@@ -11,7 +11,7 @@ const APT = {
   facts: [['Treatment type', 'Minimally invasive'], ['Duration', '60 minutes'], ['Recovery time', 'Up to 2 weeks'], ['May last', 'Up to 24 months']],
   glance: 'Planned at a free, in-person consultation and placed by our trained medical team.',
   /* the reference's ten topics, in its order; shown as a sticky row of links */
-  nav: [['what', 'What it is'], ['how', 'How it works'], ['safety', 'Is it safe'], ['duration', 'How long it lasts'], ['sessions', 'How many you need'], ['candidate', 'Good candidates'], ['expect', 'What to expect'], ['results', 'Results'], ['care', 'Pre & post care'], ['combinations', 'Elevate your results']],
+  nav: [['what', 'What it is'], ['how', 'How it works'], ['safety', 'Is it safe'], ['duration', 'How long it lasts'], ['candidate', 'Good candidates'], ['expect', 'What to expect'], ['results', 'Results'], ['care', 'Pre & post care'], ['combinations', 'Elevate your results']],
   intro: {
     tag: 'What it is', lead: 'A lift,', strong: 'without the surgery', ring: 'SOLID · LONG-LASTING · BIOSTIMULATION · ',
     text: [
@@ -41,10 +41,11 @@ const APT = {
     text: 'Thread lifts tend to suit mild to moderate sagging and good skin thickness. Your provider gives you an honest recommendation, including when another approach may suit you better.',
     yes: ['Early sagging of the midface and cheeks', 'Good skin thickness and quality', 'A wish to avoid or delay surgery', 'Realistic expectations of a subtle, natural lift'],
     no: ['Advanced laxity or very thin, sun-damaged skin', 'Active infection, acne or inflammation in the area', 'Blood-thinning medication or clotting disorders', 'Pregnancy, breastfeeding or recent facial surgery'],
+    img: 'https://nuvior.com/wp-content/themes/nuvior/assets/img/face-glow.jpg', alt: 'A woman touching her cheek, her skin smooth and natural-looking', pos: '50% 30%',
   },
   results: {
     lead: 'Real patients,', strong: 'real starting points',
-    text: 'Drag the handle on any photo to compare. A thread lift keeps refining for several weeks as collagen builds.',
+    text: 'Aptos thread lift cases photographed at our clinic. Drag any photo to compare; changes may continue to develop over several weeks.',
     cases: BA_CASES.map((c) => ({ ...c, treat: 'Aptos thread lift' })),
     more: BA_ALL,
   },
@@ -69,6 +70,7 @@ const APT = {
   duration: {
     lead: 'A lifting result', strong: 'that may last up to 24 months',
     text: 'The threads absorb gradually while the collagen they support helps hold the new position. In HA threads, hyaluronic acid is released in stages for up to six months.',
+    logo: 'assets/aptos/aptos-logo-white.svg', logoAlt: 'APTOS',
     stat: 'Up to 24', unit: 'months', label: 'How long a lifting result may last', note: 'Varies with skin, age and lifestyle. Individual results may vary.',
   },
   sessions: {
@@ -90,9 +92,13 @@ const APT = {
   },
   pair: {
     tag: 'Elevate your results', lead: 'Elevate your', strong: 'Aptos results',
-    text: 'Some treatments can be done on the same visit, others a few weeks later to allow healing. Your provider decides what can safely complement your thread lift.',
-    groups: [['Same visit, if suitable', ['Neuromodulators', 'HA dermal fillers', 'Skin boosters']], ['A few weeks later', ['Sculptra® collagen support', 'Radiesse® collagen support', 'Microneedling', 'Medical-grade facials and peels']]],
-    links: [['Dermal fillers', slug('Dermal Fillers'), 'Injectables'], ['Sculptra®', slug('Sculptra®'), 'Bio-stimulator'], ['Skin boosters', slug('Mesotherapy & Skin Boosters'), 'Injectables']],
+    text: 'Your provider may suggest pairing your thread lift with other treatments. Some can be done at the same visit, if suitable; others are usually planned a few weeks later, once the area has settled.',
+    groups: [['At the same visit, if suitable', ['Neuromodulators', 'Hyaluronic acid dermal fillers', 'Skin boosters']], ['A few weeks later', ['Sculptra®', 'Radiesse®', 'Microneedling', 'Medical-grade facials and peels']]],
+    links: [
+      ['Dermal fillers', slug('Dermal Fillers'), 'Injectables', 'assets/home/v3/lips-1000.webp', 'Hyaluronic acid gel for volume and contour.'],
+      ['Sculptra®', slug('Sculptra®'), 'Bio-stimulator', 'assets/home/v3/sculptra-1000.webp', 'A collagen stimulator, planned over a few visits.'],
+      ['Skin boosters', slug('Mesotherapy & Skin Boosters'), 'Injectables', 'assets/home/v3/booster-1000.webp', 'Fine injections that may improve skin hydration.'],
+    ],
   },
   why: {
     img: 'assets/home/team-award.jpg', alt: 'The NewDermaMed team celebrating their Top Choice Award at the clinic', pos: '50% 35%',
