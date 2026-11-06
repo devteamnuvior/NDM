@@ -1,0 +1,34 @@
+/* before & after (website v3 "Real results"): a light band, heading row with the button, four compare cards side by side */
+function BeforeAfter() {
+  const ref = useRef(null);
+  useReveal(ref);
+  return (
+    <section ref={ref} aria-labelledby="results" className="relative z-10 bg-white px-[var(--gx)] py-[clamp(80px,9vw,140px)]">
+      <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
+        <div>
+          <Eyebrow className="rv">Before &amp; after</Eyebrow>
+          <TwoTone id="results" className="rv mt-4" lead={<>Real results,<br /></>} strong="case by case" style={{ transitionDelay: '.05s' }} />
+          <p className="rv mt-4 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>Treatment cases photographed before and after. Drag any photo to compare.</p>
+        </div>
+        <div className="rv" style={{ transitionDelay: '.12s' }}><Btn href={BA_ALL} v="line">See all before &amp; after</Btn></div>
+      </div>
+      <ul role="list" className="mt-[clamp(32px,4vw,52px)] grid grid-cols-2 gap-x-3 gap-y-6 lg:grid-cols-4 lg:gap-x-4">
+        {BA_MODELS.slice(0, 4).map((c, i) => (
+          <li key={c.id} className="rv" style={{ transitionDelay: `${0.06 * i}s` }}>
+            <figure className="m-0">
+              <BaCompare c={c} i={i} nudge={i < 2} />
+              <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+                <span className="font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">{`Model ${c.id}`}</span>
+                <span className="font-inter text-[13px] text-ndm-muted">{c.treat}</span>
+              </figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-8 flex items-start gap-2.5 font-inter text-[13px] leading-[1.5] text-ndm-muted">
+        <BaIconInfo className="mt-0.5 shrink-0" />Photos show individual cases and are shared for illustration only. Individual results may vary.
+      </p>
+    </section>
+  );
+}
+
