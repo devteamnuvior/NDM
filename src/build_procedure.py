@@ -42,6 +42,35 @@ css = '''
   .offer-pill{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.25)}
   .offer-dot{animation:offerPing 1.8s ease-in-out infinite}
   @keyframes offerPing{0%,100%{box-shadow:0 0 0 0 rgba(255,166,23,.6)}50%{box-shadow:0 0 0 5px rgba(255,166,23,0)}}
+  /* the offer card: a soft light sweeps across it every few seconds */
+  .offer-shine{position:relative;isolation:isolate;box-shadow:0 30px 60px -34px rgba(0,0,0,.7);transition:transform .5s var(--e-out),box-shadow .5s var(--e-out)}
+  .offer-shine:hover{transform:translateY(-3px);box-shadow:0 36px 70px -34px rgba(0,0,0,.75)}
+  .offer-shine::after{content:"";position:absolute;inset:-20% -40%;pointer-events:none;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.08) 44%,rgba(255,255,255,.34) 50%,rgba(255,255,255,.08) 56%,transparent 62%);transform:translateX(-75%);animation:offerSweep 5.5s ease-in-out infinite}
+  .offer-shine::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;background:radial-gradient(70% 90% at 100% 50%,rgba(255,166,23,.22),transparent 70%)}
+  @keyframes offerSweep{0%,52%{transform:translateX(-75%)}82%,100%{transform:translateX(75%)}}
+  .offer-big{padding-left:clamp(16px,2vw,28px);border-left:1px solid rgba(255,255,255,.22)}
+  /* your treatment tabs: the panel fades in; the key number sits on a deep blue card */
+  .ov-in{animation:ovIn .6s var(--e-out) both}
+  @keyframes ovIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .ov-side{background:linear-gradient(180deg,#FAFAF8,#F4F7F9)}
+  .analysis-card{background:rgba(11,15,19,.42);border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(16px) saturate(130%);backdrop-filter:blur(16px) saturate(130%);box-shadow:0 40px 80px -40px rgba(0,0,0,.7)}
+  /* compare the options */
+  .cmp-t th,.cmp-t td{border-bottom:1px solid rgba(27,36,43,.08)}
+  .cmp-t tbody tr:last-child>*{border-bottom:0}
+  .cmp-t .cmp-me{background:rgba(32,158,217,.06)}
+  .cmp-t thead .cmp-me{box-shadow:inset 0 3px 0 #0F80C3}
+  /* warm peach light (photos and the price list band) */
+  .peach{position:relative}
+  .peach::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 18% 8%,rgba(255,186,148,.55),rgba(255,186,148,0) 62%),linear-gradient(180deg,rgba(255,206,176,.14),rgba(255,170,130,.08));mix-blend-mode:soft-light}
+  .peach img{filter:sepia(.1) saturate(1.06) brightness(1.02)}
+  /* every light section on this page: one paper colour; soft glows on a layer that fades at the top and bottom, so no join shows */
+  main>section:not([data-nav="dark"]){background-color:#FAFAF8!important;background-image:none!important;isolation:isolate}
+  main>section:not([data-nav="dark"])::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;-webkit-mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);background:radial-gradient(40% 50% at 96% 45%,rgba(255,190,160,.18),transparent 70%)}
+  main>section:not([data-nav="dark"]):nth-of-type(even)::before{background:radial-gradient(40% 50% at 4% 55%,rgba(255,206,182,.18),transparent 70%)}
+  /* the price list keeps a light peach wash, on the same fading layer */
+  main>section.proc-peach:not([data-nav="dark"]):nth-of-type(n)::before{background:radial-gradient(55% 60% at 12% 35%,rgba(255,190,158,.3),transparent 70%),radial-gradient(50% 55% at 92% 70%,rgba(255,176,140,.22),transparent 70%)}
+  .proc-peach .pr-group.is-open>.pr-ghead{position:static;background:transparent}
+  @media (prefers-reduced-motion:reduce){.offer-shine::after,.ov-in{animation:none}}
   .proc-form{box-shadow:0 40px 80px -40px rgba(11,15,19,.65)}
   .band-card{background:rgba(11,15,19,.62);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 30px 60px -40px rgba(0,0,0,.8)}
   /* what is this treatment: the statement's words darken as it scrolls into place */
@@ -84,7 +113,7 @@ css = '''
   @media (min-width:1280px){.pr-group.is-open>.pr-ghead{top:120px}}
   .pr-gplus{width:44px;height:44px}
   .pr-ghead button:hover .pr-gplus{border-color:#1B242B}
-  .pr-group.is-open>.pr-ghead .pr-gplus{background:#1B242B;border-color:#1B242B;color:#fff}
+  .pr-group.is-open>.pr-ghead .pr-gplus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-group.is-open>.pr-ghead .pr-gplus i+i{transform:rotate(0deg)}
   .pr-group.is-open>.pr-body{grid-template-rows:1fr}
   .pr-group.is-open>.pr-body>div{visibility:visible;transition-delay:0s}
@@ -94,7 +123,7 @@ css = '''
   .pr-plus i{position:absolute;left:50%;top:50%;width:13px;height:1.5px;margin:-.75px 0 0 -6.5px;border-radius:2px;background:currentColor;transition:transform .45s var(--e-out)}
   .pr-plus i+i{transform:rotate(90deg)}
   .pr-head:hover .pr-plus,.pr-ghead button:hover .pr-gplus{border-color:#1B242B}
-  .pr-item.is-open>h4 .pr-plus{background:#1B242B;border-color:#1B242B;color:#fff}
+  .pr-item.is-open>h4 .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-item.is-open>h4 .pr-plus i+i{transform:rotate(0deg)}
   .pr-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--e-out)}
   .pr-body>div{min-height:0;overflow:hidden;visibility:hidden;transition:visibility 0s linear .5s}
@@ -143,6 +172,7 @@ function App() {
         <TxWhy p={PROC} />
         <Team />
         <PromoReviews />
+        <ProcAnalysis />
         <Faq items={PROC.faqs} lead="Your top questions," strong="answered" intro="What to know before booking, from our medical team." />
       </main>
       <Footer />

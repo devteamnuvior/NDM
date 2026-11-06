@@ -105,23 +105,23 @@
   .btn>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;padding-block:.12em}
   .btn-sm{height:40px;padding:0 18px;font-size:14.5px}
   .btn-block{display:flex;width:100%}
-  .btn-ink{background:#1B242B;color:#fff}
-  .btn-ink:hover,.btn-ink:focus-visible,.group:hover .btn-g.btn-ink{background:#0F80C3}
+  .btn-ink{background:#0F80C3;color:#fff}
+  .btn-ink:hover,.btn-ink:focus-visible,.group:hover .btn-g.btn-ink{background:#0A4F7A}
   .btn-line{background:transparent;color:#1B242B;border-color:rgba(27,36,43,.18)}
   .btn-line:hover,.btn-line:focus-visible,.group:hover .btn-g.btn-line{background:#1B242B;border-color:#1B242B;color:#fff}
   .btn-light{background:#fff;color:#1B242B}
   .btn-light:hover,.btn-light:focus-visible,.group:hover .btn-g.btn-light{background:#0F80C3;border-color:#0F80C3;color:#fff;box-shadow:0 16px 34px -12px rgba(15,128,195,.75)}
   .btn-glass{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#fff;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   .btn-glass:hover,.btn-glass:focus-visible{background:#fff;border-color:#fff;color:#1B242B}
-  .btn-book{position:relative;isolation:isolate;overflow:hidden;justify-content:space-between;gap:12px;padding:0 6px 0 22px;background:#1B242B;color:#fff;
-    border-color:#1B242B;box-shadow:0 12px 28px -16px rgba(27,36,43,.6);transition:border-color .45s ease,box-shadow .5s ease,transform .2s ease}
+  .btn-book{position:relative;isolation:isolate;overflow:hidden;justify-content:space-between;gap:12px;padding:0 6px 0 22px;background:#0F80C3;color:#fff;
+    border-color:#0F80C3;box-shadow:0 12px 28px -16px rgba(15,128,195,.65);transition:border-color .45s ease,box-shadow .5s ease,transform .2s ease}
   .btn-book:hover,.btn-book:focus-visible,.group:hover .btn-g.btn-book{border-color:#26B1E7;box-shadow:0 16px 34px -12px rgba(15,128,195,.65)}
   .btn-hot{background:#FFA617;border-color:#FFA617;box-shadow:0 12px 28px -12px rgba(255,166,23,.9)}
   .btn-hot .btn-dot{color:#FFA617}
   .btn-on-dark{background:#fff;color:#1B242B;border-color:#fff;box-shadow:0 12px 28px -16px rgba(0,0,0,.5)}
-  .btn-on-dark .btn-dot{background:#1B242B;color:#fff}
+  .btn-on-dark .btn-dot{background:#0F80C3;color:#fff}
   .btn-on-dark:hover,.btn-on-dark:focus-visible,.group:hover .btn-g.btn-on-dark{color:#fff}
-  .btn-book::before{content:"";position:absolute;z-index:-1;right:6px;top:50%;width:36px;height:36px;border-radius:999px;background:#0F80C3;transform:translateY(-50%) scale(0);transition:transform .6s var(--e-out)}
+  .btn-book::before{content:"";position:absolute;z-index:-1;right:6px;top:50%;width:36px;height:36px;border-radius:999px;background:#0A4F7A;transform:translateY(-50%) scale(0);transition:transform .6s var(--e-out)}
   .btn-book:hover::before,.btn-book:focus-visible::before,.group:hover .btn-g.btn-book::before{transform:translateY(-50%) scale(22)}
   .btn-dot{display:grid;place-items:center;flex-shrink:0;width:36px;height:36px;border-radius:999px;background:#fff;color:#1B242B;transition:transform .5s var(--e-out),color .4s ease,background-color .4s ease}
   .btn-book:hover .btn-dot,.btn-book:focus-visible .btn-dot,.group:hover .btn-g .btn-dot{transform:rotate(-45deg);color:#fff;background:rgba(255,255,255,.2)}
@@ -244,6 +244,20 @@
   @keyframes promoNudge{0%,8%,100%{transform:none}2%{transform:translateY(-2px) scale(1.06)}4%{transform:translateY(1px)}6%{transform:translateY(-1px)}}
 
   /* partners */
+
+  /* submenu items: a thin line under each item (dropdown panels and the phone menu) */
+  .menu-item-m{border-bottom:1px solid rgba(27,36,43,.08)}
+
+  /* booking: one card on the photo */
+  .book-shell{background:rgba(250,250,248,.92);-webkit-backdrop-filter:blur(14px) saturate(130%);backdrop-filter:blur(14px) saturate(130%);box-shadow:0 40px 80px -40px rgba(11,15,19,.6)}
+  /* how it works: each step on a white card */
+  .proc-card{box-shadow:0 22px 44px -36px rgba(27,36,43,.45)}
+
+  /* round 8: a thin line between submenu items; the booking summary card */
+  .panel .menu-item{border-bottom:1px solid rgba(27,36,43,.08)}
+  .book-step{grid-area:1/1;min-width:0;transition:opacity .35s ease}.book-step.is-off{visibility:hidden;opacity:0}
+.book-sum{background:radial-gradient(90% 70% at 100% 0%,rgba(38,177,231,.32),transparent 60%),linear-gradient(160deg,#1B242B,#0B0F13)}
+  .mark-16{display:block;width:84px;height:84px;background:currentColor;-webkit-mask:url(assets/icons/16-years.svg) center/contain no-repeat;mask:url(assets/icons/16-years.svg) center/contain no-repeat}
   .marquee-mask{-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
   .marquee-track:hover{animation-play-state:paused}
 
@@ -504,6 +518,11 @@
   :is(.plate,.treat-card figure,.team-port-pic,.rv-clip,.sw-photo,.promo-card .aspect-\[16\/10\],.aspect-\[590\/385\])::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:radial-gradient(85% 70% at 12% 0%,rgba(255,183,148,.34),transparent 62%),linear-gradient(210deg,rgba(255,212,186,.14),rgba(255,158,120,.12));mix-blend-mode:soft-light}
   section[aria-labelledby="approach"],section[aria-labelledby="team"],section[aria-labelledby="treatments"],section[aria-labelledby="faq"]{background-image:radial-gradient(40% 36% at 90% 14%,rgba(255,190,160,.20),transparent 70%),radial-gradient(36% 32% at 4% 94%,rgba(255,206,182,.16),transparent 70%)}
 
+  /* seamless pages (main.seamless: promotion, pricing): one paper colour, edge-faded glows, no seams */
+  html:not([data-campaign]) main.seamless>section:not([data-nav="dark"]){background-color:#FAFAF8!important;background-image:none!important;isolation:isolate}
+  html:not([data-campaign]) main.seamless>section:not([data-nav="dark"])::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;-webkit-mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);background:radial-gradient(40% 50% at 96% 45%,rgba(255,190,160,.16),transparent 70%)}
+  html:not([data-campaign]) main.seamless>section:not([data-nav="dark"]):nth-of-type(even)::before{background:radial-gradient(40% 50% at 4% 55%,rgba(38,177,231,.10),transparent 70%)}
+  html:not([data-campaign]) main.seamless>.specials-wheel .sw-panel{background:linear-gradient(180deg,var(--sw-panel) 0%,var(--sw-panel) 72%,#FAFAF8 100%)}
   /* campaign looks: tokens per look (html[data-campaign-bar] on every page, html[data-campaign] where accents apply) */
   html[data-campaign-bar="black-friday"]{--cmp-bar:#0B0B0C;--cmp-bar-fg:#F4EBDD;--cmp-gold:#D2B57B;--cmp-acc:#8C6D36;--cmp-acc-dk:#DCC28E;--cmp-badge-bg:#0B0B0C;--cmp-badge-fg:#EBD7AA;--cmp-badge-line:rgba(210,181,123,.6);--cmp-edge:linear-gradient(115deg,rgba(200,169,106,.85),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(11,11,12,.55));--cmp-tint:linear-gradient(90deg,rgba(6,6,7,.9) 0%,rgba(6,6,7,.62) 52%,rgba(6,6,7,.38) 100%),radial-gradient(60% 70% at 85% 20%,rgba(210,181,123,.22),transparent 70%)}
   html[data-campaign-bar="holiday"]{--cmp-bar:#173D2E;--cmp-bar-fg:#F6F1E6;--cmp-gold:#D6B46A;--cmp-acc:#1F5A41;--cmp-acc-dk:#E2C583;--cmp-badge-bg:#173D2E;--cmp-badge-fg:#F6F1E6;--cmp-badge-line:rgba(214,180,106,.65);--cmp-edge:linear-gradient(115deg,rgba(31,90,65,.8),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(122,31,43,.55));--cmp-tint:linear-gradient(90deg,rgba(12,36,27,.9) 0%,rgba(12,36,27,.62) 55%,rgba(84,20,30,.4) 100%),radial-gradient(55% 65% at 85% 15%,rgba(214,180,106,.22),transparent 70%)}
@@ -558,6 +577,35 @@
   .offer-pill{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.25)}
   .offer-dot{animation:offerPing 1.8s ease-in-out infinite}
   @keyframes offerPing{0%,100%{box-shadow:0 0 0 0 rgba(255,166,23,.6)}50%{box-shadow:0 0 0 5px rgba(255,166,23,0)}}
+  /* the offer card: a soft light sweeps across it every few seconds */
+  .offer-shine{position:relative;isolation:isolate;box-shadow:0 30px 60px -34px rgba(0,0,0,.7);transition:transform .5s var(--e-out),box-shadow .5s var(--e-out)}
+  .offer-shine:hover{transform:translateY(-3px);box-shadow:0 36px 70px -34px rgba(0,0,0,.75)}
+  .offer-shine::after{content:"";position:absolute;inset:-20% -40%;pointer-events:none;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.08) 44%,rgba(255,255,255,.34) 50%,rgba(255,255,255,.08) 56%,transparent 62%);transform:translateX(-75%);animation:offerSweep 5.5s ease-in-out infinite}
+  .offer-shine::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;background:radial-gradient(70% 90% at 100% 50%,rgba(255,166,23,.22),transparent 70%)}
+  @keyframes offerSweep{0%,52%{transform:translateX(-75%)}82%,100%{transform:translateX(75%)}}
+  .offer-big{padding-left:clamp(16px,2vw,28px);border-left:1px solid rgba(255,255,255,.22)}
+  /* your treatment tabs: the panel fades in; the key number sits on a deep blue card */
+  .ov-in{animation:ovIn .6s var(--e-out) both}
+  @keyframes ovIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .ov-side{background:linear-gradient(180deg,#FAFAF8,#F4F7F9)}
+  .analysis-card{background:rgba(11,15,19,.42);border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(16px) saturate(130%);backdrop-filter:blur(16px) saturate(130%);box-shadow:0 40px 80px -40px rgba(0,0,0,.7)}
+  /* compare the options */
+  .cmp-t th,.cmp-t td{border-bottom:1px solid rgba(27,36,43,.08)}
+  .cmp-t tbody tr:last-child>*{border-bottom:0}
+  .cmp-t .cmp-me{background:rgba(32,158,217,.06)}
+  .cmp-t thead .cmp-me{box-shadow:inset 0 3px 0 #0F80C3}
+  /* warm peach light (photos and the price list band) */
+  .peach{position:relative}
+  .peach::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 18% 8%,rgba(255,186,148,.55),rgba(255,186,148,0) 62%),linear-gradient(180deg,rgba(255,206,176,.14),rgba(255,170,130,.08));mix-blend-mode:soft-light}
+  .peach img{filter:sepia(.1) saturate(1.06) brightness(1.02)}
+  /* every light section on this page: one paper colour; soft glows on a layer that fades at the top and bottom, so no join shows */
+  main>section:not([data-nav="dark"]){background-color:#FAFAF8!important;background-image:none!important;isolation:isolate}
+  main>section:not([data-nav="dark"])::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;-webkit-mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);background:radial-gradient(40% 50% at 96% 45%,rgba(255,190,160,.18),transparent 70%)}
+  main>section:not([data-nav="dark"]):nth-of-type(even)::before{background:radial-gradient(40% 50% at 4% 55%,rgba(255,206,182,.18),transparent 70%)}
+  /* the price list keeps a light peach wash, on the same fading layer */
+  main>section.proc-peach:not([data-nav="dark"]):nth-of-type(n)::before{background:radial-gradient(55% 60% at 12% 35%,rgba(255,190,158,.3),transparent 70%),radial-gradient(50% 55% at 92% 70%,rgba(255,176,140,.22),transparent 70%)}
+  .proc-peach .pr-group.is-open>.pr-ghead{position:static;background:transparent}
+  @media (prefers-reduced-motion:reduce){.offer-shine::after,.ov-in{animation:none}}
   .proc-form{box-shadow:0 40px 80px -40px rgba(11,15,19,.65)}
   .band-card{background:rgba(11,15,19,.62);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 30px 60px -40px rgba(0,0,0,.8)}
   /* what is this treatment: the statement's words darken as it scrolls into place */
@@ -600,7 +648,7 @@
   @media (min-width:1280px){.pr-group.is-open>.pr-ghead{top:120px}}
   .pr-gplus{width:44px;height:44px}
   .pr-ghead button:hover .pr-gplus{border-color:#1B242B}
-  .pr-group.is-open>.pr-ghead .pr-gplus{background:#1B242B;border-color:#1B242B;color:#fff}
+  .pr-group.is-open>.pr-ghead .pr-gplus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-group.is-open>.pr-ghead .pr-gplus i+i{transform:rotate(0deg)}
   .pr-group.is-open>.pr-body{grid-template-rows:1fr}
   .pr-group.is-open>.pr-body>div{visibility:visible;transition-delay:0s}
@@ -610,7 +658,7 @@
   .pr-plus i{position:absolute;left:50%;top:50%;width:13px;height:1.5px;margin:-.75px 0 0 -6.5px;border-radius:2px;background:currentColor;transition:transform .45s var(--e-out)}
   .pr-plus i+i{transform:rotate(90deg)}
   .pr-head:hover .pr-plus,.pr-ghead button:hover .pr-gplus{border-color:#1B242B}
-  .pr-item.is-open>h4 .pr-plus{background:#1B242B;border-color:#1B242B;color:#fff}
+  .pr-item.is-open>h4 .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-item.is-open>h4 .pr-plus i+i{transform:rotate(0deg)}
   .pr-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--e-out)}
   .pr-body>div{min-height:0;overflow:hidden;visibility:hidden;transition:visibility 0s linear .5s}
@@ -689,12 +737,12 @@ function useMedia(q) {
 }
 
 /* ---------------------------------------------------------------- content */
-const PAGE_LINKS = { 'aptos-thread-lift': 'aptos-thread-lift.html', 'non-surgical-facelift-neck-jawline-eyebrow-nose-lift': 'aptos-thread-lift.html', pricing: 'pricing.html', promotion: 'promotion.html', about: 'about.html', 'about-us': 'about.html', 'our-doctors-team': 'about.html#team', 'our-clinics': 'about.html#clinics', 'doctors-team': 'about.html#team', 'awards-recognition': 'about.html#awards', 'contact-us': 'about.html#contact', blog: 'blog.html', botox: 'botox.html', 'uptown-clinic': 'about.html#uptown', 'downtown-clinic': 'about.html#downtown' };
+const PAGE_LINKS = { 'aptos-thread-lift': 'aptos-thread-lift.html', 'non-surgical-facelift-neck-jawline-eyebrow-nose-lift': 'aptos-thread-lift.html', pricing: 'pricing.html', promotion: 'promotion.html', about: 'about.html', 'about-us': 'about.html', 'our-doctors-team': 'about.html', 'our-clinics': 'about.html', 'doctors-team': 'about.html', 'awards-recognition': 'about.html', 'contact-us': 'about.html', blog: 'blog.html', botox: 'botox.html', 'uptown-clinic': 'about.html', 'downtown-clinic': 'about.html' };
 const slug = (s) => { const k = s.toLowerCase().replace(/[®™]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''); return PAGE_LINKS[k] || '#/' + k; };
 
 const PROCEDURES = [
   { id: 'aptos', label: 'Aptos Thread Lift', blurb: 'Non-surgical lifting with absorbable threads, planned around your facial structure.',
-    groups: [{ items: ['Non-Surgical Facelift (Neck, Jawline, Eyebrow & Nose Lift)'] }] },
+    groups: [{ items: ['Aptos Thread Lift', 'Non-Surgical Facelift (Neck, Jawline, Eyebrow & Nose Lift)'] }] },
   { id: 'injectables', label: 'Injectables', blurb: 'Neuromodulators, fillers and biostimulators, dosed conservatively for a natural-looking finish.',
     groups: [{ items: ['Botox®', 'Juvederm®', 'Dermal Fillers', 'Belkyra® / Kybella® (Double Chin)', 'Lip Augmentation', 'Tear Trough Correction', 'Soft Lift™', 'Radiesse®', 'Sculptra®', 'Mesotherapy & Skin Boosters'] }] },
   { id: 'skin', label: 'Skin', blurb: 'Aesthetic and medical dermatology, from VISIA® analysis to laser resurfacing.',
@@ -1077,6 +1125,7 @@ function AptosCard({ onLink }) {
 function MegaMenu({ open, onLink }) {
   const [act, setAct] = useState(HERE_CAT || 'aptos');
   const cat = PROCEDURES.find((c) => c.id === act);
+  /* the original look: two columns, arrows beside the items, no lines; every category (Aptos too) shares this layout */
   return (
     <div className="panel w-full rounded-[28px] border border-black/5 bg-white text-ndm-ink shadow-[0_50px_90px_-40px_rgba(11,15,19,.45)]" data-open={open}>
       <div className="grid gap-4 p-4 2xl:p-5 grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]">
@@ -1097,24 +1146,12 @@ function MegaMenu({ open, onLink }) {
           );
         })}
       </ul>
-      {cat.id === 'aptos' ? (
-        <div className="grid h-[516px] grid-cols-[minmax(0,1fr)_340px] gap-4 2xl:h-[456px]">
-          <div className="min-h-0 overflow-hidden px-3 py-4 2xl:px-5">
-            <div className="flex items-baseline justify-between gap-4 border-b border-ndm-line pb-4">
-              <div>
-                <p className="font-aeonik text-[26px] leading-tight">{cat.label}</p>
-                <p className="mt-1 text-[13.5px] text-ndm-muted max-w-[46ch]">{cat.blurb}</p>
-              </div>
-            </div>
-            <AptosMenu items={cat.groups[0].items} onLink={onLink} />
-          </div>
-          <AptosCard onLink={onLink} />
-        </div>
-      ) : (
       <div className="h-[516px] px-5 py-4 2xl:h-[456px]">
         <div className="flex items-baseline justify-between gap-4 border-b border-ndm-line pb-4">
           <div>
-            <p className="font-aeonik text-[26px] leading-tight">{cat.label}</p>
+            {slug(cat.label).endsWith('.html')
+              ? <a href={slug(cat.label)} onClick={onLink} className="group inline-flex items-center gap-2 font-aeonik text-[26px] leading-tight hover:text-ndm-deep">{cat.label}<IconArrow size={14} className="text-ndm-deep transition-transform group-hover:translate-x-0.5" /></a>
+              : <p className="font-aeonik text-[26px] leading-tight">{cat.label}</p>}
             <p className="mt-1 text-[13.5px] text-ndm-muted max-w-[46ch]">{cat.blurb}</p>
           </div>
         </div>
@@ -1124,7 +1161,7 @@ function MegaMenu({ open, onLink }) {
             <div key={g.title || 'g'}>
               {g.title && <p className="font-mont text-[11px] tracking-[.14em] uppercase text-ndm-muted mb-2">{g.title}</p>}
               <ul className={g.items.length > 7 ? 'columns-2 gap-6' : ''} role="list">
-                {g.items.map((it) => (
+                {g.items.filter((it) => it !== cat.label).map((it) => (
                   <li key={it} className="break-inside-avoid">
                     <a href={slug(it)} {...here(slug(it))} onClick={onLink} className="menu-item group font-mont">
                       <span className="min-w-0">{it}</span><IconArrow size={11} className="menu-arrow" />
@@ -1137,7 +1174,6 @@ function MegaMenu({ open, onLink }) {
         </div>
         )}
       </div>
-      )}
       <a href="#/book" onClick={onLink} className="group relative overflow-hidden rounded-[16px] min-h-[380px] text-white">
         <img src="assets/clinic/clinic-2.jpg" alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
         <span className="absolute inset-0 bg-gradient-to-t from-[#0B0F13]/85 via-[#0B0F13]/25 to-transparent" />
@@ -1152,38 +1188,49 @@ function MegaMenu({ open, onLink }) {
   );
 }
 
+/* about: the two clinics as photo cards with address and opening hours (after the website v3 locations menu), then the links;
+   every About link opens the About page from the top */
+const ABOUT_LOCS = [
+  { name: 'Uptown', near: 'Yonge & Sheppard', img: 'assets/clinic/clinic-4.jpg' },
+  { name: 'Downtown', near: 'Bay & College', img: 'assets/clinic/downtown/downtown-3.jpg' },
+];
+const aboutHref = (l) => (l === 'Blog' ? 'blog.html' : /^Policies/.test(l) ? slug(l) : 'about.html');
 function AboutMenu({ open, onLink }) {
   return (
     <div className="panel w-full rounded-[28px] border border-black/5 bg-white text-ndm-ink shadow-[0_50px_90px_-40px_rgba(11,15,19,.45)]" data-open={open}>
-      <div className="grid gap-4 p-4 2xl:p-5 grid-cols-[1.1fr_1fr_340px]">
-      <div className="rounded-[16px] bg-ndm-mist/70 p-4">
-        <p className="font-mont text-[11px] tracking-[.14em] uppercase text-ndm-muted mb-2">Our Clinics</p>
-        {ABOUT.clinics.map((c) => (
-          <a key={c.name} href={slug(c.name)} onClick={onLink} className="block rounded-[12px] px-3 py-3 -mx-1 hover:bg-white transition-colors">
-            <span className="block font-aeonik text-[18px]">{c.name}</span>
-            <span className="block text-[12.5px] text-ndm-muted">{c.note}</span>
-            <span className="mt-1 block font-mont text-[12.5px] text-ndm-blue">{c.phone}</span>
-          </a>
-        ))}
-      </div>
-      <ul className="p-3" role="list">
-        {ABOUT.links.map((l) => (
-          <li key={l}>
-            <a href={slug(l)} {...here(slug(l))} onClick={onLink} className="menu-item group font-mont border-b border-ndm-line py-3 last:border-0">
-              <span className="min-w-0">{l}</span><IconArrow size={12} className="menu-arrow" />
+      <div className="grid gap-4 p-4 2xl:p-5 grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,.9fr)]">
+        {ABOUT_LOCS.map((l) => {
+          const c = CLINICS.find((x) => x.name === l.name);
+          return (
+            <a key={l.name} href="about.html" onClick={onLink} className="about-loc group flex flex-col overflow-hidden rounded-[18px] bg-ndm-mist/70 ring-1 ring-ndm-ink/[.05] transition-shadow hover:shadow-[0_24px_50px_-30px_rgba(27,36,43,.45)]">
+              <span className="relative block aspect-[16/10] overflow-hidden">
+                <img src={l.img} alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <span className="absolute inset-0 bg-gradient-to-t from-[#0B0F13]/75 via-[#0B0F13]/10 to-transparent" />
+                <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 font-inter text-[11.5px] font-medium text-ndm-ink backdrop-blur-[6px]">{l.near}</span>
+                <span className="absolute inset-x-4 bottom-3 font-aeonik text-[25px] leading-none text-white">{l.name} Clinic</span>
+              </span>
+              <span className="flex flex-1 flex-col gap-3 p-4">
+                <span className="font-inter text-[13.5px] leading-[1.45] text-ndm-muted">{c.addr}</span>
+                <span className="grid gap-1 rounded-[12px] bg-white px-3 py-2.5">
+                  {HOURS.map(([d, h]) => <span key={d} className="flex items-center justify-between gap-3 font-inter text-[13px]"><span className="text-ndm-muted">{d}</span><span className="font-medium tabular-nums text-ndm-ink">{h}</span></span>)}
+                </span>
+                <span className="mt-auto flex items-center justify-between gap-3 font-inter text-[13.5px] font-semibold text-ndm-deep">
+                  <span className="tabular-nums">{c.phone}</span>
+                  <span className="inline-flex items-center gap-1.5">About the clinic<IconArrow className="transition-transform group-hover:translate-x-1" /></span>
+                </span>
+              </span>
             </a>
-          </li>
-        ))}
-      </ul>
-      <a href={slug('Our Clinics')} onClick={onLink} className="group relative min-h-[300px] overflow-hidden rounded-[16px] text-white">
-        <img src="assets/clinic/clinic-5.jpg" alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-        <span className="absolute inset-0 bg-gradient-to-t from-[#0B0F13]/85 via-[#0B0F13]/25 to-transparent" />
-        <span className="absolute inset-x-0 bottom-0 p-5">
-          <span className="block font-mont text-[11px] tracking-[.14em] uppercase text-white/75">16+ years in Toronto</span>
-          <span className="mt-2 block font-aeonik text-[22px] leading-[1.2]">Visit our Uptown and Downtown clinics</span>
-          <span className="mt-4 inline-flex items-center gap-2 font-mont text-[13px] font-medium">Get directions <IconArrow size={12} /></span>
-        </span>
-      </a>
+          );
+        })}
+        <ul className="px-3 py-1" role="list">
+          {ABOUT.links.map((l) => (
+            <li key={l}>
+              <a href={aboutHref(l)} onClick={onLink} className="menu-item group font-mont border-b border-ndm-line py-3 last:border-0">
+                <span className="min-w-0">{l}</span><IconArrow size={12} className="menu-arrow" />
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
@@ -1271,27 +1318,27 @@ function Header({ dark, top, visible, onSearch, onDrawer, onCart, cartCount = 0 
           backdropFilter: glass, WebkitBackdropFilter: glass,
         }}
       >
-        <div className="mx-auto grid h-[64px] xl:h-[84px] max-w-[1920px] grid-cols-[auto_1fr_auto] xl:grid-cols-[1fr_auto_1fr] items-center gap-4 px-[var(--gx)]">
-          <a href="index.html" aria-label="NewDermaMed home" className="relative block h-[30px] sm:h-[34px] xl:h-[42px] justify-self-start">
-            <img src="assets/icons/logo-color.svg" alt="" className="h-full w-auto transition-opacity duration-500" style={{ opacity: tone ? 0 : 1 }} />
-            <img src="assets/icons/logo-white.svg" alt="" className="absolute left-0 top-0 h-full w-auto transition-opacity duration-500" style={{ opacity: tone ? 1 : 0 }} />
+        <div className="mx-auto grid h-[64px] xl:h-[84px] max-w-[1920px] grid-cols-[auto_1fr_auto] xl:grid-cols-[1fr_auto_1fr] items-center gap-4 xl:gap-3 2xl:gap-4 px-[var(--gx)]">
+          <a href="index.html" aria-label="NewDermaMed home" className="relative block h-[30px] sm:h-[34px] xl:h-[34px] 2xl:h-[42px] justify-self-start">
+            <img src="assets/icons/logo-color.svg" alt="" className="h-full w-auto object-contain object-left transition-opacity duration-500" style={{ opacity: tone ? 0 : 1 }} />
+            <img src="assets/icons/logo-white.svg" alt="" className="absolute left-0 top-0 h-full w-auto object-contain object-left transition-opacity duration-500" style={{ opacity: tone ? 1 : 0 }} />
           </a>
 
           <nav aria-label="Primary" className="hidden xl:block" onMouseLeave={leave}>
-            <ul className="flex items-center gap-1 2xl:gap-3" role="list">
+            <ul className="flex items-center gap-0 2xl:gap-2" role="list">
               {NAV.map((n) => (
                 <li key={n.id} className="relative" onMouseEnter={() => (n.menu ? enter(n.id) : leave())}>
                   {n.menu ? (
                     <button
                       aria-expanded={open === n.id} aria-haspopup="true"
                       onClick={() => setOpen(open === n.id ? null : n.id)}
-                      className={`relative flex items-center gap-1.5 rounded-full px-3 py-2.5 font-inter text-[16px] tracking-[-0.02em] whitespace-nowrap transition-colors 2xl:px-4 ${hover} ${open === n.id ? active : ''} ${NAV_HERE === n.id ? `nav-is-here ${tone ? 'is-dark' : ''}` : ''}`}
+                      className={`relative flex items-center gap-1.5 rounded-full px-2 py-2.5 font-inter text-[15px] tracking-[-0.02em] whitespace-nowrap transition-colors 2xl:px-4 2xl:text-[16px] ${hover} ${open === n.id ? active : ''} ${NAV_HERE === n.id ? `nav-is-here ${tone ? 'is-dark' : ''}` : ''}`}
                     >
                       {n.label}{NAV_HERE === n.id && <><span className="sr-only"> (current section)</span><i aria-hidden="true" className={`nav-here ${tone ? 'is-dark' : ''}`} /></>}
                       <IconChevron className={`opacity-60 transition-transform duration-300 ${open === n.id ? 'rotate-180' : ''}`} />
                     </button>
                   ) : (
-                    <a href={n.href || slug(n.label)} {...(n.ext ? { target: '_blank', rel: 'noopener' } : {})} {...(NAV_HERE === n.id ? { 'aria-current': 'page' } : {})} className={`relative flex items-center gap-1.5 rounded-full px-3 py-2.5 font-inter text-[16px] tracking-[-0.02em] whitespace-nowrap transition-colors 2xl:px-4 ${hover} ${NAV_HERE === n.id ? `nav-is-here ${tone ? 'is-dark' : ''}` : ''}`}>
+                    <a href={n.href || slug(n.label)} {...(n.ext ? { target: '_blank', rel: 'noopener' } : {})} {...(NAV_HERE === n.id ? { 'aria-current': 'page' } : {})} className={`relative flex items-center gap-1.5 rounded-full px-2 py-2.5 font-inter text-[15px] tracking-[-0.02em] whitespace-nowrap transition-colors 2xl:px-4 2xl:text-[16px] ${hover} ${NAV_HERE === n.id ? `nav-is-here ${tone ? 'is-dark' : ''}` : ''}`}>
                       {n.label}{n.ext && <IconExternal className="opacity-60" />}{NAV_HERE === n.id && <i aria-hidden="true" className={`nav-here ${tone ? 'is-dark' : ''}`} />}
                     </a>
                   )}
@@ -1344,7 +1391,7 @@ function FloatSearch({ onOpen, hidden, lift = 0 }) {
   const bottom = Math.max(16, avoid, lift);
   return (
     <button type="button" onClick={onOpen} tabIndex={hidden ? -1 : 0} aria-hidden={hidden} aria-label="Search treatments"
-      className={`float-search fixed right-4 z-[55] grid size-[52px] place-items-center rounded-full bg-ndm-ink text-white shadow-[0_18px_40px_-16px_rgba(11,15,19,.6)] ring-1 ring-white/10 md:hidden ${hidden ? 'is-off' : ''}`}
+      className={`float-search fixed right-4 z-[55] grid size-[52px] place-items-center rounded-full bg-ndm-deep text-white shadow-[0_18px_40px_-16px_rgba(11,15,19,.6)] ring-1 ring-white/10 md:hidden ${hidden ? 'is-off' : ''}`}
       style={{ bottom: `calc(${bottom}px + env(safe-area-inset-bottom))` }}>
       <IconSearch size={22} />
     </button>
@@ -1827,14 +1874,14 @@ function Process() {
 
   if (!wide) {
     return (
-      <section ref={ref} aria-labelledby="process" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(72px,9vw,120px)]">
+      <section ref={ref} aria-labelledby="process" className="relative z-10 bg-ndm-paper px-[var(--gx)] pb-[clamp(72px,9vw,120px)] pt-[clamp(16px,2vw,32px)]">
         {head}
         <ol className="mt-10 grid gap-10 md:grid-cols-3 md:gap-5" role="list">
           {PROCESS.map((_, i) => (
-            <li key={i} className="rv flex flex-col" style={{ transitionDelay: `${0.08 * i}s` }}>
-              <div className="aspect-[4/3]"><ProcessPhoto i={i} on /></div>
-              <div className="mt-5"><ProcessText i={i} on small /></div>
-              <div className="mt-auto pt-5"><Btn href={PROCESS_MEDIA[i].h} v={PROCESS_MEDIA[i].v} sm>{PROCESS_MEDIA[i].cta}</Btn></div>
+            <li key={i} className="rv proc-card flex flex-col rounded-[22px] bg-white p-3 ring-1 ring-ndm-ink/[.06]" style={{ transitionDelay: `${0.08 * i}s` }}>
+              <div className="aspect-[4/3.2]"><ProcessPhoto i={i} on /></div>
+              <div className="px-2 pt-5"><ProcessText i={i} on small /></div>
+              <div className="mt-auto px-2 pb-2 pt-5"><Btn href={PROCESS_MEDIA[i].h} v={PROCESS_MEDIA[i].v}>{PROCESS_MEDIA[i].cta}</Btn></div>
             </li>
           ))}
         </ol>
@@ -2374,12 +2421,12 @@ function Promotions() {
    Shown once only, after real engagement: 15 s on the page, 45% scroll depth, or exit intent on desktop, whichever comes first.
    Once it has appeared it never shows again (remembered in localStorage, or for the visit if storage is blocked).
    Add ?offer to the URL to preview it at any time. */
-const OFFER_KEY = 'ndm-offer-seen';
+const OFFER_KEY = 'ndm-offer-closed'; /* records when the pop-up was last closed; it still shows once on every page per visit */
 let offerShownThisVisit = false;
 function offerAllowed() {
   if (/[?&]offer\b/.test(location.search)) return true;
   if (offerShownThisVisit) return false;
-  try { return !localStorage.getItem(OFFER_KEY); } catch (e) { return true; }
+  try { return sessionStorage.getItem('ndm-offer-' + HERE) !== '1'; } catch (e) { return true; } /* once on every page per visit */
 }
 function OfferPopup({ ready }) {
   const [open, setOpen] = useState(false);
@@ -2390,7 +2437,7 @@ function OfferPopup({ ready }) {
     fired.current = true;
     offerShownThisVisit = true;
     stop.current();
-    try { localStorage.setItem(OFFER_KEY, String(Date.now())); } catch (e) {}
+    try { sessionStorage.setItem('ndm-offer-' + HERE, '1'); } catch (e) {}
     lastFocus.current = document.activeElement;
     setMounted(true);
     requestAnimationFrame(() => requestAnimationFrame(() => setOpen(true)));
@@ -2398,7 +2445,7 @@ function OfferPopup({ ready }) {
   useEffect(() => {
     if (!ready || !offerAllowed()) return;
     const force = /[?&]offer\b/.test(location.search);
-    const t = setTimeout(show, force ? 1500 : 15000);
+    const t = setTimeout(show, force ? 1500 : 9000);
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       if (max > 0 && window.scrollY / max > 0.45) show();
@@ -2411,6 +2458,7 @@ function OfferPopup({ ready }) {
     return () => stop.current();
   }, [ready]);
   const close = () => {
+    try { localStorage.setItem(OFFER_KEY, String(Date.now())); } catch (e) {}
     setOpen(false);
     setTimeout(() => { setMounted(false); if (lastFocus.current && lastFocus.current.focus) lastFocus.current.focus(); }, 450);
   };
@@ -3069,8 +3117,8 @@ const TEAM = [
     ],
     facts: [['Education', 'BSc, Biology'], ['Certifications', 'Cosmetic Dermatology, Medical Aesthetics'], ['Role', 'Director of NewDermaMed']],
   },
-  /* sample until the fourth team member's photo and profile arrive */
-  { id: 'team-sample', first: 'Team member', tag: 'Photo coming soon', sample: true, name: 'Team member', role: 'Profile coming soon', img: 'assets/team/sample.svg' },
+  /* photo in; her profile (bio, focus, facts) is still to come, so the card has no profile dialog yet */
+  { id: 'team-heather', first: 'Heather', tag: 'Nurse Practitioner', sample: true, name: 'Heather Bouchard, NP', role: 'Nurse Practitioner', img: 'assets/team/heather.jpg' },
 ];
 
 const TEAM_LABEL = 'font-inter text-[11.5px] font-[550] uppercase tracking-[.14em] text-ndm-muted';
@@ -3189,13 +3237,13 @@ function TeamProfile({ m, onClose }) {
 /* meet the team: copy on the left, three staggered portraits on the right (Alin, Negin, Luis).
    The portraits wipe up one after another when the row comes into view, drift at different speeds while scrolling,
    and each one opens the profile dialog. */
-const TEAM_ORDER = ['team-alin', 'team-negin', 'team-luis', 'team-sample'];
+const TEAM_ORDER = ['team-alin', 'team-negin', 'team-luis', 'team-heather'];
 const TEAM_DRIFT = [-26, 30, -10, 22]; /* px of parallax over the section's pass through the viewport */
 
 function TeamPortrait({ m, i, onOpen }) {
   return (
     <div className={`team-port team-port-${i}`} style={{ '--i': i }}>
-      <button type="button" onClick={m.sample ? undefined : onOpen} disabled={!!m.sample} aria-haspopup={m.sample ? undefined : 'dialog'} aria-label={m.sample ? 'Team member, photo coming soon' : `View profile of ${m.name}, ${m.role}`} className="group block w-full text-left disabled:cursor-default">
+      <button type="button" onClick={m.sample ? undefined : onOpen} disabled={!!m.sample} aria-haspopup={m.sample ? undefined : 'dialog'} aria-label={m.sample ? `${m.name}, ${m.role}, profile coming soon` : `View profile of ${m.name}, ${m.role}`} className="group block w-full text-left disabled:cursor-default">
         <span className="team-port-pic relative block aspect-[4/5] overflow-hidden rounded-[22px] bg-ndm-mist shadow-[0_30px_60px_-36px_rgba(27,36,43,.55)]">
           <img src={m.img} alt="" width="800" height="1000" decoding="async" className="team-port-img absolute inset-0 h-full w-full object-cover object-[50%_15%]" />
           <span aria-hidden="true" className="team-port-shade absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ndm-ink/60 to-transparent" />
@@ -3312,60 +3360,189 @@ function BookThanks({ id, onAnother }) {
   );
 }
 
+const BOOK_INTERESTS = ['Wrinkles & fine lines', 'Volume loss', 'Sagging skin & jowls', 'Dark circles & under-eye hollows', 'Double chin', 'Acne', 'Acne scars', 'Pigmentation & sun spots', 'Aptos Thread Lift', 'Dermal Fillers', 'Laser Hair Removal', 'Microneedling', 'Not sure, I’d like a skin analysis'];
+const BOOK_STEPS = ['Your concern', 'Clinic, day and time', 'Your details'];
+const BOOK_CLINIC_OPTS = [['Uptown', 'Uptown, Yonge & Sheppard'], ['Downtown', 'Downtown, Bay & College']];
+/* opening hours (HOURS): Monday to Friday 9 to 7, Saturday 10 to 5, Sunday closed; a request slot every hour, the last one an hour before closing */
+const bookSlots = (d) => { const w = d.getDay(); if (w === 0) return []; const [a, b] = w === 6 ? [10, 16] : [9, 18]; return Array.from({ length: b - a + 1 }, (_, i) => a + i); };
+const bookHour = (h) => `${h > 12 ? h - 12 : h}:00 ${h >= 12 ? 'pm' : 'am'}`;
+const bookDay = (d) => d.toLocaleDateString('en-CA', { weekday: 'short', month: 'short', day: 'numeric' });
+function BookChip({ type = 'radio', name, value, checked, onChange, children }) {
+  return (
+    <label className="relative inline-flex cursor-pointer">
+      <input type={type} name={name} value={value} checked={checked} onChange={onChange} className="peer absolute inset-0 m-0 cursor-pointer opacity-0" />
+      <span className="inline-flex min-h-[40px] items-center gap-2 rounded-full border border-ndm-ink/15 bg-white px-3.5 font-inter text-[13.5px] leading-[1.3] text-ndm-ink transition-colors peer-hover:border-ndm-ink/40 peer-checked:border-ndm-deep peer-checked:bg-ndm-deep peer-checked:text-white peer-focus-visible:ring-4 peer-focus-visible:ring-ndm-blue/25">{children}</span>
+    </label>
+  );
+}
+/* a month calendar (Sundays and past days closed) and the open request times of the chosen day */
+function BookCalendar({ day, time, onDay, onTime }) {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const [view, setView] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));
+  const first = (view.getDay() + 6) % 7; /* weeks start on Monday */
+  const days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+  const cells = [...Array(first).fill(null), ...Array.from({ length: days }, (_, i) => new Date(view.getFullYear(), view.getMonth(), i + 1))];
+  while (cells.length < 42) cells.push(null); /* always six weeks, so the card never changes height between months */
+  const canBack = view > new Date(today.getFullYear(), today.getMonth(), 1);
+  const nav = 'grid size-8 place-items-center rounded-full border border-ndm-ink/12 text-ndm-ink transition-colors hover:bg-ndm-mist disabled:opacity-30';
+  return (
+    <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,200px)]">
+      <div>
+        <div className="flex items-center justify-between">
+          <p className="font-aeonik text-[19px] text-ndm-ink">{view.toLocaleDateString('en-CA', { month: 'long', year: 'numeric' })}</p>
+          <span className="flex gap-1.5">
+            <button type="button" disabled={!canBack} onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))} aria-label="Previous month" className={nav}><IconArrow size={12} className="rotate-180" /></button>
+            <button type="button" onClick={() => setView(new Date(view.getFullYear(), view.getMonth() + 1, 1))} aria-label="Next month" className={nav}><IconArrow size={12} /></button>
+          </span>
+        </div>
+        <div className="mt-2 grid grid-cols-7 gap-1 text-center font-inter text-[11px] uppercase tracking-[.08em] text-ndm-muted" aria-hidden="true">{['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((d) => <span key={d} className="py-1">{d}</span>)}</div>
+        <div className="grid grid-cols-7 gap-1" role="group" aria-label="Choose a day">
+          {cells.map((d, i) => {
+            if (!d) return <span key={`e${i}`} />;
+            const closed = d < today || d.getDay() === 0;
+            const on = day && d.getTime() === day.getTime();
+            return (
+              <button key={d.getDate()} type="button" disabled={closed} onClick={() => onDay(d)} aria-pressed={on} aria-label={`${bookDay(d)}${closed ? ', closed' : ''}`}
+                className={`relative grid h-8 place-items-center rounded-[10px] font-inter text-[13.5px] tabular-nums transition-colors ${on ? 'bg-ndm-deep text-white' : closed ? 'text-ndm-ink/25' : 'bg-white text-ndm-ink ring-1 ring-ndm-ink/10 hover:ring-ndm-deep'}`}>
+                {d.getDate()}{!closed && !on && <i aria-hidden="true" className="absolute bottom-1 size-1 rounded-full bg-ndm-sky" />}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div className="min-h-[176px] md:min-h-0">
+        <p className="font-inter text-[13px] font-semibold text-ndm-ink">{day ? bookDay(day) : 'Pick a day'}</p>
+        {day ? (
+          <div className="mt-2 grid grid-cols-3 gap-1.5 md:grid-cols-2" role="group" aria-label="Choose a time">
+            {bookSlots(day).map((h) => (
+              <button key={h} type="button" onClick={() => onTime(h)} aria-pressed={time === h}
+                className={`h-8 rounded-[10px] font-inter text-[13px] tabular-nums transition-colors ${time === h ? 'bg-ndm-deep text-white' : 'bg-white text-ndm-ink ring-1 ring-ndm-ink/10 hover:ring-ndm-deep'}`}>{bookHour(h)}</button>
+            ))}
+          </div>
+        ) : <p className="mt-2 font-inter text-[13px] leading-[1.5] text-ndm-muted">Open days are marked with a dot. Sundays are closed.</p>}
+      </div>
+    </div>
+  );
+}
+/* the three-step request form, shared by the booking section and the Book Free Consultation pop-up */
+function BookForm({ thanksId, summary = false }) {
+  const box = useRef(null);
+  const [step, setStep] = useState(0);
+  const [sent, setSent] = useState(false);
+  const [err, setErr] = useState('');
+  const [f, setF] = useState({ interest: '', clinic: 'Uptown', day: null, time: null, via: ['Call'], news: false, first: '' });
+  const set = (k, v) => { setErr(''); setF((o) => ({ ...o, [k]: v })); };
+  const toggle = (k, v) => { setErr(''); setF((o) => ({ ...o, [k]: o[k].includes(v) ? o[k].filter((x) => x !== v) : [...o[k], v] })); };
+  const [hold, setHold] = useState(0);
+  const go = (n) => {
+    setErr(''); setStep(n);
+    setTimeout(() => { const l = box.current && box.current.querySelector(`[data-step="${n}"] legend`); if (l) l.focus({ preventScroll: true }); }, 30);
+  };
+  const next = () => {
+    if (step === 0 && !f.interest) { setErr('Please choose one option.'); return; }
+    if (step === 1 && (!f.day || !f.time)) { setErr('Please pick a day and a time.'); return; }
+    go(step + 1);
+  };
+  const submit = (e) => { e.preventDefault(); if (!f.via.length) { setErr('Please choose at least one way to reach you.'); return; } setHold(box.current ? box.current.offsetHeight : 0); setSent(true); };
+  const when = f.day && f.time ? `${bookDay(f.day)}, ${bookHour(f.time)}` : null;
+  const legend = 'font-aeonik text-[clamp(21px,1.9vw,26px)] font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink outline-none';
+  const label = 'mb-1.5 block font-inter text-[13px] font-semibold text-ndm-ink';
+  const rows = [['Concern', f.interest], ['Clinic', BOOK_CLINIC_OPTS.find(([v]) => v === f.clinic)[1]], ['Day and time', when]];
+
+  if (sent) return (
+    <div role="status" className="flex flex-1 flex-col items-start justify-center gap-3 py-4" style={{ minHeight: hold || undefined }}>
+      <span aria-hidden="true" className="grid size-12 place-items-center rounded-full bg-ndm-amber text-white"><IconCheckBadge /></span>
+      <p id={thanksId} className="font-aeonik text-[clamp(24px,2.2vw,30px)] leading-[1.15] tracking-[-0.02em] text-ndm-ink">Request sent{f.first ? `, ${f.first}` : ''}.</p>
+      <p className="max-w-[46ch] font-inter text-[14.5px] leading-[1.55] text-ndm-muted">We’ll confirm <b className="font-semibold text-ndm-ink">{when}</b> at our {f.clinic} clinic within one business day.</p>
+      <button type="button" onClick={() => { setSent(false); setF((o) => ({ ...o, interest: '', day: null, time: null })); go(0); }} className="font-inter text-[14px] font-semibold text-ndm-deep hover:underline">Book another visit</button>
+    </div>
+  );
+
+  const body = (
+    <form ref={box} onSubmit={submit} className="flex min-w-0 flex-1 flex-col">
+      <div className="grid grid-cols-3 gap-1.5" aria-hidden="true">
+        {BOOK_STEPS.map((s, i) => <span key={s} className={`h-1 rounded-full transition-colors duration-500 ${i <= step ? 'bg-ndm-deep' : 'bg-ndm-ink/10'}`} />)}
+      </div>
+      <p className="mt-2 font-inter text-[12.5px] text-ndm-muted">Step {step + 1} of {BOOK_STEPS.length} · <span className="text-ndm-ink">{BOOK_STEPS[step]}</span></p>
+
+      <div className="book-steps mt-5 grid">
+        <fieldset data-step="0" className={`book-step ${step === 0 ? '' : 'is-off'}`} aria-hidden={step !== 0 || undefined} inert={step !== 0 ? '' : undefined}>
+          <legend tabIndex={-1} className={legend}>What would you like to address?</legend>
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {BOOK_INTERESTS.map((t) => <BookChip key={t} name="interest" value={t} checked={f.interest === t} onChange={() => set('interest', t)}>{t}</BookChip>)}
+          </div>
+        </fieldset>
+        <fieldset data-step="1" className={`book-step ${step === 1 ? '' : 'is-off'}`} aria-hidden={step !== 1 || undefined} inert={step !== 1 ? '' : undefined}>
+          <legend tabIndex={-1} className={legend}>Where and when?</legend>
+          <div className="mt-4 flex flex-wrap gap-1.5" role="group" aria-label="Clinic">
+            {BOOK_CLINIC_OPTS.map(([v, t]) => <BookChip key={v} name="clinic" value={v} checked={f.clinic === v} onChange={() => set('clinic', v)}>{t}</BookChip>)}
+          </div>
+          <div className="mt-4"><BookCalendar day={f.day} time={f.time} onDay={(d) => setF((o) => ({ ...o, day: d, time: null }))} onTime={(h) => set('time', h)} /></div>
+          <p className="mt-3 font-inter text-[12px] text-ndm-muted">Times are requests; our team confirms by phone or email.</p>
+        </fieldset>
+        <fieldset data-step="2" className={`book-step ${step === 2 ? '' : 'is-off'}`} aria-hidden={step !== 2 || undefined} inert={step !== 2 ? '' : undefined}>
+          <legend tabIndex={-1} className={legend}>How can we reach you?</legend>
+          <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+            <label><span className={label}>First name</span><input required name="first" autoComplete="given-name" value={f.first} onChange={(e) => set('first', e.target.value)} className={`${fieldCls} !h-11`} /></label>
+            <label><span className={label}>Last name</span><input required name="last" autoComplete="family-name" className={`${fieldCls} !h-11`} /></label>
+            <label><span className={label}>Mobile number</span><input required type="tel" name="phone" autoComplete="tel" className={`${fieldCls} !h-11`} /></label>
+            <label><span className={label}>Email</span><input required type="email" name="email" autoComplete="email" className={`${fieldCls} !h-11`} /></label>
+          </div>
+          <div role="group" aria-label="Best way to reach you, choose any" className="mt-4 flex flex-wrap items-center gap-1.5">
+            <span className="mr-1.5 font-inter text-[13px] font-semibold text-ndm-ink">Reach me by</span>
+            {['Call', 'Text', 'Email'].map((t) => <BookChip key={t} type="checkbox" name="via" value={t} checked={f.via.includes(t)} onChange={() => toggle('via', t)}>{t}</BookChip>)}
+          </div>
+          <p className="mt-3 font-inter text-[12px] text-ndm-muted">Please don’t include medical details. We use your details only to arrange your visit.</p>
+        </fieldset>
+      </div>
+
+      <p role="alert" className="mt-3 min-h-[19px] font-inter text-[13px] leading-[19px] text-[#B4351F]">{err}</p>
+      <div className="mt-auto flex min-h-[60px] items-center gap-2.5 pt-3 sm:flex-wrap">
+        {step > 0 && <Btn as="button" type="button" v="line" sm onClick={() => go(step - 1)}>Back</Btn>}
+        {step < 2 ? <Btn as="button" type="button" v="ink" sm onClick={next}>Continue</Btn> : <Btn as="button" type="submit" v="book" hot className="min-w-0 flex-1 sm:flex-none">Book Free Consultation</Btn>}
+      </div>
+    </form>
+  );
+  if (!summary) return body;
+  return (
+    <div className="grid flex-1 gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,260px)]">
+      {body}
+      <aside className="book-sum hidden flex-col rounded-[20px] p-5 text-white lg:flex" aria-label="Your appointment">
+        <p className="font-inter text-[11.5px] uppercase tracking-[.16em] text-white/60">Your appointment</p>
+        <dl className="mt-3 grid gap-3">
+          {rows.map(([k, v]) => (
+            <div key={k} className="border-b border-white/12 pb-3">
+              <dt className="font-inter text-[11px] uppercase tracking-[.12em] text-white/55">{k}</dt>
+              <dd className={`mt-1 font-aeonik text-[16.5px] leading-[1.3] ${v ? 'text-white' : 'tt-strong text-white/45'}`}>{v || 'Not chosen yet'}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="mt-auto pt-5 font-inter text-[12.5px] leading-[1.5] text-white/65">Prefer to talk? Call {CLINICS.map((c) => <a key={c.name} href={tel(c.phone)} className="block font-semibold text-white hover:underline">{c.name} {c.phone}</a>)}</p>
+      </aside>
+    </div>
+  );
+}
 function Appointment() {
   const ref = useRef(null), pic = useRef(null);
   useReveal(ref);
-  const [sent, setSent] = useState(false);
-  const [clinic, setClinic] = useState('');
-  const submit = (e) => { e.preventDefault(); setSent(true); };
+  /* the treatment-room photo drifts a little behind the card as the page scrolls */
   useOnScroll(() => {
     const el = ref.current, img = pic.current; if (!el || !img || REDUCED) return;
     const r = el.getBoundingClientRect(), vh = window.innerHeight;
     const p = clamp01((vh - r.top) / (vh + r.height));
     img.style.transform = `translate3d(0,${((p - 0.5) * -90).toFixed(1)}px,0) scale(1.12)`;
   }, []);
-  const [treat, setTreat] = useState('');
   return (
-    <section ref={ref} aria-labelledby="book" className="relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(56px,6vw,96px)]">
+    <section ref={ref} aria-labelledby="book" className="relative z-10 isolate overflow-hidden px-[var(--gx)] py-[clamp(48px,6vw,96px)]">
       <img ref={pic} src="assets/hero/treatment-room.jpg" alt="" aria-hidden="true" loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover object-center will-change-transform" style={{ transform: 'scale(1.12)' }} />
-      <span aria-hidden="true" className="absolute inset-0 bg-[rgba(11,15,19,.3)]" />
-
-      <div className="relative flex justify-center">
-        <div className="rv w-full max-w-[560px] rounded-[16px] p-[clamp(20px,2.4vw,32px)] shadow-[0_40px_80px_-40px_rgba(11,15,19,.6)]"
-          style={{ background: 'rgba(255,255,255,.9)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}>
-          {sent ? (
-            <div className="flex min-h-[420px] items-center justify-center"><BookThanks onAnother={() => setSent(false)} /></div>
-          ) : (
-            <form onSubmit={submit}>
-              <p className="eyebrow font-mont">
-                <span className="eyebrow-mark" aria-hidden="true"><img src="assets/icons/logo-mark.svg" alt="" /></span>Book now at our two Toronto locations
-              </p>
-              <TwoTone id="book" className="mt-4" size="text-[clamp(28px,2.6vw,38px)]" lead={<>Book your consultation<br /></>} strong="in 2 simple steps" />
-              <ol className="mt-4 grid gap-2.5" role="list">
-                {['Enter your details and areas of concern.', 'We will call you with a possible day and time for your appointment.'].map((t, i) => (
-                  <li key={t} className="flex items-start gap-3 font-inter text-[14.5px] leading-[1.5] text-ndm-ink">
-                    <span className="grid size-7 shrink-0 place-items-center rounded-full bg-ndm-amber font-inter text-[12.5px] font-medium text-white">{i + 1}</span>
-                    <span className="pt-[3px]">{t}</span>
-                  </li>
-                ))}
-              </ol>
-              <div className="mt-6 grid gap-3">
-                <input required name="name" autoComplete="name" placeholder="Your name" aria-label="Your name" className={fieldCls} />
-                <input required type="email" name="email" autoComplete="email" placeholder="Your email" aria-label="Your email" className={fieldCls} />
-                <input required type="tel" name="phone" autoComplete="tel" placeholder="Your phone number" aria-label="Your phone number" className={fieldCls} />
-                <BookSelect name="treatment" value={treat} onChange={(e) => setTreat(e.target.value)} placeholder="Select your treatment">
-                  {BOOK_TREATMENTS.map((t) => <option key={t} className="text-ndm-ink">{t}</option>)}
-                </BookSelect>
-                <BookSelect name="clinic" value={clinic} onChange={(e) => setClinic(e.target.value)} placeholder="Select clinic location">
-                  {BOOK_CLINICS.map(([c, a]) => <option key={c} value={c} className="text-ndm-ink">{c}, {a}</option>)}
-                </BookSelect>
-                <textarea name="message" rows={2} placeholder="Any concerns or questions?" aria-label="Any concerns or questions?" className={`${fieldCls} h-auto resize-none py-3`} />
-                <div className="mt-2 flex flex-col items-center gap-2.5 text-center"><Btn as="button" type="submit" v="book" hot>Book Free Consultation</Btn><span className="font-inter text-[13px] text-ndm-muted">We call you to confirm a time.</span></div>
-              </div>
-            </form>
-          )}
+        className="absolute inset-0 -z-20 h-full w-full object-cover object-center will-change-transform" style={{ transform: 'scale(1.12)' }} />
+      <span aria-hidden="true" className="absolute inset-0 -z-10 bg-[rgba(11,15,19,.32)]" />
+      <div className="rv book-shell mx-auto flex max-w-[1080px] flex-col rounded-[26px] p-[clamp(18px,2.4vw,32px)]">
+        <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+          <TwoTone id="book" size="text-[clamp(26px,2.6vw,38px)]" lead={<>Book a free consultation<br /></>} strong="in three short steps" />
+          <p className="max-w-[36ch] font-inter text-[13.5px] leading-[1.5] text-ndm-muted">Uptown or Downtown. Your consultation and VISIA® skin analysis are free.</p>
         </div>
+        <div className="mt-5 flex"><BookForm summary /></div>
       </div>
     </section>
   );
@@ -3533,7 +3710,7 @@ function VisitCard({ c, i }) {
   return (
     <div className="rv visit-cell flex" style={{ transitionDelay: `${0.08 * i}s` }}>
       <article aria-labelledby={hid} className="visit-card flex min-w-0 flex-1 flex-col rounded-[28px] border border-ndm-ink/[.08] bg-white p-3">
-        <div className="rv rv-clip relative isolate aspect-[16/10] overflow-hidden rounded-[20px] bg-ndm-mist md:aspect-[2/1] lg:aspect-[16/10]" style={{ transitionDelay: `${0.12 + 0.08 * i}s` }}>
+        <div className="rv rv-clip relative isolate aspect-[16/9] overflow-hidden rounded-[20px] bg-ndm-mist md:aspect-[5/2] lg:aspect-[12/5]" style={{ transitionDelay: `${0.12 + 0.08 * i}s` }}>
           <img src={c.img} alt={`NewDermaMed ${c.name} clinic`} loading="lazy" decoding="async" className="visit-img absolute inset-0 h-full w-full object-cover" />
           <span aria-hidden="true" className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-white/85 py-1.5 pl-2.5 pr-3 font-inter text-[12px] text-ndm-ink shadow-[0_8px_20px_-10px_rgba(11,15,19,.45)] backdrop-blur-[8px]">
             <IconPin size={13} className="text-ndm-deep" />{c.name} clinic
@@ -3906,11 +4083,46 @@ const PROMO_REVIEWS = [ /* from the TESTIMONIALS block on newdermamedlaserclinic
   ['Ahmad N.', 'Multiple Sessions', '8.png', 'This clinic stands out as an exceptional establishment, offering professional services with state-of-the-art equipment tailored for cosmetic and skincare treatments. My personal experience, having undergone multiple skincare sessions here, has been thoroughly satisfying with remarkable results.'],
   ['Valeriia C.', 'Microneedling', '9.png', 'Absolutely amazing experience at Newdermamed! The staff was very professional and kind! The receptionist Sarah was very friendly and walked me though the e-forms. Alicia did my treatment with great professionalism!! She was very nice and informative, and made me feel comfortable. My face has never looked better!'],
 ];
+/* awards & recognition cards, same words as the awards block: three looks so they stand out between the reviews */
+const AWARD_CARDS = [
+  { look: 'ink', k: 'Awards & recognition', big: '8 consecutive years', d: 'Recognized as Toronto’s Top Choice Cosmetic & Laser Clinic, 2019 to 2026.', years: true },
+  { look: 'blue', k: 'Top Choice Award', big: '2026', d: 'Toronto’s Top Choice Cosmetic & Laser Clinic, for the eighth year in a row.', badge: 2026 },
+  { look: 'amber', k: 'Patient care', mark: true, big: '16+ years', d: 'Of dedication to patient care, innovation and consistent, high-quality treatment.' },
+];
+const AWARD_LOOK = {
+  ink: 'bg-ndm-ink text-white',
+  blue: 'bg-[linear-gradient(150deg,#0F80C3_0%,#209ED9_55%,#26B1E7_100%)] text-white',
+  amber: 'bg-[#FFF4E0] text-ndm-ink border border-[#FFA617]/30',
+};
+function AwardCard({ a }) {
+  const dark = a.look !== 'amber';
+  return (
+    <li className="w-[min(82vw,400px)] shrink-0">
+      <figure className={`relative m-0 flex h-full flex-col overflow-hidden rounded-[22px] p-6 shadow-[0_24px_50px_-40px_rgba(27,36,43,.45)] ${AWARD_LOOK[a.look]}`}>
+        {a.mark && <span role="img" aria-label="NewDermaMed, 16 years" className="mark-16 mb-5 text-[#8A5A12]" />}
+        <div className="flex items-center justify-between gap-4">
+          <span className={`font-inter text-[12px] uppercase tracking-[.16em] ${dark ? 'text-white/70' : 'text-ndm-muted'}`}>{a.k}</span>
+          {a.stars && <Stars />}
+        </div>
+        <p className="mt-4 font-aeonik text-[clamp(34px,3vw,44px)] leading-none tracking-[-0.03em]">{a.big}</p>
+        <p className={`mt-3 max-w-[32ch] font-inter text-[15px] leading-[1.55] ${dark ? 'text-white/80' : 'text-ndm-muted'}`}>{a.d}</p>
+        {a.years && (
+          <ul role="list" className="mt-auto flex gap-1 pt-6" aria-label="Top Choice Award, 2019 to 2026">
+            {AWARD_YEARS.map((y) => <li key={y}><img src={`assets/awards/top-choice-${y}.png`} alt="" loading="lazy" draggable="false" className="size-[clamp(30px,8vw,38px)] object-contain" /></li>)}
+          </ul>
+        )}
+        {a.badge && <img src={`assets/awards/top-choice-${a.badge}.png`} alt={`Top Choice Award ${a.badge}`} loading="lazy" draggable="false" className="pointer-events-none absolute -bottom-3 -right-3 size-[120px] rotate-[-8deg] object-contain opacity-95" />}
+        {a.mark && <p className="mt-auto pt-6 font-inter text-[13px] text-ndm-muted">Uptown and Downtown Toronto</p>}
+      </figure>
+    </li>
+  );
+}
 function PromoReviewCard({ r }) {
+  if (r.look) return <AwardCard a={r} />;
   const [name, tag, photo, quote] = r;
   return (
     <li className="w-[min(82vw,400px)] shrink-0">
-      <figure className="m-0 flex h-full flex-col rounded-[22px] border border-ndm-ink/[.06] bg-white/80 p-6 shadow-[0_24px_50px_-40px_rgba(27,36,43,.35)]">
+      <figure className="m-0 flex h-full flex-col rounded-[22px] border border-ndm-ink/[.06] bg-white p-6 shadow-[0_24px_50px_-40px_rgba(27,36,43,.35)]">
         <Stars />
         <blockquote className="mt-4 font-inter text-[15.5px] leading-[1.6] text-ndm-ink">“{quote}”</blockquote>
         <figcaption className="mt-auto flex items-center gap-3 pt-6">
@@ -3941,25 +4153,33 @@ function GoogleStars({ value }) {
   );
 }
 
-/* one testimonials row: drifts on its own (rAF), never pauses on hover, and can be grabbed and dragged either way */
-function ReviewRow({ items, dir = 1, dur = 62, hidden }) {
+/* one testimonials row: drifts on its own (rAF) and loops for ever; it can be dragged with a mouse or finger
+   and pushed sideways with a trackpad swipe, then carries on drifting */
+const REV_COPIES = 3;
+function ReviewRow({ items, dir = 1, dur = 28, hidden }) {
   const wrap = useRef(null), track = useRef(null);
   useEffect(() => {
     const w = wrap.current, el = track.current; if (!w || !el) return;
-    let x = dir > 0 ? 0 : el.scrollWidth / 4, last = 0, raf = 0, half = 0, drag = null, on = true;
-    const measure = () => { half = el.scrollWidth / 2; };
+    let x = 0, last = 0, raf = 0, period = 0, drag = null, on = true, idle = 0;
+    const measure = () => { period = el.scrollWidth / REV_COPIES; };
     measure();
-    window.addEventListener('resize', measure);
+    const ro = new ResizeObserver(measure); ro.observe(el);
     const io = new IntersectionObserver(([e]) => { on = e.isIntersecting; });
     io.observe(w);
     const tick = (t) => {
       const dt = last ? Math.min(64, t - last) : 0; last = t;
-      if (on && !drag && !REDUCED && half) x += dir * (half / (dur * 1000)) * dt;
-      if (half) x = ((x % half) + half) % half;
+      if (on && !drag && !REDUCED && period && t > idle) x += dir * (period / (dur * 1000)) * dt;
+      if (period) x = ((x % period) + period) % period;
       el.style.transform = `translate3d(${(-x).toFixed(2)}px,0,0)`;
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
+    /* trackpad: a mostly sideways swipe moves the row; vertical scrolling still scrolls the page */
+    const wheel = (e) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault(); e.stopPropagation(); /* keep the smooth-scroll library from also acting on it */
+      x += e.deltaX; idle = performance.now() + 900;
+    };
     const down = (e) => { if (e.button !== 0) return; drag = { x0: e.clientX, s: x, moved: false }; };
     const move = (e) => {
       if (!drag) return;
@@ -3970,18 +4190,21 @@ function ReviewRow({ items, dir = 1, dur = 62, hidden }) {
     const up = () => {
       if (!drag) return;
       if (drag.moved) { const stop = (ev) => { ev.preventDefault(); ev.stopPropagation(); }; w.addEventListener('click', stop, { capture: true, once: true }); setTimeout(() => w.removeEventListener('click', stop, true), 60); }
-      drag = null; w.classList.remove('is-dragging');
+      drag = null; idle = performance.now() + 600; w.classList.remove('is-dragging');
     };
+    w.addEventListener('wheel', wheel, { passive: false });
     w.addEventListener('pointerdown', down);
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', up);
     window.addEventListener('pointercancel', up);
-    return () => { cancelAnimationFrame(raf); io.disconnect(); window.removeEventListener('resize', measure); w.removeEventListener('pointerdown', down); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
+    return () => { cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); w.removeEventListener('wheel', wheel); w.removeEventListener('pointerdown', down); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
   }, []);
+  const all = Array.from({ length: REV_COPIES }, () => items).flat();
   return (
     <div ref={wrap} className="promo-rev-row overflow-hidden" onDragStart={(e) => e.preventDefault()}>
-      <ul ref={track} role="list" aria-hidden={hidden} className="flex w-max gap-4 will-change-transform">
-        {[...items, ...items].map((r, i) => <PromoReviewCard key={i} r={r} />)}
+      {/* the right padding equals the gap, so one copy plus its gap is exactly a third of the track and the loop has no jump */}
+      <ul ref={track} role="list" aria-hidden={hidden} className="flex w-max items-stretch gap-4 pr-4 will-change-transform">
+        {all.map((r, i) => <PromoReviewCard key={i} r={r} />)}
       </ul>
     </div>
   );
@@ -3990,7 +4213,8 @@ function ReviewRow({ items, dir = 1, dur = 62, hidden }) {
 function PromoReviews() {
   const ref = useRef(null);
   useReveal(ref);
-  const rows = [PROMO_REVIEWS.slice(0, 4), [...PROMO_REVIEWS.slice(4), ...PROMO_REVIEWS.slice(0, 1)]];
+  const [A1, A2, A3] = AWARD_CARDS, R = PROMO_REVIEWS;
+  const rows = [[R[0], A1, R[1], R[2], A3, R[3], R[4], A2, R[5], R[6]]]; /* one looping row */
   return (
     <section ref={ref} aria-labelledby="testimonials" className="relative z-10 overflow-hidden bg-ndm-paper py-[clamp(72px,8vw,128px)]">
       <div className="grid gap-6 px-[var(--gx)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
@@ -4010,7 +4234,7 @@ function PromoReviews() {
         </div>
       </div>
       <div className="promo-rev-rows mt-10 grid gap-4 md:mt-14">
-        {rows.map((row, k) => <ReviewRow key={k} items={row} dir={k ? -1 : 1} dur={k ? 70 : 62} hidden={k === 1} />)}
+        {rows.map((row, k) => <ReviewRow key={k} items={row} dir={k ? -1 : 1} dur={28} hidden={k === 1} />)}
       </div>
       <p className="mt-6 px-[var(--gx)] font-inter text-[12px] text-ndm-muted/70">Patient reviews shared from Google · names shortened for privacy · individual results may vary.</p>
     </section>
@@ -4128,9 +4352,10 @@ function CartDrawer({ open, onClose, onBrowse }) {
               <p className="mt-0.5 flex items-baseline justify-between"><span className="font-inter text-[14.5px]">Subtotal</span><span className="font-aeonik text-[22px] tracking-[-0.02em] tabular-nums">{money(cart.total)}</span></p>
               <p className="mt-1.5 font-inter text-[12px] leading-[1.45] text-ndm-muted">Taxes added at checkout. Your plan is confirmed at a free consultation. Affirm payments available on orders of $500 or more (Canadian citizens and residents, 19+).</p>
               <div className="mt-3.5 grid grid-cols-[1fr_auto] items-center gap-3">
-                <Btn href="#/checkout" v="ink" block className="btn-buy">Checkout</Btn>
-                <button type="button" onClick={onClose} className="px-2 font-inter text-[14px] text-ndm-ink underline-offset-4 hover:underline">Continue browsing</button>
+                <Btn href="checkout.html" v="ink" block className="btn-buy">Checkout</Btn>
+                <a href="cart.html" className="px-2 font-inter text-[14px] font-medium text-ndm-deep underline-offset-4 hover:underline">View cart</a>
               </div>
+              <button type="button" onClick={onClose} className="mt-2 w-full py-1.5 text-center font-inter text-[13.5px] text-ndm-muted underline-offset-4 hover:underline">Continue browsing</button>
             </div>
           </>
         )}
@@ -4185,7 +4410,7 @@ function CartPill({ onOpen, hidden }) {
     <button type="button" onClick={onOpen} tabIndex={show ? 0 : -1} aria-hidden={!show} data-float-avoid=""
       onTransitionEnd={(e) => { if (e.propertyName === 'transform') window.dispatchEvent(new Event('scroll')); }}
       aria-label={`View cart, ${cart.count} ${cart.count === 1 ? 'item' : 'items'}, ${money(cart.total)}`}
-      className={`cart-pill fixed inset-x-4 bottom-4 z-[60] flex items-center gap-3 rounded-full bg-ndm-ink py-2 pl-2 pr-2 text-left text-white shadow-[0_24px_50px_-20px_rgba(11,15,19,.6)] sm:inset-x-auto sm:right-6 sm:bottom-6 ${show ? '' : 'is-off'}`}>
+      className={`cart-pill fixed inset-x-4 bottom-4 z-[60] flex items-center gap-3 rounded-full bg-ndm-deep py-2 pl-2 pr-2 text-left text-white shadow-[0_24px_50px_-20px_rgba(11,15,19,.6)] sm:inset-x-auto sm:right-6 sm:bottom-6 ${show ? '' : 'is-off'}`}>
       <span className="relative grid size-11 shrink-0 place-items-center rounded-full bg-white/10">
         <IconBag size={20} />
         <span key={bump} className="cart-bump absolute -right-0.5 -top-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ndm-sky px-1 font-inter text-[11px] font-semibold leading-none text-white">{cart.count}</span>
@@ -4203,9 +4428,7 @@ function CartPill({ onOpen, hidden }) {
    Centred card on desktop, bottom sheet on phones; Esc, the backdrop or the close button shut it. */
 function BookPopup() {
   const [open, setOpen] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [treat, setTreat] = useState('');
-  const [clinic, setClinic] = useState('');
+  const [run, setRun] = useState(0); /* a fresh form every time the pop-up opens */
   const box = useRef(null), opener = useRef(null);
   const close = useCallback(() => {
     setOpen(false);
@@ -4217,7 +4440,7 @@ function BookPopup() {
       const a = e.target.closest && e.target.closest('a[href="#/book"]');
       if (!a) return;
       e.preventDefault();
-      opener.current = a; setSent(false); setOpen(true);
+      opener.current = a; setRun((x) => x + 1); setOpen(true);
     };
     document.addEventListener('click', onClick);
     return () => document.removeEventListener('click', onClick);
@@ -4235,40 +4458,14 @@ function BookPopup() {
       <div className="book-scrim absolute inset-0 bg-[#0B0F13]/55 backdrop-blur-[6px]" onClick={close} />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center sm:inset-0 sm:items-center sm:p-6">
         <div ref={box} role="dialog" aria-modal="true" aria-labelledby="book-pop-title" data-lenis-prevent=""
-          className="book-card pointer-events-auto relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white px-[clamp(20px,2.4vw,32px)] pb-[max(22px,env(safe-area-inset-bottom))] pt-6 shadow-[0_40px_80px_-30px_rgba(11,15,19,.6)] sm:max-w-[560px] sm:rounded-[20px] sm:pt-[clamp(20px,2.4vw,32px)]">
+          className="book-card pointer-events-auto relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white px-[clamp(20px,2.4vw,32px)] pb-[max(22px,env(safe-area-inset-bottom))] pt-6 shadow-[0_40px_80px_-30px_rgba(11,15,19,.6)] sm:max-w-[680px] sm:rounded-[20px] sm:pt-[clamp(20px,2.4vw,32px)]">
           <span aria-hidden="true" className="absolute left-1/2 top-2.5 h-1 w-10 -translate-x-1/2 rounded-full bg-ndm-ink/15 sm:hidden" />
           <button type="button" onClick={close} aria-label="Close booking form" className="absolute right-3 top-3 grid size-10 place-items-center rounded-full text-ndm-ink transition-colors hover:bg-ndm-mist sm:right-4 sm:top-4"><IconClose /></button>
-          {sent ? (
-            <div className="flex min-h-[420px] items-center justify-center"><BookThanks id="book-pop-title" onAnother={() => setSent(false)} /></div>
-          ) : (
-            <form onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
-              <p className="eyebrow font-mont">
-                <span className="eyebrow-mark" aria-hidden="true"><img src="assets/icons/logo-mark.svg" alt="" /></span>Book now at our two Toronto locations
-              </p>
-              <TwoTone id="book-pop-title" className="mt-4 pr-8" size="text-[clamp(26px,2.6vw,36px)]" lead={<>Book your consultation<br /></>} strong="in 2 simple steps" />
-              <ol className="mt-4 grid gap-2.5" role="list">
-                {['Enter your details and areas of concern.', 'We will call you with a possible day and time for your appointment.'].map((t, i) => (
-                  <li key={t} className="flex items-start gap-3 font-inter text-[14.5px] leading-[1.5] text-ndm-ink">
-                    <span className="grid size-7 shrink-0 place-items-center rounded-full bg-ndm-amber font-inter text-[12.5px] font-medium text-white">{i + 1}</span>
-                    <span className="pt-[3px]">{t}</span>
-                  </li>
-                ))}
-              </ol>
-              <div className="mt-5 grid gap-2.5 sm:mt-6 sm:gap-3">
-                <input required name="name" autoComplete="name" placeholder="Your name" aria-label="Your name" className={fieldCls} />
-                <input required type="email" name="email" autoComplete="email" placeholder="Your email" aria-label="Your email" className={fieldCls} />
-                <input required type="tel" name="phone" autoComplete="tel" placeholder="Your phone number" aria-label="Your phone number" className={fieldCls} />
-                <BookSelect name="treatment" value={treat} onChange={(e) => setTreat(e.target.value)} placeholder="Select your treatment">
-                  {BOOK_TREATMENTS.map((t) => <option key={t} className="text-ndm-ink">{t}</option>)}
-                </BookSelect>
-                <BookSelect name="clinic" value={clinic} onChange={(e) => setClinic(e.target.value)} placeholder="Select clinic location">
-                  {BOOK_CLINICS.map(([c, a]) => <option key={c} value={c} className="text-ndm-ink">{c}, {a}</option>)}
-                </BookSelect>
-                <textarea name="message" rows={2} placeholder="Any concerns or questions?" aria-label="Any concerns or questions?" className={`${fieldCls} h-auto resize-none py-3`} />
-                <div className="mt-2 flex flex-col items-center gap-2.5 text-center"><Btn as="button" type="submit" v="book" hot>Book Free Consultation</Btn><span className="font-inter text-[13px] text-ndm-muted">We call you to confirm a time.</span></div>
-              </div>
-            </form>
-          )}
+          <p className="eyebrow font-mont">
+            <span className="eyebrow-mark" aria-hidden="true"><img src="assets/icons/logo-mark.svg" alt="" /></span>Book now at our two Toronto locations
+          </p>
+          <TwoTone id="book-pop-title" className="mt-4 pr-8" size="text-[clamp(26px,2.6vw,36px)]" lead={<>Book a free consultation<br /></>} strong="in three short steps" />
+          <div className="mt-6 flex"><BookForm key={run} thanksId="book-pop-title" /></div>
         </div>
       </div>
     </div>
@@ -4396,9 +4593,9 @@ function ChatBot({ ready, hidden }) {
   useEffect(() => {
     if (!ready) return;
     let seen = false;
-    try { seen = sessionStorage.getItem('ndm-chat-note') === '1'; } catch (e) {}
+    try { seen = sessionStorage.getItem('ndm-chat-note') === 'closed'; } catch (e) {}
     if (seen) return;
-    const t = setTimeout(() => { setNote(true); try { sessionStorage.setItem('ndm-chat-note', '1'); } catch (e) {} }, 4500);
+    const t = setTimeout(() => setNote(true), 4500);
     return () => clearTimeout(t);
   }, [ready]);
   /* the pop-up first shows the assistant typing, then the message arrives with a soft chime */
@@ -4423,9 +4620,10 @@ function ChatBot({ ready, hidden }) {
   useOnScroll(measure, []);
   useEffect(() => { const t = setInterval(measure, 500); return () => clearInterval(t); }, []);
   useEffect(() => { if (list.current) list.current.scrollTop = list.current.scrollHeight; }, [msgs, typing]);
+  const noteOff = () => { setNote(false); try { sessionStorage.setItem('ndm-chat-note', 'closed'); } catch (e) {} };
   useEffect(() => {
     if (!open) return;
-    setNote(false);
+    noteOff();
     const t = setTimeout(() => input.current && !small && input.current.focus({ preventScroll: true }), 200);
     const k = (e) => { if (e.key === 'Escape') { setOpen(false); btn.current && btn.current.focus({ preventScroll: true }); } };
     window.addEventListener('keydown', k);
@@ -4446,32 +4644,13 @@ function ChatBot({ ready, hidden }) {
   return (
     <>
       {note && !open && !off && (!small || clear) && (
-        <div role="status" className="chat-pop fixed z-[61] w-[min(300px,calc(100vw-88px))] rounded-[20px] rounded-br-[6px] bg-white shadow-[0_28px_60px_-22px_rgba(11,15,19,.5)] ring-1 ring-ndm-ink/[.06]"
-          style={small ? { right: 16, bottom: `calc(${bottom + 64}px + env(safe-area-inset-bottom))` } : { right: 24 + 58 + 12, bottom }}>
-          <button type="button" onClick={() => setNote(false)} aria-label="Dismiss message" className="absolute right-2 top-2 grid size-7 place-items-center rounded-full text-ndm-muted hover:bg-ndm-mist hover:text-ndm-ink"><IconClose size={14} /></button>
-          <div className="flex items-center gap-2.5 px-4 pt-3.5 pr-10">
-            <span className="relative size-9 shrink-0"><img src={CHAT_AGENT.img} alt="" className="size-9 rounded-full object-cover" /><i className="absolute bottom-0 right-0 size-2.5 rounded-full bg-[#3DDC84] ring-2 ring-white" /></span>
-            <span className="min-w-0">
-              <span className="block font-inter text-[13.5px] font-semibold leading-tight text-ndm-ink">{CHAT_AGENT.name} <span className="font-normal text-ndm-muted">· NewDermaMed</span></span>
-              <span className="mt-0.5 block font-inter text-[11.5px] text-ndm-muted">Virtual assistant · now</span>
-            </span>
-          </div>
-          <div className="px-4 pb-4 pt-3">
-            {noteTyping ? (
-              <span className="flex w-fit gap-1 rounded-[16px] rounded-tl-[6px] bg-ndm-paper px-3.5 py-3" aria-label="Typing">{[0, 1, 2].map((d) => <i key={d} className="chat-dot size-1.5 rounded-full bg-ndm-muted" style={{ animationDelay: `${d * 0.15}s` }} />)}</span>
-            ) : (
-              <>
-                <button type="button" onClick={() => setOpen(true)} className="chat-pop-msg block w-full rounded-[16px] rounded-tl-[6px] bg-ndm-paper px-3.5 py-3 text-left transition-colors hover:bg-ndm-mist">
-                  <span className="block font-aeonik text-[19px] leading-[1.2] text-ndm-ink">How can I help you today?</span>
-                  <span className="mt-1 block font-inter text-[13px] leading-[1.45] text-ndm-muted">Ask me about treatments, prices or booking.</span>
-                </button>
-                <div className="chat-pop-msg mt-3 flex flex-wrap gap-2" style={{ animationDelay: '.12s' }}>
-                  <button type="button" onClick={() => setOpen(true)} className="rounded-full bg-ndm-deep px-3.5 py-2 font-inter text-[13px] font-medium text-white transition-colors hover:bg-ndm-ink">Ask a question</button>
-                  <a href="#/book" onClick={() => setNote(false)} className="rounded-full border border-ndm-ink/15 px-3.5 py-2 font-inter text-[13px] text-ndm-ink transition-colors hover:border-ndm-ink">Book a consultation</a>
-                </div>
-              </>
-            )}
-          </div>
+        <div role="status" className="chat-pop fixed z-[61] flex max-w-[calc(100vw-88px)] items-center gap-2.5 rounded-[18px] rounded-br-[6px] bg-white py-2 pl-2 pr-9 shadow-[0_24px_50px_-22px_rgba(11,15,19,.5)] ring-1 ring-ndm-ink/[.06]"
+          style={small ? { right: 16, bottom: `calc(${bottom + 64}px + env(safe-area-inset-bottom))` } : { right: 24 + 58 + 12, bottom: bottom + 8 }}>
+          <span className="relative size-9 shrink-0"><img src={CHAT_AGENT.img} alt="" className="size-9 rounded-full object-cover" /><i className="absolute bottom-0 right-0 size-2.5 rounded-full bg-[#3DDC84] ring-2 ring-white" /></span>
+          {noteTyping
+            ? <span className="flex gap-1 px-1 py-2" aria-label="Typing">{[0, 1, 2].map((d) => <i key={d} className="chat-dot size-1.5 rounded-full bg-ndm-muted" style={{ animationDelay: `${d * 0.15}s` }} />)}</span>
+            : <button type="button" onClick={() => setOpen(true)} className="chat-pop-msg whitespace-nowrap py-1 text-left font-inter text-[14px] font-medium text-ndm-ink hover:text-ndm-deep">Hi, how can I help?</button>}
+          <button type="button" onClick={noteOff} aria-label="Dismiss message" className="absolute right-1.5 top-1/2 grid size-7 -translate-y-1/2 place-items-center rounded-full text-ndm-muted hover:bg-ndm-mist hover:text-ndm-ink"><IconClose size={13} /></button>
         </div>
       )}
       <button ref={btn} type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} aria-controls="chat-panel" aria-label={open ? 'Close chat' : 'Chat with NewDermaMed'} tabIndex={off ? -1 : 0}
@@ -4537,7 +4716,7 @@ const PROC = {
   title: ['Botox® Cosmetic', 'in Toronto'],
   sub: 'A prescription treatment given by our medical team after an in-person assessment, at our Uptown and Downtown clinics.',
   hero: { d: `${NDM}/wp-content/uploads/2025/09/2.jpg`, m: `${NDM}/wp-content/uploads/2025/09/2.1.jpg`, pos: '30% 30%' },
-  offer: { tag: 'Current offer', title: 'Botox® Cosmetic packages', line: 'Up to 30% off packages of 60 to 220 units.', img: 'assets/pricing/price-1.jpg', href: '#prices', cta: 'View offer' },
+  offer: { tag: 'Current offer', title: 'Botox® Cosmetic packages', big: ['Up to', '30%', 'off'], href: '#prices', cta: 'See the prices' },
   /* floating "at a glance" card (NDM's quick facts and both phone numbers) */
   facts: [['Treatment type', 'Injectable'], ['Duration', '30 minutes'], ['Recovery time', 'Minimal downtime']],
   glance: 'A short treatment, planned after a free, in-person assessment by our medical team.',
@@ -4550,6 +4729,8 @@ const PROC = {
     ],
     chips: ['Forehead lines', 'Frown lines', 'Crow’s feet'],
     note: 'Given only by licensed medical professionals at our Uptown and Downtown clinics.',
+    /* shown alone beside the photo: everything above and below in one paragraph */
+    para: 'Small amounts of a prescription medicine are placed in specific facial muscles to relax them for a time, which may soften the lines that form when you frown, squint or raise your brows, such as forehead lines, frown lines and crow’s feet. It does not add volume. Your provider plans how much is used and where, around how your face moves, so your usual expressions can stay natural, and only after an in-person medical assessment. A visit takes about 15 to 20 minutes, usually with minimal downtime, and the treatment is given only by licensed medical professionals at our Uptown and Downtown clinics. Individual results may vary.',
     img: 'assets/pricing/price-4.jpg', alt: 'A provider giving an injectable treatment with a fine needle', pos: '50% 35%',
     points: [
       ['Softer lines', 'May soften forehead lines, frown lines and crow’s feet.'],
@@ -4557,13 +4738,40 @@ const PROC = {
       ['A quick visit', 'About 15 to 20 minutes, usually with minimal downtime.'],
     ],
   },
-  /* treatment overview: four short summaries of NDM's tabs, pricing left out (after Elevra "About") */
-  overview: [
-    { label: 'Treatment overview', pre: '', to: 20, suf: '+', title: 'years of clinical research', text: 'A non-surgical treatment used in more than 78 countries. It relaxes the muscles behind expression lines for a time.' },
-    { label: 'What to expect', pre: '15–', to: 20, suf: '', title: 'minutes per session', text: 'A very fine needle and a brief pinch. Most people return to their usual activities straight away.' },
-    { label: 'How it works', pre: '3–', to: 7, suf: '', title: 'days to a visible change', text: 'It briefly blocks the nerve signals to treated muscles, so they contract less. It does not add volume.' },
-    { label: 'Maintenance', pre: '3–', to: 4, suf: '', title: 'months, typical duration', text: 'Varies with the area, metabolism and lifestyle. Many people plan three to four visits a year.' },
-  ],
+  /* your treatment, in tabs (after the thread lift page's treatment overview: what to expect, how it works, maintenance, pricing).
+     Effects are written about "the treatment" in qualified language; the brand name only appears with the price (C.01.044) */
+  overview: {
+    tag: 'Your treatment', lead: 'From first visit', strong: 'to maintenance',
+    tabs: [
+      { label: 'Overview', stat: ['20+', 'years of clinical research'], text: [
+        'A non-surgical treatment used in more than 78 countries, with more than 20 years of clinical research behind it. It relaxes the muscles behind expression lines for a time, and it does not add volume.',
+        'At NewDermaMed it is given only by our licensed medical team, after a free, in-person assessment at our Uptown or Downtown clinic. Individual results may vary.'] },
+      { label: 'What to expect', stat: ['15–20', 'minutes per treatment'], text: [
+        'Your visit starts with a free, in-person assessment at our Uptown or Downtown clinic. A member of our medical team reviews your health history, your goals and how your face moves, and explains whether the treatment suits you, its possible risks and the alternatives.',
+        'If it is appropriate, the treatment itself takes about 15 to 20 minutes, with a very fine needle and a brief pinch. Most people return to their usual activities straight away. Mild redness, swelling or bruising at the injection sites may occur and usually settles within hours to days. Individual results may vary.'] },
+      { label: 'How it works', stat: ['3–7', 'days to a visible change'], text: [
+        'Small amounts of a prescription medicine are placed in specific facial muscles. It briefly blocks the nerve signals to those muscles, so they contract less for a time, which may soften the lines that form when you frown, squint or raise your brows.',
+        'A change is usually noticed within 3 to 7 days, with the full effect at about two weeks. The treatment does not add volume, so your provider may discuss other options for lines that stay when your face is at rest.'] },
+      { label: 'Maintenance', stat: ['3–4', 'months, typical duration'], text: [
+        'The effect typically lasts three to four months, depending on the area treated, your metabolism and your lifestyle. Many people plan three to four visits a year.',
+        'Your provider reviews your plan at each visit and adjusts the amount and placement as needed. Individual results may vary.'] },
+      { label: 'Pricing', stat: ['$12', 'per unit'], text: [
+        'Botox® Cosmetic is $12 per unit, with packages of 60 to 220 units currently 10% to 30% off.',
+        'The number of units depends on the areas treated and your plan, so your final price is confirmed at your free consultation.'], link: ['#prices', 'See the price list'] },
+    ],
+  },
+  /* compare the options (website v3 concern pages): this treatment beside the other options for lines. A general guide only */
+  compare: {
+    cols: [['This treatment', null], ['Dermal Fillers', '#/dermal-fillers'], ['Laser Skin Resurfacing', '#/laser-skin-resurfacing'], ['Skin Boosters', '#/skin-boosters']],
+    rows: [
+      ['How it works', ['Relaxes the muscles behind expression lines for a time', 'Hyaluronic acid gel restores volume and support', 'Laser renews the outer layers and builds collagen', 'Fine hyaluronic acid improves hydration and quality']],
+      ['Often chosen for', ['Lines that form when your face moves', 'Folds that stay at rest, and lost volume', 'Fine lines and texture', 'Crepey skin and fine lines']],
+      ['Typical course', ['One short visit, repeated every 3 to 4 months', 'Usually one session, with an optional review at 2 weeks', '1 to 3 sessions, depending on depth', 'Often 2 to 3 sessions, about a month apart']],
+      ['Downtime', ['Minimal; mild redness or swelling may occur', 'Possible swelling or bruising for a few days', 'From 1 to 2 days (laser peel) to 5 to 10 days (deeper resurfacing)', 'Small bumps or redness for 1 to 2 days']],
+      ['When results may appear', ['Within 3 to 7 days, full effect at about 2 weeks', 'Visible right away, settling over about 2 weeks', 'As the skin heals, with collagen changes over 3 to 6 months', 'Gradual over 2 to 4 weeks']],
+      ['Starting price', ['$12 per unit', 'From $750', 'From $200', 'From $399']],
+    ],
+  },
   /* why choose this treatment: who it may suit and safety (after Latos "Advantages") */
   choose: {
     img: 'assets/pricing/price-3.jpg',
@@ -4630,7 +4838,7 @@ function ProcForm({ id, className = '' }) {
             <textarea name="notes" rows={2} placeholder="Any concerns or questions?" aria-label="Any concerns or questions?" className={`${fieldCls} h-auto resize-none py-3`} />
           </div>
           <Btn v="book" hot block className="mt-4" type="submit">Book Free Consultation</Btn>
-          <p className="mt-3 font-inter text-[12px] leading-[1.5] text-ndm-muted">Free and no obligation. A provider confirms whether the treatment suits you.</p>
+          <p className="mt-3 font-inter text-[12px] leading-[1.5] text-ndm-muted">Free and no obligation.</p>
         </form>
       )}
     </div>
@@ -4659,22 +4867,19 @@ function ProcHero({ p }) {
         <div className="max-w-[640px]">
           <TwoTone as="h1" id="proc-title" dark className="rv" size="text-[clamp(44px,5.6vw,88px)]" lead={<>{p.title[0]}<br /></>} strong={p.title[1]} />
           <p className="rv mt-5 max-w-[48ch] font-inter text-[16.5px] leading-[1.6] text-white/80" style={{ transitionDelay: '.08s' }}>{p.sub}</p>
-          {/* the offer, at a glance (Medsecom hero card idea, frosted glass); only when the page has one */}
-          {o && <div className="rv offer-glass mt-8 flex max-w-[520px] items-center gap-4 rounded-[20px] p-3 pr-4 sm:gap-5" style={{ transitionDelay: '.16s' }}>
-            <span className="relative block size-[88px] shrink-0 overflow-hidden rounded-[14px] sm:size-[104px]">
-              <img src={o.img} alt="" className="h-full w-full object-cover" />
+          {/* the offer, at a glance: frosted glass with a light that sweeps across it now and then; no photo */}
+          {o && <a href={o.href} aria-label={`${o.tag}: ${o.title}, ${o.big.join(' ')}. ${o.cta}`} className="rv offer-glass offer-shine group mb-5 mt-7 inline-flex max-w-full items-center gap-4 overflow-hidden rounded-[18px] lg:mb-0 py-3 pl-4 pr-3" style={{ transitionDelay: '.16s' }}>
+            <span className="min-w-0">
+              <span className="offer-pill inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 font-inter text-[11px] font-medium"><i className="offer-dot size-1.5 rounded-full bg-ndm-amber" />{o.tag}</span>
+              <span className="mt-1.5 block font-aeonik text-[17px] leading-[1.2] tracking-[-0.01em] text-white">{o.title}</span>
             </span>
-            <div className="min-w-0 flex-1">
-              <span className="offer-pill inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-inter text-[11.5px] font-medium">
-                <i className="offer-dot size-1.5 rounded-full bg-ndm-amber" />{o.tag}
-              </span>
-              <p className="mt-2 font-aeonik text-[clamp(18px,1.5vw,21px)] leading-[1.2] tracking-[-0.01em] text-white">{o.title}</p>
-              <p className="mt-1 font-inter text-[13.5px] leading-[1.45] text-white/75">{o.line}</p>
-              <a href={o.href} className="group mt-2.5 inline-flex items-center gap-1.5 font-inter text-[13.5px] font-medium text-white underline-offset-4 hover:underline">
-                {o.cta}<IconArrow className="transition-transform group-hover:translate-x-1" />
-              </a>
-            </div>
-          </div>}
+            <span className="offer-big flex items-baseline gap-1.5 whitespace-nowrap">
+              <span className="font-inter text-[11px] uppercase tracking-[.14em] text-white/70">{o.big[0]}</span>
+              <span className="font-aeonik text-[34px] leading-none tracking-[-0.03em] text-white">{o.big[1]}</span>
+              <span className="font-inter text-[11px] uppercase tracking-[.14em] text-[#FFC266]">{o.big[2]}</span>
+            </span>
+            <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-full bg-white/15 text-white transition-colors group-hover:bg-white group-hover:text-ndm-ink"><IconArrow /></span>
+          </a>}
         </div>
         <ProcForm id="hero-form" className="rv hidden lg:block" />
       </div>
@@ -4713,29 +4918,137 @@ function ProcGlance({ p, wide }) {
   );
 }
 
-/* ---------------------------------------------------------------- treatment overview: centred heading, four counting cards in a row (Elevra "About" cards) */
+/* ---------------------------------------------------------------- your treatment, in tabs (the thread lift page's treatment overview,
+   in the site's own look): a tab row, then the words on the left and the key number on the right */
 function ProcOverview({ p }) {
-  const ref = useRef(null), grid = useRef(null);
+  const ref = useRef(null), tabs = useRef([]);
   useReveal(ref);
-  const run = useInView(grid, { threshold: 0.3 });
+  const o = p.overview;
+  const [act, setAct] = useState(0);
+  const t = o.tabs[act];
+  const key = (e, i) => {
+    const k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!k) return;
+    e.preventDefault();
+    const n = (i + k + o.tabs.length) % o.tabs.length;
+    setAct(n); if (tabs.current[n]) tabs.current[n].focus();
+  };
   return (
-    <section ref={ref} id="overview" aria-labelledby="overview-title" className="relative z-10 bg-white px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
-      <TxHead p={p} id="overview" tag="Treatment overview" hid="overview-title" lead="From first visit" strong="to maintenance" text="What the treatment is, what to expect, how it works and how long it typically lasts. Individual results may vary." />
-      <ul ref={grid} className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid gap-3 sm:grid-cols-2 lg:grid-cols-4`} role="list">
-        {p.overview.map((c, i) => (
-          <li key={c.label} className="rv ov-card relative flex min-h-[190px] flex-col justify-between overflow-hidden rounded-[22px] bg-ndm-paper p-[clamp(18px,1.8vw,24px)] text-ndm-ink sm:min-h-[230px]" style={{ transitionDelay: `${0.06 * i}s` }}>
-            <div>
-              <p className="font-inter text-[12px] font-[550] uppercase tracking-[.14em] text-ndm-deep">{c.label}</p>
-              <p className="mt-3 font-aeonik text-[clamp(40px,3.6vw,56px)] leading-none tracking-[-0.04em] tabular-nums">{c.pre}<CountUp to={c.to} run={run} suffix={c.suf} /></p>
+    <section ref={ref} id="overview" aria-labelledby="overview-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
+      <TxHead p={p} id="overview" tag={o.tag} hid="overview-title" lead={o.lead} strong={o.strong} />
+      <div className={`${TX_WRAP} rv mt-[clamp(32px,4vw,52px)] overflow-hidden rounded-[28px] bg-white ring-1 ring-ndm-ink/[.06] shadow-[0_30px_60px_-46px_rgba(27,36,43,.45)]`} style={{ transitionDelay: '.08s' }}>
+        <div role="tablist" aria-label="About the treatment" className="no-scrollbar mx-[clamp(14px,2.2vw,28px)] mt-[clamp(14px,2.2vw,28px)] flex gap-1 overflow-x-auto rounded-full bg-ndm-mist p-1">
+          {o.tabs.map((x, i) => (
+            <button key={x.label} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" id={`ov-t-${i}`} aria-controls="ov-panel" aria-selected={i === act} tabIndex={i === act ? 0 : -1}
+              onClick={() => setAct(i)} onKeyDown={(e) => key(e, i)}
+              className={`shrink-0 rounded-full px-4 py-2.5 font-inter text-[14px] font-medium transition-colors sm:flex-1 sm:px-5 ${i === act ? 'bg-white text-ndm-deep shadow-[0_6px_16px_-10px_rgba(27,36,43,.45)]' : 'text-ndm-muted hover:text-ndm-ink'}`}>
+              {x.label}
+            </button>
+          ))}
+        </div>
+        <div id="ov-panel" role="tabpanel" aria-labelledby={`ov-t-${act}`} key={act} className="ov-in grid gap-7 p-[clamp(20px,2.8vw,40px)] md:grid-cols-[minmax(0,1fr)_minmax(0,300px)] md:items-start md:gap-[clamp(28px,4vw,56px)]">
+          <div>
+            <h3 className="font-aeonik text-[clamp(26px,2.4vw,34px)] font-normal leading-[1.1] tracking-[-0.025em] text-ndm-ink">{t.label}</h3>
+            {t.text.map((x, i) => <p key={i} className="mt-4 max-w-[62ch] font-inter text-[16px] leading-[1.75] text-ndm-ink/80">{x}</p>)}
+            <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
+              {t.link && <a href={t.link[0]} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-deep">{t.link[1]}<IconArrow className="transition-transform group-hover:translate-x-1" /></a>}
             </div>
-            <div className="mt-5 sm:mt-8">
-              <h3 className="font-aeonik text-[19px] font-normal leading-[1.2] tracking-[-0.01em]">{c.title}</h3>
-              <p className="mt-1.5 font-inter text-[13.5px] leading-[1.5] text-ndm-muted">{c.text}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <div className="rv mt-8 flex justify-center"><Btn href="#/book" v="book">Book Free Consultation</Btn></div>
+          </div>
+          <aside className="ov-side flex flex-col rounded-[20px] p-5 ring-1 ring-ndm-ink/[.06]">
+            <span className="font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-muted">At a glance</span>
+            <span className="mt-3 flex items-baseline gap-2.5">
+              <span className="font-aeonik text-[34px] leading-none tracking-[-0.03em] text-ndm-deep tabular-nums">{t.stat[0]}</span>
+              <span className="font-inter text-[14px] leading-[1.35] text-ndm-ink">{t.stat[1]}</span>
+            </span>
+            <dl className="mt-5 grid gap-2.5 border-t border-ndm-line pt-4">
+              {p.facts.map(([k, v]) => <div key={k} className="flex items-baseline justify-between gap-3 font-inter text-[13.5px]"><dt className="text-ndm-muted">{k}</dt><dd className="text-right font-medium text-ndm-ink">{v}</dd></div>)}
+            </dl>
+          </aside>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------- compare the options (website v3 concern pages): a table in the
+   site's look, this treatment first and lightly highlighted; it scrolls sideways on phones */
+function ProcCompare({ p }) {
+  const ref = useRef(null);
+  useReveal(ref);
+  const c = p.compare;
+  return (
+    <section ref={ref} id="compare" aria-labelledby="compare-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
+      <TxHead p={p} id="compare" tag="Compare the options" hid="compare-title" lead="This treatment, beside" strong="the other options" text="A general guide to the treatments often discussed for lines. Your provider helps you choose at your free consultation." />
+      <div className={`${TX_WRAP} rv mt-[clamp(32px,4vw,52px)] overflow-x-auto rounded-[24px] bg-white ring-1 ring-ndm-ink/[.06] shadow-[0_30px_60px_-46px_rgba(27,36,43,.45)]`} style={{ transitionDelay: '.08s' }}>
+        <table className="cmp-t w-full min-w-[760px] border-collapse font-inter text-[14.5px]">
+          <thead>
+            <tr>
+              <td className="w-[170px]" />
+              {c.cols.map(([n, h], i) => (
+                <th key={n} scope="col" className={`px-5 py-5 text-left align-bottom font-aeonik text-[19px] font-normal leading-[1.2] tracking-[-0.01em] ${i === 0 ? 'cmp-me text-ndm-deep' : 'text-ndm-ink'}`}>
+                  {h ? <a href={h} className="group inline-flex items-center gap-1.5 hover:text-ndm-deep">{n}<IconArrow className="opacity-60 transition-transform group-hover:translate-x-0.5" /></a> : n}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {c.rows.map(([k, vals]) => (
+              <tr key={k}>
+                <th scope="row" className="px-5 py-4 text-left align-top text-[13px] font-semibold text-ndm-muted">{k}</th>
+                {vals.map((v, i) => <td key={i} className={`px-5 py-4 align-top leading-[1.5] text-ndm-ink ${i === 0 ? 'cmp-me' : ''}`}>{v}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className={`${TX_WRAP} mt-4 font-inter text-[12.5px] leading-[1.5] text-ndm-muted`}>A general guide for comparison. Your plan is individual, and individual results may vary.</p>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------- start with a free skin analysis (afuriaesthetics.com "Start your journey"):
+   a short warm band; when it comes into view it opens from the middle out to both sides, then the words sharpen
+   from a blur. The portrait sits on the right and fades into the wall colour behind the words */
+const JR_CSS = `
+.jr-band{--jr:#E8D6C2;background:var(--jr);clip-path:inset(0 50% 0 50%);transition:clip-path 1.25s cubic-bezier(.7,0,.2,1)}
+.jr-band.is-on{clip-path:inset(0 0 0 0)}
+.jr-band .jr-pic{transform:scale(1.14);transition:transform 2.2s cubic-bezier(.2,.7,.2,1)}
+.jr-band.is-on .jr-pic{transform:scale(1)}
+.jr-band .jr-t{opacity:0;filter:blur(14px);transform:translateY(12px);transition:opacity .9s ease,filter 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.jr-band.is-on .jr-t{opacity:1;filter:blur(0);transform:none}
+.jr-fade{background:linear-gradient(180deg,rgba(232,214,194,0) 45%,var(--jr) 98%)}
+@media (min-width:768px){.jr-fade{background:linear-gradient(90deg,var(--jr) 0%,rgba(232,214,194,.85) 14%,rgba(232,214,194,0) 46%)}}
+@media (prefers-reduced-motion:reduce){.jr-band,.jr-band .jr-pic,.jr-band .jr-t{clip-path:none;transform:none;filter:none;opacity:1;transition:none}}
+`;
+function ProcAnalysis() {
+  const band = useRef(null);
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    const el = band.current; if (!el) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setOn(true); io.disconnect(); } }, { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  const t = (k) => ({ transitionDelay: `${0.85 + k * 0.12}s` });
+  return (
+    <section aria-labelledby="analysis-title" className="relative z-10 py-[clamp(16px,2.4vw,36px)]">
+      <style>{JR_CSS}</style>
+      <div ref={band} className={`jr-band relative isolate flex flex-col overflow-hidden md:min-h-[clamp(360px,31vw,460px)] md:justify-center ${on ? 'is-on' : ''}`}>
+        <div className="relative aspect-[4/3] overflow-hidden md:absolute md:inset-y-0 md:right-0 md:aspect-auto md:w-[64%]">
+          <img src="assets/treatments/journey-skin.webp" alt="" loading="lazy" decoding="async" className="jr-pic absolute inset-0 h-full w-full object-cover object-[52%_30%]" />
+          <span aria-hidden="true" className="jr-fade absolute inset-0" />
+        </div>
+        <div className="relative -mt-10 px-[var(--gx)] pb-10 md:mt-0 md:max-w-[min(48%,560px)] md:py-10">
+          <p className="jr-t font-inter text-[12px] font-medium uppercase tracking-[.28em] text-ndm-deep" style={t(0)}>Start your journey</p>
+          <TwoTone id="analysis-title" className="jr-t mt-3" size="text-[clamp(32px,3.6vw,54px)]" lead={<>Start with a free<br /></>} strong="skin analysis" style={t(1)} />
+          <p className="jr-t mt-4 max-w-[44ch] font-inter text-[15.5px] leading-[1.6] text-ndm-ink/75" style={t(2)}>Your first consultation and VISIA® skin analysis are free, at Uptown or Downtown. No pressure, just a clear plan.</p>
+          <div className="jr-t mt-6 flex flex-wrap items-center gap-x-6 gap-y-3" style={t(3)}>
+            <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
+            <a href="about.html" className="font-inter text-[13px] font-semibold uppercase tracking-[.14em] text-ndm-ink underline-offset-8 hover:underline">Find a clinic</a>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
@@ -4758,7 +5071,6 @@ function ProcChoose({ p }) {
       <div className="text-center">
         <Eyebrow className="rv">Why choose this treatment</Eyebrow>
         <TwoTone id="choose-title" className="rv mx-auto mt-5" lead={twoLine('Who it may suit,')} strong="and safety first" style={{ transitionDelay: '.06s' }} />
-        <p className="rv mx-auto mt-4 max-w-[48ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>Your provider confirms whether the treatment suits you at your free consultation.</p>
       </div>
       <div className="mx-auto mt-[clamp(36px,4vw,56px)] grid max-w-[1180px] gap-3 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-4">
         <div className="rv rv-clip relative min-h-[360px] overflow-hidden rounded-[22px] bg-ndm-line md:col-span-2 lg:order-2 lg:col-span-1 lg:min-h-0" style={{ transitionDelay: '.08s' }}>
@@ -4781,7 +5093,7 @@ function ProcPrices({ p }) {
   const unit = (label) => (label === pr.unitLabel ? ' / unit' : '');
   const pct = Math.max(...pr.rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
   return (
-    <section ref={ref} id="prices" aria-labelledby="prices-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
+    <section ref={ref} id="prices" aria-labelledby="prices-title" className="proc-peach relative z-10 px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
       <div className="mx-auto max-w-[1040px]">
         <div className="text-center">
           <Eyebrow className="rv">Price list</Eyebrow>
@@ -4869,12 +5181,29 @@ function TxHead({ p, id, tag, hid, lead, strong, text, dark }) {
   );
 }
 
-/* treatment at a glance: a white strip pulled up over the bottom of the header photo, an icon per fact and both phone numbers */
+/* treatment at a glance: a white strip that sits half over the bottom of the header photo (its own height is measured, so the
+   overlap stays at half on every screen), an icon per fact and both phone numbers. The hero gets the same extra room at its
+   bottom so the card never covers its text. A region rather than a section, so page-wide section backgrounds never cover the photo */
 function TxGlance({ p }) {
+  const card = useRef(null);
+  const [half, setHalf] = useState(48);
+  useLayoutEffect(() => {
+    const el = card.current; if (!el) return;
+    const fit = () => setHalf(Math.round(el.offsetHeight / 2));
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(el);
+    /* re-measure once styles and fonts have settled, in case the observer is throttled (background tabs) */
+    window.addEventListener('load', fit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    const t = setTimeout(fit, 900);
+    return () => { ro.disconnect(); window.removeEventListener('load', fit); clearTimeout(t); };
+  }, []);
   return (
-    <section aria-labelledby="glance-title" className="relative z-20 -mt-[clamp(20px,3vw,44px)] px-[var(--gx)]">
+    <div role="region" aria-labelledby="glance-title" className="tx-glance relative z-20 px-[var(--gx)]" style={{ marginTop: -half }}>
+      <style>{`section[aria-labelledby="proc-title"]>.grid{padding-bottom:calc(${half}px + clamp(28px,4.5vw,64px))}`}</style>
       <h2 id="glance-title" className="sr-only">Treatment at a glance</h2>
-      <div className={`${TX_WRAP} grid gap-4 rounded-[24px] bg-white p-4 shadow-[0_30px_60px_-36px_rgba(11,15,19,.55)] ring-1 ring-ndm-ink/[.06] sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-6 lg:px-7`}>
+      <div ref={card} className={`${TX_WRAP} grid gap-4 rounded-[24px] bg-white p-4 shadow-[0_30px_60px_-36px_rgba(11,15,19,.55)] ring-1 ring-ndm-ink/[.06] sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-6 lg:px-7`}>
         <dl className={`grid grid-cols-2 gap-x-3 gap-y-4 ${p.facts.length > 3 ? 'md:grid-cols-4' : 'md:grid-cols-3'}`}>
           {p.facts.map(([k, v], i) => (
             <div key={k} className={`flex items-center gap-3 ${i ? 'md:border-l md:border-ndm-ink/10 md:pl-5' : ''}`}>
@@ -4896,7 +5225,7 @@ function TxGlance({ p }) {
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -4919,14 +5248,14 @@ function TxNav({ p }) {
   }, [on]);
   const go = (e, id) => { const el = document.getElementById(id); if (!el) return; e.preventDefault(); scrollToY(el.getBoundingClientRect().top + window.scrollY - 160); };
   return (
-    <nav ref={bar} aria-label="On this page" className="tx-nav sticky top-[100px] z-30 mt-8 border-y border-ndm-ink/[.07] bg-ndm-paper/85 backdrop-blur-[10px] xl:top-[120px]">
+    <nav ref={bar} aria-label="On this page" className="tx-nav sticky top-[100px] z-30 mt-8 bg-ndm-paper/85 backdrop-blur-[10px] xl:top-[120px]">
       <div className="tx-nav-scroll no-scrollbar relative overflow-x-auto px-[var(--gx)] py-2.5">
       <ul className="relative mx-auto flex w-max gap-1" role="list">
         {p.nav.map(([id, label], i) => (
           <li key={id} data-k={id} className="shrink-0">
             <a href={`#${id}`} onClick={(e) => go(e, id)} aria-current={on === id ? 'true' : undefined}
-              className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-2 font-inter text-[13px] transition-colors ${on === id ? 'bg-ndm-ink text-white' : 'text-ndm-ink/75 hover:bg-white hover:text-ndm-ink'}`}>
-              <span className={`tabular-nums text-[11.5px] ${on === id ? 'text-ndm-sky' : 'text-ndm-muted'}`}>{String(i + 1).padStart(2, '0')}</span>{label}
+              className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-2 font-inter text-[13px] transition-colors ${on === id ? 'bg-ndm-deep text-white' : 'text-ndm-ink/75 hover:bg-white hover:text-ndm-ink'}`}>
+              <span className={`tabular-nums text-[11.5px] ${on === id ? 'text-white/70' : 'text-ndm-muted'}`}>{String(i + 1).padStart(2, '0')}</span>{label}
             </a>
           </li>
         ))}
@@ -4936,43 +5265,53 @@ function TxNav({ p }) {
   );
 }
 
-/* what it is: photo (with NUVIOR's turning NAMICA ring on the Aptos page) beside the copy and the treatment's main points */
+/* what it is: a smaller photo (with NUVIOR's NAMICA badge on the Aptos page, ring and sphere turning together) beside the copy and the main points */
 function TxIntro({ p }) {
   const ref = useRef(null);
   useReveal(ref);
   const t = p.intro;
   return (
-    <section ref={ref} id="what" aria-labelledby="intro-title" className="relative z-10 scroll-mt-[170px] px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
+    <section ref={ref} id="what" aria-labelledby="intro-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(56px,6vw,88px)]">
       <TxHead p={p} id="what" tag={t.tag} hid="intro-title" lead={t.lead} strong={t.strong} />
-      <div className={`${TX_WRAP} mt-[clamp(36px,4vw,56px)] grid items-center gap-8 lg:grid-cols-2 lg:gap-[clamp(40px,5vw,72px)]`}>
-        <div className="rv relative" style={{ transitionDelay: '.1s' }}>
-          <div className="relative aspect-[5/4] overflow-hidden rounded-[24px] bg-ndm-mist lg:aspect-[4/5]">
+      <div className={`${TX_WRAP} mt-[clamp(28px,3.4vw,48px)] grid items-center gap-8 lg:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] lg:gap-[clamp(40px,5vw,72px)]`}>
+        <div className="rv relative mx-auto w-full max-w-[460px] lg:max-w-none" style={{ transitionDelay: '.1s' }}>
+          <div className={`relative aspect-[5/4] overflow-hidden rounded-[24px] bg-ndm-mist lg:aspect-auto ${t.para ? 'lg:h-[min(50vh,460px)]' : 'lg:h-[min(62vh,560px)]'}`}>
             <img src={t.img} alt={t.alt || ''} loading="lazy" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: t.pos || '50% 40%' }} />
           </div>
           {t.ring && (
-            <div aria-hidden="true" className="tx-ring absolute -right-3 -top-6 size-[clamp(120px,12vw,160px)] sm:-right-6">
-              <svg viewBox="0 0 160 160" className="tx-ring-text absolute inset-0 size-full">
-                <defs><path id="tx-ring-path" d="M80,80 m-64,0 a64,64 0 1,1 128,0 a64,64 0 1,1 -128,0" /></defs>
-                <circle cx="80" cy="80" r="78" fill="rgba(255,255,255,.92)" />
-                <text fontFamily="Inter, sans-serif" fontSize="10.5" fontWeight="600" letterSpacing="2.4" fill="#352862"><textPath href="#tx-ring-path">{t.ring}</textPath></text>
-              </svg>
-              <img src={NAMICA_SPHERE} alt="" className="nm-spin absolute left-1/2 top-1/2 size-[46%] -translate-x-1/2 -translate-y-1/2" />
+            <div aria-hidden="true" className="tx-ring absolute -right-3 -top-6 size-[clamp(112px,10vw,144px)] sm:-right-6">
+              {/* one piece: the words and the sphere turn together */}
+              <div className="tx-ring-spin absolute inset-0">
+                <svg viewBox="0 0 160 160" className="absolute inset-0 size-full">
+                  <defs><path id="tx-ring-path" d="M80,80 m-64,0 a64,64 0 1,1 128,0 a64,64 0 1,1 -128,0" /></defs>
+                  <circle cx="80" cy="80" r="78" fill="rgba(255,255,255,.94)" />
+                  <text fontFamily="Inter, sans-serif" fontSize="10.5" fontWeight="600" letterSpacing="2.4" fill="#352862"><textPath href="#tx-ring-path">{t.ring}</textPath></text>
+                </svg>
+                <img src={NAMICA_SPHERE} alt="" className="absolute left-1/2 top-1/2 size-[46%] -translate-x-1/2 -translate-y-1/2" />
+              </div>
             </div>
           )}
         </div>
+        {t.para ? (
+          <p className="rv max-w-[54ch] font-inter text-[clamp(17px,1.35vw,20px)] leading-[1.75] text-ndm-ink/85" style={{ transitionDelay: '.1s' }}>{t.para}</p>
+        ) : (
         <div>
-          {t.text.map((x, i) => <p key={i} className="rv mt-0 max-w-[56ch] font-inter text-[16px] leading-[1.7] text-ndm-ink/80 [&+p]:mt-4" style={{ transitionDelay: `${0.1 + i * 0.04}s` }}>{x}</p>)}
-          <ul className="mt-6 grid gap-2" role="list">
+          {t.text.map((x, i) => <p key={i} className="rv mt-0 max-w-[58ch] font-inter text-[17px] leading-[1.7] text-ndm-ink/90 [&+p]:mt-4" style={{ transitionDelay: `${0.1 + i * 0.04}s` }}>{x}</p>)}
+          <ul className="mt-7 grid gap-2.5" role="list">
             {t.points.map(([h, d], i) => (
-              <li key={h} className="rv flex items-start gap-3 rounded-[16px] bg-white px-4 py-3.5 ring-1 ring-ndm-ink/[.06]" style={{ transitionDelay: `${0.14 + i * 0.05}s` }}>
-                <span aria-hidden="true" className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconTick size={13} /></span>
-                <span><span className="block font-inter text-[15px] font-semibold text-ndm-ink">{h}</span><span className="mt-0.5 block font-inter text-[14px] leading-[1.5] text-ndm-muted">{d}</span></span>
+              <li key={h} className="rv flex items-start gap-4 rounded-[18px] bg-white px-5 py-4 ring-1 ring-ndm-ink/[.06] shadow-[0_18px_40px_-34px_rgba(27,36,43,.35)] sm:items-center" style={{ transitionDelay: `${0.14 + i * 0.05}s` }}>
+                <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconTick size={15} /></span>
+                <span className="grid gap-1 sm:grid-cols-[110px_minmax(0,1fr)] sm:items-baseline sm:gap-4">
+                  <span className="font-aeonik text-[21px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">{h}</span>
+                  <span className="font-inter text-[15.5px] leading-[1.55] text-ndm-ink/80">{d}</span>
+                </span>
               </li>
             ))}
           </ul>
-          {t.chips && <ul className="rv mt-5 flex flex-wrap gap-2" role="list">{t.chips.map((c) => <li key={c} className="rounded-full bg-white px-3.5 py-1.5 font-inter text-[13.5px] text-ndm-ink ring-1 ring-ndm-ink/10">{c}</li>)}</ul>}
-          {t.note && <p className="rv mt-5 flex items-center gap-2 font-inter text-[13.5px] text-ndm-muted"><IconCheckBadge className="shrink-0 text-ndm-deep" />{t.note}</p>}
+          {t.chips && <ul className="rv mt-5 flex flex-wrap gap-2" role="list">{t.chips.map((c) => <li key={c} className="rounded-full bg-white px-3.5 py-1.5 font-inter text-[14px] text-ndm-ink ring-1 ring-ndm-ink/10">{c}</li>)}</ul>}
+          {t.note && <p className="rv mt-5 flex items-center gap-2 font-inter text-[14.5px] text-ndm-ink/75"><IconCheckBadge className="shrink-0 text-ndm-deep" />{t.note}</p>}
         </div>
+        )}
       </div>
     </section>
   );
@@ -4985,17 +5324,17 @@ function TxSteps({ p }) {
   const on = useInView(list, { threshold: 0.3 });
   const t = p.steps;
   return (
-    <section ref={ref} id="how" aria-labelledby="steps-title" className="relative z-10 scroll-mt-[170px] bg-white px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
+    <section ref={ref} id="how" aria-labelledby="steps-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <TxHead p={p} id="how" tag={t.tag} hid="steps-title" lead={t.lead} strong={t.strong} text={t.text} />
       <ol ref={list} className={`tx-steps ${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid gap-3 sm:grid-cols-2 lg:grid-cols-4 ${on ? 'in' : ''}`} role="list">
         {t.items.map(([h, d], i) => (
-          <li key={h} className="tx-step relative rounded-[22px] bg-ndm-paper p-5 ring-1 ring-ndm-ink/[.06] md:p-6" style={{ '--d': `${(i * 0.12).toFixed(2)}s` }}>
+          <li key={h} className="tx-step relative rounded-[22px] bg-white p-5 ring-1 ring-ndm-ink/[.06] md:p-6" style={{ '--d': `${(i * 0.12).toFixed(2)}s` }}>
             <span className="flex items-center gap-3">
               <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-full bg-ndm-deep font-inter text-[13px] font-semibold text-white">{i + 1}</span>
               <span aria-hidden="true" className="tx-line h-px flex-1 bg-ndm-ink/10"><i className="block h-px origin-left bg-ndm-deep" /></span>
             </span>
             <h3 className="mt-5 font-aeonik text-[21px] font-normal leading-[1.2] tracking-[-0.01em] text-ndm-ink">{h}</h3>
-            <p className="mt-2 font-inter text-[14.5px] leading-[1.6] text-ndm-muted">{d}</p>
+            <p className="mt-2 font-inter text-[15px] leading-[1.6] text-ndm-ink/75">{d}</p>
           </li>
         ))}
       </ol>
@@ -5005,9 +5344,10 @@ function TxSteps({ p }) {
 
 const txList = (items, tone = 'blue') => (
   <ul className="mt-3 grid gap-2.5" role="list">
-    {items.map((x) => <li key={x} className="flex items-start gap-2.5 font-inter text-[14.5px] leading-[1.5] text-ndm-ink/85"><span aria-hidden="true" className={`mt-[3px] grid size-[18px] shrink-0 place-items-center rounded-full ${tone === 'blue' ? 'bg-ndm-blue/10 text-ndm-deep' : 'bg-ndm-ink/[.07] text-ndm-muted'}`}>{tone === 'blue' ? <IconTick size={10} /> : <IconX2 size={9} />}</span>{x}</li>)}
+    {items.map((x) => <li key={x} className="flex items-start gap-2.5 font-inter text-[15px] leading-[1.55] text-ndm-ink/85"><span aria-hidden="true" className={`mt-[3px] grid size-[18px] shrink-0 place-items-center rounded-full ${tone === 'blue' ? 'bg-ndm-blue/10 text-ndm-deep' : 'bg-ndm-ink/[.07] text-ndm-muted'}`}>{tone === 'blue' ? <IconTick size={10} /> : <IconX2 size={9} />}</span>{x}</li>)}
   </ul>
 );
+const IconInfoSm = (p) => <Svg size={14} vb="0 0 14 14" {...p}><circle cx="7" cy="7" r="5.6" stroke="currentColor" strokeWidth="1.4" /><path d="M7 6.2v3.6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /><circle cx="7" cy="4.2" r=".85" fill="currentColor" /></Svg>;
 
 /* is it safe: the honest answer and safeguards, with the licensed product on a soft card (Aptos) */
 function TxSafety({ p }) {
@@ -5015,12 +5355,12 @@ function TxSafety({ p }) {
   useReveal(ref);
   const t = p.safety;
   return (
-    <section ref={ref} id="safety" aria-labelledby="safety-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
+    <section ref={ref} id="safety" aria-labelledby="safety-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <TxHead p={p} id="safety" tag={t.tag || 'Is it safe'} hid="safety-title" lead={t.lead} strong={t.strong} />
       <div className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid gap-3 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,.9fr)]`}>
         <div className="rv rounded-[24px] bg-white p-6 ring-1 ring-ndm-ink/[.06] md:p-8">
-          {t.text.map((x, i) => <p key={i} className="font-inter text-[15.5px] leading-[1.7] text-ndm-ink/80 [&+p]:mt-4">{x}</p>)}
-          <p className="mt-6 font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-ndm-deep">Our safeguards</p>
+          {t.text.map((x, i) => <p key={i} className="font-inter text-[16px] leading-[1.7] text-ndm-ink/85 [&+p]:mt-4">{x}</p>)}
+          <p className="mt-6 font-inter text-[12.5px] font-semibold uppercase tracking-[.14em] text-ndm-deep">Our safeguards</p>
           {txList(t.safeguards)}
         </div>
         {t.product ? (
@@ -5030,7 +5370,7 @@ function TxSafety({ p }) {
             <figcaption className="relative">
               <span className="block font-inter text-[12px] uppercase tracking-[.14em] text-[#C9C2F4]">{t.product.tag}</span>
               <span className="mt-1.5 block font-aeonik text-[clamp(22px,2vw,28px)] leading-[1.15]">{t.product.name}</span>
-              <span className="mt-1 block max-w-[36ch] font-inter text-[13.5px] leading-[1.5] text-white/75">{t.product.note}</span>
+              <span className="mt-1 block max-w-[36ch] font-inter text-[14px] leading-[1.5] text-white/80">{t.product.note}</span>
             </figcaption>
           </figure>
         ) : null}
@@ -5039,124 +5379,226 @@ function TxSafety({ p }) {
   );
 }
 
-/* how long it lasts and how many sessions: two cards side by side; the Aptos one carries NUVIOR's HA release motion */
+/* how long it lasts: one wide card (the Aptos one carries NUVIOR's HA release motion); how many sessions now sits with the price */
 function TxLasting({ p }) {
   const ref = useRef(null), box = useRef(null);
   useReveal(ref);
   const run = useInView(box, { threshold: 0.35 });
-  const d = p.duration, s = p.sessions;
+  const d = p.duration;
   return (
-    <section ref={ref} aria-labelledby="duration-title" className="relative z-10 bg-white px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
-      <div ref={box} className={`${TX_WRAP} grid gap-3 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,.75fr)]`}>
-        <article id="duration" className="rv tx-lasts relative scroll-mt-[170px] overflow-hidden rounded-[26px] p-6 text-white md:p-9">
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 font-inter text-[13px] font-medium"><span className="tabular-nums text-[#C9C2F4]">{txNum(p, 'duration')}</span>How long it lasts</p>
-          <h2 id="duration-title" className="mt-5 font-aeonik text-[clamp(30px,3vw,44px)] font-normal leading-[1.08] tracking-[-0.03em]">{d.lead}<br /><span className="tt-strong text-[#C9C2F4]">{d.strong}</span></h2>
-          <p className="mt-4 max-w-[52ch] font-inter text-[15px] leading-[1.6] text-white/80">{d.text}</p>
+    <section ref={ref} aria-labelledby="duration-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
+      <div ref={box} className={TX_WRAP}>
+        <article id="duration" className="rv tx-lasts relative grid scroll-mt-[170px] gap-8 overflow-hidden rounded-[26px] p-6 text-white md:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-14">
+          {d.logo && <img src={d.logo} alt={d.logoAlt || ''} width="106" height="23" className="absolute right-6 top-7 h-[18px] w-auto opacity-95 md:right-10 md:top-11 md:h-[24px]" />}
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 font-inter text-[13px] font-medium"><span className="tabular-nums text-[#C9C2F4]">{txNum(p, 'duration')}</span>How long it lasts</p>
+            <h2 id="duration-title" className="mt-5 font-aeonik text-[clamp(30px,3vw,44px)] font-normal leading-[1.08] tracking-[-0.03em]">{d.lead}<br /><span className="tt-strong text-[#C9C2F4]">{d.strong}</span></h2>
+            <p className="mt-4 max-w-[52ch] font-inter text-[16px] leading-[1.65] text-white/85">{d.text}</p>
+            <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/15 pt-6">
+              <p className="flex items-baseline gap-2"><span className="font-aeonik text-[clamp(28px,2.4vw,36px)] leading-none tracking-[-0.03em]">{d.stat}</span><span className="font-inter text-[15px] text-white/75">{d.unit}</span></p>
+              <p className="max-w-[40ch] font-inter text-[13.5px] leading-[1.5] text-white/70"><span className="block text-white/90">{d.label}</span>{d.note}</p>
+            </div>
+          </div>
           {/* HA release along the thread (NUVIOR Aptos family motion): capsules drift and open over the months */}
-          <div aria-hidden="true" className={`tx-thread relative mt-8 h-[120px] ${run ? 'in' : ''}`}>
-            <span className="tx-thread-line absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full" />
-            {Array.from({ length: 18 }, (_, i) => (
-              <i key={i} className="tx-bub absolute rounded-full" style={{ left: `${(i * 5.6 + 2).toFixed(1)}%`, top: `${[28, 62, 40, 70, 22, 55, 35, 66, 30, 48, 72, 26, 58, 38, 64, 44, 30, 56][i]}%`, width: `${[10, 6, 14, 8, 12, 5, 9, 13, 6, 11, 7, 10, 5, 12, 8, 6, 9, 7][i]}px`, '--d': `${(i * 0.14).toFixed(2)}s` }} />
-            ))}
+          <div>
+            <div aria-hidden="true" className={`tx-thread relative h-[150px] ${run ? 'in' : ''}`}>
+              <span className="tx-thread-line absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full" />
+              {Array.from({ length: 18 }, (_, i) => (
+                <i key={i} className="tx-bub absolute rounded-full" style={{ left: `${(i * 5.6 + 2).toFixed(1)}%`, top: `${[28, 62, 40, 70, 22, 55, 35, 66, 30, 48, 72, 26, 58, 38, 64, 44, 30, 56][i]}%`, width: `${[10, 6, 14, 8, 12, 5, 9, 13, 6, 11, 7, 10, 5, 12, 8, 6, 9, 7][i]}px`, '--d': `${(i * 0.14).toFixed(2)}s` }} />
+              ))}
+            </div>
+            <div aria-hidden="true" className="mt-2 flex justify-between font-inter text-[12px] uppercase tracking-[.12em] text-white/65"><span>Day 0</span><span>Months 1 to 3</span><span>Up to 6 months</span></div>
           </div>
-          <div aria-hidden="true" className="mt-2 flex justify-between font-inter text-[11.5px] uppercase tracking-[.12em] text-white/60"><span>Day 0</span><span>Months 1 to 3</span><span>Up to 6 months</span></div>
-          <div className="mt-7 flex flex-wrap items-end gap-x-8 gap-y-3 border-t border-white/15 pt-6">
-            <p><span className="block font-aeonik text-[clamp(44px,4.4vw,64px)] leading-none tracking-[-0.04em]">{d.stat}<span className="ml-2 font-inter text-[15px] tracking-normal text-white/70">{d.unit}</span></span><span className="mt-2 block font-inter text-[13px] text-white/70">{d.label}</span></p>
-            <p className="max-w-[34ch] font-inter text-[13px] leading-[1.5] text-white/60">{d.note}</p>
-          </div>
-        </article>
-        <article id="sessions" className="rv flex scroll-mt-[170px] flex-col rounded-[26px] bg-ndm-paper p-6 ring-1 ring-ndm-ink/[.06] md:p-9" style={{ transitionDelay: '.08s' }}>
-          <Eyebrow><span className="tabular-nums text-ndm-deep">{txNum(p, 'sessions')}</span>How many you need</Eyebrow>
-          <p className="mt-6 font-aeonik text-[clamp(64px,6vw,96px)] leading-none tracking-[-0.05em] text-ndm-ink">{s.stat}<span className="ml-2 font-inter text-[16px] tracking-normal text-ndm-muted">{s.unit}</span></p>
-          <p className="mt-4 font-inter text-[15px] leading-[1.65] text-ndm-ink/80">{s.text}</p>
-          <ul className="mt-auto flex flex-wrap gap-2 pt-6" role="list">{s.chips.map((c) => <li key={c} className="rounded-full bg-white px-3.5 py-1.5 font-inter text-[13px] text-ndm-ink ring-1 ring-ndm-ink/10">{c}</li>)}</ul>
         </article>
       </div>
     </section>
   );
 }
 
-/* good candidates: a white card of good fits beside a quieter card of reasons to wait */
+/* good candidates: the two answers stacked on the left (a blue "often a good fit" card, a warm "worth waiting" card), a photo on the right */
 function TxFit({ p }) {
   const ref = useRef(null);
   useReveal(ref);
   const t = p.fit;
+  const row = (x, good) => (
+    <li key={x} className="flex items-start gap-3 font-inter text-[15.5px] leading-[1.55] text-ndm-ink">
+      <span aria-hidden="true" className={`mt-[2px] grid size-6 shrink-0 place-items-center rounded-full ${good ? 'bg-ndm-deep text-white' : 'bg-[#FFE7C2] text-[#8A5A12]'}`}>{good ? <IconTick size={11} /> : <IconInfoSm size={13} />}</span>{x}
+    </li>
+  );
   return (
-    <section ref={ref} id="candidate" aria-labelledby="fit-title" className="relative z-10 scroll-mt-[170px] bg-ndm-mist px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
+    <section ref={ref} id="candidate" aria-labelledby="fit-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <TxHead p={p} id="candidate" tag={t.tag || 'Good candidates'} hid="fit-title" lead={t.lead} strong={t.strong} text={t.text} />
-      <div className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid gap-3 md:grid-cols-2 md:gap-4`}>
-        <div className="rv rounded-[24px] bg-white p-6 ring-1 ring-ndm-ink/[.06] md:p-8">
-          <p className="font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-ndm-deep">Often a good fit</p>
-          {txList(t.yes)}
+      <div className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,.9fr)] lg:gap-6`}>
+        <div className="grid gap-3">
+          <div className="rv rounded-[24px] bg-[#EEF7FC] p-6 ring-1 ring-ndm-blue/20 md:p-7">
+            <p className="flex items-center gap-2.5 font-aeonik text-[22px] leading-[1.2] tracking-[-0.01em] text-ndm-ink"><span aria-hidden="true" className="h-5 w-1 rounded-full bg-ndm-deep" />Often a good fit</p>
+            <ul className="mt-4 grid gap-3" role="list">{t.yes.map((x) => row(x, true))}</ul>
+          </div>
+          <div className="rv rounded-[24px] bg-[#FFF6EA] p-6 ring-1 ring-[#FFA617]/25 md:p-7" style={{ transitionDelay: '.08s' }}>
+            <p className="flex items-center gap-2.5 font-aeonik text-[22px] leading-[1.2] tracking-[-0.01em] text-ndm-ink"><span aria-hidden="true" className="h-5 w-1 rounded-full bg-[#FFA617]" />We may advise waiting or another option</p>
+            <ul className="mt-4 grid gap-3" role="list">{t.no.map((x) => row(x, false))}</ul>
+          </div>
         </div>
-        <div className="rv rounded-[24px] border border-ndm-ink/10 p-6 md:p-8" style={{ transitionDelay: '.08s' }}>
-          <p className="font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-ndm-muted">We may advise waiting or another option</p>
-          {txList(t.no, 'grey')}
-        </div>
+        {t.img && (
+          <div className="rv peach relative min-h-[320px] overflow-hidden rounded-[24px] bg-ndm-mist" style={{ transitionDelay: '.12s' }}>
+            <img src={t.img} alt={t.alt || ''} loading="lazy" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: t.pos || '50% 40%' }} />
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
-/* what to expect: a timeline with dots on one line (across on wide screens, down on phones) */
+/* what to expect: a sticky heading on the left, a scroll-lit journey on the right (the line fills and each step lights up as it passes) */
 function TxExpect({ p }) {
-  const ref = useRef(null);
+  const ref = useRef(null), list = useRef(null), fill = useRef(null);
   useReveal(ref);
   const t = p.expect;
+  const [act, setAct] = useState(0);
+  const n = txNum(p, 'expect');
+  useOnScroll(() => {
+    const el = list.current; if (!el) return;
+    const r = el.getBoundingClientRect(), mid = window.innerHeight * 0.55;
+    const prog = clamp01((mid - r.top) / Math.max(1, r.height));
+    if (fill.current) fill.current.style.transform = `scaleY(${REDUCED ? 1 : prog.toFixed(3)})`;
+    const items = [...el.querySelectorAll('[data-step]')];
+    let k = 0; items.forEach((li, i) => { if (li.getBoundingClientRect().top < mid) k = i; });
+    setAct(k);
+  }, []);
   return (
-    <section ref={ref} id="expect" aria-labelledby="expect-title" className="relative z-10 scroll-mt-[170px] bg-white px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
-      <TxHead p={p} id="expect" tag={t.tag || 'What to expect'} hid="expect-title" lead={t.lead} strong={t.strong} text={t.text} />
-      <ol className={`${TX_WRAP} relative mt-[clamp(32px,4vw,56px)] grid gap-0 lg:grid-cols-4 lg:gap-6`} role="list">
-        <span aria-hidden="true" className="absolute left-[8px] top-2 h-[calc(100%-16px)] w-px bg-ndm-ink/[.12] lg:left-0 lg:right-0 lg:top-[7px] lg:h-px lg:w-auto" />
-        {t.items.map(([w, h, d], i) => (
-          <li key={w} className="rv relative pb-7 pl-9 last:pb-0 lg:pb-0 lg:pl-0 lg:pt-9" style={{ transitionDelay: `${0.07 * i}s` }}>
-            <i aria-hidden="true" className="absolute left-[2px] top-1 size-[13px] rounded-full bg-ndm-deep ring-4 ring-ndm-blue/15 lg:left-0 lg:top-0" />
-            <span className="block font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-ndm-deep">{w}</span>
-            <span className="mt-1 block font-aeonik text-[21px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">{h}</span>
-            <span className="mt-1.5 block font-inter text-[14.5px] leading-[1.6] text-ndm-muted">{d}</span>
-          </li>
-        ))}
-      </ol>
+    <section ref={ref} id="expect" aria-labelledby="expect-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
+      <div className={`${TX_WRAP} grid gap-10 lg:grid-cols-[minmax(0,.8fr)_minmax(0,1.2fr)] lg:gap-[clamp(48px,6vw,96px)]`}>
+        <div className="lg:sticky lg:top-[200px] lg:self-start">
+          <Eyebrow className="rv">{n && <span className="tabular-nums text-ndm-deep">{n}</span>}{t.tag || 'What to expect'}</Eyebrow>
+          <TwoTone id="expect-title" className="rv mt-5" size="text-[clamp(32px,3.4vw,50px)]" lead={twoLine(t.lead)} strong={t.strong} style={{ transitionDelay: '.06s' }} />
+          {t.text && <p className="rv mt-4 max-w-[44ch] font-inter text-[16px] leading-[1.65] text-ndm-muted">{t.text}</p>}
+          <div className="rv mt-8 hidden items-center gap-4 lg:flex" aria-hidden="true">
+            <span className="font-aeonik text-[44px] leading-none tracking-[-0.04em] text-ndm-deep tabular-nums">0{act + 1}</span>
+            <span className="font-inter text-[14px] leading-[1.4] text-ndm-muted">of 0{t.items.length}<br /><span className="text-ndm-ink">{t.items[act][0]}</span></span>
+          </div>
+          <div className="rv mt-8"><Btn href="#/book" v="book" hot>Book Free Consultation</Btn></div>
+        </div>
+        <ol ref={list} className="relative grid gap-4" role="list">
+          <span aria-hidden="true" className="absolute bottom-6 left-[19px] top-6 w-[2px] rounded-full bg-ndm-ink/[.08]"><i ref={fill} className="block h-full w-full origin-top rounded-full bg-gradient-to-b from-ndm-sky to-ndm-deep" style={{ transform: 'scaleY(0)' }} /></span>
+          {t.items.map(([w, h, d], i) => {
+            const on = i <= act;
+            return (
+              <li key={w} data-step="" className="rv relative pl-14" style={{ transitionDelay: `${0.06 * i}s` }}>
+                <span aria-hidden="true" className={`absolute left-0 top-5 grid size-10 place-items-center rounded-full font-inter text-[13px] font-semibold tabular-nums transition-colors duration-500 ${on ? 'bg-ndm-deep text-white shadow-[0_10px_22px_-10px_rgba(15,128,195,.9)]' : 'bg-white text-ndm-muted ring-1 ring-ndm-ink/10'}`}>{String(i + 1).padStart(2, '0')}</span>
+                <div className={`rounded-[22px] bg-white p-5 transition-[box-shadow,transform] duration-500 md:p-6 ${i === act ? 'shadow-[0_24px_50px_-30px_rgba(15,128,195,.45)] ring-1 ring-ndm-blue/25' : 'ring-1 ring-ndm-ink/[.06]'}`}>
+                  <span className="inline-flex rounded-full bg-ndm-blue/10 px-3 py-1 font-inter text-[12.5px] font-semibold text-ndm-deep">{w}</span>
+                  <h3 className="mt-3 font-aeonik text-[clamp(21px,1.8vw,25px)] font-normal leading-[1.2] tracking-[-0.01em] text-ndm-ink">{h}</h3>
+                  <p className="mt-2 font-inter text-[15.5px] leading-[1.6] text-ndm-ink/75">{d}</p>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
     </section>
   );
 }
 
-/* results: three compare cards at most, a calm size; more on the full gallery */
+/* results: the home page's before & after (heading row with the button, four compare cards side by side, two per row on phones).
+   A page with fewer than four real cases shows a "more results" tile in the last place rather than repeating a photo */
+const TX_MORE_CSS = `
+.tx-more{isolation:isolate;background:#0F80C3;box-shadow:0 24px 50px -32px rgba(15,128,195,.65);transition:box-shadow .5s var(--e-out),transform .5s var(--e-out)}
+.tx-more:hover{transform:translateY(-4px);box-shadow:0 34px 60px -32px rgba(15,128,195,.75)}
+.tx-more-mesh{z-index:-1;background:radial-gradient(60% 50% at 10% 6%,rgba(255,190,158,1),transparent 64%),radial-gradient(50% 40% at 100% 70%,rgba(255,206,182,.7),transparent 66%),radial-gradient(60% 55% at 92% 18%,rgba(127,211,245,.95),transparent 64%),radial-gradient(75% 60% at 30% 100%,rgba(10,79,122,.95),transparent 70%),linear-gradient(160deg,#26B1E7,#0F80C3 55%,#0A4F7A);background-size:160% 160%;animation:txMesh 14s ease-in-out infinite alternate}
+@keyframes txMesh{0%{background-position:0% 0%}100%{background-position:100% 100%}}
+.tx-more-pic{left:50%;top:50%;width:46%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;border:3px solid rgba(255,255,255,.92);box-shadow:0 18px 30px -14px rgba(11,15,19,.55);transform:translate(-50%,-50%) translateX(var(--x)) rotate(var(--r));transition:transform .7s var(--e-out)}
+.tx-more:hover .tx-more-pic{transform:translate(-50%,-50%) translateX(calc(var(--x) * 1.18)) rotate(calc(var(--r) * 1.5))}
+.tx-more-glass{background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.32);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%)}
+@media (prefers-reduced-motion:reduce){.tx-more-mesh{animation:none}.tx-more,.tx-more-pic{transition:none}}
+`;
 function TxResults({ p }) {
   const ref = useRef(null);
   useReveal(ref);
   const t = p.results;
+  const n = txNum(p, 'results');
+  const more = t.more || BA_ALL;
+  const cases = t.cases.slice(0, 4);
   return (
-    <section ref={ref} id="results" aria-labelledby="results-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
-      <TxHead p={p} id="results" tag="Results" hid="results-title" lead={t.lead} strong={t.strong} text={`${t.text} Individual results may vary.`} />
+    <section ref={ref} id="results" aria-labelledby="results-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <div className={TX_WRAP}>
-      <ul className="tx-ba no-scrollbar -mx-[var(--gx)] mt-[clamp(28px,3.4vw,44px)] flex snap-x snap-mandatory scroll-px-[var(--gx)] gap-3 overflow-x-auto px-[var(--gx)] pb-1 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0" role="list">
-        {t.cases.map((c, i) => (
-          <li key={c.id} className="rv" style={{ transitionDelay: `${i * 0.06}s` }}>
-            <BaCompare c={c} i={i} nudge={i === 0} />
-            <p className="mt-2.5 flex items-center justify-between font-inter text-[13px] text-ndm-muted"><span className="text-ndm-ink">Case {c.id}</span><span>{c.view}</span></p>
-          </li>
-        ))}
-      </ul>
+        <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
+          <div>
+            <Eyebrow className="rv">{n && <span className="tabular-nums text-ndm-deep">{n}</span>}Before &amp; after</Eyebrow>
+            <TwoTone id="results-title" className="rv mt-4" size="text-[clamp(32px,3.4vw,50px)]" lead={twoLine(t.lead)} strong={t.strong} style={{ transitionDelay: '.05s' }} />
+            <p className="rv mt-4 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>{t.text}</p>
+          </div>
+          <div className="rv" style={{ transitionDelay: '.12s' }}><Btn href={more} target="_blank" rel="noopener" v="line">See all before &amp; after</Btn></div>
+        </div>
+        <ul role="list" className="mt-[clamp(32px,4vw,52px)] grid grid-cols-2 gap-x-3 gap-y-6 lg:grid-cols-4 lg:gap-x-4">
+          {cases.map((c, i) => (
+            <li key={c.id} className="rv" style={{ transitionDelay: `${0.06 * i}s` }}>
+              <figure className="m-0">
+                <BaCompare c={c} i={i} nudge={i < 2} />
+                <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+                  <span className="font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">Case {c.id}</span>
+                  <span className="font-inter text-[13px] text-ndm-muted">{c.view}</span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+          {cases.length < 4 && (
+            <li className="rv" style={{ transitionDelay: `${0.06 * cases.length}s` }}>
+              {/* the last tile: a soft blue and peach gradient that drifts slowly, a fanned stack of case photos and a frosted
+                 panel with the text and a big arrow; same 4:5 box as the compare photos */}
+              <a href={more} target="_blank" rel="noopener" className="tx-more group relative flex aspect-[4/5] w-full flex-col overflow-hidden rounded-[22px] p-2.5 text-white sm:p-3.5">
+                <style>{TX_MORE_CSS}</style>
+                <span aria-hidden="true" className="tx-more-mesh absolute inset-0" />
+                <span aria-hidden="true" className="relative mx-auto mt-[6%] h-[50%] w-full">
+                  {t.cases.slice(0, 3).map((c, k) => (
+                    <img key={c.id} src={c.after} alt="" loading="lazy" decoding="async" className="tx-more-pic absolute"
+                      style={{ '--r': `${[-12, 0, 12][k]}deg`, '--x': `${[-44, 0, 44][k]}%`, zIndex: [1, 3, 2][k], objectPosition: `${c.fx || 50}% 30%` }} />
+                  ))}
+                </span>
+                <span className="tx-more-glass relative mt-auto flex items-end justify-between gap-2 rounded-[14px] p-2.5 sm:rounded-[16px] sm:p-4">
+                  <span className="min-w-0">
+                    <span className="hidden font-inter text-[11.5px] font-semibold uppercase tracking-[.16em] text-white/75 sm:block">Gallery</span>
+                    <span className="block font-aeonik text-[clamp(18px,1.8vw,26px)] leading-[1.08] tracking-[-0.02em] sm:mt-1">More cases</span>
+                    <span className="mt-1 hidden font-inter text-[13px] leading-[1.4] text-white/85 sm:block">See the full before &amp; after gallery</span><span className="mt-0.5 block font-inter text-[12px] text-white/85 sm:hidden">Full gallery</span><span className="sr-only"> (opens in a new tab)</span>
+                  </span>
+                  <span aria-hidden="true" className="grid size-8 shrink-0 place-items-center rounded-full bg-white text-ndm-deep transition-transform duration-500 group-hover:-rotate-45 sm:size-12"><IconArrow /></span>
+                </span>
+              </a>
+            </li>
+          )}
+        </ul>
+        <p className="mt-8 flex items-start gap-2.5 font-inter text-[13px] leading-[1.5] text-ndm-muted">
+          <BaIconInfo className="mt-0.5 shrink-0" />Photos show individual cases and are shared for illustration only. Individual results may vary.
+        </p>
       </div>
-      {t.more && <div className="rv mt-8 flex justify-center"><Btn href={t.more} target="_blank" rel="noopener" v="line">View more results</Btn></div>}
     </section>
   );
 }
 
-/* pre and post care: before your visit and after your visit, two tidy cards */
+/* pre and post care: two cards, a numbered checklist in each, read like a plan for the weeks around the visit */
 function TxCare({ p }) {
   const ref = useRef(null);
   useReveal(ref);
   const c = p.care;
+  const cards = [['Before your visit', 'Getting ready', c.before, TX_ICONS.cal], ['After your visit', 'While the area settles', c.after, TX_ICONS.leaf]];
   return (
-    <section ref={ref} id="care" aria-labelledby="care-title" className="relative z-10 scroll-mt-[170px] bg-white px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
+    <section ref={ref} id="care" aria-labelledby="care-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <TxHead p={p} id="care" tag="Pre & post care" hid="care-title" lead={c.lead} strong={c.strong} text={c.text} />
       <div className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid gap-3 md:grid-cols-2 md:gap-4`}>
-        {[['Before your visit', c.before], ['After your visit', c.after]].map(([h, items], i) => (
-          <div key={h} className="rv rounded-[24px] bg-ndm-paper p-6 ring-1 ring-ndm-ink/[.06] md:p-8" style={{ transitionDelay: `${0.06 * i}s` }}>
-            <p className="font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-ndm-deep">{h}</p>
-            {txList(items)}
+        {cards.map(([h, sub, items, ico], i) => (
+          <div key={h} className="rv rounded-[24px] bg-white p-6 ring-1 ring-ndm-ink/[.06] shadow-[0_24px_50px_-42px_rgba(27,36,43,.4)] md:p-8" style={{ transitionDelay: `${0.06 * i}s` }}>
+            <div className="flex items-center gap-3.5">
+              <span aria-hidden="true" className="grid size-12 shrink-0 place-items-center rounded-[14px] bg-gradient-to-br from-ndm-sky to-ndm-deep text-white shadow-[0_10px_20px_-12px_rgba(15,128,195,.9)]">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{ico}</svg>
+              </span>
+              <span><span className="block font-aeonik text-[23px] leading-[1.15] tracking-[-0.01em] text-ndm-ink">{h}</span><span className="block font-inter text-[13.5px] text-ndm-muted">{sub}</span></span>
+            </div>
+            <ol className="mt-5" role="list">
+              {items.map((x, k) => (
+                <li key={x} className="flex items-start gap-3.5 border-t border-ndm-ink/[.07] py-3.5 font-inter text-[15.5px] leading-[1.55] text-ndm-ink/90 first:border-0 first:pt-1">
+                  <span aria-hidden="true" className="mt-[1px] grid size-6 shrink-0 place-items-center rounded-full bg-ndm-blue/10 font-inter text-[12px] font-semibold tabular-nums text-ndm-deep">{k + 1}</span>{x}
+                </li>
+              ))}
+            </ol>
           </div>
         ))}
       </div>
@@ -5164,31 +5606,46 @@ function TxCare({ p }) {
   );
 }
 
-/* elevate your results: treatments that can complement this one, two groups of chips and a row of links */
+/* elevate your results: one calm card, what may pair at the same visit beside what is usually planned later, and plain links under it */
 function TxPair({ p }) {
   const ref = useRef(null);
   useReveal(ref);
   const t = p.pair;
   return (
-    <section ref={ref} id="combinations" aria-labelledby="pair-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
+    <section ref={ref} id="combinations" aria-labelledby="pair-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <TxHead p={p} id="combinations" tag={t.tag || 'Elevate your results'} hid="pair-title" lead={t.lead} strong={t.strong} text={t.text} />
-      <div className={`${TX_WRAP} mt-[clamp(28px,3.4vw,44px)] grid gap-3 md:grid-cols-2`}>
+      {/* when each pairing usually happens: two stops joined by a line, the treatments as chips */}
+      <ol role="list" className={`${TX_WRAP} rv tx-when relative mt-[clamp(28px,3.4vw,44px)] grid gap-3 rounded-[26px] p-3 md:grid-cols-2 md:gap-0 md:p-2`}>
         {t.groups.map(([g, items], i) => (
-          <div key={g} className="rv rounded-[22px] bg-white p-6 ring-1 ring-ndm-ink/[.06]" style={{ transitionDelay: `${0.06 * i}s` }}>
-            <p className="font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-ndm-deep">{g}</p>
+          <li key={g} className={`relative rounded-[20px] p-5 md:p-7 ${i ? 'bg-white/70' : 'bg-white shadow-[0_18px_40px_-30px_rgba(15,60,95,.45)]'}`}>
+            <p className="flex items-center gap-3 font-aeonik text-[clamp(19px,1.6vw,22px)] leading-[1.2] tracking-[-0.01em] text-ndm-ink">
+              <span aria-hidden="true" className={`grid size-9 shrink-0 place-items-center rounded-full font-inter text-[13px] font-semibold ${i ? 'bg-ndm-sky/15 text-ndm-deep' : 'bg-ndm-deep text-white'}`}>{i + 1}</span>{g}
+            </p>
             <ul className="mt-4 flex flex-wrap gap-2" role="list">
-              {items.map((x) => <li key={x} className="rounded-full bg-ndm-paper px-3.5 py-2 font-inter text-[14px] text-ndm-ink ring-1 ring-ndm-ink/10">{x}</li>)}
+              {items.map((x) => <li key={x} className="rounded-full bg-ndm-paper px-3.5 py-1.5 font-inter text-[14px] text-ndm-ink ring-1 ring-ndm-ink/[.08]">{x}</li>)}
             </ul>
-          </div>
+            {i === 0 && <span aria-hidden="true" className="tx-when-arrow absolute -right-5 top-1/2 z-[2] hidden size-10 -translate-y-1/2 place-items-center rounded-full bg-ndm-deep text-white md:grid"><IconArrow /></span>}
+          </li>
         ))}
-      </div>
+      </ol>
+      {/* treatments that pair well: photo cards with one short line, in the same card style as the home page menu */}
       {t.links && (
-        <ul className={`${TX_WRAP} mt-3 grid gap-3 sm:grid-cols-3`} role="list">
-          {t.links.map(([n, h, tag]) => (
-            <li key={n} className="rv">
-              <a href={h} className="group flex items-center justify-between gap-4 rounded-[18px] border border-ndm-ink/10 bg-white px-5 py-4 transition-colors hover:border-ndm-ink hover:bg-ndm-ink hover:text-white">
-                <span><span className="block font-inter text-[12px] text-ndm-muted transition-colors group-hover:text-white/70">{tag}</span><span className="mt-0.5 block font-aeonik text-[19px] leading-[1.2]">{n}</span></span>
-                <IconArrow className="shrink-0 transition-transform group-hover:translate-x-1" />
+        <ul role="list" className={`${TX_WRAP} mt-5 grid gap-4 sm:grid-cols-3`}>
+          {t.links.map(([n, h, tag, img, line], i) => (
+            <li key={n} className="rv" style={{ transitionDelay: `${0.06 * i}s` }}>
+              <a href={h} className="tx-pair-card group flex h-full flex-col rounded-[22px] bg-white p-2.5 ring-1 ring-ndm-ink/[.06]">
+                <span className="peach relative block aspect-[16/11] overflow-hidden rounded-[16px] bg-ndm-mist">
+                  {img && <img src={img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" style={{ transitionTimingFunction: 'var(--e-out)' }} />}
+                  {tag && <span className="absolute left-3 top-3 z-[1] rounded-full bg-white/85 px-3 py-1.5 font-inter text-[12px] text-ndm-ink backdrop-blur-[8px]">{tag}</span>}
+                </span>
+                <span className="flex flex-1 items-start justify-between gap-3 px-2 pb-2 pt-4">
+                  <span className="min-w-0">
+                    <span className="block font-aeonik text-[clamp(20px,1.7vw,23px)] leading-[1.15] tracking-[-0.02em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{n}</span>
+                    {line && <span className="mt-1 block font-inter text-[13.5px] leading-[1.45] text-ndm-muted">{line}</span>}
+                  </span>
+                  <span aria-hidden="true" className="grid size-10 shrink-0 self-end place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep transition-colors group-hover:bg-ndm-deep group-hover:text-white"><IconArrow /></span>
+                </span>
+                <span className="sr-only">Explore {n}</span>
               </a>
             </li>
           ))}
@@ -5197,8 +5654,6 @@ function TxPair({ p }) {
     </section>
   );
 }
-
-/* prices, in the Pricing page's style: one open category with its options on the white panel */
 function TxPrices({ p }) {
   const ref = useRef(null);
   useReveal(ref);
@@ -5208,7 +5663,7 @@ function TxPrices({ p }) {
   const pct = Math.max(0, ...pr.rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
   const from = Math.min(...pr.rows.map((r) => r[1]));
   return (
-    <section ref={ref} id="prices" aria-labelledby="prices-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
+    <section ref={ref} id="prices" aria-labelledby="prices-title" className="proc-peach relative z-10 scroll-mt-[170px] px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
       <TxHead p={p} id="prices" tag="Price list" hid="prices-title" lead={pr.lead} strong={pr.strong} text={pr.intro} />
       <div className={TX_WRAP}>
         <ul className="pr-groups rv mx-auto mt-[clamp(40px,4.5vw,64px)] max-w-[1040px]" role="list" style={{ transitionDelay: '.14s' }}>
@@ -5254,6 +5709,18 @@ function TxPrices({ p }) {
             </div>
           </li>
         </ul>
+        {p.sessions && (
+          <div id="sessions" className="rv mx-auto mt-6 grid max-w-[1040px] scroll-mt-[170px] gap-4 rounded-[22px] bg-white p-5 ring-1 ring-ndm-ink/[.06] sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-7 sm:p-6" style={{ transitionDelay: '.16s' }}>
+            <p className="flex items-baseline gap-2 sm:flex-col sm:items-start sm:gap-0.5">
+              <span className="font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-ndm-muted">How many you need</span>
+              <span className="flex items-baseline gap-1.5"><span className="font-aeonik text-[34px] leading-none tracking-[-0.03em] text-ndm-ink">{p.sessions.stat}</span><span className="font-inter text-[15px] text-ndm-muted">{p.sessions.unit}</span></span>
+            </p>
+            <div>
+              <p className="font-inter text-[15px] leading-[1.6] text-ndm-ink/85">{p.sessions.text}</p>
+              <ul className="mt-3 flex flex-wrap gap-2" role="list">{p.sessions.chips.map((c) => <li key={c} className="rounded-full bg-ndm-paper px-3 py-1 font-inter text-[13px] text-ndm-ink ring-1 ring-ndm-ink/10">{c}</li>)}</ul>
+            </div>
+          </div>
+        )}
         <div className="rv mt-10 flex flex-wrap justify-center gap-3" style={{ transitionDelay: '.18s' }}>
           <Btn href="#/book" v="book">Book Free Consultation</Btn>
           <Btn href="pricing.html#prices" v="line">All treatment prices</Btn>
@@ -5271,7 +5738,7 @@ function TxWhy({ p }) {
   useReveal(ref);
   const t = p.why;
   return (
-    <section ref={ref} aria-labelledby="why-title" className="relative z-10 bg-white px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
+    <section ref={ref} aria-labelledby="why-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <TxHead p={p} id="why" tag="Why NewDermaMed" hid="why-title" lead={t.lead} strong={t.strong} />
       <div className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,.9fr)] lg:gap-[clamp(40px,5vw,72px)]`}>
         <div className="rv relative aspect-[3/2] overflow-hidden rounded-[24px] bg-ndm-mist">
@@ -5328,6 +5795,7 @@ function App() {
         <TxWhy p={PROC} />
         <Team />
         <PromoReviews />
+        <ProcAnalysis />
         <Faq items={PROC.faqs} lead="Your top questions," strong="answered" intro="What to know before booking, from our medical team." />
       </main>
       <Footer />
