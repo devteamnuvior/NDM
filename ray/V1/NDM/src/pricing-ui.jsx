@@ -15,21 +15,36 @@ function bestOffer(opts) {
   return pct ? `Up to ${pct}% off` : tags[0];
 }
 const perUnit = (cat, label) => (cat.unit && label === 'Regular' ? ' / unit' : '');
-/* the "From" headline: the genuinely lowest price a client can reach. for unit-priced
-   categories a package can cost less per unit than a single unit (e.g. 180 Botox units at
-   $1,512 is $8.40/unit, below the $12 "Regular" rate), so compare every tier on a per-unit
-   basis (package total divided by its unit count; "Regular" rows are already per unit) and
-   show " / unit". every other category uses the lowest option total. */
+/* break one option label into how many base units it covers and their name, so a package or a
+   multi-buy priced as a total (2 syringes, 2 vials, 8 zones, 180 units, package of 3) can be
+   compared on a per-unit basis. no quantity keyword means one whole thing priced on its own,
+   such as a treated area or a fixed combo package. */
+function optUnits(label) {
+  let m;
+  if ((m = /(\d[\d,]*)\s*(syringe|vial|zone|unit|session)s?\b/i.exec(label))) return { n: +m[1].replace(/,/g, ''), noun: m[2].toLowerCase() };
+  if ((m = /package of\s*(\d+)/i.exec(label))) return { n: +m[1], noun: 'session' };
+  if (/^\s*single\s+zone/i.test(label)) return { n: 1, noun: 'zone' };
+  if (/^\s*single\s+session/i.test(label)) return { n: 1, noun: 'session' };
+  if (/^\s*regular\s*$/i.test(label) || /per\s+unit/i.test(label)) return { n: 1, noun: 'unit' };
+  if (/per\s+syringe/i.test(label)) return { n: 1, noun: 'syringe' };
+  return { n: 1, noun: null };
+}
+/* the "From" headline: the genuinely lowest price a client can reach, counting package and
+   buy-one-get-one discounts that are already in the price. divide every option by the base units
+   it covers (price / quantity) and take the lowest. when that lowest comes from a multi-buy, show
+   its unit (" / syringe", " / session", " / unit"), so e.g. lip filler's buy one get one 50% off
+   (2 syringes for $1,125) reads $562.50 / syringe. a unit-priced category always reads per unit. */
 function fromPrice(cat, opts) {
-  if (cat.unit) {
-    const per = opts.map(([label, p]) => {
-      const m = /(\d[\d,]*)\s*units?/i.exec(label);
-      const n = m ? +m[1].replace(/,/g, '') : 0;
-      return n > 0 ? p / n : p;
-    });
-    return { value: Math.min(...per), unit: ' / unit' };
+  let best = Infinity, noun = null, bn = 1;
+  for (const [label, p, , tag] of opts) {
+    const u = optUnits(label);
+    let n = u.n;
+    if (n > 0 && /buy\s*1\s*get\s*1\s*free/i.test(tag || '')) n *= 2; // buy one get one free doubles the sessions you get for the same price
+    const eff = n > 0 ? p / n : p;
+    if (eff < best - 0.001) { best = eff; noun = u.noun; bn = n; }
   }
-  return { value: Math.min(...opts.map((o) => o[1])), unit: '' };
+  const unit = (bn > 1 && noun) ? ` / ${noun}` : (cat.unit ? ' / unit' : '');
+  return { value: best, unit };
 }
 
 function TreatmentRow({ cat, it, uid, open, onToggle }) {
@@ -255,6 +270,16 @@ function PriceList() {
 }
 
 
+/* a special card shows the lowest price of its own treatment in the list below, so the top
+   section always tracks the price list: find the category, then the named treatment, then its
+   cheapest option through the shared fromPrice() helper (per unit for unit-priced treatments). */
+function specialFrom(id, itemName) {
+  const c = PRICE_CATS.find((x) => `pg-${x.id}` === id);
+  if (!c) return null;
+  const opts = itemName ? ((c.items.find((i) => i[0] === itemName) || [])[2] || []) : c.items.flatMap((i) => i[2]);
+  return opts.length ? fromPrice({ unit: c.unit }, opts) : null;
+}
+
 /* ---------------------------------------------------------------- the live pricing page's monthly specials (approval item C2): eight cards, each "Buy" opens its price list section */
 function PriceSpecials() {
   const ref = useRef(null);
@@ -269,14 +294,17 @@ function PriceSpecials() {
         <p className="rv mx-auto mt-4 font-inter text-[15px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>{sp.sub}</p>
       </div>
       <ul role="list" className="mx-auto mt-[clamp(28px,3.4vw,44px)] grid w-full max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-4">
-        {sp.items.map(([n, price, id], i) => (
+        {sp.items.map(([n, item, id], i) => {
+          const f = specialFrom(id, item);
+          return (
           <li key={n} className="rv rounded-[20px] bg-white p-4 ring-1 ring-ndm-ink/[.06] md:p-5" style={{ transitionDelay: `${0.04 * i}s` }}>
             <span className="inline-flex rounded-full bg-ndm-blue/10 px-2.5 py-1 font-inter text-[11px] font-semibold uppercase tracking-[.12em] text-ndm-deep">From</span>
-            <span className="mt-3 block font-aeonik text-[clamp(26px,2.4vw,34px)] leading-none tracking-[-0.03em] text-ndm-ink">{price}</span>
+            <span className="mt-3 block font-aeonik text-[clamp(26px,2.4vw,34px)] leading-none tracking-[-0.03em] text-ndm-ink">{f ? money(f.value) : ''}{f && f.unit && <span className="font-inter text-[13px] tracking-normal text-ndm-muted">{f.unit}</span>}</span>
             <span className="mt-2 block font-inter text-[15px] font-medium leading-[1.3] text-ndm-ink">{n}</span>
             <span className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1"><a href={`#${id}`} onClick={(e) => go(e, id)} className="btn btn-buy h-9 px-4 text-[13px]">Buy</a><span className="font-inter text-[12.5px] text-ndm-muted">{sp.note}</span></span>
           </li>
-        ))}
+          );
+        })}
       </ul>
     </section>
   );

@@ -42,6 +42,20 @@ function liveTitle(h1) {
   return [w.slice(0, -1).join(' '), w[w.length - 1]];
 }
 
+/* the hero offer bar: pulls the current promotion, how big it is and the cheapest price straight
+   from this treatment's matching price list category, so it stays in step with the price list. */
+function liveOffer(p) {
+  if (!p.prices) return null;
+  /* prefer the row that is this treatment (the Botox / Dysport section lists three), else the whole category */
+  const name = (p.short || p.h1 || '').replace(/[®™]/g, '').trim().toLowerCase();
+  const mine = name && p.prices.items.find((it) => it[0].replace(/[®™]/g, '').toLowerCase().includes(name));
+  const opts = mine ? mine[2] : p.prices.items.flatMap((it) => it[2]);
+  if (!opts.length) return null;
+  const promo = bestOffer(opts);
+  const m = /up to (\d+)% off/i.exec(promo);
+  return { title: `${p.short || p.h1} packages`, from: fromPrice({ unit: p.prices.unit }, opts), promo, big: m ? ['Up to', m[1] + '%', 'off'] : (promo || null) };
+}
+
 /* ---------------------------------------------------------------- header: photo, the live page's title and subtitle, the form on the right */
 function LiveHero({ p }) {
   const ref = useRef(null), pic = useRef(null);
@@ -53,6 +67,7 @@ function LiveHero({ p }) {
     img.style.transform = `translate3d(0,${Math.min(window.scrollY * 0.2, h * 0.1).toFixed(1)}px,0)`;
   }, []);
   const [lead, strong] = liveTitle(p.h1);
+  const off = liveOffer(p);
   return (
     <section ref={ref} data-nav="dark" aria-labelledby="proc-title" className="relative isolate overflow-hidden bg-ndm-night text-white">
       <div aria-hidden="true" className="absolute inset-0 -z-20 overflow-hidden">
@@ -66,6 +81,20 @@ function LiveHero({ p }) {
             {lead ? <>{lead}<br /></> : null}<span className="tt-strong text-ndm-sky">{strong}</span>
           </h1>
           <p className="rv mt-5 max-w-[52ch] font-inter text-[clamp(16px,1.25vw,18px)] leading-[1.6] text-white/85" style={{ transitionDelay: '.08s' }}>{p.sub}</p>
+          {/* current offer, pulled live from the price list: promotion, how much off and the cheapest price; a light sweeps across it */}
+          {off && <a href="#prices" aria-label={`${off.promo ? 'Current offer' : 'Pricing'}: ${off.title}${off.promo ? ', ' + off.promo : ''}, from ${money(off.from.value)}${off.from.unit}. See the prices`} className="rv offer-glass offer-shine group mt-7 inline-flex max-w-full flex-wrap items-center gap-x-4 gap-y-2 overflow-hidden rounded-[18px] py-3 pl-4 pr-3" style={{ transitionDelay: '.16s' }}>
+            <span className="min-w-0">
+              <span className="offer-pill inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 font-inter text-[11px] font-medium"><i className="offer-dot size-1.5 rounded-full bg-ndm-amber" />{off.promo ? 'Current offer' : 'Pricing'}</span>
+              <span className="mt-1.5 block font-aeonik text-[17px] leading-[1.2] tracking-[-0.01em] text-white">{off.title}</span>
+              <span className="mt-0.5 block font-inter text-[12.5px] leading-[1.3] text-white/70">From {money(off.from.value)}{off.from.unit}</span>
+            </span>
+            {off.big && <span className="offer-big flex items-baseline gap-1.5 whitespace-nowrap">
+              {Array.isArray(off.big)
+                ? <><span className="font-inter text-[11px] uppercase tracking-[.14em] text-white/70">{off.big[0]}</span><span className="font-aeonik text-[34px] leading-none tracking-[-0.03em] text-white">{off.big[1]}</span><span className="font-inter text-[11px] uppercase tracking-[.14em] text-[#FFC266]">{off.big[2]}</span></>
+                : <span className="font-aeonik text-[20px] leading-[1.1] tracking-[-0.02em] text-white">{off.big}</span>}
+            </span>}
+            <span aria-hidden="true" className="ml-auto grid size-9 shrink-0 place-items-center rounded-full bg-white/15 text-white transition-colors group-hover:bg-white group-hover:text-ndm-ink"><IconArrow /></span>
+          </a>}
         </div>
         <ProcForm id="hero-form" className="rv hidden lg:block" />
       </div>
