@@ -504,7 +504,8 @@ function TxPrices({ p }) {
   const pr = p.prices;
   const unit = (label) => (pr.unitLabel && label === pr.unitLabel ? ' / unit' : '');
   const pct = Math.max(0, ...pr.rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
-  const from = Math.min(...pr.rows.map((r) => r[1]));
+  /* lowest price a client can reach: for unit pricing a package can beat the per-unit rate, so compare per unit */
+  const from = Math.min(...pr.rows.map((r) => { const m = /(\d[\d,]*)\s*units?/i.exec(r[0]); const nu = pr.unitLabel && m ? +m[1].replace(/,/g, '') : 0; return nu > 0 ? r[1] / nu : r[1]; }));
   return (
     <section ref={ref} id="prices" aria-labelledby="prices-title" className="proc-peach relative z-10 scroll-mt-[170px] px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
       <TxHead p={p} id="prices" tag="Price list" hid="prices-title" lead={pr.lead} strong={pr.strong} text={pr.intro} />

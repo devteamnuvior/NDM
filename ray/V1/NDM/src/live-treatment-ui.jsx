@@ -27,9 +27,8 @@ function Html({ html, className = '' }) {
 function liveSummary(p) {
   const f = Object.fromEntries(p.facts);
   const bits = [f['Treatment Type'] ? `${f['Treatment Type'].toLowerCase()} treatment` : null, f['Duration'] ? `about ${f['Duration'].replace(/^(\d)/, '$1')} per session` : null, f['Recovery Time'] ? f['Recovery Time'].toLowerCase() : null].filter(Boolean);
-  let lo = null;
-  if (p.prices) p.prices.items.forEach((it) => it[2].forEach((r) => { if (r[1] && (lo === null || r[1] < lo)) lo = r[1]; }));
-  const price = lo !== null ? ` From $${lo.toLocaleString('en-CA')}${p.prices.unit ? ' per unit' : ''} on our price list.` : '';
+  const f2 = p.prices ? fromPrice({ unit: p.prices.unit }, p.prices.items.flatMap((it) => it[2])) : null;
+  const price = f2 ? ` From ${money(f2.value)}${p.prices.unit ? ' per unit' : ''} on our price list.` : '';
   return `${p.h1} at NewDermaMed Toronto: ${bits.join(', ')}.${price} Free consultation with a VISIA® skin analysis at our Uptown and Downtown clinics.`;
 }
 

@@ -15,12 +15,27 @@ function bestOffer(opts) {
   return pct ? `Up to ${pct}% off` : tags[0];
 }
 const perUnit = (cat, label) => (cat.unit && label === 'Regular' ? ' / unit' : '');
+/* the "From" headline: the genuinely lowest price a client can reach. for unit-priced
+   categories a package can cost less per unit than a single unit (e.g. 180 Botox units at
+   $1,512 is $8.40/unit, below the $12 "Regular" rate), so compare every tier on a per-unit
+   basis (package total divided by its unit count; "Regular" rows are already per unit) and
+   show " / unit". every other category uses the lowest option total. */
+function fromPrice(cat, opts) {
+  if (cat.unit) {
+    const per = opts.map(([label, p]) => {
+      const m = /(\d[\d,]*)\s*units?/i.exec(label);
+      const n = m ? +m[1].replace(/,/g, '') : 0;
+      return n > 0 ? p / n : p;
+    });
+    return { value: Math.min(...per), unit: ' / unit' };
+  }
+  return { value: Math.min(...opts.map((o) => o[1])), unit: '' };
+}
 
 function TreatmentRow({ cat, it, uid, open, onToggle }) {
   const [name, note, opts] = it;
   const offer = bestOffer(opts);
-  const from = Math.min(...opts.map((o) => o[1]));
-  const fromUnit = perUnit(cat, opts.find((o) => o[1] === from)[0]);
+  const { value: from, unit: fromUnit } = fromPrice(cat, opts);
   return (
     <li className={`pr-item ${open ? 'is-open' : ''}`}>
       <h4 className="m-0">
@@ -136,8 +151,7 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }) {
   const shown = hits || c.items.map((it, i) => [it, i]);
   const opts = c.items.flatMap((it) => it[2]);
   const offer = bestOffer(opts);
-  const from = Math.min(...opts.map((o) => o[1]));
-  const fromUnit = c.unit && opts.some((o) => o[1] === from && o[0] === 'Regular') ? ' / unit' : '';
+  const { value: from, unit: fromUnit } = fromPrice(c, opts);
   const allOpen = shown.every(([, i]) => openItem(i));
   const uid = `pg-${c.id}`;
   return (
@@ -257,7 +271,7 @@ function PriceSpecials() {
       <ul role="list" className="mx-auto mt-[clamp(28px,3.4vw,44px)] grid w-full max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-4">
         {sp.items.map(([n, price, id], i) => (
           <li key={n} className="rv rounded-[20px] bg-white p-4 ring-1 ring-ndm-ink/[.06] md:p-5" style={{ transitionDelay: `${0.04 * i}s` }}>
-            <span className="inline-flex rounded-full bg-ndm-blue/10 px-2.5 py-1 font-inter text-[11px] font-semibold uppercase tracking-[.12em] text-ndm-deep">Up to</span>
+            <span className="inline-flex rounded-full bg-ndm-blue/10 px-2.5 py-1 font-inter text-[11px] font-semibold uppercase tracking-[.12em] text-ndm-deep">From</span>
             <span className="mt-3 block font-aeonik text-[clamp(26px,2.4vw,34px)] leading-none tracking-[-0.03em] text-ndm-ink">{price}</span>
             <span className="mt-2 block font-inter text-[15px] font-medium leading-[1.3] text-ndm-ink">{n}</span>
             <span className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1"><a href={`#${id}`} onClick={(e) => go(e, id)} className="btn btn-buy h-9 px-4 text-[13px]">Buy</a><span className="font-inter text-[12.5px] text-ndm-muted">{sp.note}</span></span>

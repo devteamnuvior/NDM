@@ -69,7 +69,7 @@ t('non-surgical-bbl', 'Non-Surgical BBL',
   res='Right away with hyaluronic acid; gradually with collagen stimulators', last='12 to 24 months', price=('From $1,999', PRICE.format('non-surgical-butt-lift')))
 # prescription products: name, price and quantity only
 t('botox', 'Botox®', rx=True, line='A prescription treatment, available after an in-person medical assessment.',
-  price=('From $12 per unit', PRICE.format('botox-dysport')))
+  price=('From $8.40 per unit', PRICE.format('botox-dysport')))
 t('soft-lift', 'Soft Lift™', rx=True, line='A combination treatment that includes a prescription product, planned after an in-person medical assessment.',
   price=('Quoted at your consultation', 'soft-lift.html'))
 t('belkyra-kybella-double-chin', 'Belkyra®', rx=True, line='A prescription treatment, available after an in-person medical assessment.',

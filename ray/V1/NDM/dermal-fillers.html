@@ -597,6 +597,9 @@
   .eyebrow.is-dark{color:#fff;background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 12px 26px -16px rgba(0,0,0,.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
   .eyebrow.is-dark .eyebrow-mark{background:#fff;box-shadow:0 4px 12px -6px rgba(38,177,231,.9)}
   .eyebrow.is-dark::after{background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.22) 50%,transparent 65%)}
+  .eyebrow.is-amber{color:#6E4410;background:linear-gradient(180deg,#FFB942,#FFA617) padding-box,linear-gradient(115deg,rgba(255,166,23,.95),rgba(224,138,0,.55)) border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 12px 26px -16px rgba(255,166,23,.8)}
+  .eyebrow.is-amber .eyebrow-mark{background:radial-gradient(circle at 32% 28%,#fff,#FFE3AC 75%);box-shadow:inset 0 0 0 1px rgba(255,166,23,.35),0 4px 10px -6px rgba(224,138,0,.8)}
+  .eyebrow.is-amber::after{background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.3) 50%,transparent 65%)}
   @keyframes eyebrowSheen{0%,72%{transform:translateX(-110%)}100%{transform:translateX(110%)}}
   @media (min-width:768px){.eyebrow{font-size:16px;padding:5px 20px 5px 5px;gap:11px}.eyebrow-mark{width:32px;height:32px}.eyebrow-mark img{width:20px;height:20px}}
   @media (prefers-reduced-motion:reduce){.eyebrow::after,.nav-here{animation:none}}
@@ -3446,8 +3449,8 @@ const BOOK_INTEREST_GROUPS = [ /* the picker's categories; labels match the conc
 const BOOK_INTERESTS = BOOK_INTEREST_GROUPS.flatMap(([, xs]) => xs);
 const BOOK_NOT_SURE = 'Not sure, I’d like a skin analysis';
 /* the organised picker: category tabs, the options of the open category, the two standing options */
-function BookPicker({ value, onPick, compact }) {
-  const found = BOOK_INTEREST_GROUPS.findIndex(([, xs]) => xs.includes(value));
+function BookPicker({ values, onPick, compact }) {
+  const found = BOOK_INTEREST_GROUPS.findIndex(([, xs]) => xs.some((x) => values.includes(x)));
   const [cat, setCat] = useState(found >= 0 ? found : 0);
   const tabs = useRef([]);
   const key = (e, i) => {
@@ -3464,24 +3467,24 @@ function BookPicker({ value, onPick, compact }) {
       <div role="tablist" aria-label="Type of concern" className="flex flex-wrap gap-1">
         {BOOK_INTEREST_GROUPS.map(([g, xs], i) => (
           <button key={g} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" aria-selected={i === cat} tabIndex={i === cat ? 0 : -1} onClick={() => setCat(i)} onKeyDown={(e) => key(e, i)}
-            className={`book-tab shrink-0 rounded-full px-4 py-2.5 font-inter text-[15px] font-semibold transition-colors ${i === cat ? 'bg-ndm-ink text-white' : 'bg-ndm-mist text-ndm-ink/80 hover:text-ndm-ink'} ${xs.includes(value) && i !== cat ? 'book-tab-has' : ''}`}>{g}</button>
+            className={`book-tab shrink-0 rounded-full px-4 py-2.5 font-inter text-[15px] font-semibold transition-colors ${i === cat ? 'bg-ndm-ink text-white' : 'bg-ndm-mist text-ndm-ink/80 hover:text-ndm-ink'} ${xs.some((x) => values.includes(x)) && i !== cat ? 'book-tab-has' : ''}`}>{g}</button>
         ))}
       </div>
       <div role="tabpanel" className={`mt-2.5 grid gap-1.5 ${compact ? 'grid-cols-1 sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'}`}>
         {items.map((t) => (
           <label key={t} className="relative flex cursor-pointer">
-            <input type="radio" name="interest" value={t} checked={value === t} onChange={() => onPick(t)} className="peer absolute inset-0 m-0 cursor-pointer opacity-0" />
+            <input type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)} className="peer absolute inset-0 m-0 cursor-pointer opacity-0" />
             <span className="book-opt flex min-h-[42px] w-full items-center gap-2.5 rounded-[12px] border border-ndm-ink/12 bg-white px-3.5 py-2 font-inter text-[13.5px] leading-[1.3] text-ndm-ink transition-colors peer-hover:border-ndm-ink/35 peer-checked:border-ndm-deep peer-checked:bg-ndm-deep peer-checked:text-white peer-focus-visible:ring-4 peer-focus-visible:ring-ndm-blue/25">
-              <i aria-hidden="true" className={`size-2 shrink-0 rounded-full ${value === t ? 'bg-ndm-amber' : 'bg-ndm-ink/15'}`} />{t}
+              <i aria-hidden="true" className={`size-2 shrink-0 rounded-full ${values.includes(t) ? 'bg-ndm-amber' : 'bg-ndm-ink/15'}`} />{t}
             </span>
           </label>
         ))}
       </div>
       <div className="mt-2.5 flex flex-wrap gap-1.5">
-        {standing.map((t) => <BookChip key={t} name="interest" value={t} checked={value === t} onChange={() => onPick(t)}>{t}</BookChip>)}
+        {standing.map((t) => <BookChip key={t} type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)}>{t}</BookChip>)}
       </div>
-      <p className="mt-2.5 flex min-h-[20px] items-center gap-2 font-inter text-[13px] text-ndm-ink" aria-live="polite">
-        {value ? <><i aria-hidden="true" className="size-2 shrink-0 rounded-full bg-ndm-amber" /><span className="text-ndm-muted">Your choice:</span><b className="font-semibold">{value}</b></> : <span className="text-ndm-muted">Pick a category, then what you would like to address.</span>}
+      <p className="mt-2.5 flex min-h-[20px] flex-wrap items-center gap-2 font-inter text-[13px] text-ndm-ink" aria-live="polite">
+        {values.length ? <><i aria-hidden="true" className="size-2 shrink-0 rounded-full bg-ndm-amber" /><span className="text-ndm-muted">Your choices:</span><b className="font-semibold">{values.join(', ')}</b></> : <span className="text-ndm-muted">Pick a category, then one or more things you would like to address.</span>}
       </p>
     </div>
   );
@@ -3562,12 +3565,12 @@ function BookForm({ thanksId, summary = false, compact = false }) {
   const [path, setPath] = useState(null); /* 'book' (pick a time, deposit) or 'call' (we call you) */
   const [sent, setSent] = useState(false);
   const [err, setErr] = useState('');
-  const [f, setF] = useState({ interest: '', clinic: 'Uptown', day: null, time: null, via: ['Call', 'Text'], first: '', callTime: '', callClinic: 'Either', agree: false, other: '', visia: true });
+  const [f, setF] = useState({ interest: [], clinic: 'Uptown', day: null, time: null, via: ['Call', 'Text'], first: '', callTime: '', callClinic: 'Either', agree: false, other: '', visia: true });
   const set = (k, v) => { setErr(''); setF((o) => ({ ...o, [k]: v })); };
   const toggle = (k, v) => { setErr(''); setF((o) => ({ ...o, [k]: o[k].includes(v) ? o[k].filter((x) => x !== v) : [...o[k], v] })); };
   const otherBox = () => box.current && box.current.querySelector('input[name="other"]');
   /* "Something else" opens the text box; "Not sure, I'd like a skin analysis" switches the free VISIA analysis back on */
-  const pick = (t) => { setErr(''); setF((o) => ({ ...o, interest: t, visia: t.startsWith('Not sure') ? true : o.visia })); if (t === BOOK_OTHER) setTimeout(() => { const i = otherBox(); if (i) i.focus(); }, 60); };
+  const pick = (t) => { setErr(''); const has = f.interest.includes(t); setF((o) => ({ ...o, interest: has ? o.interest.filter((x) => x !== t) : [...o.interest, t], visia: (!has && t.startsWith('Not sure')) ? true : o.visia })); if (t === BOOK_OTHER && !has) setTimeout(() => { const i = otherBox(); if (i) i.focus(); }, 60); };
   const [hold, setHold] = useState(0);
   const flow = BOOK_FLOW[path || 'book'];
   const keyOf = (n, p) => (n < 3 ? String(n) : `${n}${p === 'call' ? 'c' : 'b'}`);
@@ -3585,8 +3588,8 @@ function BookForm({ thanksId, summary = false, compact = false }) {
   };
   const choose = (p) => { setPath(p); go(3, p); };
   const next = () => {
-    if (step === 0 && !f.interest) { setErr('Please choose one option.'); return; }
-    if (step === 0 && f.interest === BOOK_OTHER && !f.other.trim()) { setErr('Please tell us in a few words what you’d like to address.'); const i = otherBox(); if (i) i.focus(); return; }
+    if (step === 0 && !f.interest.length) { setErr('Please choose at least one option.'); return; }
+    if (step === 0 && f.interest.includes(BOOK_OTHER) && !f.other.trim()) { setErr('Please tell us in a few words what you’d like to address.'); const i = otherBox(); if (i) i.focus(); return; }
     if (step === 1 && !detailsOk()) return;
     if (step === 3 && path === 'book' && (!f.day || !f.time)) { setErr('Please pick a day and a time.'); return; }
     go(step + 1);
@@ -3599,18 +3602,18 @@ function BookForm({ thanksId, summary = false, compact = false }) {
     if (path === 'book' && !f.agree) { setErr('Please confirm the deposit terms.'); return; }
     setHold(box.current ? box.current.offsetHeight : 0); setSent(true);
   };
-  const reset = () => { setSent(false); setPath(null); setF((o) => ({ ...o, interest: '', other: '', visia: true, day: null, time: null, callTime: '', agree: false })); go(0, null); };
+  const reset = () => { setSent(false); setPath(null); setF((o) => ({ ...o, interest: [], other: '', visia: true, day: null, time: null, callTime: '', agree: false })); go(0, null); };
   const when = f.day && f.time ? `${bookDay(f.day)}, ${bookHour(f.time)}` : null;
   const clinicName = (v) => (v === 'Either' ? 'Either clinic' : BOOK_CLINIC_OPTS.find(([x]) => x === v)[1]);
   const clinicPhone = (CLINICS.find((c) => c.name === f.clinic) || CLINICS[0]).phone;
   const legend = `scroll-mt-24 font-aeonik ${compact ? 'text-[20px]' : 'text-[clamp(21px,1.9vw,26px)]'} font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink outline-none`;
   const label = 'mb-1.5 block font-inter text-[13px] font-semibold text-ndm-ink';
   const tile = 'flex min-h-[64px] items-center gap-3 rounded-[14px] border px-4 py-3 text-left font-inter transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ndm-blue/25';
-  const concern = f.interest === BOOK_OTHER ? (f.other.trim() || BOOK_OTHER) : f.interest;
+  const concern = f.interest.map((t) => t === BOOK_OTHER ? (f.other.trim() || BOOK_OTHER) : t).join(', ');
   const visiaRow = ['VISIA® skin analysis', f.visia ? 'Included, free' : 'Not added'];
   const rows = path === 'call'
-    ? [['Concern', concern], visiaRow, ['Next step', 'We call you'], ['Best time', f.callTime], ['Clinic', clinicName(f.callClinic)]]
-    : [['Concern', concern], visiaRow, ['Clinic', clinicName(f.clinic)], ['Day and time', when], ['Deposit', `$${BOOK_DEPOSIT}, refundable`]];
+    ? [['Concerns', concern], visiaRow, ['Next step', 'We call you'], ['Best time', f.callTime], ['Clinic', clinicName(f.callClinic)]]
+    : [['Concerns', concern], visiaRow, ['Clinic', clinicName(f.clinic)], ['Day and time', when], ['Deposit', `$${BOOK_DEPOSIT}, refundable`]];
   const stepCls = (k) => `book-step ${cur === k ? '' : 'is-off'}`;
   const stepAttr = (k) => ({ 'aria-hidden': cur !== k || undefined, inert: cur !== k ? '' : undefined });
 
@@ -3640,8 +3643,9 @@ function BookForm({ thanksId, summary = false, compact = false }) {
       <div className="book-steps mt-5 grid">
         <fieldset data-step="0" className={stepCls('0')} {...stepAttr('0')}>
           <legend tabIndex={-1} className={legend}>What would you like to address?</legend>
-          <div className="mt-4"><BookPicker value={f.interest} onPick={pick} compact={compact} /></div>
-          {f.interest === BOOK_OTHER && (
+          <p className="mt-2 font-inter text-[13.5px] leading-[1.5] text-ndm-muted">Choose any that apply, you can pick more than one.</p>
+          <div className="mt-4"><BookPicker values={f.interest} onPick={pick} compact={compact} /></div>
+          {f.interest.includes(BOOK_OTHER) && (
             <label className="mt-3 block max-w-[440px]"><span className={label}>Tell us in a few words</span>
               <input name="other" maxLength={80} autoComplete="off" value={f.other} onChange={(e) => set('other', e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); next(); } }}
                 placeholder="For example: neck lines, or a treatment you have in mind" className={`${fieldCls} !h-11`} /></label>
@@ -4688,7 +4692,7 @@ function BookPopup() {
           className="book-card pointer-events-auto relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white px-[clamp(20px,2.4vw,32px)] pb-[max(22px,env(safe-area-inset-bottom))] pt-6 shadow-[0_40px_80px_-30px_rgba(11,15,19,.6)] sm:max-w-[680px] sm:rounded-[20px] sm:pt-[clamp(20px,2.4vw,32px)]">
           <span aria-hidden="true" className="absolute left-1/2 top-2.5 h-1 w-10 -translate-x-1/2 rounded-full bg-ndm-ink/15 sm:hidden" />
           <button type="button" onClick={close} aria-label="Close booking form" className="absolute right-3 top-3 grid size-10 place-items-center rounded-full text-ndm-ink transition-colors hover:bg-ndm-mist sm:right-4 sm:top-4"><IconClose /></button>
-          <p className="eyebrow font-mont">
+          <p className="eyebrow is-amber font-mont">
             <span className="eyebrow-mark" aria-hidden="true"><img src="assets/icons/logo-mark.svg" alt="" /></span>Book now at our two Toronto locations
           </p>
           <TwoTone id="book-pop-title" className="mt-4 pr-8" size="text-[clamp(26px,2.6vw,36px)]" lead={<>Book a free consultation<br /></>} strong="in a few short steps" />
@@ -6200,7 +6204,8 @@ function TxPrices({ p }) {
   const pr = p.prices;
   const unit = (label) => (pr.unitLabel && label === pr.unitLabel ? ' / unit' : '');
   const pct = Math.max(0, ...pr.rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
-  const from = Math.min(...pr.rows.map((r) => r[1]));
+  /* lowest price a client can reach: for unit pricing a package can beat the per-unit rate, so compare per unit */
+  const from = Math.min(...pr.rows.map((r) => { const m = /(\d[\d,]*)\s*units?/i.exec(r[0]); const nu = pr.unitLabel && m ? +m[1].replace(/,/g, '') : 0; return nu > 0 ? r[1] / nu : r[1]; }));
   return (
     <section ref={ref} id="prices" aria-labelledby="prices-title" className="proc-peach relative z-10 scroll-mt-[170px] px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
       <TxHead p={p} id="prices" tag="Price list" hid="prices-title" lead={pr.lead} strong={pr.strong} text={pr.intro} />
@@ -6340,12 +6345,27 @@ function bestOffer(opts) {
   return pct ? `Up to ${pct}% off` : tags[0];
 }
 const perUnit = (cat, label) => (cat.unit && label === 'Regular' ? ' / unit' : '');
+/* the "From" headline: the genuinely lowest price a client can reach. for unit-priced
+   categories a package can cost less per unit than a single unit (e.g. 180 Botox units at
+   $1,512 is $8.40/unit, below the $12 "Regular" rate), so compare every tier on a per-unit
+   basis (package total divided by its unit count; "Regular" rows are already per unit) and
+   show " / unit". every other category uses the lowest option total. */
+function fromPrice(cat, opts) {
+  if (cat.unit) {
+    const per = opts.map(([label, p]) => {
+      const m = /(\d[\d,]*)\s*units?/i.exec(label);
+      const n = m ? +m[1].replace(/,/g, '') : 0;
+      return n > 0 ? p / n : p;
+    });
+    return { value: Math.min(...per), unit: ' / unit' };
+  }
+  return { value: Math.min(...opts.map((o) => o[1])), unit: '' };
+}
 
 function TreatmentRow({ cat, it, uid, open, onToggle }) {
   const [name, note, opts] = it;
   const offer = bestOffer(opts);
-  const from = Math.min(...opts.map((o) => o[1]));
-  const fromUnit = perUnit(cat, opts.find((o) => o[1] === from)[0]);
+  const { value: from, unit: fromUnit } = fromPrice(cat, opts);
   return (
     <li className={`pr-item ${open ? 'is-open' : ''}`}>
       <h4 className="m-0">
@@ -6420,9 +6440,8 @@ function Html({ html, className = '' }) {
 function liveSummary(p) {
   const f = Object.fromEntries(p.facts);
   const bits = [f['Treatment Type'] ? `${f['Treatment Type'].toLowerCase()} treatment` : null, f['Duration'] ? `about ${f['Duration'].replace(/^(\d)/, '$1')} per session` : null, f['Recovery Time'] ? f['Recovery Time'].toLowerCase() : null].filter(Boolean);
-  let lo = null;
-  if (p.prices) p.prices.items.forEach((it) => it[2].forEach((r) => { if (r[1] && (lo === null || r[1] < lo)) lo = r[1]; }));
-  const price = lo !== null ? ` From $${lo.toLocaleString('en-CA')}${p.prices.unit ? ' per unit' : ''} on our price list.` : '';
+  const f2 = p.prices ? fromPrice({ unit: p.prices.unit }, p.prices.items.flatMap((it) => it[2])) : null;
+  const price = f2 ? ` From ${money(f2.value)}${p.prices.unit ? ' per unit' : ''} on our price list.` : '';
   return `${p.h1} at NewDermaMed Toronto: ${bits.join(', ')}.${price} Free consultation with a VISIA® skin analysis at our Uptown and Downtown clinics.`;
 }
 
