@@ -1,0 +1,281 @@
+[
+ {
+  "label": "Aptos Thread Lift",
+  "groups": [
+   {
+    "title": "",
+    "items": [
+     [
+      "Non-Surgical Facelift (Neck, Jawline, Eyebrow & Nose Lift)",
+      "thread-lift/non-surgical-facelift"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "label": "Injectables",
+  "groups": [
+   {
+    "title": "",
+    "items": [
+     [
+      "Botox®",
+      "injectables/botox"
+     ],
+     [
+      "Juvederm®",
+      "injectables/juvederm"
+     ],
+     [
+      "Dermal Fillers",
+      "injectables/dermal-fillers"
+     ],
+     [
+      "Belkyra® / Kybella® (Double Chin)",
+      "injectables/double-chin/belkyra-kybella"
+     ],
+     [
+      "Lip Augmentation",
+      "injectables/lip-augmentation"
+     ],
+     [
+      "Tear Trough Correction",
+      "injectables/tear-trough-correction"
+     ],
+     [
+      "Soft Lift™",
+      "injectables/soft-lift"
+     ],
+     [
+      "Radiesse®",
+      "injectables/radiesse"
+     ],
+     [
+      "Sculptra®",
+      "injectables/sculptra"
+     ],
+     [
+      "Mesotherapy & Skin Boosters",
+      "injectables/mesotherapy-and-skin-boosters"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "label": "Skin",
+  "groups": [
+   {
+    "title": "Aesthetic",
+    "items": [
+     [
+      "VISIA® Skin Analysis",
+      "skin/aesthetic/visia-skin-analysis"
+     ],
+     [
+      "Microneedling",
+      "skin/aesthetic/microneedling"
+     ],
+     [
+      "Age Element® Facial",
+      "skin/aesthetic/age-element-facial"
+     ],
+     [
+      "Acnelan®",
+      "skin/aesthetic/acnelan"
+     ],
+     [
+      "Dermamelan®",
+      "skin/aesthetic/dermamelan"
+     ],
+     [
+      "Exosome Skin Therapy",
+      "skin/aesthetic/exosome-therapy"
+     ],
+     [
+      "Wrinkle Treatments",
+      "skin/aesthetic/wrinkle-treatments"
+     ],
+     [
+      "Dark Circles",
+      "skin/aesthetic/dark-circles"
+     ],
+     [
+      "Scar Removal",
+      "skin/aesthetic/scar-removal"
+     ],
+     [
+      "Acne Scar",
+      "laser/acne-scar"
+     ],
+     [
+      "Photo Rejuvenation",
+      "skin/aesthetic/photo-rejuvenation"
+     ],
+     [
+      "Microdermabrasion",
+      "skin/aesthetic/microdermabrasion"
+     ],
+     [
+      "Chemical Peels",
+      "skin/aesthetic/chemical-peels"
+     ],
+     [
+      "Micro Laser Peel",
+      "laser/micro-laser-peel"
+     ],
+     [
+      "Laser Skin Resurfacing",
+      "laser/laser-skin-resurfacing"
+     ],
+     [
+      "Skin Tightening",
+      "body/skin-tightening"
+     ]
+    ]
+   },
+   {
+    "title": "Medical Dermatology",
+    "items": [
+     [
+      "Mole Removal",
+      "skin/medical-dermatology/mole-removal"
+     ],
+     [
+      "Rosacea",
+      "skin/medical-dermatology/rosacea"
+     ],
+     [
+      "Melasma",
+      "skin/medical-dermatology/melasma"
+     ],
+     [
+      "Hyperpigmentation",
+      "skin/medical-dermatology/hyperpigmentation"
+     ],
+     [
+      "Acne Treatments",
+      "skin/medical-dermatology/acne-treatments"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "label": "Laser Hair Removal",
+  "groups": [
+   {
+    "title": "",
+    "items": [
+     [
+      "Laser Hair Removal",
+      "laser/laser-hair-removal"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "label": "Body",
+  "groups": [
+   {
+    "title": "",
+    "items": [
+     [
+      "CoolSculpting®",
+      "body/coolsculpting"
+     ],
+     [
+      "Non-Surgical BBL",
+      "body/non-surgical-bbl"
+     ],
+     [
+      "Cellulite & Fat Reduction",
+      "body/cellulite"
+     ],
+     [
+      "TightSculpting®",
+      "body/tightsculpting"
+     ],
+     [
+      "Vaginal Tightening",
+      "body/vaginal-tightening"
+     ],
+     [
+      "Nail Fungus Treatment",
+      "body/nail-fungus-treatment"
+     ],
+     [
+      "Snoring Treatment",
+      "body/snoring-treatment"
+     ],
+     [
+      "Stretch Marks",
+      "body/stretch-marks"
+     ],
+     [
+      "Hyperhidrosis",
+      "body/hyperhidrosis"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "label": "Veins",
+  "groups": [
+   {
+    "title": "",
+    "items": [
+     [
+      "Spider Vein Removal",
+      "veins/spider-vein-removal"
+     ],
+     [
+      "Varicose Vein Treatment",
+      "veins/varicose-vein-treatment"
+     ],
+     [
+      "Sclerotherapy",
+      "veins/sclerotherapy"
+     ],
+     [
+      "VenaSeal™",
+      "veins/venaseal"
+     ],
+     [
+      "Endovenous Laser (EVLT)",
+      "veins/endovenous-laser-evlt"
+     ],
+     [
+      "Radiofrequency Ablation (RFA)",
+      "veins/radiofrequency-ablation-rfa"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "label": "Hair Loss",
+  "groups": [
+   {
+    "title": "",
+    "items": [
+     [
+      "Hair Loss Treatments",
+      "hair/hair-loss-treatments"
+     ],
+     [
+      "Exosome Therapy for Hair",
+      "hair/exosome-therapy-for-hair"
+     ],
+     [
+      "Laser Hair Rejuvenation",
+      "hair/laser-hair-rejuvenation"
+     ]
+    ]
+   }
+  ]
+ }
+]

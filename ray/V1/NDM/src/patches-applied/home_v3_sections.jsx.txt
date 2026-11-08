@@ -1,0 +1,254 @@
+/* ---------------------------------------------------------------- where would you like to start? (website v3 expanding photo panels)
+   one panel per area; hovering (or tapping) a panel opens it, a concern opens its options in place over the photo */
+const IconPlusLg = () => <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><path d="M8 3v10M3 8h10" /></svg>;
+const priceParts = (p) => (/^From /.test(p) ? ['From', p.slice(5)] : [null, p]);
+
+function Start({ onSearch }) {
+  const ref = useRef(null), sheetRef = useRef(null), lastChip = useRef(null);
+  useReveal(ref);
+  const fine = useMedia('(pointer: fine)');
+  const narrow = useMedia('(max-width: 899px)');
+  const [open, setOpen] = useState(0);
+  const [sheet, setSheet] = useState(null);
+  const [fit, setFit] = useState({ row: null, panel: null });
+  const [tick, setTick] = useState(0);
+  const p0 = START[open];
+  const sh = sheet ? p0.chips.find((c) => c.id === sheet) : null;
+
+  /* make room for an open options card: the open panel grows on phones, the panel row on wider screens */
+  useLayoutEffect(() => {
+    const o = sheetRef.current;
+    if (!sh || !o) { setFit({ row: null, panel: null }); return; }
+    if (narrow) { setFit({ row: null, panel: o.offsetTop + o.offsetHeight + 8 }); return; }
+    const base = Math.min(620, Math.max(520, window.innerWidth * 0.42));
+    const need = o.scrollHeight + 12 + 56;
+    setFit({ row: need > base ? need : null, panel: null });
+  }, [sheet, open, narrow, tick]);
+  useEffect(() => {
+    const on = () => setTick((t) => t + 1);
+    window.addEventListener('resize', on);
+    return () => window.removeEventListener('resize', on);
+  }, []);
+  useEffect(() => {
+    if (!sh || !sheetRef.current) return;
+    const h = sheetRef.current.querySelector('h4'); if (h) h.focus({ preventScroll: true });
+    if (narrow) { const p = sheetRef.current.parentNode; if (p.getBoundingClientRect().top < 80) p.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' }); }
+  }, [sheet]);
+
+  const openPanel = (i) => { if (i === open) return; setSheet(null); setOpen(i); };
+  const close = (refocus) => { setSheet(null); if (refocus && lastChip.current) setTimeout(() => lastChip.current && lastChip.current.focus({ preventScroll: true }), 40); };
+  const pickChip = (e, c) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return; /* a new tab still works */
+    e.preventDefault(); lastChip.current = e.currentTarget; setSheet(c.id);
+  };
+
+  return (
+    <section ref={ref} id="start" aria-labelledby="start-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(80px,9vw,140px)]"
+      onKeyDown={(e) => { if (e.key === 'Escape' && sheet) close(true); }}>
+      <div className="mb-[clamp(32px,3.6vw,52px)] flex flex-wrap items-end justify-between gap-x-12 gap-y-6">
+        <div>
+          <Eyebrow className="rv">Two ways in, one clinic</Eyebrow>
+          <TwoTone as="h2" id="start-title" className="rv mt-4" size="text-[clamp(31px,4.2vw,62px)]" lead={<>Where would you like<br /></>} strong="to start?" style={{ transitionDelay: '.05s' }} />
+        </div>
+        <button type="button" onClick={onSearch} className="rv group flex h-[60px] w-full max-w-[440px] items-center gap-3 rounded-full border border-ndm-line bg-white pl-5 pr-2 text-left shadow-[0_18px_40px_-30px_rgba(27,36,43,.45)] transition-colors hover:border-ndm-ink/30" style={{ transitionDelay: '.1s' }}>
+          <IconSearch className="shrink-0 text-ndm-muted" />
+          <span className="flex-1 font-inter text-[16px] text-ndm-muted">Search treatments</span>
+          <span className="grid size-11 place-items-center rounded-full bg-ndm-ink text-white transition-transform group-hover:translate-x-0.5" aria-hidden="true"><IconArrow /></span>
+        </button>
+      </div>
+
+      <div className="rv st" style={{ height: !narrow && fit.row ? fit.row : undefined, transitionDelay: '.12s' }}>
+        {START.map((p, i) => {
+          const on = i === open, s = on ? sh : null;
+          return (
+            <div key={p.id} className={`st-p ${on ? 'is-open' : ''} ${s ? 'is-sheet' : ''}`}
+              style={{ '--pos': p.pos, '--pos-o': p.posO, height: on && narrow && fit.panel ? fit.panel : undefined }}
+              onMouseEnter={() => { if (fine && !sheet) openPanel(i); }}>
+              <img src={p.img} srcSet={p.set} sizes="(max-width: 899px) 100vw, 52vw" alt="" loading="lazy" decoding="async" />
+              <button type="button" className="st-h" aria-expanded={on} aria-controls={`stc-${p.id}`} onClick={() => openPanel(i)} tabIndex={on ? -1 : 0}>
+                <span className="st-plus" aria-hidden="true"><IconPlusLg /></span>
+                <span className="st-t font-aeonik">{p.t}<small className="font-inter">{p.sub}</small></span>
+              </button>
+              <div id={`stc-${p.id}`} className="st-c" {...(!on || s ? { inert: '' } : {})}>
+                <h3 className="font-aeonik text-[clamp(32px,2.8vw,42px)] font-normal leading-[1.08] tracking-[-0.02em] text-white">{p.h}</h3>
+                <p className="mt-2 max-w-[46ch] font-inter text-[15.5px] leading-[1.5] text-white/85">{p.d}</p>
+                {p.chips.length ? (
+                  <ul className="st-chips mt-[18px] flex flex-wrap gap-2 font-inter" role="list">
+                    {p.chips.map((c) => (
+                      <li key={c.id}><a href={c.more ? c.more[0] : '#'} onClick={(e) => pickChip(e, c)} aria-controls={c.id} aria-expanded={sheet === c.id}>{c.label}</a></li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
+                    <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
+                    <a href={p.visia} className="inline-flex items-center gap-2 font-inter text-[14.5px] font-medium text-white hover:underline">About the skin analysis <IconArrow /></a>
+                  </div>
+                )}
+              </div>
+              {s && (
+                <div ref={sheetRef} id={s.id} role="region" aria-labelledby={`${s.id}-h`} className="st-o">
+                  <button type="button" onClick={() => close(true)} aria-label={`Back to ${p.t.toLowerCase()} concerns`}
+                    className="-ml-2 inline-flex min-h-[34px] items-center gap-1.5 rounded-full pl-2 pr-3 font-inter text-[13.5px] font-semibold text-ndm-ink transition-colors hover:bg-ndm-mist">
+                    <IconArrow className="rotate-180" />{p.t}
+                  </button>
+                  <h4 id={`${s.id}-h`} tabIndex={-1} className="mt-1.5 font-aeonik text-[clamp(26px,2.2vw,32px)] font-normal leading-[1.08] tracking-[-0.02em] text-ndm-ink">{s.title}</h4>
+                  <p className="mt-2 max-w-[60ch] font-inter text-[14.5px] leading-[1.5] text-ndm-muted">{s.lede}</p>
+                  <p className="mt-4 font-inter text-[11.5px] font-semibold uppercase tracking-[.09em] text-ndm-soft">Options that may help</p>
+                  <ul className="st-o-list mt-1.5" role="list">
+                    {s.items.map(([name, what, price, href]) => {
+                      const [k, v] = priceParts(price);
+                      return (
+                        <li key={name}>
+                          <a href={href} className="flex items-center gap-4 py-[11px] pl-0.5 pr-0.5 text-ndm-ink">
+                            <span className="grid min-w-0 flex-1 gap-[3px]"><b className="font-inter text-[15px] font-semibold leading-[1.3] transition-colors">{name}</b><small className="font-inter text-[13px] leading-[1.4] text-ndm-muted">{what}</small></span>
+                            <span className="grid shrink-0 gap-[3px] text-right font-inter text-[11.5px] leading-[1.2] text-ndm-soft">{k}<b className={`font-semibold tabular-nums text-ndm-ink ${k ? 'text-[15px]' : 'text-[13px] font-medium text-ndm-muted'}`}>{v}</b></span>
+                            <IconArrow className="shrink-0 text-ndm-deep" />
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  {s.facts.length > 0 && (
+                    <dl className="mt-2.5 grid gap-2.5 sm:grid-cols-2">
+                      {s.facts.map(([t, d]) => (
+                        <div key={t} className="rounded-[14px] bg-ndm-mist px-3.5 py-3">
+                          <dt className="font-inter text-[11px] font-semibold uppercase tracking-[.08em] text-ndm-soft">{t}</dt>
+                          <dd className="mt-1.5 font-inter text-[13.5px] leading-[1.4] text-ndm-ink">{d}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
+                  {s.rx && <p className="mt-2.5 font-inter text-[12.5px] leading-[1.45] text-ndm-muted">{s.rx}</p>}
+                  <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2.5">
+                    <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
+                    {s.more && <a href={s.more[0]} className="inline-flex items-center gap-2 font-inter text-[14px] font-semibold text-ndm-deep hover:underline">{s.more[1]} <IconArrow /></a>}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <p className="mt-5 text-right"><a href="#/concerns" className="inline-flex items-center gap-2 font-inter text-[14.5px] font-semibold text-ndm-deep hover:underline">See all concerns <IconArrow /></a></p>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------- treatments, by what they do (website v3 aurora menu)
+   pinned like before & after: scrolling down moves the cards to the left; the tabs pick the category */
+function TreatMenu() {
+  const ref = useRef(null), view = useRef(null), rail = useRef(null), bar = useRef(null), tabs = useRef([]);
+  useReveal(ref);
+  const [dist, setDist] = useState(0);
+  const [cat, setCat] = useState(0);
+  const c = MENU[cat];
+  useEffect(() => {
+    if (REDUCED) return;
+    const measure = () => {
+      const v = view.current, r = rail.current; if (!v || !r) return;
+      const cs = getComputedStyle(v);
+      const inner = v.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      setDist(Math.max(0, Math.round(r.scrollWidth - inner)));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(view.current); ro.observe(rail.current);
+    return () => ro.disconnect();
+  }, []);
+  useOnScroll(() => {
+    const el = ref.current, r = rail.current; if (!el || !r || REDUCED) return;
+    const box = el.getBoundingClientRect(), vh = window.innerHeight;
+    const p = clamp01(-box.top / Math.max(1, box.height - vh));
+    r.style.transform = `translate3d(${(-p * dist).toFixed(1)}px,0,0)`;
+    if (bar.current) bar.current.style.transform = `scaleX(${p.toFixed(3)})`;
+  }, [dist]);
+  const onKey = (e, i) => {
+    const k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!k) return;
+    e.preventDefault();
+    const n = (i + k + MENU.length) % MENU.length;
+    setCat(n); tabs.current[n] && tabs.current[n].focus();
+  };
+  return (
+    <section ref={ref} data-nav="dark" data-pill-avoid="mobile" aria-labelledby="menu-title" className="tm-aurora relative z-10 text-white" style={{ height: REDUCED ? 'auto' : `calc(100vh + ${dist}px)` }}>
+      <div className={`${REDUCED ? '' : 'sticky top-0 h-screen overflow-hidden'} flex flex-col justify-center pt-[clamp(96px,12vh,124px)] pb-[clamp(16px,3vh,32px)]`}>
+        <span className="tm-sky" aria-hidden="true" /><span className="tm-grain" aria-hidden="true" />
+        <div className="grid gap-4 px-[var(--gx)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
+          <div>
+            <Eyebrow dark className="rv">Browse the menu</Eyebrow>
+            <TwoTone dark id="menu-title" className="rv mt-4" size="text-[clamp(30px,min(4vw,6vh),58px)]" lead={<>Treatments,<br /></>} strong="by what they do" style={{ transitionDelay: '.06s' }} />
+          </div>
+          <div className="min-w-0 lg:justify-self-end">
+            <p className="rv max-w-[46ch] font-inter text-[15.5px] leading-[1.6] text-white/70" style={{ transitionDelay: '.1s' }}>
+              Every treatment shows a starting price. Pick a category, then keep scrolling to see more.
+            </p>
+            <div className="rv mt-4" style={{ transitionDelay: '.14s' }}>
+              <div className="tm-seg" role="tablist" aria-label="Treatment categories">
+                {MENU.map((m, i) => (
+                  <button key={m.id} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" id={`tm-t-${m.id}`} aria-controls="tm-panel"
+                    aria-selected={i === cat} tabIndex={i === cat ? 0 : -1} onClick={() => setCat(i)} onKeyDown={(e) => onKey(e, i)} className="font-inter">{m.label}</button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div ref={view} id="tm-panel" role="tabpanel" aria-labelledby={`tm-t-${c.id}`} className={`mt-[clamp(16px,3vh,36px)] px-[var(--gx)] ${REDUCED ? 'no-scrollbar overflow-x-auto' : ''}`}>
+          <ul ref={rail} key={c.id} role="list" className="flex w-max gap-[clamp(10px,1.2vw,18px)] will-change-transform">
+            {c.cards.map(([name, d, price, href, img, set, tag], i) => (
+              <li key={name} className="tm-in w-[min(64vw,30vh)] shrink-0 sm:w-[clamp(210px,min(20vw,30vh),290px)]" style={{ animationDelay: `${Math.min(i, 5) * 0.06}s` }}>
+                <a href={href} className="tm-card flex h-full flex-col overflow-hidden rounded-[20px] bg-white text-ndm-ink shadow-[0_24px_44px_-30px_rgba(0,0,0,.6)]">
+                  <div className="aspect-[4/3] overflow-hidden bg-ndm-mist"><img src={img} srcSet={set} sizes="(max-width: 640px) 64vw, 290px" alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" /></div>
+                  <div className="flex flex-1 flex-col gap-1.5 p-[clamp(12px,1.6vh,18px)]">
+                    <span className="self-start rounded-full bg-ndm-mist px-2.5 py-1 font-inter text-[11.5px] text-ndm-muted">{tag}</span>
+                    <h3 className="font-aeonik text-[clamp(18px,min(1.5vw,2.6vh),22px)] font-normal leading-[1.15] tracking-[-0.01em]">{name}</h3>
+                    <p className="line-clamp-3 font-inter text-[13px] leading-[1.5] text-ndm-muted">{d}</p>
+                    <div className="mt-auto flex items-center justify-between gap-3 border-t border-ndm-line pt-2.5 font-inter text-[13.5px]">
+                      <b className="min-w-0 font-semibold leading-[1.25]">{price}</b><span className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap text-ndm-deep">Learn more <IconArrow /></span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-[clamp(14px,2.6vh,28px)] flex items-center gap-6 px-[var(--gx)]">
+          {!REDUCED && <span aria-hidden="true" className="relative hidden h-px w-[clamp(100px,12vw,200px)] bg-white/15 lg:block"><span ref={bar} className="absolute inset-0 origin-left scale-x-0 bg-white" /></span>}
+          <Btn href={c.all[0]} v="light" sm>{c.all[1]}</Btn>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------- two Toronto clinics (website v3 clinic film): the framed film opens to full width as it comes into view */
+const CLINIC_FILM = { poster: 'assets/home/v3/tour-poster-1440.webp', src: 'assets/home/v3/tour-1600.mp4' };
+function Space() {
+  const ref = useRef(null), frame = useRef(null), vid = useRef(null);
+  useReveal(ref);
+  useFilm(vid);
+  useOnScroll(() => {
+    const el = frame.current; if (!el || REDUCED) return;
+    const h = window.innerHeight, r = el.getBoundingClientRect();
+    el.style.setProperty('--p', clamp01((h - r.top) / (h * 0.85)).toFixed(3));
+  }, []);
+  return (
+    <section ref={ref} aria-labelledby="space" className="relative z-10 bg-ndm-paper pb-[clamp(40px,6vw,80px)]">
+      <div ref={frame} data-nav="dark" className="cf-frame">
+        <video ref={vid} muted loop playsInline preload="none" poster={CLINIC_FILM.poster} aria-hidden="true"><source src={CLINIC_FILM.src} type="video/mp4" /></video>
+        <div className="absolute inset-x-0 bottom-0 z-[2] flex flex-wrap items-end justify-between gap-6 px-[var(--gx)] pb-[clamp(28px,4.5vw,64px)]">
+          <div>
+            <Eyebrow dark className="rv">Inside our clinics</Eyebrow>
+            <TwoTone dark id="space" className="rv mt-4" size="text-[clamp(34px,4.2vw,62px)]" lead={<>Two Toronto clinics,<br /></>} strong="one standard of care" style={{ transitionDelay: '.05s' }} />
+            <p className="rv mt-3 max-w-[44ch] font-inter text-[15.5px] leading-[1.55] text-white/80" style={{ transitionDelay: '.1s' }}>
+              Private treatment rooms, VISIA® imaging and medical-grade technology at Yonge &amp; Sheppard and at Bay &amp; College.
+            </p>
+          </div>
+          <div className="rv" style={{ transitionDelay: '.14s' }}><Btn href="about.html#clinics" v="light">Visit a clinic</Btn></div>
+        </div>
+      </div>
+    </section>
+  );
+}
+

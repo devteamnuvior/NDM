@@ -1,0 +1,52 @@
+function Appointment() {
+  const ref = useRef(null), pic = useRef(null);
+  useReveal(ref);
+  /* the treatment-room photo drifts a little behind the card as the page scrolls (as in the original booking section) */
+  useOnScroll(() => {
+    const el = ref.current, img = pic.current; if (!el || !img || REDUCED) return;
+    const r = el.getBoundingClientRect(), vh = window.innerHeight;
+    const p = clamp01((vh - r.top) / (vh + r.height));
+    img.style.transform = `translate3d(0,${((p - 0.5) * -90).toFixed(1)}px,0) scale(1.12)`;
+  }, []);
+  const small = 'rounded-[16px] bg-white px-4 py-3.5 ring-1 ring-ndm-ink/[.06]';
+  return (
+    <section ref={ref} aria-labelledby="book" className="relative z-10 isolate overflow-hidden px-[var(--gx)] py-[clamp(56px,7vw,110px)]">
+      <img ref={pic} src="assets/hero/treatment-room.jpg" alt="" aria-hidden="true" loading="lazy"
+        className="absolute inset-0 -z-20 h-full w-full object-cover object-center will-change-transform" style={{ transform: 'scale(1.12)' }} />
+      <span aria-hidden="true" className="absolute inset-0 -z-10 bg-[rgba(11,15,19,.32)]" />
+      {/* everything sits in one card on the photo: the heading, the three-step form and the ways to reach us */}
+      <div className="rv book-shell grid gap-5 rounded-[28px] p-[clamp(18px,2.6vw,36px)] lg:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)] lg:gap-6">
+        <div className="flex flex-col">
+          <Eyebrow className="self-start">Book now at our two Toronto locations</Eyebrow>
+          <TwoTone id="book" className="mt-4" size="text-[clamp(30px,3.2vw,48px)]" lead={<>Book a free consultation<br /></>} strong="in three short steps" />
+          <p className="mt-3 max-w-[56ch] font-inter text-[15px] leading-[1.6] text-ndm-muted">We contact you within one business day to confirm a time at your chosen clinic. Your consultation and VISIA® skin analysis are free.</p>
+          <div className="mt-6 flex flex-1 flex-col rounded-[22px] bg-white p-[clamp(18px,2.2vw,30px)] ring-1 ring-ndm-ink/[.06]"><BookForm /></div>
+        </div>
+        <aside className="flex flex-col gap-2.5" aria-label="Other ways to book">
+          <div className={`flex items-center justify-between gap-3 ${small}`}>
+            <span><span className="block font-aeonik text-[17px] leading-[1.2] text-ndm-ink">Already a client?</span>
+              <span className="mt-0.5 block font-inter text-[12.5px] text-ndm-muted">Choose a time yourself online.</span></span>
+            <Btn href={BOOK_ONLINE} target="_blank" rel="noopener" v="line" sm>Book online<span className="sr-only"> (opens in a new tab)</span></Btn>
+          </div>
+          {CLINICS.map((c) => (
+            <div key={c.name} className={`flex items-center justify-between gap-3 ${small}`}>
+              <span className="min-w-0"><span className="block font-aeonik text-[17px] leading-[1.2] text-ndm-ink">NewDermaMed {c.name}</span>
+                <span className="mt-0.5 block truncate font-inter text-[12.5px] text-ndm-muted">{c.addr.split(',')[0]}</span></span>
+              <Btn href={tel(c.phone)} v="ink" sm>Call<span className="sr-only"> {c.phone}</span></Btn>
+            </div>
+          ))}
+          <div className="book-next relative isolate flex min-h-[220px] flex-1 flex-col justify-end overflow-hidden rounded-[20px] p-5 text-white">
+            <img src="assets/home/v3/visia-1440.webp" alt="" loading="lazy" className="absolute inset-0 -z-10 h-full w-full object-cover" />
+            <span aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-t from-[#0B0F13]/90 via-[#0B0F13]/45 to-[#0B0F13]/10" />
+            <h3 className="font-aeonik text-[21px] font-normal leading-[1.2] tracking-[-0.01em]">What happens next</h3>
+            <ul className="mt-3 grid gap-2" role="list">
+              {['We contact you within one business day', 'Your consultation and VISIA® skin analysis are free', 'No obligation to book a treatment'].map((t) => (
+                <li key={t} className="flex items-start gap-2.5 font-inter text-[14px] leading-[1.45] text-white/90"><IconCheckBadge className="mt-0.5 shrink-0 text-[#7FD3F5]" />{t}</li>
+              ))}
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+  );
+}

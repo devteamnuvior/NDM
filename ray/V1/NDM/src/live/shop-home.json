@@ -1,0 +1,3872 @@
+[
+ {
+  "kind": "hero",
+  "cls": "zo-slider-section",
+  "head": [],
+  "items": [],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/offer.svg",
+    ""
+   ]
+  ],
+  "tail": [
+   [
+    "h1",
+    "Professional Skincare Online"
+   ],
+   [
+    "h2",
+    "Curated by Toronto's Top Choice Clinic"
+   ],
+   [
+    "p",
+    "Shop authorized Mesoestetic, Dermaceutic and other professional-grade skincare - selected by the team at NewDermaMed Cosmetic Clinic. Free in-clinic pickup. Canada-wide shipping."
+   ],
+   [
+    "li",
+    "See the Offer",
+    "#zo-price-section"
+   ],
+   [
+    "li",
+    "Shop Bestsellers",
+    "#zo-best-seller-section"
+   ]
+  ],
+  "text": "Professional Skincare Online Curated by Toronto's Top Choice Clinic Shop authorized Mesoestetic, Dermaceutic and other professional-grade skincare - selected by the team at NewDermaMed Cosmetic Clinic. Free in-clinic pickup. Canada-wide shipping. See the Offer Shop Bestsellers"
+ },
+ {
+  "kind": "perks",
+  "cls": "zo-features-section",
+  "head": [],
+  "items": [
+   {
+    "cls": "zo-feature",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/feature-1.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "strong",
+      "Free Toronto Pickup"
+     ],
+     [
+      "span",
+      "Pick up at Uptown or Downtown clinic"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-feature",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/feature-2.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "strong",
+      "Canada-Wide Shipping"
+     ],
+     [
+      "span",
+      "Free on orders over $150 CAD"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-feature",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/feature-3.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "strong",
+      "Authorized Retailer"
+     ],
+     [
+      "span",
+      "100% authentic professional products"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-feature",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/feature-4.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "strong",
+      "Expert Consultations"
+     ],
+     [
+      "span",
+      "Free in-clinic skincare consults"
+     ]
+    ]
+   }
+  ],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/feature-1.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/feature-2.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/feature-3.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/feature-4.png",
+    ""
+   ]
+  ],
+  "tail": [],
+  "text": "Free Toronto Pickup Pick up at Uptown or Downtown clinic Canada-Wide Shipping Free on orders over $150 CAD Authorized Retailer 100% authentic professional products Expert Consultations Free in-clinic skincare consults"
+ },
+ {
+  "kind": "glimpse",
+  "cls": "container",
+  "head": [
+   [
+    "span",
+    "A glimpse inside"
+   ],
+   [
+    "strong",
+    "Inside Our"
+   ],
+   [
+    "small",
+    "Toronto Clinics"
+   ],
+   [
+    "p",
+    "Modern, calm, clinical. Both locations are designed for the unhurried experience our patients deserve. Treatment rooms, reception spaces, and the products we use daily."
+   ]
+  ],
+  "items": [],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/Newdermamed-Laser-Clinic.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/2.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/3.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/4.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/5.png",
+    ""
+   ]
+  ],
+  "tail": [],
+  "text": "A glimpse inside Inside Our Toronto Clinics Modern, calm, clinical. Both locations are designed for the unhurried experience our patients deserve. Treatment rooms, reception spaces, and the products we use daily."
+ },
+ {
+  "kind": "flagship",
+  "cls": "zo-dermamelan-cosmelan-section",
+  "head": [
+   [
+    "span",
+    "Flagship Treatments · Mesoestetic"
+   ],
+   [
+    "strong",
+    "Dermamelan & Cosmelan"
+   ],
+   [
+    "span",
+    "The gold standard for melasma and pigmentation"
+   ],
+   [
+    "p",
+    "Two of the most clinically referenced depigmentation protocols in professional aesthetics. Available exclusively through certified clinics — including NewDermaMed Toronto, with the at-home maintenance regimen available right here in the shop."
+   ]
+  ],
+  "items": [
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/Dermamelan-New.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "a",
+      "Pro Treatment",
+      "/product/dermamelan-home-pack"
+     ],
+     [
+      "span",
+      "Mesoestetic"
+     ],
+     [
+      "h2",
+      "Dermamelan"
+     ],
+     [
+      "p",
+      "The most powerful depigmentation protocol from Mesoestetic. Designed for severe melasma, deep hyperpigmentation and persistent pigmentation that hasn't responded to other treatments. In-clinic mask application followed by structured at-home regimen."
+     ],
+     [
+      "li",
+      "Severe Pigmentation"
+     ],
+     [
+      "li",
+      "8-Week Protocol"
+     ],
+     [
+      "li",
+      "All Skin Types"
+     ],
+     [
+      "p",
+      "<a href=\"/product/dermamelan-home-pack\" class=\"zo-book\">Profesional Threatment</a>"
+     ],
+     [
+      "a",
+      "Buy Homepack",
+      "/product/dermamelan-home-pack"
+     ],
+     [
+      "a",
+      "Threatment Cream",
+      "/product/dermamelan-treatment"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/Cosmelan-New.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "a",
+      "Pro Treatment",
+      "/product/cosmelan-home-pack-new-edition"
+     ],
+     [
+      "span",
+      "Mesoestetic"
+     ],
+     [
+      "h2",
+      "Cosmelan"
+     ],
+     [
+      "p",
+      "The original depigmentation icon. Trusted globally for mild to moderate melasma, sun damage, and uneven tone. Suitable for most skin types. A gentler protocol than Dermamelan with the same clinical pedigree."
+     ],
+     [
+      "li",
+      "Most Popular"
+     ],
+     [
+      "li",
+      "6-Week Protocol"
+     ],
+     [
+      "li",
+      "All Skin Types"
+     ],
+     [
+      "p",
+      "<a href=\"/product/dermamelan-home-pack\" class=\"zo-book\">Profesional Threatment</a>"
+     ],
+     [
+      "a",
+      "Cosmelan 2 Cream",
+      "/product/cosmelan-2-new-edition"
+     ],
+     [
+      "a",
+      "Buy Home Kit",
+      "/product/cosmelan-home-pack-new-edition"
+     ]
+    ]
+   }
+  ],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/Dermamelan-New.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/Cosmelan-New.png",
+    ""
+   ]
+  ],
+  "tail": [],
+  "text": "Flagship Treatments · Mesoestetic Dermamelan & Cosmelan The gold standard for melasma and pigmentation Two of the most clinically referenced depigmentation protocols in professional aesthetics. Available exclusively through certified clinics — including NewDermaMed Toronto, with the at-home maintenance regimen available right here in the shop. Pro Treatment Mesoestetic Dermamelan The most powerful depigmentation protocol from Mesoestetic. Designed for severe melasma, deep hyperpigmentation and persistent pigmentation that hasn't responded to other treatments. In-clinic mask application followed by structured at-home regimen. Severe Pigmentation 8-Week Protocol All Skin Types Buy Homepack Threatment Cream Pro Treatment Mesoestetic Cosmelan The original depigmentation icon. Trusted globally for mild to moderate melasma, sun damage, and uneven tone. Suitable for most skin types. A gentler protocol than Dermamelan with the same clinical pedigree. Most Popular 6-Week Protocol All Skin Types Cosmelan 2 Cream Buy Home Kit"
+ },
+ {
+  "kind": "line",
+  "cls": "zo-dermaceutic-regen-ceutic-section",
+  "head": [
+   [
+    "span",
+    "Dermaceutic · Regenerative Line"
+   ],
+   [
+    "strong",
+    "Regen Ceutic"
+   ],
+   [
+    "span",
+    "Repair · restore · rebuild"
+   ],
+   [
+    "p",
+    "Dermaceutic's regenerative cosmeceutical line. Designed for use after professional treatments - peels, microneedling, laser, thread lift - and as a daily routine for mature, fragile or compromised skin."
+   ],
+   [
+    "p",
+    "Pharmaceutical-grade actives at concentrations clinically shown to support the skin's natural repair cycle. Used by aesthetic clinics across France, Canada, and globally."
+   ]
+  ],
+  "items": [],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/1.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/2.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/3.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/8.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/7.png",
+    ""
+   ]
+  ],
+  "tail": [
+   [
+    "li",
+    "Cellular Repair"
+   ],
+   [
+    "li",
+    "Post-Procedure"
+   ],
+   [
+    "li",
+    "Pharma-Grade"
+   ],
+   [
+    "p",
+    "<a href=\"https://newdermamedlaserclinic.com\" class=\"zo-book\" target=\"_blank\">Book In-Clinic Treatment</a>"
+   ],
+   [
+    "a",
+    "Shop the Line",
+    "/shop"
+   ]
+  ],
+  "text": "Dermaceutic · Regenerative Line Regen Ceutic Repair · restore · rebuild Dermaceutic's regenerative cosmeceutical line. Designed for use after professional treatments - peels, microneedling, laser, thread lift - and as a daily routine for mature, fragile or compromised skin. Pharmaceutical-grade actives at concentrations clinically shown to support the skin's natural repair cycle. Used by aesthetic clinics across France, Canada, and globally. Cellular Repair Post-Procedure Pharma-Grade Shop the Line"
+ },
+ {
+  "kind": "founder",
+  "cls": "zo-ceo-section",
+  "head": [
+   [
+    "span",
+    "A note from our founder"
+   ],
+   [
+    "strong",
+    "Built on a Belief in"
+   ],
+   [
+    "small",
+    "Real Skin, Real Science"
+   ],
+   [
+    "blockquote",
+    "\"Every product we carry is something I'd put on my own face. That's the standard - and it's why our patients trust us with theirs.\""
+   ],
+   [
+    "p",
+    "Dr. Alin founded NewDermaMed with a single conviction: aesthetic medicine should be evidence-based, patient-first, and uncompromising on quality. 15+ years later, that conviction shapes every treatment we deliver and every product we stock."
+   ],
+   [
+    "p",
+    "Each formulation in our shop has been used by our team on real patients before it earned a spot on the shelf. No filler. No trend-chasing. Just what works."
+   ]
+  ],
+  "items": [],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/Dr-Alin.png",
+    ""
+   ]
+  ],
+  "tail": [
+   [
+    "li",
+    "15+ Years Clinical Practice"
+   ],
+   [
+    "li",
+    "Medical Director NewDermaMed Toronto"
+   ],
+   [
+    "li",
+    "NUVIOR Aptos Certified"
+   ]
+  ],
+  "text": "A note from our founder Built on a Belief in Real Skin, Real Science \"Every product we carry is something I'd put on my own face. That's the standard - and it's why our patients trust us with theirs.\" Dr. Alin founded NewDermaMed with a single conviction: aesthetic medicine should be evidence-based, patient-first, and uncompromising on quality. 15+ years later, that conviction shapes every treatment we deliver and every product we stock. Each formulation in our shop has been used by our team on real patients before it earned a spot on the shelf. No filler. No trend-chasing. Just what works. 15+ Years Clinical Practice Medical Director NewDermaMed Toronto NUVIOR Aptos Certified"
+ },
+ {
+  "kind": "routine",
+  "cls": "zo-price-section",
+  "head": [
+   [
+    "span",
+    "A premium routine, built smartly"
+   ],
+   [
+    "strong",
+    "The Routine"
+   ],
+   [
+    "small",
+    "Builder"
+   ],
+   [
+    "p",
+    "Layered skincare delivers compounding results. The more you build your routine, the more we reward you - a premium incentive to commit to your skin properly. Mix any Mesoestetic, Dermaceutic, or featured product."
+   ],
+   [
+    "span",
+    "Limited Time · Ends Soon"
+   ]
+  ],
+  "items": [
+   {
+    "cls": "zo-price",
+    "imgs": [],
+    "blocks": [
+     [
+      "span",
+      "Pair it",
+      "/shop"
+     ],
+     [
+      "strong",
+      "Pair It",
+      "/shop"
+     ],
+     [
+      "small",
+      "2 Products",
+      "/shop"
+     ],
+     [
+      "strong",
+      "10% Off",
+      "/shop"
+     ],
+     [
+      "span",
+      "On Both product",
+      "/shop"
+     ],
+     [
+      "span",
+      "Add a complementary step. Day + Night, or cleanser + serum.",
+      "/shop"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-price zo-active",
+    "imgs": [],
+    "blocks": [
+     [
+      "span",
+      "Most Popular",
+      "/shop"
+     ],
+     [
+      "span",
+      "Layer it",
+      "/shop"
+     ],
+     [
+      "strong",
+      "Layer It",
+      "/shop"
+     ],
+     [
+      "small",
+      "3 Products",
+      "/shop"
+     ],
+     [
+      "strong",
+      "15% off",
+      "/shop"
+     ],
+     [
+      "span",
+      "On All product",
+      "/shop"
+     ],
+     [
+      "span",
+      "A complete morning + evening routine. Most patients land here.",
+      "/shop"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-price",
+    "imgs": [],
+    "blocks": [
+     [
+      "span",
+      "Complete It",
+      "/shop"
+     ],
+     [
+      "strong",
+      "Complete It",
+      "/shop"
+     ],
+     [
+      "small",
+      "+4 Products",
+      "/shop"
+     ],
+     [
+      "strong",
+      "20% off",
+      "/shop"
+     ],
+     [
+      "span",
+      "Maximum Saving",
+      "/shop"
+     ],
+     [
+      "span",
+      "Full clinical routine with targeted treatments & SPF.",
+      "/shop"
+     ]
+    ]
+   }
+  ],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/timer.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/Mesoestetic-Logo.png",
+    ""
+   ]
+  ],
+  "tail": [
+   [
+    "strong",
+    "20% - 50% off",
+    "/brand/mesoestetic"
+   ],
+   [
+    "span",
+    "Across all Mesoestetic products",
+    "/brand/mesoestetic"
+   ],
+   [
+    "span",
+    "Limited time summer sale",
+    "/brand/mesoestetic"
+   ],
+   [
+    "span",
+    "Summer of",
+    "/brand/mesoestetic"
+   ],
+   [
+    "small",
+    "Glow",
+    "/brand/mesoestetic"
+   ],
+   [
+    "p",
+    "The entire Mesoestetic collection, on sale.",
+    "/brand/mesoestetic"
+   ],
+   [
+    "span",
+    "Shop the Summer Sale",
+    "/brand/mesoestetic"
+   ],
+   [
+    "span",
+    "For a Limited Time",
+    "/brand/mesoestetic"
+   ],
+   [
+    "p",
+    "Discount applied automatically at checkout to the lower-priced products in your cart. Mix any brands or categories. Cannot be combined with other promotions except the new member 10% welcome credit (stacks). Offer valid for a limited time only."
+   ],
+   [
+    "a",
+    "Start Building My Routine",
+    "/shop"
+   ]
+  ],
+  "text": "A premium routine, built smartly The Routine Builder Layered skincare delivers compounding results. The more you build your routine, the more we reward you - a premium incentive to commit to your skin properly. Mix any Mesoestetic, Dermaceutic, or featured product. Limited Time · Ends Soon Pair it Pair It 2 Products 10% Off On Both product Add a complementary step. Day + Night, or cleanser + serum. Most Popular Layer it Layer It 3 Products 15% off On All product A complete morning + evening routine. Most patients land here. Complete It Complete It +4 Products 20% off Maximum Saving Full clinical routine with targeted treatments & SPF. 20% - 50% off Across all Mesoestetic products Limited time summer sale Summer of Glow The entire Mesoestetic collection, on sale. Shop the Summer Sale For a Limited Time Discount applied automatically at checkout to the lower-priced products in your cart. Mix any brands or categories. Cannot be combined with other promotions except the new member 10% welcome credit (stacks). Offer valid for a limited time only. Start Building My Routine"
+ },
+ {
+  "kind": "brands",
+  "cls": "zo-company-section",
+  "head": [
+   [
+    "span",
+    "Featured Professional Brands"
+   ],
+   [
+    "strong",
+    "The Brands We"
+   ],
+   [
+    "small",
+    "Trust In Clinic"
+   ],
+   [
+    "p",
+    "Authorized Canadian distributors. Every product is the same clinical-grade formulation we use at NewDermaMed treatments."
+   ]
+  ],
+  "items": [
+   {
+    "cls": "zo-company",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/mesoestetic-cover.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "strong",
+      "20% - 50% off",
+      "/brand/mesoestetic/"
+     ],
+     [
+      "span",
+      "Across all Mesoestetic products",
+      "/brand/mesoestetic/"
+     ],
+     [
+      "span",
+      "Spain · Since 1984",
+      "/brand/mesoestetic/"
+     ],
+     [
+      "h2",
+      "Mesoestetic Professional Skincare",
+      "/brand/mesoestetic/"
+     ],
+     [
+      "p",
+      "Dermo-cosmetic pioneer. Cosmelan, Hydra-Vital, Energy C Complex, mesotherapy ampoules and clinical peels - trusted by aesthetic professionals worldwide.",
+      "/brand/mesoestetic/"
+     ],
+     [
+      "li",
+      "120+ Products",
+      "/brand/mesoestetic/"
+     ],
+     [
+      "li",
+      "Clinical Grade",
+      "/brand/mesoestetic/"
+     ],
+     [
+      "li",
+      "Health Canada",
+      "/brand/mesoestetic/"
+     ],
+     [
+      "span",
+      "Shop Mesoestetic",
+      "/brand/mesoestetic/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-company",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/dermaceutic-cover.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "France · Pharma Heritage",
+      "/brand/dermaceutic/"
+     ],
+     [
+      "h2",
+      "Dermaceutic Cosmeceuticals",
+      "/brand/dermaceutic/"
+     ],
+     [
+      "p",
+      "French clinical formulations bridging pharma and skincare. C25 Vitamin C, Mela Cream, Activ Retinol, Hyal Ceutic- pharmaceutical-grade actives in cosmetic form.",
+      "/brand/dermaceutic/"
+     ],
+     [
+      "li",
+      "80+ Products",
+      "/brand/dermaceutic/"
+     ],
+     [
+      "li",
+      "Pharma-Grade",
+      "/brand/dermaceutic/"
+     ],
+     [
+      "li",
+      "Health Canada",
+      "/brand/dermaceutic/"
+     ],
+     [
+      "span",
+      "Shop Dermaceutic",
+      "/brand/dermaceutic/"
+     ]
+    ]
+   }
+  ],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/mesoestetic-cover.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/dermaceutic-cover.png",
+    ""
+   ]
+  ],
+  "tail": [],
+  "text": "Featured Professional Brands The Brands We Trust In Clinic Authorized Canadian distributors. Every product is the same clinical-grade formulation we use at NewDermaMed treatments. 20% - 50% off Across all Mesoestetic products Spain · Since 1984 Mesoestetic Professional Skincare Dermo-cosmetic pioneer. Cosmelan, Hydra-Vital, Energy C Complex, mesotherapy ampoules and clinical peels - trusted by aesthetic professionals worldwide. 120+ Products Clinical Grade Health Canada Shop Mesoestetic France · Pharma Heritage Dermaceutic Cosmeceuticals French clinical formulations bridging pharma and skincare. C25 Vitamin C, Mela Cream, Activ Retinol, Hyal Ceutic- pharmaceutical-grade actives in cosmetic form. 80+ Products Pharma-Grade Health Canada Shop Dermaceutic"
+ },
+ {
+  "kind": "match",
+  "cls": "zo-brands-section",
+  "head": [
+   [
+    "span",
+    "Featured Professional Brands"
+   ],
+   [
+    "strong",
+    "Find Your"
+   ],
+   [
+    "small",
+    "Skincare Match"
+   ],
+   [
+    "p",
+    "Every concern below has a product solution - and a matching in-clinic treatment at NewDermaMed if you want to combine both."
+   ]
+  ],
+  "items": [
+   {
+    "cls": "zo-brand",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/4.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/cart.png",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/star.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "h2",
+      "Anti-Aging & Firmness"
+     ],
+     [
+      "p",
+      "Visibly firmer, smoother, more refined-looking skin. With peptides, retinol and bakuchiol."
+     ],
+     [
+      "li",
+      "Shop Anti-Aging Products →",
+      "/product-category/global-antiaging"
+     ],
+     [
+      "li",
+      "Aptos Thread Lift →",
+      "https://newdermamedlaserclinic.com/thread-lift/non-surgical-facelift"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-brand",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/5.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/cart.png",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/star.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "h2",
+      "Brightening & Dark Spots"
+     ],
+     [
+      "p",
+      "Helps visibly even tone and reduce the look of dark spots. With vitamin C, alpha-arbutin, azelaic acid and niacinamide."
+     ],
+     [
+      "li",
+      "Shop Brightening Products →",
+      "/product-category/antiaging-brightening"
+     ],
+     [
+      "li",
+      "Cosmelan / Peels →",
+      "https://newdermamedlaserclinic.com/skin/aesthetic/chemical-peels"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-brand",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/6.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/cart.png",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/star.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "h2",
+      "Hydration & Glow"
+     ],
+     [
+      "p",
+      "Plumped, refreshed, radiant-looking skin. With hyaluronic acid, ceramides and panthenol."
+     ],
+     [
+      "li",
+      "Shop Hydration Products →",
+      "/product-category/moisturising"
+     ],
+     [
+      "li",
+      "HydraFacial Treatment →",
+      "https://newdermamedlaserclinic.com/injectables/mesotherapy-and-skin-boosters"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-brand",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/7.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/cart.png",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/star.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "h2",
+      "Acne & Breakouts"
+     ],
+     [
+      "p",
+      "For clearer, more balanced-looking blemish-prone skin. With salicylic acid, niacinamide and azelaic acid."
+     ],
+     [
+      "li",
+      "Shop Acne Products →",
+      "/product-category/anti-blemish"
+     ],
+     [
+      "li",
+      "Laser Acne Treatment →",
+      "https://newdermamedlaserclinic.com/skin/aesthetic/acnelan"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-brand",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/8.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/cart.png",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/star.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "h2",
+      "Sensitive & Redness"
+     ],
+     [
+      "p",
+      "Calms and comforts the look of sensitive, reactive skin and supports the barrier. With centella, panthenol and ceramides — fragrance-free."
+     ],
+     [
+      "li",
+      "Shop Sensitive Products →",
+      "/product-category/sensitive-skin"
+     ],
+     [
+      "li",
+      "Laser Rosacea Treatment →",
+      "https://newdermamedlaserclinic.com/skin/aesthetic/photo-rejuvenation"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-brand",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/8.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/cart.png",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/star.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "h2",
+      "Post-Procedure"
+     ],
+     [
+      "p",
+      "Supports skin comfort and recovery after clinical treatments. With centella, panthenol and ceramides."
+     ],
+     [
+      "li",
+      "Shop Post-Care Products →",
+      "/product-category/postcare/"
+     ],
+     [
+      "li",
+      "Microneedling Aftercare →",
+      "https://newdermamedlaserclinic.com/skin/aesthetic/microneedling/"
+     ]
+    ]
+   }
+  ],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/4.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/cart.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/star.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/5.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/cart.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/star.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/6.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/cart.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/star.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/7.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/cart.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/star.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/8.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/cart.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/star.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/8.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/cart.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/star.png",
+    ""
+   ]
+  ],
+  "tail": [],
+  "text": "Featured Professional Brands Find Your Skincare Match Every concern below has a product solution - and a matching in-clinic treatment at NewDermaMed if you want to combine both. Anti-Aging & Firmness Visibly firmer, smoother, more refined-looking skin. With peptides, retinol and bakuchiol. Shop Anti-Aging Products → Aptos Thread Lift → Brightening & Dark Spots Helps visibly even tone and reduce the look of dark spots. With vitamin C, alpha-arbutin, azelaic acid and niacinamide. Shop Brightening Products → Cosmelan / Peels → Hydration & Glow Plumped, refreshed, radiant-looking skin. With hyaluronic acid, ceramides and panthenol. Shop Hydration Products → HydraFacial Treatment → Acne & Breakouts For clearer, more balanced-looking blemish-prone skin. With salicylic acid, niacinamide and azelaic acid. Shop Acne Products → Laser Acne Treatment → Sensitive & Redness Calms and comforts the look of sensitive, reactive skin and supports the barrier. With centella, panthenol and ceramides — fragrance-free. Shop Sensitive Products → Laser Rosacea Treatment → Post-Procedure Supports skin comfort and recovery after clinical treatments. With centella, panthenol and ceramides. Shop Post-Care Products → Microneedling Aftercare →"
+ },
+ {
+  "kind": "bestsellers",
+  "cls": "zo-products-section",
+  "head": [
+   [
+    "span",
+    "Most Loved"
+   ],
+   [
+    "strong",
+    "Bestsellers"
+   ],
+   [
+    "small",
+    "This Month"
+   ],
+   [
+    "a",
+    "View All Bestsellers",
+    "/shop"
+   ]
+  ],
+  "items": [
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/YELLOW015-Yellow-Cream-15-ml-0.50-fl.-oz.png",
+      "Yellow Cream"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Dermaceutic",
+      "https://shop.newdermamedlaserclinic.com/product/yellow-cream/"
+     ],
+     [
+      "h2",
+      "Yellow Cream",
+      "https://shop.newdermamedlaserclinic.com/product/yellow-cream/"
+     ],
+     [
+      "p",
+      "Dark spot corrector.",
+      "https://shop.newdermamedlaserclinic.com/product/yellow-cream/"
+     ],
+     [
+      "span",
+      "121.54",
+      "https://shop.newdermamedlaserclinic.com/product/yellow-cream/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/yellow-cream/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DHIG0010-ultimate-micropeel-150-ml-5.07-fl.-oz.png",
+      "ultimate micropeel"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Sale",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "Summer Sale",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "strong",
+      "20%",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "Mesoestetic",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "h2",
+      "ultimate micropeel",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "p",
+      "Biphasic solution with AHA. Retextures, softens and enhances skin luminosity.",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "132.87",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "Original price was: $132.87.",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "106.30",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "Current price is: $106.30.",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/TURN10040-Turn-Over-10-40-ml-1.35-fl.-oz.png",
+      "Turn Over 10"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Dermaceutic",
+      "https://shop.newdermamedlaserclinic.com/product/turn-over-10/"
+     ],
+     [
+      "h2",
+      "Turn Over 10",
+      "https://shop.newdermamedlaserclinic.com/product/turn-over-10/"
+     ],
+     [
+      "p",
+      "Rejuvenating night cream.",
+      "https://shop.newdermamedlaserclinic.com/product/turn-over-10/"
+     ],
+     [
+      "span",
+      "120.50",
+      "https://shop.newdermamedlaserclinic.com/product/turn-over-10/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/turn-over-10/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/TRIVIT030-Tri-Vita-C30-30-ml-1.0-fl.-oz.png",
+      "Tri Vita C30"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Dermaceutic",
+      "https://shop.newdermamedlaserclinic.com/product/tri-vita-c30/"
+     ],
+     [
+      "h2",
+      "Tri Vita C30",
+      "https://shop.newdermamedlaserclinic.com/product/tri-vita-c30/"
+     ],
+     [
+      "p",
+      "30% vitamin C serum.",
+      "https://shop.newdermamedlaserclinic.com/product/tri-vita-c30/"
+     ],
+     [
+      "span",
+      "159.10",
+      "https://shop.newdermamedlaserclinic.com/product/tri-vita-c30/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/tri-vita-c30/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DGLA0008-skinretin-03-50-ml-1.69-fl.-oz.png",
+      "skinretin 0,3%"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Sale",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "Summer Sale",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "strong",
+      "20%",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "Mesoestetic",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "h2",
+      "skinretin 0,3%",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "p",
+      "Intensive antiaging cream. Rejuvenates, brightens and revitalises the skin.",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "189.20",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "Original price was: $189.20.",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "151.36",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "Current price is: $151.36.",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DSEN0004-skin-balance-30-ml-1.01-fl.-oz.png",
+      "skin balance"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Sale",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "Summer Sale",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "strong",
+      "20%",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "Mesoestetic",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "h2",
+      "skin balance",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "p",
+      "Concentrate with soothing effect for sensitive and sensitised skin.",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "169.42",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "Original price was: $169.42.",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "135.54",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "Current price is: $135.54.",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/REVEAL015-Reveal-4x-15-ml-0.50-fl.-oz.png",
+      "Reveal 4x"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Dermaceutic",
+      "https://shop.newdermamedlaserclinic.com/product/reveal-4x/"
+     ],
+     [
+      "h2",
+      "Reveal 4x",
+      "https://shop.newdermamedlaserclinic.com/product/reveal-4x/"
+     ],
+     [
+      "p",
+      "Advanced eye serum.",
+      "https://shop.newdermamedlaserclinic.com/product/reveal-4x/"
+     ],
+     [
+      "span",
+      "111.80",
+      "https://shop.newdermamedlaserclinic.com/product/reveal-4x/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/reveal-4x/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/REGENC040-Regen-Ceutic-40-ml-1.35-fl.-oz.png",
+      "Regen Ceutic"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Dermaceutic",
+      "https://shop.newdermamedlaserclinic.com/product/regen-ceutic/"
+     ],
+     [
+      "h2",
+      "Regen Ceutic",
+      "https://shop.newdermamedlaserclinic.com/product/regen-ceutic/"
+     ],
+     [
+      "p",
+      "Nourishing hydrating cream.",
+      "https://shop.newdermamedlaserclinic.com/product/regen-ceutic/"
+     ],
+     [
+      "span",
+      "125.78",
+      "https://shop.newdermamedlaserclinic.com/product/regen-ceutic/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/regen-ceutic/"
+     ]
+    ]
+   }
+  ],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/arrow-right.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/YELLOW015-Yellow-Cream-15-ml-0.50-fl.-oz.png",
+    "Yellow Cream"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DHIG0010-ultimate-micropeel-150-ml-5.07-fl.-oz.png",
+    "ultimate micropeel"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/TURN10040-Turn-Over-10-40-ml-1.35-fl.-oz.png",
+    "Turn Over 10"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/TRIVIT030-Tri-Vita-C30-30-ml-1.0-fl.-oz.png",
+    "Tri Vita C30"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DGLA0008-skinretin-03-50-ml-1.69-fl.-oz.png",
+    "skinretin 0,3%"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DSEN0004-skin-balance-30-ml-1.01-fl.-oz.png",
+    "skin balance"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/REVEAL015-Reveal-4x-15-ml-0.50-fl.-oz.png",
+    "Reveal 4x"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/REGENC040-Regen-Ceutic-40-ml-1.35-fl.-oz.png",
+    "Regen Ceutic"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ]
+  ],
+  "tail": [],
+  "text": "Most Loved Bestsellers This Month View All Bestsellers Dermaceutic Yellow Cream Dark spot corrector. $ 121.54 Sale 20% Summer Sale Mesoestetic ultimate micropeel Biphasic solution with AHA. Retextures, softens and enhances skin luminosity. $ 132.87 Original price was: $132.87. $ 106.30 Current price is: $106.30. Dermaceutic Turn Over 10 Rejuvenating night cream. $ 120.50 Dermaceutic Tri Vita C30 30% vitamin C serum. $ 159.10 Sale 20% Summer Sale Mesoestetic skinretin 0,3% Intensive antiaging cream. Rejuvenates, brightens and revitalises the skin. $ 189.20 Original price was: $189.20. $ 151.36 Current price is: $151.36. Sale 20% Summer Sale Mesoestetic skin balance Concentrate with soothing effect for sensitive and sensitised skin. $ 169.42 Original price was: $169.42. $ 135.54 Current price is: $135.54. Dermaceutic Reveal 4x Advanced eye serum. $ 111.80 Dermaceutic Regen Ceutic Nourishing hydrating cream. $ 125.78"
+ },
+ {
+  "kind": "patients",
+  "cls": "zo-patients-section",
+  "head": [
+   [
+    "span",
+    "Real Results · Real Patients"
+   ],
+   [
+    "strong",
+    "Transformations"
+   ],
+   [
+    "small",
+    "From Our Patients"
+   ],
+   [
+    "p",
+    "Real before-and-after results from NewDermaMed patients combining clinic treatments with consistent at-home regimens. Individual results may vary."
+   ]
+  ],
+  "items": [
+   {
+    "cls": "zo-patient",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/12.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "12 Weeks · Melasma · Female · 42",
+      "/product/cosmelan-2-new-edition"
+     ],
+     [
+      "h2",
+      "Cosmelan Home Kit + Tranexamic Serum",
+      "/product/cosmelan-2-new-edition"
+     ],
+     [
+      "p",
+      "Combined in-clinic Cosmelan peel + 12 weeks of structured maintenance products.",
+      "/product/cosmelan-2-new-edition"
+     ],
+     [
+      "li",
+      "Cosmelan Kit",
+      "/product/cosmelan-2-new-edition"
+     ],
+     [
+      "li",
+      "Hydra-Vital",
+      "/product/cosmelan-2-new-edition"
+     ],
+     [
+      "li",
+      "SPF 50+",
+      "/product/cosmelan-2-new-edition"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-patient",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/Dermaceutic-Activ-Retinol-C25-Cream.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "16 Weeks · Aging + Texture · Female · 51",
+      "/product/c25-cream"
+     ],
+     [
+      "h2",
+      "Dermaceutic Activ Retinol + C25 Cream",
+      "/product/c25-cream"
+     ],
+     [
+      "p",
+      "Evening retinol + morning vitamin C routine, paired with Hyal Ceutic hydration.",
+      "/product/c25-cream"
+     ],
+     [
+      "li",
+      "Activ Retinol",
+      "/product/c25-cream"
+     ],
+     [
+      "li",
+      "C25 Cream",
+      "/product/c25-cream"
+     ],
+     [
+      "li",
+      "Hyal Ceutic",
+      "/product/c25-cream"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-patient",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/14.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "12 Weeks · Melasma · Female · 42",
+      "product/cosmelan-home-pack-new-edition"
+     ],
+     [
+      "h2",
+      "Cosmelan Home Kit + Tranexamic Serum",
+      "product/cosmelan-home-pack-new-edition"
+     ],
+     [
+      "p",
+      "Combined in-clinic Cosmelan peel + 12 weeks of structured maintenance products.",
+      "product/cosmelan-home-pack-new-edition"
+     ],
+     [
+      "li",
+      "Cosmelan Kit",
+      "product/cosmelan-home-pack-new-edition"
+     ],
+     [
+      "li",
+      "Hydra-Vital",
+      "product/cosmelan-home-pack-new-edition"
+     ],
+     [
+      "li",
+      "SPF 50+",
+      "product/cosmelan-home-pack-new-edition"
+     ]
+    ]
+   }
+  ],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/12.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/Dermaceutic-Activ-Retinol-C25-Cream.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/14.png",
+    ""
+   ]
+  ],
+  "tail": [
+   [
+    "p",
+    "Individual results may vary. Combination of in-clinic professional treatment and consistent at-home regimen. Patient photos used with written consent."
+   ]
+  ],
+  "text": "Real Results · Real Patients Transformations From Our Patients Real before-and-after results from NewDermaMed patients combining clinic treatments with consistent at-home regimens. Individual results may vary. 12 Weeks · Melasma · Female · 42 Cosmelan Home Kit + Tranexamic Serum Combined in-clinic Cosmelan peel + 12 weeks of structured maintenance products. Cosmelan Kit Hydra-Vital SPF 50+ 16 Weeks · Aging + Texture · Female · 51 Dermaceutic Activ Retinol + C25 Cream Evening retinol + morning vitamin C routine, paired with Hyal Ceutic hydration. Activ Retinol C25 Cream Hyal Ceutic 12 Weeks · Melasma · Female · 42 Cosmelan Home Kit + Tranexamic Serum Combined in-clinic Cosmelan peel + 12 weeks of structured maintenance products. Cosmelan Kit Hydra-Vital SPF 50+ Individual results may vary. Combination of in-clinic professional treatment and consistent at-home regimen. Patient photos used with written consent."
+ },
+ {
+  "kind": "editorial",
+  "cls": "zo-editorial-section",
+  "head": [
+   [
+    "span",
+    "Editorial"
+   ],
+   [
+    "strong",
+    "Clinical-Grade Skincare"
+   ],
+   [
+    "small",
+    "Built For Real Life"
+   ],
+   [
+    "p",
+    "Our products live in your bathroom, not just our clinic. Curated specifically for Toronto's climate, the demands of modern skin, and the protocols our team actually prescribes."
+   ],
+   [
+    "p",
+    "Every product in the shop has been used by our team on real patients before it earned a spot on the shelf. No filler products, no influencer picks - just what works."
+   ],
+   [
+    "a",
+    "Read Our Editorial →",
+    "#Editorial"
+   ]
+  ],
+  "items": [],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/15.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/16.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/17.png",
+    ""
+   ]
+  ],
+  "tail": [],
+  "text": "Editorial Clinical-Grade Skincare Built For Real Life Our products live in your bathroom, not just our clinic. Curated specifically for Toronto's climate, the demands of modern skin, and the protocols our team actually prescribes. Every product in the shop has been used by our team on real patients before it earned a spot on the shelf. No filler products, no influencer picks - just what works. Read Our Editorial →"
+ },
+ {
+  "kind": "catalog",
+  "cls": "zo-archive-section",
+  "head": [
+   [
+    "span",
+    "Browse Everything"
+   ],
+   [
+    "strong",
+    "The Full Shop,"
+   ],
+   [
+    "small",
+    "Filtered Your Way"
+   ],
+   [
+    "p",
+    "Filter by brand, concern, skin type, ingredient, price or rating. Find exactly what you're looking for in one view."
+   ]
+  ],
+  "items": [
+   {
+    "cls": "zo-price",
+    "imgs": [],
+    "blocks": [
+     [
+      "button",
+      "Price"
+     ],
+     [
+      "span",
+      "-"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/YELLOW015-Yellow-Cream-15-ml-0.50-fl.-oz.png",
+      "Yellow Cream"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Dermaceutic",
+      "https://shop.newdermamedlaserclinic.com/product/yellow-cream/"
+     ],
+     [
+      "h2",
+      "Yellow Cream",
+      "https://shop.newdermamedlaserclinic.com/product/yellow-cream/"
+     ],
+     [
+      "p",
+      "Dark spot corrector.",
+      "https://shop.newdermamedlaserclinic.com/product/yellow-cream/"
+     ],
+     [
+      "span",
+      "121.54",
+      "https://shop.newdermamedlaserclinic.com/product/yellow-cream/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/yellow-cream/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DHIG0010-ultimate-micropeel-150-ml-5.07-fl.-oz.png",
+      "ultimate micropeel"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Sale",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "Summer Sale",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "strong",
+      "20%",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "Mesoestetic",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "h2",
+      "ultimate micropeel",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "p",
+      "Biphasic solution with AHA. Retextures, softens and enhances skin luminosity.",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "132.87",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "Original price was: $132.87.",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "106.30",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ],
+     [
+      "span",
+      "Current price is: $106.30.",
+      "https://shop.newdermamedlaserclinic.com/product/ultimate-micropeel/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/TURN10040-Turn-Over-10-40-ml-1.35-fl.-oz.png",
+      "Turn Over 10"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Dermaceutic",
+      "https://shop.newdermamedlaserclinic.com/product/turn-over-10/"
+     ],
+     [
+      "h2",
+      "Turn Over 10",
+      "https://shop.newdermamedlaserclinic.com/product/turn-over-10/"
+     ],
+     [
+      "p",
+      "Rejuvenating night cream.",
+      "https://shop.newdermamedlaserclinic.com/product/turn-over-10/"
+     ],
+     [
+      "span",
+      "120.50",
+      "https://shop.newdermamedlaserclinic.com/product/turn-over-10/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/turn-over-10/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/TRIVIT030-Tri-Vita-C30-30-ml-1.0-fl.-oz.png",
+      "Tri Vita C30"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Dermaceutic",
+      "https://shop.newdermamedlaserclinic.com/product/tri-vita-c30/"
+     ],
+     [
+      "h2",
+      "Tri Vita C30",
+      "https://shop.newdermamedlaserclinic.com/product/tri-vita-c30/"
+     ],
+     [
+      "p",
+      "30% vitamin C serum.",
+      "https://shop.newdermamedlaserclinic.com/product/tri-vita-c30/"
+     ],
+     [
+      "span",
+      "159.10",
+      "https://shop.newdermamedlaserclinic.com/product/tri-vita-c30/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/tri-vita-c30/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DGLA0008-skinretin-03-50-ml-1.69-fl.-oz.png",
+      "skinretin 0,3%"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Sale",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "Summer Sale",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "strong",
+      "20%",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "Mesoestetic",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "h2",
+      "skinretin 0,3%",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "p",
+      "Intensive antiaging cream. Rejuvenates, brightens and revitalises the skin.",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "189.20",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "Original price was: $189.20.",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "151.36",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ],
+     [
+      "span",
+      "Current price is: $151.36.",
+      "https://shop.newdermamedlaserclinic.com/product/skinretin-03/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DSEN0004-skin-balance-30-ml-1.01-fl.-oz.png",
+      "skin balance"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Sale",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "Summer Sale",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "strong",
+      "20%",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "Mesoestetic",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "h2",
+      "skin balance",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "p",
+      "Concentrate with soothing effect for sensitive and sensitised skin.",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "169.42",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "Original price was: $169.42.",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "135.54",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ],
+     [
+      "span",
+      "Current price is: $135.54.",
+      "https://shop.newdermamedlaserclinic.com/product/skin-balance/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/REVEAL015-Reveal-4x-15-ml-0.50-fl.-oz.png",
+      "Reveal 4x"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Dermaceutic",
+      "https://shop.newdermamedlaserclinic.com/product/reveal-4x/"
+     ],
+     [
+      "h2",
+      "Reveal 4x",
+      "https://shop.newdermamedlaserclinic.com/product/reveal-4x/"
+     ],
+     [
+      "p",
+      "Advanced eye serum.",
+      "https://shop.newdermamedlaserclinic.com/product/reveal-4x/"
+     ],
+     [
+      "span",
+      "111.80",
+      "https://shop.newdermamedlaserclinic.com/product/reveal-4x/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/reveal-4x/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/REGENC040-Regen-Ceutic-40-ml-1.35-fl.-oz.png",
+      "Regen Ceutic"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Dermaceutic",
+      "https://shop.newdermamedlaserclinic.com/product/regen-ceutic/"
+     ],
+     [
+      "h2",
+      "Regen Ceutic",
+      "https://shop.newdermamedlaserclinic.com/product/regen-ceutic/"
+     ],
+     [
+      "p",
+      "Nourishing hydrating cream.",
+      "https://shop.newdermamedlaserclinic.com/product/regen-ceutic/"
+     ],
+     [
+      "span",
+      "125.78",
+      "https://shop.newdermamedlaserclinic.com/product/regen-ceutic/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/regen-ceutic/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/RADIAN030-Radiance-30-ml-1.0-fl.-oz.png",
+      "Radiance"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Dermaceutic",
+      "https://shop.newdermamedlaserclinic.com/product/radiance/"
+     ],
+     [
+      "h2",
+      "Radiance",
+      "https://shop.newdermamedlaserclinic.com/product/radiance/"
+     ],
+     [
+      "p",
+      "Brightening cream.",
+      "https://shop.newdermamedlaserclinic.com/product/radiance/"
+     ],
+     [
+      "span",
+      "112.88",
+      "https://shop.newdermamedlaserclinic.com/product/radiance/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/radiance/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DHIG0006-purifiying-mousse-150-ml-5.07-fl.-oz.png",
+      "purifiying mousse"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Sale",
+      "https://shop.newdermamedlaserclinic.com/product/purifiying-mousse/"
+     ],
+     [
+      "span",
+      "Summer Sale",
+      "https://shop.newdermamedlaserclinic.com/product/purifiying-mousse/"
+     ],
+     [
+      "strong",
+      "20%",
+      "https://shop.newdermamedlaserclinic.com/product/purifiying-mousse/"
+     ],
+     [
+      "span",
+      "Mesoestetic",
+      "https://shop.newdermamedlaserclinic.com/product/purifiying-mousse/"
+     ],
+     [
+      "h2",
+      "purifiying mousse",
+      "https://shop.newdermamedlaserclinic.com/product/purifiying-mousse/"
+     ],
+     [
+      "p",
+      "Anti-blemishes cleansing mousse. Postbiotic and anti-pollution.",
+      "https://shop.newdermamedlaserclinic.com/product/purifiying-mousse/"
+     ],
+     [
+      "span",
+      "63.43",
+      "https://shop.newdermamedlaserclinic.com/product/purifiying-mousse/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/purifiying-mousse/"
+     ],
+     [
+      "span",
+      "Original price was: $63.43.",
+      "https://shop.newdermamedlaserclinic.com/product/purifiying-mousse/"
+     ],
+     [
+      "span",
+      "50.74",
+      "https://shop.newdermamedlaserclinic.com/product/purifiying-mousse/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/purifiying-mousse/"
+     ],
+     [
+      "span",
+      "Current price is: $50.74.",
+      "https://shop.newdermamedlaserclinic.com/product/purifiying-mousse/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DHIG0013-pure-renewing-mask-100-ml-3.38-fl.-oz.png",
+      "pure renewing mask"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Sale",
+      "https://shop.newdermamedlaserclinic.com/product/pure-renewing-mask/"
+     ],
+     [
+      "span",
+      "Summer Sale",
+      "https://shop.newdermamedlaserclinic.com/product/pure-renewing-mask/"
+     ],
+     [
+      "strong",
+      "20%",
+      "https://shop.newdermamedlaserclinic.com/product/pure-renewing-mask/"
+     ],
+     [
+      "span",
+      "Mesoestetic",
+      "https://shop.newdermamedlaserclinic.com/product/pure-renewing-mask/"
+     ],
+     [
+      "h2",
+      "pure renewing mask",
+      "https://shop.newdermamedlaserclinic.com/product/pure-renewing-mask/"
+     ],
+     [
+      "p",
+      "Intensive purifying mask. Exfoliates and cleans pores to prevent blemishes.",
+      "https://shop.newdermamedlaserclinic.com/product/pure-renewing-mask/"
+     ],
+     [
+      "span",
+      "104.28",
+      "https://shop.newdermamedlaserclinic.com/product/pure-renewing-mask/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/pure-renewing-mask/"
+     ],
+     [
+      "span",
+      "Original price was: $104.28.",
+      "https://shop.newdermamedlaserclinic.com/product/pure-renewing-mask/"
+     ],
+     [
+      "span",
+      "83.42",
+      "https://shop.newdermamedlaserclinic.com/product/pure-renewing-mask/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/pure-renewing-mask/"
+     ],
+     [
+      "span",
+      "Current price is: $83.42.",
+      "https://shop.newdermamedlaserclinic.com/product/pure-renewing-mask/"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-product",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DGLA0005-proteoglycans-ampoules-10-x-2-ml-0.07-fl.-oz.png",
+      "proteoglycans ampoules"
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Sale",
+      "https://shop.newdermamedlaserclinic.com/product/proteoglycans-ampoules/"
+     ],
+     [
+      "span",
+      "Summer Sale",
+      "https://shop.newdermamedlaserclinic.com/product/proteoglycans-ampoules/"
+     ],
+     [
+      "strong",
+      "20%",
+      "https://shop.newdermamedlaserclinic.com/product/proteoglycans-ampoules/"
+     ],
+     [
+      "span",
+      "Mesoestetic",
+      "https://shop.newdermamedlaserclinic.com/product/proteoglycans-ampoules/"
+     ],
+     [
+      "h2",
+      "proteoglycans ampoules",
+      "https://shop.newdermamedlaserclinic.com/product/proteoglycans-ampoules/"
+     ],
+     [
+      "p",
+      "Moisturising, nourishing and repairing solution. Firms and helps to prevent wrinkle formation.",
+      "https://shop.newdermamedlaserclinic.com/product/proteoglycans-ampoules/"
+     ],
+     [
+      "span",
+      "106.43",
+      "https://shop.newdermamedlaserclinic.com/product/proteoglycans-ampoules/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/proteoglycans-ampoules/"
+     ],
+     [
+      "span",
+      "Original price was: $106.43.",
+      "https://shop.newdermamedlaserclinic.com/product/proteoglycans-ampoules/"
+     ],
+     [
+      "span",
+      "85.14",
+      "https://shop.newdermamedlaserclinic.com/product/proteoglycans-ampoules/"
+     ],
+     [
+      "span",
+      "$",
+      "https://shop.newdermamedlaserclinic.com/product/proteoglycans-ampoules/"
+     ],
+     [
+      "span",
+      "Current price is: $85.14.",
+      "https://shop.newdermamedlaserclinic.com/product/proteoglycans-ampoules/"
+     ]
+    ]
+   }
+  ],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/YELLOW015-Yellow-Cream-15-ml-0.50-fl.-oz.png",
+    "Yellow Cream"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DHIG0010-ultimate-micropeel-150-ml-5.07-fl.-oz.png",
+    "ultimate micropeel"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/TURN10040-Turn-Over-10-40-ml-1.35-fl.-oz.png",
+    "Turn Over 10"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/TRIVIT030-Tri-Vita-C30-30-ml-1.0-fl.-oz.png",
+    "Tri Vita C30"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DGLA0008-skinretin-03-50-ml-1.69-fl.-oz.png",
+    "skinretin 0,3%"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DSEN0004-skin-balance-30-ml-1.01-fl.-oz.png",
+    "skin balance"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/REVEAL015-Reveal-4x-15-ml-0.50-fl.-oz.png",
+    "Reveal 4x"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/REGENC040-Regen-Ceutic-40-ml-1.35-fl.-oz.png",
+    "Regen Ceutic"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/RADIAN030-Radiance-30-ml-1.0-fl.-oz.png",
+    "Radiance"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DHIG0006-purifiying-mousse-150-ml-5.07-fl.-oz.png",
+    "purifiying mousse"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DHIG0013-pure-renewing-mask-100-ml-3.38-fl.-oz.png",
+    "pure renewing mask"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/uploads/2026/06/T-DGLA0005-proteoglycans-ampoules-10-x-2-ml-0.07-fl.-oz.png",
+    "proteoglycans ampoules"
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/stars.svg",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/buy.svg",
+    ""
+   ]
+  ],
+  "tail": [
+   [
+    "p",
+    "Brand: value must match the WooCommerce term slug Category (Product Type) Price Availability"
+   ],
+   [
+    "strong",
+    "Filters"
+   ],
+   [
+    "button",
+    "Clear All"
+   ],
+   [
+    "button",
+    "Brand"
+   ],
+   [
+    "li",
+    "Dermaceutic 21"
+   ],
+   [
+    "li",
+    "Mesoestetic 47"
+   ],
+   [
+    "button",
+    "Product Type"
+   ],
+   [
+    "li",
+    "Anti-Blemish 4"
+   ],
+   [
+    "li",
+    "Antiaging Antiwrinkles 5"
+   ],
+   [
+    "li",
+    "Antiaging Brightening 4"
+   ],
+   [
+    "li",
+    "Antiaging Firming 3"
+   ],
+   [
+    "li",
+    "Cleansing 5"
+   ],
+   [
+    "li",
+    "Dermaceutic Cliniceuticals 3"
+   ],
+   [
+    "li",
+    "Dermaceutic Cosmeceuticals 18"
+   ],
+   [
+    "li",
+    "Global Antiaging 5"
+   ],
+   [
+    "li",
+    "Moisturising 5"
+   ],
+   [
+    "li",
+    "Peeling 3"
+   ],
+   [
+    "li",
+    "Pigment Control 7"
+   ],
+   [
+    "li",
+    "Postcare 13"
+   ],
+   [
+    "li",
+    "Sensitive Skin 5"
+   ],
+   [
+    "button",
+    "Availability"
+   ],
+   [
+    "li",
+    "In Stock"
+   ],
+   [
+    "li",
+    "On Sale"
+   ],
+   [
+    "li",
+    "New Arrivals"
+   ],
+   [
+    "button",
+    "Filter"
+   ]
+  ],
+  "text": "Browse Everything The Full Shop, Filtered Your Way Filter by brand, concern, skin type, ingredient, price or rating. Find exactly what you're looking for in one view. Filters Clear All Brand Dermaceutic 21 Mesoestetic 47 Product Type Anti-Blemish 4 Antiaging Antiwrinkles 5 Antiaging Brightening 4 Antiaging Firming 3 Cleansing 5 Dermaceutic Cliniceuticals 3 Dermaceutic Cosmeceuticals 18 Global Antiaging 5 Moisturising 5 Peeling 3 Pigment Control 7 Postcare 13 Sensitive Skin 5 Price - Availability In Stock On Sale New Arrivals Filter Dermaceutic Yellow Cream Dark spot corrector. $ 121.54 Sale 20% Summer Sale Mesoestetic ultimate micropeel Biphasic solution with AHA. Retextures, softens and enhances skin luminosity. $ 132.87 Original price was: $132.87. $ 106.30 Current price is: $106.30. Dermaceutic Turn Over 10 Rejuvenating night cream. $ 120.50 Dermaceutic Tri Vita C30 30% vitamin C serum. $ 159.10 Sale 20% Summer Sale Mesoestetic skinretin 0,3% Intensive antiaging cream. Rejuvenates, brightens and revitalises the skin. $ 189.20 Original price was: $189.20. $ 151.36 Current price is: $151.36. Sale 20% Summer Sale Mesoestetic skin balance Concentrate with soothing effect for sensitive and sensitised skin. $ 169.42 Original price was: $169.42. $ 135.54 Current price is: $135.54. Dermaceutic Reveal 4x Advanced eye serum. $ 111.80 Dermaceutic Regen Ceutic Nourishing hydrating cream. $ 125.78 Dermaceutic Radiance Brightening cream. $ 112.88 Sale 20% Summer Sale Mesoestetic purifiying mousse Anti-blemishes cleansing mousse. Postbiotic and anti-pollution. $ 63.43 Original price was: $63.43. $ 50.74 Current price is: $50.74. Sale 20% Summer Sale Mesoestetic pure renewing mask Intensive purifying mask. Exfoliates and cleans pores to prevent blemishes. $ 104.28 Original price was: $104.28. $ 83.42 Current price is: $83.42. Sale 20% Summer Sale Mesoestetic proteoglycans ampoules Moisturising, nourishing and repairing solution. Firms and helps to prevent wrinkle formation. $ 106.43 Original price was: $106.43. $ 85.14 Current price is: $85.14."
+ },
+ {
+  "kind": "draw",
+  "cls": "zo-form-section",
+  "head": [
+   [
+    "span",
+    "Monthly Member Draw"
+   ],
+   [
+    "strong",
+    "Win a Treatment"
+   ],
+   [
+    "span",
+    "One winner every month at NewDermaMed"
+   ],
+   [
+    "p",
+    "Enter once and you're in every monthly draw. Three winners each month — each receives a complimentary in-clinic treatment at NewDermaMed Toronto. No purchase necessary."
+   ]
+  ],
+  "items": [
+   {
+    "cls": "zo-step",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/step-1.png",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/value-850.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "small",
+      "Grand Prize"
+     ],
+     [
+      "strong",
+      "PRP + Microneedling Combination"
+     ],
+     [
+      "p",
+      "Platelet-Rich Plasma combined with collagen induction microneedling - the most advanced regenerative facial protocol at NewDermaMed."
+     ]
+    ]
+   },
+   {
+    "cls": "zo-step",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/step-2.png",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/value-650.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "small",
+      "Runner-Up"
+     ],
+     [
+      "strong",
+      "Microneedling with Salmon Sperm PDRN"
+     ],
+     [
+      "p",
+      "Collagen induction microneedling enhanced with PDRN (polydeoxyribonucleotides) — the cellular repair active that's taking aesthetic medicine global."
+     ]
+    ]
+   },
+   {
+    "cls": "zo-step",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/step-3.png",
+      ""
+     ],
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/value-450.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "small",
+      "Third Place"
+     ],
+     [
+      "strong",
+      "Microneedling with Peptides"
+     ],
+     [
+      "p",
+      "Collagen induction microneedling paired with a clinical peptide cocktail - firmness, signaling, and barrier support."
+     ]
+    ]
+   }
+  ],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/step-1.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/value-850.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/step-2.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/value-650.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/step-3.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/value-450.png",
+    ""
+   ]
+  ],
+  "tail": [
+   [
+    "strong",
+    "Enter the Draw"
+   ],
+   [
+    "p",
+    "One entry · all monthly draws"
+   ],
+   [
+    "p",
+    "First Name Last Name Email Address Phone Number"
+   ],
+   [
+    "p",
+    "I consent to receiving emails from NewDermaMed about the monthly draw, skincare education, and special offers. CASL compliant. Unsubscribe anytime."
+   ],
+   [
+    "p",
+    "Winners drawn and contacted by email + phone. Must be 19+ and a resident of Canada."
+   ],
+   [
+    "span",
+    "1st of every month"
+   ]
+  ],
+  "text": "Monthly Member Draw Win a Treatment One winner every month at NewDermaMed Enter once and you're in every monthly draw. Three winners each month — each receives a complimentary in-clinic treatment at NewDermaMed Toronto. No purchase necessary. Grand Prize PRP + Microneedling Combination Platelet-Rich Plasma combined with collagen induction microneedling - the most advanced regenerative facial protocol at NewDermaMed. Runner-Up Microneedling with Salmon Sperm PDRN Collagen induction microneedling enhanced with PDRN (polydeoxyribonucleotides) — the cellular repair active that's taking aesthetic medicine global. Third Place Microneedling with Peptides Collagen induction microneedling paired with a clinical peptide cocktail - firmness, signaling, and barrier support. Enter the Draw One entry · all monthly draws First Name Last Name Email Address Phone Number I consent to receiving emails from NewDermaMed about the monthly draw, skincare education, and special offers. CASL compliant. Unsubscribe anytime. Winners drawn 1st of every month and contacted by email + phone. Must be 19+ and a resident of Canada."
+ },
+ {
+  "kind": "services",
+  "cls": "zo-services-section",
+  "head": [
+   [
+    "span",
+    "More Than Skincare"
+   ],
+   [
+    "strong",
+    "Pair Products With"
+   ],
+   [
+    "small",
+    "In-Clinic Treatments"
+   ],
+   [
+    "p",
+    "NewDermaMed Toronto offers professional aesthetic treatments alongside our retail. Combine the right products with the right service for results that compound."
+   ]
+  ],
+  "items": [
+   {
+    "cls": "zo-service",
+    "imgs": [],
+    "blocks": [
+     [
+      "strong",
+      "Aptos Thread Lift",
+      "https://newdermamedlaserclinic.com/fees-financing/#aptos_thread_method"
+     ],
+     [
+      "p",
+      "Non-surgical facelift. Pair with anti-aging products for amplified results.",
+      "https://newdermamedlaserclinic.com/fees-financing/#aptos_thread_method"
+     ],
+     [
+      "span",
+      "Learn More →",
+      "https://newdermamedlaserclinic.com/fees-financing/#aptos_thread_method"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-service",
+    "imgs": [],
+    "blocks": [
+     [
+      "strong",
+      "Botox & Fillers",
+      "https://newdermamedlaserclinic.com/fees-financing/#botox__dysport"
+     ],
+     [
+      "p",
+      "Injectable rejuvenation. Pair with hydration and barrier-support skincare.",
+      "https://newdermamedlaserclinic.com/fees-financing/#botox__dysport"
+     ],
+     [
+      "span",
+      "Learn More →",
+      "https://newdermamedlaserclinic.com/fees-financing/#botox__dysport"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-service",
+    "imgs": [],
+    "blocks": [
+     [
+      "strong",
+      "Cosmelan Peel",
+      "https://newdermamedlaserclinic.com/fees-financing/#depigmenting_treatment"
+     ],
+     [
+      "p",
+      "Professional depigmentation protocol with at-home maintenance regimen.",
+      "https://newdermamedlaserclinic.com/fees-financing/#depigmenting_treatment"
+     ],
+     [
+      "span",
+      "Learn More →",
+      "https://newdermamedlaserclinic.com/fees-financing/#depigmenting_treatment"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-service",
+    "imgs": [],
+    "blocks": [
+     [
+      "strong",
+      "HydraFacial",
+      "https://newdermamedlaserclinic.com/fees-financing/#dermal_fillers"
+     ],
+     [
+      "p",
+      "Resurfacing facial treatment. Pair with hyaluronic acid and serums.",
+      "https://newdermamedlaserclinic.com/fees-financing/#dermal_fillers"
+     ],
+     [
+      "span",
+      "Learn More →",
+      "https://newdermamedlaserclinic.com/fees-financing/#dermal_fillers"
+     ]
+    ]
+   }
+  ],
+  "imgs": [],
+  "tail": [
+   [
+    "a",
+    "View All Services",
+    "https://newdermamedlaserclinic.com/fees-financing"
+   ]
+  ],
+  "text": "More Than Skincare Pair Products With In-Clinic Treatments NewDermaMed Toronto offers professional aesthetic treatments alongside our retail. Combine the right products with the right service for results that compound. Aptos Thread Lift Non-surgical facelift. Pair with anti-aging products for amplified results. Learn More → Botox & Fillers Injectable rejuvenation. Pair with hydration and barrier-support skincare. Learn More → Cosmelan Peel Professional depigmentation protocol with at-home maintenance regimen. Learn More → HydraFacial Resurfacing facial treatment. Pair with hyaluronic acid and serums. Learn More → View All Services"
+ },
+ {
+  "kind": "ingredients",
+  "cls": "zo-table-section",
+  "head": [
+   [
+    "span",
+    "Shop by Ingredient"
+   ],
+   [
+    "strong",
+    "Browse by"
+   ],
+   [
+    "small",
+    "Active Ingredient"
+   ],
+   [
+    "a",
+    "All Ingredients",
+    "/shop"
+   ]
+  ],
+  "items": [
+   {
+    "cls": "zo-table zo-active",
+    "imgs": [],
+    "blocks": [
+     [
+      "span",
+      "01",
+      "/product-tag/vitamin-c"
+     ],
+     [
+      "strong",
+      "25%",
+      "/product-tag/vitamin-c"
+     ],
+     [
+      "strong",
+      "C",
+      "/product-tag/vitamin-c"
+     ],
+     [
+      "span",
+      "Vitamin C",
+      "/product-tag/vitamin-c"
+     ],
+     [
+      "span",
+      "Brighten",
+      "/product-tag/vitamin-c"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-table",
+    "imgs": [],
+    "blocks": [
+     [
+      "span",
+      "02",
+      "/product-tag/retinol"
+     ],
+     [
+      "strong",
+      "1.0",
+      "/product-tag/retinol"
+     ],
+     [
+      "strong",
+      "Rt",
+      "/product-tag/retinol"
+     ],
+     [
+      "span",
+      "Retinol",
+      "/product-tag/retinol"
+     ],
+     [
+      "span",
+      "Renewal",
+      "/product-tag/retinol"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-table",
+    "imgs": [],
+    "blocks": [
+     [
+      "span",
+      "03",
+      "/product-tag/hyaluronic-acid"
+     ],
+     [
+      "strong",
+      "2.0%",
+      "/product-tag/hyaluronic-acid"
+     ],
+     [
+      "strong",
+      "Ha",
+      "/product-tag/hyaluronic-acid"
+     ],
+     [
+      "span",
+      "Hyaluronic Acid",
+      "/product-tag/hyaluronic-acid"
+     ],
+     [
+      "span",
+      "Hydrate",
+      "/product-tag/hyaluronic-acid"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-table",
+    "imgs": [],
+    "blocks": [
+     [
+      "span",
+      "04",
+      "/product-tag/niacinamide"
+     ],
+     [
+      "strong",
+      "10%",
+      "/product-tag/niacinamide"
+     ],
+     [
+      "strong",
+      "Nc",
+      "/product-tag/niacinamide"
+     ],
+     [
+      "span",
+      "Niacinamide",
+      "/product-tag/niacinamide"
+     ],
+     [
+      "span",
+      "Barrier",
+      "/product-tag/niacinamide"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-table",
+    "imgs": [],
+    "blocks": [
+     [
+      "span",
+      "05",
+      "/product-tag/peptides"
+     ],
+     [
+      "strong",
+      "Multi",
+      "/product-tag/peptides"
+     ],
+     [
+      "strong",
+      "Pp",
+      "/product-tag/peptides"
+     ],
+     [
+      "span",
+      "Peptides",
+      "/product-tag/peptides"
+     ],
+     [
+      "span",
+      "Firm",
+      "/product-tag/peptides"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-table",
+    "imgs": [],
+    "blocks": [
+     [
+      "span",
+      "06",
+      "/product-tag/salicylic-acid"
+     ],
+     [
+      "strong",
+      "α / β",
+      "/product-tag/salicylic-acid"
+     ],
+     [
+      "strong",
+      "Ax",
+      "/product-tag/salicylic-acid"
+     ],
+     [
+      "span",
+      "AHA / BHA",
+      "/product-tag/salicylic-acid"
+     ],
+     [
+      "span",
+      "Exfoliate",
+      "/product-tag/salicylic-acid"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-table zo-active",
+    "imgs": [],
+    "blocks": [
+     [
+      "span",
+      "07",
+      "/product-tag/antioxidants"
+     ],
+     [
+      "strong",
+      "28+",
+      "/product-tag/antioxidants"
+     ],
+     [
+      "strong",
+      "SP",
+      "/product-tag/antioxidants"
+     ],
+     [
+      "span",
+      "Antioxidants",
+      "/product-tag/antioxidants"
+     ],
+     [
+      "span",
+      "Protect",
+      "/product-tag/antioxidants"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-table",
+    "imgs": [],
+    "blocks": [
+     [
+      "span",
+      "08",
+      "/product-tag/centella-asiatica"
+     ],
+     [
+      "strong",
+      "EGF",
+      "/product-tag/centella-asiatica"
+     ],
+     [
+      "strong",
+      "GF",
+      "/product-tag/centella-asiatica"
+     ],
+     [
+      "span",
+      "Centella Asiatica",
+      "/product-tag/centella-asiatica"
+     ],
+     [
+      "span",
+      "Repair",
+      "/product-tag/centella-asiatica"
+     ]
+    ]
+   }
+  ],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/arrow-right.svg",
+    ""
+   ]
+  ],
+  "tail": [],
+  "text": "Shop by Ingredient Browse by Active Ingredient All Ingredients 01 25% C Vitamin C Brighten 02 1.0 Rt Retinol Renewal 03 2.0% Ha Hyaluronic Acid Hydrate 04 10% Nc Niacinamide Barrier 05 Multi Pp Peptides Firm 06 α / β Ax AHA / BHA Exfoliate 07 28+ SP Antioxidants Protect 08 EGF GF Centella Asiatica Repair"
+ },
+ {
+  "kind": "social",
+  "cls": "zo-videos-section",
+  "head": [
+   [
+    "span",
+    "Shoppable Social"
+   ],
+   [
+    "strong",
+    "From Our"
+   ],
+   [
+    "small",
+    "Community"
+   ],
+   [
+    "p",
+    "Real patients, real routines. Tag your skincare moments with #NewDermaMed for a chance to be featured."
+   ],
+   [
+    "a",
+    "Follow @newdermamed",
+    "https://www.facebook.com/newdermamed"
+   ]
+  ],
+  "items": [
+   {
+    "cls": "zo-social",
+    "imgs": [],
+    "blocks": []
+   }
+  ],
+  "imgs": [],
+  "tail": [],
+  "text": "Shoppable Social From Our Community Real patients, real routines. Tag your skincare moments with #NewDermaMed for a chance to be featured. Follow @newdermamed @newdermamed"
+ },
+ {
+  "kind": "follow",
+  "cls": "zo-social-section",
+  "head": [
+   [
+    "span",
+    "Stay connected"
+   ],
+   [
+    "strong",
+    "Follow Us, Anywhere"
+   ],
+   [
+    "p",
+    "Daily skincare education, behind-the-scenes from our Toronto clinics, treatment walkthroughs, and exclusive offers - across every platform."
+   ]
+  ],
+  "items": [
+   {
+    "cls": "zo-social",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/instagram.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "strong",
+      "Instagram",
+      "https://www.instagram.com/newdermamed"
+     ],
+     [
+      "span",
+      "@newdermamed",
+      "https://www.instagram.com/newdermamed"
+     ],
+     [
+      "strong",
+      "52K",
+      "https://www.instagram.com/newdermamed"
+     ],
+     [
+      "span",
+      "Followers",
+      "https://www.instagram.com/newdermamed"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-social",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/tiktok.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "strong",
+      "TikTok",
+      "https://www.tiktok.com/@newdermamed"
+     ],
+     [
+      "span",
+      "@newdermamed",
+      "https://www.tiktok.com/@newdermamed"
+     ],
+     [
+      "strong",
+      "686",
+      "https://www.tiktok.com/@newdermamed"
+     ],
+     [
+      "span",
+      "Followers",
+      "https://www.tiktok.com/@newdermamed"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-social",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/youtube.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "strong",
+      "Youtube",
+      "https://www.youtube.com/channel/UCEu0ghSIa-ZPqNh087WAY3w"
+     ],
+     [
+      "span",
+      "@newdermamed",
+      "https://www.youtube.com/channel/UCEu0ghSIa-ZPqNh087WAY3w"
+     ],
+     [
+      "strong",
+      "3.39K",
+      "https://www.youtube.com/channel/UCEu0ghSIa-ZPqNh087WAY3w"
+     ],
+     [
+      "span",
+      "Subscribers",
+      "https://www.youtube.com/channel/UCEu0ghSIa-ZPqNh087WAY3w"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-social",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/facebook.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "strong",
+      "Facebook",
+      "https://www.facebook.com/newdermamed"
+     ],
+     [
+      "span",
+      "@newdermamed",
+      "https://www.facebook.com/newdermamed"
+     ],
+     [
+      "strong",
+      "1.5K",
+      "https://www.facebook.com/newdermamed"
+     ],
+     [
+      "span",
+      "Followers",
+      "https://www.facebook.com/newdermamed"
+     ]
+    ]
+   }
+  ],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/instagram.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/tiktok.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/youtube.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/icons/facebook.png",
+    ""
+   ]
+  ],
+  "tail": [],
+  "text": "Stay connected Follow Us, Anywhere Daily skincare education, behind-the-scenes from our Toronto clinics, treatment walkthroughs, and exclusive offers - across every platform. Instagram @newdermamed 52K Followers TikTok @newdermamed 686 Followers Youtube @newdermamed 3.39K Subscribers Facebook @newdermamed 1.5K Followers"
+ },
+ {
+  "kind": "articles",
+  "cls": "zo-articles-section",
+  "head": [
+   [
+    "span",
+    "Education & Guides"
+   ],
+   [
+    "strong",
+    "From Our"
+   ],
+   [
+    "small",
+    "Skincare Experts"
+   ]
+  ],
+  "items": [
+   {
+    "cls": "zo-article",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/28.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Product Comparison",
+      "#Article-1"
+     ],
+     [
+      "h2",
+      "Best Vitamin C Serum in Canada - Honest Clinical Review",
+      "#Article-1"
+     ],
+     [
+      "p",
+      "What 25% L-ascorbic acid actually does, and how to pick the right Vitamin C product for your skin type.",
+      "#Article-1"
+     ],
+     [
+      "span",
+      "6 Min Read",
+      "#Article-1"
+     ],
+     [
+      "small",
+      "Read →",
+      "#Article-1"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-article",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/29.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "Skincare 101",
+      "#Article-2"
+     ],
+     [
+      "h2",
+      "How to Layer Skincare - Morning & Evening Routines",
+      "#Article-2"
+     ],
+     [
+      "p",
+      "A step-by-step guide to layering serums, creams and SPF in the right order for maximum results.",
+      "#Article-2"
+     ],
+     [
+      "span",
+      "6 Min Read",
+      "#Article-2"
+     ],
+     [
+      "small",
+      "Read →",
+      "#Article-2"
+     ]
+    ]
+   },
+   {
+    "cls": "zo-article",
+    "imgs": [
+     [
+      "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/30.png",
+      ""
+     ]
+    ],
+    "blocks": [
+     [
+      "span",
+      "After Your Treatment",
+      "#Article-3"
+     ],
+     [
+      "h2",
+      "Thread Lift Aftercare - The Products We Recommend",
+      "#Article-3"
+     ],
+     [
+      "p",
+      "What our certified team prescribes for the 2 weeks after an Aptos thread lift to support recovery.",
+      "#Article-3"
+     ],
+     [
+      "span",
+      "6 Min Read",
+      "#Article-3"
+     ],
+     [
+      "small",
+      "Read →",
+      "#Article-3"
+     ]
+    ]
+   }
+  ],
+  "imgs": [
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/28.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/29.png",
+    ""
+   ],
+   [
+    "https://shop.newdermamedlaserclinic.com/wp-content/themes/newdermamed/assets/img/30.png",
+    ""
+   ]
+  ],
+  "tail": [],
+  "text": "Education & Guides From Our Skincare Experts Product Comparison Best Vitamin C Serum in Canada - Honest Clinical Review What 25% L-ascorbic acid actually does, and how to pick the right Vitamin C product for your skin type. 6 Min Read Read → Skincare 101 How to Layer Skincare - Morning & Evening Routines A step-by-step guide to layering serums, creams and SPF in the right order for maximum results. 6 Min Read Read → After Your Treatment Thread Lift Aftercare - The Products We Recommend What our certified team prescribes for the 2 weeks after an Aptos thread lift to support recovery. 6 Min Read Read →"
+ },
+ {
+  "kind": "cta",
+  "cls": "zo-consultation-section",
+  "head": [],
+  "items": [],
+  "imgs": [],
+  "tail": [
+   [
+    "h2",
+    "Not Sure Where to Start?"
+   ],
+   [
+    "p",
+    "Book a complimentary in-person skincare consultation at either of our Toronto clinics. Our specialists will build you a personalized routine - at no cost, no commitment."
+   ],
+   [
+    "a",
+    "Book Free Consultation",
+    "#Book-Free-Consultation"
+   ]
+  ],
+  "text": "Not Sure Where to Start? Book a complimentary in-person skincare consultation at either of our Toronto clinics. Our specialists will build you a personalized routine - at no cost, no commitment. Book Free Consultation"
+ }
+]

@@ -1,0 +1,113 @@
+function MegaMenu({ open, onLink }) {
+  const [act, setAct] = useState(HERE_CAT || 'aptos');
+  const cat = PROCEDURES.find((c) => c.id === act);
+  /* one layout for every category (Aptos included): the same row size, lines and spacing; the panel keeps one height */
+  return (
+    <div className="panel w-full rounded-[28px] border border-black/5 bg-white text-ndm-ink shadow-[0_50px_90px_-40px_rgba(11,15,19,.45)]" data-open={open}>
+      <div className="grid gap-4 p-4 2xl:p-5 grid-cols-[210px_1fr_280px] 2xl:grid-cols-[260px_1fr_340px]">
+      <ul className="rounded-[16px] bg-ndm-mist/70 p-2" role="list">
+        {PROCEDURES.map((c) => {
+          const on = c.id === act;
+          return (
+            <li key={c.id}>
+              <button
+                onMouseEnter={() => setAct(c.id)} onFocus={() => setAct(c.id)} onClick={() => setAct(c.id)}
+                aria-pressed={on}
+                className={`w-full flex items-center justify-between rounded-[12px] px-4 py-3 text-left font-mont text-[14px] transition-colors ${on ? 'bg-white text-ndm-blue shadow-sm' : 'text-ndm-ink hover:bg-white/70'}`}
+              >
+                <span className="flex items-center gap-2">{c.label}{c.id === HERE_CAT && <i aria-hidden="true" className="size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(32,158,217,.18)]" />}</span>
+                <IconArrow className={`transition-[opacity,transform] ${on ? 'translate-x-0.5 opacity-100' : 'opacity-40'}`} />
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <div className="flex h-[510px] flex-col px-5 py-4">
+        <div className="border-b border-ndm-line pb-4">
+          <p className="font-aeonik text-[26px] leading-tight">{cat.label}</p>
+          <p className="mt-1 text-[13.5px] text-ndm-muted max-w-[46ch]">{cat.blurb}</p>
+        </div>
+        <div className="mt-3 grid gap-y-2">
+          {cat.groups.map((g) => (
+            <div key={g.title || 'g'}>
+              {g.title && <p className="mb-1 mt-1 font-mont text-[11px] uppercase tracking-[.14em] text-ndm-muted">{g.title}</p>}
+              <ul className="grid grid-cols-3 gap-x-5" role="list">
+                {g.items.map((it) => (
+                  <li key={it}>
+                    <a href={slug(it)} {...here(slug(it))} onClick={onLink} className="menu-item group font-mont">
+                      <span className="min-w-0">{it}</span><IconArrow size={11} className="menu-arrow" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <a href={cat.id === 'aptos' ? 'aptos-thread-lift.html' : slug(cat.label)} onClick={onLink} className="group mt-auto inline-flex items-center gap-2 pt-4 font-inter text-[15px] font-semibold text-ndm-deep">View all {cat.label.toLowerCase()}<IconArrow className="transition-transform group-hover:translate-x-1" /></a>
+      </div>
+      <a href="#/book" onClick={onLink} className="group relative overflow-hidden rounded-[16px] min-h-[380px] text-white">
+        <img src="assets/clinic/clinic-2.jpg" alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        <span className="absolute inset-0 bg-gradient-to-t from-[#0B0F13]/85 via-[#0B0F13]/25 to-transparent" />
+        <span className="absolute inset-x-0 bottom-0 p-5">
+          <span className="block font-mont text-[11px] tracking-[.14em] uppercase text-white/75">Not sure where to start?</span>
+          <span className="mt-2 block font-aeonik text-[22px] leading-[1.2]">Free consultation &amp; VISIA® skin analysis</span>
+          <Btn as="span" v="book" onDark className="btn-g mt-4">Book Free Consultation</Btn>
+        </span>
+      </a>
+      </div>
+      <div className="flex flex-wrap items-center gap-x-9 gap-y-2 border-t border-ndm-line px-6 py-4 2xl:px-7">
+        {[['All treatments', '#/treatments'], ['Prefer to start from a concern?', '#/concerns'], ['Not sure? Free VISIA® skin analysis', '#/visia-skin-analysis']].map(([t, h]) => (
+          <a key={t} href={h} onClick={onLink} className="group inline-flex items-center gap-2 font-inter text-[14.5px] font-semibold text-ndm-deep">{t}<IconArrow className="transition-transform group-hover:translate-x-1" /></a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* about: the two clinics as photo cards with address and opening hours (after the website v3 locations menu), then the links;
+   every About link opens the About page from the top */
+const ABOUT_LOCS = [
+  { name: 'Uptown', near: 'Yonge & Sheppard', img: 'assets/clinic/clinic-4.jpg' },
+  { name: 'Downtown', near: 'Bay & College', img: 'assets/clinic/downtown/downtown-3.jpg' },
+];
+const aboutHref = (l) => (l === 'Blog' ? 'blog.html' : /^Policies/.test(l) ? slug(l) : 'about.html');
+function AboutMenu({ open, onLink }) {
+  return (
+    <div className="panel w-full rounded-[28px] border border-black/5 bg-white text-ndm-ink shadow-[0_50px_90px_-40px_rgba(11,15,19,.45)]" data-open={open}>
+      <div className="grid gap-4 p-4 2xl:p-5 grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,.9fr)]">
+        {ABOUT_LOCS.map((l) => {
+          const c = CLINICS.find((x) => x.name === l.name);
+          return (
+            <a key={l.name} href="about.html" onClick={onLink} className="about-loc group flex flex-col overflow-hidden rounded-[18px] bg-ndm-mist/70 ring-1 ring-ndm-ink/[.05] transition-shadow hover:shadow-[0_24px_50px_-30px_rgba(27,36,43,.45)]">
+              <span className="relative block aspect-[16/10] overflow-hidden">
+                <img src={l.img} alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <span className="absolute inset-0 bg-gradient-to-t from-[#0B0F13]/75 via-[#0B0F13]/10 to-transparent" />
+                <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 font-inter text-[11.5px] font-medium text-ndm-ink backdrop-blur-[6px]">{l.near}</span>
+                <span className="absolute inset-x-4 bottom-3 font-aeonik text-[25px] leading-none text-white">{l.name} Clinic</span>
+              </span>
+              <span className="flex flex-1 flex-col gap-3 p-4">
+                <span className="font-inter text-[13.5px] leading-[1.45] text-ndm-muted">{c.addr}</span>
+                <span className="grid gap-1 rounded-[12px] bg-white px-3 py-2.5">
+                  {HOURS.map(([d, h]) => <span key={d} className="flex items-center justify-between gap-3 font-inter text-[13px]"><span className="text-ndm-muted">{d}</span><span className="font-medium tabular-nums text-ndm-ink">{h}</span></span>)}
+                </span>
+                <span className="mt-auto flex items-center justify-between gap-3 font-inter text-[13.5px] font-semibold text-ndm-deep">
+                  <span className="tabular-nums">{c.phone}</span>
+                  <span className="inline-flex items-center gap-1.5">About the clinic<IconArrow className="transition-transform group-hover:translate-x-1" /></span>
+                </span>
+              </span>
+            </a>
+          );
+        })}
+        <ul className="px-3 py-1" role="list">
+          {ABOUT.links.map((l) => (
+            <li key={l}>
+              <a href={aboutHref(l)} onClick={onLink} className="menu-item group font-mont">
+                <span className="min-w-0">{l}</span><IconArrow size={12} className="menu-arrow" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}

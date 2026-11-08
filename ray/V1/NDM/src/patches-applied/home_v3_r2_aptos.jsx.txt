@@ -1,0 +1,15 @@
+        {/* two photo cards and the turning NAMICA badge (nuvior.com/aptos hero), in NDM colours */}
+        <div ref={stat} className="rv apx" aria-hidden="true">
+          <div className="apx-card apx-back"><img src={NUV_IMG + 'marking-2.jpg'} alt="" loading="lazy" /></div>
+          <div className="apx-card apx-front"><img src={NUV_IMG + 'face-glow.jpg'} alt="" loading="lazy" /></div>
+          <div className="apx-globe">
+            <svg className="apx-ring" viewBox="0 0 240 240">
+              <defs><path id="apxRing" d="M120,120 m-103,0 a103,103 0 1,1 206,0 a103,103 0 1,1 -206,0" /></defs>
+              <circle className="apx-track" cx="120" cy="120" r="89" />
+              <text><textPath href="#apxRing" textLength="645" lengthAdjust="spacing">A NEW ERA OF SOLID, LONG-LASTING BIOSTIMULATION · APTOS NAMICA · </textPath></text>
+            </svg>
+            <img src={NAMICA_SPHERE} alt="" className="apx-sphere nm-spin" />
+          </div>
+          <span className="apx-chip apx-c1"><b className="tabular-nums"><CountUp to={96} run={run} suffix="%" /></b>WSRS improvement at 6 months*</span>
+          <span className="apx-chip apx-c2">Training centre for Aptos techniques</span>
+        </div>

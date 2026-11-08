@@ -1,0 +1,134 @@
+[
+ {
+  "slug": "wrinkles-fine-lines",
+  "name": "Wrinkles & Fine Lines",
+  "file": "concern-wrinkles-fine-lines.html",
+  "group": "Face & Aging"
+ },
+ {
+  "slug": "volume-loss",
+  "name": "Volume Loss",
+  "file": "concern-volume-loss.html",
+  "group": "Face & Aging"
+ },
+ {
+  "slug": "sagging-skin-jowls",
+  "name": "Sagging Skin & Jowls",
+  "file": "concern-sagging-skin-jowls.html",
+  "group": "Face & Aging"
+ },
+ {
+  "slug": "double-chin",
+  "name": "Double Chin",
+  "file": "concern-double-chin.html",
+  "group": "Face & Aging"
+ },
+ {
+  "slug": "thin-lips",
+  "name": "Thin Lips",
+  "file": "concern-thin-lips.html",
+  "group": "Face & Aging"
+ },
+ {
+  "slug": "under-eye-hollows-dark-circles",
+  "name": "Under-Eye Hollows & Dark Circles",
+  "file": "concern-under-eye-hollows-dark-circles.html",
+  "group": "Face & Aging"
+ },
+ {
+  "slug": "acne-breakouts",
+  "name": "Acne & Breakouts",
+  "file": "concern-acne-breakouts.html",
+  "group": "Skin"
+ },
+ {
+  "slug": "acne-scars",
+  "name": "Acne Scars",
+  "file": "concern-acne-scars.html",
+  "group": "Skin"
+ },
+ {
+  "slug": "rosacea-redness",
+  "name": "Rosacea & Redness",
+  "file": "concern-rosacea-redness.html",
+  "group": "Skin"
+ },
+ {
+  "slug": "melasma",
+  "name": "Melasma",
+  "file": "concern-melasma.html",
+  "group": "Skin"
+ },
+ {
+  "slug": "hyperpigmentation-sun-spots",
+  "name": "Hyperpigmentation & Sun Spots",
+  "file": "concern-hyperpigmentation-sun-spots.html",
+  "group": "Skin"
+ },
+ {
+  "slug": "uneven-texture-pores",
+  "name": "Uneven Texture & Pores",
+  "file": "concern-uneven-texture-pores.html",
+  "group": "Skin"
+ },
+ {
+  "slug": "moles-skin-lesions",
+  "name": "Moles & Skin Lesions",
+  "file": "concern-moles-skin-lesions.html",
+  "group": "Skin"
+ },
+ {
+  "slug": "stubborn-fat",
+  "name": "Stubborn Fat",
+  "file": "concern-stubborn-fat.html",
+  "group": "Body"
+ },
+ {
+  "slug": "cellulite",
+  "name": "Cellulite",
+  "file": "concern-cellulite.html",
+  "group": "Body"
+ },
+ {
+  "slug": "stretch-marks",
+  "name": "Stretch Marks",
+  "file": "concern-stretch-marks.html",
+  "group": "Body"
+ },
+ {
+  "slug": "loose-skin",
+  "name": "Loose Skin",
+  "file": "concern-loose-skin.html",
+  "group": "Body"
+ },
+ {
+  "slug": "excessive-sweating",
+  "name": "Excessive Sweating",
+  "file": "concern-excessive-sweating.html",
+  "group": "Body"
+ },
+ {
+  "slug": "spider-varicose-veins",
+  "name": "Spider & Varicose Veins",
+  "file": "concern-spider-varicose-veins.html",
+  "group": "Body"
+ },
+ {
+  "slug": "unwanted-hair",
+  "name": "Unwanted Hair",
+  "file": "concern-unwanted-hair.html",
+  "group": "Body"
+ },
+ {
+  "slug": "thinning-hair",
+  "name": "Thinning Hair",
+  "file": "concern-thinning-hair.html",
+  "group": "Hair"
+ },
+ {
+  "slug": "hair-loss",
+  "name": "Hair Loss",
+  "file": "concern-hair-loss.html",
+  "group": "Hair"
+ }
+]

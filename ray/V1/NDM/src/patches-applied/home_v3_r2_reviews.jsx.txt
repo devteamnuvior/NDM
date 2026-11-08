@@ -1,0 +1,158 @@
+/* ---------------------------------------------------------------- testimonials (the inner-page reviews), with awards & recognition cards in between */
+const NDM_UP = 'https://newdermamedlaserclinic.com/wp-content/uploads/2025/09/';
+const PROMO_REVIEWS = [ /* from the TESTIMONIALS block on newdermamedlaserclinic.com; names shortened for privacy */
+  ['Anna H.', 'Laser Skin', '1-5.png', 'I’ve been going to NewDermaMed since 2016 for laser treatments. While my early experiences were mixed, I’m now a happy returning customer thanks to Nadia. Her passion, attention to detail, and great advice make every visit enjoyable. I only trust her with my treatments now, thank you, Nadia, for your continued excellence!'],
+  ['Celina B.', 'Laser Skin', '2-5.png', 'This clinic is amazing! I did a series of laser skin resurfacing treatments and had a wonderful experience. The staff are friendly, professional, and made me feel completely at ease. I loved the Saturday appointments, and after three treatments my skin is glowing, people have even noticed! I’ll definitely be back for more. Highly recommend!'],
+  ['Luiza C.', 'Mole Removal', '3-4.png', 'Dr. Mastouri’s treatment at NewDermaMed was truly exceptional! Her expertise and reassuring demeanor made my mole removal surgery a breeze. I felt in safe hands throughout the entire process, and the results are fantastic. No pain, soreness, or itchiness at all. The clinic is also super clean and it has a nice relaxing atmosphere.'],
+  ['A. M.', 'Laser Hair Removal', '5-2.png', 'I am still in the process of completing my laser hair removal treatment, but have so far had a wonderful experience here. I think it’s rare to give a five-star review to a place that literally burns the hair out of your skin every time you go in. However, I’ve really enjoyed my appointments at NewDermaMed and think they deserve it.'],
+  ['Preeti S.', 'Microneedling', '6-1.png', 'I am a regular customer of NewDermaMed for almost 1 year now. I mostly visit the Uptown clinic, though downtown clinic is equally good. During the free consultation they listen to your concerns and suggest the treatments accordingly. The technicians are well trained and polite.'],
+  ['Ahmad N.', 'Multiple Sessions', '8.png', 'This clinic stands out as an exceptional establishment, offering professional services with state-of-the-art equipment tailored for cosmetic and skincare treatments. My personal experience, having undergone multiple skincare sessions here, has been thoroughly satisfying with remarkable results.'],
+  ['Valeriia C.', 'Microneedling', '9.png', 'Absolutely amazing experience at Newdermamed! The staff was very professional and kind! The receptionist Sarah was very friendly and walked me though the e-forms. Alicia did my treatment with great professionalism!! She was very nice and informative, and made me feel comfortable. My face has never looked better!'],
+];
+const AWARD_YEARS = [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026];
+/* awards & recognition cards, same words as the awards block: three looks so they stand out between the reviews */
+const AWARD_CARDS = [
+  { look: 'ink', k: 'Awards & recognition', big: '8 consecutive years', d: 'Recognized as Toronto’s Top Choice Cosmetic & Laser Clinic, 2019 to 2026.', years: true },
+  { look: 'blue', k: 'Top Choice Award', big: '2026', d: 'Toronto’s Top Choice Cosmetic & Laser Clinic, for the eighth year in a row.', badge: 2026 },
+  { look: 'amber', k: 'Patient care', big: '16+ years', d: 'Of dedication to patient care, innovation and consistent, high-quality treatment.', stars: true },
+];
+const AWARD_LOOK = {
+  ink: 'bg-ndm-ink text-white',
+  blue: 'bg-[linear-gradient(150deg,#0F80C3_0%,#209ED9_55%,#26B1E7_100%)] text-white',
+  amber: 'bg-[#FFF4E0] text-ndm-ink border border-[#FFA617]/30',
+};
+function AwardCard({ a }) {
+  const dark = a.look !== 'amber';
+  return (
+    <li className="w-[min(82vw,400px)] shrink-0">
+      <figure className={`relative m-0 flex h-full flex-col overflow-hidden rounded-[22px] p-6 shadow-[0_24px_50px_-40px_rgba(27,36,43,.45)] ${AWARD_LOOK[a.look]}`}>
+        <div className="flex items-center justify-between gap-4">
+          <span className={`font-inter text-[12px] uppercase tracking-[.16em] ${dark ? 'text-white/70' : 'text-ndm-muted'}`}>{a.k}</span>
+          {a.stars && <Stars />}
+        </div>
+        <p className="mt-4 font-aeonik text-[clamp(34px,3vw,44px)] leading-none tracking-[-0.03em]">{a.big}</p>
+        <p className={`mt-3 max-w-[32ch] font-inter text-[15px] leading-[1.55] ${dark ? 'text-white/80' : 'text-ndm-muted'}`}>{a.d}</p>
+        {a.years && (
+          <ul role="list" className="mt-auto flex gap-1 pt-6" aria-label="Top Choice Award, 2019 to 2026">
+            {AWARD_YEARS.map((y) => <li key={y}><img src={`assets/awards/top-choice-${y}.png`} alt="" loading="lazy" draggable="false" className="size-[clamp(30px,8vw,38px)] object-contain" /></li>)}
+          </ul>
+        )}
+        {a.badge && <img src={`assets/awards/top-choice-${a.badge}.png`} alt={`Top Choice Award ${a.badge}`} loading="lazy" draggable="false" className="pointer-events-none absolute -bottom-3 -right-3 size-[120px] rotate-[-8deg] object-contain opacity-95" />}
+        {a.stars && <p className="mt-auto pt-6 font-inter text-[13px] text-ndm-muted">Uptown and Downtown Toronto</p>}
+      </figure>
+    </li>
+  );
+}
+function PromoReviewCard({ r }) {
+  if (r.look) return <AwardCard a={r} />;
+  const [name, tag, photo, quote] = r;
+  return (
+    <li className="w-[min(82vw,400px)] shrink-0">
+      <figure className="m-0 flex h-full flex-col rounded-[22px] border border-ndm-ink/[.06] bg-white p-6 shadow-[0_24px_50px_-40px_rgba(27,36,43,.35)]">
+        <Stars />
+        <blockquote className="mt-4 font-inter text-[15.5px] leading-[1.6] text-ndm-ink">“{quote}”</blockquote>
+        <figcaption className="mt-auto flex items-center gap-3 pt-6">
+          <img src={NDM_UP + photo} alt="" loading="lazy" className="size-11 shrink-0 rounded-full bg-ndm-mist object-cover" />
+          <span>
+            <span className="block font-inter text-[14.5px] font-medium text-ndm-ink">{name}</span>
+            <span className="block font-inter text-[13px] text-ndm-muted">{tag}</span>
+          </span>
+        </figcaption>
+      </figure>
+    </li>
+  );
+}
+const GoogleG = () => (
+  <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>
+);
+/* five gold stars filled to a fractional score (4.5 shows four and a half) */
+function GoogleStars({ value }) {
+  return (
+    <span className="flex gap-1" role="img" aria-label={`Rated ${value} out of 5 on Google`}>
+      {[0, 1, 2, 3, 4].map((i) => (
+        <span key={i} className="relative inline-block size-[18px]">
+          <Star width="18" height="18" className="absolute inset-0 text-ndm-ink/15" />
+          <span className="absolute inset-0 overflow-hidden" style={{ width: `${clamp01(value - i) * 100}%` }}><Star width="18" height="18" className="text-[#F2B01E]" /></span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/* one testimonials row: drifts on its own (rAF), never pauses on hover, and can be grabbed and dragged either way */
+function ReviewRow({ items, dir = 1, dur = 62, hidden }) {
+  const wrap = useRef(null), track = useRef(null);
+  useEffect(() => {
+    const w = wrap.current, el = track.current; if (!w || !el) return;
+    let x = dir > 0 ? 0 : el.scrollWidth / 4, last = 0, raf = 0, half = 0, drag = null, on = true;
+    const measure = () => { half = el.scrollWidth / 2; };
+    measure();
+    window.addEventListener('resize', measure);
+    const io = new IntersectionObserver(([e]) => { on = e.isIntersecting; });
+    io.observe(w);
+    const tick = (t) => {
+      const dt = last ? Math.min(64, t - last) : 0; last = t;
+      if (on && !drag && !REDUCED && half) x += dir * (half / (dur * 1000)) * dt;
+      if (half) x = ((x % half) + half) % half;
+      el.style.transform = `translate3d(${(-x).toFixed(2)}px,0,0)`;
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    const down = (e) => { if (e.button !== 0) return; drag = { x0: e.clientX, s: x, moved: false }; };
+    const move = (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x0;
+      if (!drag.moved && Math.abs(dx) > 5) { drag.moved = true; w.classList.add('is-dragging'); }
+      if (drag.moved) x = drag.s - dx;
+    };
+    const up = () => {
+      if (!drag) return;
+      if (drag.moved) { const stop = (ev) => { ev.preventDefault(); ev.stopPropagation(); }; w.addEventListener('click', stop, { capture: true, once: true }); setTimeout(() => w.removeEventListener('click', stop, true), 60); }
+      drag = null; w.classList.remove('is-dragging');
+    };
+    w.addEventListener('pointerdown', down);
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+    return () => { cancelAnimationFrame(raf); io.disconnect(); window.removeEventListener('resize', measure); w.removeEventListener('pointerdown', down); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
+  }, []);
+  return (
+    <div ref={wrap} className="promo-rev-row overflow-hidden" onDragStart={(e) => e.preventDefault()}>
+      <ul ref={track} role="list" aria-hidden={hidden} className="flex w-max items-stretch gap-4 will-change-transform">
+        {[...items, ...items].map((r, i) => <PromoReviewCard key={i} r={r} />)}
+      </ul>
+    </div>
+  );
+}
+
+function Saying() {
+  const ref = useRef(null);
+  useReveal(ref);
+  const [A1, A2, A3] = AWARD_CARDS, R = PROMO_REVIEWS;
+  const rows = [[R[0], A1, R[1], R[2], A3], [R[3], R[4], A2, R[5], R[6]]];
+  return (
+    <section ref={ref} aria-labelledby="testimonials" className="relative z-10 overflow-hidden bg-ndm-paper py-[clamp(72px,8vw,128px)]">
+      <div className="grid gap-6 px-[var(--gx)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
+        <div>
+          <Eyebrow className="rv">Testimonials</Eyebrow>
+          <TwoTone id="testimonials" className="rv mt-5" lead={<>What our patients say<br className="hidden sm:block" /></>} strong="about their experience" style={{ transitionDelay: '.06s' }} />
+        </div>
+        <div className="rv lg:justify-self-end" style={{ transitionDelay: '.1s' }}>
+          <p className="font-inter text-[12px] uppercase tracking-[.16em] text-ndm-muted">Recognised</p>
+          <div className="mt-2 flex items-center gap-4">
+            <span className="font-aeonik text-[clamp(56px,5vw,76px)] leading-none tracking-[-0.04em] text-ndm-ink">4.5</span>
+            <span>
+              <GoogleStars value={4.5} />
+              <span className="mt-1.5 flex items-center gap-2 font-inter text-[14px] text-ndm-muted"><GoogleG />Google Reviews</span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className="promo-rev-rows mt-10 grid gap-4 md:mt-14">
+        {rows.map((row, k) => <ReviewRow key={k} items={row} dir={k ? -1 : 1} dur={k ? 70 : 62} hidden={k === 1} />)}
+      </div>
+      <p className="mt-6 px-[var(--gx)] font-inter text-[12px] text-ndm-muted/70">Patient reviews shared from Google · names shortened for privacy · individual results may vary.</p>
+    </section>
+  );
+}
+
