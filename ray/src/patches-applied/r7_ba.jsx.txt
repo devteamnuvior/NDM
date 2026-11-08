@@ -1,0 +1,51 @@
+/* before & after (website v3 "Real results"): heading row with the button to the full gallery, then a row of compare cards
+   (four in view on wide screens) with arrows on both sides of the row */
+function BeforeAfter() {
+  const ref = useRef(null), rail = useRef(null);
+  useReveal(ref);
+  const [edge, setEdge] = useState([true, false]);
+  const cases = BA_MODELS.slice(0, 7);
+  const sync = () => {
+    const r = rail.current; if (!r) return;
+    setEdge([r.scrollLeft < 8, r.scrollLeft > r.scrollWidth - r.clientWidth - 8]);
+  };
+  useEffect(() => { sync(); }, []);
+  const step = (d) => {
+    const r = rail.current, k = r.querySelector('li');
+    r.scrollBy({ left: d * (k ? k.offsetWidth + 16 : r.clientWidth * 0.8), behavior: REDUCED ? 'auto' : 'smooth' });
+  };
+  return (
+    <section ref={ref} aria-labelledby="results" className="relative z-10 bg-ndm-paper py-[clamp(80px,9vw,140px)]">
+      <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6 px-[var(--gx)]">
+        <div>
+          <Eyebrow className="rv">Before &amp; after</Eyebrow>
+          <TwoTone id="results" className="rv mt-4" lead={<>Real results,<br /></>} strong="case by case" style={{ transitionDelay: '.05s' }} />
+          <p className="rv mt-4 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>Treatment cases photographed before and after. Drag any photo to compare.</p>
+        </div>
+        <div className="rv" style={{ transitionDelay: '.12s' }}><Btn href={BA_ALL} v="line">See all before &amp; after</Btn></div>
+      </div>
+      <div className="side-rail relative mt-[clamp(32px,4vw,52px)]">
+        <ul ref={rail} onScroll={sync} role="list" className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-[var(--gx)] pb-2" style={{ scrollPaddingInline: 'var(--gx)' }}>
+          {cases.map((c, i) => (
+            <li key={c.id} className="ba-slide shrink-0 snap-start">
+              <figure className="m-0">
+                <BaCompare c={c} i={i} nudge={i < 2} />
+                <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+                  <span className="font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">{`Model ${c.id}`}</span>
+                  <span className="font-inter text-[13px] text-ndm-muted">{c.treat}</span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+          <li aria-hidden="true" className="w-px shrink-0" />
+        </ul>
+        <button type="button" onClick={() => step(-1)} disabled={edge[0]} aria-label="Previous cases" className="side-arrow is-l"><IconArrow className="rotate-180" /></button>
+        <button type="button" onClick={() => step(1)} disabled={edge[1]} aria-label="Next cases" className="side-arrow is-r"><IconArrow /></button>
+      </div>
+      <p className="mt-6 flex items-start gap-2.5 px-[var(--gx)] font-inter text-[13px] leading-[1.5] text-ndm-muted">
+        <BaIconInfo className="mt-0.5 shrink-0" />Photos show individual cases and are shared for illustration only. Individual results may vary.
+      </p>
+    </section>
+  );
+}
+

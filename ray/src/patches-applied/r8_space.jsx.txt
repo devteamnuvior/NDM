@@ -1,0 +1,55 @@
+/* ---------------------------------------------------------------- inside our clinics (website v3 clinic frame): a large photo slider whose frame
+   opens out to both sides as it scrolls into view; the clinic photos change on their own, each with a slow pan and zoom */
+const CLINIC_SLIDES = [
+  { k: 'u1', w: 1400, where: 'Uptown, Yonge & Sheppard', t: 'A state-of-the-art clinic, near Sheppard-Yonge Station', alt: 'The NewDermaMed Uptown entrance and reception' },
+  { k: 'u4', w: 1400, where: 'Uptown reception', t: 'Calm spaces built around comfort and privacy', alt: 'Reception at NewDermaMed Uptown' },
+  { k: 'room', w: 1440, where: 'Private treatment suites', t: 'VISIA® skin analysis and private treatment rooms', alt: 'A private treatment room at NewDermaMed' },
+  { k: 'd1', w: 1440, where: 'Downtown, Bay & College', t: 'Bright treatment rooms, near College Station', alt: 'A treatment room at NewDermaMed Downtown' },
+  { k: 'd5', w: 1440, where: 'Downtown, Bay & College', t: 'Every plan built by our medical team around you', alt: 'NewDermaMed Downtown interior' },
+];
+const clinicImg = (s) => ({ src: `assets/home/v3/${s.k}-${s.w}.webp`, srcSet: `assets/home/v3/${s.k}-720.webp 720w, assets/home/v3/${s.k}-${s.w}.webp ${s.w}w` });
+function Space() {
+  const ref = useRef(null), frame = useRef(null);
+  useReveal(ref);
+  const n = CLINIC_SLIDES.length;
+  const [i, setI] = useState(0);
+  const [seen, setSeen] = useState(false);
+  const go = (d) => setI((x) => (x + d + n) % n);
+  useEffect(() => {
+    const io = new IntersectionObserver(([e]) => setSeen(e.isIntersecting), { threshold: 0.25 });
+    io.observe(frame.current);
+    return () => io.disconnect();
+  }, []);
+  useEffect(() => {
+    if (!seen || REDUCED) return;
+    const t = setTimeout(() => go(1), 6000);
+    return () => clearTimeout(t);
+  }, [i, seen]);
+  /* the frame starts inset on both sides and opens to the full width as it comes into view */
+  useOnScroll(() => {
+    const el = frame.current; if (!el || REDUCED) return;
+    const h = window.innerHeight, r = el.getBoundingClientRect();
+    el.style.setProperty('--p', clamp01((h - r.top) / (h * 0.85)).toFixed(3));
+  }, []);
+  const s = CLINIC_SLIDES[i];
+  return (
+    <section ref={ref} aria-labelledby="space" className="relative z-10 bg-ndm-paper py-[clamp(24px,3vw,44px)]">
+      <div ref={frame} data-nav="dark" className="cl-frame" role="region" aria-roledescription="carousel" aria-label="Inside our clinics, photos">
+        {CLINIC_SLIDES.map((x, k) => {
+          const im = clinicImg(x);
+          return <div key={x.k} aria-hidden={k !== i} className={`cl-slide ${k === i ? 'is-on' : ''}`}><img src={im.src} srcSet={im.srcSet} sizes="100vw" alt={x.alt} loading={k ? 'lazy' : undefined} decoding="async" className={`cl-img cl-kb${k % 4}`} /></div>;
+        })}
+        <div className="absolute inset-x-0 bottom-0 z-[2] px-[var(--gx)] pb-[clamp(28px,4.5vw,60px)]">
+          <div>
+            <Eyebrow dark className="rv">Inside our clinics</Eyebrow>
+            <TwoTone dark id="space" className="rv mt-4" size="text-[clamp(34px,4.2vw,62px)]" lead={<>Step inside<br /></>} strong="NewDermaMed" style={{ transitionDelay: '.05s' }} />
+            <p key={i} aria-live="polite" className="space-in mt-4 inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-full border border-white/20 bg-white/10 px-4 py-2 font-inter text-[14px] text-white backdrop-blur-[12px]">
+              <b className="font-semibold">{s.where}</b><span aria-hidden="true" className="text-white/50">·</span><span className="text-white/85">{s.t}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+

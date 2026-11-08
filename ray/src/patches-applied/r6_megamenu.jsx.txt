@@ -1,0 +1,63 @@
+function MegaMenu({ open, onLink }) {
+  const [act, setAct] = useState(HERE_CAT || 'aptos');
+  const cat = PROCEDURES.find((c) => c.id === act);
+  /* the original look: two columns, arrows beside the items, no lines; every category (Aptos too) shares this layout */
+  return (
+    <div className="panel w-full rounded-[28px] border border-black/5 bg-white text-ndm-ink shadow-[0_50px_90px_-40px_rgba(11,15,19,.45)]" data-open={open}>
+      <div className="grid gap-4 p-4 2xl:p-5 grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]">
+      <ul className="rounded-[16px] bg-ndm-mist/70 p-2" role="list">
+        {PROCEDURES.map((c) => {
+          const on = c.id === act;
+          return (
+            <li key={c.id}>
+              <button
+                onMouseEnter={() => setAct(c.id)} onFocus={() => setAct(c.id)} onClick={() => setAct(c.id)}
+                aria-pressed={on}
+                className={`w-full flex items-center justify-between rounded-[12px] px-4 py-3 text-left font-mont text-[14px] transition-colors ${on ? 'bg-white text-ndm-blue shadow-sm' : 'text-ndm-ink hover:bg-white/70'}`}
+              >
+                <span className="flex items-center gap-2">{c.label}{c.id === HERE_CAT && <i aria-hidden="true" className="size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(32,158,217,.18)]" />}</span>
+                <IconArrow className={`transition-transform ${on ? 'translate-x-0 opacity-100' : '-translate-x-1 opacity-0'}`} />
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <div className="h-[516px] px-5 py-4 2xl:h-[456px]">
+        <div className="flex items-baseline justify-between gap-4 border-b border-ndm-line pb-4">
+          <div>
+            <p className="font-aeonik text-[26px] leading-tight">{cat.label}</p>
+            <p className="mt-1 text-[13.5px] text-ndm-muted max-w-[46ch]">{cat.blurb}</p>
+          </div>
+        </div>
+        {(
+        <div className={`mt-4 grid gap-6 ${cat.groups.length > 1 ? 'grid-cols-[1.9fr_1fr]' : ''}`}>
+          {cat.groups.map((g) => (
+            <div key={g.title || 'g'}>
+              {g.title && <p className="font-mont text-[11px] tracking-[.14em] uppercase text-ndm-muted mb-2">{g.title}</p>}
+              <ul className={g.items.length > 7 ? 'columns-2 gap-6' : ''} role="list">
+                {g.items.map((it) => (
+                  <li key={it} className="break-inside-avoid">
+                    <a href={slug(it)} {...here(slug(it))} onClick={onLink} className="menu-item group font-mont">
+                      <span className="min-w-0">{it}</span><IconArrow size={11} className="menu-arrow" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        )}
+      </div>
+      <a href="#/book" onClick={onLink} className="group relative overflow-hidden rounded-[16px] min-h-[380px] text-white">
+        <img src="assets/clinic/clinic-2.jpg" alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        <span className="absolute inset-0 bg-gradient-to-t from-[#0B0F13]/85 via-[#0B0F13]/25 to-transparent" />
+        <span className="absolute inset-x-0 bottom-0 p-5">
+          <span className="block font-mont text-[11px] tracking-[.14em] uppercase text-white/75">Not sure where to start?</span>
+          <span className="mt-2 block font-aeonik text-[22px] leading-[1.2]">Free consultation &amp; VISIA® skin analysis</span>
+          <Btn as="span" v="book" onDark className="btn-g mt-4">Book Free Consultation</Btn>
+        </span>
+      </a>
+      </div>
+    </div>
+  );
+}
