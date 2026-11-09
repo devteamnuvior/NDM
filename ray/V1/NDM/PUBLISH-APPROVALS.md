@@ -17,6 +17,10 @@ Approver: Raymond Valadkhani (raymond@nuvior.com).
 
 **Booking deposit — confirmed final:** the booking form takes no deposit anywhere.
 
+## Confirmed, 2026-11-09 (Raymond, in session)
+
+**Clinic hours:** Uptown is open on Saturday too. Both clinics, Uptown and Downtown, are open Monday to Friday 9am to 7pm and Saturday 10am to 5pm. Resolves HANDOFF item 23; the Visit us block on treatment and concern pages, the clinic data for Google (JSON-LD) and llms.txt now match the rest of the site.
+
 ## Still outstanding (not yet signed off)
 - Concern-page copy — new wording (not from the live site); needs Raymond's review.
 - Any testimonial / reviewer names shown on the site.

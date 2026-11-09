@@ -202,7 +202,8 @@ function TxCases({ p }) {
 }
 
 /* visit us: the two clinics, their photos, addresses and hours */
-const TX_HOURS = { Uptown: 'Monday to Friday, 9am to 7pm', Downtown: 'Monday to Friday 9am to 7pm, Saturday 10am to 5pm' };
+/* both clinics keep the same hours (Raymond confirmed Uptown's Saturday, 9 Nov 2026) */
+const TX_HOURS = { Uptown: 'Monday to Friday 9am to 7pm, Saturday 10am to 5pm', Downtown: 'Monday to Friday 9am to 7pm, Saturday 10am to 5pm' };
 function TxVisit({ p }) {
   const ref = useRef(null);
   useReveal(ref);

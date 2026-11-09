@@ -24,7 +24,8 @@ UPTOWN = {'@type': 'MedicalClinic', '@id': SITE + '#uptown', 'name': 'NewDermaMe
           'image': SITE + 'assets/clinic/clinic-4.jpg', 'hasMap': 'https://maps.app.goo.gl/Gm8Wg4B1Q3yHGnkE7',
           'address': {'@type': 'PostalAddress', 'streetAddress': '4763 Yonge Street', 'addressLocality': 'Toronto', 'addressRegion': 'ON', 'postalCode': 'M2N 5M5', 'addressCountry': 'CA'},
           'geo': {'@type': 'GeoCoordinates', 'latitude': 43.7614, 'longitude': -79.4111},
-          'openingHoursSpecification': [{'@type': 'OpeningHoursSpecification', 'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'opens': '09:00', 'closes': '19:00'}]}
+          'openingHoursSpecification': [{'@type': 'OpeningHoursSpecification', 'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'opens': '09:00', 'closes': '19:00'},
+                                        {'@type': 'OpeningHoursSpecification', 'dayOfWeek': 'Saturday', 'opens': '10:00', 'closes': '17:00'}]}   # Saturday confirmed by Raymond, 9 Nov 2026
 DOWNTOWN = {'@type': 'MedicalClinic', '@id': SITE + '#downtown', 'name': 'NewDermaMed Downtown Clinic', 'parentOrganization': {'@id': ORG_ID}, 'url': SITE + 'about.html#downtown', 'telephone': '+1-416-671-9766', 'email': 'info@newdermamed.com',
             'image': SITE + 'assets/clinic/clinic-1.jpg', 'hasMap': 'https://maps.app.goo.gl/McaiszUJaKqPem5R7',
             'address': {'@type': 'PostalAddress', 'streetAddress': '790 Bay Street, Suite 900', 'addressLocality': 'Toronto', 'addressRegion': 'ON', 'postalCode': 'M5G 1N8', 'addressCountry': 'CA'},
@@ -295,7 +296,7 @@ def group(f):
 
 
 POSTS = set(json.load(open(ROOT / 'src/live/posts-built.json', encoding='utf-8')).values()) if (ROOT / 'src/live/posts-built.json').exists() else set()
-lines = ['# NewDermaMed', '', '> Medical aesthetics and laser clinic in Toronto, Canada, with two locations: Uptown (4763 Yonge Street, North York, M2N 5M5, 416-224-8800, Monday to Friday 9am to 7pm) and Downtown (790 Bay Street, Suite 900, Toronto, M5G 1N8, 416-671-9766, Monday to Friday 9am to 7pm, Saturday 10am to 5pm). Email info@newdermamed.com. Every treatment plan starts with a free consultation and a VISIA® skin analysis with the licensed medical team. Results vary from person to person.', '',
+lines = ['# NewDermaMed', '', '> Medical aesthetics and laser clinic in Toronto, Canada, with two locations: Uptown (4763 Yonge Street, North York, M2N 5M5, 416-224-8800, Monday to Friday 9am to 7pm, Saturday 10am to 5pm) and Downtown (790 Bay Street, Suite 900, Toronto, M5G 1N8, 416-671-9766, Monday to Friday 9am to 7pm, Saturday 10am to 5pm). Email info@newdermamed.com. Every treatment plan starts with a free consultation and a VISIA® skin analysis with the licensed medical team. Results vary from person to person.', '',
          'Treatments: injectables (Botox®, Juvéderm®, dermal fillers, lip augmentation, tear trough correction, Belkyra®, Soft Lift™, mesotherapy and skin boosters), bio-stimulators (Aptos Thread Lift, Sculptra®, Radiesse®), skin treatments (microneedling, chemical peels, Dermamelan®, Acnelan®, exosome therapy, photo-rejuvenation, VISIA® skin analysis), laser (hair removal, skin resurfacing, micro laser peel, skin tightening, vein removal), body (CoolSculpting®, TightSculpting®, cellulite, stretch marks, hyperhidrosis), veins (sclerotherapy, EVLT, RFA, VenaSeal™) and hair (PRP, exosomes, laser hair rejuvenation). Medical-grade skincare from the clinic shop.', '']
 for g in ('Home', 'Clinic', 'Concerns', 'Treatments', 'Skincare shop', 'Journal'):
     rows = [(f, t, d) for f, t, d in index if group(f) == g and f not in SKIP_SITEMAP]
