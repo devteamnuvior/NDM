@@ -299,12 +299,16 @@ const JR_CSS = `
 function ProcAnalysis() {
   const band = useRef(null);
   const [on, setOn] = useState(false);
-  useEffect(() => {
+  const done = useRef(false);
+  /* reveal via the site's scroll hook (fires reliably, incl. the preview pane) rather than an
+     IntersectionObserver, which does not update for a backgrounded page and left the band blank */
+  const check = () => {
+    if (done.current) return;
     const el = band.current; if (!el) return;
-    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setOn(true); io.disconnect(); } }, { threshold: 0.3 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+    if (el.getBoundingClientRect().top < (window.innerHeight || 0) * 0.82) { done.current = true; setOn(true); }
+  };
+  useOnScroll(check, []);
+  useEffect(() => { check(); }, []);
   const t = (k) => ({ transitionDelay: `${0.85 + k * 0.12}s` });
   return (
     <section aria-labelledby="analysis-title" className="relative z-10 py-[clamp(16px,2.4vw,36px)]">

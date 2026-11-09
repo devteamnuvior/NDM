@@ -13,6 +13,10 @@ const LIVE_CSS = `
 .live-prose li::before{content:"";position:absolute;left:0;top:3px;width:18px;height:18px;border-radius:999px;background:rgba(32,158,217,.12) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='m3 7.3 2.6 2.6L11 4.5' fill='none' stroke='%230F80C3' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/10px no-repeat}
 .live-prose ol{counter-reset:li}
 .live-prose ol li::before{counter-increment:li;content:counter(li);background:rgba(32,158,217,.12);color:#0F80C3;font:600 11px/18px Manrope,sans-serif;text-align:center}
+.live-prose.on-dark>p,.live-prose.on-dark li{color:rgba(255,255,255,.82)}
+.live-prose.on-dark h2,.live-prose.on-dark h3,.live-prose.on-dark h4{color:#fff}
+.live-prose.on-dark li::before{background:rgba(255,255,255,.1) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='m3 7.3 2.6 2.6L11 4.5' fill='none' stroke='%2326B1E7' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/10px no-repeat}
+.live-prose.on-dark ol li::before{color:#26B1E7;background:rgba(255,255,255,.1)}
 .live-prose a{color:#0F80C3;font-weight:600;text-decoration:underline;text-underline-offset:4px}
 .live-prose strong,.live-prose b{font-weight:600;color:#1B242B}
 .live-prose table{width:100%;border-collapse:collapse;font-size:14.5px}
@@ -149,40 +153,47 @@ function LiveTabs({ p }) {
     const n = (i + k + p.tabs.length) % p.tabs.length;
     setAct(n); if (tabs.current[n]) tabs.current[n].focus();
   };
+  const panel = (
+    <>
+      <div role="tablist" aria-label="About the treatment" className="no-scrollbar flex gap-1 overflow-x-auto rounded-full bg-white/10 p-1 ring-1 ring-white/10">
+        {p.tabs.map((x, i) => (
+          <button key={x.label} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" id={`ov-t-${i}`} aria-controls="ov-panel" aria-selected={i === act} tabIndex={i === act ? 0 : -1}
+            onClick={() => setAct(i)} onKeyDown={(e) => key(e, i)}
+            className={`shrink-0 rounded-full px-4 py-2.5 font-inter text-[14px] font-medium transition-colors sm:flex-1 sm:px-5 ${i === act ? 'bg-white text-ndm-deep shadow-[0_6px_16px_-10px_rgba(0,0,0,.55)]' : 'text-white/70 hover:text-white'}`}>
+            {x.label}
+          </button>
+        ))}
+      </div>
+      <div id="ov-panel" role="tabpanel" aria-labelledby={`ov-t-${act}`} key={act} className="ov-in grid gap-7 pt-[clamp(26px,3vw,44px)] md:grid-cols-[minmax(0,1fr)_minmax(0,320px)] md:items-start md:gap-[clamp(28px,4vw,56px)]">
+        <div>
+          <h3 className="font-aeonik text-[clamp(26px,2.4vw,34px)] font-normal leading-[1.1] tracking-[-0.025em] text-white">{t.label}</h3>
+          <Html html={t.html} className="on-dark mt-4 max-w-[64ch]" />
+          <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
+            {t.label === 'Pricing' && <a href={p.prices ? '#prices' : 'pricing.html#prices'} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-sky">See the price list<IconArrow className="transition-transform group-hover:translate-x-1" /></a>}
+          </div>
+        </div>
+        <aside className="flex flex-col rounded-[20px] bg-white/[.055] p-5 ring-1 ring-white/10 backdrop-blur-sm">
+          <span className="font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-white/55">In short</span>
+          <p className="mt-2 font-inter text-[14px] leading-[1.55] text-white/80">{liveSummary(p)}</p>
+          <span className="mt-5 font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-white/55">At a glance</span>
+          <dl className="mt-4 grid gap-3">
+            {p.facts.map(([k, v]) => <div key={k} className="grid gap-0.5 border-t border-white/[.14] pt-3 font-inter"><dt className="text-[12.5px] text-white/55">{k}</dt><dd className="text-[16px] font-medium text-white">{v}</dd></div>)}
+          </dl>
+          <div className="mt-5 grid gap-2">
+            {CALLS.map(([n, num]) => <a key={n} href={tel(num)} className="btn btn-buy h-11 gap-2 px-3 text-[13.5px]"><IconPhone className="shrink-0" /><span className="truncate">{num} {n}</span></a>)}
+          </div>
+        </aside>
+      </div>
+    </>
+  );
+  /* a dark card floating on the light section, so it keeps a clear break from the dark video band above */
   return (
     <section ref={ref} id="overview" aria-labelledby="overview-title" className="live-tabs relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <TxHead p={p} id="overview" tag="Your treatment" hid="overview-title" lead="Everything about" strong={p.short || p.h1} />
-      <div className={`${TX_WRAP} rv mt-[clamp(32px,4vw,52px)] overflow-hidden rounded-[28px] bg-white ring-1 ring-ndm-ink/[.06] shadow-[0_30px_60px_-46px_rgba(27,36,43,.45)]`} style={{ transitionDelay: '.08s' }}>
-        <div role="tablist" aria-label="About the treatment" className="no-scrollbar mx-[clamp(14px,2.2vw,28px)] mt-[clamp(14px,2.2vw,28px)] flex gap-1 overflow-x-auto rounded-full bg-ndm-mist p-1">
-          {p.tabs.map((x, i) => (
-            <button key={x.label} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" id={`ov-t-${i}`} aria-controls="ov-panel" aria-selected={i === act} tabIndex={i === act ? 0 : -1}
-              onClick={() => setAct(i)} onKeyDown={(e) => key(e, i)}
-              className={`shrink-0 rounded-full px-4 py-2.5 font-inter text-[14px] font-medium transition-colors sm:flex-1 sm:px-5 ${i === act ? 'bg-white text-ndm-deep shadow-[0_6px_16px_-10px_rgba(27,36,43,.45)]' : 'text-ndm-muted hover:text-ndm-ink'}`}>
-              {x.label}
-            </button>
-          ))}
-        </div>
-        <div id="ov-panel" role="tabpanel" aria-labelledby={`ov-t-${act}`} key={act} className="ov-in grid gap-7 p-[clamp(20px,2.8vw,40px)] md:grid-cols-[minmax(0,1fr)_minmax(0,300px)] md:items-start md:gap-[clamp(28px,4vw,56px)]">
-          <div>
-            <h3 className="font-aeonik text-[clamp(26px,2.4vw,34px)] font-normal leading-[1.1] tracking-[-0.025em] text-ndm-ink">{t.label}</h3>
-            <Html html={t.html} className="mt-4 max-w-[64ch]" />
-            <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
-              <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
-              {t.label === 'Pricing' && <a href={p.prices ? '#prices' : 'pricing.html#prices'} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-deep">See the price list<IconArrow className="transition-transform group-hover:translate-x-1" /></a>}
-            </div>
-          </div>
-          <aside className="ov-side flex flex-col rounded-[20px] p-5 ring-1 ring-ndm-ink/[.06]">
-            <span className="font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-muted">In short</span>
-            <p className="mt-2 font-inter text-[14px] leading-[1.55] text-ndm-ink/85">{liveSummary(p)}</p>
-            <span className="mt-5 font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-muted">At a glance</span>
-            <dl className="mt-4 grid gap-3">
-              {p.facts.map(([k, v]) => <div key={k} className="grid gap-0.5 border-t border-ndm-line pt-3 font-inter"><dt className="text-[12.5px] text-ndm-muted">{k}</dt><dd className="text-[16px] font-medium text-ndm-ink">{v}</dd></div>)}
-            </dl>
-            <div className="mt-5 grid gap-2">
-              {CALLS.map(([n, num]) => <a key={n} href={tel(num)} className="btn btn-buy h-11 gap-2 px-3 text-[13.5px]"><IconPhone className="shrink-0" /><span className="truncate">{num} {n}</span></a>)}
-            </div>
-          </aside>
-        </div>
+      <div className={`${TX_WRAP} rv relative mt-[clamp(32px,4vw,52px)] overflow-hidden rounded-[28px] bg-ndm-night p-[clamp(18px,2.6vw,34px)] text-white shadow-[0_44px_90px_-54px_rgba(11,15,19,.85)]`} style={{ transitionDelay: '.08s' }}>
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(120% 85% at 82% -10%,rgba(32,158,217,.22),transparent 58%)' }} />
+        <div className="relative">{panel}</div>
       </div>
     </section>
   );

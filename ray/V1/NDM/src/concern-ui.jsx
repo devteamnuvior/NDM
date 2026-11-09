@@ -13,14 +13,31 @@ const CN_CSS = `
 .cn-card:hover{transform:translateY(-3px);box-shadow:0 30px 50px -34px rgba(15,60,95,.4)}
 .cn-bio{isolation:isolate;background:linear-gradient(135deg,#1B1740 0%,#352862 55%,#4A3A8C 100%)}
 .cn-bio::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60% 70% at 100% 0%,rgba(201,194,244,.28),transparent 60%),radial-gradient(50% 60% at 0% 100%,rgba(38,177,231,.18),transparent 60%)}
-.cn-table{width:100%;border-collapse:separate;border-spacing:0}
-.cn-table th,.cn-table td{padding:14px 14px;vertical-align:top;text-align:left;border-bottom:1px solid rgba(27,36,43,.08);font-size:14px;line-height:1.5}
-.cn-table th{font:600 11.5px/1.3 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#5A646C;background:#F2F2EF;position:sticky;top:0}
-.cn-table th:first-child,.cn-table td:first-child{position:sticky;left:0;background:#fff;z-index:1;min-width:180px}
-.cn-table th:first-child{background:#F2F2EF}
+.cn-table{width:100%;border-collapse:separate;border-spacing:0;min-width:720px}
+.cn-table th,.cn-table td{padding:13px 16px;vertical-align:top;text-align:left;border-bottom:1px solid rgba(27,36,43,.07);font-size:13.5px;line-height:1.5;color:rgba(27,36,43,.82)}
+.cn-table th{font:600 11px/1.3 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#5A646C;background:#F6F6F3;position:sticky;top:0;z-index:2;white-space:nowrap}
+.cn-table th .cn-th{display:inline-flex;align-items:center;gap:6px}
+.cn-table th .cn-th svg{color:#0F80C3}
+.cn-table th:first-child,.cn-table td:first-child{position:sticky;left:0;background:#fff;z-index:1;min-width:214px}
+.cn-table th:first-child{background:#F6F6F3;z-index:3}
 .cn-table tr:last-child td{border-bottom:0}
-.cn-table td:first-child{font-family:Fraunces,Georgia,serif;font-size:17px;line-height:1.2;letter-spacing:-.01em;color:#1B242B}
+.cn-table tbody tr{transition:background-color .15s ease}
+.cn-table tbody tr:hover td{background:rgba(32,158,217,.05)}
+.cn-table tbody tr:hover td:first-child{background:#fbfcfd}
+.cn-name{display:flex;align-items:center;gap:11px;color:#1B242B}
+.cn-name:hover{color:#0F80C3}
+.cn-name .cn-nm{font-family:Fraunces,Georgia,serif;font-size:16.5px;line-height:1.18;letter-spacing:-.01em}
+.cn-thumb{width:42px;height:42px;border-radius:11px;object-fit:cover;flex:none;box-shadow:inset 0 0 0 1px rgba(27,36,43,.06)}
+.cn-sub{display:block;margin-top:3px;font:400 11.5px/1.35 Inter,sans-serif;letter-spacing:0;text-transform:none;color:#5A646C}
+.cn-from{display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap;border-radius:999px;background:rgba(32,158,217,.1);color:#0F80C3;font:600 13.5px/1 Inter,sans-serif;padding:7px 12px;transition:background-color .15s ease}
+.cn-from:hover{background:rgba(32,158,217,.16)}
+.cn-from .cn-fl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.72}
 .cn-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.cn-hint{align-items:center;gap:6px;justify-content:center;margin-top:10px;font:500 12px/1 Inter,sans-serif;color:#5A646C}
+.cn-m summary{list-style:none}
+.cn-m summary::-webkit-details-marker{display:none}
+.cn-m[open] .cn-chev{transform:rotate(180deg)}
+.cn-m[open]{box-shadow:0 22px 44px -36px rgba(27,36,43,.45)}
 .cn-rx{background:#FFF6EA;border:1px solid rgba(255,166,23,.3)}
 `;
 
@@ -210,41 +227,81 @@ function CnOptions({ p }) {
   );
 }
 
-/* ---------------------------------------------------------------- side by side: how each option works, the visit, the course, downtime, when changes may appear, the starting price */
-const CN_COLS = [['how', 'How it works'], ['visit', 'Typical visit'], ['course', 'Typical course'], ['down', 'Downtime'], ['res', 'Changes may appear'], ['from', 'From']];
+/* ---------------------------------------------------------------- side by side: one compact, scannable table so every option can be compared at a glance (icon headers, thumbnails, price pills) */
+const CN_COLS = [['visit', 'Typical visit', 'clock'], ['course', 'Typical course', 'cal'], ['down', 'Downtime', 'leaf'], ['res', 'Changes may appear', 'star'], ['from', 'From', 'tag']];
 function CnCompare({ p }) {
   const ref = useRef(null);
   useReveal(ref);
   const rows = p.compare;
   if (!rows.length) return null;
+  const icon = { list: NAV_ICONS.list, clock: TX_ICONS.clock, cal: TX_ICONS.cal, leaf: TX_ICONS.leaf, star: NAV_ICONS.star, tag: NAV_ICONS.tag };
   return (
     <section ref={ref} id="compare" aria-labelledby="compare-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] pb-[clamp(64px,7vw,104px)]">
       <TxHead p={p} id="compare" tag="Side by side" hid="compare-title" lead="Compare" strong="the options" text="Typical figures from each treatment page. Your plan, timing and final price are confirmed at your free consultation. Individual results may vary." />
-      <div className={`${TX_WRAP} rv mt-[clamp(28px,3.4vw,44px)] hidden overflow-hidden rounded-[24px] bg-white ring-1 ring-ndm-ink/[.06] md:block`}>
+      <div className={`${TX_WRAP} rv mt-[clamp(28px,3.4vw,44px)] hidden overflow-hidden rounded-[24px] bg-white ring-1 ring-ndm-ink/[.06] shadow-[0_30px_60px_-50px_rgba(27,36,43,.4)] md:block`}>
         <div className="cn-scroll">
           <table className="cn-table">
-            <thead><tr><th scope="col">Treatment</th>{CN_COLS.map(([k, l]) => <th key={k} scope="col">{l}</th>)}</tr></thead>
+            <thead><tr>
+              <th scope="col"><span className="cn-th">Treatment</span></th>
+              {CN_COLS.map(([k, l, ic]) => <th key={k} scope="col"><span className="cn-th"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{icon[ic]}</svg>{l}</span></th>)}
+            </tr></thead>
             <tbody>
-              {rows.map((r) => (
+              {rows.map((r) => {
+                const isFrom = /^from/i.test(r.price[0]);
+                return (
                 <tr key={r.key}>
-                  <td><a href={r.file} className="hover:text-ndm-deep">{r.n}</a></td>
-                  {CN_COLS.map(([k]) => <td key={k} className="font-inter text-ndm-ink/80">{k === 'from' ? <a href={r.price[1]} className="whitespace-nowrap font-semibold text-ndm-ink underline-offset-4 hover:underline">{r.price[0]}</a> : (r[k] || 'Discussed at your consultation')}</td>)}
+                  <td>
+                    <a href={r.file} className="cn-name">
+                      {r.img && <img src={r.img} alt="" loading="lazy" className="cn-thumb" />}
+                      <span className="min-w-0"><span className="cn-nm">{r.n}</span>{r.role && <span className="cn-sub">{r.role}</span>}</span>
+                    </a>
+                  </td>
+                  {CN_COLS.map(([k]) => (
+                    <td key={k}>
+                      {k === 'from'
+                        ? <a href={r.price[1]} className="cn-from">{isFrom && <span className="cn-fl">From</span>}{isFrom ? r.price[0].replace(/^from\s*/i, '') : r.price[0]}</a>
+                        : (r[k] || 'At your consultation')}
+                    </td>
+                  ))}
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
       </div>
-      <ul role="list" className={`${TX_WRAP} mt-[clamp(28px,3.4vw,44px)] grid gap-3 md:hidden`}>
-        {rows.map((r, i) => (
-          <li key={r.key} className="rv rounded-[20px] bg-white p-5 ring-1 ring-ndm-ink/[.06]" style={{ transitionDelay: `${0.04 * i}s` }}>
-            <div className="flex items-baseline justify-between gap-3"><a href={r.file} className="font-aeonik text-[20px] leading-[1.15] tracking-[-0.01em] text-ndm-ink">{r.n}</a><a href={r.price[1]} className="shrink-0 font-inter text-[13.5px] font-semibold text-ndm-ink">{r.price[0]}</a></div>
-            <dl className="mt-3 grid gap-2">
-              {CN_COLS.filter(([k]) => k !== 'from').map(([k, l]) => <div key={k} className="grid grid-cols-[112px_minmax(0,1fr)] gap-3 border-t border-ndm-line pt-2 font-inter"><dt className="text-[12px] leading-[1.4] text-ndm-muted">{l}</dt><dd className="text-[13.5px] leading-[1.5] text-ndm-ink/85">{r[k] || 'Discussed at your consultation'}</dd></div>)}
-            </dl>
+      {/* mobile: an expandable list, so every option is visible at a glance and taps open the detail (no sideways scrolling) */}
+      <ul role="list" className={`${TX_WRAP} rv mt-[clamp(28px,3.4vw,44px)] grid gap-2.5 md:hidden`}>
+        {rows.map((r) => {
+          const isFrom = /^from/i.test(r.price[0]);
+          return (
+          <li key={r.key}>
+            <details className="cn-m overflow-hidden rounded-[18px] bg-white ring-1 ring-ndm-ink/[.06]">
+              <summary className="flex cursor-pointer items-center gap-3 p-4">
+                {r.img && <img src={r.img} alt="" loading="lazy" className="size-11 shrink-0 rounded-[12px] object-cover ring-1 ring-ndm-ink/[.06]" />}
+                <span className="min-w-0 flex-1">
+                  <span className="block font-aeonik text-[16.5px] leading-[1.15] tracking-[-0.01em] text-ndm-ink">{r.n}</span>
+                  <a href={r.price[1]} onClick={(e) => e.stopPropagation()} className="cn-from mt-1.5">{isFrom && <span className="cn-fl">From</span>}{isFrom ? r.price[0].replace(/^from\s*/i, '') : r.price[0]}</a>
+                </span>
+                <svg aria-hidden="true" className="cn-chev shrink-0 text-ndm-muted transition-transform duration-200" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+              </summary>
+              <div className="border-t border-ndm-line px-4 pb-4 pt-3">
+                {r.role && <p className="font-inter text-[11px] font-semibold uppercase tracking-[.1em] text-ndm-deep">{r.role}</p>}
+                <dl className="mt-2.5 grid grid-cols-2 gap-2.5">
+                  {CN_COLS.filter(([k]) => k !== 'how' && k !== 'from').map(([k, l, ic]) => (
+                    <div key={k} className="rounded-[13px] bg-ndm-paper p-3 ring-1 ring-ndm-ink/[.05]">
+                      <dt className="flex items-center gap-1.5 font-inter text-[10px] font-semibold uppercase tracking-[.1em] text-ndm-muted"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-ndm-deep">{icon[ic]}</svg><span className="min-w-0">{l}</span></dt>
+                      <dd className="mt-1.5 font-inter text-[13px] leading-[1.45] text-ndm-ink/85">{r[k] || 'At your consultation'}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </details>
           </li>
-        ))}
+          );
+        })}
       </ul>
+      <p className="cn-hint hidden md:flex xl:hidden" aria-hidden="true"><IconArrow className="rotate-180 opacity-60" />Swipe to see every column<IconArrow className="opacity-60" /></p>
     </section>
   );
 }

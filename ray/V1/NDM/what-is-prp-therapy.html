@@ -3385,9 +3385,8 @@ function BookPicker({ values, onPick, compact }) {
     </div>
   );
 }
-const BOOK_DEPOSIT = 50; /* refundable consultation deposit in dollars: applied to treatment or refunded at the visit */
 const BOOK_NOTICE = '24 hours'; /* free reschedule or cancel up to this long before the visit */
-const BOOK_FLOW = { book: ['Your concern', 'Your details', 'Book or call', 'Clinic, day and time', 'Deposit'], call: ['Your concern', 'Your details', 'Book or call', 'Best time to call'] };
+const BOOK_FLOW = { book: ['Your concern', 'Your details', 'Book or call', 'Clinic, day and time'], call: ['Your concern', 'Your details', 'Book or call', 'Best time to call'] };
 const BOOK_CALL_TIMES = ['Morning', 'Afternoon', 'Early evening'];
 const BOOK_OTHER = 'Something else'; /* last concern option, opens a short text box */
 const BOOK_CLINIC_OPTS = [['Uptown', 'Uptown, Yonge & Sheppard'], ['Downtown', 'Downtown, Bay & College']];
@@ -3453,12 +3452,12 @@ function BookCalendar({ day, time, onDay, onTime, stack = false }) {
   );
 }
 /* consultation booking, shared by the booking section and the Book Free Consultation pop-up: the concern, then contact
-   details (so every request reaches the team), then a choice: book a time now with a refundable deposit, or ask us to call.
+   details (so every request reaches the team), then a choice: book a time now, or ask us to call.
    Prototype: no payment is taken; the clinic's payment provider opens at the deposit step. */
 function BookForm({ thanksId, summary = false, compact = false }) {
   const box = useRef(null);
   const [step, setStep] = useState(0);
-  const [path, setPath] = useState(null); /* 'book' (pick a time, deposit) or 'call' (we call you) */
+  const [path, setPath] = useState(null); /* 'book' (pick a time) or 'call' (we call you) */
   const [sent, setSent] = useState(false);
   const [err, setErr] = useState('');
   const [f, setF] = useState({ interest: [], clinic: 'Uptown', day: null, time: null, via: ['Call', 'Text'], first: '', callTime: '', callClinic: 'Either', agree: false, other: '', visia: true });
@@ -3495,7 +3494,7 @@ function BookForm({ thanksId, summary = false, compact = false }) {
     if (step === 2) { setErr('Choose how to continue: book a time now, or have us call you.'); return; }
     if (step < flow.length - 1) { next(); return; }
     if (path === 'call' && !f.callTime) { setErr('Please choose a time of day.'); return; }
-    if (path === 'book' && !f.agree) { setErr('Please confirm the deposit terms.'); return; }
+    if (path === 'book' && (!f.day || !f.time)) { setErr('Please pick a day and a time.'); return; }
     setHold(box.current ? box.current.offsetHeight : 0); setSent(true);
   };
   const reset = () => { setSent(false); setPath(null); setF((o) => ({ ...o, interest: [], other: '', visia: true, day: null, time: null, callTime: '', agree: false })); go(0, null); };
@@ -3509,7 +3508,7 @@ function BookForm({ thanksId, summary = false, compact = false }) {
   const visiaRow = ['VISIA® skin analysis', f.visia ? 'Included, free' : 'Not added'];
   const rows = path === 'call'
     ? [['Concerns', concern], visiaRow, ['Next step', 'We call you'], ['Best time', f.callTime], ['Clinic', clinicName(f.callClinic)]]
-    : [['Concerns', concern], visiaRow, ['Clinic', clinicName(f.clinic)], ['Day and time', when], ['Deposit', `$${BOOK_DEPOSIT}, refundable`]];
+    : [['Concerns', concern], visiaRow, ['Clinic', clinicName(f.clinic)], ['Day and time', when]];
   const stepCls = (k) => `book-step ${cur === k ? '' : 'is-off'}`;
   const stepAttr = (k) => ({ 'aria-hidden': cur !== k || undefined, inert: cur !== k ? '' : undefined });
 
@@ -3518,7 +3517,7 @@ function BookForm({ thanksId, summary = false, compact = false }) {
       <span aria-hidden="true" className="grid size-12 place-items-center rounded-full bg-ndm-amber text-white"><IconCheckBadge /></span>
       {path === 'book' ? (<>
         <p id={thanksId} className="font-aeonik text-[clamp(24px,2.2vw,30px)] leading-[1.15] tracking-[-0.02em] text-ndm-ink">You’re booked{f.first ? `, ${f.first}` : ''}.</p>
-        <p className="max-w-[46ch] font-inter text-[14.5px] leading-[1.55] text-ndm-muted">Your free consultation{f.visia ? ', with your VISIA® skin analysis,' : ''} is on <b className="font-semibold text-ndm-ink">{when}</b> at our {f.clinic} clinic. Your ${BOOK_DEPOSIT} deposit is applied to any treatment you choose, or refunded at your visit. You’ll receive the details by email and text.</p>
+        <p className="max-w-[46ch] font-inter text-[14.5px] leading-[1.55] text-ndm-muted">Your free consultation{f.visia ? ', with your VISIA® skin analysis,' : ''} is on <b className="font-semibold text-ndm-ink">{when}</b> at our {f.clinic} clinic. You’ll receive the details by email and text.</p>
         <p className="font-inter text-[13px] leading-[1.5] text-ndm-muted">Need to change it? Call <a href={tel(clinicPhone)} className="font-semibold text-ndm-ink hover:underline">{clinicPhone}</a> at least {BOOK_NOTICE} before.</p>
       </>) : (<>
         <p id={thanksId} className="font-aeonik text-[clamp(24px,2.2vw,30px)] leading-[1.15] tracking-[-0.02em] text-ndm-ink">Request sent{f.first ? `, ${f.first}` : ''}.</p>
@@ -3572,7 +3571,7 @@ function BookForm({ thanksId, summary = false, compact = false }) {
           <div className={`mt-5 grid gap-3 ${compact ? '' : 'sm:grid-cols-2'}`}>
             <button type="button" onClick={() => choose('book')} className={`${tile} min-h-[96px] items-start border-ndm-deep bg-ndm-deep text-white hover:border-[#0A4F7A] hover:bg-[#0A4F7A]`}>
               <span aria-hidden="true" className="mt-0.5 grid size-10 shrink-0 place-items-center rounded-full bg-white/15 text-white"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5" /><path d="M3.5 9.5h17M8 3v4M16 3v4" /></svg></span>
-              <span className="min-w-0 flex-1"><span className="block font-aeonik text-[clamp(20px,1.6vw,23px)] leading-[1.15] tracking-[-0.01em]">Book a time now</span><span className="mt-1.5 block text-[14px] leading-[1.45] text-white/85">Choose a clinic, day and time. A ${BOOK_DEPOSIT} refundable deposit holds it.</span></span>
+              <span className="min-w-0 flex-1"><span className="block font-aeonik text-[clamp(20px,1.6vw,23px)] leading-[1.15] tracking-[-0.01em]">Book a time now</span><span className="mt-1.5 block text-[14px] leading-[1.45] text-white/85">Choose a clinic, day and time.</span></span>
               <IconArrow size={15} className="mt-2 shrink-0" />
             </button>
             <button type="button" onClick={() => choose('call')} className={`${tile} min-h-[96px] items-start border-ndm-ink/15 bg-white text-ndm-ink hover:border-ndm-ink/40`}>
@@ -3588,24 +3587,7 @@ function BookForm({ thanksId, summary = false, compact = false }) {
             {BOOK_CLINIC_OPTS.map(([v, t]) => <BookChip key={v} name="clinic" value={v} checked={f.clinic === v} onChange={() => set('clinic', v)}>{t}</BookChip>)}
           </div>
           <div className="mt-4"><BookCalendar day={f.day} time={f.time} stack={compact} onDay={(d) => setF((o) => ({ ...o, day: d, time: null }))} onTime={(h) => set('time', h)} /></div>
-          <p className="mt-3 font-inter text-[12px] text-ndm-muted">Your time is held once the deposit is paid on the next step.</p>
-        </fieldset>
-        <fieldset data-step="4b" className={stepCls('4b')} {...stepAttr('4b')}>
-          <legend tabIndex={-1} className={legend}>Hold your time with a ${BOOK_DEPOSIT} deposit</legend>
-          <p className="mt-3 font-inter text-[14.5px] leading-[1.5] text-ndm-ink"><b className="font-semibold">{when || 'Your time'}</b> · {clinicName(f.clinic)}</p>
-          <ul className="mt-3 grid gap-2 font-inter text-[13.5px] leading-[1.5] text-ndm-muted">
-            {[f.visia ? 'Your consultation and VISIA® skin analysis are free.' : 'Your consultation is free.', `The $${BOOK_DEPOSIT} is applied to any treatment you choose, or refunded at your visit.`, `Reschedule or cancel free up to ${BOOK_NOTICE} before. The deposit isn’t refunded if you miss your visit without notice.`].map((t) => (
-              <li key={t} className="flex gap-2"><IconCheckBadge className="mt-[3px] shrink-0 text-ndm-deep" /><span>{t}</span></li>
-            ))}
-          </ul>
-          <div className="mt-4 flex items-center gap-3 rounded-[14px] border border-dashed border-ndm-ink/20 bg-ndm-mist/70 px-4 py-3">
-            <IconCard className="shrink-0 text-ndm-deep" />
-            <p className="font-inter text-[12.5px] leading-[1.5] text-ndm-muted"><b className="font-semibold text-ndm-ink">Secure card payment</b><br />Prototype: the clinic’s payment provider opens here. No card details are taken on this page.</p>
-          </div>
-          <label className="mt-4 flex cursor-pointer items-start gap-2.5 font-inter text-[13.5px] leading-[1.45] text-ndm-ink">
-            <input type="checkbox" checked={f.agree} onChange={(e) => set('agree', e.target.checked)} className="mt-0.5 size-4 shrink-0 accent-ndm-deep" />
-            <span>I understand the deposit terms.</span>
-          </label>
+          <p className="mt-3 font-inter text-[12px] text-ndm-muted">We will confirm your time by email and text.</p>
         </fieldset>
         <fieldset data-step="3c" className={stepCls('3c')} {...stepAttr('3c')}>
           <legend tabIndex={-1} className={legend}>When’s a good time to call?</legend>
@@ -3625,7 +3607,7 @@ function BookForm({ thanksId, summary = false, compact = false }) {
         {step > 0 && <Btn as="button" type="button" v="line" sm onClick={() => go(step - 1)}>Back</Btn>}
         {/* own keys, so Continue is never reused as the submit button (that would submit the step it just opened) */}
         {step === 2 ? null : step < flow.length - 1 ? <Btn key="next" as="button" type="button" v="ink" sm onClick={next}>Continue</Btn>
-          : path === 'book' ? <Btn key="pay" as="button" type="submit" v="ink" className="min-w-0 flex-1 sm:flex-none">Pay ${BOOK_DEPOSIT} deposit and book</Btn>
+          : path === 'book' ? <Btn key="pay" as="button" type="submit" v="ink" className="min-w-0 flex-1 sm:flex-none">Book this time</Btn>
           : <Btn key="call" as="button" type="submit" v="ink" className="min-w-0 flex-1 sm:flex-none">Request a call</Btn>}
       </div>
     </form>
@@ -4371,7 +4353,7 @@ function PromoReviews() {
 const PROMO_FAQS = [
   ['How long are the promotions available?', 'Each promotion is available for a limited time only, so check this page often to avoid missing out.'],
   ['Can I combine promotions?', 'Promotions cannot usually be combined unless explicitly stated. However, you may book multiple treatments under different offers during the promotional period.'],
-  ['Do I need to prepay to lock in the discount?', 'Yes, in most cases you must secure your spot with a booking or deposit before the promotional deadline to guarantee the discounted rate.'],
+  ['Do I need to prepay to lock in the discount?', 'Yes, in most cases you must secure your spot with a booking before the promotional deadline to guarantee the discounted rate.'],
   ['Are consultation fees included in the promotion?', 'Yes. Consultations are free and included with all promotions. During your visit, our specialists confirm your eligibility and customize the treatment plan for your needs.'],
   ['Do promotions apply to all locations?', 'Yes, promotions are valid across all participating clinic locations unless stated otherwise. You can choose the most convenient location for your appointment.'],
   ['How can I book a consultation?', 'Use our online form or call either clinic to schedule your free consultation.'],
