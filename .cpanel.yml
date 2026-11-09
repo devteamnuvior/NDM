@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/newdermamedlaser/public_html/staging/
+    - /bin/mkdir -p $DEPLOYPATH
+    - /bin/cp -R assets ray $DEPLOYPATH
+    - /bin/cp index.html promotion.html pricing.html about.html blog.html botox.html aptos-thread-lift.html what-causes-rosacea-redness.html $DEPLOYPATH
