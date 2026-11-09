@@ -3,9 +3,9 @@ const ABOUT_UP = 'assets/live/main/uploads/2025/09/';
 const ABOUT_EMAIL = 'info@newdermamed.com';
 const ABOUT_CLINICS = [
   {
-    id: 'uptown', name: 'Uptown', area: 'Yonge Street, near Sheppard-Yonge Station', tag: 'Uptown clinic · Yonge Street', title: ['NewDermaMed', 'Uptown'], inside: `${ABOUT_UP}About-us-gallery-01.png`,
+    id: 'uptown', name: 'Uptown', area: 'Yonge Street, near Sheppard-Yonge Station', tag: 'Uptown clinic · Yonge Street', title: ['NewDermaMed', 'Uptown'], inside: `${ABOUT_UP}About-us-gallery-01.webp`,
     addr: ['4763 Yonge Street', 'Toronto, ON M2N 5M5'], phone: '416-224-8800', map: 'https://maps.app.goo.gl/Gm8Wg4B1Q3yHGnkE7', ll: [43.7606276, -79.4103338],
-    img: `${ABOUT_UP}upClinic.png`, alt: 'NewDermaMed signage above the Uptown clinic entrance on Yonge Street',
+    img: `${ABOUT_UP}upClinic.webp`, alt: 'NewDermaMed signage above the Uptown clinic entrance on Yonge Street',
     blurb: 'At NewDermaMed Uptown, our team is here to help you look and feel your best. The clinic is a short walk from Sheppard-Yonge Station, with several parking options within a few minutes of the door.',
     parking: [
       ['Lot #56, Hullmark Centre', 'Bales Ave, Toronto, ON M2N 5M5', 'https://maps.app.goo.gl/rbQRgrwuKf5pBBfB6', [43.7609673, -79.4099159]],
@@ -14,9 +14,9 @@ const ABOUT_CLINICS = [
     ],
   },
   {
-    id: 'downtown', name: 'Downtown', area: 'Bay Street, near College Station', tag: 'Downtown clinic · Bay Street', title: ['NewDermaMed', 'Downtown'], inside: `${ABOUT_UP}About-us-gallery-07.png`,
+    id: 'downtown', name: 'Downtown', area: 'Bay Street, near College Station', tag: 'Downtown clinic · Bay Street', title: ['NewDermaMed', 'Downtown'], inside: `${ABOUT_UP}About-us-gallery-07.webp`,
     addr: ['790 Bay Street, Suite 900', 'Toronto, ON M5G 1N8'], phone: '416-671-9766', map: 'https://maps.app.goo.gl/McaiszUJaKqPem5R7', ll: [43.6604681, -79.3860463],
-    img: `${ABOUT_UP}downClinic.png`, alt: 'Front entrance of 790 Bay Street, home of the NewDermaMed Downtown clinic',
+    img: `${ABOUT_UP}downClinic.webp`, alt: 'Front entrance of 790 Bay Street, home of the NewDermaMed Downtown clinic',
     blurb: 'NewDermaMed Downtown brings our treatments to the centre of the city. The clinic is steps from College Station, with parking at 790 Bay Street and on Elizabeth and College Streets.',
     parking: [
       ['Parking for 790 Bay Street', '790 Bay St, Toronto, ON M5G 1N8', 'https://maps.app.goo.gl/sYrf33nW6XimJqHA7', [43.6604363, -79.386293]],
@@ -36,7 +36,7 @@ const ABOUT_GALLERY = [
   ['08', 'Treatment room', 'Treatment rooms', 'Treatment room with a white treatment bed and side desk'],
   ['09', 'Downtown, 790 Bay Street', 'Exteriors', 'Entrance of 790 Bay Street, home of the Downtown clinic'],
   ['10', 'Uptown, Yonge Street', 'Exteriors', 'NewDermaMed signage on the Uptown clinic on Yonge Street'],
-].map(([n, t, cat, alt]) => ({ src: `${ABOUT_UP}About-us-gallery-${n}.png`, t, cat, alt }));
+].map(([n, t, cat, alt]) => ({ src: `${ABOUT_UP}About-us-gallery-${n}.webp`, t, cat, alt }));
 /* four local clinic photos join the ten NDM gallery photos so the mosaic has fourteen tiles */
 const GAL_EXTRA = [
   ['assets/clinic/clinic-2.jpg', 'Treatment room', 'Treatment rooms', 'Bright treatment room with a white treatment chair'],
