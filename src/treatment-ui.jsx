@@ -12,6 +12,44 @@ const TX_ICONS = {
 const txIcon = (label) => (/type/i.test(label) ? 'type' : /duration|session/i.test(label) ? 'clock' : /recovery|downtime/i.test(label) ? 'leaf' : 'cal');
 /* section number from the page's nav list ("01"), or nothing on pages without one */
 const txNum = (p, id) => { const i = (p.nav || []).findIndex(([k]) => k === id); return i < 0 ? '' : String(i + 1).padStart(2, '0'); };
+/* section bar icons (Ray, round 12): one per section, picked from its id and label */
+const NAV_ICONS = {
+  info: <><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 7.6h.01" /></>,
+  doc: <><rect x="5" y="3.5" width="14" height="17" rx="2" /><path d="M8.5 8h7M8.5 12h7M8.5 16h4" /></>,
+  plus: <><circle cx="12" cy="12" r="9" /><path d="M12 8.5v7M8.5 12h7" /></>,
+  results: <><rect x="3.5" y="5" width="17" height="14" rx="2" /><path d="M12 5v14" /></>,
+  tag: <><path d="M4 12.5v-7A1.5 1.5 0 0 1 5.5 4h7l7.5 7.5a1.5 1.5 0 0 1 0 2.1l-5.9 5.9a1.5 1.5 0 0 1-2.1 0L4 12.5Z" /><circle cx="8.5" cy="8.5" r="1.1" /></>,
+  help: <><circle cx="12" cy="12" r="9" /><path d="M9.6 9.6a2.4 2.4 0 1 1 3.1 2.3c-.7.26-1.2.9-1.2 1.6v.3M12 16.5h.01" /></>,
+  star: <><path d="M12 3.6l2.4 4.9 5.4.6-4 3.6 1.1 5.3L12 15.7 7.1 18l1.1-5.3-4-3.6 5.4-.6L12 3.6Z" /></>,
+  building: <><rect x="5" y="3.5" width="14" height="17" rx="1.5" /><path d="M9 8h0M12 8h0M15 8h0M9 12h0M12 12h0M15 12h0M10 20.5V16h4v4.5" /></>,
+  play: <><circle cx="12" cy="12" r="9" /><path d="M10 8.4l5.2 3.6L10 15.6Z" /></>,
+  pin: <><path d="M12 21s6-5.3 6-10a6 6 0 1 0-12 0c0 4.7 6 10 6 10Z" /><circle cx="12" cy="11" r="2.2" /></>,
+  shield: <><path d="M12 3.5l7 3v5c0 4.3-3 7.6-7 9-4-1.4-7-4.7-7-9v-5l7-3Z" /><path d="M9 12l2 2 4-4" /></>,
+  user: <><circle cx="12" cy="8.5" r="3.2" /><path d="M5.5 19.5a6.5 6.5 0 0 1 13 0" /></>,
+  list: <><path d="M9 6.5h10M9 12h10M9 17.5h10M5 6.5h.01M5 12h.01M5 17.5h.01" /></>,
+  search: <><circle cx="11" cy="11" r="6" /><path d="m20 20-4.2-4.2" /></>,
+  clock: <><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" /></>,
+  home: <><path d="M3.5 11.5 12 4l8.5 7.5" /><path d="M5.5 10v9.5h13V10" /><path d="M10 19.5v-5h4v5" /></>,
+};
+/* pick a nav icon from the section id and label */
+const navIcon = (id, label) => {
+  const s = ((id || '') + ' ' + (label || '')).toLowerCase();
+  if (/faq/.test(s)) return 'help';
+  if (/pric|fee|cost/.test(s)) return 'tag';
+  if (/result|before|after|gallery/.test(s)) return 'results';
+  if (/combin|elevate|pair|together/.test(s)) return 'plus';
+  if (/benefit/.test(s)) return 'star';
+  if (/visit|location|map/.test(s)) return 'pin';
+  if (/clinic|film|inside|space/.test(s)) return 'building';
+  if (/watch|video|reel/.test(s)) return 'play';
+  if (/why|safe|trust/.test(s)) return 'shield';
+  if (/duration|long|last|course|session/.test(s)) return 'clock';
+  if (/candidate|who|suit/.test(s)) return 'user';
+  if (/assess|analysis|consult/.test(s)) return 'search';
+  if (/overview|about|your treatment|expect|what to|understand/.test(s)) return 'doc';
+  if (/option|how|work|care|mainten/.test(s)) return 'list';
+  return 'info';
+};
 
 function TxHead({ p, id, tag, hid, lead, strong, text, dark }) {
   const n = txNum(p, id);
@@ -94,11 +132,17 @@ function TxNav({ p }) {
     <nav ref={bar} aria-label="On this page" className="tx-nav sticky top-[100px] z-30 mt-8 bg-ndm-paper/85 backdrop-blur-[10px] xl:top-[120px]">
       <div className="tx-nav-scroll no-scrollbar relative overflow-x-auto px-[var(--gx)] py-2.5">
       <ul className="relative mx-auto flex w-max gap-1" role="list">
-        {p.nav.map(([id, label], i) => (
+        <li className="shrink-0">
+          <a href="#top" aria-label="Back to top" onClick={(e) => { e.preventDefault(); scrollToY(0); }}
+            className="flex items-center whitespace-nowrap rounded-full px-2.5 py-2 text-ndm-deep transition-colors hover:bg-white hover:text-ndm-ink">
+            <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{NAV_ICONS.home}</svg>
+          </a>
+        </li>
+        {p.nav.map(([id, label]) => (
           <li key={id} data-k={id} className="shrink-0">
             <a href={`#${id}`} onClick={(e) => go(e, id)} aria-current={on === id ? 'true' : undefined}
-              className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-2 font-inter text-[13px] transition-colors ${on === id ? 'bg-ndm-deep text-white' : 'text-ndm-ink/75 hover:bg-white hover:text-ndm-ink'}`}>
-              <span className={`tabular-nums text-[11.5px] ${on === id ? 'text-white/70' : 'text-ndm-muted'}`}>{String(i + 1).padStart(2, '0')}</span>{label}
+              className={`flex items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 font-inter text-[14px] transition-colors ${on === id ? 'bg-ndm-deep font-medium text-white' : 'text-ndm-ink/80 hover:bg-white hover:text-ndm-ink'}`}>
+              <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={on === id ? 'text-white' : 'text-ndm-deep'}>{NAV_ICONS[navIcon(id, label)]}</svg>{label}
             </a>
           </li>
         ))}
@@ -114,8 +158,8 @@ function TxIntro({ p }) {
   useReveal(ref);
   const t = p.intro;
   return (
-    <section ref={ref} id="what" aria-labelledby="intro-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(56px,6vw,88px)]">
-      <TxHead p={p} id="what" tag={t.tag} hid="intro-title" lead={t.lead} strong={t.strong} />
+    <section ref={ref} id={t.id || 'what'} aria-labelledby="intro-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(56px,6vw,88px)]">
+      <TxHead p={p} id={t.id || 'what'} tag={t.tag} hid="intro-title" lead={t.lead} strong={t.strong} />
       <div className={`${TX_WRAP} mt-[clamp(28px,3.4vw,48px)] grid items-center gap-8 lg:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] lg:gap-[clamp(40px,5vw,72px)]`}>
         <div className="rv relative mx-auto w-full max-w-[460px] lg:max-w-none" style={{ transitionDelay: '.1s' }}>
           <div className={`relative aspect-[5/4] overflow-hidden rounded-[24px] bg-ndm-mist lg:aspect-auto ${t.para ? 'lg:h-[min(50vh,460px)]' : 'lg:h-[min(62vh,560px)]'}`}>
@@ -144,7 +188,7 @@ function TxIntro({ p }) {
             {t.points.map(([h, d], i) => (
               <li key={h} className="rv flex items-start gap-4 rounded-[18px] bg-white px-5 py-4 ring-1 ring-ndm-ink/[.06] shadow-[0_18px_40px_-34px_rgba(27,36,43,.35)] sm:items-center" style={{ transitionDelay: `${0.14 + i * 0.05}s` }}>
                 <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconTick size={15} /></span>
-                <span className="grid gap-1 sm:grid-cols-[110px_minmax(0,1fr)] sm:items-baseline sm:gap-4">
+                <span className="grid gap-1 sm:grid-cols-[minmax(110px,190px)_minmax(0,1fr)] sm:items-baseline sm:gap-4">
                   <span className="font-aeonik text-[21px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">{h}</span>
                   <span className="font-inter text-[15.5px] leading-[1.55] text-ndm-ink/80">{d}</span>
                 </span>
@@ -360,7 +404,7 @@ function TxResults({ p }) {
   const t = p.results;
   const n = txNum(p, 'results');
   const more = t.more || BA_ALL;
-  const cases = t.cases.slice(0, 4);
+  const cases = (t.cases || []).slice(0, 4);
   return (
     <section ref={ref} id="results" aria-labelledby="results-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <div className={TX_WRAP}>
@@ -372,6 +416,21 @@ function TxResults({ p }) {
           </div>
           <div className="rv" style={{ transitionDelay: '.12s' }}><Btn href={more} target="_blank" rel="noopener" v="line">See all before &amp; after</Btn></div>
         </div>
+        {t.pics ? (<>
+          <ul role="list" className="mt-[clamp(32px,4vw,52px)] grid gap-4 sm:grid-cols-3">
+            {t.pics.map((c, i) => (
+              <li key={c.src} className="rv" style={{ transitionDelay: `${0.06 * i}s` }}>
+                <figure className="m-0 overflow-hidden rounded-[22px] bg-white p-2.5 ring-1 ring-ndm-ink/[.06] shadow-[0_22px_44px_-36px_rgba(27,36,43,.35)]">
+                  <span className="relative block aspect-[431/310] overflow-hidden rounded-[16px] bg-ndm-mist"><img src={c.src} alt={`${c.label}, before and after`} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" /></span>
+                  <figcaption className="flex items-baseline justify-between gap-3 px-1.5 pb-1 pt-3">
+                    <span className="font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">{c.label}</span>
+                    <span className="font-inter text-[12.5px] text-ndm-muted">Before · After</span>
+                  </figcaption>
+                </figure>
+              </li>
+            ))}
+          </ul>
+        </>) : (
         <ul role="list" className="mt-[clamp(32px,4vw,52px)] grid grid-cols-2 gap-x-3 gap-y-6 lg:grid-cols-4 lg:gap-x-4">
           {cases.map((c, i) => (
             <li key={c.id} className="rv" style={{ transitionDelay: `${0.06 * i}s` }}>
@@ -409,6 +468,7 @@ function TxResults({ p }) {
             </li>
           )}
         </ul>
+        )}
         <p className="mt-8 flex items-start gap-2.5 font-inter text-[13px] leading-[1.5] text-ndm-muted">
           <BaIconInfo className="mt-0.5 shrink-0" />Photos show individual cases and are shared for illustration only. Individual results may vary.
         </p>
@@ -581,7 +641,7 @@ function TxWhy({ p }) {
   useReveal(ref);
   const t = p.why;
   return (
-    <section ref={ref} aria-labelledby="why-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
+    <section ref={ref} id="why" aria-labelledby="why-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <TxHead p={p} id="why" tag="Why NewDermaMed" hid="why-title" lead={t.lead} strong={t.strong} />
       <div className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,.9fr)] lg:gap-[clamp(40px,5vw,72px)]`}>
         <div className="rv relative aspect-[3/2] overflow-hidden rounded-[24px] bg-ndm-mist">
@@ -605,5 +665,50 @@ function TxWhy({ p }) {
         </div>
       </div>
     </section>
+  );
+}
+
+/* ---------------------------------------------------------------- visit us (Ray, round 12): the two clinics as photo cards with
+   the address, phone and hours; the whole card opens the About page's contact part */
+const TX_HOURS = { Uptown: 'Monday to Friday 9am to 7pm, Saturday 10am to 5pm', Downtown: 'Monday to Friday 9am to 7pm, Saturday 10am to 5pm' };
+const TX_VISIT_IMG = { Uptown: 'assets/clinic/clinic-4.jpg', Downtown: 'assets/clinic/clinic-1.jpg' };
+const TX_VISIT_CSS = `
+.tx-visit-pic{transition:transform 1.1s var(--e-out)}
+.tx-visit:hover .tx-visit-pic{transform:scale(1.05)}
+.tx-pill{background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 18px 40px -20px rgba(27,36,43,.55)}
+@media (prefers-reduced-motion:reduce){.tx-visit-pic{transition:none}}
+`;
+function TxVisit({ p }) {
+  const ref = useRef(null);
+  useReveal(ref);
+  const n = txNum(p, 'visit');
+  return (
+    <>
+    <style>{TX_VISIT_CSS}</style>
+    <section ref={ref} id="visit" aria-labelledby="visit-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
+      <TxHead p={p} id="visit" tag="Visit us" hid="visit-title" lead="Two clinics," strong="Uptown and Downtown" text="Both clinics offer the same free consultation and VISIA® skin analysis. Choose the one that suits you." />
+      <ul className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid gap-4 md:grid-cols-2 md:gap-6`} role="list">
+        {CLINICS.map((c, i) => (
+          <li key={c.name} className="rv" style={{ transitionDelay: `${0.08 * i}s` }}>
+            <a href="about.html#contact" className="tx-visit group block overflow-hidden rounded-[26px] bg-white ring-1 ring-ndm-ink/[.06] transition-shadow hover:shadow-[0_34px_60px_-34px_rgba(15,128,195,.45)]">
+              <span className="relative block aspect-[16/10] overflow-hidden bg-ndm-mist">
+                <img src={TX_VISIT_IMG[c.name]} alt={`NewDermaMed ${c.name} clinic`} loading="lazy" decoding="async" className="tx-visit-pic absolute inset-0 h-full w-full object-cover" />
+                <span className="tx-pill absolute left-4 top-4 rounded-full px-3.5 py-1.5 font-inter text-[12.5px] font-semibold text-ndm-ink">{c.name}</span>
+              </span>
+              <span className="flex items-start justify-between gap-4 p-5 md:p-6">
+                <span className="min-w-0">
+                  <span className="block font-aeonik text-[clamp(22px,2vw,28px)] leading-[1.15] tracking-[-0.02em] text-ndm-ink">{c.addr.split(',')[0]}</span>
+                  <span className="mt-1 block font-inter text-[14px] leading-[1.5] text-ndm-muted">{c.addr.split(',').slice(1).join(',').trim()}</span>
+                  <span className="mt-3 block font-inter text-[14px] font-semibold text-ndm-ink">{c.phone}</span>
+                  <span className="mt-1 block font-inter text-[13px] leading-[1.5] text-ndm-muted">{TX_HOURS[c.name]}</span>
+                </span>
+                <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-full bg-ndm-deep text-white transition-transform duration-500 group-hover:-rotate-45"><IconArrow /></span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+    </>
   );
 }

@@ -129,9 +129,15 @@ css = '''
   .pr-tag{padding:6px 10px;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
   @media (prefers-reduced-motion:reduce){.offer-dot{animation:none}.say-w,.pr-body,.pr-body>div,.pr-plus i{transition:none}}
 '''
+SPACING = '''
+  /* round 12: Our team, Testimonials and Visit us use the same spacing as the treatment sections (e.g. Elevate your results);
+     Visit us sits close to the band after it */
+  main>section[aria-labelledby="team"],main>section[aria-labelledby="testimonials"],main>section#visit{padding-top:clamp(64px,7vw,104px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
+  main>section#visit{padding-bottom:clamp(16px,2vw,28px)!important}
+'''
 anchor = '<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>'
 i = s.rindex('</style>', 0, s.index(anchor))
-s = s[:i] + css + s[i:]
+s = s[:i] + css + SPACING + s[i:]
 
 a = s.index('\nfunction App() {')
 b = s.index('ReactDOM.createRoot', a)
@@ -171,6 +177,7 @@ function App() {
         <TxWhy p={APT} />
         <Team />
         <PromoReviews />
+        <TxVisit p={APT} />
         <ProcAnalysis />
         <Faq items={APT.faqs} lead="Your top questions," strong="answered" intro="What to know about the Aptos Thread Lift, from our medical team." />
       </main>

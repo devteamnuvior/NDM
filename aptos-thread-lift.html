@@ -523,6 +523,19 @@
   html:not([data-campaign]) main.seamless>section:not([data-nav="dark"])::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;-webkit-mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);background:radial-gradient(40% 50% at 96% 45%,rgba(255,190,160,.16),transparent 70%)}
   html:not([data-campaign]) main.seamless>section:not([data-nav="dark"]):nth-of-type(even)::before{background:radial-gradient(40% 50% at 4% 55%,rgba(38,177,231,.10),transparent 70%)}
   html:not([data-campaign]) main.seamless>.specials-wheel .sw-panel{background:linear-gradient(180deg,var(--sw-panel) 0%,var(--sw-panel) 72%,#FAFAF8 100%)}
+  /* booking form (Ray, round 12): badge, category tabs and options; compact form and phones show only the open step */
+  .book-badge{background:linear-gradient(90deg,rgba(255,166,23,.18),rgba(255,166,23,.08));border:1px solid rgba(255,166,23,.35)}
+  .book-badge-dot{box-shadow:0 6px 14px -6px rgba(255,166,23,.9)}
+  .book-tab{position:relative}
+  .book-tab-has::after{content:"";position:absolute;right:6px;top:6px;width:6px;height:6px;border-radius:999px;background:#FFA617}
+  .book-opt{box-shadow:0 1px 0 rgba(27,36,43,.03)}
+  @media (max-width:639px){.book-step.is-off{display:none}}
+  .book-compact .book-step.is-off{display:none}
+  /* office photos are graded warm in the image files; no peach light on top, it turned white rooms pink */
+  .about-bob::after,.visit-card .rv-clip::after{content:none}
+  .eyebrow.is-amber{color:#6E4410;background:linear-gradient(180deg,#FFB942,#FFA617) padding-box,linear-gradient(115deg,rgba(255,166,23,.95),rgba(224,138,0,.55)) border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 12px 26px -16px rgba(255,166,23,.8)}
+  .eyebrow.is-amber .eyebrow-mark{background:radial-gradient(circle at 32% 28%,#fff,#FFE3AC 75%);box-shadow:inset 0 0 0 1px rgba(255,166,23,.35),0 4px 10px -6px rgba(224,138,0,.8)}
+  .eyebrow.is-amber::after{background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.3) 50%,transparent 65%)}
   /* campaign looks: tokens per look (html[data-campaign-bar] on every page, html[data-campaign] where accents apply) */
   html[data-campaign-bar="black-friday"]{--cmp-bar:#0B0B0C;--cmp-bar-fg:#F4EBDD;--cmp-gold:#D2B57B;--cmp-acc:#8C6D36;--cmp-acc-dk:#DCC28E;--cmp-badge-bg:#0B0B0C;--cmp-badge-fg:#EBD7AA;--cmp-badge-line:rgba(210,181,123,.6);--cmp-edge:linear-gradient(115deg,rgba(200,169,106,.85),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(11,11,12,.55));--cmp-tint:linear-gradient(90deg,rgba(6,6,7,.9) 0%,rgba(6,6,7,.62) 52%,rgba(6,6,7,.38) 100%),radial-gradient(60% 70% at 85% 20%,rgba(210,181,123,.22),transparent 70%)}
   html[data-campaign-bar="holiday"]{--cmp-bar:#173D2E;--cmp-bar-fg:#F6F1E6;--cmp-gold:#D6B46A;--cmp-acc:#1F5A41;--cmp-acc-dk:#E2C583;--cmp-badge-bg:#173D2E;--cmp-badge-fg:#F6F1E6;--cmp-badge-line:rgba(214,180,106,.65);--cmp-edge:linear-gradient(115deg,rgba(31,90,65,.8),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(122,31,43,.55));--cmp-tint:linear-gradient(90deg,rgba(12,36,27,.9) 0%,rgba(12,36,27,.62) 55%,rgba(84,20,30,.4) 100%),radial-gradient(55% 65% at 85% 15%,rgba(214,180,106,.22),transparent 70%)}
@@ -662,6 +675,11 @@
   .pr-badge{padding:7px 12px;font-size:14px}
   .pr-tag{padding:6px 10px;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
   @media (prefers-reduced-motion:reduce){.offer-dot{animation:none}.say-w,.pr-body,.pr-body>div,.pr-plus i{transition:none}}
+
+  /* round 12: Our team, Testimonials and Visit us use the same spacing as the treatment sections (e.g. Elevate your results);
+     Visit us sits close to the band after it */
+  main>section[aria-labelledby="team"],main>section[aria-labelledby="testimonials"],main>section#visit{padding-top:clamp(64px,7vw,104px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
+  main>section#visit{padding-bottom:clamp(16px,2vw,28px)!important}
 </style>
 </head>
 <body>
@@ -729,7 +747,7 @@ function useMedia(q) {
 }
 
 /* ---------------------------------------------------------------- content */
-const PAGE_LINKS = { 'aptos-thread-lift': 'aptos-thread-lift.html', 'non-surgical-facelift-neck-jawline-eyebrow-nose-lift': 'aptos-thread-lift.html', pricing: 'pricing.html', promotion: 'promotion.html', about: 'about.html', 'about-us': 'about.html', 'our-doctors-team': 'about.html', 'our-clinics': 'about.html', 'doctors-team': 'about.html', 'awards-recognition': 'about.html', 'contact-us': 'about.html', blog: 'blog.html', botox: 'botox.html', 'uptown-clinic': 'about.html', 'downtown-clinic': 'about.html' };
+const PAGE_LINKS = { 'wrinkles-fine-lines': 'wrinkles-fine-lines.html', 'aptos-thread-lift': 'aptos-thread-lift.html', 'non-surgical-facelift-neck-jawline-eyebrow-nose-lift': 'aptos-thread-lift.html', pricing: 'pricing.html', promotion: 'promotion.html', about: 'about.html', 'about-us': 'about.html', 'our-doctors-team': 'about.html', 'our-clinics': 'about.html', 'doctors-team': 'about.html', 'awards-recognition': 'about.html', 'contact-us': 'about.html', blog: 'blog.html', botox: 'botox.html', 'uptown-clinic': 'about.html', 'downtown-clinic': 'about.html' };
 const slug = (s) => { const k = s.toLowerCase().replace(/[®™]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''); return PAGE_LINKS[k] || '#/' + k; };
 
 const PROCEDURES = [
@@ -759,7 +777,7 @@ const CONCERNS = [
 ];
 /* which page is open: the top menu marks its section, and dropdown links to this page are highlighted */
 const HERE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-const NAV_HERE = { 'pricing.html': 'pricing', 'promotion.html': 'promotion', 'about.html': 'about', 'blog.html': 'about', 'what-causes-rosacea-redness.html': 'about', 'botox.html': 'procedures', 'aptos-thread-lift.html': 'procedures' }[HERE];
+const NAV_HERE = { 'index.html': 'home', 'pricing.html': 'pricing', 'promotion.html': 'promotion', 'about.html': 'about', 'blog.html': 'about', 'what-causes-rosacea-redness.html': 'about', 'botox.html': 'procedures', 'aptos-thread-lift.html': 'procedures', 'wrinkles-fine-lines.html': 'concerns' }[HERE];
 const isHere = (href) => !!href && !href.includes('#') && href.toLowerCase() === HERE;
 const here = (href) => (isHere(href) ? { 'aria-current': 'page' } : {});
 const HERE_CAT = (PROCEDURES.find((c) => c.groups.some((g) => g.items.some((it) => isHere(slug(it))))) || {}).id;
@@ -776,6 +794,7 @@ const ABOUT = {
   links: ['Our Doctors & Team', 'Our Clinics', 'Awards & Recognition', 'Contact Us', 'Blog', 'Policies (Privacy, Terms, Refunds)'],
 };
 const NAV = [
+  { id: 'home', label: 'Home', href: 'index.html' },
   { id: 'procedures', label: 'Procedures', menu: 'mega' },
   { id: 'concerns', label: 'Concerns', menu: 'concerns' },
   { id: 'pricing', label: 'Pricing' },
@@ -819,7 +838,7 @@ const CAMPAIGNS = [
     img: { src: 'assets/home/visia-consult.jpg', alt: 'A NewDermaMed provider reviewing skin analysis results with a patient', pos: '60% 45%', scale: 1 } },
 ];
 const CAMPAIGN_KEY = 'ndm-campaign';
-const CAMPAIGN_SKIP = ['botox.html', 'aptos-thread-lift.html', 'what-causes-rosacea-redness.html']; /* treatment and medical pages keep their look */
+const CAMPAIGN_SKIP = ['botox.html', 'aptos-thread-lift.html', 'what-causes-rosacea-redness.html', 'wrinkles-fine-lines.html']; /* treatment and medical pages keep their look */
 const CAMPAIGN = (() => {
   let id = null;
   try {
@@ -1468,6 +1487,7 @@ function Drawer({ open, onClose }) {
           <button onClick={onClose} aria-label="Close menu" className="grid place-items-center size-11 rounded-full hover:bg-ndm-mist"><IconClose /></button>
         </div>
         <nav aria-label="Mobile" className="flex-1 overflow-y-auto px-5 divide-y divide-ndm-line">
+          <a href="index.html" onClick={onClose} {...(NAV_HERE === 'home' ? { 'aria-current': 'page' } : {})} className={`block py-4 font-aeonik text-[22px] ${NAV_HERE === 'home' ? 'nav-is-here' : ''}`}><span className="relative">Home{NAV_HERE === 'home' && <i aria-hidden="true" className="nav-here is-left" />}</span></a>
           <div>
             <Row onClick={() => setSec(sec === 'p' ? null : 'p')} expanded={sec === 'p'} on={NAV_HERE === 'procedures'}>Procedures</Row>
             {sec === 'p' && (
@@ -2941,7 +2961,7 @@ function BaCompare({ c, i, nudge = true }) {
    a prescription-drug before/after is not allowed in consumer advertising). */
 const BA_TREATS = ['Aptos thread lift', 'Laser acne', 'Chemical peel', 'Dermamelan®'];
 const BA_MODELS = Array.from({ length: 12 }, (_, i) => ({ ...BA_CASES[i % BA_CASES.length], n: i + 1, id: String(i + 1).padStart(2, '0'), treat: BA_TREATS[i % BA_TREATS.length] }));
-const BA_ALL = 'https://newdermamedlaserclinic.com/before-after/';
+const BA_ALL = 'before-after.html';
 
 /* before & after: a dark, pinned section; vertical scrolling slides the row of compare cards sideways */
 const BA_STILL = true; /* promotion page: the row scrolls only when the visitor scrolls it */
@@ -3352,11 +3372,66 @@ function BookThanks({ id, onAnother }) {
   );
 }
 
-const BOOK_INTERESTS = ['Wrinkles & fine lines', 'Volume loss', 'Sagging skin & jowls', 'Dark circles & under-eye hollows', 'Double chin', 'Acne', 'Acne scars', 'Pigmentation & sun spots', 'Aptos Thread Lift', 'Dermal Fillers', 'Laser Hair Removal', 'Microneedling', 'Not sure, I’d like a skin analysis'];
-const BOOK_STEPS = ['Your concern', 'Clinic, day and time', 'Your details'];
+const BOOK_INTEREST_GROUPS = [ /* the picker's categories; labels match the concern and treatment pages. An option may sit in more than one category */
+  ['Face', ['Wrinkles & fine lines', 'Volume loss', 'Sagging skin & jowls', 'Double chin', 'Thin lips', 'Dark circles & under-eye hollows']],
+  ['Skin', ['Acne', 'Acne scars', 'Rosacea & redness', 'Melasma', 'Pigmentation & sun spots', 'Texture & pores', 'Moles & skin lesions']],
+  ['Body', ['Stubborn fat', 'Cellulite', 'Stretch marks', 'Loose skin', 'Excessive sweating', 'Spider & varicose veins', 'Unwanted hair']],
+  ['Hair', ['Thinning hair', 'Hair loss']],
+  ['Injectables', ['Botox®', 'Dermal Fillers', 'Lip fillers', 'Under-eye filler', 'Skin boosters', 'Aptos Thread Lift', 'Bio-stimulator · Sculptra®', 'Bio-stimulator · Radiesse®']],
+  ['Bio-stimulators', ['Bio-stimulator · Aptos Thread Lift', 'Bio-stimulator · Sculptra®', 'Bio-stimulator · Radiesse®']],
+  ['Thread lift', ['Aptos Thread Lift', 'Non-surgical facelift', 'Neck lift', 'Jawline lift', 'Eyebrow lift', 'Nose lift']],
+  ['Treatments', ['Laser Hair Removal', 'Microneedling', 'Laser skin resurfacing', 'Laser skin tightening', 'Photo-rejuvenation (IPL)', 'Chemical peels', 'CoolSculpting®', 'VISIA® skin analysis']],
+];
+const BOOK_INTERESTS = BOOK_INTEREST_GROUPS.flatMap(([, xs]) => xs);
+const BOOK_NOT_SURE = 'Not sure, I’d like a skin analysis';
+/* the organised picker: category tabs, the options of the open category, the two standing options */
+function BookPicker({ values, onPick, compact }) {
+  const found = BOOK_INTEREST_GROUPS.findIndex(([, xs]) => xs.some((x) => values.includes(x)));
+  const [cat, setCat] = useState(found >= 0 ? found : 0);
+  const tabs = useRef([]);
+  const key = (e, i) => {
+    const k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!k) return;
+    e.preventDefault();
+    const n = (i + k + BOOK_INTEREST_GROUPS.length) % BOOK_INTEREST_GROUPS.length;
+    setCat(n); if (tabs.current[n]) tabs.current[n].focus();
+  };
+  const [, items] = BOOK_INTEREST_GROUPS[cat];
+  const standing = [BOOK_NOT_SURE, BOOK_OTHER];
+  return (
+    <div className="book-pick">
+      <div role="tablist" aria-label="Type of concern" className="flex flex-wrap gap-1">
+        {BOOK_INTEREST_GROUPS.map(([g, xs], i) => (
+          <button key={g} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" aria-selected={i === cat} tabIndex={i === cat ? 0 : -1} onClick={() => setCat(i)} onKeyDown={(e) => key(e, i)}
+            className={`book-tab shrink-0 rounded-full px-4 py-2.5 font-inter text-[15px] font-semibold transition-colors ${i === cat ? 'bg-ndm-ink text-white' : 'bg-ndm-mist text-ndm-ink/80 hover:text-ndm-ink'} ${xs.some((x) => values.includes(x)) && i !== cat ? 'book-tab-has' : ''}`}>{g}</button>
+        ))}
+      </div>
+      <div role="tabpanel" className={`mt-2.5 grid gap-1.5 ${compact ? 'grid-cols-1 sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'}`}>
+        {items.map((t) => (
+          <label key={t} className="relative flex cursor-pointer">
+            <input type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)} className="peer absolute inset-0 m-0 cursor-pointer opacity-0" />
+            <span className="book-opt flex min-h-[42px] w-full items-center gap-2.5 rounded-[12px] border border-ndm-ink/12 bg-white px-3.5 py-2 font-inter text-[13.5px] leading-[1.3] text-ndm-ink transition-colors peer-hover:border-ndm-ink/35 peer-checked:border-ndm-deep peer-checked:bg-ndm-deep peer-checked:text-white peer-focus-visible:ring-4 peer-focus-visible:ring-ndm-blue/25">
+              <i aria-hidden="true" className={`size-2 shrink-0 rounded-full ${values.includes(t) ? 'bg-ndm-amber' : 'bg-ndm-ink/15'}`} />{t}
+            </span>
+          </label>
+        ))}
+      </div>
+      <div className="mt-2.5 flex flex-wrap gap-1.5">
+        {standing.map((t) => <BookChip key={t} type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)}>{t}</BookChip>)}
+      </div>
+      <p className="mt-2.5 flex min-h-[20px] flex-wrap items-center gap-2 font-inter text-[13px] text-ndm-ink" aria-live="polite">
+        {values.length ? <><i aria-hidden="true" className="size-2 shrink-0 rounded-full bg-ndm-amber" /><span className="text-ndm-muted">Your choices:</span><b className="font-semibold">{values.join(', ')}</b></> : <span className="text-ndm-muted">Pick a category, then one or more things you would like to address.</span>}
+      </p>
+    </div>
+  );
+}
+const BOOK_NOTICE = '24 hours'; /* free reschedule or cancel up to this long before the visit */
+const BOOK_FLOW = { book: ['Your concern', 'Your details', 'Book or call', 'Clinic, day and time'], call: ['Your concern', 'Your details', 'Book or call', 'Best time to call'] };
+const BOOK_CALL_TIMES = ['Morning', 'Afternoon', 'Early evening'];
+const BOOK_OTHER = 'Something else'; /* last concern option, opens a short text box */
 const BOOK_CLINIC_OPTS = [['Uptown', 'Uptown, Yonge & Sheppard'], ['Downtown', 'Downtown, Bay & College']];
 /* opening hours (HOURS): Monday to Friday 9 to 7, Saturday 10 to 5, Sunday closed; a request slot every hour, the last one an hour before closing */
-const bookSlots = (d) => { const w = d.getDay(); if (w === 0) return []; const [a, b] = w === 6 ? [10, 16] : [9, 18]; return Array.from({ length: b - a + 1 }, (_, i) => a + i); };
+const bookSlots = (d) => { const w = d.getDay(); if (w === 0) return []; const [a, b] = w === 6 ? [10, 16] : [9, 18]; const now = new Date(); const from = d.toDateString() === now.toDateString() ? now.getHours() + 1 : 0; /* today: only times still ahead, since a paid booking holds a real time */ return Array.from({ length: b - a + 1 }, (_, i) => a + i).filter((h) => h >= from); };
 const bookHour = (h) => `${h > 12 ? h - 12 : h}:00 ${h >= 12 ? 'pm' : 'am'}`;
 const bookDay = (d) => d.toLocaleDateString('en-CA', { weekday: 'short', month: 'short', day: 'numeric' });
 function BookChip({ type = 'radio', name, value, checked, onChange, children }) {
@@ -3368,7 +3443,7 @@ function BookChip({ type = 'radio', name, value, checked, onChange, children }) 
   );
 }
 /* a month calendar (Sundays and past days closed) and the open request times of the chosen day */
-function BookCalendar({ day, time, onDay, onTime }) {
+function BookCalendar({ day, time, onDay, onTime, stack = false }) {
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const [view, setView] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));
   const first = (view.getDay() + 6) % 7; /* weeks start on Monday */
@@ -3378,7 +3453,7 @@ function BookCalendar({ day, time, onDay, onTime }) {
   const canBack = view > new Date(today.getFullYear(), today.getMonth(), 1);
   const nav = 'grid size-8 place-items-center rounded-full border border-ndm-ink/12 text-ndm-ink transition-colors hover:bg-ndm-mist disabled:opacity-30';
   return (
-    <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,200px)]">
+    <div className={`grid gap-4 ${stack ? '' : 'md:grid-cols-[minmax(0,1fr)_minmax(0,200px)]'}`}>
       <div>
         <div className="flex items-center justify-between">
           <p className="font-aeonik text-[19px] text-ndm-ink">{view.toLocaleDateString('en-CA', { month: 'long', year: 'numeric' })}</p>
@@ -3391,7 +3466,7 @@ function BookCalendar({ day, time, onDay, onTime }) {
         <div className="grid grid-cols-7 gap-1" role="group" aria-label="Choose a day">
           {cells.map((d, i) => {
             if (!d) return <span key={`e${i}`} />;
-            const closed = d < today || d.getDay() === 0;
+            const closed = d < today || !bookSlots(d).length; /* Sundays, past days, and today once its last time has gone */
             const on = day && d.getTime() === day.getTime();
             return (
               <button key={d.getDate()} type="button" disabled={closed} onClick={() => onDay(d)} aria-pressed={on} aria-label={`${bookDay(d)}${closed ? ', closed' : ''}`}
@@ -3405,7 +3480,7 @@ function BookCalendar({ day, time, onDay, onTime }) {
       <div className="min-h-[176px] md:min-h-0">
         <p className="font-inter text-[13px] font-semibold text-ndm-ink">{day ? bookDay(day) : 'Pick a day'}</p>
         {day ? (
-          <div className="mt-2 grid grid-cols-3 gap-1.5 md:grid-cols-2" role="group" aria-label="Choose a time">
+          <div className={`mt-2 grid grid-cols-3 gap-1.5 ${stack ? 'sm:grid-cols-4' : 'md:grid-cols-2'}`} role="group" aria-label="Choose a time">
             {bookSlots(day).map((h) => (
               <button key={h} type="button" onClick={() => onTime(h)} aria-pressed={time === h}
                 className={`h-8 rounded-[10px] font-inter text-[13px] tabular-nums transition-colors ${time === h ? 'bg-ndm-deep text-white' : 'bg-white text-ndm-ink ring-1 ring-ndm-ink/10 hover:ring-ndm-deep'}`}>{bookHour(h)}</button>
@@ -3416,63 +3491,107 @@ function BookCalendar({ day, time, onDay, onTime }) {
     </div>
   );
 }
-/* the three-step request form, shared by the booking section and the Book Free Consultation pop-up */
-function BookForm({ thanksId, summary = false }) {
+/* consultation booking, shared by the booking section and the Book Free Consultation pop-up: the concern, then contact
+   details (so every request reaches the team), then a choice: book a time now, or ask us to call.
+   Prototype: no payment is taken; the clinic's payment provider opens at the deposit step. */
+function BookForm({ thanksId, summary = false, compact = false }) {
   const box = useRef(null);
   const [step, setStep] = useState(0);
+  const [path, setPath] = useState(null); /* 'book' (pick a time) or 'call' (we call you) */
   const [sent, setSent] = useState(false);
   const [err, setErr] = useState('');
-  const [f, setF] = useState({ interest: '', clinic: 'Uptown', day: null, time: null, via: ['Call'], news: false, first: '' });
+  const [f, setF] = useState({ interest: [], clinic: 'Uptown', day: null, time: null, via: ['Call', 'Text'], first: '', callTime: '', callClinic: 'Either', agree: false, other: '', visia: true });
   const set = (k, v) => { setErr(''); setF((o) => ({ ...o, [k]: v })); };
   const toggle = (k, v) => { setErr(''); setF((o) => ({ ...o, [k]: o[k].includes(v) ? o[k].filter((x) => x !== v) : [...o[k], v] })); };
+  const otherBox = () => box.current && box.current.querySelector('input[name="other"]');
+  /* "Something else" opens the text box; "Not sure, I'd like a skin analysis" switches the free VISIA analysis back on */
+  const pick = (t) => { setErr(''); const has = f.interest.includes(t); setF((o) => ({ ...o, interest: has ? o.interest.filter((x) => x !== t) : [...o.interest, t], visia: (!has && t.startsWith('Not sure')) ? true : o.visia })); if (t === BOOK_OTHER && !has) setTimeout(() => { const i = otherBox(); if (i) i.focus(); }, 60); };
   const [hold, setHold] = useState(0);
-  const go = (n) => {
+  const flow = BOOK_FLOW[path || 'book'];
+  const keyOf = (n, p) => (n < 3 ? String(n) : `${n}${p === 'call' ? 'c' : 'b'}`);
+  const cur = keyOf(step, path);
+  const go = (n, p = path) => {
     setErr(''); setStep(n);
-    setTimeout(() => { const l = box.current && box.current.querySelector(`[data-step="${n}"] legend`); if (l) l.focus({ preventScroll: true }); }, 30);
+    setTimeout(() => { const l = box.current && box.current.querySelector(`[data-step="${keyOf(n, p)}"] legend`); if (l) { l.focus({ preventScroll: true }); l.scrollIntoView({ block: 'nearest' }); } }, 30); /* keeps the new step's question in view on phones */
   };
+  const detailsOk = () => {
+    const fs = box.current && box.current.querySelector('[data-step="1"]');
+    const bad = fs ? [...fs.querySelectorAll('input[required]')].find((i) => !i.checkValidity()) : null;
+    if (bad) { setErr('Please add your name, mobile number and a valid email.'); bad.focus(); return false; }
+    if (!f.via.length) { setErr('Please choose at least one way to reach you.'); return false; }
+    return true;
+  };
+  const choose = (p) => { setPath(p); go(3, p); };
   const next = () => {
-    if (step === 0 && !f.interest) { setErr('Please choose one option.'); return; }
-    if (step === 1 && (!f.day || !f.time)) { setErr('Please pick a day and a time.'); return; }
+    if (step === 0 && !f.interest.length) { setErr('Please choose at least one option.'); return; }
+    if (step === 0 && f.interest.includes(BOOK_OTHER) && !f.other.trim()) { setErr('Please tell us in a few words what you’d like to address.'); const i = otherBox(); if (i) i.focus(); return; }
+    if (step === 1 && !detailsOk()) return;
+    if (step === 3 && path === 'book' && (!f.day || !f.time)) { setErr('Please pick a day and a time.'); return; }
     go(step + 1);
   };
-  const submit = (e) => { e.preventDefault(); if (!f.via.length) { setErr('Please choose at least one way to reach you.'); return; } setHold(box.current ? box.current.offsetHeight : 0); setSent(true); };
+  const submit = (e) => {
+    e.preventDefault();
+    if (step === 2) { setErr('Choose how to continue: book a time now, or have us call you.'); return; }
+    if (step < flow.length - 1) { next(); return; }
+    if (path === 'call' && !f.callTime) { setErr('Please choose a time of day.'); return; }
+    if (path === 'book' && (!f.day || !f.time)) { setErr('Please pick a day and a time.'); return; }
+    setHold(box.current ? box.current.offsetHeight : 0); setSent(true);
+  };
+  const reset = () => { setSent(false); setPath(null); setF((o) => ({ ...o, interest: [], other: '', visia: true, day: null, time: null, callTime: '', agree: false })); go(0, null); };
   const when = f.day && f.time ? `${bookDay(f.day)}, ${bookHour(f.time)}` : null;
-  const legend = 'font-aeonik text-[clamp(21px,1.9vw,26px)] font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink outline-none';
+  const clinicName = (v) => (v === 'Either' ? 'Either clinic' : BOOK_CLINIC_OPTS.find(([x]) => x === v)[1]);
+  const clinicPhone = (CLINICS.find((c) => c.name === f.clinic) || CLINICS[0]).phone;
+  const legend = `scroll-mt-24 font-aeonik ${compact ? 'text-[20px]' : 'text-[clamp(21px,1.9vw,26px)]'} font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink outline-none`;
   const label = 'mb-1.5 block font-inter text-[13px] font-semibold text-ndm-ink';
-  const rows = [['Concern', f.interest], ['Clinic', BOOK_CLINIC_OPTS.find(([v]) => v === f.clinic)[1]], ['Day and time', when]];
+  const tile = 'flex min-h-[64px] items-center gap-3 rounded-[14px] border px-4 py-3 text-left font-inter transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ndm-blue/25';
+  const concern = f.interest.map((t) => t === BOOK_OTHER ? (f.other.trim() || BOOK_OTHER) : t).join(', ');
+  const visiaRow = ['VISIA® skin analysis', f.visia ? 'Included, free' : 'Not added'];
+  const rows = path === 'call'
+    ? [['Concerns', concern], visiaRow, ['Next step', 'We call you'], ['Best time', f.callTime], ['Clinic', clinicName(f.callClinic)]]
+    : [['Concerns', concern], visiaRow, ['Clinic', clinicName(f.clinic)], ['Day and time', when]];
+  const stepCls = (k) => `book-step ${cur === k ? '' : 'is-off'}`;
+  const stepAttr = (k) => ({ 'aria-hidden': cur !== k || undefined, inert: cur !== k ? '' : undefined });
 
   if (sent) return (
     <div role="status" className="flex flex-1 flex-col items-start justify-center gap-3 py-4" style={{ minHeight: hold || undefined }}>
       <span aria-hidden="true" className="grid size-12 place-items-center rounded-full bg-ndm-amber text-white"><IconCheckBadge /></span>
-      <p id={thanksId} className="font-aeonik text-[clamp(24px,2.2vw,30px)] leading-[1.15] tracking-[-0.02em] text-ndm-ink">Request sent{f.first ? `, ${f.first}` : ''}.</p>
-      <p className="max-w-[46ch] font-inter text-[14.5px] leading-[1.55] text-ndm-muted">We’ll confirm <b className="font-semibold text-ndm-ink">{when}</b> at our {f.clinic} clinic within one business day.</p>
-      <button type="button" onClick={() => { setSent(false); setF((o) => ({ ...o, interest: '', day: null, time: null })); go(0); }} className="font-inter text-[14px] font-semibold text-ndm-deep hover:underline">Book another visit</button>
+      {path === 'book' ? (<>
+        <p id={thanksId} className="font-aeonik text-[clamp(24px,2.2vw,30px)] leading-[1.15] tracking-[-0.02em] text-ndm-ink">You’re booked{f.first ? `, ${f.first}` : ''}.</p>
+        <p className="max-w-[46ch] font-inter text-[14.5px] leading-[1.55] text-ndm-muted">Your free consultation{f.visia ? ', with your VISIA® skin analysis,' : ''} is on <b className="font-semibold text-ndm-ink">{when}</b> at our {f.clinic} clinic. You’ll receive the details by email and text.</p>
+        <p className="font-inter text-[13px] leading-[1.5] text-ndm-muted">Need to change it? Call <a href={tel(clinicPhone)} className="font-semibold text-ndm-ink hover:underline">{clinicPhone}</a> at least {BOOK_NOTICE} before.</p>
+      </>) : (<>
+        <p id={thanksId} className="font-aeonik text-[clamp(24px,2.2vw,30px)] leading-[1.15] tracking-[-0.02em] text-ndm-ink">Request sent{f.first ? `, ${f.first}` : ''}.</p>
+        <p className="max-w-[46ch] font-inter text-[14.5px] leading-[1.55] text-ndm-muted">We’ll call you in the <b className="font-semibold text-ndm-ink">{f.callTime.toLowerCase()}</b> within one business day to find a time for your consultation{f.visia ? ' and VISIA® skin analysis' : ''}.</p>
+      </>)}
+      <button type="button" onClick={reset} className="font-inter text-[14px] font-semibold text-ndm-deep hover:underline">Book another visit</button>
     </div>
   );
 
   const body = (
-    <form ref={box} onSubmit={submit} className="flex min-w-0 flex-1 flex-col">
-      <div className="grid grid-cols-3 gap-1.5" aria-hidden="true">
-        {BOOK_STEPS.map((s, i) => <span key={s} className={`h-1 rounded-full transition-colors duration-500 ${i <= step ? 'bg-ndm-deep' : 'bg-ndm-ink/10'}`} />)}
+    <form ref={box} onSubmit={submit} noValidate className="flex min-w-0 flex-1 flex-col">
+      {!compact && <span className="book-badge mb-3 inline-flex items-center gap-2 self-start rounded-full px-3 py-1.5 font-inter text-[12px] font-semibold text-[#8A5A12]"><i aria-hidden="true" className="book-badge-dot grid size-4 place-items-center rounded-full bg-ndm-amber text-white"><IconArrow size={8} /></i>Free consultation · VISIA® skin analysis included</span>}
+      <div className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${flow.length},minmax(0,1fr))` }} aria-hidden="true">
+        {flow.map((s, i) => <span key={s} className={`h-1 rounded-full transition-colors duration-500 ${i <= step ? 'bg-ndm-amber' : 'bg-ndm-ink/10'}`} />)}
       </div>
-      <p className="mt-2 font-inter text-[12.5px] text-ndm-muted">Step {step + 1} of {BOOK_STEPS.length} · <span className="text-ndm-ink">{BOOK_STEPS[step]}</span></p>
+      <p className="mt-2 font-inter text-[12.5px] text-ndm-muted">Step {step + 1} of {flow.length} · <span className="text-ndm-ink">{flow[step]}</span></p>
 
       <div className="book-steps mt-5 grid">
-        <fieldset data-step="0" className={`book-step ${step === 0 ? '' : 'is-off'}`} aria-hidden={step !== 0 || undefined} inert={step !== 0 ? '' : undefined}>
+        <fieldset data-step="0" className={stepCls('0')} {...stepAttr('0')}>
           <legend tabIndex={-1} className={legend}>What would you like to address?</legend>
-          <div className="mt-4 flex flex-wrap gap-1.5">
-            {BOOK_INTERESTS.map((t) => <BookChip key={t} name="interest" value={t} checked={f.interest === t} onChange={() => set('interest', t)}>{t}</BookChip>)}
-          </div>
+          <p className="mt-2 font-inter text-[13.5px] leading-[1.5] text-ndm-muted">Choose any that apply, you can pick more than one.</p>
+          <div className="mt-4"><BookPicker values={f.interest} onPick={pick} compact={compact} /></div>
+          {f.interest.includes(BOOK_OTHER) && (
+            <label className="mt-3 block max-w-[440px]"><span className={label}>Tell us in a few words</span>
+              <input name="other" maxLength={80} autoComplete="off" value={f.other} onChange={(e) => set('other', e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); next(); } }}
+                placeholder="For example: neck lines, or a treatment you have in mind" className={`${fieldCls} !h-11`} /></label>
+          )}
+          <label className="mt-5 flex cursor-pointer items-center gap-3 rounded-[14px] border border-ndm-ink/12 bg-white px-4 py-3 font-inter">
+            <span className="min-w-0 flex-1"><span className="block text-[14px] font-semibold text-ndm-ink">Include my free VISIA® skin analysis</span><span className="mt-0.5 block text-[12.5px] leading-[1.45] text-ndm-muted">So you and your provider can see your skin in detail before planning anything.</span></span>
+            <input type="checkbox" role="switch" name="visia" checked={f.visia} onChange={(e) => set('visia', e.target.checked)} className="peer sr-only" />
+            <span aria-hidden="true" className="relative h-6 w-11 shrink-0 rounded-full bg-ndm-ink/20 transition-colors after:absolute after:left-0.5 after:top-0.5 after:size-5 after:rounded-full after:bg-white after:shadow-[0_1px_3px_rgba(11,15,19,.3)] after:transition-transform peer-checked:bg-ndm-deep peer-checked:after:translate-x-5 peer-focus-visible:ring-4 peer-focus-visible:ring-ndm-blue/25" />
+          </label>
         </fieldset>
-        <fieldset data-step="1" className={`book-step ${step === 1 ? '' : 'is-off'}`} aria-hidden={step !== 1 || undefined} inert={step !== 1 ? '' : undefined}>
-          <legend tabIndex={-1} className={legend}>Where and when?</legend>
-          <div className="mt-4 flex flex-wrap gap-1.5" role="group" aria-label="Clinic">
-            {BOOK_CLINIC_OPTS.map(([v, t]) => <BookChip key={v} name="clinic" value={v} checked={f.clinic === v} onChange={() => set('clinic', v)}>{t}</BookChip>)}
-          </div>
-          <div className="mt-4"><BookCalendar day={f.day} time={f.time} onDay={(d) => setF((o) => ({ ...o, day: d, time: null }))} onTime={(h) => set('time', h)} /></div>
-          <p className="mt-3 font-inter text-[12px] text-ndm-muted">Times are requests; our team confirms by phone or email.</p>
-        </fieldset>
-        <fieldset data-step="2" className={`book-step ${step === 2 ? '' : 'is-off'}`} aria-hidden={step !== 2 || undefined} inert={step !== 2 ? '' : undefined}>
+        <fieldset data-step="1" className={stepCls('1')} {...stepAttr('1')}>
           <legend tabIndex={-1} className={legend}>How can we reach you?</legend>
           <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
             <label><span className={label}>First name</span><input required name="first" autoComplete="given-name" value={f.first} onChange={(e) => set('first', e.target.value)} className={`${fieldCls} !h-11`} /></label>
@@ -3486,12 +3605,50 @@ function BookForm({ thanksId, summary = false }) {
           </div>
           <p className="mt-3 font-inter text-[12px] text-ndm-muted">Please don’t include medical details. We use your details only to arrange your visit.</p>
         </fieldset>
+        <fieldset data-step="2" className={stepCls('2')} {...stepAttr('2')}>
+          <legend tabIndex={-1} className={legend}>How would you like to continue?</legend>
+          <p className="mt-2 font-inter text-[14px] leading-[1.5] text-ndm-muted">Book a time yourself, or let us call you to find one.</p>
+          <div className={`mt-5 grid gap-3 ${compact ? '' : 'sm:grid-cols-2'}`}>
+            <button type="button" onClick={() => choose('book')} className={`${tile} min-h-[96px] items-start border-ndm-deep bg-ndm-deep text-white hover:border-[#0A4F7A] hover:bg-[#0A4F7A]`}>
+              <span aria-hidden="true" className="mt-0.5 grid size-10 shrink-0 place-items-center rounded-full bg-white/15 text-white"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5" /><path d="M3.5 9.5h17M8 3v4M16 3v4" /></svg></span>
+              <span className="min-w-0 flex-1"><span className="block font-aeonik text-[clamp(20px,1.6vw,23px)] leading-[1.15] tracking-[-0.01em]">Book a time now</span><span className="mt-1.5 block text-[14px] leading-[1.45] text-white/85">Choose a clinic, day and time.</span></span>
+              <IconArrow size={15} className="mt-2 shrink-0" />
+            </button>
+            <button type="button" onClick={() => choose('call')} className={`${tile} min-h-[96px] items-start border-ndm-ink/15 bg-white text-ndm-ink hover:border-ndm-ink/40`}>
+              <span aria-hidden="true" className="mt-0.5 grid size-10 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconPhone size={18} /></span>
+              <span className="min-w-0 flex-1"><span className="block font-aeonik text-[clamp(20px,1.6vw,23px)] leading-[1.15] tracking-[-0.01em]">Have us call you</span><span className="mt-1.5 block text-[14px] leading-[1.45] text-ndm-muted">No payment. We call within one business day.</span></span>
+              <IconArrow size={15} className="mt-2 shrink-0 text-ndm-deep" />
+            </button>
+          </div>
+        </fieldset>
+        <fieldset data-step="3b" className={stepCls('3b')} {...stepAttr('3b')}>
+          <legend tabIndex={-1} className={legend}>Where and when?</legend>
+          <div className="mt-4 flex flex-wrap gap-1.5" role="group" aria-label="Clinic">
+            {BOOK_CLINIC_OPTS.map(([v, t]) => <BookChip key={v} name="clinic" value={v} checked={f.clinic === v} onChange={() => set('clinic', v)}>{t}</BookChip>)}
+          </div>
+          <div className="mt-4"><BookCalendar day={f.day} time={f.time} stack={compact} onDay={(d) => setF((o) => ({ ...o, day: d, time: null }))} onTime={(h) => set('time', h)} /></div>
+          <p className="mt-3 font-inter text-[12px] text-ndm-muted">We will confirm your time by email and text.</p>
+        </fieldset>
+        <fieldset data-step="3c" className={stepCls('3c')} {...stepAttr('3c')}>
+          <legend tabIndex={-1} className={legend}>When’s a good time to call?</legend>
+          <div className="mt-4 flex flex-wrap gap-1.5" role="group" aria-label="Time of day">
+            {BOOK_CALL_TIMES.map((t) => <BookChip key={t} name="calltime" value={t} checked={f.callTime === t} onChange={() => set('callTime', t)}>{t}</BookChip>)}
+          </div>
+          <p className="mt-5 font-inter text-[13px] font-semibold text-ndm-ink">Preferred clinic</p>
+          <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Preferred clinic">
+            {[['Either', 'Either clinic'], ...BOOK_CLINIC_OPTS].map(([v, t]) => <BookChip key={v} name="callclinic" value={v} checked={f.callClinic === v} onChange={() => set('callClinic', v)}>{t}</BookChip>)}
+          </div>
+          <p className="mt-3 font-inter text-[12px] text-ndm-muted">No payment needed. Our team calls to find a time that suits you.</p>
+        </fieldset>
       </div>
 
       <p role="alert" className="mt-3 min-h-[19px] font-inter text-[13px] leading-[19px] text-[#B4351F]">{err}</p>
       <div className="mt-auto flex min-h-[60px] items-center gap-2.5 pt-3 sm:flex-wrap">
         {step > 0 && <Btn as="button" type="button" v="line" sm onClick={() => go(step - 1)}>Back</Btn>}
-        {step < 2 ? <Btn as="button" type="button" v="ink" sm onClick={next}>Continue</Btn> : <Btn as="button" type="submit" v="book" hot className="min-w-0 flex-1 sm:flex-none">Book Free Consultation</Btn>}
+        {/* own keys, so Continue is never reused as the submit button (that would submit the step it just opened) */}
+        {step === 2 ? null : step < flow.length - 1 ? <Btn key="next" as="button" type="button" v="ink" sm onClick={next}>Continue</Btn>
+          : path === 'book' ? <Btn key="pay" as="button" type="submit" v="ink" className="min-w-0 flex-1 sm:flex-none">Book this time</Btn>
+          : <Btn key="call" as="button" type="submit" v="ink" className="min-w-0 flex-1 sm:flex-none">Request a call</Btn>}
       </div>
     </form>
   );
@@ -3531,7 +3688,7 @@ function Appointment() {
       <span aria-hidden="true" className="absolute inset-0 -z-10 bg-[rgba(11,15,19,.32)]" />
       <div className="rv book-shell mx-auto flex max-w-[1080px] flex-col rounded-[26px] p-[clamp(18px,2.4vw,32px)]">
         <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
-          <TwoTone id="book" size="text-[clamp(26px,2.6vw,38px)]" lead={<>Book a free consultation<br /></>} strong="in three short steps" />
+          <TwoTone id="book" size="text-[clamp(26px,2.6vw,38px)]" lead={<>Book a free consultation<br /></>} strong="in a few short steps" />
           <p className="max-w-[36ch] font-inter text-[13.5px] leading-[1.5] text-ndm-muted">Uptown or Downtown. Your consultation and VISIA® skin analysis are free.</p>
         </div>
         <div className="mt-5 flex"><BookForm summary /></div>
@@ -4453,10 +4610,10 @@ function BookPopup() {
           className="book-card pointer-events-auto relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white px-[clamp(20px,2.4vw,32px)] pb-[max(22px,env(safe-area-inset-bottom))] pt-6 shadow-[0_40px_80px_-30px_rgba(11,15,19,.6)] sm:max-w-[680px] sm:rounded-[20px] sm:pt-[clamp(20px,2.4vw,32px)]">
           <span aria-hidden="true" className="absolute left-1/2 top-2.5 h-1 w-10 -translate-x-1/2 rounded-full bg-ndm-ink/15 sm:hidden" />
           <button type="button" onClick={close} aria-label="Close booking form" className="absolute right-3 top-3 grid size-10 place-items-center rounded-full text-ndm-ink transition-colors hover:bg-ndm-mist sm:right-4 sm:top-4"><IconClose /></button>
-          <p className="eyebrow font-mont">
+          <p className="eyebrow is-amber font-mont">
             <span className="eyebrow-mark" aria-hidden="true"><img src="assets/icons/logo-mark.svg" alt="" /></span>Book now at our two Toronto locations
           </p>
-          <TwoTone id="book-pop-title" className="mt-4 pr-8" size="text-[clamp(26px,2.6vw,36px)]" lead={<>Book a free consultation<br /></>} strong="in three short steps" />
+          <TwoTone id="book-pop-title" className="mt-4 pr-8" size="text-[clamp(26px,2.6vw,36px)]" lead={<>Book a free consultation<br /></>} strong="in a few short steps" />
           <div className="mt-6 flex"><BookForm key={run} thanksId="book-pop-title" /></div>
         </div>
       </div>
@@ -4704,52 +4861,48 @@ function ChatBot({ ready, hidden }) {
    (name, price, units, quantity); anything about effects is written about "the treatment" in qualified language (Health Canada C.01.044). */
 const NDM_VIDEO = `${NDM}/wp-content/uploads/2025/10/Brand-Animation-Final.mp4`;
 const PROC = {
-  crumbs: [['Procedures'], ['Injectables'], 'Botox® Cosmetic'],
-  title: ['Botox® Cosmetic', 'in Toronto'],
-  sub: 'A prescription treatment given by our medical team after an in-person assessment, at our Uptown and Downtown clinics.',
-  hero: { d: `${NDM}/wp-content/uploads/2025/09/2.jpg`, m: `${NDM}/wp-content/uploads/2025/09/2.1.jpg`, pos: '30% 30%' },
+  /* round 12: the content of Ray's Botox page (his live-site build, ray/V1/NDM/botox.html), kept word for word, in this page's
+     own sections. It is the live site's wording; it names Botox® beside its effects, so it needs Raymond's approval before publishing */
+  crumbs: [['Procedures'], ['Injectables'], 'Botox®'],
+  /* the sticky section bar (TxNav): the same items as Ray's Botox page */
+  nav: [['benefits', 'Benefits'], ['film', 'The clinic'], ['overview', 'About'], ['why-choose', 'Why choose'], ['watch', 'Watch'], ['results', 'Results'], ['prices', 'Prices'], ['why', 'Why NewDermaMed'], ['visit', 'Visit us'], ['faq', 'FAQ']],
+  title: ['Botox®', 'in Toronto'],
+  sub: 'Smooth wrinkles with trusted Botox® safe, expert care for natural, youthful results.',
+  hero: { d: 'assets/botox/hero.jpg', m: 'assets/botox/hero-m.jpg', pos: '50% 30%' },
   offer: { tag: 'Current offer', title: 'Botox® Cosmetic packages', big: ['Up to', '30%', 'off'], href: '#prices', cta: 'See the prices' },
-  /* floating "at a glance" card (NDM's quick facts and both phone numbers) */
-  facts: [['Treatment type', 'Injectable'], ['Duration', '30 minutes'], ['Recovery time', 'Minimal downtime']],
+  facts: [['Treatment Type', 'Injectable'], ['Duration', '30 minutes'], ['Recovery Time', 'Minimal downtime']],
   glance: 'A short treatment, planned after a free, in-person assessment by our medical team.',
-  /* what is this treatment (shared TxIntro: copy beside a photo with the treatment's main points) */
+  /* Benefits (TxIntro, id "benefits"): Ray's five benefit points beside his photo */
   intro: {
-    tag: 'What is this treatment?', lead: 'A prescription treatment', strong: 'for expression lines',
-    text: [
-      'Small amounts of a prescription medicine are placed in specific facial muscles to relax them for a time, which may soften the lines that form when you frown, squint or raise your brows. It does not add volume.',
-      'Your provider plans how much is used and where, around how your face moves, and only after an in-person medical assessment.',
-    ],
-    chips: ['Forehead lines', 'Frown lines', 'Crow’s feet'],
-    note: 'Given only by licensed medical professionals at our Uptown and Downtown clinics.',
-    /* shown alone beside the photo: everything above and below in one paragraph */
-    para: 'Small amounts of a prescription medicine are placed in specific facial muscles to relax them for a time, which may soften the lines that form when you frown, squint or raise your brows, such as forehead lines, frown lines and crow’s feet. It does not add volume. Your provider plans how much is used and where, around how your face moves, so your usual expressions can stay natural, and only after an in-person medical assessment. A visit takes about 15 to 20 minutes, usually with minimal downtime, and the treatment is given only by licensed medical professionals at our Uptown and Downtown clinics. Individual results may vary.',
-    img: 'assets/pricing/price-4.jpg', alt: 'A provider giving an injectable treatment with a fine needle', pos: '50% 35%',
+    id: 'benefits', tag: 'Benefits', lead: 'Benefits', strong: 'of Botox®',
+    img: 'assets/botox/benefits.webp', alt: 'Botox® at NewDermaMed, Toronto', pos: '50% 40%',
+    text: [],
     points: [
-      ['Softer lines', 'May soften forehead lines, frown lines and crow’s feet.'],
-      ['A natural look', 'Planned to keep your usual expressions. Individual results may vary.'],
-      ['A quick visit', 'About 15 to 20 minutes, usually with minimal downtime.'],
+      ['Smooths Fine Lines & Wrinkles', 'Softens crow’s feet, frown lines, and forehead creases.'],
+      ['Prevents New Wrinkle Formation', 'Relaxes facial muscles to reduce future expression lines.'],
+      ['Quick & Convenient', 'Treatment takes only minutes with no downtime required.'],
+      ['Natural-Looking Results', 'Refreshes appearance without affecting facial expressions.'],
+      ['Clinically Proven & Safe', 'Backed by 20+ years of research and global trust.'],
     ],
   },
-  /* your treatment, in tabs (after the thread lift page's treatment overview: what to expect, how it works, maintenance, pricing).
-     Effects are written about "the treatment" in qualified language; the brand name only appears with the price (C.01.044) */
+  /* The clinic (TxFilm): the clinic footage, Ray's words */
+  film: { src: 'assets/botox/clinic-film.mp4', src_m: 'assets/botox/clinic-film-m.mp4', poster: 'assets/botox/clinic-film.webp', lead: 'Botox®', strong: 'at NewDermaMed Toronto',
+    text: 'Two clinics, Uptown on Yonge Street and Downtown on Bay Street. Every visit starts with a free consultation and a VISIA® skin analysis with our licensed medical team.',
+    chips: ['4763 Yonge St, Uptown', '790 Bay St, Downtown', 'Free consultation', 'VISIA® skin analysis'] },
+  /* About (ProcOverview tabs): Ray's five tabs; the key numbers beside them are this page's */
   overview: {
-    tag: 'Your treatment', lead: 'From first visit', strong: 'to maintenance',
+    tag: 'About', lead: 'From first visit', strong: 'to maintenance',
     tabs: [
-      { label: 'Overview', stat: ['20+', 'years of clinical research'], text: [
-        'A non-surgical treatment used in more than 78 countries, with more than 20 years of clinical research behind it. It relaxes the muscles behind expression lines for a time, and it does not add volume.',
-        'At NewDermaMed it is given only by our licensed medical team, after a free, in-person assessment at our Uptown or Downtown clinic. Individual results may vary.'] },
-      { label: 'What to expect', stat: ['15–20', 'minutes per treatment'], text: [
-        'Your visit starts with a free, in-person assessment at our Uptown or Downtown clinic. A member of our medical team reviews your health history, your goals and how your face moves, and explains whether the treatment suits you, its possible risks and the alternatives.',
-        'If it is appropriate, the treatment itself takes about 15 to 20 minutes, with a very fine needle and a brief pinch. Most people return to their usual activities straight away. Mild redness, swelling or bruising at the injection sites may occur and usually settles within hours to days. Individual results may vary.'] },
-      { label: 'How it works', stat: ['3–7', 'days to a visible change'], text: [
-        'Small amounts of a prescription medicine are placed in specific facial muscles. It briefly blocks the nerve signals to those muscles, so they contract less for a time, which may soften the lines that form when you frown, squint or raise your brows.',
-        'A change is usually noticed within 3 to 7 days, with the full effect at about two weeks. The treatment does not add volume, so your provider may discuss other options for lines that stay when your face is at rest.'] },
+      { label: 'Treatment Overview', stat: ['20+', 'years of clinical research'], text: [
+        'By momentarily relaxing the underlying muscles that cause expression lines, Botox® Cosmetic is a reliable, non-surgical procedure that reduces wrinkles and fine lines. Botox® is one of the most researched and secure cosmetic procedures in the world, having been used in more than 78 countries and undergoing more than 20 years of clinical research. Our experts at NewDermaMed use precise injections to produce refreshed, natural-looking results without changing your distinctive facial expressions.'] },
+      { label: 'What to Expect', stat: ['15–20', 'minutes per treatment'], text: [
+        'A typical Botox® session lasts 15 to 20 minutes, making it quick and convenient. Our skilled injector will assess your facial structure during your visit and use a tiny needle to carefully apply the treatment. The majority of patients describe the slight discomfort as a momentary pinch. It’s the ideal “lunchtime procedure” because you can get back to your regular activities right away. Within three to seven days, noticeable progress is made, and in roughly two weeks, the full effects are achieved.'] },
+      { label: 'How it Works', stat: ['3–7', 'days to a visible change'], text: [
+        'Purified botulinum toxin type A, which temporarily stops nerve signals to the targeted muscles, is an ingredient in Botox®. The skin above these muscles smoothes out and wrinkles like frown lines, forehead lines, and crow’s feet are lessened by lowering repetitive contractions. Instead of adding volume, the treatment prevents and corrects dynamic wrinkles brought on by facial movement.'] },
       { label: 'Maintenance', stat: ['3–4', 'months, typical duration'], text: [
-        'The effect typically lasts three to four months, depending on the area treated, your metabolism and your lifestyle. Many people plan three to four visits a year.',
-        'Your provider reviews your plan at each visit and adjusts the amount and placement as needed. Individual results may vary.'] },
+        'Although longevity can vary depending on lifestyle, metabolism, and treatment area, Botox® results typically last three to four months. Patients are advised to arrange maintenance procedures three to four times a year in order to preserve a young, refreshed appearance. Over time, results might last longer with regular treatments.'] },
       { label: 'Pricing', stat: ['$12', 'per unit'], text: [
-        'Botox® Cosmetic is $12 per unit, with packages of 60 to 220 units currently 10% to 30% off.',
-        'The number of units depends on the areas treated and your plan, so your final price is confirmed at your free consultation.'], link: ['#prices', 'See the price list'] },
+        'Treatment plans are completely customized because each face is different. We invite you to schedule a free consultation with one of our experts so that you can go over your options, talk about your objectives, and create a plan that is specifically for you.'], link: ['#prices', 'See the price list'] },
     ],
   },
   /* compare the options (website v3 concern pages): this treatment beside the other options for lines. A general guide only */
@@ -4764,36 +4917,44 @@ const PROC = {
       ['Starting price', ['$12 per unit', 'From $750', 'From $200', 'From $399']],
     ],
   },
-  /* why choose this treatment: who it may suit and safety (after Latos "Advantages") */
+  /* Why choose (ProcChoose): Ray's candidate list and safety paragraph; the short card titles are this page's */
   choose: {
-    img: 'assets/pricing/price-3.jpg',
+    img: 'assets/botox/why-choose.jpg', alt: 'Botox® at NewDermaMed, Toronto', tag: 'Why choose', lead: 'Why choose', strong: 'Botox®?',
     cards: [
-      ['Moderate to severe lines', 'For adults with moderate to severe expression lines on the forehead, between the brows or around the eyes.'],
-      ['A subtle, natural look', 'For people who would like an understated change rather than a dramatic one.'],
-      ['Planning ahead', 'For people who want to talk with a medical provider about early care for expression lines.'],
-      ['Safety first', 'Given only by a qualified, licensed professional after a medical assessment. Mild redness, swelling or bruising may occur and usually settles within hours to days.'],
+      ['A good candidate', 'People seeking a non-invasive anti-aging treatment who have moderate to severe fine lines or wrinkles'],
+      ['Understated results', 'Anyone seeking understated, organic improvements'],
+      ['Preventative care', 'Those looking for preventative wrinkle care'],
+      ['Is Botox® safe?', 'When administered by a qualified, licensed professional, Botox® has a demonstrated safety profile. The injection site may experience mild redness, swelling, or bruising, but these side effects are rare and usually go away in a few hours to days. Choosing an experienced provider ensures natural-looking results and minimized risk of complications.'],
     ],
   },
-  /* why NewDermaMed (shared TxWhy) */
+  /* Watch (TxReel): the clinic's Instagram reel */
+  reel: { src: 'assets/botox/reel.mp4', poster: 'assets/botox/reel.webp', tag: 'Botox®', lead: 'See it', strong: 'at NewDermaMed', text: 'A short clip from our Instagram, filmed at the clinic. Follow @newdermamed for more.' },
+  /* Why NewDermaMed (TxWhy) */
   why: {
     img: 'assets/home/team-award.jpg', alt: 'The NewDermaMed team celebrating their Top Choice Award at the clinic', pos: '50% 35%',
     lead: 'Expert care at', strong: 'two Toronto clinics',
-    items: [['16+', 'Years', 'Caring for patients in Toronto'], ['8', 'Awards', 'Top Choice Award, 2019 to 2026'], ['Licensed', 'Medical team', 'Injectables are given only by our licensed medical team'], ['Free', 'Consultation', 'Every plan starts with an in-person assessment']],
+    items: [['16+', 'Years', 'Caring for patients in Toronto'], ['8', 'Awards', 'Top Choice Award, 2019 to 2026'], ['Licensed', 'Medical team', 'Treatments are given only by our licensed medical team'], ['Free', 'Consultation', 'Every plan starts with an in-person assessment']],
   },
-  /* before & after (shared TxResults): three compact cards. Samples only, see HANDOFF */
-  results: { lead: 'Before', strong: 'and after', text: 'Drag the handle on any photo to compare.', cases: BA_CASES.map((c) => ({ ...c, treat: 'Sample' })) },
+  /* Results (TxResults): the live gallery's Botox® cases (each photo shows before and after side by side) */
+  results: { lead: 'Before', strong: 'and after', text: 'Cases from our before and after gallery, photographed at NewDermaMed.', more: 'before-after.html',
+    pics: [{ src: 'assets/botox/case-1.webp', label: 'Botox®' }, { src: 'assets/botox/case-2.webp', label: 'Botox®' }, { src: 'assets/botox/case-3.webp', label: 'Botox®' }] },
+  /* Prices (ProcPrices): Ray's two groups, Botox Cosmetic and Dysport */
   prices: {
-    name: 'Botox Cosmetic', cat: 'Botox / Dysport', unitLabel: 'Regular',
-    blurb: 'A prescription product priced per unit, given only after an in-person medical assessment.',
-    rows: [['Regular', 12, 0], ['60 units', 648, 720, '10% OFF'], ['120 units', 1152, 1440, '20% OFF'], ['180 units', 1512, 2160, '30% OFF'], ['220 units', 1848, 2640, '30% OFF']],
+    lead: 'Botox® and Dysport®', cat: 'Botox / Dysport', unitLabel: 'Regular',
+    groups: [
+      { name: 'Botox Cosmetic', title: 'Botox® Cosmetic', blurb: 'A prescription product priced per unit, given only after an in-person medical assessment.',
+        rows: [['Regular', 12, 0], ['60 units', 648, 720, '10% OFF'], ['120 units', 1152, 1440, '20% OFF'], ['180 units', 1512, 2160, '30% OFF'], ['220 units', 1848, 2640, '30% OFF']] },
+      { name: 'Dysport', title: 'Dysport®', blurb: 'A prescription product priced per unit, given only after an in-person medical assessment.',
+        rows: [['Regular', 11, 0], ['60 units', 594, 660, '10% OFF'], ['120 units', 1056, 1320, '20% OFF'], ['180 units', 1386, 1980, '30% OFF'], ['220 units', 1694, 2420, '30% OFF']] },
+    ],
   },
+  faq: { lead: 'FAQ For', strong: 'Botox®', sub: 'Everything you need to know before starting your journey with us.' },
   faqs: [
-    ['What is Botox® Cosmetic?', 'Botox® Cosmetic is a prescription medicine given by injection. At NewDermaMed it is only given after an in-person assessment by our medical team, who explain whether it suits you, the possible risks and the alternatives.'],
-    ['Which areas are commonly treated?', 'Common treatment areas include forehead lines, frown lines between the brows and crow’s feet around the eyes. Your provider will discuss which areas are appropriate for you.'],
-    ['When might I notice a change?', 'Changes are usually noticed within 3 to 7 days, with the full effect at about two weeks after treatment. Individual results may vary.'],
-    ['How long does the effect last?', 'The effect typically lasts three to four months, depending on the area treated, your metabolism and lifestyle. Many people book maintenance visits three to four times a year.'],
-    ['What side effects can occur?', 'Mild redness, swelling or bruising at the injection sites may occur and usually settles within hours to days. Your provider reviews all possible side effects with you before any treatment.'],
-    ['How much does it cost?', 'Botox® Cosmetic is $12 per unit, with packages of 60 to 220 units currently 10% to 30% off. See the price list for details; your final price is confirmed at your free consultation.'],
+    ['What is Botox®?', 'Botox® is an FDA- and Health Canada-approved injectable treatment that relaxes facial muscles to smooth fine lines and wrinkles.'],
+    ['What areas can Botox® treat?', 'Common areas include forehead lines, frown lines, crow’s feet, brow lift, gummy smile, and jawline slimming.'],
+    ['How soon will I see results from Botox®?', 'Results typically appear within 3–7 days, with full effects visible in about 2 weeks after treatment.'],
+    ['How long do Botox® results last?', 'Results generally last 3–4 months, with maintenance treatments recommended to preserve a youthful, refreshed look.'],
+    ['Is Botox® safe?', 'Yes. Botox® has been extensively studied with over 20 years of clinical use worldwide, and is safe when performed by licensed professionals.'],
   ],
 };
 
@@ -4803,36 +4964,19 @@ const IconClock = (props) => <Svg size={30} vb="0 0 32 32" {...props}><circle cx
 const IconTick = (p) => <Svg size={14} vb="0 0 14 14" {...p}><path d="m3 7.3 2.6 2.6L11 4.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></Svg>;
 
 /* ---------------------------------------------------------------- booking form (hero card on desktop, its own block on phones) */
+/* the hero and phone form: the shared booking form (BookForm) in its compact layout, after Ray's version (round 12) */
 function ProcForm({ id, className = '' }) {
-  const [sent, setSent] = useState(false);
-  const [treat, setTreat] = useState('Injectables');
-  const [clinic, setClinic] = useState('');
   const hid = `${id}-title`;
   return (
-    <div className={`proc-form rounded-[22px] bg-white p-[clamp(20px,2.2vw,30px)] text-ndm-ink ${className}`}>
-      {sent ? (
-        <div className="flex min-h-[380px] items-center justify-center"><BookThanks onAnother={() => setSent(false)} /></div>
-      ) : (
-        <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} aria-labelledby={hid}>
-          <h2 id={hid} className="font-aeonik text-[clamp(24px,2vw,30px)] font-normal leading-[1.1] tracking-[-0.025em]">
-            Book your <br /><span className="tt-strong text-ndm-deep">free consultation</span>
-          </h2>
-          <div className="mt-5 grid gap-2.5">
-            <input required name="name" autoComplete="name" placeholder="Your name" aria-label="Your name" className={fieldCls} />
-            <input required type="email" name="email" autoComplete="email" placeholder="Your email" aria-label="Your email" className={fieldCls} />
-            <input required type="tel" name="phone" autoComplete="tel" placeholder="Your phone number" aria-label="Your phone number" className={fieldCls} />
-            <BookSelect name="treatment" value={treat} onChange={(e) => setTreat(e.target.value)} placeholder="Select your treatment">
-              {BOOK_TREATMENTS.map((t) => <option key={t} className="text-ndm-ink">{t}</option>)}
-            </BookSelect>
-            <BookSelect name="clinic" value={clinic} onChange={(e) => setClinic(e.target.value)} placeholder="Select clinic location">
-              {BOOK_CLINICS.map(([c, a]) => <option key={c} value={c} className="text-ndm-ink">{c}, {a}</option>)}
-            </BookSelect>
-            <textarea name="notes" rows={2} placeholder="Any concerns or questions?" aria-label="Any concerns or questions?" className={`${fieldCls} h-auto resize-none py-3`} />
-          </div>
-          <Btn v="book" hot block className="mt-4" type="submit">Book Free Consultation</Btn>
-          <p className="mt-3 font-inter text-[12px] leading-[1.5] text-ndm-muted">Free and no obligation.</p>
-        </form>
-      )}
+    <div className={`proc-form book-compact rounded-[22px] bg-white p-[clamp(20px,2.2vw,28px)] text-ndm-ink ${className}`} role="region" aria-labelledby={hid}>
+      <div className="mb-4 flex items-start justify-between gap-3">
+        <h2 id={hid} className="font-aeonik text-[clamp(24px,2vw,28px)] font-normal leading-[1.1] tracking-[-0.025em]">
+          Book your <br /><span className="tt-strong text-ndm-deep">free consultation</span>
+        </h2>
+        <span aria-hidden="true" className="book-badge-dot mt-1 grid size-9 shrink-0 place-items-center rounded-full bg-ndm-amber text-white"><IconArrow size={13} /></span>
+      </div>
+      <div className="flex flex-col"><BookForm compact thanksId={`${id}-thanks`} /></div>
+      <p className="mt-3 font-inter text-[12px] leading-[1.5] text-ndm-muted">Free and no obligation. VISIA® skin analysis included.</p>
     </div>
   );
 }
@@ -4970,15 +5114,16 @@ function ProcCompare({ p }) {
   useReveal(ref);
   const c = p.compare;
   return (
-    <section ref={ref} id="compare" aria-labelledby="compare-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
-      <TxHead p={p} id="compare" tag="Compare the options" hid="compare-title" lead="This treatment, beside" strong="the other options" text="A general guide to the treatments often discussed for lines. Your provider helps you choose at your free consultation." />
+    <section ref={ref} id="compare" aria-labelledby="compare-title" className="relative z-10 scroll-mt-[90px] bg-ndm-paper px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
+      {/* a concern page passes its own heading and turns off the highlighted first column (c.mark === false) */}
+      <TxHead p={p} id="compare" tag={c.tag || 'Compare the options'} hid="compare-title" lead={c.lead || 'This treatment, beside'} strong={c.strong || 'the other options'} text={c.text || 'A general guide to the treatments often discussed for lines. Your provider helps you choose at your free consultation.'} />
       <div className={`${TX_WRAP} rv mt-[clamp(32px,4vw,52px)] overflow-x-auto rounded-[24px] bg-white ring-1 ring-ndm-ink/[.06] shadow-[0_30px_60px_-46px_rgba(27,36,43,.45)]`} style={{ transitionDelay: '.08s' }}>
         <table className="cmp-t w-full min-w-[760px] border-collapse font-inter text-[14.5px]">
           <thead>
             <tr>
               <td className="w-[170px]" />
               {c.cols.map(([n, h], i) => (
-                <th key={n} scope="col" className={`px-5 py-5 text-left align-bottom font-aeonik text-[19px] font-normal leading-[1.2] tracking-[-0.01em] ${i === 0 ? 'cmp-me text-ndm-deep' : 'text-ndm-ink'}`}>
+                <th key={n} scope="col" className={`px-5 py-5 text-left align-bottom font-aeonik text-[19px] font-normal leading-[1.2] tracking-[-0.01em] ${i === 0 && c.mark !== false ? 'cmp-me text-ndm-deep' : 'text-ndm-ink'}`}>
                   {h ? <a href={h} className="group inline-flex items-center gap-1.5 hover:text-ndm-deep">{n}<IconArrow className="opacity-60 transition-transform group-hover:translate-x-0.5" /></a> : n}
                 </th>
               ))}
@@ -4988,7 +5133,7 @@ function ProcCompare({ p }) {
             {c.rows.map(([k, vals]) => (
               <tr key={k}>
                 <th scope="row" className="px-5 py-4 text-left align-top text-[13px] font-semibold text-ndm-muted">{k}</th>
-                {vals.map((v, i) => <td key={i} className={`px-5 py-4 align-top leading-[1.5] text-ndm-ink ${i === 0 ? 'cmp-me' : ''}`}>{v}</td>)}
+                {vals.map((v, i) => <td key={i} className={`px-5 py-4 align-top leading-[1.5] text-ndm-ink ${i === 0 && c.mark !== false ? 'cmp-me' : ''}`}>{v}</td>)}
               </tr>
             ))}
           </tbody>
@@ -5059,14 +5204,14 @@ function ProcChoose({ p }) {
     </li>
   );
   return (
-    <section ref={ref} id="why-choose" aria-labelledby="choose-title" className="relative z-10 bg-ndm-mist px-[var(--gx)] py-[clamp(72px,8vw,120px)]">
+    <section ref={ref} id="why-choose" aria-labelledby="choose-title" className="relative z-10 scroll-mt-[170px] bg-ndm-mist px-[var(--gx)] py-[clamp(72px,8vw,120px)]">
       <div className="text-center">
-        <Eyebrow className="rv">Why choose this treatment</Eyebrow>
-        <TwoTone id="choose-title" className="rv mx-auto mt-5" lead={twoLine('Who it may suit,')} strong="and safety first" style={{ transitionDelay: '.06s' }} />
+        <Eyebrow className="rv">{txNum(p, 'why-choose') && <span className="tabular-nums text-ndm-deep">{txNum(p, 'why-choose')}</span>}{p.choose.tag || 'Why choose this treatment'}</Eyebrow>
+        <TwoTone id="choose-title" className="rv mx-auto mt-5" lead={twoLine(p.choose.lead || 'Who it may suit,')} strong={p.choose.strong || 'and safety first'} style={{ transitionDelay: '.06s' }} />
       </div>
       <div className="mx-auto mt-[clamp(36px,4vw,56px)] grid max-w-[1180px] gap-3 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-4">
         <div className="rv rv-clip relative min-h-[360px] overflow-hidden rounded-[22px] bg-ndm-line md:col-span-2 lg:order-2 lg:col-span-1 lg:min-h-0" style={{ transitionDelay: '.08s' }}>
-          <img src={p.choose.img} alt="Close-up of a woman’s face in soft natural light" loading="lazy" className="absolute inset-0 h-full w-full object-cover object-[50%_40%]" />
+          <img src={p.choose.img} alt={p.choose.alt || 'Close-up of a woman’s face in soft natural light'} loading="lazy" className="absolute inset-0 h-full w-full object-cover object-[50%_40%]" />
         </div>
         <ul className="grid gap-3 lg:order-1 lg:gap-4" role="list">{c.slice(0, 2).map(card)}</ul>
         <ul className="grid gap-3 lg:order-3 lg:gap-4" role="list">{c.slice(2).map((x, i) => card(x, i + 2))}</ul>
@@ -5080,60 +5225,66 @@ function ProcChoose({ p }) {
 function ProcPrices({ p }) {
   const ref = useRef(null);
   useReveal(ref);
-  const [on, setOn] = useState(true);
   const pr = p.prices;
+  const groups = pr.groups || [{ name: pr.name, title: 'Botox® Cosmetic', blurb: pr.blurb, rows: pr.rows }];
+  const [open, setOpen] = useState(() => groups.map((g, i) => i === 0));
   const unit = (label) => (label === pr.unitLabel ? ' / unit' : '');
-  const pct = Math.max(...pr.rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
+  const pctOf = (rows) => Math.max(...rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
   return (
-    <section ref={ref} id="prices" aria-labelledby="prices-title" className="proc-peach relative z-10 px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
+    <section ref={ref} id="prices" aria-labelledby="prices-title" className="proc-peach relative z-10 scroll-mt-[150px] px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
       <div className="mx-auto max-w-[1040px]">
         <div className="text-center">
-          <Eyebrow className="rv">Price list</Eyebrow>
-          <TwoTone id="prices-title" className="rv mx-auto mt-5" lead={twoLine('Botox® Cosmetic')} strong="prices and packages" style={{ transitionDelay: '.06s' }} />
+          <Eyebrow className="rv">{txNum(p, 'prices') && <span className="tabular-nums text-ndm-deep">{txNum(p, 'prices')}</span>}Price list</Eyebrow>
+          <TwoTone id="prices-title" className="rv mx-auto mt-5" lead={twoLine(pr.lead || 'Botox® Cosmetic')} strong="prices and packages" style={{ transitionDelay: '.06s' }} />
           <p className="rv mx-auto mt-5 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>Prices per unit and per package, with current offers. Your plan and final price are confirmed at your free consultation.</p>
         </div>
         <ul className="pr-groups rv mt-[clamp(40px,4.5vw,64px)]" role="list" style={{ transitionDelay: '.14s' }}>
-          <li className={`pr-group ${on ? 'is-open' : ''}`}>
-            <h3 className="pr-ghead m-0">
-              <button type="button" id="proc-pr-h" aria-expanded={on} aria-controls="proc-pr" onClick={() => setOn((v) => !v)}
-                className="group grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 py-[22px] text-left sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6">
-                <span className="min-w-0">
-                  <span className="block font-inter text-[12.5px] tabular-nums text-ndm-muted">{pr.rows.length} options</span>
-                  <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">Botox® Cosmetic</span>
-                </span>
-                <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                  {pct > 0 && <span className="pr-badge">Up to {pct}% off</span>}
-                  <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{money(Math.min(...pr.rows.map((r) => r[1])))}</span> / unit</span>
-                </span>
-                <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
-              </button>
-            </h3>
-            <div id="proc-pr" role="region" aria-labelledby="proc-pr-h" className="pr-body" {...(on ? {} : { inert: '' })}>
-              <div>
-                <p className="max-w-[60ch] pb-2 font-inter text-[15px] leading-[1.55] text-ndm-muted">{pr.blurb}</p>
-                <ul className="pr-sub grid gap-2 py-4" role="list">
-                  {pr.rows.map(([label, price, was, tag]) => {
-                    const line = { key: `${pr.name}|${label}`, cat: pr.cat, name: pr.name, label, price, was: was || 0, unit: unit(label) };
-                    return (
-                      <li key={label} className="pr-opt grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-[14px] py-3 pl-4 pr-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6 sm:pl-5">
-                        <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
-                          <span className="font-inter text-[15px] text-ndm-ink">{label === 'Regular' ? 'Per unit' : label}</span>
-                          {tag && <span className="pr-tag">{tag}</span>}
-                        </span>
-                        <span className="col-start-1 row-start-2 flex items-baseline gap-2.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                          {was ? <s className="pr-was"><span className="sr-only">Regular price </span>{money(was)}</s> : null}
-                          <span className={`font-aeonik text-[22px] leading-none tracking-[-0.02em] ${was ? 'text-ndm-deep' : 'text-ndm-ink'}`}>
-                            {was ? <span className="sr-only">now </span> : null}{money(price)}{line.unit && <span className="font-inter text-[13px] tracking-normal text-ndm-muted">{line.unit}</span>}
-                          </span>
-                        </span>
-                        <span className="col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><QtyControl line={line} label={`${pr.name}, ${label}`} /></span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            </div>
-          </li>
+          {groups.map((g, gi) => {
+            const on = open[gi], pct = pctOf(g.rows), hid = `proc-pr-h${gi}`, bid = `proc-pr${gi}`;
+            return (
+              <li key={g.name} className={`pr-group ${on ? 'is-open' : ''}`}>
+                <h3 className="pr-ghead m-0">
+                  <button type="button" id={hid} aria-expanded={on} aria-controls={bid} onClick={() => setOpen((o) => o.map((v, k) => (k === gi ? !v : v)))}
+                    className="group grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 py-[22px] text-left sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6">
+                    <span className="min-w-0">
+                      <span className="block font-inter text-[12.5px] tabular-nums text-ndm-muted">{g.rows.length} options</span>
+                      <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{g.title}</span>
+                    </span>
+                    <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
+                      {pct > 0 && <span className="pr-badge">Up to {pct}% off</span>}
+                      <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{money(Math.min(...g.rows.map((r) => r[1])))}</span> / unit</span>
+                    </span>
+                    <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
+                  </button>
+                </h3>
+                <div id={bid} role="region" aria-labelledby={hid} className="pr-body" {...(on ? {} : { inert: '' })}>
+                  <div>
+                    <p className="max-w-[60ch] pb-2 font-inter text-[15px] leading-[1.55] text-ndm-muted">{g.blurb}</p>
+                    <ul className="pr-sub grid gap-2 py-4" role="list">
+                      {g.rows.map(([label, price, was, tag]) => {
+                        const line = { key: `${g.name}|${label}`, cat: pr.cat, name: g.name, label, price, was: was || 0, unit: unit(label) };
+                        return (
+                          <li key={label} className="pr-opt grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-[14px] py-3 pl-4 pr-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6 sm:pl-5">
+                            <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
+                              <span className="font-inter text-[15px] text-ndm-ink">{label === 'Regular' ? 'Per unit' : label}</span>
+                              {tag && <span className="pr-tag">{tag}</span>}
+                            </span>
+                            <span className="col-start-1 row-start-2 flex items-baseline gap-2.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
+                              {was ? <s className="pr-was"><span className="sr-only">Regular price </span>{money(was)}</s> : null}
+                              <span className={`font-aeonik text-[22px] leading-none tracking-[-0.02em] ${was ? 'text-ndm-deep' : 'text-ndm-ink'}`}>
+                                {was ? <span className="sr-only">now </span> : null}{money(price)}{line.unit && <span className="font-inter text-[13px] tracking-normal text-ndm-muted">{line.unit}</span>}
+                              </span>
+                            </span>
+                            <span className="col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><QtyControl line={line} label={`${g.name}, ${label}`} /></span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
         </ul>
         <div className="rv mt-10 flex flex-wrap justify-center gap-3" style={{ transitionDelay: '.18s' }}>
           <Btn href="#/book" v="book">Book Free Consultation</Btn>
@@ -5161,6 +5312,44 @@ const TX_ICONS = {
 const txIcon = (label) => (/type/i.test(label) ? 'type' : /duration|session/i.test(label) ? 'clock' : /recovery|downtime/i.test(label) ? 'leaf' : 'cal');
 /* section number from the page's nav list ("01"), or nothing on pages without one */
 const txNum = (p, id) => { const i = (p.nav || []).findIndex(([k]) => k === id); return i < 0 ? '' : String(i + 1).padStart(2, '0'); };
+/* section bar icons (Ray, round 12): one per section, picked from its id and label */
+const NAV_ICONS = {
+  info: <><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 7.6h.01" /></>,
+  doc: <><rect x="5" y="3.5" width="14" height="17" rx="2" /><path d="M8.5 8h7M8.5 12h7M8.5 16h4" /></>,
+  plus: <><circle cx="12" cy="12" r="9" /><path d="M12 8.5v7M8.5 12h7" /></>,
+  results: <><rect x="3.5" y="5" width="17" height="14" rx="2" /><path d="M12 5v14" /></>,
+  tag: <><path d="M4 12.5v-7A1.5 1.5 0 0 1 5.5 4h7l7.5 7.5a1.5 1.5 0 0 1 0 2.1l-5.9 5.9a1.5 1.5 0 0 1-2.1 0L4 12.5Z" /><circle cx="8.5" cy="8.5" r="1.1" /></>,
+  help: <><circle cx="12" cy="12" r="9" /><path d="M9.6 9.6a2.4 2.4 0 1 1 3.1 2.3c-.7.26-1.2.9-1.2 1.6v.3M12 16.5h.01" /></>,
+  star: <><path d="M12 3.6l2.4 4.9 5.4.6-4 3.6 1.1 5.3L12 15.7 7.1 18l1.1-5.3-4-3.6 5.4-.6L12 3.6Z" /></>,
+  building: <><rect x="5" y="3.5" width="14" height="17" rx="1.5" /><path d="M9 8h0M12 8h0M15 8h0M9 12h0M12 12h0M15 12h0M10 20.5V16h4v4.5" /></>,
+  play: <><circle cx="12" cy="12" r="9" /><path d="M10 8.4l5.2 3.6L10 15.6Z" /></>,
+  pin: <><path d="M12 21s6-5.3 6-10a6 6 0 1 0-12 0c0 4.7 6 10 6 10Z" /><circle cx="12" cy="11" r="2.2" /></>,
+  shield: <><path d="M12 3.5l7 3v5c0 4.3-3 7.6-7 9-4-1.4-7-4.7-7-9v-5l7-3Z" /><path d="M9 12l2 2 4-4" /></>,
+  user: <><circle cx="12" cy="8.5" r="3.2" /><path d="M5.5 19.5a6.5 6.5 0 0 1 13 0" /></>,
+  list: <><path d="M9 6.5h10M9 12h10M9 17.5h10M5 6.5h.01M5 12h.01M5 17.5h.01" /></>,
+  search: <><circle cx="11" cy="11" r="6" /><path d="m20 20-4.2-4.2" /></>,
+  clock: <><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" /></>,
+  home: <><path d="M3.5 11.5 12 4l8.5 7.5" /><path d="M5.5 10v9.5h13V10" /><path d="M10 19.5v-5h4v5" /></>,
+};
+/* pick a nav icon from the section id and label */
+const navIcon = (id, label) => {
+  const s = ((id || '') + ' ' + (label || '')).toLowerCase();
+  if (/faq/.test(s)) return 'help';
+  if (/pric|fee|cost/.test(s)) return 'tag';
+  if (/result|before|after|gallery/.test(s)) return 'results';
+  if (/combin|elevate|pair|together/.test(s)) return 'plus';
+  if (/benefit/.test(s)) return 'star';
+  if (/visit|location|map/.test(s)) return 'pin';
+  if (/clinic|film|inside|space/.test(s)) return 'building';
+  if (/watch|video|reel/.test(s)) return 'play';
+  if (/why|safe|trust/.test(s)) return 'shield';
+  if (/duration|long|last|course|session/.test(s)) return 'clock';
+  if (/candidate|who|suit/.test(s)) return 'user';
+  if (/assess|analysis|consult/.test(s)) return 'search';
+  if (/overview|about|your treatment|expect|what to|understand/.test(s)) return 'doc';
+  if (/option|how|work|care|mainten/.test(s)) return 'list';
+  return 'info';
+};
 
 function TxHead({ p, id, tag, hid, lead, strong, text, dark }) {
   const n = txNum(p, id);
@@ -5243,11 +5432,17 @@ function TxNav({ p }) {
     <nav ref={bar} aria-label="On this page" className="tx-nav sticky top-[100px] z-30 mt-8 bg-ndm-paper/85 backdrop-blur-[10px] xl:top-[120px]">
       <div className="tx-nav-scroll no-scrollbar relative overflow-x-auto px-[var(--gx)] py-2.5">
       <ul className="relative mx-auto flex w-max gap-1" role="list">
-        {p.nav.map(([id, label], i) => (
+        <li className="shrink-0">
+          <a href="#top" aria-label="Back to top" onClick={(e) => { e.preventDefault(); scrollToY(0); }}
+            className="flex items-center whitespace-nowrap rounded-full px-2.5 py-2 text-ndm-deep transition-colors hover:bg-white hover:text-ndm-ink">
+            <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{NAV_ICONS.home}</svg>
+          </a>
+        </li>
+        {p.nav.map(([id, label]) => (
           <li key={id} data-k={id} className="shrink-0">
             <a href={`#${id}`} onClick={(e) => go(e, id)} aria-current={on === id ? 'true' : undefined}
-              className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-2 font-inter text-[13px] transition-colors ${on === id ? 'bg-ndm-deep text-white' : 'text-ndm-ink/75 hover:bg-white hover:text-ndm-ink'}`}>
-              <span className={`tabular-nums text-[11.5px] ${on === id ? 'text-white/70' : 'text-ndm-muted'}`}>{String(i + 1).padStart(2, '0')}</span>{label}
+              className={`flex items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 font-inter text-[14px] transition-colors ${on === id ? 'bg-ndm-deep font-medium text-white' : 'text-ndm-ink/80 hover:bg-white hover:text-ndm-ink'}`}>
+              <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={on === id ? 'text-white' : 'text-ndm-deep'}>{NAV_ICONS[navIcon(id, label)]}</svg>{label}
             </a>
           </li>
         ))}
@@ -5263,8 +5458,8 @@ function TxIntro({ p }) {
   useReveal(ref);
   const t = p.intro;
   return (
-    <section ref={ref} id="what" aria-labelledby="intro-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(56px,6vw,88px)]">
-      <TxHead p={p} id="what" tag={t.tag} hid="intro-title" lead={t.lead} strong={t.strong} />
+    <section ref={ref} id={t.id || 'what'} aria-labelledby="intro-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(56px,6vw,88px)]">
+      <TxHead p={p} id={t.id || 'what'} tag={t.tag} hid="intro-title" lead={t.lead} strong={t.strong} />
       <div className={`${TX_WRAP} mt-[clamp(28px,3.4vw,48px)] grid items-center gap-8 lg:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] lg:gap-[clamp(40px,5vw,72px)]`}>
         <div className="rv relative mx-auto w-full max-w-[460px] lg:max-w-none" style={{ transitionDelay: '.1s' }}>
           <div className={`relative aspect-[5/4] overflow-hidden rounded-[24px] bg-ndm-mist lg:aspect-auto ${t.para ? 'lg:h-[min(50vh,460px)]' : 'lg:h-[min(62vh,560px)]'}`}>
@@ -5293,7 +5488,7 @@ function TxIntro({ p }) {
             {t.points.map(([h, d], i) => (
               <li key={h} className="rv flex items-start gap-4 rounded-[18px] bg-white px-5 py-4 ring-1 ring-ndm-ink/[.06] shadow-[0_18px_40px_-34px_rgba(27,36,43,.35)] sm:items-center" style={{ transitionDelay: `${0.14 + i * 0.05}s` }}>
                 <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconTick size={15} /></span>
-                <span className="grid gap-1 sm:grid-cols-[110px_minmax(0,1fr)] sm:items-baseline sm:gap-4">
+                <span className="grid gap-1 sm:grid-cols-[minmax(110px,190px)_minmax(0,1fr)] sm:items-baseline sm:gap-4">
                   <span className="font-aeonik text-[21px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">{h}</span>
                   <span className="font-inter text-[15.5px] leading-[1.55] text-ndm-ink/80">{d}</span>
                 </span>
@@ -5509,7 +5704,7 @@ function TxResults({ p }) {
   const t = p.results;
   const n = txNum(p, 'results');
   const more = t.more || BA_ALL;
-  const cases = t.cases.slice(0, 4);
+  const cases = (t.cases || []).slice(0, 4);
   return (
     <section ref={ref} id="results" aria-labelledby="results-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <div className={TX_WRAP}>
@@ -5521,6 +5716,21 @@ function TxResults({ p }) {
           </div>
           <div className="rv" style={{ transitionDelay: '.12s' }}><Btn href={more} target="_blank" rel="noopener" v="line">See all before &amp; after</Btn></div>
         </div>
+        {t.pics ? (<>
+          <ul role="list" className="mt-[clamp(32px,4vw,52px)] grid gap-4 sm:grid-cols-3">
+            {t.pics.map((c, i) => (
+              <li key={c.src} className="rv" style={{ transitionDelay: `${0.06 * i}s` }}>
+                <figure className="m-0 overflow-hidden rounded-[22px] bg-white p-2.5 ring-1 ring-ndm-ink/[.06] shadow-[0_22px_44px_-36px_rgba(27,36,43,.35)]">
+                  <span className="relative block aspect-[431/310] overflow-hidden rounded-[16px] bg-ndm-mist"><img src={c.src} alt={`${c.label}, before and after`} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" /></span>
+                  <figcaption className="flex items-baseline justify-between gap-3 px-1.5 pb-1 pt-3">
+                    <span className="font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">{c.label}</span>
+                    <span className="font-inter text-[12.5px] text-ndm-muted">Before · After</span>
+                  </figcaption>
+                </figure>
+              </li>
+            ))}
+          </ul>
+        </>) : (
         <ul role="list" className="mt-[clamp(32px,4vw,52px)] grid grid-cols-2 gap-x-3 gap-y-6 lg:grid-cols-4 lg:gap-x-4">
           {cases.map((c, i) => (
             <li key={c.id} className="rv" style={{ transitionDelay: `${0.06 * i}s` }}>
@@ -5558,6 +5768,7 @@ function TxResults({ p }) {
             </li>
           )}
         </ul>
+        )}
         <p className="mt-8 flex items-start gap-2.5 font-inter text-[13px] leading-[1.5] text-ndm-muted">
           <BaIconInfo className="mt-0.5 shrink-0" />Photos show individual cases and are shared for illustration only. Individual results may vary.
         </p>
@@ -5730,7 +5941,7 @@ function TxWhy({ p }) {
   useReveal(ref);
   const t = p.why;
   return (
-    <section ref={ref} aria-labelledby="why-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
+    <section ref={ref} id="why" aria-labelledby="why-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <TxHead p={p} id="why" tag="Why NewDermaMed" hid="why-title" lead={t.lead} strong={t.strong} />
       <div className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,.9fr)] lg:gap-[clamp(40px,5vw,72px)]`}>
         <div className="rv relative aspect-[3/2] overflow-hidden rounded-[24px] bg-ndm-mist">
@@ -5757,6 +5968,51 @@ function TxWhy({ p }) {
   );
 }
 
+/* ---------------------------------------------------------------- visit us (Ray, round 12): the two clinics as photo cards with
+   the address, phone and hours; the whole card opens the About page's contact part */
+const TX_HOURS = { Uptown: 'Monday to Friday 9am to 7pm, Saturday 10am to 5pm', Downtown: 'Monday to Friday 9am to 7pm, Saturday 10am to 5pm' };
+const TX_VISIT_IMG = { Uptown: 'assets/clinic/clinic-4.jpg', Downtown: 'assets/clinic/clinic-1.jpg' };
+const TX_VISIT_CSS = `
+.tx-visit-pic{transition:transform 1.1s var(--e-out)}
+.tx-visit:hover .tx-visit-pic{transform:scale(1.05)}
+.tx-pill{background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 18px 40px -20px rgba(27,36,43,.55)}
+@media (prefers-reduced-motion:reduce){.tx-visit-pic{transition:none}}
+`;
+function TxVisit({ p }) {
+  const ref = useRef(null);
+  useReveal(ref);
+  const n = txNum(p, 'visit');
+  return (
+    <>
+    <style>{TX_VISIT_CSS}</style>
+    <section ref={ref} id="visit" aria-labelledby="visit-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
+      <TxHead p={p} id="visit" tag="Visit us" hid="visit-title" lead="Two clinics," strong="Uptown and Downtown" text="Both clinics offer the same free consultation and VISIA® skin analysis. Choose the one that suits you." />
+      <ul className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid gap-4 md:grid-cols-2 md:gap-6`} role="list">
+        {CLINICS.map((c, i) => (
+          <li key={c.name} className="rv" style={{ transitionDelay: `${0.08 * i}s` }}>
+            <a href="about.html#contact" className="tx-visit group block overflow-hidden rounded-[26px] bg-white ring-1 ring-ndm-ink/[.06] transition-shadow hover:shadow-[0_34px_60px_-34px_rgba(15,128,195,.45)]">
+              <span className="relative block aspect-[16/10] overflow-hidden bg-ndm-mist">
+                <img src={TX_VISIT_IMG[c.name]} alt={`NewDermaMed ${c.name} clinic`} loading="lazy" decoding="async" className="tx-visit-pic absolute inset-0 h-full w-full object-cover" />
+                <span className="tx-pill absolute left-4 top-4 rounded-full px-3.5 py-1.5 font-inter text-[12.5px] font-semibold text-ndm-ink">{c.name}</span>
+              </span>
+              <span className="flex items-start justify-between gap-4 p-5 md:p-6">
+                <span className="min-w-0">
+                  <span className="block font-aeonik text-[clamp(22px,2vw,28px)] leading-[1.15] tracking-[-0.02em] text-ndm-ink">{c.addr.split(',')[0]}</span>
+                  <span className="mt-1 block font-inter text-[14px] leading-[1.5] text-ndm-muted">{c.addr.split(',').slice(1).join(',').trim()}</span>
+                  <span className="mt-3 block font-inter text-[14px] font-semibold text-ndm-ink">{c.phone}</span>
+                  <span className="mt-1 block font-inter text-[13px] leading-[1.5] text-ndm-muted">{TX_HOURS[c.name]}</span>
+                </span>
+                <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-full bg-ndm-deep text-white transition-transform duration-500 group-hover:-rotate-45"><IconArrow /></span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+    </>
+  );
+}
+
 /* ---------------------------------------------------------------- Aptos Thread Lift page data.
    Content: DermaHub's thread-lift page structure, adapted to Aptos and NewDermaMed; NDM's own facts (60 minutes, up to 2 weeks,
    up to 24 months, prices) and NUVIOR's patient-facing Aptos text. In Canada, Visage Excellence is licensed for the midface,
@@ -5770,7 +6026,7 @@ const APT = {
   facts: [['Treatment type', 'Minimally invasive'], ['Duration', '60 minutes'], ['Recovery time', 'Up to 2 weeks'], ['May last', 'Up to 24 months']],
   glance: 'Planned at a free, in-person consultation and placed by our trained medical team.',
   /* the reference's ten topics, in its order; shown as a sticky row of links */
-  nav: [['what', 'What it is'], ['how', 'How it works'], ['safety', 'Is it safe'], ['duration', 'How long it lasts'], ['candidate', 'Good candidates'], ['expect', 'What to expect'], ['results', 'Results'], ['care', 'Pre & post care'], ['combinations', 'Elevate your results']],
+  nav: [['what', 'What it is'], ['how', 'How it works'], ['safety', 'Is it safe'], ['duration', 'How long it lasts'], ['candidate', 'Good candidates'], ['expect', 'What to expect'], ['results', 'Results'], ['care', 'Pre & post care'], ['combinations', 'Elevate your results'], ['visit', 'Visit us']],
   intro: {
     tag: 'What it is', lead: 'A lift,', strong: 'without the surgery', ring: 'SOLID · LONG-LASTING · BIOSTIMULATION · ',
     text: [
@@ -5910,6 +6166,7 @@ function App() {
         <TxWhy p={APT} />
         <Team />
         <PromoReviews />
+        <TxVisit p={APT} />
         <ProcAnalysis />
         <Faq items={APT.faqs} lead="Your top questions," strong="answered" intro="What to know about the Aptos Thread Lift, from our medical team." />
       </main>
