@@ -1,0 +1,34 @@
+name: Deploy to cPanel (staging)
+
+on:
+  push:
+    branches: [Ray-Dev]
+
+concurrency:
+  group: cpanel-deploy
+  cancel-in-progress: false
+
+env:
+  CPANEL_HOST: newdermamedlaserclinic.com
+  CPANEL_USER: newdermamedlaser
+  REPO_PATH: /home/newdermamedlaser/repositories/NDM
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Ray-Dev on cPanel
+        run: |
+          curl -fsS -G "https://$CPANEL_HOST:2083/execute/VersionControl/update" \
+            -H "Authorization: cpanel $CPANEL_USER:${{ secrets.CPANEL_TOKEN }}" \
+            --data-urlencode "repository_root=$REPO_PATH" \
+            --data-urlencode "branch=Ray-Dev" | tee update.json
+          jq -e '.status == 1' update.json
+
+      - name: Deploy HEAD commit
+        run: |
+          sleep 5
+          curl -fsS -G "https://$CPANEL_HOST:2083/execute/VersionControlDeployment/create" \
+            -H "Authorization: cpanel $CPANEL_USER:${{ secrets.CPANEL_TOKEN }}" \
+            --data-urlencode "repository_root=$REPO_PATH" | tee deploy.json
+          jq -e '.status == 1' deploy.json
