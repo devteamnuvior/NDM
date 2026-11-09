@@ -3,52 +3,48 @@
    (name, price, units, quantity); anything about effects is written about "the treatment" in qualified language (Health Canada C.01.044). */
 const NDM_VIDEO = `${NDM}/wp-content/uploads/2025/10/Brand-Animation-Final.mp4`;
 const PROC = {
-  crumbs: [['Procedures'], ['Injectables'], 'Botox® Cosmetic'],
-  title: ['Botox® Cosmetic', 'in Toronto'],
-  sub: 'A prescription treatment given by our medical team after an in-person assessment, at our Uptown and Downtown clinics.',
-  hero: { d: `${NDM}/wp-content/uploads/2025/09/2.jpg`, m: `${NDM}/wp-content/uploads/2025/09/2.1.jpg`, pos: '30% 30%' },
+  /* round 12: the content of Ray's Botox page (his live-site build, ray/V1/NDM/botox.html), kept word for word, in this page's
+     own sections. It is the live site's wording; it names Botox® beside its effects, so it needs Raymond's approval before publishing */
+  crumbs: [['Procedures'], ['Injectables'], 'Botox®'],
+  /* the sticky section bar (TxNav): the same items as Ray's Botox page */
+  nav: [['benefits', 'Benefits'], ['film', 'The clinic'], ['overview', 'About'], ['why-choose', 'Why choose'], ['watch', 'Watch'], ['results', 'Results'], ['prices', 'Prices'], ['why', 'Why NewDermaMed'], ['visit', 'Visit us'], ['faq', 'FAQ']],
+  title: ['Botox®', 'in Toronto'],
+  sub: 'Smooth wrinkles with trusted Botox® safe, expert care for natural, youthful results.',
+  hero: { d: 'assets/botox/hero.jpg', m: 'assets/botox/hero-m.jpg', pos: '50% 30%' },
   offer: { tag: 'Current offer', title: 'Botox® Cosmetic packages', big: ['Up to', '30%', 'off'], href: '#prices', cta: 'See the prices' },
-  /* floating "at a glance" card (NDM's quick facts and both phone numbers) */
-  facts: [['Treatment type', 'Injectable'], ['Duration', '30 minutes'], ['Recovery time', 'Minimal downtime']],
+  facts: [['Treatment Type', 'Injectable'], ['Duration', '30 minutes'], ['Recovery Time', 'Minimal downtime']],
   glance: 'A short treatment, planned after a free, in-person assessment by our medical team.',
-  /* what is this treatment (shared TxIntro: copy beside a photo with the treatment's main points) */
+  /* Benefits (TxIntro, id "benefits"): Ray's five benefit points beside his photo */
   intro: {
-    tag: 'What is this treatment?', lead: 'A prescription treatment', strong: 'for expression lines',
-    text: [
-      'Small amounts of a prescription medicine are placed in specific facial muscles to relax them for a time, which may soften the lines that form when you frown, squint or raise your brows. It does not add volume.',
-      'Your provider plans how much is used and where, around how your face moves, and only after an in-person medical assessment.',
-    ],
-    chips: ['Forehead lines', 'Frown lines', 'Crow’s feet'],
-    note: 'Given only by licensed medical professionals at our Uptown and Downtown clinics.',
-    /* shown alone beside the photo: everything above and below in one paragraph */
-    para: 'Small amounts of a prescription medicine are placed in specific facial muscles to relax them for a time, which may soften the lines that form when you frown, squint or raise your brows, such as forehead lines, frown lines and crow’s feet. It does not add volume. Your provider plans how much is used and where, around how your face moves, so your usual expressions can stay natural, and only after an in-person medical assessment. A visit takes about 15 to 20 minutes, usually with minimal downtime, and the treatment is given only by licensed medical professionals at our Uptown and Downtown clinics. Individual results may vary.',
-    img: 'assets/pricing/price-4.jpg', alt: 'A provider giving an injectable treatment with a fine needle', pos: '50% 35%',
+    id: 'benefits', tag: 'Benefits', lead: 'Benefits', strong: 'of Botox®',
+    img: 'assets/botox/benefits.webp', alt: 'Botox® at NewDermaMed, Toronto', pos: '50% 40%',
+    text: [],
     points: [
-      ['Softer lines', 'May soften forehead lines, frown lines and crow’s feet.'],
-      ['A natural look', 'Planned to keep your usual expressions. Individual results may vary.'],
-      ['A quick visit', 'About 15 to 20 minutes, usually with minimal downtime.'],
+      ['Smooths Fine Lines & Wrinkles', 'Softens crow’s feet, frown lines, and forehead creases.'],
+      ['Prevents New Wrinkle Formation', 'Relaxes facial muscles to reduce future expression lines.'],
+      ['Quick & Convenient', 'Treatment takes only minutes with no downtime required.'],
+      ['Natural-Looking Results', 'Refreshes appearance without affecting facial expressions.'],
+      ['Clinically Proven & Safe', 'Backed by 20+ years of research and global trust.'],
     ],
   },
-  /* your treatment, in tabs (after the thread lift page's treatment overview: what to expect, how it works, maintenance, pricing).
-     Effects are written about "the treatment" in qualified language; the brand name only appears with the price (C.01.044) */
+  /* The clinic (TxFilm): the clinic footage, Ray's words */
+  film: { src: 'assets/botox/clinic-film.mp4', src_m: 'assets/botox/clinic-film-m.mp4', poster: 'assets/botox/clinic-film.webp', lead: 'Botox®', strong: 'at NewDermaMed Toronto',
+    text: 'Two clinics, Uptown on Yonge Street and Downtown on Bay Street. Every visit starts with a free consultation and a VISIA® skin analysis with our licensed medical team.',
+    chips: ['4763 Yonge St, Uptown', '790 Bay St, Downtown', 'Free consultation', 'VISIA® skin analysis'] },
+  /* About (ProcOverview tabs): Ray's five tabs; the key numbers beside them are this page's */
   overview: {
-    tag: 'Your treatment', lead: 'From first visit', strong: 'to maintenance',
+    tag: 'About', lead: 'From first visit', strong: 'to maintenance',
     tabs: [
-      { label: 'Overview', stat: ['20+', 'years of clinical research'], text: [
-        'A non-surgical treatment used in more than 78 countries, with more than 20 years of clinical research behind it. It relaxes the muscles behind expression lines for a time, and it does not add volume.',
-        'At NewDermaMed it is given only by our licensed medical team, after a free, in-person assessment at our Uptown or Downtown clinic. Individual results may vary.'] },
-      { label: 'What to expect', stat: ['15–20', 'minutes per treatment'], text: [
-        'Your visit starts with a free, in-person assessment at our Uptown or Downtown clinic. A member of our medical team reviews your health history, your goals and how your face moves, and explains whether the treatment suits you, its possible risks and the alternatives.',
-        'If it is appropriate, the treatment itself takes about 15 to 20 minutes, with a very fine needle and a brief pinch. Most people return to their usual activities straight away. Mild redness, swelling or bruising at the injection sites may occur and usually settles within hours to days. Individual results may vary.'] },
-      { label: 'How it works', stat: ['3–7', 'days to a visible change'], text: [
-        'Small amounts of a prescription medicine are placed in specific facial muscles. It briefly blocks the nerve signals to those muscles, so they contract less for a time, which may soften the lines that form when you frown, squint or raise your brows.',
-        'A change is usually noticed within 3 to 7 days, with the full effect at about two weeks. The treatment does not add volume, so your provider may discuss other options for lines that stay when your face is at rest.'] },
+      { label: 'Treatment Overview', stat: ['20+', 'years of clinical research'], text: [
+        'By momentarily relaxing the underlying muscles that cause expression lines, Botox® Cosmetic is a reliable, non-surgical procedure that reduces wrinkles and fine lines. Botox® is one of the most researched and secure cosmetic procedures in the world, having been used in more than 78 countries and undergoing more than 20 years of clinical research. Our experts at NewDermaMed use precise injections to produce refreshed, natural-looking results without changing your distinctive facial expressions.'] },
+      { label: 'What to Expect', stat: ['15–20', 'minutes per treatment'], text: [
+        'A typical Botox® session lasts 15 to 20 minutes, making it quick and convenient. Our skilled injector will assess your facial structure during your visit and use a tiny needle to carefully apply the treatment. The majority of patients describe the slight discomfort as a momentary pinch. It’s the ideal “lunchtime procedure” because you can get back to your regular activities right away. Within three to seven days, noticeable progress is made, and in roughly two weeks, the full effects are achieved.'] },
+      { label: 'How it Works', stat: ['3–7', 'days to a visible change'], text: [
+        'Purified botulinum toxin type A, which temporarily stops nerve signals to the targeted muscles, is an ingredient in Botox®. The skin above these muscles smoothes out and wrinkles like frown lines, forehead lines, and crow’s feet are lessened by lowering repetitive contractions. Instead of adding volume, the treatment prevents and corrects dynamic wrinkles brought on by facial movement.'] },
       { label: 'Maintenance', stat: ['3–4', 'months, typical duration'], text: [
-        'The effect typically lasts three to four months, depending on the area treated, your metabolism and your lifestyle. Many people plan three to four visits a year.',
-        'Your provider reviews your plan at each visit and adjusts the amount and placement as needed. Individual results may vary.'] },
+        'Although longevity can vary depending on lifestyle, metabolism, and treatment area, Botox® results typically last three to four months. Patients are advised to arrange maintenance procedures three to four times a year in order to preserve a young, refreshed appearance. Over time, results might last longer with regular treatments.'] },
       { label: 'Pricing', stat: ['$12', 'per unit'], text: [
-        'Botox® Cosmetic is $12 per unit, with packages of 60 to 220 units currently 10% to 30% off.',
-        'The number of units depends on the areas treated and your plan, so your final price is confirmed at your free consultation.'], link: ['#prices', 'See the price list'] },
+        'Treatment plans are completely customized because each face is different. We invite you to schedule a free consultation with one of our experts so that you can go over your options, talk about your objectives, and create a plan that is specifically for you.'], link: ['#prices', 'See the price list'] },
     ],
   },
   /* compare the options (website v3 concern pages): this treatment beside the other options for lines. A general guide only */
@@ -63,36 +59,44 @@ const PROC = {
       ['Starting price', ['$12 per unit', 'From $750', 'From $200', 'From $399']],
     ],
   },
-  /* why choose this treatment: who it may suit and safety (after Latos "Advantages") */
+  /* Why choose (ProcChoose): Ray's candidate list and safety paragraph; the short card titles are this page's */
   choose: {
-    img: 'assets/pricing/price-3.jpg',
+    img: 'assets/botox/why-choose.jpg', alt: 'Botox® at NewDermaMed, Toronto', tag: 'Why choose', lead: 'Why choose', strong: 'Botox®?',
     cards: [
-      ['Moderate to severe lines', 'For adults with moderate to severe expression lines on the forehead, between the brows or around the eyes.'],
-      ['A subtle, natural look', 'For people who would like an understated change rather than a dramatic one.'],
-      ['Planning ahead', 'For people who want to talk with a medical provider about early care for expression lines.'],
-      ['Safety first', 'Given only by a qualified, licensed professional after a medical assessment. Mild redness, swelling or bruising may occur and usually settles within hours to days.'],
+      ['A good candidate', 'People seeking a non-invasive anti-aging treatment who have moderate to severe fine lines or wrinkles'],
+      ['Understated results', 'Anyone seeking understated, organic improvements'],
+      ['Preventative care', 'Those looking for preventative wrinkle care'],
+      ['Is Botox® safe?', 'When administered by a qualified, licensed professional, Botox® has a demonstrated safety profile. The injection site may experience mild redness, swelling, or bruising, but these side effects are rare and usually go away in a few hours to days. Choosing an experienced provider ensures natural-looking results and minimized risk of complications.'],
     ],
   },
-  /* why NewDermaMed (shared TxWhy) */
+  /* Watch (TxReel): the clinic's Instagram reel */
+  reel: { src: 'assets/botox/reel.mp4', poster: 'assets/botox/reel.webp', tag: 'Botox®', lead: 'See it', strong: 'at NewDermaMed', text: 'A short clip from our Instagram, filmed at the clinic. Follow @newdermamed for more.' },
+  /* Why NewDermaMed (TxWhy) */
   why: {
     img: 'assets/home/team-award.jpg', alt: 'The NewDermaMed team celebrating their Top Choice Award at the clinic', pos: '50% 35%',
     lead: 'Expert care at', strong: 'two Toronto clinics',
-    items: [['16+', 'Years', 'Caring for patients in Toronto'], ['8', 'Awards', 'Top Choice Award, 2019 to 2026'], ['Licensed', 'Medical team', 'Injectables are given only by our licensed medical team'], ['Free', 'Consultation', 'Every plan starts with an in-person assessment']],
+    items: [['16+', 'Years', 'Caring for patients in Toronto'], ['8', 'Awards', 'Top Choice Award, 2019 to 2026'], ['Licensed', 'Medical team', 'Treatments are given only by our licensed medical team'], ['Free', 'Consultation', 'Every plan starts with an in-person assessment']],
   },
-  /* before & after (shared TxResults): three compact cards. Samples only, see HANDOFF */
-  results: { lead: 'Before', strong: 'and after', text: 'Drag the handle on any photo to compare.', cases: BA_CASES.map((c) => ({ ...c, treat: 'Sample' })) },
+  /* Results (TxResults): the live gallery's Botox® cases (each photo shows before and after side by side) */
+  results: { lead: 'Before', strong: 'and after', text: 'Cases from our before and after gallery, photographed at NewDermaMed.', more: 'before-after.html',
+    pics: [{ src: 'assets/botox/case-1.webp', label: 'Botox®' }, { src: 'assets/botox/case-2.webp', label: 'Botox®' }, { src: 'assets/botox/case-3.webp', label: 'Botox®' }] },
+  /* Prices (ProcPrices): Ray's two groups, Botox Cosmetic and Dysport */
   prices: {
-    name: 'Botox Cosmetic', cat: 'Botox / Dysport', unitLabel: 'Regular',
-    blurb: 'A prescription product priced per unit, given only after an in-person medical assessment.',
-    rows: [['Regular', 12, 0], ['60 units', 648, 720, '10% OFF'], ['120 units', 1152, 1440, '20% OFF'], ['180 units', 1512, 2160, '30% OFF'], ['220 units', 1848, 2640, '30% OFF']],
+    lead: 'Botox® and Dysport®', cat: 'Botox / Dysport', unitLabel: 'Regular',
+    groups: [
+      { name: 'Botox Cosmetic', title: 'Botox® Cosmetic', blurb: 'A prescription product priced per unit, given only after an in-person medical assessment.',
+        rows: [['Regular', 12, 0], ['60 units', 648, 720, '10% OFF'], ['120 units', 1152, 1440, '20% OFF'], ['180 units', 1512, 2160, '30% OFF'], ['220 units', 1848, 2640, '30% OFF']] },
+      { name: 'Dysport', title: 'Dysport®', blurb: 'A prescription product priced per unit, given only after an in-person medical assessment.',
+        rows: [['Regular', 11, 0], ['60 units', 594, 660, '10% OFF'], ['120 units', 1056, 1320, '20% OFF'], ['180 units', 1386, 1980, '30% OFF'], ['220 units', 1694, 2420, '30% OFF']] },
+    ],
   },
+  faq: { lead: 'FAQ For', strong: 'Botox®', sub: 'Everything you need to know before starting your journey with us.' },
   faqs: [
-    ['What is Botox® Cosmetic?', 'Botox® Cosmetic is a prescription medicine given by injection. At NewDermaMed it is only given after an in-person assessment by our medical team, who explain whether it suits you, the possible risks and the alternatives.'],
-    ['Which areas are commonly treated?', 'Common treatment areas include forehead lines, frown lines between the brows and crow’s feet around the eyes. Your provider will discuss which areas are appropriate for you.'],
-    ['When might I notice a change?', 'Changes are usually noticed within 3 to 7 days, with the full effect at about two weeks after treatment. Individual results may vary.'],
-    ['How long does the effect last?', 'The effect typically lasts three to four months, depending on the area treated, your metabolism and lifestyle. Many people book maintenance visits three to four times a year.'],
-    ['What side effects can occur?', 'Mild redness, swelling or bruising at the injection sites may occur and usually settles within hours to days. Your provider reviews all possible side effects with you before any treatment.'],
-    ['How much does it cost?', 'Botox® Cosmetic is $12 per unit, with packages of 60 to 220 units currently 10% to 30% off. See the price list for details; your final price is confirmed at your free consultation.'],
+    ['What is Botox®?', 'Botox® is an FDA- and Health Canada-approved injectable treatment that relaxes facial muscles to smooth fine lines and wrinkles.'],
+    ['What areas can Botox® treat?', 'Common areas include forehead lines, frown lines, crow’s feet, brow lift, gummy smile, and jawline slimming.'],
+    ['How soon will I see results from Botox®?', 'Results typically appear within 3–7 days, with full effects visible in about 2 weeks after treatment.'],
+    ['How long do Botox® results last?', 'Results generally last 3–4 months, with maintenance treatments recommended to preserve a youthful, refreshed look.'],
+    ['Is Botox® safe?', 'Yes. Botox® has been extensively studied with over 20 years of clinical use worldwide, and is safe when performed by licensed professionals.'],
   ],
 };
 
@@ -102,36 +106,19 @@ const IconClock = (props) => <Svg size={30} vb="0 0 32 32" {...props}><circle cx
 const IconTick = (p) => <Svg size={14} vb="0 0 14 14" {...p}><path d="m3 7.3 2.6 2.6L11 4.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></Svg>;
 
 /* ---------------------------------------------------------------- booking form (hero card on desktop, its own block on phones) */
+/* the hero and phone form: the shared booking form (BookForm) in its compact layout, after Ray's version (round 12) */
 function ProcForm({ id, className = '' }) {
-  const [sent, setSent] = useState(false);
-  const [treat, setTreat] = useState('Injectables');
-  const [clinic, setClinic] = useState('');
   const hid = `${id}-title`;
   return (
-    <div className={`proc-form rounded-[22px] bg-white p-[clamp(20px,2.2vw,30px)] text-ndm-ink ${className}`}>
-      {sent ? (
-        <div className="flex min-h-[380px] items-center justify-center"><BookThanks onAnother={() => setSent(false)} /></div>
-      ) : (
-        <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} aria-labelledby={hid}>
-          <h2 id={hid} className="font-aeonik text-[clamp(24px,2vw,30px)] font-normal leading-[1.1] tracking-[-0.025em]">
-            Book your <br /><span className="tt-strong text-ndm-deep">free consultation</span>
-          </h2>
-          <div className="mt-5 grid gap-2.5">
-            <input required name="name" autoComplete="name" placeholder="Your name" aria-label="Your name" className={fieldCls} />
-            <input required type="email" name="email" autoComplete="email" placeholder="Your email" aria-label="Your email" className={fieldCls} />
-            <input required type="tel" name="phone" autoComplete="tel" placeholder="Your phone number" aria-label="Your phone number" className={fieldCls} />
-            <BookSelect name="treatment" value={treat} onChange={(e) => setTreat(e.target.value)} placeholder="Select your treatment">
-              {BOOK_TREATMENTS.map((t) => <option key={t} className="text-ndm-ink">{t}</option>)}
-            </BookSelect>
-            <BookSelect name="clinic" value={clinic} onChange={(e) => setClinic(e.target.value)} placeholder="Select clinic location">
-              {BOOK_CLINICS.map(([c, a]) => <option key={c} value={c} className="text-ndm-ink">{c}, {a}</option>)}
-            </BookSelect>
-            <textarea name="notes" rows={2} placeholder="Any concerns or questions?" aria-label="Any concerns or questions?" className={`${fieldCls} h-auto resize-none py-3`} />
-          </div>
-          <Btn v="book" hot block className="mt-4" type="submit">Book Free Consultation</Btn>
-          <p className="mt-3 font-inter text-[12px] leading-[1.5] text-ndm-muted">Free and no obligation.</p>
-        </form>
-      )}
+    <div className={`proc-form book-compact rounded-[22px] bg-white p-[clamp(20px,2.2vw,28px)] text-ndm-ink ${className}`} role="region" aria-labelledby={hid}>
+      <div className="mb-4 flex items-start justify-between gap-3">
+        <h2 id={hid} className="font-aeonik text-[clamp(24px,2vw,28px)] font-normal leading-[1.1] tracking-[-0.025em]">
+          Book your <br /><span className="tt-strong text-ndm-deep">free consultation</span>
+        </h2>
+        <span aria-hidden="true" className="book-badge-dot mt-1 grid size-9 shrink-0 place-items-center rounded-full bg-ndm-amber text-white"><IconArrow size={13} /></span>
+      </div>
+      <div className="flex flex-col"><BookForm compact thanksId={`${id}-thanks`} /></div>
+      <p className="mt-3 font-inter text-[12px] leading-[1.5] text-ndm-muted">Free and no obligation. VISIA® skin analysis included.</p>
     </div>
   );
 }
@@ -269,15 +256,16 @@ function ProcCompare({ p }) {
   useReveal(ref);
   const c = p.compare;
   return (
-    <section ref={ref} id="compare" aria-labelledby="compare-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
-      <TxHead p={p} id="compare" tag="Compare the options" hid="compare-title" lead="This treatment, beside" strong="the other options" text="A general guide to the treatments often discussed for lines. Your provider helps you choose at your free consultation." />
+    <section ref={ref} id="compare" aria-labelledby="compare-title" className="relative z-10 scroll-mt-[90px] bg-ndm-paper px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
+      {/* a concern page passes its own heading and turns off the highlighted first column (c.mark === false) */}
+      <TxHead p={p} id="compare" tag={c.tag || 'Compare the options'} hid="compare-title" lead={c.lead || 'This treatment, beside'} strong={c.strong || 'the other options'} text={c.text || 'A general guide to the treatments often discussed for lines. Your provider helps you choose at your free consultation.'} />
       <div className={`${TX_WRAP} rv mt-[clamp(32px,4vw,52px)] overflow-x-auto rounded-[24px] bg-white ring-1 ring-ndm-ink/[.06] shadow-[0_30px_60px_-46px_rgba(27,36,43,.45)]`} style={{ transitionDelay: '.08s' }}>
         <table className="cmp-t w-full min-w-[760px] border-collapse font-inter text-[14.5px]">
           <thead>
             <tr>
               <td className="w-[170px]" />
               {c.cols.map(([n, h], i) => (
-                <th key={n} scope="col" className={`px-5 py-5 text-left align-bottom font-aeonik text-[19px] font-normal leading-[1.2] tracking-[-0.01em] ${i === 0 ? 'cmp-me text-ndm-deep' : 'text-ndm-ink'}`}>
+                <th key={n} scope="col" className={`px-5 py-5 text-left align-bottom font-aeonik text-[19px] font-normal leading-[1.2] tracking-[-0.01em] ${i === 0 && c.mark !== false ? 'cmp-me text-ndm-deep' : 'text-ndm-ink'}`}>
                   {h ? <a href={h} className="group inline-flex items-center gap-1.5 hover:text-ndm-deep">{n}<IconArrow className="opacity-60 transition-transform group-hover:translate-x-0.5" /></a> : n}
                 </th>
               ))}
@@ -287,7 +275,7 @@ function ProcCompare({ p }) {
             {c.rows.map(([k, vals]) => (
               <tr key={k}>
                 <th scope="row" className="px-5 py-4 text-left align-top text-[13px] font-semibold text-ndm-muted">{k}</th>
-                {vals.map((v, i) => <td key={i} className={`px-5 py-4 align-top leading-[1.5] text-ndm-ink ${i === 0 ? 'cmp-me' : ''}`}>{v}</td>)}
+                {vals.map((v, i) => <td key={i} className={`px-5 py-4 align-top leading-[1.5] text-ndm-ink ${i === 0 && c.mark !== false ? 'cmp-me' : ''}`}>{v}</td>)}
               </tr>
             ))}
           </tbody>
@@ -358,14 +346,14 @@ function ProcChoose({ p }) {
     </li>
   );
   return (
-    <section ref={ref} id="why-choose" aria-labelledby="choose-title" className="relative z-10 bg-ndm-mist px-[var(--gx)] py-[clamp(72px,8vw,120px)]">
+    <section ref={ref} id="why-choose" aria-labelledby="choose-title" className="relative z-10 scroll-mt-[170px] bg-ndm-mist px-[var(--gx)] py-[clamp(72px,8vw,120px)]">
       <div className="text-center">
-        <Eyebrow className="rv">Why choose this treatment</Eyebrow>
-        <TwoTone id="choose-title" className="rv mx-auto mt-5" lead={twoLine('Who it may suit,')} strong="and safety first" style={{ transitionDelay: '.06s' }} />
+        <Eyebrow className="rv">{txNum(p, 'why-choose') && <span className="tabular-nums text-ndm-deep">{txNum(p, 'why-choose')}</span>}{p.choose.tag || 'Why choose this treatment'}</Eyebrow>
+        <TwoTone id="choose-title" className="rv mx-auto mt-5" lead={twoLine(p.choose.lead || 'Who it may suit,')} strong={p.choose.strong || 'and safety first'} style={{ transitionDelay: '.06s' }} />
       </div>
       <div className="mx-auto mt-[clamp(36px,4vw,56px)] grid max-w-[1180px] gap-3 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-4">
         <div className="rv rv-clip relative min-h-[360px] overflow-hidden rounded-[22px] bg-ndm-line md:col-span-2 lg:order-2 lg:col-span-1 lg:min-h-0" style={{ transitionDelay: '.08s' }}>
-          <img src={p.choose.img} alt="Close-up of a woman’s face in soft natural light" loading="lazy" className="absolute inset-0 h-full w-full object-cover object-[50%_40%]" />
+          <img src={p.choose.img} alt={p.choose.alt || 'Close-up of a woman’s face in soft natural light'} loading="lazy" className="absolute inset-0 h-full w-full object-cover object-[50%_40%]" />
         </div>
         <ul className="grid gap-3 lg:order-1 lg:gap-4" role="list">{c.slice(0, 2).map(card)}</ul>
         <ul className="grid gap-3 lg:order-3 lg:gap-4" role="list">{c.slice(2).map((x, i) => card(x, i + 2))}</ul>
@@ -379,60 +367,66 @@ function ProcChoose({ p }) {
 function ProcPrices({ p }) {
   const ref = useRef(null);
   useReveal(ref);
-  const [on, setOn] = useState(true);
   const pr = p.prices;
+  const groups = pr.groups || [{ name: pr.name, title: 'Botox® Cosmetic', blurb: pr.blurb, rows: pr.rows }];
+  const [open, setOpen] = useState(() => groups.map((g, i) => i === 0));
   const unit = (label) => (label === pr.unitLabel ? ' / unit' : '');
-  const pct = Math.max(...pr.rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
+  const pctOf = (rows) => Math.max(...rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
   return (
-    <section ref={ref} id="prices" aria-labelledby="prices-title" className="proc-peach relative z-10 px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
+    <section ref={ref} id="prices" aria-labelledby="prices-title" className="proc-peach relative z-10 scroll-mt-[150px] px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
       <div className="mx-auto max-w-[1040px]">
         <div className="text-center">
-          <Eyebrow className="rv">Price list</Eyebrow>
-          <TwoTone id="prices-title" className="rv mx-auto mt-5" lead={twoLine('Botox® Cosmetic')} strong="prices and packages" style={{ transitionDelay: '.06s' }} />
+          <Eyebrow className="rv">{txNum(p, 'prices') && <span className="tabular-nums text-ndm-deep">{txNum(p, 'prices')}</span>}Price list</Eyebrow>
+          <TwoTone id="prices-title" className="rv mx-auto mt-5" lead={twoLine(pr.lead || 'Botox® Cosmetic')} strong="prices and packages" style={{ transitionDelay: '.06s' }} />
           <p className="rv mx-auto mt-5 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>Prices per unit and per package, with current offers. Your plan and final price are confirmed at your free consultation.</p>
         </div>
         <ul className="pr-groups rv mt-[clamp(40px,4.5vw,64px)]" role="list" style={{ transitionDelay: '.14s' }}>
-          <li className={`pr-group ${on ? 'is-open' : ''}`}>
-            <h3 className="pr-ghead m-0">
-              <button type="button" id="proc-pr-h" aria-expanded={on} aria-controls="proc-pr" onClick={() => setOn((v) => !v)}
-                className="group grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 py-[22px] text-left sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6">
-                <span className="min-w-0">
-                  <span className="block font-inter text-[12.5px] tabular-nums text-ndm-muted">{pr.rows.length} options</span>
-                  <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">Botox® Cosmetic</span>
-                </span>
-                <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                  {pct > 0 && <span className="pr-badge">Up to {pct}% off</span>}
-                  <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{money(Math.min(...pr.rows.map((r) => r[1])))}</span> / unit</span>
-                </span>
-                <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
-              </button>
-            </h3>
-            <div id="proc-pr" role="region" aria-labelledby="proc-pr-h" className="pr-body" {...(on ? {} : { inert: '' })}>
-              <div>
-                <p className="max-w-[60ch] pb-2 font-inter text-[15px] leading-[1.55] text-ndm-muted">{pr.blurb}</p>
-                <ul className="pr-sub grid gap-2 py-4" role="list">
-                  {pr.rows.map(([label, price, was, tag]) => {
-                    const line = { key: `${pr.name}|${label}`, cat: pr.cat, name: pr.name, label, price, was: was || 0, unit: unit(label) };
-                    return (
-                      <li key={label} className="pr-opt grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-[14px] py-3 pl-4 pr-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6 sm:pl-5">
-                        <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
-                          <span className="font-inter text-[15px] text-ndm-ink">{label === 'Regular' ? 'Per unit' : label}</span>
-                          {tag && <span className="pr-tag">{tag}</span>}
-                        </span>
-                        <span className="col-start-1 row-start-2 flex items-baseline gap-2.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                          {was ? <s className="pr-was"><span className="sr-only">Regular price </span>{money(was)}</s> : null}
-                          <span className={`font-aeonik text-[22px] leading-none tracking-[-0.02em] ${was ? 'text-ndm-deep' : 'text-ndm-ink'}`}>
-                            {was ? <span className="sr-only">now </span> : null}{money(price)}{line.unit && <span className="font-inter text-[13px] tracking-normal text-ndm-muted">{line.unit}</span>}
-                          </span>
-                        </span>
-                        <span className="col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><QtyControl line={line} label={`${pr.name}, ${label}`} /></span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            </div>
-          </li>
+          {groups.map((g, gi) => {
+            const on = open[gi], pct = pctOf(g.rows), hid = `proc-pr-h${gi}`, bid = `proc-pr${gi}`;
+            return (
+              <li key={g.name} className={`pr-group ${on ? 'is-open' : ''}`}>
+                <h3 className="pr-ghead m-0">
+                  <button type="button" id={hid} aria-expanded={on} aria-controls={bid} onClick={() => setOpen((o) => o.map((v, k) => (k === gi ? !v : v)))}
+                    className="group grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 py-[22px] text-left sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6">
+                    <span className="min-w-0">
+                      <span className="block font-inter text-[12.5px] tabular-nums text-ndm-muted">{g.rows.length} options</span>
+                      <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{g.title}</span>
+                    </span>
+                    <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
+                      {pct > 0 && <span className="pr-badge">Up to {pct}% off</span>}
+                      <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{money(Math.min(...g.rows.map((r) => r[1])))}</span> / unit</span>
+                    </span>
+                    <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
+                  </button>
+                </h3>
+                <div id={bid} role="region" aria-labelledby={hid} className="pr-body" {...(on ? {} : { inert: '' })}>
+                  <div>
+                    <p className="max-w-[60ch] pb-2 font-inter text-[15px] leading-[1.55] text-ndm-muted">{g.blurb}</p>
+                    <ul className="pr-sub grid gap-2 py-4" role="list">
+                      {g.rows.map(([label, price, was, tag]) => {
+                        const line = { key: `${g.name}|${label}`, cat: pr.cat, name: g.name, label, price, was: was || 0, unit: unit(label) };
+                        return (
+                          <li key={label} className="pr-opt grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-[14px] py-3 pl-4 pr-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6 sm:pl-5">
+                            <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
+                              <span className="font-inter text-[15px] text-ndm-ink">{label === 'Regular' ? 'Per unit' : label}</span>
+                              {tag && <span className="pr-tag">{tag}</span>}
+                            </span>
+                            <span className="col-start-1 row-start-2 flex items-baseline gap-2.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
+                              {was ? <s className="pr-was"><span className="sr-only">Regular price </span>{money(was)}</s> : null}
+                              <span className={`font-aeonik text-[22px] leading-none tracking-[-0.02em] ${was ? 'text-ndm-deep' : 'text-ndm-ink'}`}>
+                                {was ? <span className="sr-only">now </span> : null}{money(price)}{line.unit && <span className="font-inter text-[13px] tracking-normal text-ndm-muted">{line.unit}</span>}
+                              </span>
+                            </span>
+                            <span className="col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><QtyControl line={line} label={`${g.name}, ${label}`} /></span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
         </ul>
         <div className="rv mt-10 flex flex-wrap justify-center gap-3" style={{ transitionDelay: '.18s' }}>
           <Btn href="#/book" v="book">Book Free Consultation</Btn>

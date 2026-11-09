@@ -9,7 +9,8 @@ from pathlib import Path
 root, scratch = Path(sys.argv[1]), Path(sys.argv[2])
 s = (root / 'promotion.html').read_text()
 s = re.sub(r'\n<script type="application/ld\+json" id="ld-crumbs">.*?</script>', '', s, count=1)
-ui = (scratch / 'procedure-ui.jsx').read_text() + '\n' + (scratch / 'treatment-ui.jsx').read_text()
+ui = (scratch / 'procedure-ui.jsx').read_text() + '\n' + (scratch / 'treatment-ui.jsx').read_text() + '\n' + (scratch / 'media-ui.jsx').read_text()
+MEDIA_CSS = re.search(r'const MEDIA_CSS = `(.*?)`;', ui, re.S).group(1)  # the film and reel styles (round 12)
 OUT = 'botox.html'
 
 
@@ -22,13 +23,13 @@ def rep(a, b, n=1):
 
 faqs = re.search(r"  faqs: \[\n(.*?)\n  \],\n", ui, re.S).group(1)
 faq_pairs = re.findall(r"\['(.+?)', '(.+?)'\],?", faqs)
-assert len(faq_pairs) == 6, len(faq_pairs)
+assert len(faq_pairs) == 5, len(faq_pairs)
 ld = {'@context': 'https://schema.org', '@graph': [
     {'@type': 'BreadcrumbList', 'itemListElement': [
         {'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'index.html'},
         {'@type': 'ListItem', 'position': 2, 'name': 'Procedures'},
         {'@type': 'ListItem', 'position': 3, 'name': 'Injectables'},
-        {'@type': 'ListItem', 'position': 4, 'name': 'Botox® Cosmetic'}]},
+        {'@type': 'ListItem', 'position': 4, 'name': 'Botox®'}]},
     {'@type': 'FAQPage', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a.replace("\\'", "'")}} for q, a in faq_pairs]},
 ]}
 rep('<title>Promotions, NewDermaMed Toronto</title>', '<title>Botox® Cosmetic in Toronto, Prices &amp; Free Consultation, NewDermaMed</title>')
@@ -136,9 +137,17 @@ css = '''
   .pr-tag{padding:6px 10px;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
   @media (prefers-reduced-motion:reduce){.offer-dot{animation:none}.say-w,.pr-body,.pr-body>div,.pr-plus i{transition:none}}
 '''
+SPACING = '''
+  /* round 12: Our team, Testimonials and Visit us use the same spacing as the treatment sections (e.g. Elevate your results);
+     Visit us sits close to the band after it */
+  main>section[aria-labelledby="team"],main>section[aria-labelledby="testimonials"],main>section#visit{padding-top:clamp(64px,7vw,104px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
+  main>section#visit{padding-bottom:clamp(16px,2vw,28px)!important}
+  /* Botox (round 14): the price list and the FAQ take the same spacing as Before & after too */
+  main>section#prices,main>section[aria-labelledby="faq"]{padding-top:clamp(64px,7vw,104px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
+'''
 anchor = '<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>'
 i = s.rindex('</style>', 0, s.index(anchor))
-s = s[:i] + css + s[i:]
+s = s[:i] + css + MEDIA_CSS + SPACING + s[i:]
 
 a = s.index('\nfunction App() {')
 b = s.index('ReactDOM.createRoot', a)
@@ -164,16 +173,20 @@ function App() {
         <ProcHero p={PROC} />
         <TxGlance p={PROC} />
         <section aria-label="Book a free consultation" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-6 lg:hidden"><ProcForm id="mobile-form" className="ring-1 ring-ndm-ink/[.06]" /></section>
+        <TxNav p={PROC} />
         <TxIntro p={PROC} />
+        <TxFilm p={PROC} />
         <ProcOverview p={PROC} />
         <ProcChoose p={PROC} />
+        <TxReel p={PROC} />
         <TxResults p={PROC} />
         <ProcPrices p={PROC} />
         <TxWhy p={PROC} />
         <Team />
         <PromoReviews />
+        <TxVisit p={PROC} />
         <ProcAnalysis />
-        <Faq items={PROC.faqs} lead="Your top questions," strong="answered" intro="What to know before booking, from our medical team." />
+        <Faq items={PROC.faqs} lead={<>{PROC.faq.lead}<br /></>} strong={PROC.faq.strong} intro={PROC.faq.sub} />
       </main>
       <Footer />
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} onBrowse={() => { window.location.href = 'pricing.html#prices'; }} />
