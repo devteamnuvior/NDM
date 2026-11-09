@@ -2248,16 +2248,17 @@ function Social() {
 /* ---------------------------------------------------------------- exclusive monthly specials */
 const NDM = 'https://newdermamedlaserclinic.com';
 const FEES = 'pricing.html#prices';
-const SPECIALS = [ /* from newdermamedlaserclinic.com/promotion */
-  { n: 'Radiesse® Collagen Lift', img: 'assets/promotion/collagen-lift.webp', pos: '50% 42%', p: 499, u: 'per syringe', tag: 'Bio-stimulator', area: 'Face', icon: 'syringe', h: 'promotion.html', d: 'Restore lost volume and stimulate natural collagen production.' },
-  { n: 'Radiesse® Jawline Lift', img: 'assets/promotion/jawline.webp', pos: '50% 50%', p: 499, u: 'per syringe', tag: 'Bio-stimulator', area: 'Face', icon: 'face', h: 'promotion.html', d: 'Sculpt a more defined, contoured jawline.' },
-  { n: 'Hand Rejuvenation with Radiesse®', img: 'assets/promotion/hands.webp', pos: '50% 58%', p: 499, u: 'per syringe', tag: 'Bio-stimulator', area: 'Body', icon: 'hand', h: 'promotion.html', d: 'Restore youthful volume to aging hands.' },
-  { n: 'Non-Surgical Butt Lift (60 mL)', img: 'assets/promotion/butt-lift.webp', pos: '50% 56%', p: 3999, u: 'package', tag: 'Body', area: 'Body', icon: 'body', h: 'pricing.html#pg-non-surgical-butt-lift-h', d: 'Add natural-looking volume and lift with no surgery required.' },
-  { n: 'Hip Dip Enhancement', img: 'assets/promotion/hip-dip.webp', pos: '50% 56%', p: 1999, u: 'package', tag: 'Body', area: 'Body', icon: 'body', h: 'pricing.html#pg-non-surgical-butt-lift-h', d: 'Smooth and contour the hip area for balanced curves.' },
-  { n: 'Crepey Arm Rejuvenation with Radiesse®', img: 'assets/promotion/crepey-arms.webp', pos: '50% 55%', p: 599, u: 'per syringe', tag: 'Bio-stimulator', area: 'Body', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Tighten and smooth crepey skin on the arms.' },
-  { n: 'Above the Knee Tightening', img: 'assets/promotion/above-knee.webp', pos: '50% 55%', p: 599, u: 'per syringe', tag: 'Bio-stimulator', area: 'Body', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Firm and lift loose, sagging skin above the knees.' },
-  { n: 'Liquid Facelift', img: 'assets/pricing/price-4.jpg', p: 599, u: 'package', tag: 'Face', area: 'Face', icon: 'face', h: 'promotion.html', d: 'Restore volume and lift with no downtime.' },
-  { n: 'Liquid Facelift with Sculptra®', img: 'assets/promotion/sculptra-face.webp', pos: '50% 45%', p: 599, u: 'package', tag: 'Bio-stimulator', area: 'Face', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Long-lasting, collagen-stimulating facial rejuvenation.' },
+const SPECIALS = [ /* ten most-wanted treatments; prices pulled from the pricing page (src/live/pricing.json) by src/patches-applied/promo_offers_patch.py, rerun on every build */
+  { n: 'Lip Filler', img: 'assets/treatments/lip-filler.jpg', pos: '50% 35%', p: '562.50', u: 'per syringe', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
+  { n: 'Microneedling', img: 'assets/treatments/microneedling.jpg', pos: '50% 40%', p: '245', u: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
+  { n: 'Chemical Peel', img: 'assets/treatments/chemical-peel.jpg', pos: '50% 40%', p: '104.30', u: 'per session', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
+  { n: 'Laser Skin Resurfacing', img: 'assets/treatments/laser-resurfacing.jpg', pos: '50% 40%', p: '140', u: 'per session', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
+  { n: 'Photo Rejuvenation', img: 'assets/treatments/photo-rejuvenation.jpg', pos: '50% 40%', p: '192.50', u: 'per session', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
+  { n: 'Skin Booster', img: 'assets/treatments/skin-booster.jpg', pos: '50% 40%', p: '399', u: '', tag: 'Skin Booster and Bio-stimulators', area: 'Face', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Deep hydration for a fresh, dewy glow.' },
+  { n: 'Sculptra® Liquid Facelift', img: 'assets/promotion/sculptra-face.webp', pos: '50% 45%', p: '699', u: '', tag: 'Skin Booster and Bio-stimulators', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Gradual, collagen-building facial lift.' },
+  { n: 'Hand Rejuvenation with Radiesse®', img: 'assets/promotion/hands.webp', pos: '50% 58%', p: '599', u: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'hand', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Restore youthful volume to aging hands.' },
+  { n: 'Crepey Arm Rejuvenation', img: 'assets/promotion/crepey-arms.webp', pos: '50% 55%', p: '599', u: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Smooth and firm crepey skin on the arms.' },
+  { n: 'Above the Knee Tightening', img: 'assets/promotion/above-knee.webp', pos: '50% 55%', p: '599', u: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Firm loose, sagging skin above the knees.' }
 ];
 const SW_ICONS = {
   pen: <><path d="M15.5 3.5 20.5 8.5 11 18l-5-5 9.5-9.5Z" /><path d="m6 13-2.5 2.5M8.5 15.5 6 18M11 18l-2.5 2.5" /></>,
@@ -4826,22 +4827,18 @@ function ChatBot({ ready, hidden }) {
   );
 }
 
-/* ---------------------------------------------------------------- pricing page data, item for item from newdermamedlaserclinic.com/fees-financing (CAD) */
-/* item: [name, note, [[option, price, regular price or 0, badge], ...]]; badges are the site's own (20% OFF, BUY 1 GET 1 FREE, ...) */
-/* laser hair removal: every package carries the site's BUY 1 GET 1 FREE badge */
-const lhrB = (a, b, c, d) => [['Single session', a, 0], ['Package of 3', b, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', c, 0, 'BUY 1 GET 1 FREE'], ...(d ? [['Package of 8', d, 0, 'BUY 1 GET 1 FREE']] : [])];
 const PRICE_CATS = [
   { id: 'aptos-thread-method', name: 'Aptos Thread Method', blurb: '', items: [
-    ['Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)', '', [['Nose lift/correction', 2500, 0], ['Fox eyebrow / eyebrow lift', 2500, 0], ['Mid face', 2500, 0], ['Lower face or submental', 2500, 0], ['Face – Mid & Lower', 3400, 4400, 'Save $1000 Off'], ['Neck', 2900, 3900, 'Save $1000 Off'], ['Face + neck', 5900, 6900, 'Save $1000 Off']]],
+    ['Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)', '', [['Nose lift/correction', 2500, 0], ['Fox eyebrow / eyebrow lift', 2500, 0], ['Mid face', 2500, 0], ['Lower face or submental', 2500, 0], ['Face – Mid & Lower', 3400, 4400, 'Save $1000 Off'], ['Neck', 2900, 3900, 'Save $1000 Off'], ['Face + neck', 5900, 6900, 'Save $1000 Off']]]
   ] },
   { id: 'botox-dysport', name: 'Botox / Dysport', unit: true, blurb: '', items: [
     ['Botox Cosmetic', '', [['Regular', 12, 0], ['60 units', 648, 720, '10% OFF'], ['120 units', 1152, 1440, '20% OFF'], ['180 units', 1512, 2160, '30% OFF'], ['220 units', 1848, 2640, '30% OFF']]],
     ['Dysport', '', [['Regular', 11, 0], ['60 units', 594, 660, '10% OFF'], ['120 units', 1056, 1320, '20% OFF'], ['180 units', 1386, 1980, '30% OFF'], ['220 units', 1694, 2420, '30% OFF']]],
-    ['Hyperhidrosis', '', [['Regular', 9, 0], ['50 units', 450, 0], ['100 units', 900, 0]]],
+    ['Hyperhidrosis', '', [['Regular', 9, 0], ['50 units', 450, 0], ['100 units', 900, 0]]]
   ] },
   { id: 'laser-vein', name: 'Laser Vein', blurb: '', items: [
     ['Laser Vein Removal One Small Area', '', [['Single session', 240, 0], ['Package of 3', 576, 720, '20% OFF'], ['Package of 6', 1004, 1440, '30% OFF']]],
-    ['Laser Vein Removal One Large Area', '', [['Single session', 450, 0], ['Package of 3', 1080, 1350, '20% OFF'], ['Package of 6', 1890, 2700, '30% OFF']]],
+    ['Laser Vein Removal One Large Area', '', [['Single session', 450, 0], ['Package of 3', 1080, 1350, '20% OFF'], ['Package of 6', 1890, 2700, '30% OFF']]]
   ] },
   { id: 'dermal-fillers', name: 'Dermal Fillers', blurb: '', items: [
     ['Lip Enhancement', 'definition, volume, hydration', [['1 Syringe', 750, 0], ['2 Syringes', 1125, 1500, 'BUY 1 GET 1 50% OFF']]],
@@ -4852,7 +4849,7 @@ const PRICE_CATS = [
     ['Lower Face Contour Package', 'Jawline Contouring + Chin Enhancement', [['2 Syringes', 1100, 0]]],
     ['Midface Lift Package', 'Cheeks (mid-face / cheek enhancement) + Smile Lines (Nasolabial folds)', [['2 Syringes', 995, 0]]],
     ['Full Midface Rejuvenation', 'Cheeks (mid-face / cheek enhancement) + Under-Eye Filler (Tear Trough) + Temples', [['3 Syringes', 1658, 0]]],
-    ['Upper Face Support Package', '', [['2 Syringes', 995, 0]]],
+    ['Upper Face Support Package', '', [['2 Syringes', 995, 0]]]
   ] },
   { id: 'skin-booster-and-bio-stimulators', name: 'Skin Booster and Bio-stimulators', blurb: '', items: [
     ['Bio-Stimulator – Above the Knee Tightening', '', [['1 Syringe', 599, 0]]],
@@ -4863,22 +4860,22 @@ const PRICE_CATS = [
     ['Bio-Stimulator – Crepey Arm Rejuvenation with Radiesse', '', [['Per Syringe', 599, 0]]],
     ['Bio-Stimulator – Hand Rejuvenation with Radiesse', '', [['1 Syringe', 599, 0]]],
     ['Bio-Stimulator – Radiesse Collagen Lift', '', [['1 Syringe', 599, 0]]],
-    ['Bio-Stimulator – Radiesse Jawline Lift', '', [['1 Syringe', 599, 0]]],
+    ['Bio-Stimulator – Radiesse Jawline Lift', '', [['1 Syringe', 599, 0]]]
   ] },
   { id: 'non-surgical-butt-lift', name: 'Non-Surgical Butt Lift', blurb: '', items: [
     ['Non-Surgical Butt Lift', '', [['60 mL', 3999, 0]]],
-    ['Hip Dip Contouring', '', [['Standard', 1999, 0]]],
+    ['Hip Dip Contouring', '', [['Standard', 1999, 0]]]
   ] },
   { id: 'microneedling', name: 'Microneedling', blurb: '', items: [
     ['Microneedling-Face', '', [['Single session', 245, 490, '50% OFF'], ['Package of 3', 735, 1470, '50% OFF'], ['Package of 6', 1470, 2940, '50% OFF']]],
     ['Microneedling with PRP - Face', '', [['Single session', 590, 0], ['Package of 3', 1416, 1770, '20% OFF'], ['Package of 6', 2478, 3540, '30% OFF']]],
     ['Microneedling with PDRN (Salmon DNA) - Face', '', [['Single session', 590, 0], ['Package of 3', 1416, 1770, '20% OFF'], ['Package of 6', 2478, 3540, '30% OFF']]],
     ['Microneedling with Exosomes - Face', '', [['Single session', 590, 0], ['Package of 3', 1416, 1770, '20% OFF'], ['Package of 6', 2478, 3540, '30% OFF']]],
-    ['Microneedling - Neck', '', [['Single session', 490, 0], ['Package of 3', 1176, 1470, '20% OFF'], ['Package of 6', 2058, 2940, '30% OFF']]],
+    ['Microneedling - Neck', '', [['Single session', 490, 0], ['Package of 3', 1176, 1470, '20% OFF'], ['Package of 6', 2058, 2940, '30% OFF']]]
   ] },
   { id: 'laser-acne-treatment', name: 'Laser Acne Treatment', blurb: '', items: [
     ['Laser Acne Full Face', '', [['Single session', 375, 0], ['Package of 3', 895, 1125, '20% OFF'], ['Package of 6', 1575, 2250, '30% OFF']]],
-    ['Laser Acne Upper Back', '', [['Single session', 4500, 0], ['Package of 3', 1800, 2250, '20% OFF'], ['Package of 6', 3150, 4500, '30% OFF']]],
+    ['Laser Acne Upper Back', '', [['Single session', 4500, 0], ['Package of 3', 1800, 2250, '20% OFF'], ['Package of 6', 3150, 4500, '30% OFF']]]
   ] },
   { id: 'laser-skin-resurfacing', name: 'Laser Skin Resurfacing', blurb: '', items: [
     ['Laser Skin Resurfacing Face', '', [['Single session', 990, 0], ['Package of 3', 2376, 2970, '20% OFF'], ['Package of 6', 4158, 5940, '30% OFF']]],
@@ -4899,94 +4896,94 @@ const PRICE_CATS = [
     ['Micro Laser Peel Small', '', [['Single session', 589, 0], ['Package of 3', 1413.6, 1767, '20% OFF'], ['Package of 6', 2473.8, 3534, '30% OFF']]],
     ['Micro Laser Peel Medium', '', [['Single session', 900, 0], ['Package of 3', 2160, 2700, '20% OFF'], ['Package of 6', 3780, 5400, '30% OFF']]],
     ['Micro Laser Peel Large', '', [['Single session', 1180, 0], ['Package of 3', 2832, 3540, '20% OFF'], ['Package of 6', 4956, 7080, '30% OFF']]],
-    ['Ultra Laser Peel Face', '', [['Single session', 489, 0], ['Package of 3', 1173.6, 1467, '20% OFF'], ['Package of 6', 2053.8, 2934, '30% OFF']]],
+    ['Ultra Laser Peel Face', '', [['Single session', 489, 0], ['Package of 3', 1173.6, 1467, '20% OFF'], ['Package of 6', 2053.8, 2934, '30% OFF']]]
   ] },
   { id: 'photo-rejuvenation', name: 'Photo-Rejuvenation', blurb: '', items: [
     ['Photo-Rejuvenation Face', '', [['Single session', 395, 0], ['Package of 3', 948, 1185, '20% OFF'], ['Package of 6', 1659, 2370, '30% OFF']]],
     ['Photo-Rejuvenation Extra Small', '', [['Single session', 275, 0], ['Package of 3', 660, 825, '20% OFF'], ['Package of 6', 1155, 1650, '30% OFF']]],
     ['Photo-Rejuvenation Small', '', [['Single session', 390, 0], ['Package of 3', 936, 1170, '20% OFF'], ['Package of 6', 1638, 2340, '30% OFF']]],
     ['Photo-Rejuvenation Medium', '', [['Single session', 790, 0], ['Package of 3', 1896, 2370, '20% OFF'], ['Package of 6', 3318, 4740, '30% OFF']]],
-    ['Photo-Rejuvenation Large', '', [['Single session', 1185, 0], ['Package of 3', 2844, 3555, '20% OFF'], ['Package of 6', 2844, 7110, '60% OFF']]],
+    ['Photo-Rejuvenation Large', '', [['Single session', 1185, 0], ['Package of 3', 2844, 3555, '20% OFF'], ['Package of 6', 2844, 7110, '60% OFF']]]
   ] },
   { id: '4d-rejuvalift', name: '4D Rejuvalift', blurb: '', items: [
     ['4D Rejuvalift Face', '', [['Single session', 1200, 0], ['Package of 3', 2880, 3600, '20% OFF'], ['Package of 6', 5040, 7200, '30% OFF']]],
-    ['4D Rejuvalift Large', '', [['Single session', 1200, 0], ['Package of 3', 2880, 3600, '20% OFF'], ['Package of 6', 5040, 7200, '30% OFF']]],
+    ['4D Rejuvalift Large', '', [['Single session', 1200, 0], ['Package of 3', 2880, 3600, '20% OFF'], ['Package of 6', 5040, 7200, '30% OFF']]]
   ] },
   { id: '2d-3d-laser-skin-tightening', name: '2D & 3D Laser Skin Tightening', blurb: '', items: [
     ['2D Skin Tightening Face', '', [['Single session', 480, 0], ['Package of 3', 1440, 0], ['Package of 6', 2880, 0]]],
     ['2D Skin Tightening Large Area', '', [['Single session', 960, 0], ['Package of 3', 2880, 0], ['Package of 6', 5760, 0]]],
     ['Smooth Eye Tightening', '', [['Single session', 600, 0], ['Package of 3', 1440, 1800, '20% OFF'], ['Package of 6', 2520, 3600, '30% OFF']]],
     ['3D Skin Tightening Face', '', [['Single session', 810, 0], ['Package of 3', 2160, 2700, '20% OFF'], ['Package of 6', 3780, 5400, '30% OFF']]],
-    ['3D Skin Tightening Large Area', '', [['Single session', 810, 0], ['Package of 3', 2160, 2700, '20% OFF'], ['Package of 6', 3780, 5400, '30% OFF']]],
+    ['3D Skin Tightening Large Area', '', [['Single session', 810, 0], ['Package of 3', 2160, 2700, '20% OFF'], ['Package of 6', 3780, 5400, '30% OFF']]]
   ] },
   { id: '2d-3d-laser-rejuvenation', name: '2D & 3D Laser Rejuvenation', blurb: '', items: [
     ['2D Skin Rejuvenation Face', '', [['Single session', 600, 0], ['Package of 3', 1440, 1800, '20% OFF'], ['Package of 6', 2520, 3600, '30% OFF']]],
     ['2D Skin Rejuvenation Large Area', '', [['Single session', 960, 0], ['Package of 3', 2880, 0], ['Package of 6', 5760, 0]]],
     ['3D Skin Rejuvenation Face', '', [['Single session', 900, 0], ['Package of 3', 2700, 0], ['Package of 6', 5400, 0]]],
-    ['3D Skin Rejuvenation Large Area', '', [['Single session', 1200, 0], ['Package of 3', 3600, 0], ['Package of 6', 7200, 0]]],
+    ['3D Skin Rejuvenation Large Area', '', [['Single session', 1200, 0], ['Package of 3', 3600, 0], ['Package of 6', 7200, 0]]]
   ] },
   { id: 'facial', name: 'Facial', blurb: '', items: [
     ['Age Element Facial', '', [['Single session', 249, 0], ['Package of 3', 597.6, 747, '20% OFF'], ['Package of 6', 1045.8, 1494, '30% OFF']]],
     ['Purifying Acne Relief Facial', '', [['Single session', 249, 0], ['Package of 3', 597.6, 747, '20% OFF'], ['Package of 6', 1045.8, 1494, '30% OFF']]],
-    ['Glass Glow Facial', '', [['Single session', 249, 0], ['Package of 3', 597.6, 747, '20% OFF'], ['Package of 6', 1045.8, 1494, '30% OFF']]],
+    ['Glass Glow Facial', '', [['Single session', 249, 0], ['Package of 3', 597.6, 747, '20% OFF'], ['Package of 6', 1045.8, 1494, '30% OFF']]]
   ] },
   { id: 'chemical-peel', name: 'Chemical Peel', blurb: '', items: [
-    ['Purifying Light Peel', '', [['Single session', 149, 0], ['Package of 3', 355.6, 447, '20% OFF'], ['Package of 6', 625.8, 894, '30% OFF']]],
-    ['Brightening Medium Peel', '', [['Single session', 299, 0], ['Package of 3', 717.6, 897, '20% OFF'], ['Package of 6', 1255.8, 1794, '30% OFF']]],
+    ['PURIFYING Light Peel', '', [['Single session', 149, 0], ['Package of 3', 355.6, 447, '20% OFF'], ['Package of 6', 625.8, 894, '30% OFF']]],
+    ['BRIGHTENING Medium Peel', '', [['Single session', 299, 0], ['Package of 3', 717.6, 897, '20% OFF'], ['Package of 6', 1255.8, 1794, '30% OFF']]],
     ['PRO Deep Peel', '', [['Single session', 399, 0], ['Package of 3', 957, 1197, '20% OFF'], ['Package of 6', 1675.8, 2394, '30% OFF']]],
-    ['Acnelan', '', [['Single session', 249, 0], ['Package of 3', 597.6, 747, '20% OFF'], ['Package of 6', 1045.8, 1494, '30% OFF']]],
+    ['Acnelan', '', [['Single session', 249, 0], ['Package of 3', 597.6, 747, '20% OFF'], ['Package of 6', 1045.8, 1494, '30% OFF']]]
   ] },
   { id: 'depigmenting-treatment', name: 'Depigmenting Treatment', blurb: '', items: [
     ['Cosmelan', '', [['Single session', 799.2, 999, '20% OFF']]],
-    ['Dermamelan', '', [['Single session', 1119.2, 1399, '20% OFF']]],
+    ['Dermamelan', '', [['Single session', 1119.2, 1399, '20% OFF']]]
   ] },
   { id: 'hair-loss', name: 'Hair Loss', blurb: '', items: [
     ['PRP Scalp - Small', '', [['Single session', 399, 1000, '60% OFF'], ['Package of 3', 1197, 0], ['Package of 6', 2394, 0]]],
     ['PRP Scalp - Medium', '', [['Single session', 1500, 0], ['Package of 3', 3600, 4500, '20% OFF'], ['Package of 6', 6300, 9000, '30% OFF']]],
     ['PRP Scalp - Full', '', [['Single session', 2100, 0], ['Package of 3', 5040, 6300, '20% OFF'], ['Package of 6', 8820, 12600, '30% OFF']]],
-    ['Laser Hair Rejuvenation', '', [['Single session', 350, 0], ['Package of 3', 1050, 0], ['Package of 6', 2100, 0]]],
+    ['Laser Hair Rejuvenation', '', [['Single session', 350, 0], ['Package of 3', 1050, 0], ['Package of 6', 2100, 0]]]
   ] },
   { id: 'laser-hair-removal', name: 'Laser Hair Removal', blurb: '', items: [
-    ['LHR - Abdomen', '', lhrB(190, 570, 950, 1520)],
-    ['LHR - Arms (Full)', '', lhrB(290, 870, 1450, 2320)],
-    ['LHR - Arms (Lower)', '', lhrB(190, 570, 950, 1520)],
-    ['LHR - Arms (Upper)', '', lhrB(219, 657, 1095, 1752)],
-    ['Hands & Fingers', '', lhrB(150, 450, 750, 1200)],
-    ['LHR - Back (Full)', '', lhrB(390, 1170, 1950, 3120)],
-    ['LHR - Back (Lower)', '', lhrB(250, 750, 1250, 2000)],
-    ['LHR - Back (Upper)', '', lhrB(250, 750, 1250, 2000)],
-    ['Full Back & Shoulders', '', lhrB(520, 1560, 2600, 4160)],
-    ['Upper Back & Shoulders', '', lhrB(450, 1350, 2250, 3600)],
-    ['LHR - Chest', '', lhrB(290, 870, 1450, 2320)],
-    ['Chest & Abdomen', '', lhrB(450, 1350, 2250, 3600)],
-    ['Chest, Abdomen & Shoulders', '', lhrB(550, 1650, 2750, 4400)],
-    ['LHR - Legs (Full)', '', lhrB(490, 1470, 2450, 3920)],
-    ['LHR - Legs (Upper)', '', lhrB(290, 870, 1450, 2320)],
-    ['LHR - Legs (Lower)', '', lhrB(290, 870, 1450, 2320)],
-    ['Full Legs & Brazilian', '', lhrB(650, 1950, 3250, 5200)],
-    ['Full Legs & Bikini', '', lhrB(620, 1860, 3100, 4960)],
-    ['LHR - Brazilian', '', lhrB(190, 570, 950, 1520)],
-    ['Bikini', '', lhrB(150, 450, 750, 1200)],
-    ['LHR - Buttocks', '', lhrB(350, 1050, 1750, 2800)],
-    ['Linea Alba', '', lhrB(120, 360, 600, 960)],
-    ['Full face', '', lhrB(290, 870, 1450, 2320)],
-    ['Half Face', '', lhrB(190, 570, 950, 1520)],
-    ['Chin', '', lhrB(120, 360, 600, 960)],
-    ['LHR - Chin & Anterior Neck', '', lhrB(190, 570, 950, 1520)],
-    ['LHR - Lip (Upper & Lower)', '', lhrB(120, 360, 600, 960)],
-    ['LHR - Lip (Upper)', '', lhrB(90, 270, 450, 720)],
-    ['LHR - Sideburns', '', lhrB(120, 360, 600, 960)],
-    ['Eyebrows', '', lhrB(120, 360, 600)],
-    ['Entire Neck', '', lhrB(250, 750, 1250, 2000)],
-    ['LHR - Neck (Front)', '', lhrB(150, 450, 750, 1200)],
-    ['LHR - Neck (Back)', '', lhrB(150, 450, 750, 1200)],
-    ['Areola', '', lhrB(120, 360, 600, 960)],
-    ['LHR - Feet & Toes', '', lhrB(150, 450, 750, 1200)],
-    ['LHR - Shoulders', '', lhrB(190, 570, 950, 1520)],
-    ['LHR - Underarms', '', lhrB(150, 450, 750, 1200)],
+    ['LHR - Abdomen', '', [['Single session', 190, 0], ['Package of 3', 570, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 950, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 1520, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Arms (Full)', '', [['Single session', 290, 0], ['Package of 3', 870, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 1450, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 2320, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Arms (Lower)', '', [['Single session', 190, 0], ['Package of 3', 570, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 950, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 1520, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Arms (Upper)', '', [['Single session', 219, 0], ['Package of 3', 657, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 1095, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 1752, 0, 'BUY 1 GET 1 FREE']]],
+    ['Hands & Fingers', '', [['Single session', 150, 0], ['Package of 3', 450, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 750, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 1200, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Back (Full)', '', [['Single session', 390, 0], ['Package of 3', 1170, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 1950, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 3120, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Back (Lower)', '', [['Single session', 250, 0], ['Package of 3', 750, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 1250, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 2000, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Back (Upper)', '', [['Single session', 250, 0], ['Package of 3', 750, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 1250, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 2000, 0, 'BUY 1 GET 1 FREE']]],
+    ['Full Back & Shoulders', '', [['Single session', 520, 0], ['Package of 3', 1560, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 2600, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 4160, 0, 'BUY 1 GET 1 FREE']]],
+    ['Upper Back & Shoulders', '', [['Single session', 450, 0], ['Package of 3', 1350, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 2250, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 3600, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Chest', '', [['Single session', 290, 0], ['Package of 3', 870, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 1450, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 2320, 0, 'BUY 1 GET 1 FREE']]],
+    ['Chest & Abdomen', '', [['Single session', 450, 0], ['Package of 3', 1350, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 2250, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 3600, 0, 'BUY 1 GET 1 FREE']]],
+    ['Chest, Abdomen & Shoulders', '', [['Single session', 550, 0], ['Package of 3', 1650, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 2750, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 4400, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Legs (Full)', '', [['Single session', 490, 0], ['Package of 3', 1470, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 2450, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 3920, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Legs (Upper)', '', [['Single session', 290, 0], ['Package of 3', 870, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 1450, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 2320, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Legs (Lower)', '', [['Single session', 290, 0], ['Package of 3', 870, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 1450, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 2320, 0, 'BUY 1 GET 1 FREE']]],
+    ['Full Legs & Brazilian', '', [['Single session', 650, 0], ['Package of 3', 1950, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 3250, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 5200, 0, 'BUY 1 GET 1 FREE']]],
+    ['Full Legs & Bikini', '', [['Single session', 620, 0], ['Package of 3', 1860, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 3100, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 4960, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Brazilian', '', [['Single session', 190, 0], ['Package of 3', 570, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 950, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 1520, 0, 'BUY 1 GET 1 FREE']]],
+    ['Bikini', '', [['Single session', 150, 0], ['Package of 3', 450, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 750, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 1200, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Buttocks', '', [['Single session', 350, 0], ['Package of 3', 1050, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 1750, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 2800, 0, 'BUY 1 GET 1 FREE']]],
+    ['Linea Alba', '', [['Single session', 120, 0], ['Package of 3', 360, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 600, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 960, 0, 'BUY 1 GET 1 FREE']]],
+    ['Full face', '', [['Single Session', 290, 0], ['Package of 3', 870, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 1450, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 2320, 0, 'BUY 1 GET 1 FREE']]],
+    ['Half Face', '', [['Single session', 190, 0], ['Package of 3', 570, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 950, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 1520, 0, 'BUY 1 GET 1 FREE']]],
+    ['Chin', '', [['Single session', 120, 0], ['Package of 3', 360, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 600, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 960, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Chin & Anterior Neck', '', [['Single session', 190, 0], ['Package of 3', 570, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 950, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 1520, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Lip (Upper & Lower)', '', [['Single session', 120, 0], ['Package of 3', 360, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 600, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 960, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Lip (Upper)', '', [['Single session', 90, 0], ['Package of 3', 270, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 450, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 720, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Sideburns', '', [['Single session', 120, 0], ['Package of 3', 360, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 600, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 960, 0, 'BUY 1 GET 1 FREE']]],
+    ['Eyebrows', '', [['Single session', 120, 0], ['Package of 3', 360, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 600, 0, 'BUY 1 GET 1 FREE']]],
+    ['Entire Neck', '', [['Single session', 250, 0], ['Package of 3', 750, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 1250, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 2000, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Neck (Front)', '', [['Single session', 150, 0], ['Package of 3', 450, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 750, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 1200, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Neck (Back)', '', [['Single session', 150, 0], ['Package of 3', 450, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 750, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 1200, 0, 'BUY 1 GET 1 FREE']]],
+    ['Areola', '', [['Single session', 120, 0], ['Package of 3', 360, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 600, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 960, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Feet & Toes', '', [['Single session', 150, 0], ['Package of 3', 450, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 750, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 1200, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Shoulders', '', [['Single session', 190, 0], ['Package of 3', 570, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 950, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 1520, 0, 'BUY 1 GET 1 FREE']]],
+    ['LHR - Underarms', '', [['Single session', 150, 0], ['Package of 3', 450, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', 750, 0, 'BUY 1 GET 1 FREE'], ['Package of 8', 1200, 0, 'BUY 1 GET 1 FREE']]]
   ] },
   { id: 'laser-vaginal-tightening', name: 'Laser Vaginal Tightening', blurb: '', items: [
-    ['Vaginal Tightening', '', [['Single session', 1250, 0], ['Package of 3', 3000, 3750, '20% OFF'], ['Package of 6', 5250, 7500, '30% OFF']]],
+    ['Vaginal Tightening', '', [['Single session', 1250, 0], ['Package of 3', 3000, 3750, '20% OFF'], ['Package of 6', 5250, 7500, '30% OFF']]]
   ] },
   { id: 'coolsculpting-tight-sculpting', name: 'Coolsculpting & Tight Sculpting', blurb: '', items: [
     ['Regular Treatment Zone', '', [['Single zone', 850, 0], ['2 zones', 1360, 1700, '20% OFF'], ['4 zones and more', 3400, 0], ['8 zones', 4760, 6800, '30% OFF']]],
@@ -4994,25 +4991,30 @@ const PRICE_CATS = [
     ['Coolsculpting Smooth', '', [['Single zone', 1000, 0], ['2 zones', 2000, 0], ['4 zones and more', 4000, 0], ['8 zones', 8000, 0]]],
     ['Coolsculpting Double', '', [['Single zone', 1600, 0], ['2 zones', 2560, 3200, '20% OFF'], ['4 zones and more', 6400, 0], ['8 zones', 8960, 12800, '30% OFF']]],
     ['Tight Sculpting - Small Area', '', [['Single session', 600, 0], ['Package of 3', 1440, 1800, '20% OFF'], ['Package of 6', 2520, 3600, '30% OFF'], ['Package of 8', 4800, 0]]],
-    ['Tight Sculpting - Medium Area', '', [['Single session', 800, 0], ['Package of 3', 1920, 2400, '20% OFF'], ['Package of 6', 3360, 4800, '30% OFF'], ['Package of 8', 6400, 0]]],
+    ['Tight Sculpting - Medium Area', '', [['Single session', 800, 0], ['Package of 3', 1920, 2400, '20% OFF'], ['Package of 6', 3360, 4800, '30% OFF'], ['Package of 8', 6400, 0]]]
   ] },
   { id: 'snoring-treatment', name: 'Snoring Treatment', blurb: '', items: [
-    ['Snoring Treatment', '', [['Single session', 450, 0], ['Package of 3', 1080, 1350, '20% OFF'], ['Package of 6', 1890, 2700, '30% OFF']]],
+    ['Snoring Treatment', '', [['Single session', 450, 0], ['Package of 3', 1080, 1350, '20% OFF'], ['Package of 6', 1890, 2700, '30% OFF']]]
   ] },
   { id: 'toenail-fungus-removal', name: 'Toenail Fungus Removal', blurb: '', items: [
-    ['Toenail Fungus Removal', '', [['Single session', 300, 0], ['Package of 3', 719, 900, '20% OFF'], ['Package of 6', 1260, 1800, '30% OFF']]],
+    ['TOENAIL FUNGUS REMOVAL', '', [['Single session', 300, 0], ['Package of 3', 719, 900, '20% OFF'], ['Package of 6', 1260, 1800, '30% OFF']]]
   ] },
   { id: 'latisse', name: 'Latisse', blurb: '', items: [
-    ['Latisse', '', [['Single session', 245, 0]]],
-  ] },
+    ['Latisse', '', [['Single session', 245, 0]]]
+  ] }
 ];
+
+/* Prices live in ONE place: src/live/pricing.json (the single source of truth).
+   build_pricing.py generates the PRICE_CATS array from it, so editing pricing.json updates the
+   pricing page, the treatment/concern pages and the promotion offers on rebuild. This file holds
+   only the curated Monthly Specials, whose prices are read live from PRICE_CATS (see specialFrom). */
 
 /* the live pricing page's "EXCLUSIVE MONTHLY SPECIALS" block (approval item C2, 7 Nov 2026): name, price and the price list section each "Buy" opens */
 /* each card is [display name, treatment name in PRICE_CATS or '' for the whole category, category section id];
    the price is not stored, it is read live from the cheapest option (see specialFrom), so editing the
-   price list below updates these cards automatically. the eight are the most popular treatment types in
-   the market, spread across face, body, skin and hair; prescription drugs (Botox, Dysport) are kept out
-   of this promo block. '' = show the lowest price anywhere in that category (its label is the category);
+   price list below updates these cards automatically. the most popular treatment types in the market,
+   spread across face, body, skin and hair; prescription drugs (Botox, Dysport) are kept out of this
+   promo block. '' = show the lowest price anywhere in that category (its label is the category);
    a named treatment = show that one treatment's lowest option (so the label stays accurate). */
 const PRICE_SPECIALS = { title: 'Exclusive monthly specials', sub: 'Save on cosmetic treatment, apply for financing now', note: 'for selected packages', items: [
   ['Laser Hair Removal', '', 'pg-laser-hair-removal'], ['Lip Filler', 'Lip Enhancement', 'pg-dermal-fillers'], ['Microneedling', '', 'pg-microneedling'], ['Chemical Peel', '', 'pg-chemical-peel'],

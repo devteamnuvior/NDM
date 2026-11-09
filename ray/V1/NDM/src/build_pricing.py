@@ -5,6 +5,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pricelib  # noqa: E402
+
 root, scratch = Path(sys.argv[1]), Path(sys.argv[2])
 s = (root / 'promotion.html').read_text()
 s = re.sub(r'\n?<!-- seo -->.*?<!-- /seo -->', '', s, count=1, flags=re.S)   # the shell's own SEO head block (src/patches-applied/seo_patch.py) is per page: strip it, the patch re-adds it after the build
@@ -78,8 +81,8 @@ s = s[:i] + css + s[i:]
 # 4. pricing data + UI before the app, then the pricing app
 data = (scratch / 'pricing-data.jsx').read_text()
 ui = (scratch / 'pricing-ui.jsx').read_text()
-helper = "/* laser hair removal: every package carries the site's BUY 1 GET 1 FREE badge */\nconst lhrB = (a, b, c, d) => [['Single session', a, 0], ['Package of 3', b, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', c, 0, 'BUY 1 GET 1 FREE'], ...(d ? [['Package of 8', d, 0, 'BUY 1 GET 1 FREE']] : [])];\n"
-data = data.replace('const PRICE_CATS = [', helper + 'const PRICE_CATS = [', 1)
+# PRICE_CATS is generated from the single source of truth, src/live/pricing.json
+data = pricelib.gen_price_cats_js(scratch) + '\n' + data
 
 a = s.index('function App() {')
 b = s.index('ReactDOM.createRoot', a)
