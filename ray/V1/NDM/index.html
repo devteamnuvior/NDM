@@ -721,6 +721,17 @@
   .cmp-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--cmp-badge-line);border-radius:999px;background:var(--cmp-badge-bg);color:var(--cmp-badge-fg);padding:6px 12px 6px 10px;font-family:"Helvetica Neue",Inter,Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1;white-space:nowrap;box-shadow:0 10px 22px -14px rgba(0,0,0,.6)}
   .cmp-badge::before{content:'';width:6px;height:6px;flex-shrink:0;transform:rotate(45deg);background:var(--cmp-gold)}
   .promo-attn .cmp-badge{background:transparent;color:var(--cmp-gold);padding:3px 9px 3px 8px;font-size:9.5px;box-shadow:none}
+  /* sale tape (same as the Black Friday preview tape): crosses the page at a slight angle, words drift slowly */
+  .cmp-band{position:relative;z-index:12;overflow:hidden;background:transparent;padding:clamp(12px,2vw,28px) 0;pointer-events:none}
+  .cmp-tape{background:var(--cmp-tape,#C8101D);color:var(--cmp-tape-fg,#fff);transform:rotate(-1.4deg);margin:0 -3vw;box-shadow:0 0 0 1px rgba(255,255,255,.06),0 18px 40px -20px rgba(0,0,0,.9)}
+  .cmp-band.is-flip .cmp-tape{transform:rotate(1.2deg)}
+  .cmp-tape-track{display:flex;width:max-content;animation:cmpTape 46s linear infinite}
+  .cmp-band.is-flip .cmp-tape-track{animation-direction:reverse}
+  .cmp-tape ul{display:flex;flex-shrink:0;align-items:center}
+  .cmp-tape li{display:flex;align-items:center;gap:22px;padding:13px 0 13px 22px;font:800 clamp(13px,1.25vw,17px)/1 "Helvetica Neue",Inter,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+  .cmp-tape li::after{content:'';width:8px;height:8px;transform:rotate(45deg);background:currentColor;opacity:.9}
+  @keyframes cmpTape{to{transform:translateX(-50%)}}
+  @media (prefers-reduced-motion:reduce){.cmp-tape-track{animation:none}}
   .cmp-tint{background:var(--cmp-tint)}
   html[data-campaign] .cmp-hl{color:var(--cmp-acc-dk)}
   html[data-campaign] .tt-strong.text-ndm-deep{color:var(--cmp-acc)}
@@ -865,7 +876,7 @@ const CONCERNS = [
 ];
 /* which page is open: the top menu marks its section, and dropdown links to this page are highlighted */
 const HERE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-const NAV_HERE = { 'pricing.html': 'pricing', 'promotion.html': 'promotion', 'about.html': 'about', 'blog.html': 'about', 'what-causes-rosacea-redness.html': 'about', 'botox.html': 'procedures', 'aptos-thread-lift.html': 'procedures' , 'acne-scar.html': 'procedures', 'acne-treatments.html': 'procedures', 'acnelan.html': 'procedures', 'age-element-facial.html': 'procedures', 'belkyra-kybella-double-chin.html': 'procedures', 'cellulite-fat-reduction.html': 'procedures', 'chemical-peels.html': 'procedures', 'coolsculpting.html': 'procedures', 'dark-circles.html': 'procedures', 'dermal-fillers.html': 'procedures', 'dermamelan.html': 'procedures', 'endovenous-laser-evlt.html': 'procedures', 'exosome-skin-therapy.html': 'procedures', 'exosome-therapy-for-hair.html': 'procedures', 'hair-loss-treatments.html': 'procedures', 'hair-rejuvenation.html': 'procedures', 'hyperhidrosis.html': 'procedures', 'hyperpigmentation.html': 'procedures', 'juvederm.html': 'procedures', 'laser-hair-rejuvenation.html': 'procedures', 'laser-hair-removal.html': 'procedures', 'laser-skin-resurfacing.html': 'procedures', 'laser-skin-tightening.html': 'procedures', 'laser-vein-removal.html': 'procedures', 'lip-augmentation.html': 'procedures', 'melasma.html': 'procedures', 'mesotherapy-skin-boosters.html': 'procedures', 'micro-laser-peel.html': 'procedures', 'microdermabrasion.html': 'procedures', 'microneedling.html': 'procedures', 'mole-removal.html': 'procedures', 'nail-fungus-treatment.html': 'procedures', 'non-surgical-bbl.html': 'procedures', 'photo-rejuvenation.html': 'procedures', 'radiesse.html': 'procedures', 'radiofrequency-ablation-rfa.html': 'procedures', 'rosacea.html': 'procedures', 'scar-removal.html': 'procedures', 'sclerotherapy.html': 'procedures', 'sculptra.html': 'procedures', 'skin-tightening.html': 'procedures', 'snoring-treatment.html': 'procedures', 'soft-lift.html': 'procedures', 'spider-vein-removal.html': 'procedures', 'stretch-marks.html': 'procedures', 'tear-trough-correction.html': 'procedures', 'tightsculpting.html': 'procedures', 'vaginal-tightening.html': 'procedures', 'varicose-vein-treatment.html': 'procedures', 'vein-removal-treatment.html': 'procedures', 'venaseal.html': 'procedures', 'visia-skin-analysis.html': 'procedures', 'wrinkle-treatments.html': 'procedures' }[HERE] || (HERE === 'concerns.html' || HERE.startsWith('concern-') ? 'concerns' : undefined);
+const NAV_HERE = { 'index.html': 'home', 'pricing.html': 'pricing', 'promotion.html': 'promotion', 'about.html': 'about', 'blog.html': 'about', 'what-causes-rosacea-redness.html': 'about', 'botox.html': 'procedures', 'aptos-thread-lift.html': 'procedures' , 'acne-scar.html': 'procedures', 'acne-treatments.html': 'procedures', 'acnelan.html': 'procedures', 'age-element-facial.html': 'procedures', 'belkyra-kybella-double-chin.html': 'procedures', 'cellulite-fat-reduction.html': 'procedures', 'chemical-peels.html': 'procedures', 'coolsculpting.html': 'procedures', 'dark-circles.html': 'procedures', 'dermal-fillers.html': 'procedures', 'dermamelan.html': 'procedures', 'endovenous-laser-evlt.html': 'procedures', 'exosome-skin-therapy.html': 'procedures', 'exosome-therapy-for-hair.html': 'procedures', 'hair-loss-treatments.html': 'procedures', 'hair-rejuvenation.html': 'procedures', 'hyperhidrosis.html': 'procedures', 'hyperpigmentation.html': 'procedures', 'juvederm.html': 'procedures', 'laser-hair-rejuvenation.html': 'procedures', 'laser-hair-removal.html': 'procedures', 'laser-skin-resurfacing.html': 'procedures', 'laser-skin-tightening.html': 'procedures', 'laser-vein-removal.html': 'procedures', 'lip-augmentation.html': 'procedures', 'melasma.html': 'procedures', 'mesotherapy-skin-boosters.html': 'procedures', 'micro-laser-peel.html': 'procedures', 'microdermabrasion.html': 'procedures', 'microneedling.html': 'procedures', 'mole-removal.html': 'procedures', 'nail-fungus-treatment.html': 'procedures', 'non-surgical-bbl.html': 'procedures', 'photo-rejuvenation.html': 'procedures', 'radiesse.html': 'procedures', 'radiofrequency-ablation-rfa.html': 'procedures', 'rosacea.html': 'procedures', 'scar-removal.html': 'procedures', 'sclerotherapy.html': 'procedures', 'sculptra.html': 'procedures', 'skin-tightening.html': 'procedures', 'snoring-treatment.html': 'procedures', 'soft-lift.html': 'procedures', 'spider-vein-removal.html': 'procedures', 'stretch-marks.html': 'procedures', 'tear-trough-correction.html': 'procedures', 'tightsculpting.html': 'procedures', 'vaginal-tightening.html': 'procedures', 'varicose-vein-treatment.html': 'procedures', 'vein-removal-treatment.html': 'procedures', 'venaseal.html': 'procedures', 'visia-skin-analysis.html': 'procedures', 'wrinkle-treatments.html': 'procedures' }[HERE] || (HERE === 'concerns.html' || HERE.startsWith('concern-') ? 'concerns' : undefined);
 const isHere = (href) => !!href && !href.includes('#') && href.toLowerCase() === HERE;
 const here = (href) => (isHere(href) ? { 'aria-current': 'page' } : {});
 const HERE_CAT = (PROCEDURES.find((c) => c.groups.some((g) => g.items.some((it) => isHere(slug(it))))) || {}).id;
@@ -882,6 +893,7 @@ const ABOUT = {
   links: ['Our Doctors & Team', 'Our Clinics', 'Awards & Recognition', 'Contact Us', 'Blog', 'Policies (Privacy, Terms, Refunds)'],
 };
 const NAV = [
+  { id: 'home', label: 'Home', href: 'index.html' },
   { id: 'procedures', label: 'Procedures', menu: 'mega' },
   { id: 'concerns', label: 'Concerns', menu: 'concerns' },
   { id: 'pricing', label: 'Pricing' },
@@ -901,25 +913,25 @@ const CAMPAIGN_LOOKS = {
   'new-year': ['New Year', ['#FFFFFF', '#C9CED4', '#5E6A75']],
 };
 const CAMPAIGNS = [
-  { id: 'vip', name: 'VIP Early Access', look: 'black-friday', when: 'Nov 16 to 26', badge: 'VIP Access',
+  { id: 'vip', name: 'VIP Early Access', look: 'black-friday', when: 'Nov 16 to 26', badge: 'VIP Access', tape: ['VIP Early Access', 'Black Friday offers open to the list Nov 23', 'Join the VIP list', 'Uptown and Downtown Toronto'], tapeColor: ['#0B0B0C', '#D2B57B'],
     bar: 'VIP Early Access: Black Friday offers open to the list on Nov 23', barM: 'VIP Early Access opens Nov 23', barCta: ['Join the VIP list', '#/vip'],
     head: ['See Black Friday', 'offers first'], sub: 'Join the VIP list and our private offer page opens to you on Monday, November 23.', cta: ['Join the VIP list', '#/vip'],
     until: '2026-11-27T00:00:00-05:00', untilLabel: 'Black Friday starts in',
     img: { src: 'assets/hero/clinic-exterior.jpg', alt: 'The NewDermaMed clinic storefront in Toronto at night', pos: '58% 50%', scale: 1 } },
-  { id: 'black-friday', name: 'Black Friday', look: 'black-friday', when: 'Nov 27 to 30', badge: 'Black Friday',
+  { id: 'black-friday', name: 'Black Friday', look: 'black-friday', when: 'Nov 27 to 30', badge: 'Black Friday', tape: ['Black Friday at NewDermaMed', 'Nov 27 to 30', 'Uptown and Downtown Toronto', 'Treatment offers Friday to Monday', 'Online finale Monday: skincare and gift cards'], tapeColor: ['#C8101D', '#FFFFFF'],
     bar: 'Black Friday: treatment offers until Monday, Nov 30 at 11:59 pm', barM: 'Black Friday offers until Nov 30', barCta: ['See the offers', 'promotion.html'],
     head: ['Black Friday', 'at NewDermaMed'], sub: 'Treatment offers Friday to Monday. Monday is our online finale: skincare and gift cards.', cta: ['See the offers', 'promotion.html'],
     until: '2026-11-30T23:59:00-05:00', untilLabel: 'Offers end in',
     img: { src: 'assets/hero/clinic-exterior.jpg', alt: 'The NewDermaMed clinic storefront in Toronto at night', pos: '58% 50%', scale: 1 } },
-  { id: 'holiday', name: 'Holiday Gifting', look: 'holiday', when: 'Dec 1 to 25', badge: 'Gift Idea',
+  { id: 'holiday', name: 'Holiday Gifting', look: 'holiday', when: 'Dec 1 to 25', badge: 'Gift Idea', tape: ['Holiday Gifting', 'Dec 1 to 25', 'Gift cards with bonus value', 'Delivered instantly by email', 'Uptown and Downtown Toronto'], tapeColor: ['#1F5A41', '#F6F1E6'],
     bar: 'Holiday gift cards with bonus value, delivered instantly by email', barM: 'Holiday gift cards, sent by email', barCta: ['Shop gift cards', '#/gift-cards'],
     head: ['Holiday gift cards,', 'with bonus value'], sub: 'Delivered instantly by email, with bonus value to use from January to March.', cta: ['Shop gift cards', '#/gift-cards'],
     img: { src: 'assets/hero/clinic-reception.jpg', alt: 'NewDermaMed reception with the clinic logo and skincare wall', pos: '50% 50%', scale: 1 } },
-  { id: 'boxing-week', name: 'Boxing Week', look: 'holiday', when: 'Dec 26 to 31', badge: 'Gift Idea',
+  { id: 'boxing-week', name: 'Boxing Week', look: 'holiday', when: 'Dec 26 to 31', badge: 'Gift Idea', tape: ['Boxing Week', 'Dec 26 to 31', 'Online only: skincare and gift cards', 'Last call on gift card bonus value', 'January booking now open'], tapeColor: ['#7A1F2B', '#F6F1E6'],
     bar: 'Boxing Week online, Dec 26 to 31: skincare and gift cards', barM: 'Boxing Week online, Dec 26 to 31', barCta: ['Shop skincare', 'shop.html'],
     head: ['Boxing Week,', 'online only'], sub: 'Skincare offers, a last call on gift card bonus value, and January booking now open.', cta: ['Shop skincare', 'shop.html'],
     img: { src: 'assets/hero/clinic-reception.jpg', alt: 'NewDermaMed reception with the clinic logo and skincare wall', pos: '50% 50%', scale: 1 } },
-  { id: 'new-year', name: 'New Year Skin Plan', look: 'new-year', when: 'Jan 1 to 31', badge: 'New Year Plan',
+  { id: 'new-year', name: 'New Year Skin Plan', look: 'new-year', when: 'Jan 1 to 31', badge: 'New Year Plan', tape: ['New Year Skin Plan', 'Jan 1 to 31', 'Free skin analysis with your visit', 'A plan built around your skin', 'Uptown and Downtown Toronto'], tapeColor: ['#3E4852', '#FFFFFF'],
     bar: 'New Year Skin Plan: a free skin analysis with your visit', barM: 'Free skin analysis with your visit', barCta: ['Book yours', '#/book'],
     head: ['Your 2027 skin plan', 'starts here'], sub: 'Begin with a free skin analysis and a treatment plan built around your skin.', cta: ['Book Free Consultation', '#/book'],
     img: { src: 'assets/home/visia-consult.jpg', alt: 'A NewDermaMed provider reviewing skin analysis results with a patient', pos: '60% 45%', scale: 1 } },
@@ -948,6 +960,17 @@ function useCountdown(until) {
   if (!(ms > 0)) return null;
   const d = Math.floor(ms / 864e5), h = Math.floor((ms % 864e5) / 36e5), m = Math.floor((ms % 36e5) / 6e4);
   return { d, h, m, text: `${d}d ${h}h ${m}m`, label: `${d} days, ${h} hours and ${m} minutes` };
+}
+/* the sale tape: shows only while a campaign is on (and not on treatment / medical pages) */
+function CampaignTape({ flip }) {
+  if (!CAMPAIGN_LOOK || !CAMPAIGN.tape) return null;
+  const items = [...CAMPAIGN.tape, ...CAMPAIGN.tape];
+  const st = CAMPAIGN.tapeColor ? { '--cmp-tape': CAMPAIGN.tapeColor[0], '--cmp-tape-fg': CAMPAIGN.tapeColor[1] } : undefined;
+  return (
+    <div className={`cmp-band ${flip ? 'is-flip' : ''}`} aria-hidden="true">
+      <div className="cmp-tape" style={st}><div className="cmp-tape-track">{[0, 1].map((k) => <ul key={k} role="list">{items.map((t, i) => <li key={i}>{t}</li>)}</ul>)}</div></div>
+    </div>
+  );
 }
 function CampaignHeroTag({ c }) {
   const cd = useCountdown(c.until);
@@ -1534,6 +1557,7 @@ function Drawer({ open, onClose }) {
           <button onClick={onClose} aria-label="Close menu" className="grid place-items-center size-11 rounded-full hover:bg-ndm-mist"><IconClose /></button>
         </div>
         <nav aria-label="Mobile" className="flex-1 overflow-y-auto px-5 divide-y divide-ndm-line">
+          <a href="index.html" onClick={onClose} {...(NAV_HERE === 'home' ? { 'aria-current': 'page' } : {})} className={`block py-4 font-aeonik text-[22px] ${NAV_HERE === 'home' ? 'nav-is-here' : ''}`}><span className="relative">Home{NAV_HERE === 'home' && <i aria-hidden="true" className="nav-here is-left" />}</span></a>
           <div>
             <Row onClick={() => setSec(sec === 'p' ? null : 'p')} expanded={sec === 'p'} on={NAV_HERE === 'procedures'}>Procedures</Row>
             {sec === 'p' && (
@@ -4648,14 +4672,17 @@ function App() {
       <Header dark={dark} top={introDone ? 36 : 0} visible={introDone} onSearch={() => setSearch(true)} onDrawer={() => setDrawer(true)} onCart={() => setCartOpen(true)} cartCount={cart.count} />
       <main id="main">
         <Hero sectionRef={heroRef} onIntroDone={() => setIntroDone(true)} />
+        <CampaignTape />
         <Statement />
         <Start onSearch={() => setSearch(true)} />
+        <CampaignTape flip />
         <TreatMenu />
         <AptosCare />
         <Space />
         <Team />
         <BeforeAfter />
         <Process />
+        <CampaignTape />
         <Promotions />
         <Saying />
         <VisitUs />

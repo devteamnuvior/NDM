@@ -9,6 +9,7 @@ Run from ndm-homepage:  python3 src/build_blackfriday.py . src"""
 import re, sys
 root = sys.argv[1] if len(sys.argv) > 1 else '.'
 s = open(f'{root}/index.html').read()
+s = re.sub(r'        <CampaignTape(?: flip)? />\n', '', s)   # this page carries its own BfTape bands
 def rep(a, b, n=1):
     global s
     c = s.count(a); assert c == n, (a[:90], c); s = s.replace(a, b)
