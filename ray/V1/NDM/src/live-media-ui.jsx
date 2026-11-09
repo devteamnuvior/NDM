@@ -59,8 +59,8 @@ function TxFilm({ p }) {
       </video>
       <span aria-hidden="true" className="tx-film-shade absolute inset-0" />
       <svg aria-hidden="true" className="tx-film-ring hidden text-white/80 md:block" viewBox="0 0 100 100">
-        <defs><path id="tx-ring-path" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" /></defs>
-        <text fontSize="9.2" fontFamily="Inter, sans-serif" letterSpacing="2.2" fill="currentColor"><textPath href="#tx-ring-path">UPTOWN · DOWNTOWN · TORONTO · NEWDERMAMED · </textPath></text>
+        <defs><path id="tx-film-ring-path" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" /></defs>
+        <text fontSize="9.2" fontFamily="Inter, sans-serif" letterSpacing="2.2" fill="currentColor"><textPath href="#tx-film-ring-path">UPTOWN · DOWNTOWN · TORONTO · NEWDERMAMED · </textPath></text>
         <circle cx="50" cy="50" r="6" fill="#FFA617" />
       </svg>
       <div className={`${TX_WRAP} relative`}>

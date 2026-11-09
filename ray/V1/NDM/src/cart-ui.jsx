@@ -133,7 +133,7 @@ function CartPage() {
   const empty = cart.lines.length === 0;
   return (
     <section aria-labelledby="co-title" className={`co-band ${coWrap}`}>
-      <CoHead at={0} lead="Your" strong="cart" text={empty ? null : 'Check your treatments, then continue to checkout. Nothing is charged online: you pay at the clinic.'} />
+      <CoHead at={0} lead="Your" strong="cart" text={empty ? null : 'Check your cart, then continue to checkout. Nothing is charged online: you pay at the clinic.'} />
       {empty ? (
         <div className={`${CO_CARD} mt-10 flex flex-col items-center px-6 py-14 text-center`}>
           <span className="grid size-16 place-items-center rounded-full bg-ndm-mist text-ndm-deep"><IconBag size={26} /></span>
@@ -151,7 +151,7 @@ function CartPage() {
           <div>
             <div className={`${CO_CARD} px-[clamp(18px,2.4vw,32px)]`}>
               <div className="flex items-baseline justify-between border-b border-ndm-ink/10 py-5">
-                <h2 className="font-aeonik text-[22px] font-normal tracking-[-0.01em] text-ndm-ink">Treatments in your cart</h2>
+                <h2 className="font-aeonik text-[22px] font-normal tracking-[-0.01em] text-ndm-ink">In your cart</h2>
                 <span className="font-inter text-[13.5px] text-ndm-muted">{cart.count} {cart.count === 1 ? 'item' : 'items'}</span>
               </div>
               <ul className="divide-y divide-ndm-ink/10" role="list">{cart.lines.map((l) => <CartLine key={l.key} l={l} />)}</ul>
@@ -236,7 +236,7 @@ function CheckoutPage() {
   };
   return (
     <section aria-labelledby="co-title" className={`co-band ${coWrap}`}>
-      <CoHead at={1} lead="Almost" strong="there" text="Your details are used only to arrange your treatment. Nothing is charged online: you pay at the clinic." />
+      <CoHead at={1} lead="Almost" strong="there" text="Your details are used only to arrange your order. Nothing is charged online: you pay at the clinic." />
       {empty ? (
         <div className={`${CO_CARD} mt-10 flex flex-col items-center px-6 py-14 text-center`}>
           <h2 className="font-aeonik text-[clamp(26px,2.6vw,34px)] font-normal leading-[1.15] text-ndm-ink">There is nothing to check out yet</h2>

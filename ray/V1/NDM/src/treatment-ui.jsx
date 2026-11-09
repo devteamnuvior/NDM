@@ -9,7 +9,9 @@ const TX_ICONS = {
   leaf: <><path d="M5 19c0-8 5-13.5 14-14-.5 9-6 14-14 14Z" /><path d="M5 19 13 11" /></>,
   cal: <><rect x="3.5" y="5" width="17" height="15" rx="2.5" /><path d="M3.5 9.5h17M8 3v4M16 3v4" /></>,
 };
-const txIcon = (label) => (/type/i.test(label) ? 'type' : /duration|session/i.test(label) ? 'clock' : /recovery|downtime/i.test(label) ? 'leaf' : 'cal');
+/* concern pages list options, consultation, skin analysis and price: each gets its own icon (from NAV_ICONS) instead of the calendar */
+const txIcon = (label) => (/type/i.test(label) ? 'type' : /duration|session/i.test(label) ? 'clock' : /recovery|downtime/i.test(label) ? 'leaf'
+  : /option/i.test(label) ? 'list' : /consult/i.test(label) ? 'user' : /analysis/i.test(label) ? 'search' : /price/i.test(label) ? 'tag' : 'cal');
 /* section number from the page's nav list ("01"), or nothing on pages without one */
 const txNum = (p, id) => { const i = (p.nav || []).findIndex(([k]) => k === id); return i < 0 ? '' : String(i + 1).padStart(2, '0'); };
 /* small icons for the on-this-page nav pills (24x24, stroked) */
@@ -89,7 +91,7 @@ function TxGlance({ p }) {
           {p.facts.map(([k, v], i) => (
             <div key={k} className={`flex items-center gap-3 ${i ? 'md:border-l md:border-ndm-ink/10 md:pl-5' : ''}`}>
               <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-[14px] bg-gradient-to-br from-ndm-sky to-ndm-deep text-white shadow-[0_10px_20px_-12px_rgba(15,128,195,.9)]">
-                <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{TX_ICONS[txIcon(k)]}</svg>
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{TX_ICONS[txIcon(k)] || NAV_ICONS[txIcon(k)]}</svg>
               </span>
               <div className="min-w-0">
                 <dt className="font-inter text-[12px] leading-[1.3] text-ndm-muted">{k}</dt>
