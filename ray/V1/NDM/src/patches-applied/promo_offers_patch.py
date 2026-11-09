@@ -45,9 +45,10 @@ def build_specials():
         val, noun = res
         u = f'per {noun}' if noun else ''
         href = 'pricing.html#pg-' + pricelib.slug(o['cat']) + '-h'
+        deal = pricelib.best_deal(src, o['cat'], o['item'])  # the deal shown on the card, from the price list badges
         rows.append(
-            '  { n: %s, img: %s, pos: %s, p: %s, u: %s, tag: %s, area: %s, icon: %s, h: %s, d: %s }'
-            % (jss(o['n']), jss(o['img']), jss(o['pos']), jss(money(val)), jss(u),
+            '  { n: %s, img: %s, pos: %s, p: %s, u: %s, deal: %s, tag: %s, area: %s, icon: %s, h: %s, d: %s }'
+            % (jss(o['n']), jss(o['img']), jss(o['pos']), jss(money(val)), jss(u), jss(deal),
                jss(o['cat']), jss(o['area']), jss(o['icon']), jss(href), jss(o['d']))
         )
     return ("const SPECIALS = [ /* ten most-wanted treatments; prices pulled from the pricing page "
@@ -56,9 +57,11 @@ def build_specials():
 
 
 new = build_specials()
-p = root / 'promotion.html'
-s = p.read_text(encoding='utf-8')
-s2, n = re.subn(r'const SPECIALS = \[.*?\n\];', lambda m: new, s, count=1, flags=re.S)
-assert n == 1, 'SPECIALS array not found in promotion.html'
-p.write_text(s2, encoding='utf-8')
-print('promo offers: %d cards, prices from pricing.json' % len(OFFERS))
+# the promotion page and the home page both show these offers (wheel + grid on promotion, wheel on home)
+for page in ('promotion.html', 'index.html'):
+    p = root / page
+    s = p.read_text(encoding='utf-8')
+    s2, n = re.subn(r'const SPECIALS = \[.*?\n\];', lambda m: new, s, count=1, flags=re.S)
+    assert n == 1, 'SPECIALS array not found in ' + page
+    p.write_text(s2, encoding='utf-8')
+print('promo offers: %d cards on promotion + home, prices from pricing.json' % len(OFFERS))

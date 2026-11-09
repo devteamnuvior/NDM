@@ -731,6 +731,10 @@
   .cmp-tape li{display:flex;align-items:center;gap:22px;padding:13px 0 13px 22px;font:800 clamp(13px,1.25vw,17px)/1 "Helvetica Neue",Inter,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
   .cmp-tape li::after{content:'';width:8px;height:8px;transform:rotate(45deg);background:currentColor;opacity:.9}
   @keyframes cmpTape{to{transform:translateX(-50%)}}
+  /* offer cards: the deal from the price list as a solid sticker, and the sale that is on */
+  .promo-sticker{display:inline-flex;align-items:center;border-radius:999px;white-space:nowrap;font:700 12px/1 "Helvetica Neue",Inter,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:8px 12px;background:#C0182C;color:#fff;box-shadow:0 10px 22px -12px rgba(0,0,0,.55)}
+  .promo-now{display:flex;align-items:center;gap:9px;font:500 14px/1.4 Inter,"Helvetica Neue",Arial,sans-serif;color:#141414}
+  .promo-now i{width:9px;height:9px;flex-shrink:0;transform:rotate(45deg)}
   @media (prefers-reduced-motion:reduce){.cmp-tape-track{animation:none}}
   .cmp-tint{background:var(--cmp-tint)}
   html[data-campaign] .cmp-hl{color:var(--cmp-acc-dk)}
@@ -2354,15 +2358,17 @@ function Social() {
 /* ---------------------------------------------------------------- exclusive monthly specials */
 const NDM = 'https://newdermamedlaserclinic.com';
 const FEES = 'pricing.html#prices';
-const SPECIALS = [
-  { n: 'Microneedling', img: 'assets/pricing/price-4.jpg', p: 249, tag: 'Skin', h: 'pricing.html#pg-microneedling-h', icon: 'pen' },
-  { n: 'Lip Filler', img: 'assets/pricing/price-2.jpg', p: 299, tag: 'Injectables', h: 'pricing.html#pg-dermal-fillers-h', icon: 'lips' },
-  { n: 'PRP Hair Rejuvenation', img: 'assets/journal/laser-hair-removal.webp', p: 399, off: 30, tag: 'Hair', h: 'pricing.html#pg-hair-loss-h', icon: 'hair' }, /* off: placeholder percentage, confirm before launch */
-  { n: 'Radiesse®', img: 'assets/pricing/price-1.jpg', p: 599, tag: 'Bio-stimulator', h: 'pricing.html#prices', icon: 'syringe' },
-  { n: 'Radiesse® for Hands', img: 'assets/live/main/uploads/2025/11/service.webp', p: 599, off: 20, tag: 'Bio-stimulator', h: 'pricing.html#prices', icon: 'hand' }, /* off: placeholder percentage, confirm before launch */
-  { n: 'Sculptra®', img: 'assets/pricing/price-7.jpg', p: 699, tag: 'Bio-stimulator', h: 'pricing.html#prices', icon: 'drop' },
-  { n: 'Sculptra® Liquid Facelift', img: 'assets/pricing/price-3.jpg', p: 699, tag: 'Bio-stimulator', h: 'pricing.html#prices', icon: 'face' },
-  { n: 'Non-Surgical BBL', img: 'assets/live/main/uploads/2025/10/Non-Surgical-BBL.webp', p: 3999, tag: 'Body', h: 'pricing.html#prices', icon: 'body' },
+const SPECIALS = [ /* ten most-wanted treatments; prices pulled from the pricing page (src/live/pricing.json) by src/patches-applied/promo_offers_patch.py, rerun on every build */
+  { n: 'Lip Filler', img: 'assets/treatments/lip-filler.jpg', pos: '50% 35%', p: '562.50', u: 'per syringe', deal: 'Buy 1 get 1 50% off', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
+  { n: 'Microneedling', img: 'assets/treatments/microneedling.jpg', pos: '50% 40%', p: '245', u: '', deal: 'Up to 50% off', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
+  { n: 'Chemical Peel', img: 'assets/treatments/chemical-peel.jpg', pos: '50% 40%', p: '104.30', u: 'per session', deal: 'Up to 30% off', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
+  { n: 'Laser Skin Resurfacing', img: 'assets/treatments/laser-resurfacing.jpg', pos: '50% 40%', p: '140', u: 'per session', deal: 'Up to 30% off', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
+  { n: 'Photo Rejuvenation', img: 'assets/treatments/photo-rejuvenation.jpg', pos: '50% 40%', p: '192.50', u: 'per session', deal: 'Up to 60% off', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
+  { n: 'Skin Booster', img: 'assets/treatments/skin-booster.jpg', pos: '50% 40%', p: '399', u: '', deal: 'Buy 1 get 1 50% off', tag: 'Skin Booster and Bio-stimulators', area: 'Face', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Deep hydration for a fresh, dewy glow.' },
+  { n: 'Sculptra® Liquid Facelift', img: 'assets/promotion/sculptra-face.webp', pos: '50% 45%', p: '699', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Gradual, collagen-building facial lift.' },
+  { n: 'Hand Rejuvenation with Radiesse®', img: 'assets/promotion/hands.webp', pos: '50% 58%', p: '599', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'hand', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Restore youthful volume to aging hands.' },
+  { n: 'Crepey Arm Rejuvenation', img: 'assets/promotion/crepey-arms.webp', pos: '50% 55%', p: '599', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Smooth and firm crepey skin on the arms.' },
+  { n: 'Above the Knee Tightening', img: 'assets/promotion/above-knee.webp', pos: '50% 55%', p: '599', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Firm loose, sagging skin above the knees.' }
 ];
 const SW_ICONS = {
   pen: <><path d="M15.5 3.5 20.5 8.5 11 18l-5-5 9.5-9.5Z" /><path d="m6 13-2.5 2.5M8.5 15.5 6 18M11 18l-2.5 2.5" /></>,
@@ -2387,6 +2393,13 @@ const arcAt = (d) => {
   return [s * (p[0] + (q[0] - p[0]) * f), p[1] + (q[1] - p[1]) * f, s * (p[2] + (q[2] - p[2]) * f)];
 };
 
+/* "On now: Black Friday · ends in 3d 4h" under the offer headings, only while a sale is on */
+function CampaignNow({ className = '' }) {
+  const cd = useCountdown(CAMPAIGN && CAMPAIGN.until);
+  if (!CAMPAIGN_LOOK) return null;
+  const c = CAMPAIGN.tapeColor || ['#C8101D', '#FFFFFF'];
+  return <p className={`promo-now ${className}`}><i aria-hidden="true" style={{ background: c[0] }} /><span>On now: <b className="font-semibold">{CAMPAIGN.name}</b> · {cd ? `ends in ${cd.text}` : CAMPAIGN.when}</span></p>;
+}
 function Promotions() {
   const ref = useRef(null), stage = useRef(null);
   useReveal(ref);
@@ -2452,7 +2465,9 @@ function Promotions() {
                 <span className="relative flex h-full flex-col p-[clamp(14px,1.6vw,22px)]">
                   <span className="flex items-center justify-between gap-2">
                     <span className="sw-photo block shrink-0 overflow-hidden rounded-full" style={{ width: 52 * k, height: 52 * k }}><img src={s.img} alt="" loading="lazy" draggable="false" className="h-full w-full object-cover" /></span>
-                    <span className={`sw-tag truncate rounded-full px-3 py-1.5 font-mont text-[10.5px] uppercase tracking-[.12em] ${i === 0 ? 'is-feature' : ''}`}>{i === 0 ? 'Featured' : s.tag}</span>
+                    {CAMPAIGN_LOOK
+                      ? <span className="truncate rounded-full px-3 py-1.5 font-mont text-[10.5px] font-semibold uppercase tracking-[.12em]" style={{ background: (CAMPAIGN.tapeColor || ['#C8101D'])[0], color: (CAMPAIGN.tapeColor || ['', '#FFFFFF'])[1] }}>{CAMPAIGN.badge}</span>
+                      : <span className={`sw-tag truncate rounded-full px-3 py-1.5 font-mont text-[10.5px] uppercase tracking-[.12em] ${i === 0 ? 'is-feature' : ''}`}>{i === 0 ? 'Featured' : s.tag}</span>}
                   </span>
                   <h3 className="sw-title mt-[clamp(12px,1.5vw,20px)] flex items-center justify-center text-center font-aeonik font-normal leading-[1.04] tracking-[-0.03em]" style={{ fontSize: 34 * k, minHeight: 34 * k * 2.15 }}>{s.n}</h3>
                   <span className="flex flex-1 flex-col items-center justify-center text-center">
@@ -2464,6 +2479,7 @@ function Promotions() {
                       </>
                     ) : (
                       <>
+                        {s.deal && <span className="promo-sticker mb-3">{s.deal}</span>}
                         <span className="sw-muted font-inter text-[11px] uppercase tracking-[.18em]">From</span>
                         <span className="sw-price mt-1 whitespace-nowrap font-aeonik leading-none tracking-[-0.035em]" style={{ fontSize: 40 * k }}><span className="sw-cur">$</span>{s.p}</span>
                         <span className="sw-muted mt-2 font-inter text-[12.5px]">for selected packages</span>

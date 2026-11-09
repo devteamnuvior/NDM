@@ -70,6 +70,21 @@ def _opt_units(label):
     return 1, None
 
 
+def best_deal(src, cat_name, item_name=None):
+    """The headline deal for a category or one treatment, from the price list's own badges
+    (same rule as bestOffer() on the pricing page): the largest 'N% OFF' becomes 'Up to N% off',
+    otherwise the first badge in sentence case ('Buy 1 get 1 50% off'). '' when there is no deal."""
+    cat = next((c for c in load_cats(src) if c['name'] == cat_name), None)
+    if not cat:
+        return ''
+    items = [i for i in cat['items'] if item_name is None or i['name'] == item_name]
+    tags = [r['badge'] for it in items for r in it['rows'] if r.get('badge')]
+    pcts = [int(m.group(1)) for t in tags for m in [re.match(r'^(\d+)% OFF$', t, re.I)] if m]
+    if pcts:
+        return f'Up to {max(pcts)}% off'
+    return tags[0].lower().capitalize() if tags else ''
+
+
 def lowest(src, cat_name_or_slug, item_name=None):
     """Return (value, noun) for a category (optionally a single treatment in it).
     noun is a unit word ('syringe', 'session', ...) when the cheapest comes from a multi-buy, else None."""
