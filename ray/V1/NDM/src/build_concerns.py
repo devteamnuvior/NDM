@@ -12,6 +12,14 @@ root, src = Path(sys.argv[1]), Path(sys.argv[2])
 ONLY = set(sys.argv[3:])
 sys.path.insert(0, str(src))
 import concerns_data as D   # noqa: E402
+import pricelib             # noqa: E402
+
+# starting prices come from the price list (src/live/pricing.json) whenever the treatment is on it, so a change on the
+# pricing page reaches the concern pages on the next build (Raymond, 8 Nov 2026); other labels stay as written in D.T
+for _t in D.T.values():
+    _spec = pricelib.TREATMENT_PRICES.get(_t['file'])
+    if _spec and str(_t['price'][0]).startswith('From'):
+        _t['price'] = (pricelib.from_label(src, _spec) or _t['price'][0],) + tuple(_t['price'][1:])
 
 LIVE = json.load(open(src / 'live/services.json', encoding='utf-8'))
 BUILT = json.load(open(src / 'live/pages-built.json', encoding='utf-8'))      # live path -> file
@@ -101,9 +109,9 @@ def page_data(c):
     opts = [opt(k, r, f) for k, r, f in c['opts']]
     bio = [opt(k, 'Bio-stimulator', f) for k, f in c['bio']] if c.get('bio') else None
     everything = opts + (bio or [])
-    nums = [price_num(o['price'][0]) for o in everything]
-    nums = [n for n in nums if n]
-    low = min(nums) if nums else None
+    priced = [(price_num(o['price'][0]), o['price'][0]) for o in everything]
+    priced = [p for p in priced if p[0]]
+    low = min(priced)[1] if priced else None   # the cheapest option's own label, unit included ("From $8.40 per unit")
     compare = [o for o in everything if o.get('how')]
     seen, rows = set(), []
     for o in compare:
@@ -112,7 +120,7 @@ def page_data(c):
     return {
         'slug': c['s'], 'file': CFILE[c['s']], 'short': c['n'], 'group': c['g'], 'h1': c['h1'], 'sub': c['sub'], 'hero': hero_of(c['img']),
         'crumbs': [['Concerns', 'concerns.html'], c['n']],
-        'facts': [['Treatment options', f"{len(everything)} to compare"], ['Consultation', 'Free, in person'], ['Skin analysis', 'VISIA®, included'], ['Starting price', ('From $' + (f'{low:,.2f}'.rstrip('0').rstrip('.') if low % 1 else f'{int(low):,}')) if low else 'Quoted at consultation']],
+        'facts': [['Treatment options', f"{len(everything)} to compare"], ['Consultation', 'Free, in person'], ['Skin analysis', 'VISIA®, included'], ['Starting price', low or 'Quoted at consultation']],
         'lede': c['lede'], 'pages': [{'n': D.T[k]['n'], 'file': D.T[k]['file']} for k in c['pages']], 'ba': bool(c.get('ba')),
         'notice': c['notice'], 'cause': c['why'], 'assess': {'text': c['assess'][0], 'points': c['assess'][1]},
         'opts': opts, 'bio': bio,

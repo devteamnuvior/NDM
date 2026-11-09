@@ -114,3 +114,70 @@ def lowest(src, cat_name_or_slug, item_name=None):
     val = int(best) if best == int(best) else round(best, 2)
     unit = noun if (bn > 1 and noun) else ('unit' if is_unit else None)
     return (val, unit)
+
+
+def money(v):
+    return f'{v:,.2f}' if v % 1 else f'{int(v):,}'
+
+
+def from_label(src, spec):
+    """The 'From $X' / 'From $X per syringe' label for anything that shows a starting price
+    (home treatment cards, concern pages). spec is (category, items) or a list of them;
+    items is None (the whole category), one treatment name, or a list of names. The
+    cheapest of everything named wins. None when nothing in the price list matches."""
+    found = []
+    for cat, items in (spec if isinstance(spec, list) else [spec]):
+        names = [None] if items is None else ([items] if isinstance(items, str) else list(items))
+        found += [r for n in names for r in [lowest(src, cat, n)] if r]
+    if not found:
+        return None
+    val, noun = min(found, key=lambda r: r[0])
+    return f'From ${money(val)}' + (f' per {noun}' if noun else '')
+
+
+# Where each treatment's starting price lives in the price list. Used by the home page cards
+# (src/patches-applied/home_prices_patch.py) and the concern pages (src/build_concerns.py),
+# so a price changed in pricing.json reaches every page on the next build.
+_FILLERS = 'Dermal Fillers'
+_BIO = 'Skin Booster and Bio-stimulators'
+_COOL = 'Coolsculpting & Tight Sculpting'
+TREATMENT_PRICES = {
+    'dermal-fillers.html': (_FILLERS, None),
+    'juvederm.html': (_FILLERS, None),
+    'lip-augmentation.html': (_FILLERS, 'Lip Enhancement'),
+    'tear-trough-correction.html': (_FILLERS, 'Precision / Advanced Areas'),   # under-eye filler is a precision area
+    'sculptra.html': (_BIO, 'Bio-Stimulator – Sculptra'),
+    'radiesse.html': (_BIO, 'Bio-Stimulator – Radiesse'),
+    'mesotherapy-skin-boosters.html': (_BIO, 'Skin Booster – HA (Hyaluronic Acid)'),
+    'aptos-thread-lift.html': ('Aptos Thread Method', None),
+    'exosome-skin-therapy.html': ('Microneedling', 'Microneedling with Exosomes - Face'),
+    'non-surgical-bbl.html': ('Non-Surgical Butt Lift', None),
+    'botox.html': ('Botox / Dysport', 'Botox Cosmetic'),
+    'hyperhidrosis.html': ('Botox / Dysport', 'Hyperhidrosis'),
+    'laser-skin-resurfacing.html': ('Laser Skin Resurfacing', None),
+    'micro-laser-peel.html': ('Laser Skin Resurfacing', ['Micro Laser Peel Face', 'Micro Laser Peel Face + Neck', 'Micro Laser Peel Extra Small',
+                                                         'Micro Laser Peel Small', 'Micro Laser Peel Medium', 'Micro Laser Peel Large']),
+    'laser-skin-tightening.html': ('2D & 3D Laser Skin Tightening', None),
+    'skin-tightening.html': ('2D & 3D Laser Skin Tightening', None),
+    'photo-rejuvenation.html': ('Photo-Rejuvenation', None),
+    'laser-hair-removal.html': ('Laser Hair Removal', None),
+    'acne-treatments.html': ('Laser Acne Treatment', None),
+    'laser-vein-removal.html': ('Laser Vein', None),
+    'spider-vein-removal.html': ('Laser Vein', None),
+    'microneedling.html': ('Microneedling', None),
+    'chemical-peels.html': ('Chemical Peel', None),
+    'acnelan.html': ('Chemical Peel', 'Acnelan'),
+    'age-element-facial.html': ('Facial', None),
+    'dermamelan.html': ('Depigmenting Treatment', None),
+    'coolsculpting.html': (_COOL, ['Regular Treatment Zone', 'Coolsculpting Mini', 'Coolsculpting Smooth', 'Coolsculpting Double']),
+    'tightsculpting.html': (_COOL, ['Tight Sculpting - Small Area', 'Tight Sculpting - Medium Area']),
+    'hair-loss-treatments.html': ('Hair Loss', ['PRP Scalp - Small', 'PRP Scalp - Medium', 'PRP Scalp - Full']),   # the PRP page
+    'laser-hair-rejuvenation.html': ('Hair Loss', 'Laser Hair Rejuvenation'),
+    'vaginal-tightening.html': ('Laser Vaginal Tightening', None),
+    'snoring-treatment.html': ('Snoring Treatment', None),
+    'nail-fungus-treatment.html': ('Toenail Fungus Removal', None),
+}
+# cards whose name points at more than the page they link to
+NAMED_PRICES = {
+    'Fotona 4D® & Laser Rejuvenation': [('4D Rejuvalift', None), ('2D & 3D Laser Rejuvenation', None)],
+}

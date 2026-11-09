@@ -31,8 +31,10 @@ function Html({ html, className = '' }) {
 function liveSummary(p) {
   const f = Object.fromEntries(p.facts);
   const bits = [f['Treatment Type'] ? `${f['Treatment Type'].toLowerCase()} treatment` : null, f['Duration'] ? `about ${f['Duration'].replace(/^(\d)/, '$1')} per session` : null, f['Recovery Time'] ? f['Recovery Time'].toLowerCase() : null].filter(Boolean);
-  const f2 = p.prices ? fromPrice({ unit: p.prices.unit }, p.prices.items.flatMap((it) => it[2])) : null;
-  const price = f2 ? ` From ${money(f2.value)}${p.prices.unit ? ' per unit' : ''} on our price list.` : '';
+  /* the same price as the hero's offer bar: this treatment's own row when the section lists several (Botox, not Dysport),
+     with its unit ("per syringe", "per session") so a package price is never read as the price of one visit */
+  const off = liveOffer(p);
+  const price = off ? ` From ${money(off.from.value)}${off.from.unit ? off.from.unit.replace(' / ', ' per ') : ''} on our price list.` : '';
   return `${p.h1} at NewDermaMed Toronto: ${bits.join(', ')}.${price} Free consultation with a VISIA® skin analysis at our Uptown and Downtown clinics.`;
 }
 
