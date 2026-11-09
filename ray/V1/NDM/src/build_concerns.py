@@ -231,7 +231,7 @@ function App() {
 }
 '''
 OLD_TITLE = '<title>Promotions, NewDermaMed Toronto</title>'
-OLD_DESC = '<meta name="description" content="NewDermaMed is Toronto\'s award-winning cosmetic and laser clinic, with Uptown and Downtown locations. Book a free consultation and VISIA® skin analysis.">'
+OLD_DESC = '<meta name="description" content="Current offers on lip filler, microneedling, peels, laser and skin boosters at NewDermaMed, Toronto. Every treatment starts with a free consultation.">'
 
 
 def assemble(title, desc, ld, data_js, app, extra_ui=''):

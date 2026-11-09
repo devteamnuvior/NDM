@@ -74,6 +74,89 @@ def abs_url(path):
     return SITE + path.lstrip('./')
 
 
+PAGE_DESC = {   # pages whose builder gives them another page's description (8 Nov 2026 audit)
+    'promotion.html': 'Current offers on lip filler, microneedling, peels, laser and skin boosters at NewDermaMed, Toronto. Every treatment starts with a free consultation.',
+}
+
+
+def fix_page_ld(s, url):
+    """The pages' own JSON-LD (8 Nov 2026 audit): BreadcrumbList items get absolute URLs, and a middle crumb with no
+    page ("Procedures", "Injectables") is dropped, since Google rejects list items without a URL; Product images become
+    absolute URLs. Idempotent."""
+    def repl(m):
+        try:
+            j = json.loads(m.group(2))
+        except Exception:
+            return m.group(0)
+        changed = False
+        for n in (j.get('@graph', [j]) if isinstance(j, dict) else []):
+            if n.get('@type') == 'BreadcrumbList':
+                items, keep = n.get('itemListElement', []), []
+                for i, it in enumerate(items):
+                    if it.get('item'):
+                        it['item'] = SITE if it['item'] in ('index.html', SITE + 'index.html') else abs_url(it['item'])
+                    elif i == len(items) - 1:
+                        it['item'] = url
+                    else:
+                        continue
+                    keep.append(it)
+                for k, it in enumerate(keep):
+                    it['position'] = k + 1
+                n['itemListElement'] = keep
+                changed = True
+            if n.get('@type') == 'Product' and n.get('image'):
+                n['image'] = [abs_url(x) for x in (n['image'] if isinstance(n['image'], list) else [n['image']])]
+                changed = True
+        if not changed:
+            return m.group(0)
+        return m.group(1) + json.dumps(j, ensure_ascii=False).replace('</', '<\\/') + '</script>'
+    return re.sub(r'(<script type="application/ld\+json"(?![^>]*id="ld-site")[^>]*>)(.*?)</script>', repl, s, flags=re.S)
+
+
+def product_of(s):
+    for ld in first_ld(s):
+        for x in (ld.get('@graph', [ld]) if isinstance(ld, dict) else []):
+            if x.get('@type') == 'Product':
+                return x
+    return None
+
+
+def tidy_title(file, t, product):
+    """the brand as NewDermaMed: the live site's ' - NDM' and 'Newdermamed Laser Clinic Shop' suffixes, all-caps titles"""
+    t = t.replace('Newdermamed', 'NewDermaMed')
+    if re.search(r'\s-\s+NDM$', t):
+        base = re.sub(r'\s-\s+NDM$', '', t)
+        t = base if 'NewDermaMed' in base else base + (' NewDermaMed' if base.endswith(('?', '!')) else ', NewDermaMed')
+    shop = ', NewDermaMed Laser Clinic Shop'
+    if file.startswith('shop-') and t.endswith(shop):
+        base, brand = t[:-len(shop)], ((product or {}).get('brand') or {}).get('name')
+        t = f'{base} by {brand}, NewDermaMed Shop' if brand and len(f'{base} by {brand}, NewDermaMed Shop') <= 60 else f'{base}, NewDermaMed Shop'
+    head, sep, tail = t.rpartition(', NewDermaMed')
+    if sep and head.isupper():
+        t = head.title() + sep + tail
+    return t
+
+
+def tidy_desc(file, d, product):
+    """one description per page, no WordPress '[…]' excerpt endings, at most about 160 characters, and the shop's
+    one-line product descriptions completed with the product, brand and where to buy it"""
+    d = PAGE_DESC.get(file, d)
+    m = re.search(r'\s*\[(?:…|&hellip;|\.\.\.)\]\s*$', d)
+    if m:   # a WordPress excerpt cut mid-sentence: back to the last full sentence
+        d = d[:m.start()].strip()
+        k = max(d.rfind('. '), d.rfind('! '), d.rfind('? '))
+        if not re.search(r'[.!?)]$', d) and k > 60:
+            d = d[:k + 1]
+    if file.startswith('shop-') and product and len(d) < 90 and 'NewDermaMed' not in d:
+        brand = (product.get('brand') or {}).get('name')
+        d = f"{d.rstrip('.')}. {product['name']}{' by ' + brand if brand else ''}, from the NewDermaMed skincare shop in Toronto."
+    if len(d) > 160:
+        cut = d[:158]
+        k = max(cut.rfind('. '), cut.rfind('! '), cut.rfind('? '))
+        d = cut[:k + 1] if k >= 90 else cut[:cut.rfind(' ')].rstrip(',;:') + '…'
+    return d
+
+
 def price_floor(prices):
     lo = None
     for it in prices['items']:
@@ -139,6 +222,10 @@ def build(file, s):
     tags = [
         '<!-- seo -->',
         f'<link rel="canonical" href="{H.escape(url, quote=True)}">',
+        # the NDM mark as the tab and search-result icon (site audit, 8 Nov 2026: no page had one); favicon.ico sits at the root
+        '<link rel="icon" href="assets/icons/logo-mark.svg" type="image/svg+xml">',
+        '<link rel="icon" href="assets/icons/favicon-48.png" sizes="48x48" type="image/png">',
+        '<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">',
         '' if '<meta name="robots"' in s else '<meta name="robots" content="noindex,follow">' if file in NOINDEX else '<meta name="robots" content="index,follow,max-image-preview:large">',   # a page that sets its own robots tag (cart pages, campaign preview) keeps it
         '<meta name="geo.region" content="CA-ON">', '<meta name="geo.placename" content="Toronto">',
         f'<meta property="og:site_name" content="NewDermaMed">', f'<meta property="og:locale" content="en_CA">', f'<meta property="og:type" content="{og_type}">',
@@ -156,7 +243,20 @@ def build(file, s):
 def patch(path):
     s = path.read_text(encoding='utf-8')
     s = re.sub(r'\n?<!-- seo -->.*?<!-- /seo -->', '', s, count=1, flags=re.S)
+    # the static copy for crawlers belongs to one page only (tools/prerender.py writes it after this patch); a builder that
+    # copied a shell carries the shell's copy, so every copy goes here and tools/prerender.py adds each page's own
+    s = re.sub(r'\n?<!-- ndm-pre-head -->.*?<!-- /ndm-pre-head -->', '', s, count=1, flags=re.S)
+    s = re.sub(r'(<div id="root">)<div class="ndm-pre">.*?</div><!-- /ndm-pre -->(</div>)', r'\1\2', s, count=1, flags=re.S)
     s = s.replace('<html lang="en">', '<html lang="en-CA">', 1)
+    url = SITE + ('' if path.name == 'index.html' else path.name)
+    s = fix_page_ld(s, url)
+    product = product_of(s)
+    t0, d0 = title_of(s), head_text(s, 'description')
+    t1, d1 = tidy_title(path.name, t0, product), tidy_desc(path.name, d0, product)
+    if t1 != t0:
+        s = re.sub(r'<title>.*?</title>', lambda m: '<title>' + H.escape(t1, quote=False) + '</title>', s, count=1, flags=re.S)
+    if d1 != d0:
+        s = re.sub(r'<meta name="description" content="[^"]*">', lambda m: '<meta name="description" content="' + H.escape(d1, quote=True) + '">', s, count=1)
     block, title, desc, image = build(path.name, s)
     anchor = '<meta name="theme-color"'
     i = s.index(anchor)

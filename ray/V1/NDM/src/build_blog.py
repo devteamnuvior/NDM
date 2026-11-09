@@ -42,7 +42,7 @@ ld = {
 
 # 1. title, description, structured data
 rep('<title>Promotions, NewDermaMed Toronto</title>', '<title>Blog, Skin Care Tips &amp; Treatment Guides, NewDermaMed Toronto</title>')
-rep('<meta name="description" content="NewDermaMed is Toronto\'s award-winning cosmetic and laser clinic, with Uptown and Downtown locations. Book a free consultation and VISIA® skin analysis.">',
+rep('<meta name="description" content="Current offers on lip filler, microneedling, peels, laser and skin boosters at NewDermaMed, Toronto. Every treatment starts with a free consultation.">',
     '<meta name="description" content="Skin care tips and treatment guides from NewDermaMed in Toronto: lasers, injectables, thread lifts, body contouring and vein care.">\n'
     '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>')
 

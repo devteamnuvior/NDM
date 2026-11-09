@@ -25,7 +25,7 @@ def rep(a, b, n=1):
 
 # 1. page title + description
 rep('<title>Promotions, NewDermaMed Toronto</title>', '<title>Treatments &amp; Pricing, NewDermaMed Toronto</title>')
-rep('<meta name="description" content="NewDermaMed is Toronto\'s award-winning cosmetic and laser clinic, with Uptown and Downtown locations. Book a free consultation and VISIA® skin analysis.">',
+rep('<meta name="description" content="Current offers on lip filler, microneedling, peels, laser and skin boosters at NewDermaMed, Toronto. Every treatment starts with a free consultation.">',
     '<meta name="description" content="Treatment prices and current offers at NewDermaMed, Toronto. Every treatment begins with a free consultation at our Uptown or Downtown clinic.">\n'
     '<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "index.html"}, {"@type": "ListItem", "position": 2, "name": "Pricing"}]}</script>')
 

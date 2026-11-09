@@ -301,7 +301,7 @@ def build(p):
     desc = dashes(p['seo']['description'] or p['hero']['sub'])   # the live meta description, dashes to commas like the rest of the copy (A1)
     assert s.count('<title>Promotions, NewDermaMed Toronto</title>') == 1
     s = s.replace('<title>Promotions, NewDermaMed Toronto</title>', '<title>' + H.escape(title) + '</title>')
-    old_desc = '<meta name="description" content="NewDermaMed is Toronto\'s award-winning cosmetic and laser clinic, with Uptown and Downtown locations. Book a free consultation and VISIA® skin analysis.">'
+    old_desc = '<meta name="description" content="Current offers on lip filler, microneedling, peels, laser and skin boosters at NewDermaMed, Toronto. Every treatment starts with a free consultation.">'
     assert s.count(old_desc) == 1
     s = s.replace(old_desc, '<meta name="description" content="' + H.escape(desc, quote=True) + '">\n<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>')
     a = s.index('\nfunction App() {')

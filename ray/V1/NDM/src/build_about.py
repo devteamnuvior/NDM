@@ -64,7 +64,7 @@ ld = {
 rep('<title>Promotions, NewDermaMed Toronto</title>', '<title>About Us, NewDermaMed Cosmetic &amp; Laser Clinic in Toronto</title>\n'
     '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin="anonymous">\n'
     '<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin="anonymous"></script>')
-rep('<meta name="description" content="NewDermaMed is Toronto\'s award-winning cosmetic and laser clinic, with Uptown and Downtown locations. Book a free consultation and VISIA® skin analysis.">',
+rep('<meta name="description" content="Current offers on lip filler, microneedling, peels, laser and skin boosters at NewDermaMed, Toronto. Every treatment starts with a free consultation.">',
     '<meta name="description" content="Meet the NewDermaMed medical team and visit our Uptown and Downtown Toronto clinics: addresses, hours, parking, a clinic gallery and answers to common questions.">\n'
     '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>')
 

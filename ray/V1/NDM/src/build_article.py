@@ -34,7 +34,7 @@ ld = {'@context': 'https://schema.org', '@graph': [
      'description': 'The everyday triggers that can make rosacea flare, why they affect some skin more than others, and how redness can be managed.'},
 ]}
 rep('<title>Promotions, NewDermaMed Toronto</title>', '<title>What Causes Rosacea Redness, NewDermaMed Blog</title>')
-rep('<meta name="description" content="NewDermaMed is Toronto\'s award-winning cosmetic and laser clinic, with Uptown and Downtown locations. Book a free consultation and VISIA® skin analysis.">',
+rep('<meta name="description" content="Current offers on lip filler, microneedling, peels, laser and skin boosters at NewDermaMed, Toronto. Every treatment starts with a free consultation.">',
     '<meta name="description" content="What causes rosacea redness, the everyday triggers that can make it flare, and how NewDermaMed in Toronto approaches care for calmer skin.">\n'
     '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>')
 

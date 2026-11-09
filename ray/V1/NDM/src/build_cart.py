@@ -62,7 +62,7 @@ for out, title, crumb, page, desc in PAGES:
         s = s.replace(a, b)
 
     rep('<title>Promotions, NewDermaMed Toronto</title>', f'<title>{title}</title>\n<meta name="robots" content="noindex, nofollow">')
-    rep('<meta name="description" content="NewDermaMed is Toronto\'s award-winning cosmetic and laser clinic, with Uptown and Downtown locations. Book a free consultation and VISIA® skin analysis.">',
+    rep('<meta name="description" content="Current offers on lip filler, microneedling, peels, laser and skin boosters at NewDermaMed, Toronto. Every treatment starts with a free consultation.">',
         f'<meta name="description" content="{desc}">')
     anchor = '<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>'
     i = s.rindex('</style>', 0, s.index(anchor))
