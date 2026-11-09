@@ -166,6 +166,8 @@ def page_data(p):
         if nav['sub']: crumbs.append([nav['sub']])
     else:
         crumbs.append([{'laser': 'Laser', 'hair': 'Hair Loss', 'veins': 'Veins'}.get(p['path'].split('/')[0], 'Treatments')])
+    same = lambda a, b: re.sub(r'[®™\s]', '', a).lower() == re.sub(r'[®™\s]', '', b).lower()
+    crumbs = [c for c in crumbs if not same(c[0], h1)]   # a menu group named like the page ("Laser Hair Removal / Laser Hair Removal")
     crumbs.append(h1)
     faqs = [[re.sub(r'^\d+\.\s*', '', q), dashes(t)] for q, a, t in p['faq']['items']]
     ft = p['faq']['title']
