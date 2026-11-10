@@ -52,9 +52,11 @@ css = r'''
   .pr-plus i+i{transform:rotate(90deg)}
   .pr-head:hover .pr-plus,.pr-ghead button:hover .pr-gplus{border-color:#1B242B}
   /* hero scroll hint */
-  .pr-scroll svg{animation:prScroll 1.8s ease-in-out infinite}
+  .pr-scroll-line{position:relative;display:block;width:1px;height:64px;overflow:hidden;background:rgba(255,255,255,.28)}
+  .pr-scroll-line::after{content:"";position:absolute;left:0;top:-45%;width:100%;height:45%;background:#fff;animation:prLine 1.9s ease-in-out infinite}
+  @keyframes prLine{to{top:100%}}
   @keyframes prScroll{0%,100%{transform:translateY(-2px)}50%{transform:translateY(4px)}}
-  @media (prefers-reduced-motion:reduce){.pr-scroll svg{animation:none}}
+  @media (prefers-reduced-motion:reduce){.pr-scroll-line::after{animation:none}}
   /* treatments inside an open category: a blue circle with a white plus, easier to see */
   .pr-sub .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-sub .pr-head:hover .pr-plus{background:#209ED9;border-color:#209ED9}

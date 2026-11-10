@@ -74,12 +74,12 @@ const IconPlay = () => <Svg size={14} vb="0 0 14 14"><path d="M4 2.6v8.8a.5.5 0 
 function PricingHero() {
   const ref = useRef(null), vid = useRef(null);
   useReveal(ref);
-  const [paused, setPaused] = useState(REDUCED);
+  /* the film plays straight through, on a loop (no pause button) */
   useEffect(() => {
-    const v = vid.current; if (!v) return;
+    const v = vid.current; if (!v || REDUCED) return;
     v.muted = true;
-    if (paused) v.pause(); else { const p = v.play(); if (p) p.catch(() => {}); }
-  }, [paused]);
+    const p = v.play(); if (p) p.catch(() => {});
+  }, []);
   const browse = (e) => {
     e.preventDefault();
     const el = document.getElementById('prices');
@@ -91,13 +91,9 @@ function PricingHero() {
       <video ref={vid} src={PRICING_FILM.src} poster={PRICING_FILM.poster} autoPlay={!REDUCED} muted loop playsInline preload="auto" aria-hidden="true"
         className="absolute inset-0 -z-20 h-full w-full object-cover" />
       <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(180deg,rgba(11,15,19,.62) 0%,rgba(11,15,19,.08) 28%,rgba(11,15,19,.12) 50%,rgba(11,15,19,.84) 100%)' }} />
-      <button type="button" onClick={() => setPaused(!paused)} aria-label={paused ? 'Play background video' : 'Pause background video'}
-        className="absolute right-[var(--gx)] top-[116px] grid size-10 place-items-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-[10px] transition-colors hover:bg-white hover:text-ndm-ink xl:top-[140px]">
-        {paused ? <IconPlay /> : <IconPause />}
-      </button>
-      {/* the page carries on below: a soft bouncing arrow at the bottom centre, which also scrolls to the prices */}
-      <a href="#prices" onClick={browse} aria-label="Scroll to the price list" className="pr-scroll absolute bottom-4 left-1/2 z-[1] grid size-11 -translate-x-1/2 place-items-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-[10px] transition-colors hover:bg-white hover:text-ndm-ink md:bottom-6">
-        <IconCaret />
+      {/* the page carries on below: a quiet "Scroll to prices" line at the right edge (clear of the bottom tab), which also scrolls there */}
+      <a href="#prices" onClick={browse} className="pr-scroll absolute right-[var(--gx)] top-1/2 z-[1] hidden -translate-y-1/2 flex-col items-center gap-3 font-inter text-[11px] font-medium uppercase tracking-[.22em] text-white/75 transition-colors hover:text-white md:flex">
+        <span style={{ writingMode: 'vertical-rl' }}>Scroll to prices</span><span aria-hidden="true" className="pr-scroll-line" />
       </a>
       <div className="px-[var(--gx)] pb-[clamp(84px,8vw,112px)]">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
