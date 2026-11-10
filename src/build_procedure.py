@@ -199,7 +199,7 @@ SPACING = '''
   main>section[aria-labelledby="testimonials"]>div,main>section[aria-labelledby="testimonials"]>p{padding-left:0!important;padding-right:0!important}
   main>section#prices>div{max-width:1180px!important}
   /* the free skin analysis band sits tight between Visit us and the FAQ */
-  main>section[aria-labelledby="analysis-title"]{padding-top:0!important;padding-bottom:0!important}
+  main>section[aria-labelledby="analysis-title"]{padding-top:clamp(40px,4.5vw,64px)!important;padding-bottom:0!important}
   main>section[aria-labelledby="faq"]{padding-top:clamp(48px,5vw,72px)!important}
   /* round 18: the FAQ's sticky heading stops below the section bar; Good to know: number badges, doctor card */
   main>section[aria-labelledby="faq"] .lg\:sticky{top:200px}

@@ -323,46 +323,52 @@ function ProcCompare({ p }) {
   );
 }
 
-/* ---------------------------------------------------------------- start with a free skin analysis (afuriaesthetics.com "Start your journey"):
-   a short warm band; when it comes into view it opens from the middle out to both sides, then the words sharpen
-   from a blur. The portrait sits on the right and fades into the wall colour behind the words */
+/* ---------------------------------------------------------------- start with a free skin analysis (round 19, after the
+   futuron.framer.website "Join a Community" card): a rounded photo card at the content width; a deep NDM-navy gradient
+   over the left and the bottom carries the words, which sit left: tag, heading, line and the two actions. When it comes into
+   view the card opens from the middle out to both sides and the words sharpen from a blur */
 const JR_CSS = `
-.jr-band{--jr:#E8D6C2;background:var(--jr);clip-path:inset(0 50% 0 50%);transition:clip-path 1.25s cubic-bezier(.7,0,.2,1)}
-.jr-band.is-on{clip-path:inset(0 0 0 0)}
-.jr-band .jr-pic{transform:scale(1.14);transition:transform 2.2s cubic-bezier(.2,.7,.2,1)}
-.jr-band.is-on .jr-pic{transform:scale(1)}
-.jr-band .jr-t{opacity:0;filter:blur(14px);transform:translateY(12px);transition:opacity .9s ease,filter 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1)}
-.jr-band.is-on .jr-t{opacity:1;filter:blur(0);transform:none}
-.jr-fade{background:linear-gradient(180deg,rgba(232,214,194,0) 45%,var(--jr) 98%)}
-@media (min-width:768px){.jr-fade{background:linear-gradient(90deg,var(--jr) 0%,rgba(232,214,194,.85) 14%,rgba(232,214,194,0) 46%)}}
-@media (prefers-reduced-motion:reduce){.jr-band,.jr-band .jr-pic,.jr-band .jr-t{clip-path:none;transform:none;filter:none;opacity:1;transition:none}}
+.jr-card{clip-path:inset(0 50% 0 50% round 32px);transition:clip-path 1.2s cubic-bezier(.7,0,.2,1);box-shadow:0 40px 80px -50px rgba(11,15,19,.6)}
+.jr-card.is-on{clip-path:inset(0 0 0 0 round 32px)}
+.jr-card .jr-pic{transform:scale(1.12);transition:transform 2.2s cubic-bezier(.2,.7,.2,1)}
+.jr-card.is-on .jr-pic{transform:scale(1)}
+.jr-shade{background:linear-gradient(90deg,rgba(9,22,34,.9) 0%,rgba(9,22,34,.72) 34%,rgba(9,22,34,.18) 66%,rgba(9,22,34,0) 100%),linear-gradient(0deg,rgba(10,52,84,.72) 0%,rgba(10,52,84,0) 55%)}
+@media (max-width:767px){.jr-card{clip-path:inset(0 50% 0 50% round 24px)}.jr-card.is-on{clip-path:inset(0 0 0 0 round 24px)}
+  .jr-shade{background:linear-gradient(0deg,rgba(9,22,34,.94) 0%,rgba(9,22,34,.8) 42%,rgba(9,22,34,.1) 78%,rgba(9,22,34,0) 100%)}}
+.jr-card .jr-t{opacity:0;filter:blur(14px);transform:translateY(12px);transition:opacity .9s ease,filter 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.jr-card.is-on .jr-t{opacity:1;filter:blur(0);transform:none}
+@media (prefers-reduced-motion:reduce){.jr-card,.jr-card .jr-pic,.jr-card .jr-t{clip-path:none;transform:none;filter:none;opacity:1;transition:none}}
 `;
 function ProcAnalysis() {
-  const band = useRef(null);
+  const card = useRef(null);
   const [on, setOn] = useState(false);
   useEffect(() => {
-    const el = band.current; if (!el) return;
+    const el = card.current; if (!el) return;
+    /* the card is clipped to nothing until it opens, so watch its section */
     const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setOn(true); io.disconnect(); } }, { threshold: 0.2 });
     if (el.getBoundingClientRect().top < window.innerHeight * 0.8) setOn(true);
-    io.observe(el.parentElement); /* the band itself is clipped to nothing until it opens, so watch its section */
+    io.observe(el.parentElement);
     return () => io.disconnect();
   }, []);
-  const t = (k) => ({ transitionDelay: `${0.85 + k * 0.12}s` });
+  /* a second trigger from the scroll position, in case the browser delays the visibility check */
+  useOnScroll(() => {
+    const el = card.current; if (!el || el.classList.contains('is-on')) return;
+    if (el.parentElement.getBoundingClientRect().top < window.innerHeight * 0.85) setOn(true);
+  }, []);
+  const t = (k) => ({ transitionDelay: `${0.75 + k * 0.12}s` });
   return (
-    <section aria-labelledby="analysis-title" className="relative z-10 py-[clamp(16px,2.4vw,36px)]">
+    <section aria-labelledby="analysis-title" className="relative z-10 px-[var(--gx)] py-[clamp(40px,5vw,72px)]">
       <style>{JR_CSS}</style>
-      <div ref={band} className={`jr-band relative isolate flex flex-col overflow-hidden md:min-h-[clamp(360px,31vw,460px)] md:justify-center ${on ? 'is-on' : ''}`}>
-        <div className="relative aspect-[4/3] overflow-hidden md:absolute md:inset-y-0 md:right-0 md:aspect-auto md:w-[64%]">
-          <img src="assets/treatments/journey-skin.webp" alt="" loading="lazy" decoding="async" className="jr-pic absolute inset-0 h-full w-full object-cover object-[52%_30%]" />
-          <span aria-hidden="true" className="jr-fade absolute inset-0" />
-        </div>
-        <div className="relative -mt-10 px-[var(--gx)] pb-10 md:mt-0 md:max-w-[min(48%,560px)] md:py-10">
-          <p className="jr-t font-inter text-[12px] font-medium uppercase tracking-[.28em] text-ndm-deep" style={t(0)}>Start your journey</p>
-          <TwoTone id="analysis-title" className="jr-t mt-3" size="text-[clamp(32px,3.6vw,54px)]" lead={<>Start with a free<br /></>} strong="skin analysis" style={t(1)} />
-          <p className="jr-t mt-4 max-w-[44ch] font-inter text-[15.5px] leading-[1.6] text-ndm-ink/75" style={t(2)}>Your first consultation and VISIA® skin analysis are free, at Uptown or Downtown. No pressure, just a clear plan.</p>
-          <div className="jr-t mt-6 flex flex-wrap items-center gap-x-6 gap-y-3" style={t(3)}>
+      <div ref={card} className={`jr-card ${TX_WRAP} relative isolate flex min-h-[600px] flex-col justify-end md:min-h-[clamp(460px,40vw,520px)] overflow-hidden rounded-[24px] p-6 text-white md:justify-center md:rounded-[32px] md:p-[56px] ${on ? 'is-on' : ''}`}>
+        <img src="assets/treatments/journey-skin.webp" alt="" loading="lazy" decoding="async" className="jr-pic absolute inset-0 -z-20 h-full w-full object-cover object-[62%_28%] md:object-[70%_30%]" />
+        <span aria-hidden="true" className="jr-shade absolute inset-0 -z-10" />
+        <div className="max-w-[620px]">
+          <div className="jr-t" style={t(0)}><Eyebrow dark>Start your journey</Eyebrow></div>
+          <TwoTone id="analysis-title" dark className="jr-t mt-5" size="text-[clamp(32px,3.4vw,48px)]" lead={<>Start with a free<br /></>} strong="skin analysis" style={t(1)} />
+          <p className="jr-t mt-4 max-w-[46ch] font-inter text-[15.5px] leading-[1.65] text-white/80" style={t(2)}>Your first consultation and VISIA® skin analysis are free, at Uptown or Downtown. No pressure, just a clear plan.</p>
+          <div className="jr-t mt-7 flex flex-wrap items-center gap-x-5 gap-y-3" style={t(3)}>
             <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
-            <a href="about.html" className="font-inter text-[13px] font-semibold uppercase tracking-[.14em] text-ndm-ink underline-offset-8 hover:underline">Find a clinic</a>
+            <Btn href="about.html#contact" v="light">Find a clinic</Btn>
           </div>
         </div>
       </div>
