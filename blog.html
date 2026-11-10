@@ -245,6 +245,44 @@
 
   /* partners */
 
+  /* Black Friday timer (round 24): dark tiles with a red glow, rolling digits, blinking red colons */
+  .bft{display:flex;align-items:flex-start;gap:clamp(4px,.8vw,10px)}
+  .bft-cell{display:flex;flex:1;min-width:0;flex-direction:column;align-items:center;gap:9px}
+  .bft-tile{position:relative;display:grid;width:100%;place-items:center;overflow:hidden;border-radius:16px;padding:.32em 0;background:linear-gradient(180deg,#1E1E21 0%,#161618 49.5%,#0F0F11 50.5%,#141416 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 0 1px rgba(255,255,255,.07),0 22px 36px -20px rgba(211,18,29,.75)}
+  .bft-tile::before{content:"";position:absolute;inset:0;background:radial-gradient(90% 70% at 50% 0%,rgba(211,18,29,.32),transparent 70%)}
+  .bft-tile::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.65);box-shadow:0 1px 0 rgba(255,255,255,.05)}
+  .bft-num{position:relative;display:flex;line-height:1;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .bft-dig{display:inline-block;animation:bftRoll .55s cubic-bezier(.2,.7,.2,1) both}
+  .bft-sm .bft-num{font-size:26px}.bft-md .bft-num{font-size:clamp(34px,4vw,50px)}.bft-lg .bft-num{font-size:clamp(40px,5.4vw,72px)}
+  .bft-sep{padding-top:.2em;line-height:1;color:#EE3A45;animation:bftBlink 1s steps(1) infinite}
+  .bft-sm .bft-sep{font-size:22px}.bft-md .bft-sep{font-size:clamp(28px,3vw,40px)}.bft-lg .bft-sep{font-size:clamp(32px,4vw,56px)}
+  .bft-lab{font:600 10.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+  .bft-bar{height:4px;overflow:hidden;border-radius:9px;background:rgba(255,255,255,.1)}
+  .bft-bar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#A50E18,#EE3A45)}
+  @keyframes bftRoll{from{transform:translateY(-55%);opacity:0;filter:blur(3px)}to{transform:none;opacity:1;filter:none}}
+  @keyframes bftBlink{50%{opacity:.25}}
+  /* Black Friday bottom tab and full-width panel (round 24) */
+  .bfd-tab{position:fixed;left:50%;bottom:0;z-index:54;display:flex;align-items:center;gap:10px;padding:9px 14px 9px 9px;border-radius:18px 18px 0 0;background:#0B0B0C;color:#fff;transform:translate(-50%,110%);transition:transform .6s cubic-bezier(.2,.7,.2,1);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 -10px 30px -18px rgba(11,11,12,.6)}
+  .bfd-tab.is-on{transform:translate(-50%,0)}
+  .bfd-tab::before,.bfd-tab::after{content:"";position:absolute;bottom:0;width:18px;height:18px;pointer-events:none}
+  .bfd-tab::before{left:-18px;background:radial-gradient(circle at 0 0,transparent 17.5px,#0B0B0C 18px)}
+  .bfd-tab::after{right:-18px;background:radial-gradient(circle at 100% 0,transparent 17.5px,#0B0B0C 18px)}
+  .bfd-mark{display:grid;place-items:center;width:34px;height:34px;flex:none;border-radius:10px;background:linear-gradient(150deg,#EE3A45,#A50E18);font-size:19px;line-height:1;color:#fff}
+  .bfd-label{font:500 15.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;white-space:nowrap}
+  .bfd-badge{border-radius:999px;background:#fff;padding:6px 11px;font:600 13px/1 Inter,"Helvetica Neue",Arial,sans-serif;color:#C8101D;white-space:nowrap}
+  @media (max-width:420px){.bfd-badge{display:none}}
+  .bfd-scrim{position:fixed;inset:0;z-index:84;background:rgba(11,11,12,.45);opacity:0;pointer-events:none;transition:opacity .4s ease}
+  .bfd-scrim.is-on{opacity:1;pointer-events:auto}
+  .bfd-panel{position:fixed;left:0;right:0;bottom:0;z-index:85;max-height:92svh;overflow:auto;border-radius:28px 28px 0 0;color:#fff;transform:translateY(105%);transition:transform .7s cubic-bezier(.2,.8,.2,1);background:radial-gradient(60% 90% at 90% 0%,rgba(211,18,29,.38),transparent 60%),radial-gradient(40% 60% at 0% 100%,rgba(211,18,29,.18),transparent 70%),#0B0B0C;box-shadow:0 -40px 80px -40px rgba(0,0,0,.7)}
+  .bfd-panel.is-open{transform:none}
+  .bfd-tape{position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent,#EE3A45 30%,#D3121F 70%,transparent)}
+  .bfd-close{position:absolute;right:max(16px,calc((100% - 1180px) / 2));top:16px;z-index:1;display:grid;width:40px;height:40px;place-items:center;border-radius:99px;border:1px solid rgba(255,255,255,.18);color:#fff;transition:background-color .25s ease}
+  .bfd-close:hover{background:rgba(255,255,255,.12)}
+  .bfd-dot{width:7px;height:7px;border-radius:9px;background:#EE3A45;box-shadow:0 0 0 0 rgba(238,58,69,.7);animation:bfdPulse 1.8s ease-out infinite}
+  .bfd-cta{background:#D3121F;border-color:#D3121F;color:#fff;box-shadow:0 14px 30px -14px rgba(211,18,29,.9)}
+  .bfd-cta:hover,.bfd-cta:focus-visible{background:#A50E18;border-color:#A50E18}
+  @keyframes bfdPulse{70%{box-shadow:0 0 0 8px rgba(238,58,69,0)}100%{box-shadow:0 0 0 0 rgba(238,58,69,0)}}
+  @media (prefers-reduced-motion:reduce){.bfd-tab,.bfd-panel,.bfd-scrim{transition:none}.bft-dig,.bft-sep,.bfd-dot{animation:none}}
   /* submenu items: a thin line under each item (dropdown panels and the phone menu) */
   .menu-item-m{border-bottom:1px solid rgba(27,36,43,.08)}
 
@@ -257,7 +295,7 @@
   .panel .menu-item{border-bottom:1px solid rgba(27,36,43,.08)}
   .book-step{grid-area:1/1;min-width:0;transition:opacity .35s ease}.book-step.is-off{visibility:hidden;opacity:0}
 .book-sum{background:radial-gradient(90% 70% at 100% 0%,rgba(38,177,231,.32),transparent 60%),linear-gradient(160deg,#1B242B,#0B0F13)}
-  .mark-16{display:block;width:84px;height:84px;background:currentColor;-webkit-mask:url(assets/icons/16-years.svg) center/contain no-repeat;mask:url(assets/icons/16-years.svg) center/contain no-repeat}
+  .mark-16{display:block;width:84px;height:84px;object-fit:contain}
   .marquee-mask{-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
   .marquee-track:hover{animation-play-state:paused}
 
@@ -544,6 +582,18 @@
   @media (prefers-reduced-motion:reduce){.deal-badge::after{animation:none;display:none}}
   .soc-ico.soc-ico-line:not(:hover):not(:focus-visible){background:transparent}
   .soc-ico-line:hover,.soc-ico-line:focus-visible{border-color:transparent}
+  /* before & after row (round 22, from the home page) */
+  .side-arrow{position:absolute;top:42%;z-index:3;display:grid;place-items:center;width:48px;height:48px;border-radius:999px;background:#fff;color:#1B242B;box-shadow:0 14px 30px -14px rgba(27,36,43,.45),0 0 0 1px rgba(27,36,43,.08);transform:translateY(-50%);transition:background-color .25s ease,color .25s ease,opacity .25s ease}
+  .side-arrow:hover{background:#0F80C3;color:#fff}
+  .side-arrow:disabled{opacity:0;pointer-events:none}
+  .side-arrow.is-l{left:max(8px,calc(var(--gx) - 24px))}
+  .side-arrow.is-r{right:max(8px,calc(var(--gx) - 24px))}
+  @media (max-width:767px){.side-arrow{display:none}}
+  .ba-slide{width:min(64vw,300px)}
+  @media (min-width:1024px){.ba-slide{width:calc((100vw - 2 * var(--gx) - 48px) / 4)}}
+  .side-rail::before,.side-rail::after{content:"";position:absolute;top:0;bottom:0;z-index:2;width:var(--gx);pointer-events:none}
+  .side-rail::before{left:0;background:linear-gradient(90deg,#FAFAF8 15%,rgba(250,250,248,0))}
+  .side-rail::after{right:0;background:linear-gradient(270deg,#FAFAF8 15%,rgba(250,250,248,0))}
   /* campaign looks: tokens per look (html[data-campaign-bar] on every page, html[data-campaign] where accents apply) */
   html[data-campaign-bar="black-friday"]{--cmp-bar:#0B0B0C;--cmp-bar-fg:#F4EBDD;--cmp-gold:#D2B57B;--cmp-acc:#8C6D36;--cmp-acc-dk:#DCC28E;--cmp-badge-bg:#0B0B0C;--cmp-badge-fg:#EBD7AA;--cmp-badge-line:rgba(210,181,123,.6);--cmp-edge:linear-gradient(115deg,rgba(200,169,106,.85),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(11,11,12,.55));--cmp-tint:linear-gradient(90deg,rgba(6,6,7,.9) 0%,rgba(6,6,7,.62) 52%,rgba(6,6,7,.38) 100%),radial-gradient(60% 70% at 85% 20%,rgba(210,181,123,.22),transparent 70%)}
   html[data-campaign-bar="holiday"]{--cmp-bar:#173D2E;--cmp-bar-fg:#F6F1E6;--cmp-gold:#D6B46A;--cmp-acc:#1F5A41;--cmp-acc-dk:#E2C583;--cmp-badge-bg:#173D2E;--cmp-badge-fg:#F6F1E6;--cmp-badge-line:rgba(214,180,106,.65);--cmp-edge:linear-gradient(115deg,rgba(31,90,65,.8),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(122,31,43,.55));--cmp-tint:linear-gradient(90deg,rgba(12,36,27,.9) 0%,rgba(12,36,27,.62) 55%,rgba(84,20,30,.4) 100%),radial-gradient(55% 65% at 85% 15%,rgba(214,180,106,.22),transparent 70%)}
@@ -1177,6 +1227,86 @@ function AboutMenu({ open, onLink }) {
         </ul>
       </div>
     </div>
+  );
+}
+
+
+/* ---------------------------------------------------------------- Black Friday (round 24): shared clock and timer, and the bottom tab
+   that opens a full-width Black Friday panel. Dates match the black-friday campaign; the badge is the best offer on the landing page. */
+const BF_SALE = { href: 'black-friday-sale.html', start: '2026-11-27T00:00:00-05:00', end: '2026-11-30T23:59:00-05:00', when: 'Nov 27 to 30', badge: 'Up to 60% off' };
+function useBfClock(step = 1000) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => { const t = setInterval(() => setNow(Date.now()), step); return () => clearInterval(t); }, [step]);
+  const s = new Date(BF_SALE.start).getTime(), e = new Date(BF_SALE.end).getTime();
+  const live = now >= s, over = now > e;
+  const ms = Math.max(0, (live ? e : s) - now);
+  return { live, over, pct: live ? Math.min(1, (now - s) / (e - s)) : 0, d: Math.floor(ms / 864e5), h: Math.floor((ms % 864e5) / 36e5), m: Math.floor((ms % 36e5) / 6e4), s: Math.floor((ms % 6e4) / 1e3) };
+}
+function BfDigits({ v }) {
+  return <span className="bft-num font-aeonik">{String(v).padStart(2, '0').split('').map((c, i) => <span key={`${i}-${c}`} className="bft-dig">{c}</span>)}</span>;
+}
+function BfTimer({ t, size = 'md' }) {
+  const cells = [[t.d, 'Days'], [t.h, 'Hours'], [t.m, 'Mins'], [t.s, 'Secs']];
+  return (
+    <div className={`bft bft-${size}`} role="timer" aria-label={`${t.live ? 'Offers end in' : 'Black Friday starts in'} ${t.d} days, ${t.h} hours and ${t.m} minutes`}>
+      {cells.map(([n, l], k) => (
+        <Fragment key={l}>
+          {k > 0 && <span className="bft-sep font-aeonik" aria-hidden="true">:</span>}
+          <span className="bft-cell" aria-hidden="true"><span className="bft-tile"><BfDigits v={n} /></span><span className="bft-lab">{l}</span></span>
+        </Fragment>
+      ))}
+    </div>
+  );
+}
+function BfDock() {
+  const t = useBfClock(1000);
+  const [open, setOpen] = useState(false);
+  const [shown, setShown] = useState(false);
+  const tab = useRef(null);
+  useEffect(() => { const id = setTimeout(() => setShown(true), 900); return () => clearTimeout(id); }, []);
+  useEffect(() => {
+    if (!open) return;
+    const k = (e) => { if (e.key === 'Escape') setOpen(false); };
+    window.addEventListener('keydown', k);
+    return () => window.removeEventListener('keydown', k);
+  }, [open]);
+  const close = () => { setOpen(false); requestAnimationFrame(() => tab.current && tab.current.focus({ preventScroll: true })); };
+  if (HERE === BF_SALE.href || t.over) return null;
+  return (
+    <>
+      <div className={`bfd-scrim ${open ? 'is-on' : ''}`} onClick={close} aria-hidden="true" />
+      <button ref={tab} type="button" onClick={() => setOpen(true)} aria-expanded={open} aria-controls="bfd-panel"
+        className={`bfd-tab ${shown && !open ? 'is-on' : ''}`}>
+        <span aria-hidden="true" className="bfd-mark font-aeonik">%</span>
+        <span className="bfd-label">Black Friday<span className="hidden sm:inline"> Sale</span></span>
+        <span className="bfd-badge">{BF_SALE.badge}</span>
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 15 6-6 6 6" /></svg>
+      </button>
+      <section id="bfd-panel" role="dialog" aria-modal="false" aria-label="Black Friday sale" className={`bfd-panel ${open ? 'is-open' : ''}`} {...(open ? {} : { inert: '' })}>
+        <span aria-hidden="true" className="bfd-tape" />
+        <button type="button" onClick={close} aria-label="Close the Black Friday panel" className="bfd-close">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+        </button>
+        <div className="mx-auto grid max-w-[1180px] gap-8 px-[var(--gx)] pb-[calc(28px+env(safe-area-inset-bottom))] pt-9 lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)] lg:items-center lg:gap-14 lg:pb-12 lg:pt-12">
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[.06] px-3.5 py-1.5 font-inter text-[12px] font-semibold uppercase tracking-[.16em] text-white/85"><i aria-hidden="true" className="bfd-dot" />Black Friday · {BF_SALE.when}</p>
+            <h2 className="mt-4 font-aeonik text-[clamp(44px,6vw,84px)] font-normal leading-[.92] tracking-[-0.04em] text-white">Black Friday<span className="text-[#EE3A45]">.</span></h2>
+            <p className="mt-4 max-w-[46ch] font-inter text-[15.5px] leading-[1.6] text-white/75"><b className="font-semibold text-white">{BF_SALE.badge} selected treatments</b> at both Toronto clinics. Build your plan, then book a free consultation to claim it.</p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <a href={BF_SALE.href} className="btn bfd-cta">See the Black Friday deals</a>
+              <Btn href="#/book" v="glass" onClick={() => setOpen(false)}>Book Free Consultation</Btn>
+            </div>
+          </div>
+          <div>
+            <p className="mb-3 flex items-center justify-between gap-3 font-inter text-[12px] font-semibold uppercase tracking-[.16em] text-white/65"><span>{t.live ? 'Offers end in' : 'Black Friday starts in'}</span><span className="hidden text-white/45 sm:inline">{t.live ? 'Nov 30, 11:59 pm' : 'Nov 27, 12:00 am'}</span></p>
+            <BfTimer t={t} size="lg" />
+            {t.live
+              ? <div className="mt-5"><div className="bft-bar"><i style={{ width: `${(t.pct * 100).toFixed(1)}%` }} /></div><p className="mt-2 font-inter text-[12.5px] text-white/55">{Math.round(t.pct * 100)}% of Black Friday has passed</p></div>
+              : <p className="mt-5 font-inter text-[13px] text-white/55">Doors open Friday, November 27. Plan ahead now, the deals are live on the page.</p>}
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -2345,7 +2475,7 @@ function Promotions() {
           <p className="sw-title flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center font-mont text-[12px] uppercase tracking-[.16em] md:text-[13px]">
             <span>Save on cosmetic treatment</span>
             <i aria-hidden="true" className="hidden h-px w-7 bg-ndm-amber sm:block" />
-            <a href={FEES} className={`font-semibold underline-offset-4 hover:underline ${dark ? 'text-ndm-sky' : 'text-ndm-deep'}`}>Apply for financing now</a>
+            <span className="normal-case tracking-normal"><Btn href={FEES} v={dark ? 'glass' : 'line'} sm>Apply for financing now</Btn></span>
           </p>
           <div className="flex items-center gap-3">
             <button onClick={() => go(-1)} aria-label="Previous offer" className="sw-ctrl grid size-12 place-items-center rounded-full border transition"><IconArrow className="rotate-180" /></button>
@@ -2898,86 +3028,53 @@ const BA_TREATS = ['Aptos thread lift', 'Laser acne', 'Chemical peel', 'Dermamel
 const BA_MODELS = Array.from({ length: 12 }, (_, i) => ({ ...BA_CASES[i % BA_CASES.length], n: i + 1, id: String(i + 1).padStart(2, '0'), treat: BA_TREATS[i % BA_TREATS.length] }));
 const BA_ALL = 'before-after.html';
 
-/* before & after: a dark, pinned section; vertical scrolling slides the row of compare cards sideways */
-const BA_STILL = true; /* promotion page: the row scrolls only when the visitor scrolls it */
+/* before & after (website v3 "Real results"): heading row with the button to the full gallery, then a row of compare cards
+   (four in view on wide screens) with arrows on both sides of the row */
 function BeforeAfter() {
-  const ref = useRef(null), view = useRef(null), rail = useRef(null), bar = useRef(null);
+  const ref = useRef(null), rail = useRef(null);
   useReveal(ref);
-  const [dist, setDist] = useState(0);
-  const [pick, setPick] = useState('All');
-  const list = pick === 'All' ? BA_MODELS : BA_MODELS.filter((c) => c.treat === pick);
-  useEffect(() => {
-    if (BA_STILL) return;
-    const measure = () => {
-      const v = view.current, r = rail.current; if (!v || !r) return;
-      const cs = getComputedStyle(v);
-      const inner = v.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
-      setDist(Math.max(0, Math.round(r.scrollWidth - inner)));
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(view.current); ro.observe(rail.current);
-    return () => ro.disconnect();
-  }, []);
-  useOnScroll(() => {
-    const el = ref.current, r = rail.current; if (!el || !r || BA_STILL) return;
-    const box = el.getBoundingClientRect(), vh = window.innerHeight;
-    const p = clamp01(-box.top / Math.max(1, box.height - vh));
-    r.style.transform = `translate3d(${(-p * dist).toFixed(1)}px,0,0)`;
-    if (bar.current) bar.current.style.transform = `scaleX(${p.toFixed(3)})`;
-  }, [dist]);
-  const chip = (t) => (
-    <button key={t} type="button" onClick={() => setPick(t)} aria-pressed={pick === t}
-      className={`h-9 shrink-0 rounded-full border px-4 font-inter text-[13.5px] transition-colors ${pick === t ? 'border-white bg-white text-ndm-ink' : 'border-white/20 text-white/75 hover:border-white/50 hover:text-white'}`}>{t}</button>
-  );
+  const [edge, setEdge] = useState([true, false]);
+  const cases = BA_MODELS.slice(0, 7);
+  const sync = () => {
+    const r = rail.current; if (!r) return;
+    setEdge([r.scrollLeft < 8, r.scrollLeft > r.scrollWidth - r.clientWidth - 8]);
+  };
+  useEffect(() => { sync(); }, []);
+  const step = (d) => {
+    const r = rail.current, k = r.querySelector('li');
+    r.scrollBy({ left: d * (k ? k.offsetWidth + 16 : r.clientWidth * 0.8), behavior: REDUCED ? 'auto' : 'smooth' });
+  };
   return (
-    <section ref={ref} data-nav="dark" aria-labelledby="results" className="ba-dark relative z-10 text-white" style={{ height: BA_STILL ? 'auto' : `calc(100vh + ${dist}px)` }}>
-      <div className={`${BA_STILL ? 'py-[clamp(72px,8vw,120px)]' : 'sticky top-0 h-screen overflow-hidden pt-[clamp(100px,12.5vh,124px)] pb-[clamp(16px,3vh,32px)]'} flex flex-col justify-center`}>
-        <div className="grid gap-4 px-[var(--gx)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
-          <div>
-            <Eyebrow dark className="rv">Before &amp; after</Eyebrow>
-            <TwoTone dark id="results" className="rv mt-4" size="text-[clamp(30px,min(4vw,6vh),58px)]" lead={<>Before and after,<br className="hidden sm:block" /></>} strong="by treatment" style={{ transitionDelay: '.06s' }} />
-            <div className="rv mt-5" style={{ transitionDelay: '.12s' }}><Btn href={BA_ALL} v="light" sm>See all before &amp; after</Btn></div>
-          </div>
-          <div className="lg:justify-self-end">
-            <p className="rv max-w-[46ch] font-inter text-[15.5px] leading-[1.6] text-white/70" style={{ transitionDelay: '.1s' }}>
-              Treatment cases photographed before and after. Use the arrows to see more, and drag any photo to compare.
-            </p>
-            <div className="rv no-scrollbar mt-4 flex gap-2 overflow-x-auto" role="group" aria-label="Filter by treatment" style={{ transitionDelay: '.14s' }}>
-              {['All', ...BA_TREATS].map(chip)}
-            </div>
-          </div>
+    <section ref={ref} aria-labelledby="results" className="relative z-10 bg-ndm-paper pb-[clamp(40px,4vw,64px)] pt-[clamp(80px,9vw,140px)]">
+      <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6 px-[var(--gx)]">
+        <div>
+          <Eyebrow className="rv">Before &amp; after</Eyebrow>
+          <TwoTone id="results" className="rv mt-4" lead={<>Real results,<br /></>} strong="case by case" style={{ transitionDelay: '.05s' }} />
+          <p className="rv mt-4 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>Treatment cases photographed before and after. Drag any photo to compare.</p>
         </div>
-
-        <div ref={view} className={`mt-[clamp(24px,3vw,44px)] ${BA_STILL ? 'no-scrollbar snap-x snap-mandatory overflow-x-auto' : ''}`} style={{ paddingInline: 'var(--gx)', scrollPaddingInline: 'var(--gx)' }}>
-          <ul ref={rail} role="list" className="flex w-max gap-[clamp(10px,1.2vw,18px)] will-change-transform">
-            {list.map((c, i) => (
-              <li key={c.id} className="w-[min(70vw,300px)] shrink-0 snap-start sm:w-[clamp(220px,18.8vw,300px)]">
-                <figure className="m-0">
-                  <BaCompare c={c} i={i} nudge={i < 3} />
-                  <figcaption className="mt-3 flex items-baseline justify-between gap-3">
-                    <span className="font-aeonik text-[17px] leading-[1.25] tracking-[-0.01em] text-white">{`Model ${c.id}`}</span>
-                    <span className="font-inter text-[13px] text-white/60">{c.treat}</span>
-                  </figcaption>
-                </figure>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* the progress line and arrows sit on the left, the bottom-right corner stays clear for the cart bar */}
-        <div className="mt-[clamp(14px,2.6vh,28px)] flex flex-col gap-4 px-[var(--gx)] md:flex-row md:items-center md:justify-start md:gap-8">
-          <p className="flex min-w-0 items-center gap-2.5 font-inter text-[13px] leading-[1.5] text-white/60 md:max-w-[48ch]">
-            <BaIconInfo className="shrink-0" />Photos show individual cases and are shared for illustration only. Individual results may vary.
-          </p>
-          <div className="flex items-center gap-5 md:order-first">
-            {BA_STILL && [[-1, 'Previous photos'], [1, 'Next photos']].map(([d, l]) => (
-              <button key={d} type="button" aria-label={l} onClick={() => { const v = view.current; const li = v && v.querySelector('li'); if (v) v.scrollBy({ left: d * (li ? li.offsetWidth + 16 : v.clientWidth * 0.8) * 2, behavior: REDUCED ? 'auto' : 'smooth' }); }}
-                className="grid size-12 place-items-center rounded-full border border-white/25 text-white transition hover:bg-white hover:text-ndm-ink"><IconArrow className={d < 0 ? 'rotate-180' : ''} /></button>
-            ))}
-          </div>
-        </div>
+        <div className="rv" style={{ transitionDelay: '.12s' }}><Btn href={BA_ALL} v="line">See all before &amp; after</Btn></div>
       </div>
+      <div className="side-rail relative mt-[clamp(32px,4vw,52px)]">
+        <ul ref={rail} onScroll={sync} role="list" className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-[var(--gx)] pb-2" style={{ scrollPaddingInline: 'var(--gx)' }}>
+          {cases.map((c, i) => (
+            <li key={c.id} className="ba-slide shrink-0 snap-start">
+              <figure className="m-0">
+                <BaCompare c={c} i={i} nudge={i < 2} />
+                <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+                  <span className="font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">{`Model ${c.id}`}</span>
+                  <span className="font-inter text-[13px] text-ndm-muted">{c.treat}</span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+          <li aria-hidden="true" className="w-px shrink-0" />
+        </ul>
+        <button type="button" onClick={() => step(-1)} disabled={edge[0]} aria-label="Previous cases" className="side-arrow is-l"><IconArrow className="rotate-180" /></button>
+        <button type="button" onClick={() => step(1)} disabled={edge[1]} aria-label="Next cases" className="side-arrow is-r"><IconArrow /></button>
+      </div>
+      <p className="mt-6 flex items-start gap-2.5 px-[var(--gx)] font-inter text-[13px] leading-[1.5] text-ndm-muted">
+        <BaIconInfo className="mt-0.5 shrink-0" />Photos show individual cases and are shared for illustration only. Individual results may vary.
+      </p>
     </section>
   );
 }
@@ -4154,8 +4251,8 @@ function PromoGrid() {
           </li>
         ))}
       </ul>
-      <p className="rv mt-10 text-center font-inter text-[13px] uppercase tracking-[.16em] text-ndm-muted">
-        Save on cosmetic treatment <span aria-hidden="true" className="mx-2 inline-block h-px w-8 align-middle bg-ndm-amber" /> <a href={FEES} className="font-semibold text-ndm-deep underline-offset-4 hover:underline">Apply for financing now</a>
+      <p className="rv mt-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 text-center font-inter text-[13px] uppercase tracking-[.16em] text-ndm-muted">
+        Save on cosmetic treatment <span aria-hidden="true" className="inline-block h-px w-8 bg-ndm-amber" /> <span className="normal-case tracking-normal"><Btn href={FEES} v="line" sm>Apply for financing now</Btn></span>
       </p>
     </section>
   );
@@ -4188,7 +4285,7 @@ function AwardCard({ a }) {
   return (
     <li className="w-[min(82vw,400px)] shrink-0">
       <figure className={`relative m-0 flex h-full flex-col overflow-hidden rounded-[22px] p-6 shadow-[0_24px_50px_-40px_rgba(27,36,43,.45)] ${AWARD_LOOK[a.look]}`}>
-        {a.mark && <span role="img" aria-label="NewDermaMed, 16 years" className="mark-16 mb-5 text-[#8A5A12]" />}
+        {a.mark && <img src="assets/icons/16-years-gold.svg" alt="NewDermaMed, 16 years" width="84" height="84" draggable="false" className="mark-16 mb-5" />}
         <div className="flex items-center justify-between gap-4">
           <span className={`font-inter text-[12px] uppercase tracking-[.16em] ${dark ? 'text-white/70' : 'text-ndm-muted'}`}>{a.k}</span>
           {a.stars && <Stars />}
@@ -5066,7 +5163,8 @@ function App() {
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 ReactDOM.createRoot(document.getElementById('book-root')).render(<BookPopup />);
-(() => { const d = document.createElement('div'); d.id = 'campaign-root'; document.body.appendChild(d); ReactDOM.createRoot(d).render(<CampaignSwitch />); })();
+(() => { const d = document.createElement('div'); d.id = 'bf-dock-root'; document.body.appendChild(d); ReactDOM.createRoot(d).render(<BfDock />); })();
+/* the Campaign looks switcher is hidden (round 23); Black Friday has its own page, black-friday-sale.html */
 </script>
 </body>
 </html>
