@@ -675,8 +675,10 @@ html.bfs .btn-ink:hover,html.bfs .btn-buy:hover{background:var(--r);border-color
 /* hero */
 .bfs-hero{background:radial-gradient(55% 60% at 88% 18%,rgba(211,18,29,.42),transparent 62%),radial-gradient(45% 55% at 0% 100%,rgba(211,18,29,.22),transparent 70%),var(--k)}
 /* round 26 */
-.bfs-big{position:absolute;right:-3vw;top:-7vw;z-index:-1;font-size:44vw;line-height:1;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.09);pointer-events:none;user-select:none;animation:bfsDrift 14s ease-in-out infinite alternate}
-.bfs-big-l{right:auto;left:-6vw;top:-10vw;font-size:52vw;z-index:0;-webkit-text-stroke:1.5px rgba(255,255,255,.06)}
+.bfs-hero-pic{opacity:.5;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 55%),linear-gradient(180deg,#000 55%,transparent 96%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0,#000 55%),linear-gradient(180deg,#000 55%,transparent 96%);mask-composite:intersect}
+@media (max-width:1023px){.bfs-hero-pic{opacity:.26;-webkit-mask-image:linear-gradient(180deg,#000 30%,transparent 100%);mask-image:linear-gradient(180deg,#000 30%,transparent 100%)}}
+.bfs-big{position:absolute;right:38vw;top:-4vw;z-index:-1;font-size:34vw;line-height:1;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.09);pointer-events:none;user-select:none;animation:bfsDrift 14s ease-in-out infinite alternate}
+.bfs-big.bfs-big-l{right:auto;left:-6vw;top:-10vw;font-size:52vw;z-index:0;-webkit-text-stroke:1.5px rgba(255,255,255,.06)}
 .bfs-grid{position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(70% 70% at 50% 40%,#000,transparent);mask-image:radial-gradient(70% 70% at 50% 40%,#000,transparent)}
 .bfs-fri{color:transparent;background:linear-gradient(100deg,#fff 0%,#fff 35%,#FF6B73 50%,#fff 65%,#fff 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;animation:bfsShine 5s linear infinite;padding-right:.08em}
 .bfs-rise>*{animation:bfsRise .9s cubic-bezier(.2,.7,.2,1) both}
@@ -718,10 +720,11 @@ html.bfs .btn-ink:hover,html.bfs .btn-buy:hover{background:var(--r);border-color
 @keyframes bfsDrift{to{transform:translate3d(-2vw,1.5vw,0)}}
 @keyframes bfsShine{from{background-position:125% 0}to{background-position:-125% 0}}
 @keyframes bfsRise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
-@media (max-width:767px){.bfs-big{font-size:70vw;top:8vw;right:-10vw}.bfs-tapes{height:104px}}
+@media (max-width:1023px){.bfs-big{font-size:70vw;top:8vw;right:-10vw}}
+@media (max-width:767px){.bfs-tapes{height:104px}}
 @media (prefers-reduced-motion:reduce){.bfs-big,.bfs-fri,.bfs-rise>*,.bfs-fan-ring{animation:none}.bfs-ticket,.bfs-fan-card{transition:none}}
 .bfs-dot{color:var(--r)}
-.bfs-cd{background:rgba(11,11,12,.55);border:1px solid rgba(255,255,255,.12);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.bfs-cd{background:rgba(11,11,12,.68);border:1px solid rgba(255,255,255,.12);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .bfs-live{width:8px;height:8px;border-radius:9px;background:var(--r-l);box-shadow:0 0 0 0 rgba(238,58,69,.7);animation:bfsPulse 1.8s ease-out infinite}
 @keyframes bfsPulse{70%{box-shadow:0 0 0 10px rgba(238,58,69,0)}100%{box-shadow:0 0 0 0 rgba(238,58,69,0)}}
 /* steps and cards */
@@ -5242,8 +5245,10 @@ html.bfs .btn-ink:hover,html.bfs .btn-buy:hover{background:var(--r);border-color
 /* hero */
 .bfs-hero{background:radial-gradient(55% 60% at 88% 18%,rgba(211,18,29,.42),transparent 62%),radial-gradient(45% 55% at 0% 100%,rgba(211,18,29,.22),transparent 70%),var(--k)}
 /* round 26 */
-.bfs-big{position:absolute;right:-3vw;top:-7vw;z-index:-1;font-size:44vw;line-height:1;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.09);pointer-events:none;user-select:none;animation:bfsDrift 14s ease-in-out infinite alternate}
-.bfs-big-l{right:auto;left:-6vw;top:-10vw;font-size:52vw;z-index:0;-webkit-text-stroke:1.5px rgba(255,255,255,.06)}
+.bfs-hero-pic{opacity:.5;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 55%),linear-gradient(180deg,#000 55%,transparent 96%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0,#000 55%),linear-gradient(180deg,#000 55%,transparent 96%);mask-composite:intersect}
+@media (max-width:1023px){.bfs-hero-pic{opacity:.26;-webkit-mask-image:linear-gradient(180deg,#000 30%,transparent 100%);mask-image:linear-gradient(180deg,#000 30%,transparent 100%)}}
+.bfs-big{position:absolute;right:38vw;top:-4vw;z-index:-1;font-size:34vw;line-height:1;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.09);pointer-events:none;user-select:none;animation:bfsDrift 14s ease-in-out infinite alternate}
+.bfs-big.bfs-big-l{right:auto;left:-6vw;top:-10vw;font-size:52vw;z-index:0;-webkit-text-stroke:1.5px rgba(255,255,255,.06)}
 .bfs-grid{position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(70% 70% at 50% 40%,#000,transparent);mask-image:radial-gradient(70% 70% at 50% 40%,#000,transparent)}
 .bfs-fri{color:transparent;background:linear-gradient(100deg,#fff 0%,#fff 35%,#FF6B73 50%,#fff 65%,#fff 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;animation:bfsShine 5s linear infinite;padding-right:.08em}
 .bfs-rise>*{animation:bfsRise .9s cubic-bezier(.2,.7,.2,1) both}
@@ -5285,10 +5290,11 @@ html.bfs .btn-ink:hover,html.bfs .btn-buy:hover{background:var(--r);border-color
 @keyframes bfsDrift{to{transform:translate3d(-2vw,1.5vw,0)}}
 @keyframes bfsShine{from{background-position:125% 0}to{background-position:-125% 0}}
 @keyframes bfsRise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
-@media (max-width:767px){.bfs-big{font-size:70vw;top:8vw;right:-10vw}.bfs-tapes{height:104px}}
+@media (max-width:1023px){.bfs-big{font-size:70vw;top:8vw;right:-10vw}}
+@media (max-width:767px){.bfs-tapes{height:104px}}
 @media (prefers-reduced-motion:reduce){.bfs-big,.bfs-fri,.bfs-rise>*,.bfs-fan-ring{animation:none}.bfs-ticket,.bfs-fan-card{transition:none}}
 .bfs-dot{color:var(--r)}
-.bfs-cd{background:rgba(11,11,12,.55);border:1px solid rgba(255,255,255,.12);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.bfs-cd{background:rgba(11,11,12,.68);border:1px solid rgba(255,255,255,.12);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .bfs-live{width:8px;height:8px;border-radius:9px;background:var(--r-l);box-shadow:0 0 0 0 rgba(238,58,69,.7);animation:bfsPulse 1.8s ease-out infinite}
 @keyframes bfsPulse{70%{box-shadow:0 0 0 10px rgba(238,58,69,0)}100%{box-shadow:0 0 0 0 rgba(238,58,69,0)}}
 /* steps and cards */
@@ -5403,8 +5409,9 @@ function BfsFan() {
 function BfsHero() {
   return (
     <section aria-labelledby="bfs-title" className="bfs-hero relative isolate overflow-hidden text-white">
+      {/* round 28: the clinic at night sits behind the tickets and the countdown, fading into the black on the left and at the bottom */}
+      <img src="assets/hero/clinic-exterior.jpg" alt="" className="bfs-hero-pic absolute right-0 top-0 -z-10 h-[46%] w-full object-cover lg:h-full lg:w-[60%]" style={{ objectPosition: '58% 50%' }} />
       <span aria-hidden="true" className="bfs-big font-aeonik">{BFS_MAX}%</span>
-      <span aria-hidden="true" className="bfs-grid" />
       <div className="mx-auto grid max-w-[1280px] gap-12 px-[var(--gx)] pb-[clamp(36px,4vw,56px)] pt-[clamp(48px,6vw,96px)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,.95fr)] lg:items-center">
         <div className="bfs-rise">
           <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[.06] px-3.5 py-1.5 font-inter text-[12px] font-semibold uppercase tracking-[.16em] text-white/85"><i className="bfs-live" />{BFS.when}</p>
