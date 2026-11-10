@@ -90,7 +90,7 @@ function PricingHero() {
     <section ref={ref} data-nav="dark" aria-labelledby="pricing-title" className="relative isolate flex min-h-[100svh] flex-col justify-end pt-[150px] md:h-[100svh] md:min-h-[640px] md:max-h-[1040px] md:pt-0 overflow-hidden bg-ndm-night text-white">
       <video ref={vid} src={PRICING_FILM.src} poster={PRICING_FILM.poster} autoPlay={!REDUCED} muted loop playsInline preload="auto" aria-hidden="true"
         className="absolute inset-0 -z-20 h-full w-full object-cover" />
-      <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(180deg,rgba(11,15,19,.62) 0%,rgba(11,15,19,.08) 28%,rgba(11,15,19,.12) 50%,rgba(11,15,19,.84) 100%)' }} />
+      <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(90deg,rgba(11,15,19,.5) 0%,rgba(11,15,19,.18) 55%,rgba(11,15,19,.1) 100%),linear-gradient(180deg,rgba(11,15,19,.62) 0%,rgba(11,15,19,.2) 28%,rgba(11,15,19,.26) 50%,rgba(11,15,19,.86) 100%)' }} />
       {/* the page carries on below: a quiet "Scroll to prices" line at the right edge (clear of the bottom tab), which also scrolls there */}
       <a href="#prices" onClick={browse} className="pr-scroll absolute right-[var(--gx)] top-1/2 z-[1] hidden -translate-y-1/2 flex-col items-center gap-3 font-inter text-[11px] font-medium uppercase tracking-[.22em] text-white/75 transition-colors hover:text-white md:flex">
         <span style={{ writingMode: 'vertical-rl' }}>Scroll to prices</span><span aria-hidden="true" className="pr-scroll-line" />
