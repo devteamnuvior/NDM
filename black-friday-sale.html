@@ -513,6 +513,18 @@
   .is-grab{cursor:grabbing !important;scroll-snap-type:none !important;scroll-behavior:auto !important;user-select:none}
   .is-grab *{pointer-events:none}
   /* chat assistant */
+  /* chat bot (round 27) */
+  .chat-launch{padding:3px;background:linear-gradient(145deg,#26B1E7,#0F80C3 55%,#0A4F7A);box-shadow:0 18px 40px -14px rgba(15,128,195,.8),inset 0 1px 0 rgba(255,255,255,.35)}
+  .chat-launch:hover{transform:translateY(-2px)}
+  .chat-launch.is-open{background:#0A4F7A}
+  .chat-launch-img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid #fff}
+  .chat-launch-badge{position:absolute;right:-3px;bottom:-3px;display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:#FFA617;color:#fff;border:2px solid #fff}
+  .chat-head{background:radial-gradient(110% 120% at 100% 0%,#26B1E7 0%,rgba(38,177,231,0) 58%),linear-gradient(150deg,#0F80C3,#0A4F7A);transition:padding .35s ease}
+  .chat-quick a{display:flex;flex-direction:column;gap:8px;border-radius:16px;background:#fff;padding:11px 11px 12px;font:500 12.5px/1.25 Inter,"Helvetica Neue",Arial,sans-serif;color:#1B242B;box-shadow:0 16px 30px -18px rgba(11,15,19,.5),0 0 0 1px rgba(27,36,43,.06);transition:transform .3s ease,color .2s ease}
+  .chat-quick a:hover{transform:translateY(-2px);color:#0F80C3}
+  .chat-quick i{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(15,128,195,.1);color:#0F80C3}
+  .chat-quick a:first-child i{background:#FFA617;color:#fff}
+  .chat-body{background:linear-gradient(180deg,#F3F8FB 0%,#FAFAF8 140px)}
   .chat-btn{transition:opacity .3s ease,transform .3s ease,background-color .3s ease}
   .chat-btn.is-off{opacity:0;transform:scale(.8);pointer-events:none}
   .chat-note{animation:chatNote .5s var(--e-out) both}
@@ -656,15 +668,58 @@ html.bfs .btn-book::before{background:var(--r-d)}
 html.bfs .btn-ink,html.bfs .btn-buy{background:var(--k);border-color:var(--k);color:#fff}
 html.bfs .btn-ink:hover,html.bfs .btn-buy:hover{background:var(--r);border-color:var(--r)}
 /* red ticker */
-.bfs-tick{background:var(--r);color:#fff;overflow:hidden;white-space:nowrap}
 .bfs-tick-in{display:inline-flex;animation:bfsTick 38s linear infinite}
 .bfs-tick-in span{display:inline-flex;align-items:center;gap:22px;padding-right:22px}
 .bfs-tick-in i{width:5px;height:5px;border-radius:9px;background:#fff;opacity:.7}
 @keyframes bfsTick{to{transform:translateX(-50%)}}
 /* hero */
-.bfs-hero{background:radial-gradient(60% 70% at 85% 30%,rgba(211,18,29,.28),transparent 60%),radial-gradient(40% 50% at 10% 100%,rgba(211,18,29,.16),transparent 70%),var(--k)}
-.bfs-hero-pic{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 45%);mask-image:linear-gradient(90deg,transparent 0,#000 45%)}
-@media (max-width:1023px){.bfs-hero-pic{-webkit-mask-image:linear-gradient(0deg,transparent 0,#000 70%);mask-image:linear-gradient(0deg,transparent 0,#000 70%)}}
+.bfs-hero{background:radial-gradient(55% 60% at 88% 18%,rgba(211,18,29,.42),transparent 62%),radial-gradient(45% 55% at 0% 100%,rgba(211,18,29,.22),transparent 70%),var(--k)}
+/* round 26 */
+.bfs-big{position:absolute;right:-3vw;top:-7vw;z-index:-1;font-size:44vw;line-height:1;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.09);pointer-events:none;user-select:none;animation:bfsDrift 14s ease-in-out infinite alternate}
+.bfs-big-l{right:auto;left:-6vw;top:-10vw;font-size:52vw;z-index:0;-webkit-text-stroke:1.5px rgba(255,255,255,.06)}
+.bfs-grid{position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(70% 70% at 50% 40%,#000,transparent);mask-image:radial-gradient(70% 70% at 50% 40%,#000,transparent)}
+.bfs-fri{color:transparent;background:linear-gradient(100deg,#fff 0%,#fff 35%,#FF6B73 50%,#fff 65%,#fff 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;animation:bfsShine 5s linear infinite;padding-right:.08em}
+.bfs-rise>*{animation:bfsRise .9s cubic-bezier(.2,.7,.2,1) both}
+.bfs-rise>*:nth-child(2){animation-delay:.08s}.bfs-rise>*:nth-child(3){animation-delay:.16s}.bfs-rise>*:nth-child(4){animation-delay:.24s}.bfs-rise>*:nth-child(5){animation-delay:.32s}
+.bfs-fan-card{position:absolute;left:29%;top:6%;width:42%;height:88%;transition:transform .9s cubic-bezier(.3,.7,.2,1),opacity .6s ease,filter .9s ease}
+.bfs-pos-0{transform:translateX(-66%) translateY(12px) rotate(-10deg) scale(.9);z-index:2;filter:brightness(.72)}
+.bfs-pos-1{transform:translateY(-8px) scale(1.05);z-index:4}
+.bfs-pos-2{transform:translateX(66%) translateY(12px) rotate(10deg) scale(.9);z-index:3;filter:brightness(.72)}
+.bfs-pos-3{transform:translateY(22px) scale(.74);z-index:1;opacity:0;pointer-events:none}
+.bfs-fan-ring{position:absolute;left:50%;top:50%;z-index:0;width:112%;aspect-ratio:1;border-radius:50%;border:1px dashed rgba(255,255,255,.16);transform:translate(-50%,-50%);animation:bfsSpin 40s linear infinite;pointer-events:none}
+.bfs-fan-ring::after{content:"";position:absolute;left:50%;top:-5px;width:10px;height:10px;border-radius:50%;background:var(--r-l);box-shadow:0 0 18px 4px rgba(238,58,69,.7)}
+@keyframes bfsSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.bfs-tapes{position:relative;height:118px;margin-top:8px}
+.bfs-tape{overflow:hidden;white-space:nowrap;padding:11px 0;font:600 12.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase}
+.bfs-tapes .bfs-tape{position:absolute;left:-5%;width:110%}
+.bfs-tapes .bfs-tape:first-child{top:22px;transform:rotate(-2.2deg);z-index:1}
+.bfs-tapes .bfs-tape:last-child{top:52px;transform:rotate(1.6deg)}
+.bfs-tape-red{background:var(--r);color:#fff}
+.bfs-tape-white{background:#fff;color:#0B0B0C}
+.bfs-tape-white i{background:var(--r)!important;opacity:1!important}
+.bfs-tick-in.is-rev{animation-direction:reverse}
+.bfs-chip-n{color:var(--r)}.bfs-chip-k{color:#5A646C}.bfs-chip-d{color:#5A646C}
+.bfs-chip-go{background:rgba(11,11,12,.06);color:#0B0B0C;transition:background-color .25s ease,color .25s ease,transform .4s cubic-bezier(.2,.7,.2,1)}
+.bfs-chip:hover .bfs-chip-go{background:var(--r);color:#fff;transform:rotate(-45deg)}
+.bfs-chip[aria-pressed="true"] .bfs-chip-n{color:#FF4B55}.bfs-chip[aria-pressed="true"] .bfs-chip-k,.bfs-chip[aria-pressed="true"] .bfs-chip-d{color:rgba(255,255,255,.65)}
+.bfs-chip[aria-pressed="true"] .bfs-chip-go{background:var(--r);color:#fff;transform:rotate(90deg)}
+.bfs-head{background:radial-gradient(90% 120% at 0% 100%,rgba(211,18,29,.5),transparent 60%),#0B0B0C}
+.bfs-head-pic{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 70%);mask-image:linear-gradient(90deg,transparent 0,#000 70%);opacity:.85;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.bfs-card:hover .bfs-head-pic{transform:scale(1.06)}
+.bfs-ticket.on-k::before,.bfs-ticket.on-k::after{background:#0B0B0C}
+.bfs-ticket{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.bfs-ticket:hover{transform:translateY(-6px) rotate(-.6deg)}
+.bfs-how-n{font-size:clamp(64px,6vw,88px);line-height:.8;letter-spacing:-.05em;color:var(--r)}
+.bfs-how-n i{font-style:normal;color:rgba(11,11,12,.12)}
+.bfs-how-card{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease}
+.bfs-how-card:hover{transform:translateY(-5px);box-shadow:0 34px 60px -40px rgba(60,10,14,.5)}
+.bfs-how-go{position:absolute;z-index:1;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--r);color:#fff;box-shadow:0 0 0 6px var(--pp);left:50%;bottom:-27px;transform:translateX(-50%) rotate(90deg)}
+@media (min-width:768px){.bfs-how-go{left:auto;right:-29px;bottom:auto;top:50%;transform:translateY(-50%)}}
+@keyframes bfsDrift{to{transform:translate3d(-2vw,1.5vw,0)}}
+@keyframes bfsShine{from{background-position:125% 0}to{background-position:-125% 0}}
+@keyframes bfsRise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@media (max-width:767px){.bfs-big{font-size:70vw;top:8vw;right:-10vw}.bfs-tapes{height:104px}}
+@media (prefers-reduced-motion:reduce){.bfs-big,.bfs-fri,.bfs-rise>*,.bfs-fan-ring{animation:none}.bfs-ticket,.bfs-fan-card{transition:none}}
 .bfs-dot{color:var(--r)}
 .bfs-cd{background:rgba(11,11,12,.55);border:1px solid rgba(255,255,255,.12);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .bfs-live{width:8px;height:8px;border-radius:9px;background:var(--r-l);box-shadow:0 0 0 0 rgba(238,58,69,.7);animation:bfsPulse 1.8s ease-out infinite}
@@ -4867,23 +4922,32 @@ function ChatBot({ ready, hidden }) {
         </div>
       )}
       <button ref={btn} type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} aria-controls="chat-panel" aria-label={open ? 'Close chat' : 'Chat with NewDermaMed'} tabIndex={off ? -1 : 0}
-        className={`chat-btn fixed z-[61] grid size-[52px] place-items-center rounded-full bg-ndm-deep text-white shadow-[0_18px_40px_-16px_rgba(15,128,195,.7)] ring-1 ring-white/20 transition hover:bg-ndm-ink md:size-[58px] ${off ? 'is-off' : ''} ${note && !open ? 'has-note' : ''}`}
+        className={`chat-btn chat-launch fixed z-[61] grid size-[56px] place-items-center rounded-full text-white md:size-[62px] ${off ? 'is-off' : ''} ${note && !open ? 'has-note' : ''} ${open ? 'is-open' : ''}`}
         style={{ right: small ? 16 : 24, bottom: `calc(${bottom}px + env(safe-area-inset-bottom))` }}>
-        {open ? <IconClose /> : <IconChat />}
-        {note && !open && <i aria-hidden="true" className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-ndm-amber px-1 font-inter text-[11px] font-semibold not-italic leading-none text-white ring-2 ring-white">1</i>}
+        {open ? <IconClose /> : <><img src={CHAT_AGENT.img} alt="" className="chat-launch-img" /><span aria-hidden="true" className="chat-launch-badge"><IconChat size={13} /></span></>}
+        {note && !open && <i aria-hidden="true" className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#E5484D] px-1 font-inter text-[11px] font-semibold not-italic leading-none text-white ring-2 ring-white">1</i>}
       </button>
       <section id="chat-panel" role="dialog" aria-label={`Chat with ${CHAT_AGENT.name} from NewDermaMed`} aria-hidden={!open} {...(open ? {} : { inert: '' })} data-lenis-prevent=""
-        className={`chat-panel fixed z-[62] flex flex-col overflow-hidden bg-white shadow-[0_40px_80px_-30px_rgba(11,15,19,.55)] ring-1 ring-ndm-ink/[.06] ${open ? 'is-on' : ''} ${small ? 'inset-x-2 bottom-2 top-[76px] rounded-[22px]' : 'h-[min(600px,calc(100vh-140px))] w-[380px] rounded-[22px]'}`}
-        style={small ? {} : { right: 24, bottom: bottom + 72 }}>
-        <header className="flex items-center gap-3 bg-ndm-night px-4 py-3.5 text-white">
-          <span className="relative size-10 shrink-0"><img src={CHAT_AGENT.img} alt="" className="size-10 rounded-full object-cover ring-2 ring-white/15" /><i className="absolute bottom-0 right-0 size-2.5 rounded-full bg-[#3DDC84] ring-2 ring-ndm-night" /></span>
-          <span className="min-w-0 flex-1">
-            <span className="block font-inter text-[15px] font-semibold">{CHAT_AGENT.name} <span className="font-normal text-white/70">· NewDermaMed</span></span>
-            <span className="block font-inter text-[12px] text-white/70">Virtual assistant, our care team follows up</span>
-          </span>
-          <button type="button" onClick={() => setOpen(false)} aria-label="Close chat" className="grid size-9 place-items-center rounded-full text-white/85 hover:bg-white/10 hover:text-white"><IconClose size={18} /></button>
+        className={`chat-panel fixed z-[62] flex flex-col overflow-hidden bg-white shadow-[0_40px_80px_-30px_rgba(11,15,19,.55)] ring-1 ring-ndm-ink/[.06] ${open ? 'is-on' : ''} ${small ? 'inset-x-2 bottom-2 top-[76px] rounded-[26px]' : 'h-[min(640px,calc(100vh-140px))] w-[400px] rounded-[26px]'}`}
+        style={small ? {} : { right: 24, bottom: bottom + 76 }}>
+        <header className={`chat-head relative px-5 pt-4 text-white ${msgs.length ? 'pb-4' : 'pb-14'}`}>
+          <div className="flex items-center gap-3">
+            <span className="relative size-11 shrink-0"><img src={CHAT_AGENT.img} alt="" className="size-11 rounded-full object-cover ring-2 ring-white/40" /><i className="absolute bottom-0 right-0 size-3 rounded-full bg-[#3DDC84] ring-2 ring-[#0F80C3]" /></span>
+            <span className="min-w-0 flex-1">
+              <span className="block font-inter text-[15px] font-semibold">{CHAT_AGENT.name} <span className="font-normal text-white/75">· NewDermaMed</span></span>
+              <span className="block font-inter text-[12px] text-white/75">Virtual assistant, our care team follows up</span>
+            </span>
+            <button type="button" onClick={() => setOpen(false)} aria-label="Close chat" className="grid size-9 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20"><IconClose size={16} /></button>
+          </div>
+          {!msgs.length && <p className="mt-5 font-aeonik text-[26px] leading-[1.1] tracking-[-0.02em]">Hi there,<br /><span className="tt-strong">how can we help?</span></p>}
         </header>
-        <div ref={list} className="flex-1 space-y-3 overflow-y-auto overscroll-contain bg-ndm-paper px-4 py-4" aria-live="polite">
+        {!msgs.length && (
+          <div className="chat-quick relative z-[1] -mt-9 grid grid-cols-3 gap-2 px-4">
+            <a href="#/book" onClick={() => setOpen(false)}><i aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><rect x="3.5" y="5" width="17" height="15" rx="3" /><path d="M8 3v4M16 3v4M3.5 10h17" /></svg></i>Book a free consultation</a>
+            {PHONES.map((ph) => <a key={ph.label} href={tel(ph.num)}><i aria-hidden="true"><IconPhone /></i>Call {ph.label}<span className="-mt-1.5 block whitespace-nowrap text-[11px] font-normal tabular-nums tracking-[-0.01em] text-ndm-muted">{ph.num}</span></a>)}
+          </div>
+        )}
+        <div ref={list} className="chat-body flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-4" aria-live="polite">
           <div className="chat-msg max-w-[88%] rounded-[16px] rounded-tl-[6px] bg-white px-3.5 py-2.5 font-inter text-[14px] leading-[1.5] text-ndm-ink shadow-[0_6px_16px_-12px_rgba(27,36,43,.4)]">
             Hi, I’m {CHAT_AGENT.name} from NewDermaMed. I can help with booking, our two Toronto clinics, hours, payment plans and treatments. Pick a question or type your own.
           </div>
@@ -4898,10 +4962,10 @@ function ChatBot({ ready, hidden }) {
           {typing && <div className="chat-msg flex w-fit gap-1 rounded-[16px] rounded-tl-[6px] bg-white px-3.5 py-3 shadow-[0_6px_16px_-12px_rgba(27,36,43,.4)]" aria-label="Typing">{[0, 1, 2].map((d) => <i key={d} className="chat-dot size-1.5 rounded-full bg-ndm-muted" style={{ animationDelay: `${d * 0.15}s` }} />)}</div>}
           {left.length > 0 && !typing && (
             <div className="pt-1">
-              <p className="font-inter text-[12px] text-ndm-muted">{msgs.length ? 'You can also ask' : 'Common questions'}</p>
-              <ul className="mt-2 flex flex-wrap gap-2" role="list">
-                {left.slice(0, msgs.length ? 3 : 6).map((pq) => (
-                  <li key={pq[0]}><button type="button" onClick={() => ask(pq[0], pq)} className="rounded-full border border-ndm-deep/25 bg-white px-3 py-1.5 text-left font-inter text-[13px] text-ndm-deep transition-colors hover:border-ndm-deep hover:bg-ndm-deep hover:text-white">{pq[0]}</button></li>
+              <p className="font-inter text-[11.5px] font-medium uppercase tracking-[.12em] text-ndm-muted">{msgs.length ? 'You can also ask' : 'Common questions'}</p>
+              <ul className="mt-2 grid gap-1.5" role="list">
+                {left.slice(0, msgs.length ? 3 : 5).map((pq) => (
+                  <li key={pq[0]}><button type="button" onClick={() => ask(pq[0], pq)} className="group flex w-full items-center justify-between gap-3 rounded-[14px] bg-white px-3.5 py-2.5 text-left font-inter text-[13.5px] text-ndm-ink ring-1 ring-ndm-ink/[.07] transition hover:text-ndm-deep hover:ring-ndm-deep/50">{pq[0]}<IconArrow size={11} className="shrink-0 text-ndm-deep transition-transform group-hover:translate-x-0.5" /></button></li>
                 ))}
               </ul>
             </div>
@@ -5124,6 +5188,12 @@ const BFS_GROUP = {
   'coolsculpting-tight-sculpting': 'Body', 'non-surgical-butt-lift': 'Body', 'hair-loss': 'Hair',
   'laser-vaginal-tightening': 'Wellness', 'snoring-treatment': 'Wellness', 'toenail-fungus-removal': 'Wellness',
 };
+/* treatment photos for the deal cards (only where the site has one) */
+const BFS_PIC = {
+  'laser-skin-resurfacing': 'assets/treatments/laser-resurfacing.jpg', 'photo-rejuvenation': 'assets/treatments/photo-rejuvenation.jpg', microneedling: 'assets/treatments/microneedling.jpg',
+  facial: 'assets/treatments/age-element-facial.jpg', 'chemical-peel': 'assets/treatments/chemical-peel.jpg', 'dermal-fillers': 'assets/treatments/lip-filler.jpg',
+  'skin-booster-and-bio-stimulators': 'assets/treatments/skin-booster.jpg', 'aptos-thread-method': 'assets/aptos/midface-vectors.jpg',
+};
 const BFS_TABS = ['All deals', 'Laser', 'Skin', 'Injectables', 'Body', 'Hair', 'Wellness'];
 const BFS_CONCERNS = [
   ['Unwanted hair', 'Choose your area and laser hair removal package.', ['laser-hair-removal']],
@@ -5165,15 +5235,58 @@ html.bfs .btn-book::before{background:var(--r-d)}
 html.bfs .btn-ink,html.bfs .btn-buy{background:var(--k);border-color:var(--k);color:#fff}
 html.bfs .btn-ink:hover,html.bfs .btn-buy:hover{background:var(--r);border-color:var(--r)}
 /* red ticker */
-.bfs-tick{background:var(--r);color:#fff;overflow:hidden;white-space:nowrap}
 .bfs-tick-in{display:inline-flex;animation:bfsTick 38s linear infinite}
 .bfs-tick-in span{display:inline-flex;align-items:center;gap:22px;padding-right:22px}
 .bfs-tick-in i{width:5px;height:5px;border-radius:9px;background:#fff;opacity:.7}
 @keyframes bfsTick{to{transform:translateX(-50%)}}
 /* hero */
-.bfs-hero{background:radial-gradient(60% 70% at 85% 30%,rgba(211,18,29,.28),transparent 60%),radial-gradient(40% 50% at 10% 100%,rgba(211,18,29,.16),transparent 70%),var(--k)}
-.bfs-hero-pic{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 45%);mask-image:linear-gradient(90deg,transparent 0,#000 45%)}
-@media (max-width:1023px){.bfs-hero-pic{-webkit-mask-image:linear-gradient(0deg,transparent 0,#000 70%);mask-image:linear-gradient(0deg,transparent 0,#000 70%)}}
+.bfs-hero{background:radial-gradient(55% 60% at 88% 18%,rgba(211,18,29,.42),transparent 62%),radial-gradient(45% 55% at 0% 100%,rgba(211,18,29,.22),transparent 70%),var(--k)}
+/* round 26 */
+.bfs-big{position:absolute;right:-3vw;top:-7vw;z-index:-1;font-size:44vw;line-height:1;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.09);pointer-events:none;user-select:none;animation:bfsDrift 14s ease-in-out infinite alternate}
+.bfs-big-l{right:auto;left:-6vw;top:-10vw;font-size:52vw;z-index:0;-webkit-text-stroke:1.5px rgba(255,255,255,.06)}
+.bfs-grid{position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(70% 70% at 50% 40%,#000,transparent);mask-image:radial-gradient(70% 70% at 50% 40%,#000,transparent)}
+.bfs-fri{color:transparent;background:linear-gradient(100deg,#fff 0%,#fff 35%,#FF6B73 50%,#fff 65%,#fff 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;animation:bfsShine 5s linear infinite;padding-right:.08em}
+.bfs-rise>*{animation:bfsRise .9s cubic-bezier(.2,.7,.2,1) both}
+.bfs-rise>*:nth-child(2){animation-delay:.08s}.bfs-rise>*:nth-child(3){animation-delay:.16s}.bfs-rise>*:nth-child(4){animation-delay:.24s}.bfs-rise>*:nth-child(5){animation-delay:.32s}
+.bfs-fan-card{position:absolute;left:29%;top:6%;width:42%;height:88%;transition:transform .9s cubic-bezier(.3,.7,.2,1),opacity .6s ease,filter .9s ease}
+.bfs-pos-0{transform:translateX(-66%) translateY(12px) rotate(-10deg) scale(.9);z-index:2;filter:brightness(.72)}
+.bfs-pos-1{transform:translateY(-8px) scale(1.05);z-index:4}
+.bfs-pos-2{transform:translateX(66%) translateY(12px) rotate(10deg) scale(.9);z-index:3;filter:brightness(.72)}
+.bfs-pos-3{transform:translateY(22px) scale(.74);z-index:1;opacity:0;pointer-events:none}
+.bfs-fan-ring{position:absolute;left:50%;top:50%;z-index:0;width:112%;aspect-ratio:1;border-radius:50%;border:1px dashed rgba(255,255,255,.16);transform:translate(-50%,-50%);animation:bfsSpin 40s linear infinite;pointer-events:none}
+.bfs-fan-ring::after{content:"";position:absolute;left:50%;top:-5px;width:10px;height:10px;border-radius:50%;background:var(--r-l);box-shadow:0 0 18px 4px rgba(238,58,69,.7)}
+@keyframes bfsSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.bfs-tapes{position:relative;height:118px;margin-top:8px}
+.bfs-tape{overflow:hidden;white-space:nowrap;padding:11px 0;font:600 12.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase}
+.bfs-tapes .bfs-tape{position:absolute;left:-5%;width:110%}
+.bfs-tapes .bfs-tape:first-child{top:22px;transform:rotate(-2.2deg);z-index:1}
+.bfs-tapes .bfs-tape:last-child{top:52px;transform:rotate(1.6deg)}
+.bfs-tape-red{background:var(--r);color:#fff}
+.bfs-tape-white{background:#fff;color:#0B0B0C}
+.bfs-tape-white i{background:var(--r)!important;opacity:1!important}
+.bfs-tick-in.is-rev{animation-direction:reverse}
+.bfs-chip-n{color:var(--r)}.bfs-chip-k{color:#5A646C}.bfs-chip-d{color:#5A646C}
+.bfs-chip-go{background:rgba(11,11,12,.06);color:#0B0B0C;transition:background-color .25s ease,color .25s ease,transform .4s cubic-bezier(.2,.7,.2,1)}
+.bfs-chip:hover .bfs-chip-go{background:var(--r);color:#fff;transform:rotate(-45deg)}
+.bfs-chip[aria-pressed="true"] .bfs-chip-n{color:#FF4B55}.bfs-chip[aria-pressed="true"] .bfs-chip-k,.bfs-chip[aria-pressed="true"] .bfs-chip-d{color:rgba(255,255,255,.65)}
+.bfs-chip[aria-pressed="true"] .bfs-chip-go{background:var(--r);color:#fff;transform:rotate(90deg)}
+.bfs-head{background:radial-gradient(90% 120% at 0% 100%,rgba(211,18,29,.5),transparent 60%),#0B0B0C}
+.bfs-head-pic{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 70%);mask-image:linear-gradient(90deg,transparent 0,#000 70%);opacity:.85;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.bfs-card:hover .bfs-head-pic{transform:scale(1.06)}
+.bfs-ticket.on-k::before,.bfs-ticket.on-k::after{background:#0B0B0C}
+.bfs-ticket{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.bfs-ticket:hover{transform:translateY(-6px) rotate(-.6deg)}
+.bfs-how-n{font-size:clamp(64px,6vw,88px);line-height:.8;letter-spacing:-.05em;color:var(--r)}
+.bfs-how-n i{font-style:normal;color:rgba(11,11,12,.12)}
+.bfs-how-card{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease}
+.bfs-how-card:hover{transform:translateY(-5px);box-shadow:0 34px 60px -40px rgba(60,10,14,.5)}
+.bfs-how-go{position:absolute;z-index:1;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--r);color:#fff;box-shadow:0 0 0 6px var(--pp);left:50%;bottom:-27px;transform:translateX(-50%) rotate(90deg)}
+@media (min-width:768px){.bfs-how-go{left:auto;right:-29px;bottom:auto;top:50%;transform:translateY(-50%)}}
+@keyframes bfsDrift{to{transform:translate3d(-2vw,1.5vw,0)}}
+@keyframes bfsShine{from{background-position:125% 0}to{background-position:-125% 0}}
+@keyframes bfsRise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@media (max-width:767px){.bfs-big{font-size:70vw;top:8vw;right:-10vw}.bfs-tapes{height:104px}}
+@media (prefers-reduced-motion:reduce){.bfs-big,.bfs-fri,.bfs-rise>*,.bfs-fan-ring{animation:none}.bfs-ticket,.bfs-fan-card{transition:none}}
 .bfs-dot{color:var(--r)}
 .bfs-cd{background:rgba(11,11,12,.55);border:1px solid rgba(255,255,255,.12);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .bfs-live{width:8px;height:8px;border-radius:9px;background:var(--r-l);box-shadow:0 0 0 0 rgba(238,58,69,.7);animation:bfsPulse 1.8s ease-out infinite}
@@ -5200,15 +5313,11 @@ html.bfs .btn-ink:hover,html.bfs .btn-buy:hover{background:var(--r);border-color
 @media (prefers-reduced-motion:reduce){.bfs-tick-in,.bfs-live{animation:none}.bfs-card,.bfs-chip{transition:none}}
 `;
 
-function BfsTicker() {
-  const words = [`Black Friday · ${BFS.whenShort}`, `Up to ${BFS_MAX}% off selected treatments`, 'Buy 1 get 1 offers on fillers and laser hair removal', 'Free consultation and VISIA® skin analysis', 'Uptown and Downtown Toronto'];
-  const row = <span>{words.map((w) => <Fragment key={w}>{w}<i aria-hidden="true" /></Fragment>)}</span>;
-  return (
-    <div className="bfs-tick relative z-[60] py-2.5 font-inter text-[12px] font-semibold uppercase tracking-[.16em]">
-      <p className="sr-only">{words.join('. ')}</p>
-      <div aria-hidden="true" className="bfs-tick-in">{row}{row}{row}{row}</div>
-    </div>
-  );
+/* round 26: moving tapes. Two crossed strips close the hero; one strip divides sections */
+const BFS_WORDS = [`Black Friday · ${BFS.whenShort}`, `Up to ${BFS_MAX}% off selected treatments`, 'Buy 1 get 1 offers', 'Free consultation and VISIA® skin analysis', 'Uptown and Downtown Toronto'];
+function BfsTape({ tone = 'red', rev = false }) {
+  const row = <span>{BFS_WORDS.map((w) => <Fragment key={w}>{w}<i /></Fragment>)}</span>;
+  return <div aria-hidden="true" className={`bfs-tape bfs-tape-${tone}`}><div className={`bfs-tick-in ${rev ? 'is-rev' : ''}`}>{row}{row}{row}{row}</div></div>;
 }
 
 function BfsHeader({ count }) {
@@ -5256,28 +5365,82 @@ function BfsCountdown() {
   );
 }
 
+/* round 27: the offer tickets turn like a carousel. Every few seconds the front ticket moves left, the right one comes forward
+   and the next one enters from behind; hovering pauses it, and clicking a side ticket brings it to the front */
+function BfsFan() {
+  const cards = SPECIALS.filter((x) => !/botox|dysport/i.test(x.n) && x.deal).slice(0, 5);
+  const n = cards.length;
+  const [k, setK] = useState(0);
+  const [hold, setHold] = useState(false);
+  useEffect(() => {
+    if (REDUCED || hold) return;
+    const t = setInterval(() => setK((x) => x + 1), 2600);
+    return () => clearInterval(t);
+  }, [hold]);
+  return (
+    <ul role="list" onMouseEnter={() => setHold(true)} onMouseLeave={() => setHold(false)} className="bfs-fan relative mx-auto mb-8 hidden h-[clamp(250px,24vw,330px)] w-full max-w-[520px] md:block">
+      {cards.map((x, i) => {
+        const pos = (((i - k) % n) + n + 1) % n; /* 0 left, 1 front, 2 right, others wait behind */
+        return (
+          <li key={x.n} className={`bfs-fan-card bfs-pos-${Math.min(pos, 3)}`} aria-hidden={pos > 2}>
+            <a href="#specials" tabIndex={pos > 2 ? -1 : 0} onClick={(e) => { if (pos !== 1 && pos < 3) { e.preventDefault(); setK((v) => v + (pos === 2 ? 1 : -1)); } else bfsGo('specials')(e); }}
+              className="block h-full w-full overflow-hidden rounded-[22px] bg-white text-[#0B0B0C] shadow-[0_40px_70px_-30px_rgba(0,0,0,.85)]">
+              <span className="relative block h-[62%] overflow-hidden"><img src={x.img} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: x.pos }} /><span className="bfs-off absolute left-2.5 top-2.5 rounded-full px-2.5 py-1 font-inter text-[11px] font-semibold">{x.deal}</span></span>
+              <span className="block border-t-2 border-dashed border-black/10 px-3.5 pt-2.5">
+                <span className="block truncate font-aeonik text-[18px] leading-[1.15]">{x.n}</span>
+                <span className="mt-0.5 block font-inter text-[12.5px] text-ndm-muted">From <b className="font-semibold text-[#D3121F]">${x.p}</b></span>
+              </span>
+            </a>
+          </li>
+        );
+      })}
+      <li aria-hidden="true" className="bfs-fan-ring" />
+    </ul>
+  );
+}
+
+/* round 26: the hero. A giant outlined percentage behind the words, a fan of three offer tickets with the countdown, crossed tapes */
 function BfsHero() {
   return (
     <section aria-labelledby="bfs-title" className="bfs-hero relative isolate overflow-hidden text-white">
-      <img src="assets/hero/clinic-exterior.jpg" alt="" className="bfs-hero-pic absolute right-0 top-0 -z-10 h-[52%] w-full object-cover opacity-40 lg:h-full lg:w-[58%] lg:opacity-60" style={{ objectPosition: '58% 50%' }} />
-      <div className="mx-auto grid max-w-[1280px] gap-10 px-[var(--gx)] pb-[clamp(48px,6vw,88px)] pt-[clamp(150px,22vw,200px)] lg:grid-cols-[minmax(0,1.1fr)_minmax(0,.9fr)] lg:items-end lg:pt-[clamp(72px,8vw,120px)]">
-        <div>
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[.06] px-3.5 py-1.5 font-inter text-[12px] font-semibold uppercase tracking-[.16em] text-white/85"><i className="bfs-live" />Black Friday 2026</p>
-          <h1 id="bfs-title" className="mt-5 font-aeonik text-[clamp(64px,10vw,150px)] font-normal leading-[.9] tracking-[-0.045em]">Black<br />Friday<span className="bfs-dot">.</span></h1>
-          <p className="mt-6 max-w-[54ch] font-inter text-[clamp(16px,1.3vw,18px)] leading-[1.6] text-white/80">
-            <b className="font-semibold text-white">Up to {BFS_MAX}% off selected treatments</b> at NewDermaMed, {BFS.when}. Choose your treatment, pick your package and build one plan with all your savings, then book a free consultation to claim it.
-          </p>
+      <span aria-hidden="true" className="bfs-big font-aeonik">{BFS_MAX}%</span>
+      <span aria-hidden="true" className="bfs-grid" />
+      <div className="mx-auto grid max-w-[1280px] gap-12 px-[var(--gx)] pb-[clamp(36px,4vw,56px)] pt-[clamp(48px,6vw,96px)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,.95fr)] lg:items-center">
+        <div className="bfs-rise">
+          <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[.06] px-3.5 py-1.5 font-inter text-[12px] font-semibold uppercase tracking-[.16em] text-white/85"><i className="bfs-live" />{BFS.when}</p>
+          <h1 id="bfs-title" className="mt-6 font-aeonik text-[clamp(68px,10.5vw,164px)] font-normal leading-[.86] tracking-[-0.05em]">Black<br /><span className="tt-strong bfs-fri">Friday</span><span className="bfs-dot">.</span></h1>
+          <p className="mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1"><span className="font-inter text-[13px] font-semibold uppercase tracking-[.18em] text-white/60">Up to</span><b className="font-aeonik text-[clamp(52px,6vw,84px)] font-normal leading-none tracking-[-0.04em] text-[#EE3A45]">{BFS_MAX}%</b><span className="tt-strong font-aeonik text-[clamp(30px,3.4vw,46px)] leading-none text-white">off</span><span className="basis-full font-inter text-[15px] text-white/65 sm:basis-auto">selected treatments at NewDermaMed</span></p>
+          <p className="mt-5 max-w-[50ch] font-inter text-[clamp(15.5px,1.2vw,17px)] leading-[1.6] text-white/75">Choose your treatment, pick your package and build one plan with all your savings. Then book a free consultation to claim it.</p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Btn href="#deals" v="book" hot onClick={bfsGo('deals')}>Build my plan</Btn>
             <Btn href="#/book" v="glass">Book Free Consultation</Btn>
           </div>
-          <p className="mt-6 font-inter text-[13.5px] text-white/60">Uptown, Yonge &amp; Sheppard · Downtown, Bay &amp; College</p>
         </div>
-        <div className="lg:justify-self-end lg:w-full lg:max-w-[500px]">
-          <BfsCountdown />
-          <p className="mt-3 font-inter text-[12.5px] leading-[1.5] text-white/55">Package prices change with the area and sessions you choose. Your plan keeps a running total of your savings.</p>
+        <div className="relative">
+          <BfsFan />
+          <div className="mx-auto max-w-[520px]"><BfsCountdown /></div>
         </div>
       </div>
+      <div className="bfs-tapes"><BfsTape tone="red" /><BfsTape tone="white" rev /></div>
+    </section>
+  );
+}
+
+/* round 26: the sale in four numbers */
+function BfsStats() {
+  const ref = useRef(null);
+  useReveal(ref);
+  const items = [[`${BFS_MAX}%`, 'Up to, on selected packages'], [String(BFS_DEALS.length), 'Treatment groups on offer'], ['4', 'Days only, Friday to Monday'], ['$0', 'Consultation and VISIA® analysis']];
+  return (
+    <section ref={ref} aria-label="Black Friday at a glance" className="px-[var(--gx)] pt-[clamp(40px,5vw,72px)]">
+      <ul role="list" className="mx-auto grid max-w-[1180px] grid-cols-2 gap-y-8 lg:grid-cols-4">
+        {items.map(([n, l], i) => (
+          <li key={l} className={`rv px-4 text-center ${i ? 'lg:border-l lg:border-black/10' : ''} ${i % 2 ? 'border-l border-black/10' : ''}`} style={{ transitionDelay: `${0.05 * i}s` }}>
+            <b className="block font-aeonik text-[clamp(44px,5vw,72px)] font-normal leading-none tracking-[-0.04em] text-[#0B0B0C]">{n.replace('%', '')}{n.includes('%') && <span className="text-[#D3121F]">%</span>}</b>
+            <span className="mt-2 block font-inter text-[13.5px] leading-[1.4] text-ndm-muted">{l}</span>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
@@ -5288,19 +5451,27 @@ function BfsConcerns({ pick, setPick }) {
   return (
     <section ref={ref} id="concerns" aria-labelledby="bfs-c-title" className="scroll-mt-[84px] px-[var(--gx)] pt-[clamp(64px,7vw,104px)]">
       <div className="mx-auto max-w-[1180px]">
-        <p className="bfs-step rv"><b>1</b>Step 1</p>
-        <h2 id="bfs-c-title" className="rv mt-5 font-aeonik text-[clamp(32px,3.6vw,52px)] font-normal leading-[1.04] tracking-[-0.03em] text-[#0B0B0C]" style={{ transitionDelay: '.05s' }}>What brings you<br /><span className="tt-strong text-[#D3121F]">in today?</span></h2>
-        <p className="rv mt-4 max-w-[56ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.08s' }}>Tap a concern and we shortlist the Black Friday deals for it. Tap it again to see everything.</p>
-        <ul role="list" className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,.8fr)] lg:items-end">
+          <div>
+            <p className="bfs-step rv"><b>1</b>Step 1</p>
+            <h2 id="bfs-c-title" className="rv mt-5 font-aeonik text-[clamp(36px,4.4vw,64px)] font-normal leading-[1] tracking-[-0.035em] text-[#0B0B0C]" style={{ transitionDelay: '.05s' }}>What brings you<br /><span className="tt-strong text-[#D3121F]">in today?</span></h2>
+          </div>
+          <p className="rv max-w-[46ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted lg:pb-2" style={{ transitionDelay: '.08s' }}>Tap a concern and we shortlist the Black Friday deals for it. Tap it again to see everything.</p>
+        </div>
+        <ul role="list" className="mt-9 grid grid-cols-2 gap-3 md:grid-cols-3">
           {BFS_CONCERNS.map(([n, d, ids], i) => {
             const on = pick === n, k = ids.filter((id) => BFS_DEALS.some((x) => x.id === id)).length;
             return (
               <li key={n} className="rv" style={{ transitionDelay: `${0.03 * i}s` }}>
                 <button type="button" aria-pressed={on} onClick={() => { setPick(on ? null : n); if (!on) setTimeout(() => bfsGo('deals')(), 60); }}
-                  className="bfs-chip flex h-full w-full flex-col rounded-[20px] bg-white p-4 text-left ring-1 ring-black/[.06] sm:p-5">
-                  <span className={`font-inter text-[11px] font-semibold uppercase tracking-[.14em] ${on ? 'text-white/60' : 'text-[#D3121F]'}`}>{k} {k === 1 ? 'treatment' : 'treatments'}</span>
-                  <span className="mt-2 font-aeonik text-[clamp(19px,1.6vw,23px)] leading-[1.15]">{n}</span>
-                  <span className={`mt-1.5 hidden font-inter text-[13px] leading-[1.45] sm:block ${on ? 'text-white/70' : 'text-ndm-muted'}`}>{d}</span>
+                  className="bfs-chip group relative flex h-full w-full flex-col overflow-hidden rounded-[22px] bg-white p-4 text-left ring-1 ring-black/[.06] sm:p-6">
+                  <span className="flex items-start justify-between gap-3">
+                    <span className="bfs-chip-n font-aeonik text-[clamp(38px,3.6vw,54px)] leading-none tracking-[-0.04em]">{k}</span>
+                    <span aria-hidden="true" className="bfs-chip-go grid size-9 shrink-0 place-items-center rounded-full"><IconArrow size={12} /></span>
+                  </span>
+                  <span className="bfs-chip-k mt-1 font-inter text-[11px] font-semibold uppercase tracking-[.14em]">{k === 1 ? 'treatment' : 'treatments'}</span>
+                  <span className="mt-4 font-aeonik text-[clamp(20px,1.8vw,26px)] leading-[1.12] tracking-[-0.015em]">{n}</span>
+                  <span className="bfs-chip-d mt-1.5 hidden font-inter text-[13.5px] leading-[1.45] sm:block">{d}</span>
                 </button>
               </li>
             );
@@ -5324,12 +5495,15 @@ function BfsDealCard({ d, plan, toggle }) {
   const save = o[2] > 0 ? o[2] - o[1] : 0;
   return (
     <li id={`bf-${d.id}`} className="scroll-mt-[96px]">
-      <article className={`bfs-card flex h-full flex-col rounded-[24px] bg-white p-5 ring-1 ring-black/[.06] sm:p-6 ${inPlan ? 'is-in' : ''}`}>
-        <div className="flex items-center justify-between gap-3">
-          <span className="font-inter text-[11.5px] font-semibold uppercase tracking-[.16em] text-ndm-muted">{d.group}</span>
-          <span className="bfs-off rounded-full px-3 py-1 font-inter text-[12px] font-semibold">{d.offer}</span>
+      <article className={`bfs-card flex h-full flex-col overflow-hidden rounded-[24px] bg-white p-5 ring-1 ring-black/[.06] sm:p-6 ${inPlan ? 'is-in' : ''}`}>
+        <div className="bfs-head relative -mx-5 -mt-5 mb-5 flex min-h-[150px] flex-col justify-between overflow-hidden p-5 text-white sm:-mx-6 sm:-mt-6 sm:p-6">
+          {BFS_PIC[d.id] && <img src={BFS_PIC[d.id]} alt="" loading="lazy" decoding="async" className="bfs-head-pic absolute inset-y-0 right-0 h-full w-[62%] object-cover" />}
+          <span className="relative font-inter text-[11.5px] font-semibold uppercase tracking-[.16em] text-white/65">{d.group}</span>
+          {d.pct
+            ? <span className="relative flex items-baseline gap-2"><span className="font-inter text-[12px] font-semibold uppercase tracking-[.16em] text-white/70">Up to</span><b className="font-aeonik text-[60px] font-normal leading-[.9] tracking-[-0.04em] text-[#EE3A45]">{d.pct}%</b><span className="tt-strong font-aeonik text-[26px] leading-none">off</span></span>
+            : <span className="relative max-w-[11ch] font-aeonik text-[32px] leading-[1.02] tracking-[-0.02em]">{d.offer.replace(/ (free|50% off)$/, '')} <span className="tt-strong text-[#EE3A45]">{(/(free|50% off)$/.exec(d.offer) || [''])[0]}</span></span>}
         </div>
-        <h3 className="mt-4 font-aeonik text-[clamp(23px,2vw,28px)] font-normal leading-[1.1] tracking-[-0.02em] text-[#0B0B0C]">{cat}</h3>
+        <h3 className="font-aeonik text-[clamp(23px,2vw,28px)] font-normal leading-[1.1] tracking-[-0.02em] text-[#0B0B0C]">{cat}</h3>
         <p className="mt-2 font-inter text-[14px] leading-[1.55] text-ndm-muted">{d.c.blurb}</p>
         {d.items.length > 1 && (
           <label className="mt-5 block">
@@ -5360,7 +5534,7 @@ function BfsDealCard({ d, plan, toggle }) {
                 {o[2] > 0 && <s className="font-inter text-[15px] text-ndm-muted">{money(o[2])}</s>}
               </span>
             </p>
-            {(save > 0 || o[3]) && <span className="pb-1 text-right font-inter text-[12.5px] font-semibold text-[#D3121F]">{save > 0 ? `You save ${money(save)}` : bfsTag(o[3])}</span>}
+            {(save > 0 || o[3]) && <span className="shrink-0 whitespace-nowrap pb-1 text-right font-inter text-[12.5px] font-semibold text-[#D3121F]">{save > 0 ? `You save ${money(save)}` : bfsTag(o[3])}</span>}
           </div>
           <button type="button" onClick={() => toggle({ key, cat, item: bfsShort(it[0], cat), opt: o[0], price: o[1], reg: o[2] || 0, tag: bfsTag(o[3]) })}
             className={`btn mt-5 w-full ${inPlan ? 'btn-line' : 'btn-ink'}`} aria-pressed={inPlan}>
@@ -5414,18 +5588,19 @@ function BfsSpecials() {
   const list = SPECIALS.filter((s) => !/botox|dysport/i.test(s.n)).slice(0, 6);
   const catOf = (s) => { const m = /#pg-([a-z0-9-]+)-h/.exec(s.h || ''); return m && BFS_DEALS.some((d) => d.id === m[1]) ? m[1] : null; };
   return (
-    <section ref={ref} id="specials" aria-labelledby="bfs-s-title" className="scroll-mt-[84px] px-[var(--gx)] pt-[clamp(64px,7vw,104px)]">
+    <section ref={ref} id="specials" aria-labelledby="bfs-s-title" data-nav="dark" className="bfs-dark bfs-band relative mt-[clamp(64px,7vw,104px)] scroll-mt-[68px] overflow-hidden px-[var(--gx)] py-[clamp(72px,8vw,120px)] text-white">
+      <span aria-hidden="true" className="bfs-big bfs-big-l font-aeonik">%</span>
       <div className="mx-auto max-w-[1180px]">
         <div className="text-center">
-          <p className="rv font-inter text-[12px] font-semibold uppercase tracking-[.18em] text-[#D3121F]">Six Black Friday specials</p>
-          <h2 id="bfs-s-title" className="rv mt-4 font-aeonik text-[clamp(32px,3.6vw,52px)] font-normal leading-[1.04] tracking-[-0.03em] text-[#0B0B0C]" style={{ transitionDelay: '.05s' }}>Our most wanted,<br /><span className="tt-strong text-[#D3121F]">at their best price</span></h2>
+          <p className="rv font-inter text-[12px] font-semibold uppercase tracking-[.18em] text-[#EE3A45]">Six Black Friday specials</p>
+          <h2 id="bfs-s-title" className="rv mt-4 font-aeonik text-[clamp(36px,4.4vw,64px)] font-normal leading-[1.04] tracking-[-0.03em] text-white" style={{ transitionDelay: '.05s' }}>Our most wanted,<br /><span className="tt-strong text-[#EE3A45]">at their best price</span></h2>
         </div>
-        <ul role="list" className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <ul role="list" className="relative mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((s, i) => {
             const id = catOf(s);
             return (
               <li key={s.n} className="rv" style={{ transitionDelay: `${0.04 * i}s` }}>
-                <article className="bfs-ticket flex h-full flex-col overflow-hidden rounded-[24px] ring-1 ring-black/[.06]">
+                <article className="bfs-ticket on-k flex h-full flex-col overflow-hidden rounded-[24px] text-[#0B0B0C]">
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#F3F1EF]">
                     <img src={s.img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: s.pos }} />
                     {s.deal && <span className="bfs-off absolute left-3 top-3 rounded-full px-3 py-1.5 font-inter text-[12px] font-semibold">{s.deal}</span>}
@@ -5459,14 +5634,23 @@ function BfsHow() {
   return (
     <section ref={ref} id="how" aria-labelledby="bfs-h-title" className="scroll-mt-[84px] px-[var(--gx)] pt-[clamp(64px,7vw,104px)]">
       <div className="mx-auto max-w-[1180px]">
-        <p className="rv font-inter text-[12px] font-semibold uppercase tracking-[.18em] text-[#D3121F]">How it works</p>
-        <h2 id="bfs-h-title" className="rv mt-4 font-aeonik text-[clamp(32px,3.6vw,52px)] font-normal leading-[1.04] tracking-[-0.03em] text-[#0B0B0C]" style={{ transitionDelay: '.05s' }}>Your plan, in<br /><span className="tt-strong text-[#D3121F]">three simple steps</span></h2>
-        <ol className="mt-10 grid gap-4 md:grid-cols-3">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p className="rv font-inter text-[12px] font-semibold uppercase tracking-[.18em] text-[#D3121F]">How it works</p>
+            <h2 id="bfs-h-title" className="rv mt-4 font-aeonik text-[clamp(36px,4.4vw,64px)] font-normal leading-[1] tracking-[-0.035em] text-[#0B0B0C]" style={{ transitionDelay: '.05s' }}>Your plan, in<br /><span className="tt-strong text-[#D3121F]">three simple steps</span></h2>
+          </div>
+          <div className="rv" style={{ transitionDelay: '.1s' }}><Btn href="#deals" v="book" hot onClick={bfsGo('deals')}>Build my plan</Btn></div>
+        </div>
+        <ol className="bfs-how mt-10 grid gap-4 md:grid-cols-3 md:gap-5">
           {steps.map(([t, d], i) => (
-            <li key={t} className="rv rounded-[24px] bg-white p-6 ring-1 ring-black/[.06]" style={{ transitionDelay: `${0.05 * i}s` }}>
-              <span className="grid size-11 place-items-center rounded-full bg-[#0B0B0C] font-aeonik text-[20px] text-white">{i + 1}</span>
-              <h3 className="mt-5 font-aeonik text-[24px] font-normal leading-[1.1] text-[#0B0B0C]">{t}</h3>
+            <li key={t} className="rv bfs-how-card relative rounded-[26px] bg-white p-6 ring-1 ring-black/[.06] md:p-7" style={{ transitionDelay: `${0.08 * i}s` }}>
+              <span className="flex items-center justify-between gap-4">
+                <span aria-hidden="true" className="bfs-how-n font-aeonik"><i>0</i>{i + 1}</span>
+                <span className="rounded-full bg-[#0B0B0C] px-3 py-1.5 font-inter text-[11px] font-semibold uppercase tracking-[.16em] text-white">Step {i + 1}</span>
+              </span>
+              <h3 className="mt-6 font-aeonik text-[clamp(24px,2.2vw,30px)] font-normal leading-[1.1] tracking-[-0.02em] text-[#0B0B0C]">{t}</h3>
               <p className="mt-2 font-inter text-[15px] leading-[1.6] text-ndm-muted">{d}</p>
+              {i < 2 && <span aria-hidden="true" className="bfs-how-go"><IconArrow size={13} /></span>}
             </li>
           ))}
         </ol>
@@ -5593,10 +5777,10 @@ function App() {
   return (
     <>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:rounded-full focus:bg-[#D3121F] focus:px-4 focus:py-2 focus:font-mont focus:text-white">Skip to content</a>
-      <BfsTicker />
       <BfsHeader count={plan.length} />
       <main id="main">
         <BfsHero />
+        <BfsStats />
         <BfsConcerns pick={pick} setPick={setPick} />
         <BfsDeals pick={pick} setPick={setPick} plan={plan} toggle={toggle} />
         <BfsSpecials />

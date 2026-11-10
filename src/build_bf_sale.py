@@ -59,10 +59,10 @@ function App() {
   return (
     <>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:rounded-full focus:bg-[#D3121F] focus:px-4 focus:py-2 focus:font-mont focus:text-white">Skip to content</a>
-      <BfsTicker />
       <BfsHeader count={plan.length} />
       <main id="main">
         <BfsHero />
+        <BfsStats />
         <BfsConcerns pick={pick} setPick={setPick} />
         <BfsDeals pick={pick} setPick={setPick} plan={plan} toggle={toggle} />
         <BfsSpecials />
