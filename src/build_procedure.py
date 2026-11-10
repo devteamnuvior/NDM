@@ -201,6 +201,12 @@ SPACING = '''
   /* the free skin analysis band sits tight between Visit us and the FAQ */
   main>section[aria-labelledby="analysis-title"]{padding-top:0!important;padding-bottom:0!important}
   main>section[aria-labelledby="faq"]{padding-top:clamp(48px,5vw,72px)!important}
+  /* round 18: the FAQ's sticky heading stops below the section bar; Good to know: number badges, doctor card */
+  main>section[aria-labelledby="faq"] .lg\:sticky{top:200px}
+  .guide-num{background:linear-gradient(135deg,#26B1E7,#0F80C3);box-shadow:0 10px 20px -12px rgba(15,128,195,.9)}
+  .guide-q{box-shadow:0 22px 44px -38px rgba(27,36,43,.35);transition:box-shadow .5s var(--e-out),transform .5s var(--e-out)}
+  .guide-q:hover{transform:translateY(-2px);box-shadow:0 30px 56px -38px rgba(15,128,195,.4)}
+  .guide-doc{background:radial-gradient(90% 80% at 100% 0%,rgba(38,177,231,.14),transparent 60%),linear-gradient(160deg,#fff,#F6F4EF);box-shadow:0 0 0 1px rgba(27,36,43,.06),0 26px 50px -40px rgba(27,36,43,.4)}
 '''
 anchor = '<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>'
 i = s.rindex('</style>', 0, s.index(anchor))

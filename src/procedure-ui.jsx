@@ -110,7 +110,10 @@ const PROC = {
     ],
     trust: 'Treatments are given by our licensed medical team under the medical direction of Dr. Negin Mastouri, Medical Director.',
     updated: ['2026-11-10', 'November 10, 2026'],
-    related: [['Wrinkles & fine lines', 'wrinkles-fine-lines.html'], ['Aptos Thread Lift', 'aptos-thread-lift.html'], ['Dermal fillers', '#/dermal-fillers'], ['Skin boosters', '#/skin-boosters'], ['Before & after gallery', 'before-after.html'], ['All treatment prices', 'pricing.html#prices']],
+    intro: 'Short answers to what people ask most before their first Botox® visit. Your provider confirms everything at your free consultation.',
+    doctor: { name: 'Dr. Negin Mastouri', role: 'Medical Director', img: 'assets/team/negin.jpg' },
+    /* related pages as photo cards: [title, link, photo, kind] */
+    related: [['Wrinkles & fine lines', 'wrinkles-fine-lines.html', 'assets/home/v3/mirror-720.webp', 'Concern'], ['Aptos Thread Lift', 'aptos-thread-lift.html', 'assets/aptos/midface-vectors.jpg', 'Treatment'], ['Dermal fillers', '#/dermal-fillers', 'assets/home/v3/lips-720.webp', 'Treatment'], ['Skin boosters', '#/skin-boosters', 'assets/home/v3/booster-720.webp', 'Treatment'], ['Before & after gallery', 'before-after.html', 'assets/before-after/Botox-e1762379266837.webp', 'Gallery'], ['All treatment prices', 'pricing.html#prices', 'assets/pricing/price-2.jpg', 'Prices']],
   },
   faq: { lead: 'FAQ For', strong: 'Botox®', sub: 'Everything you need to know before starting your journey with us.' },
   faqs: [
@@ -173,7 +176,7 @@ function ProcHero({ p }) {
       </div>
       <div aria-hidden="true" className="absolute inset-0 -z-10 hidden lg:block" style={{ background: 'linear-gradient(90deg,rgba(11,15,19,.72) 0%,rgba(11,15,19,.38) 50%,rgba(11,15,19,.18) 100%),linear-gradient(180deg,rgba(11,15,19,.55) 0%,rgba(11,15,19,0) 30%,rgba(11,15,19,.35) 100%)' }} />
       <div aria-hidden="true" className="absolute inset-0 -z-10 lg:hidden" style={{ background: 'linear-gradient(180deg,rgba(11,15,19,.55) 0%,rgba(11,15,19,.25) 30%,rgba(11,15,19,.6) 62%,rgba(11,15,19,.88) 100%)' }} />
-      <div className="grid items-end gap-10 px-[var(--gx)] pb-[clamp(28px,4.5vw,64px)] pt-[184px] sm:pt-[170px] lg:min-h-[min(100svh,920px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,430px)] lg:items-center xl:gap-[clamp(48px,6vw,110px)]">
+      <div className="grid items-end gap-10 px-[var(--gx)] pb-[clamp(28px,4.5vw,64px)] pt-[184px] sm:pt-[170px] lg:min-h-[min(100svh,920px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)] xl:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:items-center xl:gap-[clamp(48px,6vw,110px)]">
         <div className="max-w-[640px]">
           <TwoTone as="h1" id="proc-title" dark className="rv" size="text-[clamp(44px,5.6vw,88px)]" lead={<>{p.title[0]}<br /></>} strong={p.title[1]} />
           <p className="rv mt-5 max-w-[48ch] font-inter text-[16.5px] leading-[1.6] text-white/80" style={{ transitionDelay: '.08s' }}>{p.sub}</p>
@@ -257,7 +260,7 @@ function ProcOverview({ p }) {
           ))}
         </div>
         {o.tabs.map((t, i) => (
-        <div key={t.label} id={`ov-panel-${i}`} role="tabpanel" aria-labelledby={`ov-t-${i}`} hidden={i !== act} data-pre-keep="" className={`${i === act ? 'ov-in ' : ''}grid gap-7 p-[clamp(20px,2.8vw,40px)] md:grid-cols-[minmax(0,1fr)_minmax(0,300px)] md:items-start md:gap-[clamp(28px,4vw,56px)]`}>
+        <div key={t.label} id={`ov-panel-${i}`} role="tabpanel" aria-labelledby={`ov-t-${i}`} hidden={i !== act} data-pre-keep="" className={`${i === act ? 'ov-in grid' : 'hidden'} gap-7 p-[clamp(20px,2.8vw,40px)] md:grid-cols-[minmax(0,1fr)_minmax(0,300px)] md:items-start md:gap-[clamp(28px,4vw,56px)]`}>
           <div>
             <h3 className="font-aeonik text-[clamp(26px,2.4vw,34px)] font-normal leading-[1.1] tracking-[-0.025em] text-ndm-ink">{t.label}</h3>
             {t.text.map((x, k) => <p key={k} className="mt-4 max-w-[62ch] font-inter text-[16px] leading-[1.75] text-ndm-ink/80">{x}</p>)}
@@ -339,8 +342,9 @@ function ProcAnalysis() {
   const [on, setOn] = useState(false);
   useEffect(() => {
     const el = band.current; if (!el) return;
-    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setOn(true); io.disconnect(); } }, { threshold: 0.3 });
-    io.observe(el);
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setOn(true); io.disconnect(); } }, { threshold: 0.2 });
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.8) setOn(true);
+    io.observe(el.parentElement); /* the band itself is clipped to nothing until it opens, so watch its section */
     return () => io.disconnect();
   }, []);
   const t = (k) => ({ transitionDelay: `${0.85 + k * 0.12}s` });
@@ -474,40 +478,67 @@ function ProcPrices({ p }) {
   );
 }
 
-/* ---------------------------------------------------------------- good to know (SEO round 16, after barbeauty.ca/botox): the questions
-   people search for as question headings with short answers, then who gives the treatment, when the page was updated, and
-   links to related treatments, concerns, the gallery and the prices */
+/* ---------------------------------------------------------------- good to know (SEO round 16, redesigned round 18): a sticky
+   column with the heading, a short intro and who directs the care; beside it the questions as numbered cards; then the related
+   pages as photo cards. Question headings and full answers stay in the page for search engines */
 function ProcGuide({ p }) {
   const ref = useRef(null);
   useReveal(ref);
   const g = p.guide;
+  const n = txNum(p, 'guide');
   return (
     <section ref={ref} id="guide" aria-labelledby="guide-title" className="relative z-10 scroll-mt-[150px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
-      <TxHead p={p} id="guide" tag={g.tag} hid="guide-title" lead={g.lead} strong={g.strong} />
-      <ul className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid gap-3 md:grid-cols-2 md:gap-4`} role="list">
-        {g.items.map((it, i) => (
-          <li key={it.q} className={`rv rounded-[22px] bg-white p-[clamp(20px,2.2vw,30px)] ring-1 ring-ndm-ink/[.06] shadow-[0_22px_44px_-38px_rgba(27,36,43,.35)] ${i === g.items.length - 1 && g.items.length % 2 ? 'md:col-span-2' : ''}`} style={{ transitionDelay: `${0.05 * (i % 2)}s` }}>
-            <h3 className="font-aeonik text-[clamp(21px,1.7vw,25px)] font-normal leading-[1.2] tracking-[-0.015em] text-ndm-ink">{it.q}</h3>
-            {it.a.map((x, k) => <p key={k} className="mt-3 font-inter text-[15.5px] leading-[1.7] text-ndm-ink/80">{x}</p>)}
-            {it.list && (
-              <ul className="mt-3 grid gap-2" role="list">
-                {it.list.map((x) => <li key={x} className="flex items-start gap-2.5 font-inter text-[15px] leading-[1.6] text-ndm-ink/80"><IconCheckBadge className="mt-[3px] shrink-0 text-ndm-deep" />{x}</li>)}
-              </ul>
-            )}
-          </li>
-        ))}
-      </ul>
-      <div className={`${TX_WRAP} rv mt-6 flex flex-col gap-4 rounded-[22px] bg-ndm-mist/80 p-[clamp(18px,2vw,26px)] md:flex-row md:items-center md:justify-between`}>
-        <p className="flex items-start gap-2.5 font-inter text-[14px] leading-[1.55] text-ndm-ink/80">
-          <IconCheckBadge className="mt-[2px] shrink-0 text-ndm-deep" />
-          <span>{g.trust} <span className="text-ndm-muted">Page updated <time dateTime={g.updated[0]}>{g.updated[1]}</time>.</span></span>
-        </p>
+      <div className={`${TX_WRAP} grid gap-8 lg:grid-cols-[minmax(0,.78fr)_minmax(0,1.22fr)] lg:gap-[clamp(40px,5vw,72px)]`}>
+        <div className="lg:sticky lg:top-[200px] lg:self-start">
+          <Eyebrow className="rv">{n && <span className="tabular-nums text-ndm-deep">{n}</span>}{g.tag}</Eyebrow>
+          <TwoTone id="guide-title" className="rv mt-5" size="text-[clamp(32px,3.4vw,50px)]" lead={twoLine(g.lead)} strong={g.strong} style={{ transitionDelay: '.06s' }} />
+          <p className="rv mt-4 max-w-[44ch] font-inter text-[15.5px] leading-[1.65] text-ndm-muted" style={{ transitionDelay: '.1s' }}>{g.intro}</p>
+          <div className="rv guide-doc mt-7 rounded-[22px] p-5" style={{ transitionDelay: '.14s' }}>
+            <div className="flex items-center gap-3.5">
+              <img src={g.doctor.img} alt={`${g.doctor.name}, ${g.doctor.role}, NewDermaMed`} loading="lazy" decoding="async" className="size-14 shrink-0 rounded-full object-cover object-[50%_20%] ring-2 ring-white" />
+              <span className="min-w-0">
+                <span className="block font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-muted">Medical direction</span>
+                <span className="mt-0.5 block font-aeonik text-[19px] leading-[1.2] text-ndm-ink">{g.doctor.name}</span>
+                <span className="block font-inter text-[13px] text-ndm-muted">{g.doctor.role}</span>
+              </span>
+            </div>
+            <p className="mt-4 font-inter text-[14px] leading-[1.55] text-ndm-ink/80">{g.trust}</p>
+            <p className="mt-3 flex items-center gap-2 font-inter text-[12.5px] text-ndm-muted"><IconCheckBadge size={14} className="shrink-0 text-ndm-deep" />Page updated <time dateTime={g.updated[0]}>{g.updated[1]}</time></p>
+            <Btn href="#/book" v="book" hot sm className="mt-5">Book Free Consultation</Btn>
+          </div>
+        </div>
+        <ol className="grid gap-3" role="list">
+          {g.items.map((it, i) => (
+            <li key={it.q} className="rv guide-q relative overflow-hidden rounded-[22px] bg-white p-[clamp(20px,2.2vw,28px)] pl-[clamp(64px,5.2vw,80px)] ring-1 ring-ndm-ink/[.06]" style={{ transitionDelay: `${0.04 * i}s` }}>
+              <span aria-hidden="true" className="guide-num absolute left-[clamp(18px,1.8vw,26px)] top-[clamp(20px,2.2vw,28px)] grid size-9 place-items-center rounded-full font-inter text-[13px] font-semibold tabular-nums text-white">{String(i + 1).padStart(2, '0')}</span>
+              <h3 className="font-aeonik text-[clamp(20px,1.6vw,24px)] font-normal leading-[1.2] tracking-[-0.015em] text-ndm-ink">{it.q}</h3>
+              {it.a.map((x, k) => <p key={k} className="mt-2.5 font-inter text-[15px] leading-[1.7] text-ndm-ink/80">{x}</p>)}
+              {it.list && (
+                <ul className="mt-3 grid gap-2 rounded-[16px] bg-ndm-mist/70 p-4 sm:grid-cols-2" role="list">
+                  {it.list.map((x) => <li key={x} className="flex items-start gap-2.5 font-inter text-[14px] leading-[1.55] text-ndm-ink/85"><IconCheckBadge className="mt-[2px] shrink-0 text-ndm-deep" />{x}</li>)}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ol>
       </div>
-      <nav aria-label="Related treatments" className={`${TX_WRAP} rv mt-6`}>
-        <p className="font-inter text-[12px] font-semibold uppercase tracking-[.16em] text-ndm-muted">Related</p>
-        <ul className="mt-3 flex flex-wrap gap-2" role="list">
-          {g.related.map(([t, h]) => (
-            <li key={t}><a href={h} className="group inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 font-inter text-[14px] text-ndm-ink ring-1 ring-ndm-ink/10 transition-colors hover:text-ndm-deep hover:ring-ndm-deep">{t}<IconArrow size={12} className="text-ndm-deep transition-transform group-hover:translate-x-0.5" /></a></li>
+      <nav aria-labelledby="related-title" className={`${TX_WRAP} mt-[clamp(48px,5vw,72px)]`}>
+        <div className="flex items-end justify-between gap-4">
+          <h3 id="related-title" className="rv font-aeonik text-[clamp(24px,2.2vw,32px)] font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink">Related <span className="tt-strong text-ndm-deep">treatments and pages</span></h3>
+        </div>
+        <ul className="no-scrollbar -mx-[var(--gx)] mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-[var(--gx)] pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 xl:grid-cols-6" role="list" style={{ scrollPaddingInline: 'var(--gx)' }}>
+          {g.related.map(([t, h, img, kind], i) => (
+            <li key={t} className="rv w-[62%] shrink-0 snap-start sm:w-auto" style={{ transitionDelay: `${0.04 * i}s` }}>
+              <a href={h} className="guide-rel group relative block aspect-[4/5] overflow-hidden rounded-[20px] bg-ndm-mist text-white">
+                <img src={img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.06]" />
+                <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#0B0F13]/85 via-[#0B0F13]/20 to-transparent" />
+                <span className="absolute left-3 top-3 rounded-full bg-white/85 px-2.5 py-1 font-inter text-[11.5px] font-medium text-ndm-ink backdrop-blur-[6px]">{kind}</span>
+                <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3.5">
+                  <span className="font-aeonik text-[18px] leading-[1.15]">{t}</span>
+                  <span aria-hidden="true" className="grid size-8 shrink-0 place-items-center rounded-full bg-white text-ndm-deep transition-transform duration-500 group-hover:-rotate-45"><IconArrow size={12} /></span>
+                </span>
+              </a>
+            </li>
           ))}
         </ul>
       </nav>

@@ -134,6 +134,7 @@ SPACING = '''
      Visit us sits close to the band after it */
   main>section[aria-labelledby="team"],main>section[aria-labelledby="testimonials"],main>section#visit{padding-top:clamp(64px,7vw,104px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
   main>section#visit{padding-bottom:clamp(16px,2vw,28px)!important}
+  main>section[aria-labelledby="faq"] .lg\\:sticky{top:200px} /* round 18: below the section bar */
 '''
 anchor = '<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>'
 i = s.rindex('</style>', 0, s.index(anchor))
