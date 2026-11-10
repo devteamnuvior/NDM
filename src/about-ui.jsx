@@ -170,22 +170,106 @@ function TeamBio({ m }) {
 function AboutTeam() {
   const ref = useRef(null);
   useReveal(ref);
+  /* four compact cards, Alin first: each one fits on a single screen; the full bios live in the home page's profile dialog */
+  const people = TEAM_ORDER.map((id) => TEAM.find((m) => m.id === id)).filter(Boolean);
+  /* each card opens the same profile dialog as the home page; a member whose profile has not arrived (sample) stays a plain card */
+  const [sel, setSel] = useState(null);
+  const opener = useRef(null);
+  const open = (m) => (e) => { opener.current = e.currentTarget; setSel(m); };
+  const closed = useCallback(() => {
+    setSel(null);
+    const btn = opener.current;
+    requestAnimationFrame(() => { if (btn && btn.isConnected) btn.focus({ preventScroll: true }); });
+  }, []);
   return (
     <section ref={ref} id="team" aria-labelledby="team-title" className="relative z-10 scroll-mt-[100px] bg-ndm-paper px-[var(--gx)] py-[clamp(80px,9vw,128px)]">
       <SectionHead id="team-title" eyebrow="Our team" lead={<>The people<br /></>} strong="behind your care"
-        intro="Physicians, a vascular surgeon and medical aesthetics specialists. Every treatment plan starts with a consultation and is guided by medical training." />
-      <ul className="rv mt-8 flex flex-wrap gap-2" role="list" aria-label="Jump to a profile" style={{ transitionDelay: '.14s' }}>
-        {TEAM_ORDER.map((id) => TEAM.find((m) => m.id === id)).filter((m) => !m.sample).map((m) => (
-          <li key={m.id}>
-            <a href={`#${m.id}`} onClick={(e) => { e.preventDefault(); scrollToId(m.id); }}
-              className="inline-flex items-center gap-2.5 rounded-full bg-white py-1.5 pl-1.5 pr-4 font-inter text-[14px] text-ndm-ink ring-1 ring-ndm-ink/10 transition-colors hover:ring-ndm-ink/30">
-              <img src={m.img} alt="" className="size-8 rounded-full object-cover object-[50%_15%]" />{m.name}
-            </a>
+        intro="Physicians, a vascular surgeon, a nurse practitioner and medical aesthetics specialists. Every treatment plan starts with a consultation and is guided by medical training." />
+      <ul className="mt-[clamp(36px,4vw,56px)] grid gap-4 sm:grid-cols-2 xl:grid-cols-4" role="list">
+        {people.map((m, i) => (
+          <li key={m.id} id={m.id} className="rv scroll-mt-[110px]" style={{ transitionDelay: `${0.06 * i}s` }}>
+            <article aria-labelledby={`${m.id}-name`} className={`team-card group relative flex h-full flex-col overflow-hidden rounded-[24px] bg-white ring-1 ring-ndm-ink/[.06] transition-shadow ${m.sample ? '' : 'hover:shadow-[0_30px_60px_-36px_rgba(27,36,43,.45)]'}`}>
+              <div className="relative aspect-[4/3] overflow-hidden bg-ndm-mist xl:aspect-square">
+                <img src={m.img} alt={`Portrait of ${m.name}, ${m.role}`} width="800" height="1000" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[50%_18%] transition-transform duration-[1200ms] hover:scale-[1.04]" />
+                <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 font-inter text-[12px] font-medium text-ndm-ink backdrop-blur-[6px]">{m.tag}</span>
+              </div>
+              <div className="flex flex-1 flex-col p-5">
+                {m.cred && <p className={`${TEAM_CRED} truncate text-[10.5px]`} title={m.cred}>{m.cred}</p>}
+                <h3 id={`${m.id}-name`} className="mt-1.5 font-aeonik text-[clamp(22px,1.7vw,26px)] font-normal leading-[1.1] tracking-[-0.02em] text-ndm-ink">
+                  {m.sample ? m.name : <button type="button" onClick={open(m)} aria-haspopup="dialog" className="text-left after:absolute after:inset-0 after:z-[1] after:content-[''] hover:text-ndm-deep focus-visible:outline-none">{m.name}<span className="sr-only">, view full profile</span></button>}
+                </h3>
+                <p className="mt-1 font-inter text-[13.5px] text-ndm-muted">{m.role}</p>
+                <p className="mt-3 line-clamp-3 font-inter text-[14.5px] leading-[1.6] text-ndm-ink/80">{m.short || 'A nurse practitioner on our medical team.'}</p>
+                {m.focus && (
+                  <ul className="mt-4 flex flex-wrap gap-1.5" role="list" aria-label={m.focusLabel}>
+                    {m.focus.slice(0, 2).map(([, label]) => <li key={label} className="rounded-full bg-ndm-mist px-2.5 py-1 font-inter text-[12px] text-ndm-ink">{label}</li>)}
+                  </ul>
+                )}
+                <p aria-hidden="true" className={`mt-auto flex items-center gap-2 pt-5 font-inter text-[13.5px] font-semibold ${m.sample ? 'text-ndm-muted' : 'text-ndm-deep'}`}>
+                  {m.sample ? 'Full profile coming soon' : <>View full profile<IconArrow size={13} className="transition-transform group-hover:translate-x-1" /></>}
+                </p>
+              </div>
+            </article>
           </li>
         ))}
       </ul>
-      <div className="mt-[clamp(40px,5vw,72px)] grid gap-[clamp(56px,7vw,104px)]">
-        {TEAM_ORDER.map((id) => TEAM.find((m) => m.id === id)).filter((m) => !m.sample).map((m) => <TeamBio key={m.id} m={m} />)}
+      {sel && ReactDOM.createPortal(<TeamProfile m={sel} onClose={closed} />, document.body)}
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------- about NewDermaMed, over the clinic film (same as the home page):
+   the framed film opens to full width as it comes into view; the numbers sit in the pricing-hero strip */
+const ABOUT_FILM = { poster: 'assets/home/v3/tour-poster-1440.webp', src: 'assets/home/v3/tour-1600.mp4' };
+const ABOUT_STATS = [[16, '+', 'years', 'In Toronto'], [8, '', 'Top Choice Awards', 'In a row, 2019 to 2026'], [2, '', 'Toronto clinics', 'Uptown and Downtown'], [20, '+', 'categories', 'Of treatment']];
+function AboutFilm({ hero = false }) {
+  const ref = useRef(null), frame = useRef(null), vid = useRef(null), stats = useRef(null);
+  useReveal(ref);
+  const run = useInView(stats, { threshold: 0.4 });
+  useEffect(() => {
+    const v = vid.current; if (!v) return;
+    v.muted = true;
+    if (REDUCED || (navigator.connection && navigator.connection.saveData)) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { const q = v.play(); if (q && q.catch) q.catch(() => {}); } else v.pause(); }, { rootMargin: '100% 0px' });
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
+  useOnScroll(() => {
+    const el = frame.current; if (!el || REDUCED) return;
+    if (hero) { el.style.setProperty('--p', '1'); return; } /* as the page header it is full width from the start */
+    const h = window.innerHeight, r = el.getBoundingClientRect();
+    el.style.setProperty('--p', clamp01((h * 1.3 - r.top) / (h * 0.5)).toFixed(3));
+  }, []);
+  const go = (id) => (e) => { e.preventDefault(); scrollToId(id); };
+  const H = hero ? 'h1' : 'h2';
+  return (
+    <section ref={ref} id={hero ? 'top' : 'about-ndm'} aria-labelledby="about-ndm-title" data-nav="dark" className="relative z-10 bg-ndm-night">
+      <div ref={frame} className={`cf-frame ${hero ? 'is-hero' : ''}`} style={hero ? { '--p': 1 } : undefined}>
+        <video ref={vid} muted loop playsInline preload="auto" poster={ABOUT_FILM.poster} aria-hidden="true"><source src={ABOUT_FILM.src} type="video/mp4" /></video>
+        <div className="absolute inset-x-0 bottom-0 z-[2] grid gap-8 px-[var(--gx)] pb-[clamp(28px,4.5vw,64px)] lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+          <div>
+            <Eyebrow dark className="rv">About NewDermaMed</Eyebrow>
+            <TwoTone as={H} dark id="about-ndm-title" className="rv mt-4" size={hero ? 'text-[clamp(38px,4.8vw,72px)]' : 'text-[clamp(32px,4vw,60px)]'} lead={<>Toronto’s cosmetic<br /></>} strong="and laser clinic" style={{ transitionDelay: '.05s' }} />
+            <p className="rv mt-3 max-w-[56ch] font-inter text-[15.5px] leading-[1.6] text-white/80" style={{ transitionDelay: '.1s' }}>{STATEMENT} Recognized as Toronto’s Top Choice Cosmetic &amp; Laser Clinic for eight consecutive years.</p>
+            {hero && (
+              <div className="rv mt-7 flex flex-wrap gap-3" style={{ transitionDelay: '.14s' }}>
+                <Btn href="#/book" v="book" onDark>Book Free Consultation</Btn>
+                <Btn href="#team" onClick={go('team')} v="glass">Meet our team</Btn>
+              </div>
+            )}
+          </div>
+          <ul ref={stats} className="rv grid grid-cols-2 gap-y-5 border-t border-white/15 pt-6 sm:flex sm:items-center lg:border-0 lg:pt-0" role="list" style={{ transitionDelay: '.18s' }}>
+            {ABOUT_STATS.map(([n, suf, t, l], k) => (
+              <Fragment key={t}>
+                <li className="min-w-0 px-1 py-1 text-center sm:flex-1 lg:w-[clamp(160px,11.5vw,220px)] lg:flex-none">
+                  <span className="block font-inter text-[14px] font-medium leading-[1.3] text-white sm:text-[15px]"><span className="tabular-nums"><CountUp to={n} run={run} suffix={suf} /></span> {t}</span>
+                  <span className="mt-1.5 block font-inter text-[12px] leading-[1.35] text-ndm-soft sm:mt-2.5 sm:text-[13px]">{l}</span>
+                </li>
+                {k < ABOUT_STATS.length - 1 && <li role="presentation" aria-hidden="true" className="hidden h-[50px] w-px shrink-0 bg-[#B9B9B9]/60 sm:block" />}
+              </Fragment>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );

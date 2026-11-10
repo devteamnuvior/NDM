@@ -59,9 +59,27 @@ css = '''
   .tx-line i{transform:scaleX(0);transition:transform 1s var(--e-out) calc(var(--d,0s) + .2s)}
   .tx-steps.in .tx-line i{transform:scaleX(1)}
   .tx-step:last-child .tx-line{visibility:hidden}
-  /* NAMICA ring on the intro photo: the words turn slowly around the sphere */
+  /* NAMICA badge on the intro photo: the ring of words and the sphere turn together, as one piece */
   .tx-ring{filter:drop-shadow(0 18px 30px rgba(53,40,98,.35))}
-  .tx-ring-text{animation:nmTurn 24s linear infinite}
+  .tx-ring-spin{animation:nmTurn 30s linear infinite}
+  /* warm peach light on photos */
+  .peach{position:relative}
+  .peach::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 18% 8%,rgba(255,186,148,.55),rgba(255,186,148,0) 62%),linear-gradient(180deg,rgba(255,206,176,.14),rgba(255,170,130,.08));mix-blend-mode:soft-light}
+  .peach img{filter:sepia(.1) saturate(1.06) brightness(1.02)}
+  /* every light section on this page (as on the Botox page): one paper colour; soft glows on a layer that fades at the top and
+     bottom, so no join shows */
+  main>section:not([data-nav="dark"]){background-color:#FAFAF8!important;background-image:none!important;isolation:isolate}
+  main>section:not([data-nav="dark"])::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;-webkit-mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);background:radial-gradient(40% 50% at 96% 45%,rgba(255,190,160,.18),transparent 70%)}
+  main>section:not([data-nav="dark"]):nth-of-type(even)::before{background:radial-gradient(40% 50% at 4% 55%,rgba(255,206,182,.18),transparent 70%)}
+  /* the price list keeps a light peach wash, on the same fading layer, and its open header stays in place (Botox look) */
+  main>section.proc-peach.proc-peach:not([data-nav="dark"])::before{background:radial-gradient(55% 60% at 12% 35%,rgba(255,190,158,.3),transparent 70%),radial-gradient(50% 55% at 92% 70%,rgba(255,176,140,.22),transparent 70%)}
+  .proc-peach .pr-group.is-open>.pr-ghead{position:static;background:transparent}
+  .analysis-card{background:rgba(11,15,19,.42);border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(16px) saturate(130%);backdrop-filter:blur(16px) saturate(130%);box-shadow:0 40px 80px -40px rgba(0,0,0,.7)}
+  /* elevate your results: the timing strip on a soft blue to peach wash, an arrow joining its two stops */
+  .tx-when{background:linear-gradient(110deg,rgba(38,177,231,.14),rgba(255,206,182,.28))}
+  .tx-when-arrow{box-shadow:0 0 0 6px #FAFAF8}
+  .tx-pair-card{transition:transform .5s var(--e-out),box-shadow .5s var(--e-out)}
+  .tx-pair-card:hover{transform:translateY(-4px);box-shadow:0 30px 50px -34px rgba(15,60,95,.45)}
   /* licensed product card and the how-long-it-lasts card, in NUVIOR's Aptos purple */
   .tx-product{background:radial-gradient(120% 90% at 50% 0%,#5B48B0 0%,#352862 55%,#221a45 100%)}
   .tx-product-img{filter:drop-shadow(0 30px 40px rgba(10,6,30,.55));animation:nmFloat 7s ease-in-out infinite}
@@ -71,7 +89,7 @@ css = '''
   .tx-thread.in .tx-bub{animation:txBub 5.5s ease-in-out var(--d,0s) infinite}
   @keyframes txBub{0%{opacity:0;transform:translateY(10px) scale(.4)}20%{opacity:.95;transform:translateY(0) scale(1)}70%{opacity:.75;transform:translateY(-14px) scale(1)}100%{opacity:0;transform:translateY(-26px) scale(1.25)}}
   .tx-nav a{transition:background-color .3s ease,color .3s ease}
-  @media (prefers-reduced-motion:reduce){.tx-step{opacity:1;transform:none;transition:none}.tx-line i{transform:none;transition:none}.tx-ring-text,.tx-product-img,.tx-thread.in .tx-bub{animation:none}.tx-bub{opacity:.8;transform:none}}
+  @media (prefers-reduced-motion:reduce){.tx-step{opacity:1;transform:none;transition:none}.tx-line i{transform:none;transition:none}.tx-ring-spin,.tx-product-img,.tx-thread.in .tx-bub{animation:none}.tx-bub{opacity:.8;transform:none}}
   /* treatments inside an open category: blue circle, white plus */
   .pr-sub .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   @media (max-width:639px){.ba-grid>li{flex:0 0 min(78vw,300px);scroll-snap-align:start}}
@@ -88,7 +106,7 @@ css = '''
   @media (min-width:1280px){.pr-group.is-open>.pr-ghead{top:120px}}
   .pr-gplus{width:44px;height:44px}
   .pr-ghead button:hover .pr-gplus{border-color:#1B242B}
-  .pr-group.is-open>.pr-ghead .pr-gplus{background:#1B242B;border-color:#1B242B;color:#fff}
+  .pr-group.is-open>.pr-ghead .pr-gplus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-group.is-open>.pr-ghead .pr-gplus i+i{transform:rotate(0deg)}
   .pr-group.is-open>.pr-body{grid-template-rows:1fr}
   .pr-group.is-open>.pr-body>div{visibility:visible;transition-delay:0s}
@@ -98,7 +116,7 @@ css = '''
   .pr-plus i{position:absolute;left:50%;top:50%;width:13px;height:1.5px;margin:-.75px 0 0 -6.5px;border-radius:2px;background:currentColor;transition:transform .45s var(--e-out)}
   .pr-plus i+i{transform:rotate(90deg)}
   .pr-head:hover .pr-plus,.pr-ghead button:hover .pr-gplus{border-color:#1B242B}
-  .pr-item.is-open>h4 .pr-plus{background:#1B242B;border-color:#1B242B;color:#fff}
+  .pr-item.is-open>h4 .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-item.is-open>h4 .pr-plus i+i{transform:rotate(0deg)}
   .pr-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--e-out)}
   .pr-body>div{min-height:0;overflow:hidden;visibility:hidden;transition:visibility 0s linear .5s}
@@ -111,9 +129,16 @@ css = '''
   .pr-tag{padding:6px 10px;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
   @media (prefers-reduced-motion:reduce){.offer-dot{animation:none}.say-w,.pr-body,.pr-body>div,.pr-plus i{transition:none}}
 '''
+SPACING = '''
+  /* round 12: Our team, Testimonials and Visit us use the same spacing as the treatment sections (e.g. Elevate your results);
+     Visit us sits close to the band after it */
+  main>section[aria-labelledby="team"],main>section[aria-labelledby="testimonials"],main>section#visit{padding-top:clamp(64px,7vw,104px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
+  main>section#visit{padding-bottom:clamp(16px,2vw,28px)!important}
+  main>section[aria-labelledby="faq"] .lg\\:sticky{top:200px} /* round 18: below the section bar */
+'''
 anchor = '<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>'
 i = s.rindex('</style>', 0, s.index(anchor))
-s = s[:i] + css + s[i:]
+s = s[:i] + css + SPACING + s[i:]
 
 a = s.index('\nfunction App() {')
 b = s.index('ReactDOM.createRoot', a)
@@ -153,6 +178,8 @@ function App() {
         <TxWhy p={APT} />
         <Team />
         <PromoReviews />
+        <TxVisit p={APT} />
+        <ProcAnalysis />
         <Faq items={APT.faqs} lead="Your top questions," strong="answered" intro="What to know about the Aptos Thread Lift, from our medical team." />
       </main>
       <Footer />

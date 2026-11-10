@@ -1,0 +1,85 @@
+const VID = 'https://newdermamedlaserclinic.com/wp-content/uploads/2025/09/';
+const SPACE = { t: 'A state-of-the-art clinic', d: 'Two Toronto locations, Uptown on Yonge Street and Downtown on Bay Street, built around comfort and privacy.', chips: ['Uptown & Downtown', 'Near the subway', 'VISIA® analysis'], v: 'slide-1' };
+
+function SpaceClip({ x, vref }) {
+  const ref = useRef(null);
+  useEffect(() => { vref(ref.current); }, []);
+  return (
+    <video ref={ref} muted loop playsInline preload="metadata" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover">
+      <source src={`${VID}${x.v}-Mobile.mp4`} type="video/mp4" media="(max-width: 767px)" />
+      <source src={`${VID}${x.v}-1.mp4`} type="video/mp4" />
+    </video>
+  );
+}
+
+/* inside our clinics (Makeupy "Makeup session"): a small video under the heading grows to full screen as you scroll;
+   one clinic film, with its card, then the page carries on */
+function Space() {
+  const track = useRef(null), stage = useRef(null), head = useRef(null), frame = useRef(null), ui = useRef(null), sides = useRef(null);
+  const vids = useRef([]);
+  useEffect(() => {
+    const st = stage.current; if (!st) return;
+    const io = new IntersectionObserver(([e]) => vids.current.forEach((v) => {
+      if (!v) return;
+      if (e.isIntersecting && !REDUCED) { const p = v.play(); if (p && p.catch) p.catch(() => {}); } else v.pause();
+    }));
+    io.observe(st);
+    return () => io.disconnect();
+  }, []);
+  useOnScroll(() => {
+    const el = track.current, f = frame.current, h = head.current; if (!el || !f || !h) return;
+    const r = el.getBoundingClientRect(), vh = window.innerHeight, vw = window.innerWidth;
+    const p = REDUCED ? 1 : clamp01(-r.top / Math.max(1, r.height - vh));
+    /* grow from a card under the heading to the full screen (first 55% of the pass), then hold */
+    const g = easeInOut(clamp01(p / 0.55));
+    const top0 = h.offsetTop + h.offsetHeight + 28;
+    const w0 = vw < 768 ? vw * 0.9 : Math.min(880, Math.max(420, vw * 0.54));
+    const s0 = Math.min(w0 / vw, Math.max(0.2, (vh - top0 - 24) / vh));
+    const s = s0 + (1 - s0) * g;
+    const dy = (top0 + (vh * s0) / 2 - vh / 2) * (1 - g);
+    f.style.transform = `translate3d(0,${dy.toFixed(1)}px,0) scale(${s.toFixed(4)})`;
+    f.style.borderRadius = `${((24 * (1 - g)) / s).toFixed(2)}px`;
+    h.style.opacity = (1 - clamp01((g - 0.35) / 0.4)).toFixed(3);
+    h.style.transform = `translate3d(0,${(-40 * g).toFixed(1)}px,0)`;
+    if (sides.current) { sides.current.style.opacity = (1 - clamp01(g / 0.35)).toFixed(3); sides.current.style.transform = `translate3d(0,${(-60 * g).toFixed(1)}px,0)`; }
+    if (ui.current) ui.current.style.opacity = clamp01((g - 0.8) / 0.2).toFixed(3);
+    stage.current.dataset.nav = g > 0.92 ? 'dark' : '';
+  }, []);
+  const glass = { background: 'rgba(11,15,19,.35)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)' };
+  const s = SPACE;
+  return (
+    <section aria-labelledby="space" className="relative z-10 bg-ndm-paper">
+      <div ref={track} className="relative" style={{ height: REDUCED ? '100vh' : '230vh' }}>
+        <div ref={stage} className="sticky top-0 h-screen overflow-hidden">
+          <div ref={head} className="absolute inset-x-0 top-[clamp(104px,14vh,150px)] px-[var(--gx)] text-center will-change-transform">
+            <p className="eyebrow font-mont">
+              <span className="eyebrow-mark" aria-hidden="true"><img src="assets/icons/logo-mark.svg" alt="" /></span>Inside our clinics
+            </p>
+            <TwoTone id="space" className="mx-auto mt-4" size="text-[clamp(32px,min(4.2vw,7vh),62px)]" lead={<>Step inside<br className="hidden sm:block" /></>} strong="NewDermaMed" />
+            <p className="mx-auto mt-3 max-w-[52ch] font-inter text-[15px] leading-[1.55] text-ndm-muted">A 16-year Toronto clinic for cosmetic, laser and dermatology care. Keep scrolling to walk through.</p>
+          </div>
+          {/* clinic photos either side of the first card (wide screens), fading out as the video grows */}
+          <div ref={sides} aria-hidden="true" className="pointer-events-none absolute inset-0 hidden xl:block">
+            <div className="about-bob absolute left-[var(--gx)] top-[46%] w-[clamp(150px,11vw,200px)] overflow-hidden rounded-[18px] shadow-[0_24px_50px_-30px_rgba(27,36,43,.5)]"><img src="assets/clinic/clinic-3.jpg" alt="" loading="lazy" className="aspect-[4/5] w-full object-cover" /></div>
+            <div className="about-bob about-bob-2 absolute left-[calc(var(--gx)+clamp(90px,7vw,130px))] top-[70%] w-[clamp(120px,8.5vw,160px)] overflow-hidden rounded-[18px] border-4 border-ndm-paper shadow-[0_24px_50px_-30px_rgba(27,36,43,.5)]"><img src="assets/clinic/clinic-5.jpg" alt="" loading="lazy" className="aspect-square w-full object-cover" /></div>
+            <div className="about-bob about-bob-2 absolute right-[var(--gx)] top-[42%] w-[clamp(150px,11vw,200px)] overflow-hidden rounded-[18px] shadow-[0_24px_50px_-30px_rgba(27,36,43,.5)]"><img src="assets/clinic/clinic-2.jpg" alt="" loading="lazy" className="aspect-[4/5] w-full object-cover" /></div>
+            <div className="about-bob absolute right-[calc(var(--gx)+clamp(90px,7vw,130px))] top-[68%] w-[clamp(120px,8.5vw,160px)] overflow-hidden rounded-[18px] border-4 border-ndm-paper shadow-[0_24px_50px_-30px_rgba(27,36,43,.5)]"><img src="assets/clinic/clinic-4.jpg" alt="" loading="lazy" className="aspect-square w-full object-cover" /></div>
+          </div>
+          <div ref={frame} className="absolute inset-0 overflow-hidden bg-ndm-slate will-change-transform" style={{ transformOrigin: '50% 50%' }}>
+            <div className="absolute inset-0 overflow-hidden"><SpaceClip x={SPACE} vref={(el) => (vids.current[0] = el)} /></div>
+            <div className="absolute inset-0 z-[5] bg-gradient-to-t from-black/45 via-black/0 to-black/25" />
+            <div ref={ui} className="absolute inset-0 z-[6]" style={{ opacity: 0 }}>
+              <div className="space-in absolute bottom-[clamp(64px,12vh,128px)] left-[var(--gx)] right-[var(--gx)] rounded-[20px] p-6 text-white md:right-auto md:w-[420px]" style={glass}>
+                <p className="font-inter text-[13px] text-white/70">NewDermaMed Toronto</p>
+                <p className="mt-2 font-inter text-[22px] font-medium tracking-[-0.02em] md:text-[24px]">{s.t}</p>
+                <p className="mt-2 font-inter text-[14px] leading-[1.5] text-white/85">{s.d}</p>
+                <div className="mt-4 flex flex-wrap gap-2">{s.chips.map((c) => <span key={c} className="rounded-full border border-white/30 px-3 py-1.5 font-inter text-[12px]">{c}</span>)}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+

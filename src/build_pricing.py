@@ -40,7 +40,7 @@ css = r'''
   @media (min-width:1280px){.pr-group.is-open>.pr-ghead{top:120px}}
   .pr-gplus{width:44px;height:44px}
   .pr-ghead button:hover .pr-gplus{border-color:#1B242B}
-  .pr-group.is-open>.pr-ghead .pr-gplus{background:#1B242B;border-color:#1B242B;color:#fff}
+  .pr-group.is-open>.pr-ghead .pr-gplus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-group.is-open>.pr-ghead .pr-gplus i+i{transform:rotate(0deg)}
   .pr-group.is-open>.pr-body{grid-template-rows:1fr}
   .pr-group.is-open>.pr-body>div{visibility:visible;transition-delay:0s}
@@ -57,7 +57,7 @@ css = r'''
   /* treatments inside an open category: a blue circle with a white plus, easier to see */
   .pr-sub .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-sub .pr-head:hover .pr-plus{background:#209ED9;border-color:#209ED9}
-  .pr-item.is-open>h4 .pr-plus{background:#1B242B;border-color:#1B242B;color:#fff}
+  .pr-item.is-open>h4 .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-item.is-open>h4 .pr-plus i+i{transform:rotate(0deg)}
   .pr-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--e-out)}
   .pr-body>div{min-height:0;overflow:hidden;visibility:hidden;transition:visibility 0s linear .5s}
@@ -108,7 +108,7 @@ app = r'''function App() {
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-12 focus:z-[90] focus:rounded-full focus:bg-ndm-amber focus:px-4 focus:py-2 focus:font-mont focus:text-white">Skip to content</a>
       <PromoBar hidden={false} />
       <Header dark={dark} top={36} visible onSearch={() => setSearch(true)} onDrawer={() => setDrawer(true)} onCart={() => setCartOpen(true)} cartCount={cart.count} />
-      <main id="main">
+      <main id="main" className="seamless">
         <Breadcrumb items={['Pricing']} dark />
         <PricingHero />
         <PriceList />

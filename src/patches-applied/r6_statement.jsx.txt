@@ -1,0 +1,64 @@
+const APPROACH_STATS = [[16, '+', 'Years in Toronto'], [8, '', 'Top Choice Awards'], [2, '', 'Toronto clinics'], [20, '+', 'Treatment categories']];
+const APPROACH_PICS = [
+  ['assets/clinic/clinic-1.jpg', 'assets/hero/treatment-room.jpg'],
+  ['assets/clinic/clinic-4.jpg', 'assets/hero/clinic-reception.jpg'],
+];
+
+function AboutPair({ pics, side }) {
+  return (
+    <div aria-hidden="true" data-drift={side === 'l' ? 60 : -60} className={`absolute top-[clamp(40px,5vw,84px)] hidden xl:block ${side === 'l' ? 'left-[clamp(0px,2.4vw,56px)]' : 'right-[clamp(0px,2.4vw,56px)]'}`}>
+      <div className="rv rv-clip relative size-[clamp(176px,14.5vw,236px)] overflow-hidden rounded-[18px] shadow-[0_24px_50px_-30px_rgba(27,36,43,.5)] about-bob" style={{ transitionDelay: '.1s' }}>
+        <img src={pics[0]} alt="" loading="lazy" className="h-full w-full object-cover" />
+      </div>
+      <div className={`rv rv-clip relative -mt-[clamp(28px,2.6vw,44px)] size-[clamp(184px,15vw,248px)] overflow-hidden rounded-[18px] border-4 border-ndm-paper shadow-[0_24px_50px_-30px_rgba(27,36,43,.5)] about-bob about-bob-2 ${side === 'l' ? 'ml-[clamp(72px,6vw,104px)]' : '-ml-[clamp(72px,6vw,104px)]'}`} style={{ transitionDelay: '.25s' }}>
+        <img src={pics[1]} alt="" loading="lazy" className="h-full w-full object-cover" />
+      </div>
+    </div>
+  );
+}
+/* our approach (Skinlycare "About us": centred copy, floating photo pairs, stats row) */
+function Statement() {
+  const ref = useRef(null), copy = useRef(null), stats = useRef(null);
+  useReveal(ref);
+  const run = useInView(stats, { threshold: 0.4 });
+  const words = STATEMENT.split(' ');
+  useOnScroll(() => {
+    const el = copy.current; if (!el) return;
+    const r = el.getBoundingClientRect(), vh = window.innerHeight;
+    const p = REDUCED ? 1 : clamp01((vh * 0.9 - r.top) / (vh * 0.45 + r.height * 0.5));
+    const spans = el.querySelectorAll('[data-w]');
+    const n = spans.length;
+    spans.forEach((s, i) => { s.style.opacity = (0.22 + 0.78 * clamp01(p * n * 1.05 - i)).toFixed(3); });
+    if (REDUCED) return;
+    ref.current.querySelectorAll('[data-drift]').forEach((d) => { d.style.translate = `0 ${((0.5 - clamp01((vh - ref.current.getBoundingClientRect().top) / (vh + ref.current.offsetHeight))) * Number(d.dataset.drift)).toFixed(1)}px`; });
+  }, []);
+
+  return (
+    <section ref={ref} aria-labelledby="approach" className="relative z-10 overflow-hidden bg-ndm-paper px-[var(--gx)] pt-[clamp(112px,12vw,190px)] pb-[clamp(96px,10vw,160px)]">
+      <AboutPair pics={APPROACH_PICS[0]} side="l" />
+      <AboutPair pics={APPROACH_PICS[1]} side="r" />
+      <div className="relative mx-auto max-w-[760px] text-center">
+        <p className="rv eyebrow font-mont">
+          <span className="eyebrow-mark" aria-hidden="true"><img src="assets/icons/logo-mark.svg" alt="" /></span>About NewDermaMed
+        </p>
+        <TwoTone id="approach" className="rv mx-auto mt-5" style={{ transitionDelay: '.06s' }}
+          lead={<>Toronto’s cosmetic<br /></>} strong="and laser clinic" />
+        <p ref={copy} className="mx-auto mt-5 max-w-[58ch] font-inter text-[clamp(15px,1.2vw,18px)] leading-[1.6] text-ndm-ink">
+          {words.map((w, i) => (
+            <Fragment key={i}><span data-w="" style={{ opacity: 0.22, transition: 'opacity .25s linear' }} className={/NewDermaMed/.test(w) ? 'text-ndm-deep' : ''}>{w}</span>{i < words.length - 1 ? ' ' : ''}</Fragment>
+          ))}
+        </p>
+      </div>
+      <ul ref={stats} className="relative mx-auto mt-[clamp(56px,7vw,104px)] grid max-w-[1240px] grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-4" role="list">
+        {APPROACH_STATS.map(([n, s, l], i) => (
+          <li key={l} className="rv px-2 text-center md:border-l md:border-ndm-ink/10 md:px-6 md:py-2 md:first:border-0" style={{ transitionDelay: `${0.08 * i}s` }}>
+            <span className="block font-aeonik text-[clamp(42px,4.4vw,66px)] leading-none tracking-[-0.03em] text-ndm-deep tabular-nums"><CountUp to={n} run={run} suffix={s} /></span>
+            <span aria-hidden="true" className="mx-auto mt-4 block h-[3px] w-8 rounded-full bg-gradient-to-r from-ndm-deep to-ndm-sky" />
+            <span className="mx-auto mt-3 block max-w-[18ch] font-aeonik text-[clamp(18px,1.55vw,24px)] leading-[1.22] tracking-[-0.015em] text-ndm-ink">{l}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+

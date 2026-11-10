@@ -2,8 +2,8 @@
 Built from index.html. The page stays light; the event shows through the details, not a headline:
   - one palette: every brand blue (and the amber) becomes signal red, the blue-black ink becomes true black. No yellow.
   - black event bands with a slowly moving red tape between sections
-  - treatment cards and the monthly specials become tickets (notches + a dashed tear line)
-  - the Aptos band keeps its own purple look, the hero keeps its normal slides (no Black Friday slide)
+  - the monthly specials become tickets (notches + a dashed tear line)
+  - the hero keeps its normal film and words (no Black Friday headline)
 index.html and every other page stay untouched.
 Run from ndm-homepage:  python3 src/build_blackfriday.py . src"""
 import re, sys
@@ -179,24 +179,8 @@ CSS = r'''
 _i = s.index('</style>', s.index('campaign looks: tokens'))
 s = s[:_i] + CSS + s[_i:]
 
-# hero: the normal slides only (no Black Friday slide); the event reads from the bar, bands and cards
-a = s.index('const SLIDES = CAMPAIGN_LOOK ?'); b = s.index('\n', a)
-s = s[:a] + 'const SLIDES = SLIDES_BASE;' + s[b:]
-
-# treatment cards become black tickets: a ticket line on top, price + Book on the stub below the tear line
-rep('''          <article key={x.t} className="treat-card group shrink-0 snap-start">
-            <figure''', '''          <article key={x.t} className="treat-card bf-ticket group shrink-0 snap-start">
-            <p className="bf-tix-head"><span>Black Friday <b>·</b> Admit one</span><span className="tabular-nums">No. {String(TREATS.indexOf(x) + 1).padStart(3, '0')}</span></p>
-            <figure''')
-rep('''            <div className="mt-5 flex items-center justify-between gap-3">
-              <span className="font-inter text-[14px] text-ndm-ink">{x.p}</span>
-              <Btn href="#/book" v="ink" sm>Book</Btn>
-            </div>
-          </article>''', '''            <div className="bf-stub mt-auto">
-              <span className="bf-price">{x.p}</span>
-              <Btn href="#/book" v="ink" sm>Book</Btn>
-            </div>
-          </article>''')
+# hero: the normal film and words (no Black Friday headline); the event reads from the bar, bands and cards
+rep('const HERO_CMP = CAMPAIGN_LOOK ? CAMPAIGN : null;', 'const HERO_CMP = null;')
 
 # how it works: the three step buttons share one look and size
 rep("h: '#treatments', cta: 'Explore treatments', v: 'ink' }", "h: '#treatments', cta: 'Explore treatments', v: 'book' }")
@@ -218,7 +202,7 @@ rep('v="ink">View all offers</Btn>', 'v="light">View all offers</Btn>')
 rep('{n.label}{n.ext && <IconExternal className="opacity-60" />}', "{n.label}{n.ext && <IconExternal className=\"opacity-60\" />}{n.id === 'promotion' && <i aria-hidden=\"true\" className=\"bf-nav-dot\" />}")
 
 # mega menu: event strip, black rail, ticket card
-rep('<div className="grid gap-4 p-4 2xl:p-5 grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]">', """<div className="bf-mm-strip bf-grain">
+rep("<div className={`grid gap-4 p-4 2xl:p-5 ${act === 'aptos' ? 'grid-cols-[210px_minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] 2xl:grid-cols-[260px_minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)]' : 'grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]'}`}>", """<div className="bf-mm-strip bf-grain">
         <span className="cmp-badge">{CAMPAIGN.badge}</span>
         <span className="truncate">Treatment offers Friday to Monday, {CAMPAIGN.when}</span>
         <span className="ml-auto flex items-center gap-4">
@@ -226,7 +210,7 @@ rep('<div className="grid gap-4 p-4 2xl:p-5 grid-cols-[210px_1fr_340px] 2xl:grid
           <a href="#specials" onClick={onLink} className="bf-mm-strip-a">See the offers <IconArrow size={12} /></a>
         </span>
       </div>
-      <div className="grid gap-4 p-4 2xl:p-5 grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]">""")
+      <div className={`grid gap-4 p-4 2xl:p-5 ${act === 'aptos' ? 'grid-cols-[210px_minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] 2xl:grid-cols-[260px_minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)]' : 'grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]'}`}>""")
 rep('<ul className="rounded-[16px] bg-ndm-mist/70 p-2" role="list">', '<ul className="bf-mm-rail rounded-[16px] bg-ndm-mist/70 p-2" role="list">')
 _a = s.index('<a href="#/book" onClick={onLink} className="group relative overflow-hidden rounded-[16px] min-h-[380px] text-white">')
 _b = s.index('</a>', _a) + len('</a>')
@@ -302,7 +286,7 @@ function BfExit() {
 function App() {'''
 rep('\nfunction App() {', TAPE)
 rep('        <Hero sectionRef={heroRef} onIntroDone={() => setIntroDone(true)} />\n', '        <Hero sectionRef={heroRef} onIntroDone={() => setIntroDone(true)} />\n        <BfTape />\n')
-rep('        <Treatments />\n', '        <BfTape flip />\n        <Treatments />\n')
+rep('        <TreatMenu />\n', '        <BfTape flip />\n        <TreatMenu />\n')
 rep('        <Promotions />\n', '        <BfTape />\n        <Promotions />\n        <BfFx />\n')
 # the look switcher is replaced by a way back to the normal site
 rep("ReactDOM.createRoot(d).render(<CampaignSwitch />);", "ReactDOM.createRoot(d).render(<BfExit />);")

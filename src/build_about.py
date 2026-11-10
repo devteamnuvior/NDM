@@ -69,6 +69,14 @@ rep('<meta name="description" content="NewDermaMed is Toronto\'s award-winning c
 
 # 2. about page CSS
 css = '''
+  /* about NewDermaMed: the clinic film opens to full width as it comes into view (as on the home page) */
+  .cf-frame{--p:0;position:relative;height:min(88svh,880px);margin:0 calc((1 - var(--p)) * var(--gx));border-radius:0;overflow:hidden;background:#0B0F13;color:#fff;transform:translateZ(0)}
+  .cf-frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(calc(1.12 - .12 * var(--p)))}
+  .cf-frame::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(11,15,19,.22),rgba(11,15,19,.06) 30%,rgba(11,15,19,.86)),linear-gradient(90deg,rgba(11,15,19,.55),rgba(11,15,19,0) 60%)}
+  @media (prefers-reduced-motion:reduce){.cf-frame{--p:1!important}}
+  .cf-frame.is-hero{height:max(620px,min(100svh,960px))}
+  .cf-frame.is-hero video{transform:none}
+  .team-card{box-shadow:0 26px 50px -40px rgba(27,36,43,.45)}
   /* clinic maps: photo pin pops up when the map comes into view, numbered parking pins */
   .clinic-map .leaflet-container{font:inherit;background:#F2F2EF}
   .map-clinic{display:flex;flex-direction:column;align-items:center}
@@ -130,24 +138,9 @@ i = s.rindex('</style>', 0, s.index(anchor))
 s = s[:i] + css + s[i:]
 
 # 3. menu links that belong on this page
-# menu links that belong on this page become same-page anchors
-for k, v in (("about: 'about.html'", "about: '#top'"), ("'about-us': 'about.html'", "'about-us': '#top'"), ("'our-doctors-team': 'about.html#team'", "'our-doctors-team': '#team'"),
-             ("'our-clinics': 'about.html#clinics'", "'our-clinics': '#clinics'"), ("'doctors-team': 'about.html#team'", "'doctors-team': '#team'"),
-             ("'awards-recognition': 'about.html#awards'", "'awards-recognition': '#awards'"), ("'contact-us': 'about.html#contact'", "'contact-us': '#contact'"), ("'uptown-clinic': 'about.html#uptown'", "'uptown-clinic': '#uptown'"), ("'downtown-clinic': 'about.html#downtown'", "'downtown-clinic': '#downtown'")):
+# every About link opens this page from the top (about.html); only "About" itself becomes the top of this page
+for k, v in (("about: 'about.html'", "about: '#top'"), ("'about-us': 'about.html'", "'about-us': '#top'")):
     rep(k, v)
-
-# 4. "about NewDermaMed" reuses the approach section, retitled, with the clinic's own introduction and recognition
-rep('<img src="assets/icons/logo-mark.svg" alt="" /></span>Our approach', '<img src="assets/icons/logo-mark.svg" alt="" /></span>About NewDermaMed')
-rep('''          ))}
-        </p>
-      </div>
-      <ul ref={stats}''', '''          ))}
-        </p>
-        <p className="rv mx-auto mt-5 max-w-[60ch] font-inter text-[15.5px] leading-[1.65] text-ndm-muted" style={{ transitionDelay: '.1s' }}>
-          NewDermaMed has been recognized as Toronto’s Top Choice Cosmetic &amp; Laser Clinic for eight consecutive years, a reflection of our dedication to patient care and innovation. Our team works with trusted, Health Canada approved brands and devices.
-        </p>
-      </div>
-      <ul ref={stats}''')
 
 # 5. about UI before the app, then the about app
 ui = (scratch / 'about-ui.jsx').read_text()
@@ -182,8 +175,7 @@ function App() {
       <Header dark={dark} top={36} visible onSearch={() => setSearch(true)} onDrawer={() => setDrawer(true)} onCart={() => setCartOpen(true)} cartCount={cart.count} />
       <main id="main">
         <Breadcrumb items={['About us']} dark />
-        <AboutHero />
-        <Statement />
+        <AboutFilm hero />
         <AboutTeam />
         <AboutClinics />
         <AboutGallery />

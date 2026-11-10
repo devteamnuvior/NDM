@@ -1,0 +1,71 @@
+/* ---------------------------------------------------------------- treatments, by what they do: the old "Most popular treatments" carousel
+   (photo, tag, title, text, price and Book), a little smaller and on white cards, on the page's paper; category tabs; arrows, no scroll-jacking */
+function TreatMenu() {
+  const ref = useRef(null), rail = useRef(null), tabs = useRef([]);
+  useReveal(ref);
+  const [cat, setCat] = useState(0);
+  const [edge, setEdge] = useState([true, false]);
+  const c = MENU_TABS[cat];
+  const sync = () => {
+    const r = rail.current; if (!r) return;
+    setEdge([r.scrollLeft < 8, r.scrollLeft > r.scrollWidth - r.clientWidth - 8]);
+  };
+  useEffect(() => { const r = rail.current; if (r) { r.scrollLeft = 0; sync(); } }, [cat]);
+  const step = (d) => {
+    const r = rail.current, k = r.querySelector('article');
+    r.scrollBy({ left: d * (k ? k.offsetWidth + 16 : r.clientWidth * 0.8), behavior: REDUCED ? 'auto' : 'smooth' });
+  };
+  const onKey = (e, i) => {
+    const k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!k) return;
+    e.preventDefault();
+    const n = (i + k + MENU_TABS.length) % MENU_TABS.length;
+    setCat(n); tabs.current[n] && tabs.current[n].focus();
+  };
+  const btn = 'grid size-12 place-items-center rounded-full border border-ndm-ink/15 bg-white text-ndm-ink transition hover:border-ndm-deep hover:bg-ndm-deep hover:text-white disabled:pointer-events-none disabled:opacity-35';
+  return (
+    <section ref={ref} id="treatments" aria-labelledby="menu-title" className="relative z-10 bg-ndm-paper py-[clamp(72px,8vw,120px)]">
+      <div className="grid gap-5 px-[var(--gx)] lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+        <div>
+          <Eyebrow className="rv">Browse the menu</Eyebrow>
+          <TwoTone id="menu-title" className="rv mt-4" lead={<>Treatments,<br /></>} strong="by what they do" style={{ transitionDelay: '.06s' }} />
+          <p className="rv mt-4 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>Every treatment shows a starting price. Pick a category to narrow the list.</p>
+        </div>
+        <div className="rv flex shrink-0 gap-2" style={{ transitionDelay: '.12s' }}>
+          <button type="button" onClick={() => step(-1)} disabled={edge[0]} aria-label="Previous treatments" className={btn}><IconArrow className="rotate-180" /></button>
+          <button type="button" onClick={() => step(1)} disabled={edge[1]} aria-label="Next treatments" className={btn}><IconArrow /></button>
+        </div>
+      </div>
+      <div className="rv mt-7 px-[var(--gx)]" style={{ transitionDelay: '.14s' }}>
+        <div className="tm-tabs no-scrollbar inline-flex max-w-full gap-1 overflow-x-auto rounded-full bg-ndm-mist p-1" role="tablist" aria-label="Treatment categories">
+          {MENU_TABS.map((m, i) => (
+            <button key={m.id} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" id={`tm-t-${m.id}`} aria-controls="tm-panel"
+              aria-selected={i === cat} tabIndex={i === cat ? 0 : -1} onClick={() => setCat(i)} onKeyDown={(e) => onKey(e, i)}
+              className={`shrink-0 rounded-full px-4 py-2.5 font-inter text-[14px] transition-colors ${i === cat ? 'bg-white font-medium text-ndm-deep shadow-[0_6px_16px_-10px_rgba(27,36,43,.45)]' : 'text-ndm-muted hover:text-ndm-ink'}`}>{m.label}</button>
+          ))}
+        </div>
+      </div>
+      <div ref={rail} onScroll={sync} id="tm-panel" role="tabpanel" aria-labelledby={`tm-t-${c.id}`}
+        className="no-scrollbar mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-[var(--gx)] pb-6 pt-1" style={{ scrollPaddingInline: 'var(--gx)' }}>
+        {c.cards.map(([name, d, price, href, img, set, tag], i) => (
+          <article key={`${c.id}-${name}`} className="tm-card2 tm-in group flex shrink-0 snap-start flex-col rounded-[22px] bg-white p-3 ring-1 ring-ndm-ink/[.06]" style={{ animationDelay: `${Math.min(i, 5) * 0.05}s` }}>
+            <a href={href} className="peach relative block aspect-[4/3.2] overflow-hidden rounded-[16px] bg-ndm-mist">
+              <img src={img} srcSet={set} sizes="(max-width: 640px) 78vw, 320px" alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" style={{ transitionTimingFunction: 'var(--e-out)' }} />
+              <span className="absolute left-3 top-3 z-[1] rounded-full bg-white/85 px-3 py-1.5 font-inter text-[12px] text-ndm-ink backdrop-blur-[8px]">{tag}</span>
+            </a>
+            <div className="flex flex-1 flex-col px-2 pb-1.5 pt-4">
+              <h3 className="font-aeonik text-[clamp(21px,1.6vw,25px)] font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink"><a href={href} className="hover:text-ndm-deep">{name}</a></h3>
+              <p className="mt-2 line-clamp-3 font-inter text-[14px] leading-[1.55] text-ndm-muted">{d}</p>
+              <div className="mt-auto flex items-center justify-between gap-3 pt-4">
+                <span className="font-inter text-[14px] font-medium text-ndm-ink">{price}</span>
+                <Btn href="#/book" v="ink" sm>Book</Btn>
+              </div>
+            </div>
+          </article>
+        ))}
+        <span aria-hidden="true" className="w-px shrink-0" />
+      </div>
+      <div className="px-[var(--gx)]"><Btn href={c.all[0]} v="line" sm>{c.all[1]}</Btn></div>
+    </section>
+  );
+}

@@ -105,23 +105,23 @@
   .btn>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;padding-block:.12em}
   .btn-sm{height:40px;padding:0 18px;font-size:14.5px}
   .btn-block{display:flex;width:100%}
-  .btn-ink{background:#1B242B;color:#fff}
-  .btn-ink:hover,.btn-ink:focus-visible,.group:hover .btn-g.btn-ink{background:#0F80C3}
+  .btn-ink{background:#0F80C3;color:#fff}
+  .btn-ink:hover,.btn-ink:focus-visible,.group:hover .btn-g.btn-ink{background:#0A4F7A}
   .btn-line{background:transparent;color:#1B242B;border-color:rgba(27,36,43,.18)}
   .btn-line:hover,.btn-line:focus-visible,.group:hover .btn-g.btn-line{background:#1B242B;border-color:#1B242B;color:#fff}
   .btn-light{background:#fff;color:#1B242B}
   .btn-light:hover,.btn-light:focus-visible,.group:hover .btn-g.btn-light{background:#0F80C3;border-color:#0F80C3;color:#fff;box-shadow:0 16px 34px -12px rgba(15,128,195,.75)}
   .btn-glass{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#fff;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   .btn-glass:hover,.btn-glass:focus-visible{background:#fff;border-color:#fff;color:#1B242B}
-  .btn-book{position:relative;isolation:isolate;overflow:hidden;justify-content:space-between;gap:12px;padding:0 6px 0 22px;background:#1B242B;color:#fff;
-    border-color:#1B242B;box-shadow:0 12px 28px -16px rgba(27,36,43,.6);transition:border-color .45s ease,box-shadow .5s ease,transform .2s ease}
+  .btn-book{position:relative;isolation:isolate;overflow:hidden;justify-content:space-between;gap:12px;padding:0 6px 0 22px;background:#0F80C3;color:#fff;
+    border-color:#0F80C3;box-shadow:0 12px 28px -16px rgba(15,128,195,.65);transition:border-color .45s ease,box-shadow .5s ease,transform .2s ease}
   .btn-book:hover,.btn-book:focus-visible,.group:hover .btn-g.btn-book{border-color:#26B1E7;box-shadow:0 16px 34px -12px rgba(15,128,195,.65)}
   .btn-hot{background:#FFA617;border-color:#FFA617;box-shadow:0 12px 28px -12px rgba(255,166,23,.9)}
   .btn-hot .btn-dot{color:#FFA617}
   .btn-on-dark{background:#fff;color:#1B242B;border-color:#fff;box-shadow:0 12px 28px -16px rgba(0,0,0,.5)}
-  .btn-on-dark .btn-dot{background:#1B242B;color:#fff}
+  .btn-on-dark .btn-dot{background:#0F80C3;color:#fff}
   .btn-on-dark:hover,.btn-on-dark:focus-visible,.group:hover .btn-g.btn-on-dark{color:#fff}
-  .btn-book::before{content:"";position:absolute;z-index:-1;right:6px;top:50%;width:36px;height:36px;border-radius:999px;background:#0F80C3;transform:translateY(-50%) scale(0);transition:transform .6s var(--e-out)}
+  .btn-book::before{content:"";position:absolute;z-index:-1;right:6px;top:50%;width:36px;height:36px;border-radius:999px;background:#0A4F7A;transform:translateY(-50%) scale(0);transition:transform .6s var(--e-out)}
   .btn-book:hover::before,.btn-book:focus-visible::before,.group:hover .btn-g.btn-book::before{transform:translateY(-50%) scale(22)}
   .btn-dot{display:grid;place-items:center;flex-shrink:0;width:36px;height:36px;border-radius:999px;background:#fff;color:#1B242B;transition:transform .5s var(--e-out),color .4s ease,background-color .4s ease}
   .btn-book:hover .btn-dot,.btn-book:focus-visible .btn-dot,.group:hover .btn-g .btn-dot{transform:rotate(-45deg);color:#fff;background:rgba(255,255,255,.2)}
@@ -244,6 +244,20 @@
   @keyframes promoNudge{0%,8%,100%{transform:none}2%{transform:translateY(-2px) scale(1.06)}4%{transform:translateY(1px)}6%{transform:translateY(-1px)}}
 
   /* partners */
+
+  /* submenu items: a thin line under each item (dropdown panels and the phone menu) */
+  .menu-item-m{border-bottom:1px solid rgba(27,36,43,.08)}
+
+  /* booking: one card on the photo */
+  .book-shell{background:rgba(250,250,248,.92);-webkit-backdrop-filter:blur(14px) saturate(130%);backdrop-filter:blur(14px) saturate(130%);box-shadow:0 40px 80px -40px rgba(11,15,19,.6)}
+  /* how it works: each step on a white card */
+  .proc-card{box-shadow:0 22px 44px -36px rgba(27,36,43,.45)}
+
+  /* round 8: a thin line between submenu items; the booking summary card */
+  .panel .menu-item{border-bottom:1px solid rgba(27,36,43,.08)}
+  .book-step{grid-area:1/1;min-width:0;transition:opacity .35s ease}.book-step.is-off{visibility:hidden;opacity:0}
+.book-sum{background:radial-gradient(90% 70% at 100% 0%,rgba(38,177,231,.32),transparent 60%),linear-gradient(160deg,#1B242B,#0B0F13)}
+  .mark-16{display:block;width:84px;height:84px;background:currentColor;-webkit-mask:url(assets/icons/16-years.svg) center/contain no-repeat;mask:url(assets/icons/16-years.svg) center/contain no-repeat}
   .marquee-mask{-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
   .marquee-track:hover{animation-play-state:paused}
 
@@ -504,6 +518,32 @@
   :is(.plate,.treat-card figure,.team-port-pic,.rv-clip,.sw-photo,.promo-card .aspect-\[16\/10\],.aspect-\[590\/385\])::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:radial-gradient(85% 70% at 12% 0%,rgba(255,183,148,.34),transparent 62%),linear-gradient(210deg,rgba(255,212,186,.14),rgba(255,158,120,.12));mix-blend-mode:soft-light}
   section[aria-labelledby="approach"],section[aria-labelledby="team"],section[aria-labelledby="treatments"],section[aria-labelledby="faq"]{background-image:radial-gradient(40% 36% at 90% 14%,rgba(255,190,160,.20),transparent 70%),radial-gradient(36% 32% at 4% 94%,rgba(255,206,182,.16),transparent 70%)}
 
+  /* seamless pages (main.seamless: promotion, pricing): one paper colour, edge-faded glows, no seams */
+  html:not([data-campaign]) main.seamless>section:not([data-nav="dark"]){background-color:#FAFAF8!important;background-image:none!important;isolation:isolate}
+  html:not([data-campaign]) main.seamless>section:not([data-nav="dark"])::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;-webkit-mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);background:radial-gradient(40% 50% at 96% 45%,rgba(255,190,160,.16),transparent 70%)}
+  html:not([data-campaign]) main.seamless>section:not([data-nav="dark"]):nth-of-type(even)::before{background:radial-gradient(40% 50% at 4% 55%,rgba(38,177,231,.10),transparent 70%)}
+  html:not([data-campaign]) main.seamless>.specials-wheel .sw-panel{background:linear-gradient(180deg,var(--sw-panel) 0%,var(--sw-panel) 72%,#FAFAF8 100%)}
+  /* booking form (Ray, round 12): badge, category tabs and options; compact form and phones show only the open step */
+  .book-badge{background:linear-gradient(90deg,rgba(255,166,23,.18),rgba(255,166,23,.08));border:1px solid rgba(255,166,23,.35)}
+  .book-badge-dot{box-shadow:0 6px 14px -6px rgba(255,166,23,.9)}
+  .book-tab{position:relative}
+  .book-tab-has::after{content:"";position:absolute;right:6px;top:6px;width:6px;height:6px;border-radius:999px;background:#FFA617}
+  .book-opt{box-shadow:0 1px 0 rgba(27,36,43,.03)}
+  @media (max-width:639px){.book-step.is-off{display:none}}
+  .book-compact .book-step.is-off{display:none}
+  /* office photos are graded warm in the image files; no peach light on top, it turned white rooms pink */
+  .about-bob::after,.visit-card .rv-clip::after{content:none}
+  .eyebrow.is-amber{color:#6E4410;background:linear-gradient(180deg,#FFB942,#FFA617) padding-box,linear-gradient(115deg,rgba(255,166,23,.95),rgba(224,138,0,.55)) border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 12px 26px -16px rgba(255,166,23,.8)}
+  .eyebrow.is-amber .eyebrow-mark{background:radial-gradient(circle at 32% 28%,#fff,#FFE3AC 75%);box-shadow:inset 0 0 0 1px rgba(255,166,23,.35),0 4px 10px -6px rgba(224,138,0,.8)}
+  .eyebrow.is-amber::after{background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.3) 50%,transparent 65%)}
+  /* round 21: the deal from the price list as a red badge (offer wheel and grid) */
+  .deal-badge{position:relative;display:inline-flex;align-items:center;gap:7px;overflow:hidden;border-radius:999px;padding:6px 13px 6px 6px;white-space:nowrap;font:700 11.5px/1 "Helvetica Neue",Inter,Arial,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#EC3A50 0%,#C8182E 55%,#A0102A 100%);box-shadow:0 12px 24px -12px rgba(200,24,46,.85),inset 0 1px 0 rgba(255,255,255,.28)}
+  .deal-badge i{display:grid;place-items:center;width:20px;height:20px;border-radius:999px;background:#fff;color:#C8182E;font:800 11px/1 "Helvetica Neue",Inter,Arial,sans-serif;font-style:normal}
+  .deal-badge::after{content:"";position:absolute;inset:-40% -60%;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.38) 50%,transparent 60%);transform:translateX(-70%);animation:dealShine 4.5s ease-in-out infinite}
+  @keyframes dealShine{0%,55%{transform:translateX(-70%)}85%,100%{transform:translateX(70%)}}
+  @media (prefers-reduced-motion:reduce){.deal-badge::after{animation:none;display:none}}
+  .soc-ico.soc-ico-line:not(:hover):not(:focus-visible){background:transparent}
+  .soc-ico-line:hover,.soc-ico-line:focus-visible{border-color:transparent}
   /* campaign looks: tokens per look (html[data-campaign-bar] on every page, html[data-campaign] where accents apply) */
   html[data-campaign-bar="black-friday"]{--cmp-bar:#0B0B0C;--cmp-bar-fg:#F4EBDD;--cmp-gold:#D2B57B;--cmp-acc:#8C6D36;--cmp-acc-dk:#DCC28E;--cmp-badge-bg:#0B0B0C;--cmp-badge-fg:#EBD7AA;--cmp-badge-line:rgba(210,181,123,.6);--cmp-edge:linear-gradient(115deg,rgba(200,169,106,.85),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(11,11,12,.55));--cmp-tint:linear-gradient(90deg,rgba(6,6,7,.9) 0%,rgba(6,6,7,.62) 52%,rgba(6,6,7,.38) 100%),radial-gradient(60% 70% at 85% 20%,rgba(210,181,123,.22),transparent 70%)}
   html[data-campaign-bar="holiday"]{--cmp-bar:#173D2E;--cmp-bar-fg:#F6F1E6;--cmp-gold:#D6B46A;--cmp-acc:#1F5A41;--cmp-acc-dk:#E2C583;--cmp-badge-bg:#173D2E;--cmp-badge-fg:#F6F1E6;--cmp-badge-line:rgba(214,180,106,.65);--cmp-edge:linear-gradient(115deg,rgba(31,90,65,.8),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(122,31,43,.55));--cmp-tint:linear-gradient(90deg,rgba(12,36,27,.9) 0%,rgba(12,36,27,.62) 55%,rgba(84,20,30,.4) 100%),radial-gradient(55% 65% at 85% 15%,rgba(214,180,106,.22),transparent 70%)}
@@ -566,7 +606,7 @@
   @media (min-width:1280px){.pr-group.is-open>.pr-ghead{top:120px}}
   .pr-gplus{width:44px;height:44px}
   .pr-ghead button:hover .pr-gplus{border-color:#1B242B}
-  .pr-group.is-open>.pr-ghead .pr-gplus{background:#1B242B;border-color:#1B242B;color:#fff}
+  .pr-group.is-open>.pr-ghead .pr-gplus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-group.is-open>.pr-ghead .pr-gplus i+i{transform:rotate(0deg)}
   .pr-group.is-open>.pr-body{grid-template-rows:1fr}
   .pr-group.is-open>.pr-body>div{visibility:visible;transition-delay:0s}
@@ -583,7 +623,7 @@
   /* treatments inside an open category: a blue circle with a white plus, easier to see */
   .pr-sub .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-sub .pr-head:hover .pr-plus{background:#209ED9;border-color:#209ED9}
-  .pr-item.is-open>h4 .pr-plus{background:#1B242B;border-color:#1B242B;color:#fff}
+  .pr-item.is-open>h4 .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-item.is-open>h4 .pr-plus i+i{transform:rotate(0deg)}
   .pr-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--e-out)}
   .pr-body>div{min-height:0;overflow:hidden;visibility:hidden;transition:visibility 0s linear .5s}
@@ -662,12 +702,12 @@ function useMedia(q) {
 }
 
 /* ---------------------------------------------------------------- content */
-const PAGE_LINKS = { 'aptos-thread-lift': 'aptos-thread-lift.html', 'non-surgical-facelift-neck-jawline-eyebrow-nose-lift': 'aptos-thread-lift.html', pricing: 'pricing.html', promotion: 'promotion.html', about: 'about.html', 'about-us': 'about.html', 'our-doctors-team': 'about.html#team', 'our-clinics': 'about.html#clinics', 'doctors-team': 'about.html#team', 'awards-recognition': 'about.html#awards', 'contact-us': 'about.html#contact', blog: 'blog.html', botox: 'botox.html', 'uptown-clinic': 'about.html#uptown', 'downtown-clinic': 'about.html#downtown' };
+const PAGE_LINKS = { 'wrinkles-fine-lines': 'wrinkles-fine-lines.html', 'aptos-thread-lift': 'aptos-thread-lift.html', 'non-surgical-facelift-neck-jawline-eyebrow-nose-lift': 'aptos-thread-lift.html', pricing: 'pricing.html', promotion: 'promotion.html', about: 'about.html', 'about-us': 'about.html', 'our-doctors-team': 'about.html', 'our-clinics': 'about.html', 'doctors-team': 'about.html', 'awards-recognition': 'about.html', 'contact-us': 'about.html', blog: 'blog.html', botox: 'botox.html', 'uptown-clinic': 'about.html', 'downtown-clinic': 'about.html' };
 const slug = (s) => { const k = s.toLowerCase().replace(/[®™]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''); return PAGE_LINKS[k] || '#/' + k; };
 
 const PROCEDURES = [
   { id: 'aptos', label: 'Aptos Thread Lift', blurb: 'Non-surgical lifting with absorbable threads, planned around your facial structure.',
-    groups: [{ items: ['Non-Surgical Facelift (Neck, Jawline, Eyebrow & Nose Lift)'] }] },
+    groups: [{ items: ['Aptos Thread Lift', 'Non-Surgical Facelift (Neck, Jawline, Eyebrow & Nose Lift)'] }] },
   { id: 'injectables', label: 'Injectables', blurb: 'Neuromodulators, fillers and biostimulators, dosed conservatively for a natural-looking finish.',
     groups: [{ items: ['Botox®', 'Juvederm®', 'Dermal Fillers', 'Belkyra® / Kybella® (Double Chin)', 'Lip Augmentation', 'Tear Trough Correction', 'Soft Lift™', 'Radiesse®', 'Sculptra®', 'Mesotherapy & Skin Boosters'] }] },
   { id: 'skin', label: 'Skin', blurb: 'Aesthetic and medical dermatology, from VISIA® analysis to laser resurfacing.',
@@ -692,7 +732,7 @@ const CONCERNS = [
 ];
 /* which page is open: the top menu marks its section, and dropdown links to this page are highlighted */
 const HERE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-const NAV_HERE = { 'pricing.html': 'pricing', 'promotion.html': 'promotion', 'about.html': 'about', 'blog.html': 'about', 'what-causes-rosacea-redness.html': 'about', 'botox.html': 'procedures', 'aptos-thread-lift.html': 'procedures' }[HERE];
+const NAV_HERE = { 'index.html': 'home', 'pricing.html': 'pricing', 'promotion.html': 'promotion', 'about.html': 'about', 'blog.html': 'about', 'what-causes-rosacea-redness.html': 'about', 'botox.html': 'procedures', 'aptos-thread-lift.html': 'procedures', 'wrinkles-fine-lines.html': 'concerns' }[HERE];
 const isHere = (href) => !!href && !href.includes('#') && href.toLowerCase() === HERE;
 const here = (href) => (isHere(href) ? { 'aria-current': 'page' } : {});
 const HERE_CAT = (PROCEDURES.find((c) => c.groups.some((g) => g.items.some((it) => isHere(slug(it))))) || {}).id;
@@ -709,6 +749,7 @@ const ABOUT = {
   links: ['Our Doctors & Team', 'Our Clinics', 'Awards & Recognition', 'Contact Us', 'Blog', 'Policies (Privacy, Terms, Refunds)'],
 };
 const NAV = [
+  { id: 'home', label: 'Home', href: 'index.html' },
   { id: 'procedures', label: 'Procedures', menu: 'mega' },
   { id: 'concerns', label: 'Concerns', menu: 'concerns' },
   { id: 'pricing', label: 'Pricing' },
@@ -752,7 +793,7 @@ const CAMPAIGNS = [
     img: { src: 'assets/home/visia-consult.jpg', alt: 'A NewDermaMed provider reviewing skin analysis results with a patient', pos: '60% 45%', scale: 1 } },
 ];
 const CAMPAIGN_KEY = 'ndm-campaign';
-const CAMPAIGN_SKIP = ['botox.html', 'aptos-thread-lift.html', 'what-causes-rosacea-redness.html']; /* treatment and medical pages keep their look */
+const CAMPAIGN_SKIP = ['botox.html', 'aptos-thread-lift.html', 'what-causes-rosacea-redness.html', 'wrinkles-fine-lines.html']; /* treatment and medical pages keep their look */
 const CAMPAIGN = (() => {
   let id = null;
   try {
@@ -1050,9 +1091,10 @@ function AptosCard({ onLink }) {
 function MegaMenu({ open, onLink }) {
   const [act, setAct] = useState(HERE_CAT || 'aptos');
   const cat = PROCEDURES.find((c) => c.id === act);
+  /* the original look: two columns, arrows beside the items, no lines; every category (Aptos too) shares this layout */
   return (
     <div className="panel w-full rounded-[28px] border border-black/5 bg-white text-ndm-ink shadow-[0_50px_90px_-40px_rgba(11,15,19,.45)]" data-open={open}>
-      <div className="grid gap-4 p-4 2xl:p-5 grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]">
+      <div className={`grid gap-4 p-4 2xl:p-5 ${act === 'aptos' ? 'grid-cols-[210px_minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] 2xl:grid-cols-[260px_minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)]' : 'grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]'}`}>
       <ul className="rounded-[16px] bg-ndm-mist/70 p-2" role="list">
         {PROCEDURES.map((c) => {
           const on = c.id === act;
@@ -1070,34 +1112,22 @@ function MegaMenu({ open, onLink }) {
           );
         })}
       </ul>
-      {cat.id === 'aptos' ? (
-        <div className="grid h-[516px] grid-cols-[minmax(0,1fr)_340px] gap-4 2xl:h-[456px]">
-          <div className="min-h-0 overflow-hidden px-3 py-4 2xl:px-5">
-            <div className="flex items-baseline justify-between gap-4 border-b border-ndm-line pb-4">
-              <div>
-                <p className="font-aeonik text-[26px] leading-tight">{cat.label}</p>
-                <p className="mt-1 text-[13.5px] text-ndm-muted max-w-[46ch]">{cat.blurb}</p>
-              </div>
-            </div>
-            <AptosMenu items={cat.groups[0].items} onLink={onLink} />
-          </div>
-          <AptosCard onLink={onLink} />
-        </div>
-      ) : (
       <div className="h-[516px] px-5 py-4 2xl:h-[456px]">
         <div className="flex items-baseline justify-between gap-4 border-b border-ndm-line pb-4">
           <div>
-            <p className="font-aeonik text-[26px] leading-tight">{cat.label}</p>
+            {slug(cat.label).endsWith('.html') && act !== 'aptos'
+              ? <a href={slug(cat.label)} onClick={onLink} className="group inline-flex items-center gap-2 font-aeonik text-[26px] leading-tight hover:text-ndm-deep">{cat.label}<IconArrow size={14} className="text-ndm-deep transition-transform group-hover:translate-x-0.5" /></a>
+              : <p className="font-aeonik text-[26px] leading-tight">{cat.label}</p>}
             <p className="mt-1 text-[13.5px] text-ndm-muted max-w-[46ch]">{cat.blurb}</p>
           </div>
         </div>
-        {(
+        {act === 'aptos' ? <AptosMenu items={cat.groups[0].items.filter((it) => it !== cat.label)} onLink={onLink} /> : (
         <div className={`mt-4 grid gap-6 ${cat.groups.length > 1 ? 'grid-cols-[1.9fr_1fr]' : ''}`}>
           {cat.groups.map((g) => (
             <div key={g.title || 'g'}>
               {g.title && <p className="font-mont text-[11px] tracking-[.14em] uppercase text-ndm-muted mb-2">{g.title}</p>}
               <ul className={g.items.length > 7 ? 'columns-2 gap-6' : ''} role="list">
-                {g.items.map((it) => (
+                {g.items.filter((it) => it !== cat.label).map((it) => (
                   <li key={it} className="break-inside-avoid">
                     <a href={slug(it)} {...here(slug(it))} onClick={onLink} className="menu-item group font-mont">
                       <span className="min-w-0">{it}</span><IconArrow size={11} className="menu-arrow" />
@@ -1110,7 +1140,7 @@ function MegaMenu({ open, onLink }) {
         </div>
         )}
       </div>
-      )}
+      {act === 'aptos' && <AptosCard onLink={onLink} />}
       <a href="#/book" onClick={onLink} className="group relative overflow-hidden rounded-[16px] min-h-[380px] text-white">
         <img src="assets/clinic/clinic-2.jpg" alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
         <span className="absolute inset-0 bg-gradient-to-t from-[#0B0F13]/85 via-[#0B0F13]/25 to-transparent" />
@@ -1125,38 +1155,49 @@ function MegaMenu({ open, onLink }) {
   );
 }
 
+/* about: the two clinics as photo cards with address and opening hours (after the website v3 locations menu), then the links;
+   every About link opens the About page from the top */
+const ABOUT_LOCS = [
+  { name: 'Uptown', near: 'Yonge & Sheppard', img: 'assets/clinic/clinic-4.jpg' },
+  { name: 'Downtown', near: 'Bay & College', img: 'assets/clinic/downtown/downtown-3.jpg' },
+];
+const aboutHref = (l) => (l === 'Blog' ? 'blog.html' : /^Policies/.test(l) ? slug(l) : 'about.html');
 function AboutMenu({ open, onLink }) {
   return (
     <div className="panel w-full rounded-[28px] border border-black/5 bg-white text-ndm-ink shadow-[0_50px_90px_-40px_rgba(11,15,19,.45)]" data-open={open}>
-      <div className="grid gap-4 p-4 2xl:p-5 grid-cols-[1.1fr_1fr_340px]">
-      <div className="rounded-[16px] bg-ndm-mist/70 p-4">
-        <p className="font-mont text-[11px] tracking-[.14em] uppercase text-ndm-muted mb-2">Our Clinics</p>
-        {ABOUT.clinics.map((c) => (
-          <a key={c.name} href={slug(c.name)} onClick={onLink} className="block rounded-[12px] px-3 py-3 -mx-1 hover:bg-white transition-colors">
-            <span className="block font-aeonik text-[18px]">{c.name}</span>
-            <span className="block text-[12.5px] text-ndm-muted">{c.note}</span>
-            <span className="mt-1 block font-mont text-[12.5px] text-ndm-blue">{c.phone}</span>
-          </a>
-        ))}
-      </div>
-      <ul className="p-3" role="list">
-        {ABOUT.links.map((l) => (
-          <li key={l}>
-            <a href={slug(l)} {...here(slug(l))} onClick={onLink} className="menu-item group font-mont border-b border-ndm-line py-3 last:border-0">
-              <span className="min-w-0">{l}</span><IconArrow size={12} className="menu-arrow" />
+      <div className="grid gap-4 p-4 2xl:p-5 grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,.9fr)]">
+        {ABOUT_LOCS.map((l) => {
+          const c = CLINICS.find((x) => x.name === l.name);
+          return (
+            <a key={l.name} href="about.html" onClick={onLink} className="about-loc group flex flex-col overflow-hidden rounded-[18px] bg-ndm-mist/70 ring-1 ring-ndm-ink/[.05] transition-shadow hover:shadow-[0_24px_50px_-30px_rgba(27,36,43,.45)]">
+              <span className="relative block aspect-[16/10] overflow-hidden">
+                <img src={l.img} alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <span className="absolute inset-0 bg-gradient-to-t from-[#0B0F13]/75 via-[#0B0F13]/10 to-transparent" />
+                <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 font-inter text-[11.5px] font-medium text-ndm-ink backdrop-blur-[6px]">{l.near}</span>
+                <span className="absolute inset-x-4 bottom-3 font-aeonik text-[25px] leading-none text-white">{l.name} Clinic</span>
+              </span>
+              <span className="flex flex-1 flex-col gap-3 p-4">
+                <span className="font-inter text-[13.5px] leading-[1.45] text-ndm-muted">{c.addr}</span>
+                <span className="grid gap-1 rounded-[12px] bg-white px-3 py-2.5">
+                  {HOURS.map(([d, h]) => <span key={d} className="flex items-center justify-between gap-3 font-inter text-[13px]"><span className="text-ndm-muted">{d}</span><span className="font-medium tabular-nums text-ndm-ink">{h}</span></span>)}
+                </span>
+                <span className="mt-auto flex items-center justify-between gap-3 font-inter text-[13.5px] font-semibold text-ndm-deep">
+                  <span className="tabular-nums">{c.phone}</span>
+                  <span className="inline-flex items-center gap-1.5">About the clinic<IconArrow className="transition-transform group-hover:translate-x-1" /></span>
+                </span>
+              </span>
             </a>
-          </li>
-        ))}
-      </ul>
-      <a href={slug('Our Clinics')} onClick={onLink} className="group relative min-h-[300px] overflow-hidden rounded-[16px] text-white">
-        <img src="assets/clinic/clinic-5.jpg" alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-        <span className="absolute inset-0 bg-gradient-to-t from-[#0B0F13]/85 via-[#0B0F13]/25 to-transparent" />
-        <span className="absolute inset-x-0 bottom-0 p-5">
-          <span className="block font-mont text-[11px] tracking-[.14em] uppercase text-white/75">16+ years in Toronto</span>
-          <span className="mt-2 block font-aeonik text-[22px] leading-[1.2]">Visit our Uptown and Downtown clinics</span>
-          <span className="mt-4 inline-flex items-center gap-2 font-mont text-[13px] font-medium">Get directions <IconArrow size={12} /></span>
-        </span>
-      </a>
+          );
+        })}
+        <ul className="px-3 py-1" role="list">
+          {ABOUT.links.map((l) => (
+            <li key={l}>
+              <a href={aboutHref(l)} onClick={onLink} className="menu-item group font-mont border-b border-ndm-line py-3 last:border-0">
+                <span className="min-w-0">{l}</span><IconArrow size={12} className="menu-arrow" />
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
@@ -1244,27 +1285,27 @@ function Header({ dark, top, visible, onSearch, onDrawer, onCart, cartCount = 0 
           backdropFilter: glass, WebkitBackdropFilter: glass,
         }}
       >
-        <div className="mx-auto grid h-[64px] xl:h-[84px] max-w-[1920px] grid-cols-[auto_1fr_auto] xl:grid-cols-[1fr_auto_1fr] items-center gap-4 px-[var(--gx)]">
-          <a href="index.html" aria-label="NewDermaMed home" className="relative block h-[30px] sm:h-[34px] xl:h-[42px] justify-self-start">
-            <img src="assets/icons/logo-color.svg" alt="" className="h-full w-auto transition-opacity duration-500" style={{ opacity: tone ? 0 : 1 }} />
-            <img src="assets/icons/logo-white.svg" alt="" className="absolute left-0 top-0 h-full w-auto transition-opacity duration-500" style={{ opacity: tone ? 1 : 0 }} />
+        <div className="mx-auto grid h-[64px] xl:h-[84px] max-w-[1920px] grid-cols-[auto_1fr_auto] xl:grid-cols-[1fr_auto_1fr] items-center gap-4 xl:gap-3 2xl:gap-4 px-[var(--gx)]">
+          <a href="index.html" aria-label="NewDermaMed home" className="relative block h-[30px] sm:h-[34px] xl:h-[34px] 2xl:h-[42px] justify-self-start">
+            <img src="assets/icons/logo-color.svg" alt="" className="h-full w-auto object-contain object-left transition-opacity duration-500" style={{ opacity: tone ? 0 : 1 }} />
+            <img src="assets/icons/logo-white.svg" alt="" className="absolute left-0 top-0 h-full w-auto object-contain object-left transition-opacity duration-500" style={{ opacity: tone ? 1 : 0 }} />
           </a>
 
           <nav aria-label="Primary" className="hidden xl:block" onMouseLeave={leave}>
-            <ul className="flex items-center gap-1 2xl:gap-3" role="list">
+            <ul className="flex items-center gap-0 2xl:gap-2" role="list">
               {NAV.map((n) => (
                 <li key={n.id} className="relative" onMouseEnter={() => (n.menu ? enter(n.id) : leave())}>
                   {n.menu ? (
                     <button
                       aria-expanded={open === n.id} aria-haspopup="true"
                       onClick={() => setOpen(open === n.id ? null : n.id)}
-                      className={`relative flex items-center gap-1.5 rounded-full px-3 py-2.5 font-inter text-[16px] tracking-[-0.02em] whitespace-nowrap transition-colors 2xl:px-4 ${hover} ${open === n.id ? active : ''} ${NAV_HERE === n.id ? `nav-is-here ${tone ? 'is-dark' : ''}` : ''}`}
+                      className={`relative flex items-center gap-1.5 rounded-full px-2 py-2.5 font-inter text-[15px] tracking-[-0.02em] whitespace-nowrap transition-colors 2xl:px-4 2xl:text-[16px] ${hover} ${open === n.id ? active : ''} ${NAV_HERE === n.id ? `nav-is-here ${tone ? 'is-dark' : ''}` : ''}`}
                     >
                       {n.label}{NAV_HERE === n.id && <><span className="sr-only"> (current section)</span><i aria-hidden="true" className={`nav-here ${tone ? 'is-dark' : ''}`} /></>}
                       <IconChevron className={`opacity-60 transition-transform duration-300 ${open === n.id ? 'rotate-180' : ''}`} />
                     </button>
                   ) : (
-                    <a href={n.href || slug(n.label)} {...(n.ext ? { target: '_blank', rel: 'noopener' } : {})} {...(NAV_HERE === n.id ? { 'aria-current': 'page' } : {})} className={`relative flex items-center gap-1.5 rounded-full px-3 py-2.5 font-inter text-[16px] tracking-[-0.02em] whitespace-nowrap transition-colors 2xl:px-4 ${hover} ${NAV_HERE === n.id ? `nav-is-here ${tone ? 'is-dark' : ''}` : ''}`}>
+                    <a href={n.href || slug(n.label)} {...(n.ext ? { target: '_blank', rel: 'noopener' } : {})} {...(NAV_HERE === n.id ? { 'aria-current': 'page' } : {})} className={`relative flex items-center gap-1.5 rounded-full px-2 py-2.5 font-inter text-[15px] tracking-[-0.02em] whitespace-nowrap transition-colors 2xl:px-4 2xl:text-[16px] ${hover} ${NAV_HERE === n.id ? `nav-is-here ${tone ? 'is-dark' : ''}` : ''}`}>
                       {n.label}{n.ext && <IconExternal className="opacity-60" />}{NAV_HERE === n.id && <i aria-hidden="true" className={`nav-here ${tone ? 'is-dark' : ''}`} />}
                     </a>
                   )}
@@ -1317,7 +1358,7 @@ function FloatSearch({ onOpen, hidden, lift = 0 }) {
   const bottom = Math.max(16, avoid, lift);
   return (
     <button type="button" onClick={onOpen} tabIndex={hidden ? -1 : 0} aria-hidden={hidden} aria-label="Search treatments"
-      className={`float-search fixed right-4 z-[55] grid size-[52px] place-items-center rounded-full bg-ndm-ink text-white shadow-[0_18px_40px_-16px_rgba(11,15,19,.6)] ring-1 ring-white/10 md:hidden ${hidden ? 'is-off' : ''}`}
+      className={`float-search fixed right-4 z-[55] grid size-[52px] place-items-center rounded-full bg-ndm-deep text-white shadow-[0_18px_40px_-16px_rgba(11,15,19,.6)] ring-1 ring-white/10 md:hidden ${hidden ? 'is-off' : ''}`}
       style={{ bottom: `calc(${bottom}px + env(safe-area-inset-bottom))` }}>
       <IconSearch size={22} />
     </button>
@@ -1402,6 +1443,7 @@ function Drawer({ open, onClose }) {
           <button onClick={onClose} aria-label="Close menu" className="grid place-items-center size-11 rounded-full hover:bg-ndm-mist"><IconClose /></button>
         </div>
         <nav aria-label="Mobile" className="flex-1 overflow-y-auto px-5 divide-y divide-ndm-line">
+          <a href="index.html" onClick={onClose} {...(NAV_HERE === 'home' ? { 'aria-current': 'page' } : {})} className={`block py-4 font-aeonik text-[22px] ${NAV_HERE === 'home' ? 'nav-is-here' : ''}`}><span className="relative">Home{NAV_HERE === 'home' && <i aria-hidden="true" className="nav-here is-left" />}</span></a>
           <div>
             <Row onClick={() => setSec(sec === 'p' ? null : 'p')} expanded={sec === 'p'} on={NAV_HERE === 'procedures'}>Procedures</Row>
             {sec === 'p' && (
@@ -1755,9 +1797,9 @@ const PROCESS = [
    three photos on the right. Pinned on wide screens; each scroll step sends the top photo up and away while the
    step text fades out and the next one fades in. Photo and text are both links; a CTA sits under the text. */
 const PROCESS_MEDIA = [
-  { img: 'assets/hero/clinic-reception.jpg', alt: 'Reception at NewDermaMed Toronto', h: '#/book', cta: 'Book Free Consultation', v: 'book' },
-  { img: 'assets/hero/treatment-room.jpg', alt: 'A NewDermaMed consultation room with VISIA® skin analysis', h: '#treatments', cta: 'Explore treatments', v: 'ink' },
-  { img: 'assets/clinic/clinic-2.jpg', alt: 'A treatment suite at NewDermaMed Toronto', h: '#visit', cta: 'Find a clinic', v: 'ink' },
+  { img: 'assets/home/visia-consult.jpg', alt: 'A provider and a patient reviewing VISIA® skin analysis results', h: '#/book', cta: 'Book Free Consultation', v: 'book' },
+  { img: 'assets/home/visia-screen.jpg', alt: 'VISIA® skin analysis results on the consultation room screen', h: '#treatments', cta: 'Explore treatments', v: 'ink' },
+  { img: 'assets/home/mirror-check.jpg', alt: 'A patient checking her skin in a hand mirror in the treatment chair', h: '#visit', cta: 'Find a clinic', v: 'ink' },
 ];
 
 function ProcessText({ i, on, small }) {
@@ -1793,21 +1835,21 @@ function Process() {
   }, [wide]);
   const head = (
     <>
-      <Eyebrow className="rv">Process</Eyebrow>
+      <Eyebrow className="rv">How it works</Eyebrow>
       <TwoTone id="process" className="rv mt-5 max-w-[14ch]" lead="How your treatment" strong="journey works" style={{ transitionDelay: '.06s' }} />
     </>
   );
 
   if (!wide) {
     return (
-      <section ref={ref} aria-labelledby="process" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(72px,9vw,120px)]">
+      <section ref={ref} aria-labelledby="process" className="relative z-10 bg-ndm-paper px-[var(--gx)] pb-[clamp(72px,9vw,120px)] pt-[clamp(16px,2vw,32px)]">
         {head}
         <ol className="mt-10 grid gap-10 md:grid-cols-3 md:gap-5" role="list">
           {PROCESS.map((_, i) => (
-            <li key={i} className="rv flex flex-col" style={{ transitionDelay: `${0.08 * i}s` }}>
-              <div className="aspect-[4/3]"><ProcessPhoto i={i} on /></div>
-              <div className="mt-5"><ProcessText i={i} on small /></div>
-              <div className="mt-auto pt-5"><Btn href={PROCESS_MEDIA[i].h} v={PROCESS_MEDIA[i].v} sm>{PROCESS_MEDIA[i].cta}</Btn></div>
+            <li key={i} className="rv proc-card flex flex-col rounded-[22px] bg-white p-3 ring-1 ring-ndm-ink/[.06]" style={{ transitionDelay: `${0.08 * i}s` }}>
+              <div className="aspect-[4/3.2]"><ProcessPhoto i={i} on /></div>
+              <div className="px-2 pt-5"><ProcessText i={i} on small /></div>
+              <div className="mt-auto px-2 pb-2 pt-5"><Btn href={PROCESS_MEDIA[i].h} v={PROCESS_MEDIA[i].v}>{PROCESS_MEDIA[i].cta}</Btn></div>
             </li>
           ))}
         </ol>
@@ -2161,7 +2203,7 @@ function Social() {
   useReveal(ref);
   const icons = [[SOCIAL.instagram, IconInstagram, 'Instagram'], [SOCIAL.facebook, IconFacebook, 'Facebook'], [SOCIAL.youtube, IconYouTube, 'YouTube'], [SOCIAL.x, IconX, 'X'], [SOCIAL.linkedin, IconLinkedIn, 'LinkedIn']];
   return (
-    <section ref={ref} aria-labelledby="social" className="relative z-10 overflow-hidden bg-ndm-paper px-[var(--gx)] pt-[clamp(72px,8vw,120px)]">
+    <section ref={ref} aria-labelledby="social" className="relative z-10 overflow-hidden bg-ndm-paper px-[var(--gx)] pt-[clamp(40px,4.5vw,72px)]">
       <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div className="pb-[clamp(8px,4vw,96px)]">
           <p className="rv eyebrow font-mont">
@@ -2175,7 +2217,7 @@ function Social() {
             <Btn href={SOCIAL.instagram} target="_blank" rel="noopener" v="ink">Follow along</Btn>
             <ul className="flex gap-2" role="list">
               {icons.map(([h, I, n]) => (
-                <li key={n}><a href={h} target="_blank" rel="noopener" aria-label={`NewDermaMed on ${n}`} className="grid size-11 place-items-center rounded-full border border-ndm-ink/15 text-ndm-ink transition-colors hover:border-ndm-ink hover:bg-ndm-ink hover:text-white"><I /></a></li>
+                <li key={n}><a href={h} target="_blank" rel="noopener" aria-label={`NewDermaMed on ${n}`} data-net={n.toLowerCase()} className="soc-ico soc-ico-line grid size-11 place-items-center rounded-full border border-ndm-ink/15 text-ndm-ink"><I /></a></li>
               ))}
             </ul>
           </div>
@@ -2192,16 +2234,17 @@ function Social() {
 /* ---------------------------------------------------------------- exclusive monthly specials */
 const NDM = 'https://newdermamedlaserclinic.com';
 const FEES = `${NDM}/fees-financing/`;
-const SPECIALS = [ /* from newdermamedlaserclinic.com/promotion */
-  { n: 'Radiesse® Collagen Lift', img: 'assets/promotion/collagen-lift.webp', pos: '50% 42%', p: 499, u: 'per syringe', tag: 'Bio-stimulator', area: 'Face', icon: 'syringe', h: '/promotion/', d: 'Restore lost volume and stimulate natural collagen production.' },
-  { n: 'Radiesse® Jawline Lift', img: 'assets/promotion/jawline.webp', pos: '50% 50%', p: 499, u: 'per syringe', tag: 'Bio-stimulator', area: 'Face', icon: 'face', h: '/promotion/', d: 'Sculpt a more defined, contoured jawline.' },
-  { n: 'Hand Rejuvenation with Radiesse®', img: 'assets/promotion/hands.webp', pos: '50% 58%', p: 499, u: 'per syringe', tag: 'Bio-stimulator', area: 'Body', icon: 'hand', h: '/promotion/', d: 'Restore youthful volume to aging hands.' },
-  { n: 'Non-Surgical Butt Lift (60 mL)', img: 'assets/promotion/butt-lift.webp', pos: '50% 56%', p: 3999, u: 'package', tag: 'Body', area: 'Body', icon: 'body', h: '/fees-financing/#non_surgical_butt_lift', d: 'Add natural-looking volume and lift with no surgery required.' },
-  { n: 'Hip Dip Enhancement', img: 'assets/promotion/hip-dip.webp', pos: '50% 56%', p: 1999, u: 'package', tag: 'Body', area: 'Body', icon: 'body', h: '/fees-financing/#non_surgical_butt_lift', d: 'Smooth and contour the hip area for balanced curves.' },
-  { n: 'Crepey Arm Rejuvenation with Radiesse®', img: 'assets/promotion/crepey-arms.webp', pos: '50% 55%', p: 599, u: 'per syringe', tag: 'Bio-stimulator', area: 'Body', icon: 'syringe', h: '/fees-financing/#skin_booster_and_bio_stimulators', d: 'Tighten and smooth crepey skin on the arms.' },
-  { n: 'Above the Knee Tightening', img: 'assets/promotion/above-knee.webp', pos: '50% 55%', p: 599, u: 'per syringe', tag: 'Bio-stimulator', area: 'Body', icon: 'drop', h: '/fees-financing/#skin_booster_and_bio_stimulators', d: 'Firm and lift loose, sagging skin above the knees.' },
-  { n: 'Liquid Facelift', img: 'assets/pricing/price-4.jpg', p: 599, u: 'package', tag: 'Face', area: 'Face', icon: 'face', h: '/promotion/', d: 'Restore volume and lift with no downtime.' },
-  { n: 'Liquid Facelift with Sculptra®', img: 'assets/promotion/sculptra-face.webp', pos: '50% 45%', p: 599, u: 'package', tag: 'Bio-stimulator', area: 'Face', icon: 'drop', h: '/fees-financing/#skin_booster_and_bio_stimulators', d: 'Long-lasting, collagen-stimulating facial rejuvenation.' },
+const SPECIALS = [ /* ten most-wanted treatments; prices pulled from the pricing page (src/live/pricing.json) by src/patches-applied/promo_offers_patch.py, rerun on every build */
+  { n: 'Lip Filler', img: 'assets/treatments/lip-filler.jpg', pos: '50% 35%', p: '562.50', u: 'per syringe', deal: 'Buy 1 get 1 50% off', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
+  { n: 'Microneedling', img: 'assets/treatments/microneedling.jpg', pos: '50% 40%', p: '245', u: '', deal: 'Up to 50% off', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
+  { n: 'Chemical Peel', img: 'assets/treatments/chemical-peel.jpg', pos: '50% 40%', p: '104.30', u: 'per session', deal: 'Up to 30% off', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
+  { n: 'Laser Skin Resurfacing', img: 'assets/treatments/laser-resurfacing.jpg', pos: '50% 40%', p: '140', u: 'per session', deal: 'Up to 30% off', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
+  { n: 'Photo Rejuvenation', img: 'assets/treatments/photo-rejuvenation.jpg', pos: '50% 40%', p: '192.50', u: 'per session', deal: 'Up to 60% off', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
+  { n: 'Skin Booster', img: 'assets/treatments/skin-booster.jpg', pos: '50% 40%', p: '399', u: '', deal: 'Buy 1 get 1 50% off', tag: 'Skin Booster and Bio-stimulators', area: 'Face', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Deep hydration for a fresh, dewy glow.' },
+  { n: 'Sculptra® Liquid Facelift', img: 'assets/promotion/sculptra-face.webp', pos: '50% 45%', p: '699', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Gradual, collagen-building facial lift.' },
+  { n: 'Hand Rejuvenation with Radiesse®', img: 'assets/promotion/hands.webp', pos: '50% 58%', p: '599', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'hand', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Restore youthful volume to aging hands.' },
+  { n: 'Crepey Arm Rejuvenation', img: 'assets/promotion/crepey-arms.webp', pos: '50% 55%', p: '599', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Smooth and firm crepey skin on the arms.' },
+  { n: 'Above the Knee Tightening', img: 'assets/promotion/above-knee.webp', pos: '50% 55%', p: '599', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Firm loose, sagging skin above the knees.' }
 ];
 const SW_ICONS = {
   pen: <><path d="M15.5 3.5 20.5 8.5 11 18l-5-5 9.5-9.5Z" /><path d="m6 13-2.5 2.5M8.5 15.5 6 18M11 18l-2.5 2.5" /></>,
@@ -2305,6 +2348,7 @@ function Promotions() {
                       </>
                     ) : (
                       <>
+                        {s.deal && <span className="deal-badge mb-3"><i aria-hidden="true">%</i>{s.deal}</span>}
                         <span className="sw-muted font-inter text-[11px] uppercase tracking-[.18em]">From</span>
                         <span className="sw-price mt-1 whitespace-nowrap font-aeonik leading-none tracking-[-0.035em]" style={{ fontSize: 40 * k }}><span className="sw-cur">$</span>{s.p}</span>
                         <span className="sw-muted mt-2 font-inter text-[12.5px]">{s.u || 'for selected packages'}</span>
@@ -2347,12 +2391,12 @@ function Promotions() {
    Shown once only, after real engagement: 15 s on the page, 45% scroll depth, or exit intent on desktop, whichever comes first.
    Once it has appeared it never shows again (remembered in localStorage, or for the visit if storage is blocked).
    Add ?offer to the URL to preview it at any time. */
-const OFFER_KEY = 'ndm-offer-seen';
+const OFFER_KEY = 'ndm-offer-closed'; /* records when the pop-up was last closed; it still shows once on every page per visit */
 let offerShownThisVisit = false;
 function offerAllowed() {
   if (/[?&]offer\b/.test(location.search)) return true;
   if (offerShownThisVisit) return false;
-  try { return !localStorage.getItem(OFFER_KEY); } catch (e) { return true; }
+  try { return sessionStorage.getItem('ndm-offer-' + HERE) !== '1'; } catch (e) { return true; } /* once on every page per visit */
 }
 function OfferPopup({ ready }) {
   const [open, setOpen] = useState(false);
@@ -2363,7 +2407,7 @@ function OfferPopup({ ready }) {
     fired.current = true;
     offerShownThisVisit = true;
     stop.current();
-    try { localStorage.setItem(OFFER_KEY, String(Date.now())); } catch (e) {}
+    try { sessionStorage.setItem('ndm-offer-' + HERE, '1'); } catch (e) {}
     lastFocus.current = document.activeElement;
     setMounted(true);
     requestAnimationFrame(() => requestAnimationFrame(() => setOpen(true)));
@@ -2371,7 +2415,7 @@ function OfferPopup({ ready }) {
   useEffect(() => {
     if (!ready || !offerAllowed()) return;
     const force = /[?&]offer\b/.test(location.search);
-    const t = setTimeout(show, force ? 1500 : 15000);
+    const t = setTimeout(show, force ? 1500 : 9000);
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       if (max > 0 && window.scrollY / max > 0.45) show();
@@ -2384,6 +2428,7 @@ function OfferPopup({ ready }) {
     return () => stop.current();
   }, [ready]);
   const close = () => {
+    try { localStorage.setItem(OFFER_KEY, String(Date.now())); } catch (e) {}
     setOpen(false);
     setTimeout(() => { setMounted(false); if (lastFocus.current && lastFocus.current.focus) lastFocus.current.focus(); }, 450);
   };
@@ -2874,7 +2919,7 @@ function BaCompare({ c, i, nudge = true }) {
    a prescription-drug before/after is not allowed in consumer advertising). */
 const BA_TREATS = ['Aptos thread lift', 'Laser acne', 'Chemical peel', 'Dermamelan®'];
 const BA_MODELS = Array.from({ length: 12 }, (_, i) => ({ ...BA_CASES[i % BA_CASES.length], n: i + 1, id: String(i + 1).padStart(2, '0'), treat: BA_TREATS[i % BA_TREATS.length] }));
-const BA_ALL = 'https://newdermamedlaserclinic.com/before-after/';
+const BA_ALL = 'before-after.html';
 
 /* before & after: a dark, pinned section; vertical scrolling slides the row of compare cards sideways */
 const BA_STILL = true; /* promotion page: the row scrolls only when the visitor scrolls it */
@@ -3042,8 +3087,8 @@ const TEAM = [
     ],
     facts: [['Education', 'BSc, Biology'], ['Certifications', 'Cosmetic Dermatology, Medical Aesthetics'], ['Role', 'Director of NewDermaMed']],
   },
-  /* sample until the fourth team member's photo and profile arrive */
-  { id: 'team-sample', first: 'Team member', tag: 'Photo coming soon', sample: true, name: 'Team member', role: 'Profile coming soon', img: 'assets/team/sample.svg' },
+  /* photo in; her profile (bio, focus, facts) is still to come, so the card has no profile dialog yet */
+  { id: 'team-heather', first: 'Heather', tag: 'Nurse Practitioner', sample: true, name: 'Heather Bouchard, NP', role: 'Nurse Practitioner', img: 'assets/team/heather.jpg' },
 ];
 
 const TEAM_LABEL = 'font-inter text-[11.5px] font-[550] uppercase tracking-[.14em] text-ndm-muted';
@@ -3162,13 +3207,13 @@ function TeamProfile({ m, onClose }) {
 /* meet the team: copy on the left, three staggered portraits on the right (Alin, Negin, Luis).
    The portraits wipe up one after another when the row comes into view, drift at different speeds while scrolling,
    and each one opens the profile dialog. */
-const TEAM_ORDER = ['team-alin', 'team-negin', 'team-luis', 'team-sample'];
+const TEAM_ORDER = ['team-alin', 'team-negin', 'team-luis', 'team-heather'];
 const TEAM_DRIFT = [-26, 30, -10, 22]; /* px of parallax over the section's pass through the viewport */
 
 function TeamPortrait({ m, i, onOpen }) {
   return (
     <div className={`team-port team-port-${i}`} style={{ '--i': i }}>
-      <button type="button" onClick={m.sample ? undefined : onOpen} disabled={!!m.sample} aria-haspopup={m.sample ? undefined : 'dialog'} aria-label={m.sample ? 'Team member, photo coming soon' : `View profile of ${m.name}, ${m.role}`} className="group block w-full text-left disabled:cursor-default">
+      <button type="button" onClick={m.sample ? undefined : onOpen} disabled={!!m.sample} aria-haspopup={m.sample ? undefined : 'dialog'} aria-label={m.sample ? `${m.name}, ${m.role}, profile coming soon` : `View profile of ${m.name}, ${m.role}`} className="group block w-full text-left disabled:cursor-default">
         <span className="team-port-pic relative block aspect-[4/5] overflow-hidden rounded-[22px] bg-ndm-mist shadow-[0_30px_60px_-36px_rgba(27,36,43,.55)]">
           <img src={m.img} alt="" width="800" height="1000" decoding="async" className="team-port-img absolute inset-0 h-full w-full object-cover object-[50%_15%]" />
           <span aria-hidden="true" className="team-port-shade absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ndm-ink/60 to-transparent" />
@@ -3285,60 +3330,330 @@ function BookThanks({ id, onAnother }) {
   );
 }
 
+const BOOK_INTEREST_GROUPS = [ /* the picker's categories; labels match the concern and treatment pages. An option may sit in more than one category */
+  ['Face', ['Wrinkles & fine lines', 'Volume loss', 'Sagging skin & jowls', 'Double chin', 'Thin lips', 'Dark circles & under-eye hollows']],
+  ['Skin', ['Acne', 'Acne scars', 'Rosacea & redness', 'Melasma', 'Pigmentation & sun spots', 'Texture & pores', 'Moles & skin lesions']],
+  ['Body', ['Stubborn fat', 'Cellulite', 'Stretch marks', 'Loose skin', 'Excessive sweating', 'Spider & varicose veins', 'Unwanted hair']],
+  ['Hair', ['Thinning hair', 'Hair loss']],
+  ['Injectables', ['Botox®', 'Dermal Fillers', 'Lip fillers', 'Under-eye filler', 'Skin boosters', 'Aptos Thread Lift', 'Bio-stimulator · Sculptra®', 'Bio-stimulator · Radiesse®']],
+  ['Bio-stimulators', ['Bio-stimulator · Aptos Thread Lift', 'Bio-stimulator · Sculptra®', 'Bio-stimulator · Radiesse®']],
+  ['Thread lift', ['Aptos Thread Lift', 'Non-surgical facelift', 'Neck lift', 'Jawline lift', 'Eyebrow lift', 'Nose lift']],
+  ['Treatments', ['Laser Hair Removal', 'Microneedling', 'Laser skin resurfacing', 'Laser skin tightening', 'Photo-rejuvenation (IPL)', 'Chemical peels', 'CoolSculpting®', 'VISIA® skin analysis']],
+];
+const BOOK_INTERESTS = BOOK_INTEREST_GROUPS.flatMap(([, xs]) => xs);
+const BOOK_NOT_SURE = 'Not sure, I’d like a skin analysis';
+/* the organised picker: category tabs, the options of the open category, the two standing options */
+function BookPicker({ values, onPick, compact }) {
+  const found = BOOK_INTEREST_GROUPS.findIndex(([, xs]) => xs.some((x) => values.includes(x)));
+  const [cat, setCat] = useState(found >= 0 ? found : 0);
+  const tabs = useRef([]);
+  const key = (e, i) => {
+    const k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!k) return;
+    e.preventDefault();
+    const n = (i + k + BOOK_INTEREST_GROUPS.length) % BOOK_INTEREST_GROUPS.length;
+    setCat(n); if (tabs.current[n]) tabs.current[n].focus();
+  };
+  const standing = [BOOK_NOT_SURE, BOOK_OTHER];
+  return (
+    <div className="book-pick">
+      <div role="tablist" aria-label="Type of concern" className={`flex gap-1 ${compact ? 'no-scrollbar -mx-1 overflow-x-auto px-1' : 'flex-wrap'}`}>
+        {BOOK_INTEREST_GROUPS.map(([g, xs], i) => (
+          <button key={g} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" aria-selected={i === cat} tabIndex={i === cat ? 0 : -1} onClick={() => setCat(i)} onKeyDown={(e) => key(e, i)}
+            className={`book-tab shrink-0 rounded-full ${compact ? 'px-3 py-1.5 text-[13px]' : 'px-4 py-2.5 text-[15px]'} font-inter font-semibold transition-colors ${i === cat ? 'bg-ndm-ink text-white' : 'bg-ndm-mist text-ndm-ink/80 hover:text-ndm-ink'} ${xs.some((x) => values.includes(x)) && i !== cat ? 'book-tab-has' : ''}`}>{g}</button>
+        ))}
+      </div>
+      <div className="mt-2.5 grid">
+        {BOOK_INTEREST_GROUPS.map(([g, xs], gi) => (
+          <div key={g} role="tabpanel" aria-label={g} aria-hidden={gi !== cat || undefined} inert={gi !== cat ? '' : undefined}
+            className={`grid content-start gap-1.5 [grid-area:1/1] ${gi === cat ? '' : 'invisible'} ${compact ? 'grid-cols-1 sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'}`}>
+            {xs.map((t) => (
+              <label key={t} className="relative flex cursor-pointer">
+                <input type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)} tabIndex={gi === cat ? undefined : -1} className="peer absolute inset-0 m-0 cursor-pointer opacity-0" />
+                <span className={`book-opt flex w-full items-center gap-2.5 rounded-[12px] border border-ndm-ink/12 bg-white px-3.5 font-inter ${compact ? 'min-h-[36px] py-1.5 text-[13px]' : 'min-h-[42px] py-2 text-[13.5px]'} leading-[1.3] text-ndm-ink transition-colors peer-hover:border-ndm-ink/35 peer-checked:border-ndm-deep peer-checked:bg-ndm-deep peer-checked:text-white peer-focus-visible:ring-4 peer-focus-visible:ring-ndm-blue/25`}>
+                  <i aria-hidden="true" className={`size-2 shrink-0 rounded-full ${values.includes(t) ? 'bg-ndm-amber' : 'bg-ndm-ink/15'}`} />{t}
+                </span>
+              </label>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="mt-2.5 flex flex-wrap gap-1.5">
+        {standing.map((t) => <BookChip key={t} type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)}>{t}</BookChip>)}
+      </div>
+      <p className={`mt-2.5 flex flex-wrap content-start items-center gap-2 font-inter text-[13px] text-ndm-ink ${compact ? 'min-h-[20px]' : 'min-h-[40px]'}`} aria-live="polite">
+        {values.length ? <><i aria-hidden="true" className="size-2 shrink-0 rounded-full bg-ndm-amber" /><span className="text-ndm-muted">Your choices:</span><b className="font-semibold">{values.join(', ')}</b></> : <span className="text-ndm-muted">Pick a category, then one or more things you would like to address.</span>}
+      </p>
+    </div>
+  );
+}
+const BOOK_NOTICE = '24 hours'; /* free reschedule or cancel up to this long before the visit */
+const BOOK_FLOW = { book: ['Your concern', 'Your details', 'Book or call', 'Clinic, day and time'], call: ['Your concern', 'Your details', 'Book or call', 'Best time to call'] };
+const BOOK_CALL_TIMES = ['Morning', 'Afternoon', 'Early evening'];
+const BOOK_OTHER = 'Something else'; /* last concern option, opens a short text box */
+const BOOK_CLINIC_OPTS = [['Uptown', 'Uptown, Yonge & Sheppard'], ['Downtown', 'Downtown, Bay & College']];
+/* opening hours (HOURS): Monday to Friday 9 to 7, Saturday 10 to 5, Sunday closed; a request slot every hour, the last one an hour before closing */
+const bookSlots = (d) => { const w = d.getDay(); if (w === 0) return []; const [a, b] = w === 6 ? [10, 16] : [9, 18]; const now = new Date(); const from = d.toDateString() === now.toDateString() ? now.getHours() + 1 : 0; /* today: only times still ahead, since a paid booking holds a real time */ return Array.from({ length: b - a + 1 }, (_, i) => a + i).filter((h) => h >= from); };
+const bookHour = (h) => `${h > 12 ? h - 12 : h}:00 ${h >= 12 ? 'pm' : 'am'}`;
+const bookDay = (d) => d.toLocaleDateString('en-CA', { weekday: 'short', month: 'short', day: 'numeric' });
+function BookChip({ type = 'radio', name, value, checked, onChange, children }) {
+  return (
+    <label className="relative inline-flex cursor-pointer">
+      <input type={type} name={name} value={value} checked={checked} onChange={onChange} className="peer absolute inset-0 m-0 cursor-pointer opacity-0" />
+      <span className="inline-flex min-h-[40px] items-center gap-2 rounded-full border border-ndm-ink/15 bg-white px-3.5 font-inter text-[13.5px] leading-[1.3] text-ndm-ink transition-colors peer-hover:border-ndm-ink/40 peer-checked:border-ndm-deep peer-checked:bg-ndm-deep peer-checked:text-white peer-focus-visible:ring-4 peer-focus-visible:ring-ndm-blue/25">{children}</span>
+    </label>
+  );
+}
+/* a month calendar (Sundays and past days closed) and the open request times of the chosen day */
+function BookCalendar({ day, time, onDay, onTime, stack = false }) {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const [view, setView] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));
+  const first = (view.getDay() + 6) % 7; /* weeks start on Monday */
+  const days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+  const cells = [...Array(first).fill(null), ...Array.from({ length: days }, (_, i) => new Date(view.getFullYear(), view.getMonth(), i + 1))];
+  while (cells.length < 42) cells.push(null); /* always six weeks, so the card never changes height between months */
+  const canBack = view > new Date(today.getFullYear(), today.getMonth(), 1);
+  const nav = 'grid size-8 place-items-center rounded-full border border-ndm-ink/12 text-ndm-ink transition-colors hover:bg-ndm-mist disabled:opacity-30';
+  return (
+    <div className={`grid gap-4 ${stack ? '' : 'md:grid-cols-[minmax(0,1fr)_minmax(0,200px)]'}`}>
+      <div>
+        <div className="flex items-center justify-between">
+          <p className="font-aeonik text-[19px] text-ndm-ink">{view.toLocaleDateString('en-CA', { month: 'long', year: 'numeric' })}</p>
+          <span className="flex gap-1.5">
+            <button type="button" disabled={!canBack} onClick={() => setView(new Date(view.getFullYear(), view.getMonth() - 1, 1))} aria-label="Previous month" className={nav}><IconArrow size={12} className="rotate-180" /></button>
+            <button type="button" onClick={() => setView(new Date(view.getFullYear(), view.getMonth() + 1, 1))} aria-label="Next month" className={nav}><IconArrow size={12} /></button>
+          </span>
+        </div>
+        <div className="mt-2 grid grid-cols-7 gap-1 text-center font-inter text-[11px] uppercase tracking-[.08em] text-ndm-muted" aria-hidden="true">{['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((d) => <span key={d} className="py-1">{d}</span>)}</div>
+        <div className="grid grid-cols-7 gap-1" role="group" aria-label="Choose a day">
+          {cells.map((d, i) => {
+            if (!d) return <span key={`e${i}`} />;
+            const closed = d < today || !bookSlots(d).length; /* Sundays, past days, and today once its last time has gone */
+            const on = day && d.getTime() === day.getTime();
+            return (
+              <button key={d.getDate()} type="button" disabled={closed} onClick={() => onDay(d)} aria-pressed={on} aria-label={`${bookDay(d)}${closed ? ', closed' : ''}`}
+                className={`relative grid h-8 place-items-center rounded-[10px] font-inter text-[13.5px] tabular-nums transition-colors ${on ? 'bg-ndm-deep text-white' : closed ? 'text-ndm-ink/25' : 'bg-white text-ndm-ink ring-1 ring-ndm-ink/10 hover:ring-ndm-deep'}`}>
+                {d.getDate()}{!closed && !on && <i aria-hidden="true" className="absolute bottom-1 size-1 rounded-full bg-ndm-sky" />}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div className="min-h-[176px] md:min-h-0">
+        <p className="font-inter text-[13px] font-semibold text-ndm-ink">{day ? bookDay(day) : 'Pick a day'}</p>
+        {day ? (
+          <div className={`mt-2 grid grid-cols-3 gap-1.5 ${stack ? 'sm:grid-cols-4' : 'md:grid-cols-2'}`} role="group" aria-label="Choose a time">
+            {bookSlots(day).map((h) => (
+              <button key={h} type="button" onClick={() => onTime(h)} aria-pressed={time === h}
+                className={`h-8 rounded-[10px] font-inter text-[13px] tabular-nums transition-colors ${time === h ? 'bg-ndm-deep text-white' : 'bg-white text-ndm-ink ring-1 ring-ndm-ink/10 hover:ring-ndm-deep'}`}>{bookHour(h)}</button>
+            ))}
+          </div>
+        ) : <p className="mt-2 font-inter text-[13px] leading-[1.5] text-ndm-muted">Open days are marked with a dot. Sundays are closed.</p>}
+      </div>
+    </div>
+  );
+}
+/* consultation booking, shared by the booking section and the Book Free Consultation pop-up: the concern, then contact
+   details (so every request reaches the team), then a choice: book a time now, or ask us to call.
+   Prototype: no payment is taken; the clinic's payment provider opens at the deposit step. */
+function BookForm({ thanksId, summary = false, compact = false }) {
+  const box = useRef(null);
+  const [step, setStep] = useState(0);
+  const [path, setPath] = useState(null); /* 'book' (pick a time) or 'call' (we call you) */
+  const [sent, setSent] = useState(false);
+  const [err, setErr] = useState('');
+  const [f, setF] = useState({ interest: [], clinic: 'Uptown', day: null, time: null, via: ['Call', 'Text'], first: '', callTime: '', callClinic: 'Either', agree: false, other: '', visia: true });
+  const set = (k, v) => { setErr(''); setF((o) => ({ ...o, [k]: v })); };
+  const toggle = (k, v) => { setErr(''); setF((o) => ({ ...o, [k]: o[k].includes(v) ? o[k].filter((x) => x !== v) : [...o[k], v] })); };
+  const otherBox = () => box.current && box.current.querySelector('input[name="other"]');
+  /* "Something else" opens the text box; "Not sure, I'd like a skin analysis" switches the free VISIA analysis back on */
+  const pick = (t) => { setErr(''); const has = f.interest.includes(t); setF((o) => ({ ...o, interest: has ? o.interest.filter((x) => x !== t) : [...o.interest, t], visia: (!has && t.startsWith('Not sure')) ? true : o.visia })); if (t === BOOK_OTHER && !has) setTimeout(() => { const i = otherBox(); if (i) i.focus(); }, 60); };
+  const [hold, setHold] = useState(0);
+  const flow = BOOK_FLOW[path || 'book'];
+  const keyOf = (n, p) => (n < 3 ? String(n) : `${n}${p === 'call' ? 'c' : 'b'}`);
+  const cur = keyOf(step, path);
+  const go = (n, p = path) => {
+    setErr(''); setStep(n);
+    setTimeout(() => { const l = box.current && box.current.querySelector(`[data-step="${keyOf(n, p)}"] legend`); if (l) { l.focus({ preventScroll: true }); l.scrollIntoView({ block: 'nearest' }); } }, 30); /* keeps the new step's question in view on phones */
+  };
+  const detailsOk = () => {
+    const fs = box.current && box.current.querySelector('[data-step="1"]');
+    const bad = fs ? [...fs.querySelectorAll('input[required]')].find((i) => !i.checkValidity()) : null;
+    if (bad) { setErr('Please add your name, mobile number and a valid email.'); bad.focus(); return false; }
+    if (!f.via.length) { setErr('Please choose at least one way to reach you.'); return false; }
+    return true;
+  };
+  const choose = (p) => { setPath(p); go(3, p); };
+  const next = () => {
+    if (step === 0 && !f.interest.length) { setErr('Please choose at least one option.'); return; }
+    if (step === 0 && f.interest.includes(BOOK_OTHER) && !f.other.trim()) { setErr('Please tell us in a few words what you’d like to address.'); const i = otherBox(); if (i) i.focus(); return; }
+    if (step === 1 && !detailsOk()) return;
+    if (step === 3 && path === 'book' && (!f.day || !f.time)) { setErr('Please pick a day and a time.'); return; }
+    go(step + 1);
+  };
+  const submit = (e) => {
+    e.preventDefault();
+    if (step === 2) { setErr('Choose how to continue: book a time now, or have us call you.'); return; }
+    if (step < flow.length - 1) { next(); return; }
+    if (path === 'call' && !f.callTime) { setErr('Please choose a time of day.'); return; }
+    if (path === 'book' && (!f.day || !f.time)) { setErr('Please pick a day and a time.'); return; }
+    setHold(box.current ? box.current.offsetHeight : 0); setSent(true);
+  };
+  const reset = () => { setSent(false); setPath(null); setF((o) => ({ ...o, interest: [], other: '', visia: true, day: null, time: null, callTime: '', agree: false })); go(0, null); };
+  const when = f.day && f.time ? `${bookDay(f.day)}, ${bookHour(f.time)}` : null;
+  const clinicName = (v) => (v === 'Either' ? 'Either clinic' : BOOK_CLINIC_OPTS.find(([x]) => x === v)[1]);
+  const clinicPhone = (CLINICS.find((c) => c.name === f.clinic) || CLINICS[0]).phone;
+  const legend = `scroll-mt-24 font-aeonik ${compact ? 'text-[20px]' : 'text-[clamp(21px,1.9vw,26px)]'} font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink outline-none`;
+  const label = 'mb-1.5 block font-inter text-[13px] font-semibold text-ndm-ink';
+  const tile = 'flex min-h-[64px] items-center gap-3 rounded-[14px] border px-4 py-3 text-left font-inter transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ndm-blue/25';
+  const concern = f.interest.map((t) => t === BOOK_OTHER ? (f.other.trim() || BOOK_OTHER) : t).join(', ');
+  const visiaRow = ['VISIA® skin analysis', f.visia ? 'Included, free' : 'Not added'];
+  const rows = path === 'call'
+    ? [['Concerns', concern], visiaRow, ['Next step', 'We call you'], ['Best time', f.callTime], ['Clinic', clinicName(f.callClinic)]]
+    : [['Concerns', concern], visiaRow, ['Clinic', clinicName(f.clinic)], ['Day and time', when]];
+  const stepCls = (k) => `book-step ${cur === k ? '' : 'is-off'}`;
+  const stepAttr = (k) => ({ 'aria-hidden': cur !== k || undefined, inert: cur !== k ? '' : undefined });
+
+  if (sent) return (
+    <div role="status" className="flex flex-1 flex-col items-start justify-center gap-3 py-4" style={{ minHeight: hold || undefined }}>
+      <span aria-hidden="true" className="grid size-12 place-items-center rounded-full bg-ndm-amber text-white"><IconCheckBadge /></span>
+      {path === 'book' ? (<>
+        <p id={thanksId} className="font-aeonik text-[clamp(24px,2.2vw,30px)] leading-[1.15] tracking-[-0.02em] text-ndm-ink">You’re booked{f.first ? `, ${f.first}` : ''}.</p>
+        <p className="max-w-[46ch] font-inter text-[14.5px] leading-[1.55] text-ndm-muted">Your free consultation{f.visia ? ', with your VISIA® skin analysis,' : ''} is on <b className="font-semibold text-ndm-ink">{when}</b> at our {f.clinic} clinic. You’ll receive the details by email and text.</p>
+        <p className="font-inter text-[13px] leading-[1.5] text-ndm-muted">Need to change it? Call <a href={tel(clinicPhone)} className="font-semibold text-ndm-ink hover:underline">{clinicPhone}</a> at least {BOOK_NOTICE} before.</p>
+      </>) : (<>
+        <p id={thanksId} className="font-aeonik text-[clamp(24px,2.2vw,30px)] leading-[1.15] tracking-[-0.02em] text-ndm-ink">Request sent{f.first ? `, ${f.first}` : ''}.</p>
+        <p className="max-w-[46ch] font-inter text-[14.5px] leading-[1.55] text-ndm-muted">We’ll call you in the <b className="font-semibold text-ndm-ink">{f.callTime.toLowerCase()}</b> within one business day to find a time for your consultation{f.visia ? ' and VISIA® skin analysis' : ''}.</p>
+      </>)}
+      <button type="button" onClick={reset} className="font-inter text-[14px] font-semibold text-ndm-deep hover:underline">Book another visit</button>
+    </div>
+  );
+
+  const body = (
+    <form ref={box} onSubmit={submit} noValidate className="flex min-w-0 flex-1 flex-col">
+      {!compact && <span className="book-badge mb-3 inline-flex items-center gap-2 self-start rounded-full px-3 py-1.5 font-inter text-[12px] font-semibold text-[#8A5A12]"><i aria-hidden="true" className="book-badge-dot grid size-4 place-items-center rounded-full bg-ndm-amber text-white"><IconArrow size={8} /></i>Free consultation · VISIA® skin analysis included</span>}
+      <div className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${flow.length},minmax(0,1fr))` }} aria-hidden="true">
+        {flow.map((s, i) => <span key={s} className={`h-1 rounded-full transition-colors duration-500 ${i <= step ? 'bg-ndm-amber' : 'bg-ndm-ink/10'}`} />)}
+      </div>
+      <p className="mt-2 font-inter text-[12.5px] text-ndm-muted">Step {step + 1} of {flow.length} · <span className="text-ndm-ink">{flow[step]}</span></p>
+
+      <div className="book-steps mt-5 grid">
+        <fieldset data-step="0" className={stepCls('0')} {...stepAttr('0')}>
+          <legend tabIndex={-1} className={legend}>What would you like to address?</legend>
+          <p className={`mt-2 font-inter text-[13.5px] leading-[1.5] text-ndm-muted ${compact ? 'hidden' : ''}`}>Choose any that apply, you can pick more than one.</p>
+          <div className="mt-4"><BookPicker values={f.interest} onPick={pick} compact={compact} /></div>
+          {f.interest.includes(BOOK_OTHER) && (
+            <label className="mt-3 block max-w-[440px]"><span className={label}>Tell us in a few words</span>
+              <input name="other" maxLength={80} autoComplete="off" value={f.other} onChange={(e) => set('other', e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); next(); } }}
+                placeholder="For example: neck lines, or a treatment you have in mind" className={`${fieldCls} !h-11`} /></label>
+          )}
+          <label className={`flex cursor-pointer items-center gap-3 rounded-[14px] border border-ndm-ink/12 bg-white px-4 font-inter ${compact ? 'mt-3 py-2.5' : 'mt-5 py-3'}`}>
+            <span className="min-w-0 flex-1"><span className="block text-[14px] font-semibold text-ndm-ink">Include my free VISIA® skin analysis</span><span className={`mt-0.5 block text-[12.5px] leading-[1.45] text-ndm-muted ${compact ? 'hidden' : ''}`}>So you and your provider can see your skin in detail before planning anything.</span></span>
+            <input type="checkbox" role="switch" name="visia" checked={f.visia} onChange={(e) => set('visia', e.target.checked)} className="peer sr-only" />
+            <span aria-hidden="true" className="relative h-6 w-11 shrink-0 rounded-full bg-ndm-ink/20 transition-colors after:absolute after:left-0.5 after:top-0.5 after:size-5 after:rounded-full after:bg-white after:shadow-[0_1px_3px_rgba(11,15,19,.3)] after:transition-transform peer-checked:bg-ndm-deep peer-checked:after:translate-x-5 peer-focus-visible:ring-4 peer-focus-visible:ring-ndm-blue/25" />
+          </label>
+        </fieldset>
+        <fieldset data-step="1" className={stepCls('1')} {...stepAttr('1')}>
+          <legend tabIndex={-1} className={legend}>How can we reach you?</legend>
+          <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+            <label><span className={label}>First name</span><input required name="first" autoComplete="given-name" value={f.first} onChange={(e) => set('first', e.target.value)} className={`${fieldCls} !h-11`} /></label>
+            <label><span className={label}>Last name</span><input required name="last" autoComplete="family-name" className={`${fieldCls} !h-11`} /></label>
+            <label><span className={label}>Mobile number</span><input required type="tel" name="phone" autoComplete="tel" className={`${fieldCls} !h-11`} /></label>
+            <label><span className={label}>Email</span><input required type="email" name="email" autoComplete="email" className={`${fieldCls} !h-11`} /></label>
+          </div>
+          <div role="group" aria-label="Best way to reach you, choose any" className="mt-4 flex flex-wrap items-center gap-1.5">
+            <span className="mr-1.5 font-inter text-[13px] font-semibold text-ndm-ink">Reach me by</span>
+            {['Call', 'Text', 'Email'].map((t) => <BookChip key={t} type="checkbox" name="via" value={t} checked={f.via.includes(t)} onChange={() => toggle('via', t)}>{t}</BookChip>)}
+          </div>
+          <p className="mt-3 font-inter text-[12px] text-ndm-muted">Please don’t include medical details. We use your details only to arrange your visit.</p>
+        </fieldset>
+        <fieldset data-step="2" className={stepCls('2')} {...stepAttr('2')}>
+          <legend tabIndex={-1} className={legend}>How would you like to continue?</legend>
+          <p className="mt-2 font-inter text-[14px] leading-[1.5] text-ndm-muted">Book a time yourself, or let us call you to find one.</p>
+          <div className={`mt-5 grid gap-3 ${compact ? '' : 'sm:grid-cols-2'}`}>
+            <button type="button" onClick={() => choose('book')} className={`${tile} min-h-[96px] items-start border-ndm-deep bg-ndm-deep text-white hover:border-[#0A4F7A] hover:bg-[#0A4F7A]`}>
+              <span aria-hidden="true" className="mt-0.5 grid size-10 shrink-0 place-items-center rounded-full bg-white/15 text-white"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5" /><path d="M3.5 9.5h17M8 3v4M16 3v4" /></svg></span>
+              <span className="min-w-0 flex-1"><span className="block font-aeonik text-[clamp(20px,1.6vw,23px)] leading-[1.15] tracking-[-0.01em]">Book a time now</span><span className="mt-1.5 block text-[14px] leading-[1.45] text-white/85">Choose a clinic, day and time.</span></span>
+              <IconArrow size={15} className="mt-2 shrink-0" />
+            </button>
+            <button type="button" onClick={() => choose('call')} className={`${tile} min-h-[96px] items-start border-ndm-ink/15 bg-white text-ndm-ink hover:border-ndm-ink/40`}>
+              <span aria-hidden="true" className="mt-0.5 grid size-10 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconPhone size={18} /></span>
+              <span className="min-w-0 flex-1"><span className="block font-aeonik text-[clamp(20px,1.6vw,23px)] leading-[1.15] tracking-[-0.01em]">Have us call you</span><span className="mt-1.5 block text-[14px] leading-[1.45] text-ndm-muted">No payment. We call within one business day.</span></span>
+              <IconArrow size={15} className="mt-2 shrink-0 text-ndm-deep" />
+            </button>
+          </div>
+        </fieldset>
+        <fieldset data-step="3b" className={stepCls('3b')} {...stepAttr('3b')}>
+          <legend tabIndex={-1} className={legend}>Where and when?</legend>
+          <div className="mt-4 flex flex-wrap gap-1.5" role="group" aria-label="Clinic">
+            {BOOK_CLINIC_OPTS.map(([v, t]) => <BookChip key={v} name="clinic" value={v} checked={f.clinic === v} onChange={() => set('clinic', v)}>{t}</BookChip>)}
+          </div>
+          <div className="mt-4"><BookCalendar day={f.day} time={f.time} stack={compact} onDay={(d) => setF((o) => ({ ...o, day: d, time: null }))} onTime={(h) => set('time', h)} /></div>
+          <p className="mt-3 font-inter text-[12px] text-ndm-muted">We will confirm your time by email and text.</p>
+        </fieldset>
+        <fieldset data-step="3c" className={stepCls('3c')} {...stepAttr('3c')}>
+          <legend tabIndex={-1} className={legend}>When’s a good time to call?</legend>
+          <div className="mt-4 flex flex-wrap gap-1.5" role="group" aria-label="Time of day">
+            {BOOK_CALL_TIMES.map((t) => <BookChip key={t} name="calltime" value={t} checked={f.callTime === t} onChange={() => set('callTime', t)}>{t}</BookChip>)}
+          </div>
+          <p className="mt-5 font-inter text-[13px] font-semibold text-ndm-ink">Preferred clinic</p>
+          <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Preferred clinic">
+            {[['Either', 'Either clinic'], ...BOOK_CLINIC_OPTS].map(([v, t]) => <BookChip key={v} name="callclinic" value={v} checked={f.callClinic === v} onChange={() => set('callClinic', v)}>{t}</BookChip>)}
+          </div>
+          <p className="mt-3 font-inter text-[12px] text-ndm-muted">No payment needed. Our team calls to find a time that suits you.</p>
+        </fieldset>
+      </div>
+
+      <p role="alert" className="mt-3 min-h-[19px] font-inter text-[13px] leading-[19px] text-[#B4351F]">{err}</p>
+      <div className="mt-auto flex min-h-[60px] items-center gap-2.5 pt-3 sm:flex-wrap">
+        {step > 0 && <Btn as="button" type="button" v="line" sm onClick={() => go(step - 1)}>Back</Btn>}
+        {/* own keys, so Continue is never reused as the submit button (that would submit the step it just opened) */}
+        {step === 2 ? null : step < flow.length - 1 ? <Btn key="next" as="button" type="button" v="ink" sm onClick={next}>Continue</Btn>
+          : path === 'book' ? <Btn key="pay" as="button" type="submit" v="ink" className="min-w-0 flex-1 sm:flex-none">Book this time</Btn>
+          : <Btn key="call" as="button" type="submit" v="ink" className="min-w-0 flex-1 sm:flex-none">Request a call</Btn>}
+      </div>
+    </form>
+  );
+  if (!summary) return body;
+  return (
+    <div className="grid flex-1 gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,260px)]">
+      {body}
+      <aside className="book-sum hidden flex-col rounded-[20px] p-5 text-white lg:flex" aria-label="Your appointment">
+        <p className="font-inter text-[11.5px] uppercase tracking-[.16em] text-white/60">Your appointment</p>
+        <dl className="mt-3 grid gap-3">
+          {rows.map(([k, v]) => (
+            <div key={k} className="border-b border-white/12 pb-3">
+              <dt className="font-inter text-[11px] uppercase tracking-[.12em] text-white/55">{k}</dt>
+              <dd className={`mt-1 font-aeonik text-[16.5px] leading-[1.3] ${v ? 'text-white' : 'tt-strong text-white/45'}`}>{v || 'Not chosen yet'}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="mt-auto pt-5 font-inter text-[12.5px] leading-[1.5] text-white/65">Prefer to talk? Call {CLINICS.map((c) => <a key={c.name} href={tel(c.phone)} className="block font-semibold text-white hover:underline">{c.name} {c.phone}</a>)}</p>
+      </aside>
+    </div>
+  );
+}
 function Appointment() {
   const ref = useRef(null), pic = useRef(null);
   useReveal(ref);
-  const [sent, setSent] = useState(false);
-  const [clinic, setClinic] = useState('');
-  const submit = (e) => { e.preventDefault(); setSent(true); };
+  /* the treatment-room photo drifts a little behind the card as the page scrolls */
   useOnScroll(() => {
     const el = ref.current, img = pic.current; if (!el || !img || REDUCED) return;
     const r = el.getBoundingClientRect(), vh = window.innerHeight;
     const p = clamp01((vh - r.top) / (vh + r.height));
     img.style.transform = `translate3d(0,${((p - 0.5) * -90).toFixed(1)}px,0) scale(1.12)`;
   }, []);
-  const [treat, setTreat] = useState('');
   return (
-    <section ref={ref} aria-labelledby="book" className="relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(56px,6vw,96px)]">
+    <section ref={ref} aria-labelledby="book" className="relative z-10 isolate overflow-hidden px-[var(--gx)] py-[clamp(48px,6vw,96px)]">
       <img ref={pic} src="assets/hero/treatment-room.jpg" alt="" aria-hidden="true" loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover object-center will-change-transform" style={{ transform: 'scale(1.12)' }} />
-      <span aria-hidden="true" className="absolute inset-0 bg-[rgba(11,15,19,.3)]" />
-
-      <div className="relative flex justify-center">
-        <div className="rv w-full max-w-[560px] rounded-[16px] p-[clamp(20px,2.4vw,32px)] shadow-[0_40px_80px_-40px_rgba(11,15,19,.6)]"
-          style={{ background: 'rgba(255,255,255,.9)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}>
-          {sent ? (
-            <div className="flex min-h-[420px] items-center justify-center"><BookThanks onAnother={() => setSent(false)} /></div>
-          ) : (
-            <form onSubmit={submit}>
-              <p className="eyebrow font-mont">
-                <span className="eyebrow-mark" aria-hidden="true"><img src="assets/icons/logo-mark.svg" alt="" /></span>Book now at our two Toronto locations
-              </p>
-              <TwoTone id="book" className="mt-4" size="text-[clamp(28px,2.6vw,38px)]" lead={<>Book your consultation<br /></>} strong="in 2 simple steps" />
-              <ol className="mt-4 grid gap-2.5" role="list">
-                {['Enter your details and areas of concern.', 'We will call you with a possible day and time for your appointment.'].map((t, i) => (
-                  <li key={t} className="flex items-start gap-3 font-inter text-[14.5px] leading-[1.5] text-ndm-ink">
-                    <span className="grid size-7 shrink-0 place-items-center rounded-full bg-ndm-amber font-inter text-[12.5px] font-medium text-white">{i + 1}</span>
-                    <span className="pt-[3px]">{t}</span>
-                  </li>
-                ))}
-              </ol>
-              <div className="mt-6 grid gap-3">
-                <input required name="name" autoComplete="name" placeholder="Your name" aria-label="Your name" className={fieldCls} />
-                <input required type="email" name="email" autoComplete="email" placeholder="Your email" aria-label="Your email" className={fieldCls} />
-                <input required type="tel" name="phone" autoComplete="tel" placeholder="Your phone number" aria-label="Your phone number" className={fieldCls} />
-                <BookSelect name="treatment" value={treat} onChange={(e) => setTreat(e.target.value)} placeholder="Select your treatment">
-                  {BOOK_TREATMENTS.map((t) => <option key={t} className="text-ndm-ink">{t}</option>)}
-                </BookSelect>
-                <BookSelect name="clinic" value={clinic} onChange={(e) => setClinic(e.target.value)} placeholder="Select clinic location">
-                  {BOOK_CLINICS.map(([c, a]) => <option key={c} value={c} className="text-ndm-ink">{c}, {a}</option>)}
-                </BookSelect>
-                <textarea name="message" rows={2} placeholder="Any concerns or questions?" aria-label="Any concerns or questions?" className={`${fieldCls} h-auto resize-none py-3`} />
-                <div className="mt-2 flex flex-col items-center gap-2.5 text-center"><Btn as="button" type="submit" v="book" hot>Book Free Consultation</Btn><span className="font-inter text-[13px] text-ndm-muted">We call you to confirm a time.</span></div>
-              </div>
-            </form>
-          )}
+        className="absolute inset-0 -z-20 h-full w-full object-cover object-center will-change-transform" style={{ transform: 'scale(1.12)' }} />
+      <span aria-hidden="true" className="absolute inset-0 -z-10 bg-[rgba(11,15,19,.32)]" />
+      <div className="rv book-shell mx-auto flex max-w-[1080px] flex-col rounded-[26px] p-[clamp(18px,2.4vw,32px)]">
+        <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+          <TwoTone id="book" size="text-[clamp(26px,2.6vw,38px)]" lead={<>Book a free consultation<br /></>} strong="in a few short steps" />
+          <p className="max-w-[36ch] font-inter text-[13.5px] leading-[1.5] text-ndm-muted">Uptown or Downtown. Your consultation and VISIA® skin analysis are free.</p>
         </div>
+        <div className="mt-5 flex"><BookForm summary /></div>
       </div>
     </section>
   );
@@ -3506,7 +3821,7 @@ function VisitCard({ c, i }) {
   return (
     <div className="rv visit-cell flex" style={{ transitionDelay: `${0.08 * i}s` }}>
       <article aria-labelledby={hid} className="visit-card flex min-w-0 flex-1 flex-col rounded-[28px] border border-ndm-ink/[.08] bg-white p-3">
-        <div className="rv rv-clip relative isolate aspect-[16/10] overflow-hidden rounded-[20px] bg-ndm-mist md:aspect-[2/1] lg:aspect-[16/10]" style={{ transitionDelay: `${0.12 + 0.08 * i}s` }}>
+        <div className="rv rv-clip relative isolate aspect-[16/9] overflow-hidden rounded-[20px] bg-ndm-mist md:aspect-[5/2] lg:aspect-[12/5]" style={{ transitionDelay: `${0.12 + 0.08 * i}s` }}>
           <img src={c.img} alt={`NewDermaMed ${c.name} clinic`} loading="lazy" decoding="async" className="visit-img absolute inset-0 h-full w-full object-cover" />
           <span aria-hidden="true" className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-white/85 py-1.5 pl-2.5 pr-3 font-inter text-[12px] text-ndm-ink shadow-[0_8px_20px_-10px_rgba(11,15,19,.45)] backdrop-blur-[8px]">
             <IconPin size={13} className="text-ndm-deep" />{c.name} clinic
@@ -3842,6 +4157,7 @@ function PromoGrid() {
               <div className="relative aspect-[16/10] overflow-hidden rounded-[16px] bg-ndm-mist">
                 <img src={s.img} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" style={{ transitionTimingFunction: 'var(--e-out)', objectPosition: s.pos }} />
                 {CAMPAIGN_LOOK && <span className="cmp-badge absolute left-3 top-3">{CAMPAIGN.badge}</span>}
+                {s.deal && !CAMPAIGN_LOOK && <span className="deal-badge absolute left-3 top-3"><i aria-hidden="true">%</i>{s.deal}</span>}
               </div>
               <div className="relative mt-5 flex items-center justify-between gap-2 px-3">
                 <span className="promo-badge grid size-12 shrink-0 place-items-center rounded-full"><SpecialIcon k={s.icon} /></span>
@@ -3879,11 +4195,46 @@ const PROMO_REVIEWS = [ /* from the TESTIMONIALS block on newdermamedlaserclinic
   ['Ahmad N.', 'Multiple Sessions', '8.png', 'This clinic stands out as an exceptional establishment, offering professional services with state-of-the-art equipment tailored for cosmetic and skincare treatments. My personal experience, having undergone multiple skincare sessions here, has been thoroughly satisfying with remarkable results.'],
   ['Valeriia C.', 'Microneedling', '9.png', 'Absolutely amazing experience at Newdermamed! The staff was very professional and kind! The receptionist Sarah was very friendly and walked me though the e-forms. Alicia did my treatment with great professionalism!! She was very nice and informative, and made me feel comfortable. My face has never looked better!'],
 ];
+/* awards & recognition cards, same words as the awards block: three looks so they stand out between the reviews */
+const AWARD_CARDS = [
+  { look: 'ink', k: 'Awards & recognition', big: '8 consecutive years', d: 'Recognized as Toronto’s Top Choice Cosmetic & Laser Clinic, 2019 to 2026.', years: true },
+  { look: 'blue', k: 'Top Choice Award', big: '2026', d: 'Toronto’s Top Choice Cosmetic & Laser Clinic, for the eighth year in a row.', badge: 2026 },
+  { look: 'amber', k: 'Patient care', mark: true, big: '16+ years', d: 'Of dedication to patient care, innovation and consistent, high-quality treatment.' },
+];
+const AWARD_LOOK = {
+  ink: 'bg-ndm-ink text-white',
+  blue: 'bg-[linear-gradient(150deg,#0F80C3_0%,#209ED9_55%,#26B1E7_100%)] text-white',
+  amber: 'bg-[#FFF4E0] text-ndm-ink border border-[#FFA617]/30',
+};
+function AwardCard({ a }) {
+  const dark = a.look !== 'amber';
+  return (
+    <li className="w-[min(82vw,400px)] shrink-0">
+      <figure className={`relative m-0 flex h-full flex-col overflow-hidden rounded-[22px] p-6 shadow-[0_24px_50px_-40px_rgba(27,36,43,.45)] ${AWARD_LOOK[a.look]}`}>
+        {a.mark && <span role="img" aria-label="NewDermaMed, 16 years" className="mark-16 mb-5 text-[#8A5A12]" />}
+        <div className="flex items-center justify-between gap-4">
+          <span className={`font-inter text-[12px] uppercase tracking-[.16em] ${dark ? 'text-white/70' : 'text-ndm-muted'}`}>{a.k}</span>
+          {a.stars && <Stars />}
+        </div>
+        <p className="mt-4 font-aeonik text-[clamp(34px,3vw,44px)] leading-none tracking-[-0.03em]">{a.big}</p>
+        <p className={`mt-3 max-w-[32ch] font-inter text-[15px] leading-[1.55] ${dark ? 'text-white/80' : 'text-ndm-muted'}`}>{a.d}</p>
+        {a.years && (
+          <ul role="list" className="mt-auto flex gap-1 pt-6" aria-label="Top Choice Award, 2019 to 2026">
+            {AWARD_YEARS.map((y) => <li key={y}><img src={`assets/awards/top-choice-${y}.png`} alt="" loading="lazy" draggable="false" className="size-[clamp(30px,8vw,38px)] object-contain" /></li>)}
+          </ul>
+        )}
+        {a.badge && <img src={`assets/awards/top-choice-${a.badge}.png`} alt={`Top Choice Award ${a.badge}`} loading="lazy" draggable="false" className="pointer-events-none absolute -bottom-3 -right-3 size-[120px] rotate-[-8deg] object-contain opacity-95" />}
+        {a.mark && <p className="mt-auto pt-6 font-inter text-[13px] text-ndm-muted">Uptown and Downtown Toronto</p>}
+      </figure>
+    </li>
+  );
+}
 function PromoReviewCard({ r }) {
+  if (r.look) return <AwardCard a={r} />;
   const [name, tag, photo, quote] = r;
   return (
     <li className="w-[min(82vw,400px)] shrink-0">
-      <figure className="m-0 flex h-full flex-col rounded-[22px] border border-ndm-ink/[.06] bg-white/80 p-6 shadow-[0_24px_50px_-40px_rgba(27,36,43,.35)]">
+      <figure className="m-0 flex h-full flex-col rounded-[22px] border border-ndm-ink/[.06] bg-white p-6 shadow-[0_24px_50px_-40px_rgba(27,36,43,.35)]">
         <Stars />
         <blockquote className="mt-4 font-inter text-[15.5px] leading-[1.6] text-ndm-ink">“{quote}”</blockquote>
         <figcaption className="mt-auto flex items-center gap-3 pt-6">
@@ -3914,25 +4265,33 @@ function GoogleStars({ value }) {
   );
 }
 
-/* one testimonials row: drifts on its own (rAF), never pauses on hover, and can be grabbed and dragged either way */
-function ReviewRow({ items, dir = 1, dur = 62, hidden }) {
+/* one testimonials row: drifts on its own (rAF) and loops for ever; it can be dragged with a mouse or finger
+   and pushed sideways with a trackpad swipe, then carries on drifting */
+const REV_COPIES = 3;
+function ReviewRow({ items, dir = 1, dur = 28, hidden }) {
   const wrap = useRef(null), track = useRef(null);
   useEffect(() => {
     const w = wrap.current, el = track.current; if (!w || !el) return;
-    let x = dir > 0 ? 0 : el.scrollWidth / 4, last = 0, raf = 0, half = 0, drag = null, on = true;
-    const measure = () => { half = el.scrollWidth / 2; };
+    let x = 0, last = 0, raf = 0, period = 0, drag = null, on = true, idle = 0;
+    const measure = () => { period = el.scrollWidth / REV_COPIES; };
     measure();
-    window.addEventListener('resize', measure);
+    const ro = new ResizeObserver(measure); ro.observe(el);
     const io = new IntersectionObserver(([e]) => { on = e.isIntersecting; });
     io.observe(w);
     const tick = (t) => {
       const dt = last ? Math.min(64, t - last) : 0; last = t;
-      if (on && !drag && !REDUCED && half) x += dir * (half / (dur * 1000)) * dt;
-      if (half) x = ((x % half) + half) % half;
+      if (on && !drag && !REDUCED && period && t > idle) x += dir * (period / (dur * 1000)) * dt;
+      if (period) x = ((x % period) + period) % period;
       el.style.transform = `translate3d(${(-x).toFixed(2)}px,0,0)`;
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
+    /* trackpad: a mostly sideways swipe moves the row; vertical scrolling still scrolls the page */
+    const wheel = (e) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault(); e.stopPropagation(); /* keep the smooth-scroll library from also acting on it */
+      x += e.deltaX; idle = performance.now() + 900;
+    };
     const down = (e) => { if (e.button !== 0) return; drag = { x0: e.clientX, s: x, moved: false }; };
     const move = (e) => {
       if (!drag) return;
@@ -3943,18 +4302,21 @@ function ReviewRow({ items, dir = 1, dur = 62, hidden }) {
     const up = () => {
       if (!drag) return;
       if (drag.moved) { const stop = (ev) => { ev.preventDefault(); ev.stopPropagation(); }; w.addEventListener('click', stop, { capture: true, once: true }); setTimeout(() => w.removeEventListener('click', stop, true), 60); }
-      drag = null; w.classList.remove('is-dragging');
+      drag = null; idle = performance.now() + 600; w.classList.remove('is-dragging');
     };
+    w.addEventListener('wheel', wheel, { passive: false });
     w.addEventListener('pointerdown', down);
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', up);
     window.addEventListener('pointercancel', up);
-    return () => { cancelAnimationFrame(raf); io.disconnect(); window.removeEventListener('resize', measure); w.removeEventListener('pointerdown', down); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
+    return () => { cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); w.removeEventListener('wheel', wheel); w.removeEventListener('pointerdown', down); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
   }, []);
+  const all = Array.from({ length: REV_COPIES }, () => items).flat();
   return (
     <div ref={wrap} className="promo-rev-row overflow-hidden" onDragStart={(e) => e.preventDefault()}>
-      <ul ref={track} role="list" aria-hidden={hidden} className="flex w-max gap-4 will-change-transform">
-        {[...items, ...items].map((r, i) => <PromoReviewCard key={i} r={r} />)}
+      {/* the right padding equals the gap, so one copy plus its gap is exactly a third of the track and the loop has no jump */}
+      <ul ref={track} role="list" aria-hidden={hidden} className="flex w-max items-stretch gap-4 pr-4 will-change-transform">
+        {all.map((r, i) => <PromoReviewCard key={i} r={r} />)}
       </ul>
     </div>
   );
@@ -3963,7 +4325,8 @@ function ReviewRow({ items, dir = 1, dur = 62, hidden }) {
 function PromoReviews() {
   const ref = useRef(null);
   useReveal(ref);
-  const rows = [PROMO_REVIEWS.slice(0, 4), [...PROMO_REVIEWS.slice(4), ...PROMO_REVIEWS.slice(0, 1)]];
+  const [A1, A2, A3] = AWARD_CARDS, R = PROMO_REVIEWS;
+  const rows = [[R[0], A1, R[1], R[2], A3, R[3], R[4], A2, R[5], R[6]]]; /* one looping row */
   return (
     <section ref={ref} aria-labelledby="testimonials" className="relative z-10 overflow-hidden bg-ndm-paper py-[clamp(72px,8vw,128px)]">
       <div className="grid gap-6 px-[var(--gx)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
@@ -3983,7 +4346,7 @@ function PromoReviews() {
         </div>
       </div>
       <div className="promo-rev-rows mt-10 grid gap-4 md:mt-14">
-        {rows.map((row, k) => <ReviewRow key={k} items={row} dir={k ? -1 : 1} dur={k ? 70 : 62} hidden={k === 1} />)}
+        {rows.map((row, k) => <ReviewRow key={k} items={row} dir={k ? -1 : 1} dur={28} hidden={k === 1} />)}
       </div>
       <p className="mt-6 px-[var(--gx)] font-inter text-[12px] text-ndm-muted/70">Patient reviews shared from Google · names shortened for privacy · individual results may vary.</p>
     </section>
@@ -4101,9 +4464,10 @@ function CartDrawer({ open, onClose, onBrowse }) {
               <p className="mt-0.5 flex items-baseline justify-between"><span className="font-inter text-[14.5px]">Subtotal</span><span className="font-aeonik text-[22px] tracking-[-0.02em] tabular-nums">{money(cart.total)}</span></p>
               <p className="mt-1.5 font-inter text-[12px] leading-[1.45] text-ndm-muted">Taxes added at checkout. Your plan is confirmed at a free consultation. Affirm payments available on orders of $500 or more (Canadian citizens and residents, 19+).</p>
               <div className="mt-3.5 grid grid-cols-[1fr_auto] items-center gap-3">
-                <Btn href="#/checkout" v="ink" block className="btn-buy">Checkout</Btn>
-                <button type="button" onClick={onClose} className="px-2 font-inter text-[14px] text-ndm-ink underline-offset-4 hover:underline">Continue browsing</button>
+                <Btn href="checkout.html" v="ink" block className="btn-buy">Checkout</Btn>
+                <a href="cart.html" className="px-2 font-inter text-[14px] font-medium text-ndm-deep underline-offset-4 hover:underline">View cart</a>
               </div>
+              <button type="button" onClick={onClose} className="mt-2 w-full py-1.5 text-center font-inter text-[13.5px] text-ndm-muted underline-offset-4 hover:underline">Continue browsing</button>
             </div>
           </>
         )}
@@ -4158,7 +4522,7 @@ function CartPill({ onOpen, hidden }) {
     <button type="button" onClick={onOpen} tabIndex={show ? 0 : -1} aria-hidden={!show} data-float-avoid=""
       onTransitionEnd={(e) => { if (e.propertyName === 'transform') window.dispatchEvent(new Event('scroll')); }}
       aria-label={`View cart, ${cart.count} ${cart.count === 1 ? 'item' : 'items'}, ${money(cart.total)}`}
-      className={`cart-pill fixed inset-x-4 bottom-4 z-[60] flex items-center gap-3 rounded-full bg-ndm-ink py-2 pl-2 pr-2 text-left text-white shadow-[0_24px_50px_-20px_rgba(11,15,19,.6)] sm:inset-x-auto sm:right-6 sm:bottom-6 ${show ? '' : 'is-off'}`}>
+      className={`cart-pill fixed inset-x-4 bottom-4 z-[60] flex items-center gap-3 rounded-full bg-ndm-deep py-2 pl-2 pr-2 text-left text-white shadow-[0_24px_50px_-20px_rgba(11,15,19,.6)] sm:inset-x-auto sm:right-6 sm:bottom-6 ${show ? '' : 'is-off'}`}>
       <span className="relative grid size-11 shrink-0 place-items-center rounded-full bg-white/10">
         <IconBag size={20} />
         <span key={bump} className="cart-bump absolute -right-0.5 -top-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ndm-sky px-1 font-inter text-[11px] font-semibold leading-none text-white">{cart.count}</span>
@@ -4176,9 +4540,7 @@ function CartPill({ onOpen, hidden }) {
    Centred card on desktop, bottom sheet on phones; Esc, the backdrop or the close button shut it. */
 function BookPopup() {
   const [open, setOpen] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [treat, setTreat] = useState('');
-  const [clinic, setClinic] = useState('');
+  const [run, setRun] = useState(0); /* a fresh form every time the pop-up opens */
   const box = useRef(null), opener = useRef(null);
   const close = useCallback(() => {
     setOpen(false);
@@ -4190,7 +4552,7 @@ function BookPopup() {
       const a = e.target.closest && e.target.closest('a[href="#/book"]');
       if (!a) return;
       e.preventDefault();
-      opener.current = a; setSent(false); setOpen(true);
+      opener.current = a; setRun((x) => x + 1); setOpen(true);
     };
     document.addEventListener('click', onClick);
     return () => document.removeEventListener('click', onClick);
@@ -4208,40 +4570,14 @@ function BookPopup() {
       <div className="book-scrim absolute inset-0 bg-[#0B0F13]/55 backdrop-blur-[6px]" onClick={close} />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center sm:inset-0 sm:items-center sm:p-6">
         <div ref={box} role="dialog" aria-modal="true" aria-labelledby="book-pop-title" data-lenis-prevent=""
-          className="book-card pointer-events-auto relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white px-[clamp(20px,2.4vw,32px)] pb-[max(22px,env(safe-area-inset-bottom))] pt-6 shadow-[0_40px_80px_-30px_rgba(11,15,19,.6)] sm:max-w-[560px] sm:rounded-[20px] sm:pt-[clamp(20px,2.4vw,32px)]">
+          className="book-card pointer-events-auto relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white px-[clamp(20px,2.4vw,32px)] pb-[max(22px,env(safe-area-inset-bottom))] pt-6 shadow-[0_40px_80px_-30px_rgba(11,15,19,.6)] sm:max-w-[680px] sm:rounded-[20px] sm:pt-[clamp(20px,2.4vw,32px)]">
           <span aria-hidden="true" className="absolute left-1/2 top-2.5 h-1 w-10 -translate-x-1/2 rounded-full bg-ndm-ink/15 sm:hidden" />
           <button type="button" onClick={close} aria-label="Close booking form" className="absolute right-3 top-3 grid size-10 place-items-center rounded-full text-ndm-ink transition-colors hover:bg-ndm-mist sm:right-4 sm:top-4"><IconClose /></button>
-          {sent ? (
-            <div className="flex min-h-[420px] items-center justify-center"><BookThanks id="book-pop-title" onAnother={() => setSent(false)} /></div>
-          ) : (
-            <form onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
-              <p className="eyebrow font-mont">
-                <span className="eyebrow-mark" aria-hidden="true"><img src="assets/icons/logo-mark.svg" alt="" /></span>Book now at our two Toronto locations
-              </p>
-              <TwoTone id="book-pop-title" className="mt-4 pr-8" size="text-[clamp(26px,2.6vw,36px)]" lead={<>Book your consultation<br /></>} strong="in 2 simple steps" />
-              <ol className="mt-4 grid gap-2.5" role="list">
-                {['Enter your details and areas of concern.', 'We will call you with a possible day and time for your appointment.'].map((t, i) => (
-                  <li key={t} className="flex items-start gap-3 font-inter text-[14.5px] leading-[1.5] text-ndm-ink">
-                    <span className="grid size-7 shrink-0 place-items-center rounded-full bg-ndm-amber font-inter text-[12.5px] font-medium text-white">{i + 1}</span>
-                    <span className="pt-[3px]">{t}</span>
-                  </li>
-                ))}
-              </ol>
-              <div className="mt-5 grid gap-2.5 sm:mt-6 sm:gap-3">
-                <input required name="name" autoComplete="name" placeholder="Your name" aria-label="Your name" className={fieldCls} />
-                <input required type="email" name="email" autoComplete="email" placeholder="Your email" aria-label="Your email" className={fieldCls} />
-                <input required type="tel" name="phone" autoComplete="tel" placeholder="Your phone number" aria-label="Your phone number" className={fieldCls} />
-                <BookSelect name="treatment" value={treat} onChange={(e) => setTreat(e.target.value)} placeholder="Select your treatment">
-                  {BOOK_TREATMENTS.map((t) => <option key={t} className="text-ndm-ink">{t}</option>)}
-                </BookSelect>
-                <BookSelect name="clinic" value={clinic} onChange={(e) => setClinic(e.target.value)} placeholder="Select clinic location">
-                  {BOOK_CLINICS.map(([c, a]) => <option key={c} value={c} className="text-ndm-ink">{c}, {a}</option>)}
-                </BookSelect>
-                <textarea name="message" rows={2} placeholder="Any concerns or questions?" aria-label="Any concerns or questions?" className={`${fieldCls} h-auto resize-none py-3`} />
-                <div className="mt-2 flex flex-col items-center gap-2.5 text-center"><Btn as="button" type="submit" v="book" hot>Book Free Consultation</Btn><span className="font-inter text-[13px] text-ndm-muted">We call you to confirm a time.</span></div>
-              </div>
-            </form>
-          )}
+          <p className="eyebrow is-amber font-mont">
+            <span className="eyebrow-mark" aria-hidden="true"><img src="assets/icons/logo-mark.svg" alt="" /></span>Book now at our two Toronto locations
+          </p>
+          <TwoTone id="book-pop-title" className="mt-4 pr-8" size="text-[clamp(26px,2.6vw,36px)]" lead={<>Book a free consultation<br /></>} strong="in a few short steps" />
+          <div className="mt-6 flex"><BookForm key={run} thanksId="book-pop-title" /></div>
         </div>
       </div>
     </div>
@@ -4369,9 +4705,9 @@ function ChatBot({ ready, hidden }) {
   useEffect(() => {
     if (!ready) return;
     let seen = false;
-    try { seen = sessionStorage.getItem('ndm-chat-note') === '1'; } catch (e) {}
+    try { seen = sessionStorage.getItem('ndm-chat-note') === 'closed'; } catch (e) {}
     if (seen) return;
-    const t = setTimeout(() => { setNote(true); try { sessionStorage.setItem('ndm-chat-note', '1'); } catch (e) {} }, 4500);
+    const t = setTimeout(() => setNote(true), 4500);
     return () => clearTimeout(t);
   }, [ready]);
   /* the pop-up first shows the assistant typing, then the message arrives with a soft chime */
@@ -4396,9 +4732,10 @@ function ChatBot({ ready, hidden }) {
   useOnScroll(measure, []);
   useEffect(() => { const t = setInterval(measure, 500); return () => clearInterval(t); }, []);
   useEffect(() => { if (list.current) list.current.scrollTop = list.current.scrollHeight; }, [msgs, typing]);
+  const noteOff = () => { setNote(false); try { sessionStorage.setItem('ndm-chat-note', 'closed'); } catch (e) {} };
   useEffect(() => {
     if (!open) return;
-    setNote(false);
+    noteOff();
     const t = setTimeout(() => input.current && !small && input.current.focus({ preventScroll: true }), 200);
     const k = (e) => { if (e.key === 'Escape') { setOpen(false); btn.current && btn.current.focus({ preventScroll: true }); } };
     window.addEventListener('keydown', k);
@@ -4419,32 +4756,13 @@ function ChatBot({ ready, hidden }) {
   return (
     <>
       {note && !open && !off && (!small || clear) && (
-        <div role="status" className="chat-pop fixed z-[61] w-[min(300px,calc(100vw-88px))] rounded-[20px] rounded-br-[6px] bg-white shadow-[0_28px_60px_-22px_rgba(11,15,19,.5)] ring-1 ring-ndm-ink/[.06]"
-          style={small ? { right: 16, bottom: `calc(${bottom + 64}px + env(safe-area-inset-bottom))` } : { right: 24 + 58 + 12, bottom }}>
-          <button type="button" onClick={() => setNote(false)} aria-label="Dismiss message" className="absolute right-2 top-2 grid size-7 place-items-center rounded-full text-ndm-muted hover:bg-ndm-mist hover:text-ndm-ink"><IconClose size={14} /></button>
-          <div className="flex items-center gap-2.5 px-4 pt-3.5 pr-10">
-            <span className="relative size-9 shrink-0"><img src={CHAT_AGENT.img} alt="" className="size-9 rounded-full object-cover" /><i className="absolute bottom-0 right-0 size-2.5 rounded-full bg-[#3DDC84] ring-2 ring-white" /></span>
-            <span className="min-w-0">
-              <span className="block font-inter text-[13.5px] font-semibold leading-tight text-ndm-ink">{CHAT_AGENT.name} <span className="font-normal text-ndm-muted">· NewDermaMed</span></span>
-              <span className="mt-0.5 block font-inter text-[11.5px] text-ndm-muted">Virtual assistant · now</span>
-            </span>
-          </div>
-          <div className="px-4 pb-4 pt-3">
-            {noteTyping ? (
-              <span className="flex w-fit gap-1 rounded-[16px] rounded-tl-[6px] bg-ndm-paper px-3.5 py-3" aria-label="Typing">{[0, 1, 2].map((d) => <i key={d} className="chat-dot size-1.5 rounded-full bg-ndm-muted" style={{ animationDelay: `${d * 0.15}s` }} />)}</span>
-            ) : (
-              <>
-                <button type="button" onClick={() => setOpen(true)} className="chat-pop-msg block w-full rounded-[16px] rounded-tl-[6px] bg-ndm-paper px-3.5 py-3 text-left transition-colors hover:bg-ndm-mist">
-                  <span className="block font-aeonik text-[19px] leading-[1.2] text-ndm-ink">How can I help you today?</span>
-                  <span className="mt-1 block font-inter text-[13px] leading-[1.45] text-ndm-muted">Ask me about treatments, prices or booking.</span>
-                </button>
-                <div className="chat-pop-msg mt-3 flex flex-wrap gap-2" style={{ animationDelay: '.12s' }}>
-                  <button type="button" onClick={() => setOpen(true)} className="rounded-full bg-ndm-deep px-3.5 py-2 font-inter text-[13px] font-medium text-white transition-colors hover:bg-ndm-ink">Ask a question</button>
-                  <a href="#/book" onClick={() => setNote(false)} className="rounded-full border border-ndm-ink/15 px-3.5 py-2 font-inter text-[13px] text-ndm-ink transition-colors hover:border-ndm-ink">Book a consultation</a>
-                </div>
-              </>
-            )}
-          </div>
+        <div role="status" className="chat-pop fixed z-[61] flex max-w-[calc(100vw-88px)] items-center gap-2.5 rounded-[18px] rounded-br-[6px] bg-white py-2 pl-2 pr-9 shadow-[0_24px_50px_-22px_rgba(11,15,19,.5)] ring-1 ring-ndm-ink/[.06]"
+          style={small ? { right: 16, bottom: `calc(${bottom + 64}px + env(safe-area-inset-bottom))` } : { right: 24 + 58 + 12, bottom: bottom + 8 }}>
+          <span className="relative size-9 shrink-0"><img src={CHAT_AGENT.img} alt="" className="size-9 rounded-full object-cover" /><i className="absolute bottom-0 right-0 size-2.5 rounded-full bg-[#3DDC84] ring-2 ring-white" /></span>
+          {noteTyping
+            ? <span className="flex gap-1 px-1 py-2" aria-label="Typing">{[0, 1, 2].map((d) => <i key={d} className="chat-dot size-1.5 rounded-full bg-ndm-muted" style={{ animationDelay: `${d * 0.15}s` }} />)}</span>
+            : <button type="button" onClick={() => setOpen(true)} className="chat-pop-msg whitespace-nowrap py-1 text-left font-inter text-[14px] font-medium text-ndm-ink hover:text-ndm-deep">Hi, how can I help?</button>}
+          <button type="button" onClick={noteOff} aria-label="Dismiss message" className="absolute right-1.5 top-1/2 grid size-7 -translate-y-1/2 place-items-center rounded-full text-ndm-muted hover:bg-ndm-mist hover:text-ndm-ink"><IconClose size={13} /></button>
         </div>
       )}
       <button ref={btn} type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} aria-controls="chat-panel" aria-label={open ? 'Close chat' : 'Chat with NewDermaMed'} tabIndex={off ? -1 : 0}
@@ -4950,7 +5268,7 @@ function App() {
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-12 focus:z-[90] focus:rounded-full focus:bg-ndm-amber focus:px-4 focus:py-2 focus:font-mont focus:text-white">Skip to content</a>
       <PromoBar hidden={false} />
       <Header dark={dark} top={36} visible onSearch={() => setSearch(true)} onDrawer={() => setDrawer(true)} onCart={() => setCartOpen(true)} cartCount={cart.count} />
-      <main id="main">
+      <main id="main" className="seamless">
         <Breadcrumb items={['Pricing']} dark />
         <PricingHero />
         <PriceList />
