@@ -541,15 +541,27 @@
  "home": [
   {
    "t": "Anti-ageing",
-   "cat": "Antiaging Antiwrinkles",
+   "cat": "Anti-ageing & anti-wrinkle",
    "text": "Retinol, peptides and antioxidants support collagen between visits.",
-   "href": "https://shop.newdermamedlaserclinic.com/shop/"
+   "href": "https://shop.newdermamedlaserclinic.com/shop/",
+   "product": {
+    "n": "Activ Retinol 0.5",
+    "size": "30 ml",
+    "img": "RET0.5030-Activ-Retinol-0.5-30-ml-1.0-fl.-oz.png",
+    "href": "https://shop.newdermamedlaserclinic.com/product/activ-retinol-0-5/"
+   }
   },
   {
    "t": "Hydration",
    "cat": "Moisturising",
    "text": "Hyaluronic acid and ceramides make fine lines less visible by keeping the skin plump.",
-   "href": "https://shop.newdermamedlaserclinic.com/shop/"
+   "href": "https://shop.newdermamedlaserclinic.com/shop/",
+   "product": {
+    "n": "age element anti-wrinkle cream",
+    "size": "50 ml",
+    "img": "T-DAWS0003-age-element-anti-wrinkle-cream-50-ml-1.69-fl.-oz.png",
+    "href": "https://shop.newdermamedlaserclinic.com/product/age-element-anti-wrinkle-cream/"
+   }
   },
   {
    "t": "Sun protection",
@@ -723,5 +735,43 @@
   "Wrinkles &",
   "fine lines"
  ],
- "where": "At our Uptown clinic, Yonge & Sheppard, and our Downtown clinic, Bay & College, Toronto."
+ "where": "At our Uptown clinic, Yonge & Sheppard, and our Downtown clinic, Bay & College, Toronto.",
+ "related_tx": [
+  [
+   "Aptos Thread Lift",
+   "Aptos Thread Lift",
+   "assets/live/thumbs/1-1.webp",
+   "Lifting"
+  ],
+  [
+   "Dermal Fillers",
+   "Dermal Fillers",
+   "assets/live/thumbs/Dermal-Fillers-Treatment-Toronto.webp",
+   "Injectable"
+  ],
+  [
+   "Skin Boosters",
+   "Skin Boosters",
+   "assets/live/thumbs/Soft-Lift.webp",
+   "Injectable"
+  ],
+  [
+   "Sculptra®",
+   "Sculptra®",
+   "assets/live/thumbs/9.webp",
+   "Bio-stimulator"
+  ],
+  [
+   "Microneedling",
+   "Microneedling",
+   "assets/live/thumbs/11-1.webp",
+   "Skin"
+  ],
+  [
+   "Laser Skin Resurfacing",
+   "Laser Skin Resurfacing",
+   "assets/live/thumbs/26.webp",
+   "Laser"
+  ]
+ ]
 }
