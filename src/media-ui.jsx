@@ -7,12 +7,16 @@ const MEDIA_CSS = `
 .tx-film video{position:absolute;left:0;top:-4%;height:142%;width:100%;object-fit:cover;object-position:50% 0;will-change:transform}
 .tx-film-shade{background:linear-gradient(90deg,rgba(11,15,19,.82) 0%,rgba(11,15,19,.5) 48%,rgba(11,15,19,.25) 100%),linear-gradient(180deg,rgba(11,15,19,.35),rgba(11,15,19,0) 35%,rgba(11,15,19,.55) 100%)}
 .tx-film-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-.tx-film-ring{position:absolute;right:clamp(16px,4vw,64px);bottom:clamp(16px,4vw,48px);width:clamp(96px,10vw,140px);aspect-ratio:1;animation:txSpin 22s linear infinite}
+.tx-film-ring{position:absolute;right:max(var(--gx),calc((100% - 1180px) / 2));bottom:clamp(56px,9vw,140px);width:clamp(96px,10vw,140px);aspect-ratio:1;animation:txSpin 22s linear infinite} /* inside the section padding, at the right edge of the content */
 @keyframes txSpin{to{transform:rotate(360deg)}}
-.tx-phone{width:min(280px,72vw);aspect-ratio:9/19;border-radius:44px;background:#0B0F13;padding:10px;box-shadow:0 50px 90px -40px rgba(11,15,19,.7),inset 0 0 0 2px rgba(255,255,255,.08)}
-.tx-phone-screen{position:relative;height:100%;width:100%;overflow:hidden;border-radius:34px;background:#1B242B}
-.tx-phone-screen video,.tx-phone-screen img{position:absolute;inset:0;height:100%;width:100%;object-fit:cover}
-.tx-phone-notch{position:absolute;left:50%;top:10px;z-index:2;width:38%;height:22px;transform:translateX(-50%);border-radius:999px;background:#0B0F13}
+/* the phone: an iPhone 18 Pro seen from the front (titanium rim, thin black border, Dynamic Island, side buttons); only the front shows */
+.tx-phone{position:relative;width:min(290px,72vw);aspect-ratio:1206/2622;border-radius:58px;padding:4px;background:linear-gradient(145deg,#e4e6e9 0%,#9aa0a7 20%,#f4f5f6 46%,#858b92 70%,#d2d5d9 100%);box-shadow:0 50px 90px -40px rgba(11,15,19,.65),0 0 0 1px rgba(11,15,19,.18)}
+.tx-phone::before{content:"";position:absolute;left:-3px;top:19%;width:3px;height:5%;border-radius:3px 0 0 3px;background:#a3a8ae;box-shadow:0 calc(min(290px,72vw) * .19) 0 #a3a8ae,0 calc(min(290px,72vw) * .36) 0 #a3a8ae}
+.tx-phone::after{content:"";position:absolute;right:-3px;top:27%;width:3px;height:11%;border-radius:0 3px 3px 0;background:#a3a8ae}
+.tx-phone-screen{position:relative;height:100%;width:100%;overflow:hidden;border-radius:54px;border:9px solid #040506;background:#000}
+.tx-phone-screen::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.1) 0%,rgba(255,255,255,0) 32%)}
+.tx-phone-screen video,.tx-phone-screen img{position:absolute;inset:0;height:100%;width:100%;object-fit:contain;background:#000} /* the clip fills the width; any space above and below stays black */
+.tx-phone-notch{position:absolute;left:50%;top:22px;z-index:2;width:31%;height:26px;transform:translateX(-50%);border-radius:999px;background:#000;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
 .tx-phone-glow{position:absolute;inset:-14%;z-index:-1;background:radial-gradient(45% 45% at 50% 50%,rgba(38,177,231,.45),transparent 70%),radial-gradient(35% 35% at 30% 80%,rgba(255,166,23,.32),transparent 70%);filter:blur(10px)}
 .tx-case{transition:transform .6s var(--e-out),box-shadow .6s var(--e-out)}
 .tx-case:hover{transform:translateY(-6px);box-shadow:0 34px 60px -30px rgba(38,177,231,.45)}
@@ -50,7 +54,7 @@ function TxFilm({ p }) {
   }, []);
   const f = p.film;
   return (
-    <section ref={ref} id="film" data-nav="dark" aria-labelledby="film-title" className="tx-film relative z-10 scroll-mt-[120px] overflow-hidden px-[var(--gx)] py-[clamp(72px,9vw,140px)] text-white">
+    <section ref={ref} id="film" data-nav="dark" aria-labelledby="film-title" className="tx-film relative z-10 scroll-mt-[120px] overflow-hidden px-[var(--gx)] py-[clamp(56px,9vw,140px)] text-white">
       <video ref={vid} muted loop playsInline preload="none" poster={f.poster} aria-hidden="true" tabIndex={-1}>
         <source src={f.src_m} type="video/mp4" media="(max-width: 767px)" />
         <source src={f.src} type="video/mp4" />
@@ -65,12 +69,12 @@ function TxFilm({ p }) {
         <Eyebrow dark className="rv">{txNum(p, 'film') && <span className="tabular-nums text-ndm-sky">{txNum(p, 'film')}</span>}Inside the clinic</Eyebrow>
         <TwoTone id="film-title" dark className="rv mt-5 max-w-[14ch]" size="text-[clamp(34px,4.4vw,64px)]" lead={twoLine(f.lead)} strong={f.strong} style={{ transitionDelay: '.06s' }} />
         <p className="rv mt-5 max-w-[50ch] font-inter text-[clamp(15.5px,1.15vw,17px)] leading-[1.6] text-white/80" style={{ transitionDelay: '.1s' }}>{f.text}</p>
-        <ul className="rv mt-8 flex flex-wrap gap-2" role="list" style={{ transitionDelay: '.14s' }}>
+        <ul className="rv mt-8 hidden flex-wrap gap-2 sm:flex" role="list" style={{ transitionDelay: '.14s' }}>
           {f.chips.map((c) => <li key={c} className="tx-film-chip rounded-full px-4 py-2 font-inter text-[13.5px] text-white/90">{c}</li>)}
         </ul>
         <div className="rv mt-8 flex flex-wrap items-center gap-3" style={{ transitionDelay: '.18s' }}>
           <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
-          <Btn href="about.html#contact" v="glass">Find a clinic</Btn>
+          <span className="hidden sm:contents"><Btn href="about.html#contact" v="glass">Find a clinic</Btn></span>
         </div>
       </div>
     </section>
