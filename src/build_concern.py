@@ -1,18 +1,23 @@
-"""Build the concern page wrinkles-fine-lines.html: the article page's layout (blog-ui.jsx + article-ui.jsx) blended with the
-treatment pages' sections (procedure-ui.jsx + treatment-ui.jsx), content in concern-ui.jsx. Built from promotion.html.
-usage: python3 build_concern.py <ndm-homepage dir> <scratch dir>
+"""Build the concern page wrinkles-fine-lines.html (round 20): Ray's concern page structure and copy (src/concern-data.json,
+src/concern-ui.jsx) in this site's treatment-page look, with the Botox page's header, form, glance card, section bar, Before &
+after photo cases and spacing. No clinic film. Built from promotion.html; run tools/prerender.py after it.
+usage: python3 src/build_concern.py <NDM dir> <src dir>
 """
 import json
 import re
 import sys
 from pathlib import Path
 
-root, scratch = Path(sys.argv[1]), Path(sys.argv[2])
-s = (root / 'promotion.html').read_text()
+root, src = Path(sys.argv[1]), Path(sys.argv[2])
+s = (root / 'promotion.html').read_text(encoding='utf-8')
 s = re.sub(r'\n<script type="application/ld\+json" id="ld-crumbs">.*?</script>', '', s, count=1)
-parts = ['blog-ui.jsx', 'article-ui.jsx', 'procedure-ui.jsx', 'treatment-ui.jsx', 'concern-ui.jsx']
-ui = '\n'.join((scratch / p).read_text() for p in parts)
+ui = '\n'.join((src / f).read_text(encoding='utf-8') for f in ['procedure-ui.jsx', 'treatment-ui.jsx', 'concern-ui.jsx'])
+CN = json.load(open(src / 'concern-data.json', encoding='utf-8'))
 OUT = 'wrinkles-fine-lines.html'
+proc_build = (src / 'build_procedure.py').read_text(encoding='utf-8')
+CSS_PROC = re.search(r"\ncss = '''(.*?)'''", proc_build, re.S).group(1)       # the Botox page's look (seamless sections, peach, tabs)
+SPACING = re.search(r"\nSPACING = '''(.*?)'''", proc_build, re.S).group(1)    # and its spacing and alignment
+CN_CSS = re.search(r'const CN_CSS = `(.*?)`;', ui, re.S).group(1)
 
 
 def rep(a, b, n=1):
@@ -22,45 +27,35 @@ def rep(a, b, n=1):
     s = s.replace(a, b)
 
 
-def css_of(build):
-    """the page CSS block of another build script, so the two looks stay in step"""
-    src = (scratch / build).read_text()
-    return re.search(r"\ncss = '''(.*?)'''", src, re.S).group(1)
-
-
-faqs = re.search(r"  faqs: \[\n(.*?)\n  \],\n  related", (scratch / 'concern-ui.jsx').read_text(), re.S).group(1)
-faq_pairs = re.findall(r"\['(.+?)', '(.+?)'\],?", faqs)
-assert len(faq_pairs) == 5, len(faq_pairs)
+SITE = 'https://newdermamedlaserclinic.com/'
+URL = SITE + OUT
+TITLE = 'Wrinkles & Fine Lines Treatment Toronto | NewDermaMed'
+DESC = ('Treatments for wrinkles and fine lines in Toronto: 11 options compared, with a free consultation and VISIA® skin analysis '
+        'at our Uptown (Yonge & Sheppard) and Downtown (Bay & College) clinics.')
+H = lambda x: x.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;')
 ld = {'@context': 'https://schema.org', '@graph': [
-    {'@type': 'BreadcrumbList', 'itemListElement': [
-        {'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'index.html'},
+    {'@type': 'MedicalWebPage', '@id': URL + '#webpage', 'url': URL, 'name': TITLE, 'description': DESC, 'inLanguage': 'en-CA',
+     'about': {'@type': 'MedicalCondition', 'name': 'Wrinkles and fine lines'}, 'breadcrumb': {'@id': URL + '#breadcrumb'}},
+    {'@type': 'BreadcrumbList', '@id': URL + '#breadcrumb', 'itemListElement': [
+        {'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': SITE},
         {'@type': 'ListItem', 'position': 2, 'name': 'Concerns'},
-        {'@type': 'ListItem', 'position': 3, 'name': 'Wrinkles & Fine Lines'}]},
-    {'@type': 'FAQPage', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a.replace("\\'", "'")}} for q, a in faq_pairs]},
+        {'@type': 'ListItem', 'position': 3, 'name': 'Wrinkles & Fine Lines', 'item': URL}]},
+    {'@type': 'FAQPage', '@id': URL + '#faq', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in CN['faqs']]},
 ]}
-rep('<title>Promotions, NewDermaMed Toronto</title>', '<title>Wrinkles &amp; Fine Lines, Treatments in Toronto, NewDermaMed</title>')
+HEAD = '\n'.join([
+    f'<link rel="canonical" href="{URL}">', '<meta property="og:type" content="website">', '<meta property="og:site_name" content="NewDermaMed">',
+    f'<meta property="og:url" content="{URL}">', f'<meta property="og:title" content="{H(TITLE)}">', f'<meta property="og:description" content="{H(DESC)}">',
+    f'<meta property="og:image" content="{SITE}{CN["hero"]["d"]}">', '<meta name="twitter:card" content="summary_large_image">',
+    '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>'])
+rep('<title>Promotions, NewDermaMed Toronto</title>', f'<title>{H(TITLE)}</title>')
 rep('<meta name="description" content="NewDermaMed is Toronto\'s award-winning cosmetic and laser clinic, with Uptown and Downtown locations. Book a free consultation and VISIA® skin analysis.">',
-    '<meta name="description" content="What causes wrinkles and fine lines, the kinds of lines we see, and the non-surgical treatments that may help, at NewDermaMed Uptown and Downtown Toronto.">\n'
-    '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>')
+    f'<meta name="description" content="{H(DESC)}">\n' + HEAD)
 
-css = css_of('build_article.py') + css_of('build_procedure.py') + '''
-  /* concern page: the treatment cards row (same as the home menu row) */
-  .side-rail::before,.side-rail::after{content:"";position:absolute;top:0;bottom:0;z-index:2;width:var(--gx);pointer-events:none}
-  .side-rail::before{left:0;background:linear-gradient(90deg,#FAFAF8 15%,rgba(250,250,248,0))}
-  .side-rail::after{right:0;background:linear-gradient(270deg,#FAFAF8 15%,rgba(250,250,248,0))}
-  .side-arrow{position:absolute;top:42%;z-index:3;display:grid;place-items:center;width:48px;height:48px;border-radius:999px;background:#fff;color:#1B242B;box-shadow:0 14px 30px -14px rgba(27,36,43,.45),0 0 0 1px rgba(27,36,43,.08);transform:translateY(-50%);transition:background-color .25s ease,color .25s ease,opacity .25s ease}
-  .side-arrow:hover{background:#0F80C3;color:#fff}
-  .side-arrow:disabled{opacity:0;pointer-events:none}
-  .side-arrow.is-l{left:max(8px,calc(var(--gx) - 24px))}
-  .side-arrow.is-r{right:max(8px,calc(var(--gx) - 24px))}
-  @media (max-width:767px){.side-arrow{display:none}}
-  .tm-card2{width:78%;max-width:340px;box-shadow:0 22px 44px -36px rgba(27,36,43,.45);transition:box-shadow .45s var(--e-out),transform .45s var(--e-out)}
-  @media (min-width:640px){.tm-card2{width:44%}}
-  @media (min-width:1024px){.tm-card2{width:calc((100% - 48px) / 4.25);max-width:none}}
-  .tm-card2:hover{transform:translateY(-3px);box-shadow:0 30px 56px -36px rgba(27,36,43,.55)}
-  /* the benefit cards sit inside the article column: no bullet dots */
-  .article-prose .cn-cards li{padding-left:1rem}
-  .article-prose .cn-cards li::before{content:none}
+css = CSS_PROC + SPACING + CN_CSS + '''
+  /* concern page (round 20): sections that came with their own grey band share the paper colour of the Botox page */
+  main>section#assess,main>section#home-care{background-color:#FAFAF8!important}
+  /* the same section spacing as the Botox page */
+  main>section#understand,main>section#assess,main>section#home-care,main>section#read{padding-top:clamp(64px,7vw,104px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
 '''
 anchor = '<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>'
 i = s.rindex('</style>', 0, s.index(anchor))
@@ -71,7 +66,7 @@ b = s.index('ReactDOM.createRoot', a)
 app = r'''
 function App() {
   const cart = useCartState();
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
   const [search, setSearch] = useState(false);
   const [drawer, setDrawer] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -80,27 +75,33 @@ function App() {
     setDark([...document.querySelectorAll('[data-nav="dark"]')].some((el) => { const r = el.getBoundingClientRect(); return r.top <= probe && r.bottom >= probe; }));
   }, []);
   useEffect(() => { lockScroll(search || drawer || cartOpen); }, [search, drawer, cartOpen]);
-  const related = CONCERN.related.map((k) => BLOG_POSTS.find((p) => p.slug.startsWith(k))).filter(Boolean);
   return (
     <CartCtx.Provider value={cart}>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-12 focus:z-[90] focus:rounded-full focus:bg-ndm-amber focus:px-4 focus:py-2 focus:font-mont focus:text-white">Skip to content</a>
       <PromoBar hidden={false} />
       <Header dark={dark} top={36} visible onSearch={() => setSearch(true)} onDrawer={() => setDrawer(true)} onCart={() => setCartOpen(true)} cartCount={cart.count} />
-      <ReadProgress />
       <main id="main">
-        <Breadcrumb items={['Concerns', CONCERN.name]} />
-        <article aria-labelledby="concern-title">
-          <ConcernHead c={CONCERN} />
-          <ConcernBody c={CONCERN} />
-        </article>
-        <ConcernTreatments c={CONCERN} />
-        <ProcOverview p={CONCERN} />
-        <ProcCompare p={CONCERN} />
+        <Breadcrumb items={CN.crumbs} dark />
+        <ProcHero p={CN} />
+        <TxGlance p={CN} />
+        <section aria-label="Book a free consultation" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-6 lg:hidden"><ProcForm id="mobile-form" className="ring-1 ring-ndm-ink/[.06]" /></section>
+        <TxNav p={CN} />
+        <CnIntro p={CN} />
+        <CnUnderstand p={CN} />
+        <CnAssess p={CN} />
+        <CnOptions p={CN} />
+        <CnCompare p={CN} />
+        <TxExpect p={CN} />
+        <TxResults p={CN} />
+        <CnHome p={CN} />
+        <TxWhy p={CN} />
         <Team />
         <PromoReviews />
+        <CnArticles p={CN} />
+        <CnRelated p={CN} />
+        <TxVisit p={CN} />
         <ProcAnalysis />
-        <Faq items={CONCERN.faqs} lead="Wrinkle treatments," strong="your questions answered" intro="What people ask us most about lines, wrinkles and the treatments that may help." />
-        <RelatedStories items={related} />
+        <Faq items={CN.faqs} lead={<>Questions about<br /></>} strong={CN.short.toLowerCase()} intro="The things people ask us most about this concern." />
       </main>
       <Footer />
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} onBrowse={() => { window.location.href = 'pricing.html#prices'; }} />
@@ -115,6 +116,7 @@ function App() {
 }
 
 '''
-s = s[:a] + '\n' + ui + '\n/* ---------------------------------------------------------------- app (concern page) */' + app + s[b:]
-(root / OUT).write_text(s)
+data = '/* ---------------------------------------------------------------- the concern (src/concern-data.json) */\nconst CN = ' + json.dumps(CN, ensure_ascii=False) + ';\n'
+s = s[:a] + '\n' + ui + '\n' + data + '\n/* ---------------------------------------------------------------- app (concern page) */' + app + s[b:]
+(root / OUT).write_text(s, encoding='utf-8')
 print('wrote', OUT, len(s))

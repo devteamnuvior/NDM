@@ -1,265 +1,360 @@
-/* ---------------------------------------------------------------- concern page (one concern: Wrinkles & Fine Lines).
-   A blend of the article page (centred blurred title, wide photo, reading line, a narrow reading column with an
-   "On this page" list, the key takeaway card, related articles) and the treatment pages (the at-a-glance strip,
-   treatment cards, the five treatment tabs, compare the options, team, testimonials, the free skin analysis band, FAQ).
-   Content: newdermamedlaserclinic.com/skin/aesthetic/wrinkle-treatments/, rewritten in qualified language.
-   Prescription drugs are never named beside a benefit (C.01.044): the injection card says "neuromodulator injections". */
-const scrollToId = (id) => { const el = document.getElementById(id); if (el) scrollToY(el.getBoundingClientRect().top + window.scrollY - 100); };
-const CONCERN = {
-  slug: 'wrinkles-fine-lines',
-  name: 'Wrinkles & Fine Lines',
-  group: 'Face & ageing',
-  title: ['Wrinkles &', 'fine lines'],
-  sub: 'What causes them, the kinds of lines we see, and the non-surgical treatments that may help, planned around your skin.',
-  hero: 'assets/home/v3/mirror-1440.webp',
-  heroAlt: 'A woman in a NewDermaMed treatment chair looking at her skin in a hand mirror',
-  /* the glance strip under the photo (TX_ICONS picks the icon from the label) */
-  facts: [['Treatment type', 'Injectable, laser & skin'], ['Session', '30 to 60 minutes'], ['Recovery time', 'Minimal downtime']],
-  toc: [['causes', 'What causes wrinkles'], ['kinds', 'The kinds of lines'], ['suit', 'Who it may suit'], ['benefits', 'What treatment may offer'],
-    ['treatments', 'Treatments that may help'], ['overview', 'Your treatment'], ['compare', 'Compare the options'], ['faq', 'Questions']],
-  intro: 'Wrinkles don’t have to define your look. At NewDermaMed our medical team combines modern, non-surgical treatments into one plan for your skin, your facial structure and your goals, for a smoother, naturally refreshed look.',
-  body: [
-    ['h2', 'What causes wrinkles', 'causes'],
-    ['p', 'Wrinkles form as the skin’s collagen and elastin break down over time. Sun exposure, natural ageing, repeated facial expressions and everyday habits all play a part, which is why lines can appear in different places and at different depths.'],
-    ['h2', 'The kinds of lines we see', 'kinds'],
-    ['p', 'Not every line has the same cause, so not every line needs the same treatment. At your consultation our team looks at which of these you have:'],
-    ['ul', ['Fine lines, often around the eyes and across the forehead', 'Dynamic lines that appear when you smile, frown or raise your brows', 'Deeper folds, such as smile lines and marionette lines', 'Lost volume, which can make lines look deeper', 'Loose, uneven or sun-damaged skin']],
-    ['img', 'assets/home/v3/collagen-1000.webp', 'A provider assessing a patient’s skin before treatment'],
-    ['h2', 'Who these treatments may suit', 'suit'],
-    ['p', 'Wrinkle treatments may suit adults who would like smoother-looking skin without surgery. Plans can be tailored to most skin types, whether you want early care in your 30s or a refresh later on. Every plan starts with a free, in-person consultation.'],
-    ['h2', 'What treatment may offer', 'benefits'],
-    ['cards', [
-      ['Softer lines', 'May soften crow’s feet, frown lines and forehead creases.'],
-      ['Restored volume', 'Dermal fillers can restore volume in areas affected by ageing.'],
-      ['Collagen support', 'Microneedling, lasers and biostimulators may encourage the skin’s own renewal.'],
-      ['Lift and definition', 'Thread lifts and energy-based treatments can help redefine facial contours.'],
-      ['A plan for you', 'Each plan is personalised for a natural-looking result. Individual results may vary.'],
-    ]],
-  ],
-  takeaway: 'Lines have different causes, so results usually come from a plan that matches each one. A free consultation is the simplest way to find out which treatments may suit your skin.',
-  /* treatment cards: [name, one line, starting price, link, photo, tag]; prices from the pricing page */
-  treatments: [
-    ['Neuromodulator injections', 'Relax the muscles behind expression lines for a time.', '$12 per unit', 'botox.html', 'assets/home/v3/sface-720.webp', 'Injectable'],
-    ['Dermal fillers', 'Hyaluronic acid gel for folds and lost volume.', 'From $750', '#/dermal-fillers', 'assets/home/v3/jawline-720.webp', 'Injectable'],
-    ['Laser skin resurfacing', 'Renews the outer layers and supports new collagen.', 'From $200', '#/laser-skin-resurfacing', 'assets/home/v3/resurf-720.webp', 'Laser'],
-    ['Microneedling', 'Fine needles that encourage collagen and elastin.', 'From $245', '#/microneedling', 'assets/home/v3/mneedle-720.webp', 'Skin'],
-    ['Biostimulators', 'Sculptra® and Radiesse®, for gradual collagen support.', 'From $599', '#/sculptra', 'assets/home/v3/sculptra-720.webp', 'Injectable'],
-    ['Aptos thread lift', 'Absorbable threads that may lift and support tissue.', 'From $2,500', 'aptos-thread-lift.html', `${NDM}/wp-content/uploads/2025/09/Benefits-of-Aptos-Thread-Lift.jpg`, 'Thread lift'],
-  ],
-  /* the five tabs, as on the treatment pages */
-  overview: {
-    tag: 'Your treatment', lead: 'From first visit', strong: 'to maintenance',
-    tabs: [
-      { label: 'Overview', stat: ['6', 'treatment options'], text: [
-        'Wrinkle treatments at NewDermaMed aim to smooth fine lines, restore volume and refresh the skin. Our team combines advanced medical aesthetic treatments into one plan built around your skin and your goals.',
-        'There are modern, non-surgical options for most kinds of lines, whatever their cause. Individual results may vary.'] },
-      { label: 'What to expect', stat: ['30–60', 'minutes per session'], text: [
-        'Your plan starts with a personalised consultation. Our team looks at your skin, your facial structure and your goals, then explains the options that may suit you.',
-        'Depending on your plan, sessions take about 30 to 60 minutes with little to no downtime, so most people return to their day straight away. Some changes may be visible soon after, and the skin can keep improving as it heals. Individual results may vary.'] },
-      { label: 'How it works', stat: ['5', 'ways to treat lines'], text: [
-        'Treatments work on both the visible signs of ageing and their causes. Neuromodulator injections relax overactive muscles behind expression lines for a time, and dermal fillers restore lost volume and support.',
-        'Microneedling and laser treatments encourage collagen and elastin, which may leave the skin firmer and smoother. Biostimulators such as Sculptra® or Radiesse® and thread lifts add structural support over time. Combined, they can give a fuller, natural-looking result.'] },
-      { label: 'Maintenance', stat: ['6–18', 'months, typical for fillers'], text: [
-        'How long results last depends on the treatment: neuromodulator injections typically last 3 to 4 months, fillers 6 to 18 months, and collagen-stimulating treatments may improve the skin for up to 2 years.',
-        'Regular follow-up visits and medical-grade skincare chosen for you can help you keep your result. Individual results may vary.'] },
-      { label: 'Pricing', stat: ['Free', 'first consultation'], text: [
-        'Every face is different, and so is every plan. Starting prices are shown on each treatment above, and your final price is confirmed at your free consultation.',
-        'Our licensed professionals look at your skin, talk through your options and build a personalised plan with careful, medical-grade care.'], link: ['pricing.html', 'See all prices'] },
-    ],
-  },
-  compare: {
-    tag: 'Compare the options', lead: 'The main treatments', strong: 'for lines, side by side', mark: false,
-    text: 'A general guide to the treatments most often discussed for wrinkles. Our team helps you choose at your free consultation.',
-    cols: [['Neuromodulator injections', 'botox.html'], ['Dermal fillers', '#/dermal-fillers'], ['Laser skin resurfacing', '#/laser-skin-resurfacing'], ['Microneedling', '#/microneedling']],
-    rows: [
-      ['How it works', ['Relaxes the muscles behind expression lines for a time', 'Hyaluronic acid gel restores volume and support', 'Laser renews the outer layers and builds collagen', 'Fine needles encourage collagen and elastin']],
-      ['Often chosen for', ['Lines that form when your face moves', 'Folds that stay at rest, and lost volume', 'Fine lines and texture', 'Fine lines and overall skin quality']],
-      ['Typical course', ['One short visit, repeated every 3 to 4 months', 'Usually one session, with an optional review at 2 weeks', '1 to 3 sessions, depending on depth', 'A course of sessions, in packages of 3 or 6']],
-      ['Downtime', ['Minimal; mild redness or swelling may occur', 'Possible swelling or bruising for a few days', 'From 1 to 2 days to 5 to 10 days, by depth', 'Little to no downtime for most people']],
-      ['When results may appear', ['Within 3 to 7 days, full effect at about 2 weeks', 'Visible right away, settling over about 2 weeks', 'As the skin heals, with collagen changes over 3 to 6 months', 'Gradually, over weeks to months']],
-      ['Starting price', ['$12 per unit', 'From $750', 'From $200', 'From $245']],
-    ],
-  },
-  faqs: [
-    ['What causes wrinkles?', 'Wrinkles come from the breakdown of collagen and elastin, along with sun exposure, natural ageing, facial expressions and lifestyle habits.'],
-    ['What treatments are available for wrinkles?', 'Options include neuromodulator injections, dermal fillers, laser skin resurfacing, microneedling, thread lifts, biostimulators and medical-grade skincare. Your plan may combine more than one.'],
-    ['How soon may I see results?', 'Injectable treatments can show a change within days, while lasers and microneedling bring gradual improvement over weeks to months. Individual results may vary.'],
-    ['Are wrinkle treatments safe?', 'The treatments we offer are minimally invasive, use Health Canada approved products and devices, and are performed by trained medical professionals after an assessment. As with any treatment, side effects can occur, and they are explained at your consultation.'],
-    ['Who is a good candidate for wrinkle treatments?', 'Wrinkle treatments may suit men and women who would like smoother-looking skin and refreshed facial contours without surgery.'],
-  ],
-  related: ['/aptos-excellence-visage', '/how-to-prepare-for-dermal-fillers/', '/things-to-keep-in-mind-when-considering-juvederm/'],
-};
+/* ---------------------------------------------------------------- concern page (wrinkles-fine-lines.html), round 20. Structure and
+   copy from Ray's concern page (ray/V1/NDM/concern-wrinkles-fine-lines.html, components from his concern-ui.jsx), set in this
+   site's treatment-page look: the Botox header and form, glance card, section bar, Before & after photo cases and spacing.
+   His clinic film in the middle of the page is left out. Data: src/concern-data.json (const CN, added by build_concern.py) */
+const CN_CSS = `
+.cn-role{font:600 11px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:7px 10px;border-radius:999px;box-shadow:0 6px 16px -8px rgba(11,15,19,.5)}
+.cn-role-primary{background:#0F80C3;color:#fff}
+.cn-role-supporting{background:rgba(15,128,195,.1);color:#0A4F7A}
+.cn-role-combination{background:#FFF1DB;color:#8A5A12}
+.cn-role-bio{background:#0A4F7A;color:#fff}
+.cn-card{transition:transform .5s var(--e-out),box-shadow .5s var(--e-out)}
+.cn-card:hover{transform:translateY(-3px);box-shadow:0 30px 50px -34px rgba(15,60,95,.4)}
+.cn-bio{isolation:isolate;background:linear-gradient(135deg,#EAF5FB 0%,#F4F9FC 55%,#FBF3EC 100%);box-shadow:0 0 0 1px rgba(15,128,195,.14)} /* NDM blue to warm paper, no purple (round 21) */
+.cn-bio::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(55% 70% at 100% 0%,rgba(38,177,231,.16),transparent 60%),radial-gradient(45% 60% at 0% 100%,rgba(255,190,160,.18),transparent 60%)}
+.cn-table{width:100%;border-collapse:separate;border-spacing:0;min-width:720px}
+.cn-table th,.cn-table td{padding:13px 16px;vertical-align:top;text-align:left;border-bottom:1px solid rgba(27,36,43,.07);font-size:13.5px;line-height:1.5;color:rgba(27,36,43,.82)}
+.cn-table th{font:600 11px/1.3 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#5A646C;background:#F6F6F3;position:sticky;top:0;z-index:2;white-space:nowrap}
+.cn-table th .cn-th{display:inline-flex;align-items:center;gap:6px}
+.cn-table th .cn-th svg{color:#0F80C3}
+.cn-table th:first-child,.cn-table td:first-child{position:sticky;left:0;background:#fff;z-index:1;min-width:214px}
+.cn-table th:first-child{background:#F6F6F3;z-index:3}
+.cn-table tr:last-child td{border-bottom:0}
+.cn-table tbody tr{transition:background-color .15s ease}
+.cn-table tbody tr:hover td{background:rgba(32,158,217,.05)}
+.cn-table tbody tr:hover td:first-child{background:#fbfcfd}
+.cn-name{display:flex;align-items:center;gap:11px;color:#1B242B}
+.cn-name:hover{color:#0F80C3}
+.cn-name .cn-nm{font-family:Fraunces,Georgia,serif;font-size:16.5px;line-height:1.18;letter-spacing:-.01em}
+.cn-thumb{width:42px;height:42px;border-radius:11px;object-fit:cover;flex:none;box-shadow:inset 0 0 0 1px rgba(27,36,43,.06)}
+.cn-sub{display:block;margin-top:3px;font:400 11.5px/1.35 Inter,sans-serif;letter-spacing:0;text-transform:none;color:#5A646C}
+.cn-from{display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap;border-radius:999px;background:rgba(32,158,217,.1);color:#0F80C3;font:600 13.5px/1 Inter,sans-serif;padding:7px 12px;transition:background-color .15s ease}
+.cn-from:hover{background:rgba(32,158,217,.16)}
+.cn-from .cn-fl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.72}
+.cn-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.cn-hint{align-items:center;gap:6px;justify-content:center;margin-top:10px;font:500 12px/1 Inter,sans-serif;color:#5A646C}
+.cn-m summary{list-style:none}
+.cn-m summary::-webkit-details-marker{display:none}
+.cn-m[open] .cn-chev{transform:rotate(180deg)}
+.cn-m[open]{box-shadow:0 22px 44px -36px rgba(27,36,43,.45)}
+.cn-rx{background:#FFF6EA;border:1px solid rgba(255,166,23,.3)}
+`;
 
-/* the article head: category chip, the blurred two-line title, a short line, the wide photo, and the treatment
-   pages' at-a-glance strip sitting half over the photo's bottom edge */
-function ConcernHead({ c }) {
-  const ref = useRef(null), pic = useRef(null);
-  useReveal(ref);
-  useOnScroll(() => {
-    const img = pic.current; if (!img || REDUCED) return;
-    const h = img.parentElement.offsetHeight;
-    img.style.transform = `translate3d(0,${Math.min(window.scrollY * 0.15, h * 0.12).toFixed(1)}px,0)`;
-  }, []);
-  const go = (e) => { e.preventDefault(); scrollToId('article-body'); };
-  return (
-    <div ref={ref} className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(170px,15vw,220px)]">
-      <div className="mx-auto max-w-[980px] text-center">
-        <p className="rv flex flex-wrap items-center justify-center gap-2 font-inter text-[13px] text-ndm-muted">
-          <span className="rounded-full bg-white px-3 py-1.5 font-medium text-ndm-deep ring-1 ring-ndm-ink/[.08]">Concern</span>
-          <span>{c.group}</span><i aria-hidden="true" className="size-1 rounded-full bg-ndm-muted/60" /><span>6 treatment options</span>
-        </p>
-        <BlurTitle as="h1" id="concern-title" size="text-[clamp(42px,5.6vw,88px)]" className="mt-6" lead={c.title[0]} strong={c.title[1]} />
-        <p className="rv mx-auto mt-6 max-w-[56ch] font-inter text-[16.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.3s' }}>{c.sub}</p>
-        <div className="rv mt-7 flex flex-wrap justify-center gap-3" style={{ transitionDelay: '.36s' }}>
-          <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
-          <Btn href="#article-body" onClick={go} v="line">Read the guide</Btn>
-        </div>
-      </div>
-      <div className="rv rv-clip relative mx-auto mt-[clamp(40px,5vw,64px)] aspect-[4/3] max-w-[1320px] overflow-hidden rounded-[20px] bg-ndm-line sm:aspect-[21/9]">
-        <img ref={pic} src={c.hero} alt={c.heroAlt} fetchpriority="high" className="absolute inset-x-0 -top-[12%] h-[124%] w-full object-cover object-[50%_28%] will-change-transform" />
-      </div>
-      <div role="region" aria-labelledby="glance-title" className="relative z-10 -mt-[clamp(44px,4vw,60px)] px-[clamp(0px,2vw,28px)]">
-        <h2 id="glance-title" className="sr-only">Treatment at a glance</h2>
-        <div className="rv mx-auto grid max-w-[1180px] gap-4 rounded-[24px] bg-white p-4 shadow-[0_30px_60px_-36px_rgba(11,15,19,.55)] ring-1 ring-ndm-ink/[.06] sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-6 lg:px-7" style={{ transitionDelay: '.1s' }}>
-          <dl className="grid grid-cols-2 gap-x-3 gap-y-4 md:grid-cols-3">
-            {c.facts.map(([k, v], i) => (
-              <div key={k} className={`flex items-center gap-3 ${i ? 'md:border-l md:border-ndm-ink/10 md:pl-5' : ''} ${i === 0 ? 'col-span-2 md:col-span-1' : ''}`}>
-                <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-[14px] bg-gradient-to-br from-ndm-sky to-ndm-deep text-white shadow-[0_10px_20px_-12px_rgba(15,128,195,.9)]">
-                  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{TX_ICONS[txIcon(k)]}</svg>
-                </span>
-                <div className="min-w-0">
-                  <dt className="font-inter text-[12px] leading-[1.3] text-ndm-muted">{k}</dt>
-                  <dd className="font-inter text-[15px] font-semibold leading-[1.3] text-ndm-ink sm:text-[16px]">{v}</dd>
-                </div>
-              </div>
-            ))}
-          </dl>
-          <div className="grid grid-cols-2 gap-2 lg:w-[230px] lg:grid-cols-1">
-            {CALLS.map(([n, num]) => (
-              <a key={n} href={tel(num)} aria-label={`Call the ${n} clinic at ${num}`} className="btn btn-buy h-11 gap-2 px-3 text-[13.5px]">
-                <IconPhone className="shrink-0" /><span className="truncate"><span className="lg:hidden">{n}</span><span className="hidden lg:inline">{num} {n}</span></span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
-/* the article column with an "On this page" list beside it (a chip row on phones); the list marks the part being read */
-function ConcernBody({ c }) {
+/* ---------------------------------------------------------------- the opening: the concern in plain words, the pages on our site that cover it */
+function CnIntro({ p }) {
   const ref = useRef(null);
   useReveal(ref);
-  const [act, setAct] = useState(c.toc[0][0]);
-  useOnScroll(() => {
-    const y = window.innerHeight * 0.35;
-    let on = c.toc[0][0];
-    c.toc.forEach(([id]) => { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top < y) on = id; });
-    setAct(on);
-  }, []);
-  const go = (id) => (e) => { e.preventDefault(); scrollToId(id); };
   return (
-    <section ref={ref} id="article-body" aria-label="About wrinkles and fine lines" className="relative z-10 bg-ndm-paper px-[var(--gx)] pb-[clamp(56px,6vw,96px)] pt-[clamp(56px,6vw,96px)]">
-      <div className="mx-auto grid max-w-[1180px] grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[220px_minmax(0,720px)] lg:justify-between">
-        <nav aria-label="On this page" className="min-w-0 lg:sticky lg:top-[150px] lg:self-start">
-          <p className="font-inter text-[11.5px] font-semibold uppercase tracking-[.16em] text-ndm-muted">On this page</p>
-          <ol className="no-scrollbar -mx-[var(--gx)] mt-3 flex gap-1.5 overflow-x-auto px-[var(--gx)] lg:mx-0 lg:grid lg:gap-0 lg:overflow-visible lg:border-l lg:border-ndm-ink/10 lg:px-0" role="list">
-            {c.toc.map(([id, t], i) => (
-              <li key={id} className="shrink-0">
-                <a href={`#${id}`} onClick={go(id)} aria-current={act === id ? 'true' : undefined}
-                  className={`flex items-center gap-2.5 whitespace-nowrap rounded-full px-3.5 py-2 font-inter text-[13.5px] transition-colors lg:-ml-px lg:rounded-none lg:border-l-2 lg:px-4 lg:py-2 ${act === id ? 'bg-ndm-deep text-white lg:border-ndm-deep lg:bg-transparent lg:font-semibold lg:text-ndm-deep' : 'bg-white text-ndm-ink ring-1 ring-ndm-ink/[.08] hover:text-ndm-deep lg:border-transparent lg:bg-transparent lg:text-ndm-muted lg:ring-0'}`}>
-                  <span className="hidden tabular-nums text-[11.5px] opacity-60 lg:inline">{String(i + 1).padStart(2, '0')}</span>{t}
-                </a>
+    <section ref={ref} id="about" aria-labelledby="about-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] pt-[clamp(40px,5vw,72px)] pb-[clamp(24px,3vw,40px)]">
+      <div className={`${TX_WRAP} grid gap-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,.75fr)] lg:gap-[clamp(40px,5vw,80px)]`}>
+        <div>
+          <h2 id="about-title" className="sr-only">About this concern</h2>
+          {p.lede.map((x, i) => <p key={i} className="rv max-w-[62ch] font-inter text-[clamp(17px,1.35vw,20px)] leading-[1.7] text-ndm-ink/90 [&+p]:mt-5" style={{ transitionDelay: `${0.04 * i}s` }}>{x}</p>)}
+        </div>
+        <aside className="rv self-start rounded-[22px] bg-white p-5 ring-1 ring-ndm-ink/[.06] shadow-[0_18px_40px_-34px_rgba(27,36,43,.35)] md:p-6" style={{ transitionDelay: '.1s' }}>
+          <p className="font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-muted">In short</p>
+          <p className="mt-2 font-inter text-[14px] leading-[1.55] text-ndm-ink/85">{p.short} at NewDermaMed Toronto: {p.facts[0][1].replace(' to compare', '')} treatment options{/^From/.test(p.facts[3][1]) ? `, ${p.facts[3][1].replace('From', 'from')}` : ''}, chosen at a free consultation with a VISIA® skin analysis. Uptown and Downtown clinics.</p>
+          <p className="mt-5 font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-muted">On our site</p>
+          <ul className="mt-3 grid gap-1.5" role="list">
+            {p.pages.map((x) => (
+              <li key={x.file}><a href={x.file} className="group flex items-center justify-between gap-3 rounded-[12px] px-3 py-2.5 font-inter text-[15px] text-ndm-ink transition-colors hover:bg-ndm-mist"><span>{x.n}</span><IconArrow size={12} className="shrink-0 text-ndm-deep transition-transform group-hover:translate-x-0.5" /></a></li>
+            ))}
+            {p.ba && <li><a href="before-after.html" className="group flex items-center justify-between gap-3 rounded-[12px] px-3 py-2.5 font-inter text-[15px] text-ndm-ink transition-colors hover:bg-ndm-mist"><span>Before &amp; after gallery</span><IconArrow size={12} className="shrink-0 text-ndm-deep transition-transform group-hover:translate-x-0.5" /></a></li>}
+          </ul>
+          <div className="mt-4 border-t border-ndm-line pt-4"><Btn href="#/book" v="book" hot block>Book Free Consultation</Btn></div>
+        </aside>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------- what you may notice, and why it happens */
+function CnUnderstand({ p }) {
+  const ref = useRef(null);
+  useReveal(ref);
+  return (
+    <section ref={ref} id="understand" aria-labelledby="understand-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(48px,5.5vw,88px)]">
+      <TxHead p={p} id="understand" tag="The concern" hid="understand-title" lead="What you may notice," strong="and why it happens" />
+      <div className={`${TX_WRAP} mt-[clamp(28px,3.4vw,48px)] grid gap-4 lg:grid-cols-[minmax(0,.9fr)_minmax(0,1.1fr)] lg:gap-6`}>
+        <div className="rv rounded-[24px] bg-[#EEF7FC] p-6 ring-1 ring-ndm-blue/20 md:p-7">
+          <p className="flex items-center gap-2.5 font-aeonik text-[22px] leading-[1.2] tracking-[-0.01em] text-ndm-ink"><span aria-hidden="true" className="h-5 w-1 rounded-full bg-ndm-deep" />You may notice</p>
+          <ul className="mt-4 grid gap-3" role="list">
+            {p.notice.map((x) => (
+              <li key={x} className="flex items-start gap-3 font-inter text-[15.5px] leading-[1.55] text-ndm-ink">
+                <span aria-hidden="true" className="mt-[2px] grid size-6 shrink-0 place-items-center rounded-full bg-ndm-deep text-white"><IconTick size={11} /></span>{x}
               </li>
             ))}
-          </ol>
-          <div className="mt-6 hidden rounded-[18px] bg-white p-4 ring-1 ring-ndm-ink/[.06] lg:block">
-            <p className="font-aeonik text-[18px] leading-[1.25] text-ndm-ink">Not sure where to start?</p>
-            <p className="mt-1.5 font-inter text-[13px] leading-[1.5] text-ndm-muted">A free consultation and VISIA® skin analysis.</p>
-            <Btn href="#/book" v="book" hot sm className="mt-3">Book free</Btn>
-          </div>
-        </nav>
-
-        <div className="article-prose min-w-0">
-          <p className="rv font-aeonik text-[clamp(21px,1.8vw,26px)] leading-[1.45] tracking-[-0.01em] text-ndm-ink">{c.intro}</p>
-          <hr className="my-[clamp(32px,4vw,48px)] border-ndm-ink/10" />
-          {c.body.map((b, i) => {
-            const [t, x, extra] = b;
-            if (t === 'h2') return <h2 key={i} id={extra} className="rv scroll-mt-[140px] font-aeonik">{x}</h2>;
-            if (t === 'ul') return <ul key={i} className="rv font-inter" role="list">{x.map((li) => <li key={li}>{li}</li>)}</ul>;
-            if (t === 'img') return (
-              <figure key={i} className="rv rv-clip peach overflow-hidden rounded-[14px]">
-                <img src={x} alt={extra} loading="lazy" decoding="async" className="aspect-[16/9] w-full object-cover object-[50%_30%]" />
-              </figure>
-            );
-            if (t === 'cards') return (
-              <ul key={i} className="cn-cards !mt-6 !grid gap-3 sm:grid-cols-2" role="list">
-                {x.map(([h, d], k) => (
-                  <li key={h} className={`rv flex gap-3.5 rounded-[18px] bg-white p-4 ring-1 ring-ndm-ink/[.06] ${k === x.length - 1 ? 'sm:col-span-2' : ''}`} style={{ transitionDelay: `${0.05 * k}s` }}>
-                    <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconCheckBadge /></span>
-                    <span><span className="block font-aeonik text-[19px] leading-[1.2] text-ndm-ink">{h}</span><span className="mt-1 block font-inter text-[14.5px] leading-[1.55] text-ndm-ink/75">{d}</span></span>
-                  </li>
-                ))}
-              </ul>
-            );
-            return <p key={i} className="rv font-inter">{x}</p>;
-          })}
-          <aside aria-labelledby="takeaway" className="take-card mt-[clamp(40px,5vw,64px)] grid overflow-hidden rounded-[22px] md:grid-cols-[minmax(0,.8fr)_minmax(0,1.2fr)]">
-            <div className="rv rv-clip take-pic relative min-h-[240px] overflow-hidden bg-ndm-mist md:min-h-full">
-              <img src="assets/home/v3/facial-720.webp" alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[50%_30%]" />
-            </div>
-            <div className="rv p-[clamp(22px,2.6vw,36px)]" style={{ transitionDelay: '.15s' }}>
-              <Eyebrow>Key takeaway</Eyebrow>
-              <p id="takeaway" className="mt-5 font-aeonik text-[clamp(20px,1.7vw,24px)] leading-[1.4] tracking-[-0.01em] text-ndm-ink">{c.takeaway}</p>
-              <div className="mt-6 flex flex-wrap gap-2.5">
-                <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
-                <Btn href="#treatments" onClick={go('treatments')} v="line">See the treatments</Btn>
-              </div>
-            </div>
-          </aside>
+          </ul>
+        </div>
+        <div className="rv rounded-[24px] bg-white p-6 ring-1 ring-ndm-ink/[.06] md:p-8" style={{ transitionDelay: '.08s' }}>
+          <p className="flex items-center gap-2.5 font-aeonik text-[22px] leading-[1.2] tracking-[-0.01em] text-ndm-ink"><span aria-hidden="true" className="h-5 w-1 rounded-full bg-[#FFA617]" />Why it happens</p>
+          {p.cause.map((x, i) => <p key={i} className="mt-4 font-inter text-[16px] leading-[1.7] text-ndm-ink/85">{x}</p>)}
         </div>
       </div>
     </section>
   );
 }
 
-/* treatments that may help: the home menu's card style, a sideways row with arrows on both sides */
-function ConcernTreatments({ c }) {
-  const ref = useRef(null), rail = useRef(null);
+/* ---------------------------------------------------------------- how we assess it: the free consultation and skin analysis */
+function CnAssess({ p }) {
+  const ref = useRef(null);
   useReveal(ref);
-  const [edge, setEdge] = useState([true, false]);
-  const sync = () => { const r = rail.current; if (!r) return; setEdge([r.scrollLeft < 8, r.scrollLeft > r.scrollWidth - r.clientWidth - 8]); };
-  useEffect(() => { sync(); }, []);
-  const step = (d) => { const r = rail.current, k = r.querySelector('article'); r.scrollBy({ left: d * (k ? k.offsetWidth + 16 : r.clientWidth * 0.8), behavior: REDUCED ? 'auto' : 'smooth' }); };
+  const a = p.assess;
   return (
-    <section ref={ref} id="treatments" aria-labelledby="treatments-title" className="relative z-10 scroll-mt-[90px] bg-ndm-paper py-[clamp(64px,7vw,104px)]">
-      <div className="px-[var(--gx)]">
-        <TxHead p={c} id="treatments" tag="Treatments that may help" hid="treatments-title" lead="Six ways to treat" strong="wrinkles and fine lines" text="Each one works on a different cause. Starting prices are shown; your final price is confirmed at your free consultation." />
-      </div>
-      <div className="side-rail relative mt-[clamp(32px,4vw,52px)]">
-        <div ref={rail} onScroll={sync} className="no-scrollbar -mb-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-[var(--gx)] pb-14 pt-2" style={{ scrollPaddingInline: 'var(--gx)' }}>
-          {c.treatments.map(([name, d, price, href, img, tag], i) => (
-            <article key={name} className="tm-card2 rv group flex shrink-0 snap-start flex-col rounded-[22px] bg-white p-3 ring-1 ring-ndm-ink/[.06]" style={{ transitionDelay: `${Math.min(i, 4) * 0.05}s` }}>
-              <a href={href} className="peach relative block aspect-[4/3.2] overflow-hidden rounded-[16px] bg-ndm-mist">
-                <img src={img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" style={{ transitionTimingFunction: 'var(--e-out)' }} />
-                <span className="absolute left-3 top-3 z-[1] rounded-full bg-white/85 px-3 py-1.5 font-inter text-[12px] text-ndm-ink backdrop-blur-[8px]">{tag}</span>
-              </a>
-              <div className="flex flex-1 flex-col px-2 pb-1.5 pt-4">
-                <h3 className="font-aeonik text-[clamp(21px,1.6vw,25px)] font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink"><a href={href} className="hover:text-ndm-deep">{name}</a></h3>
-                <p className="mt-2 font-inter text-[14px] leading-[1.55] text-ndm-muted">{d}</p>
-                <div className="mt-auto flex items-center justify-between gap-3 pt-4">
-                  <span className="font-inter text-[14px] font-medium text-ndm-ink">{price}</span>
-                  <Btn href={href} v="line" sm>Learn more<span className="sr-only"> about {name}</span></Btn>
-                </div>
-              </div>
-            </article>
-          ))}
-          <span aria-hidden="true" className="w-px shrink-0" />
+    <section ref={ref} id="assess" aria-labelledby="assess-title" className="relative z-10 scroll-mt-[170px] bg-ndm-mist px-[var(--gx)] py-[clamp(56px,6vw,96px)]">
+      <TxHead p={p} id="assess" tag="Your consultation" hid="assess-title" lead="How we assess" strong={p.short} />
+      <div className={`${TX_WRAP} mt-[clamp(28px,3.4vw,48px)] grid items-center gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,.9fr)] lg:gap-[clamp(32px,4vw,64px)]`}>
+        <div className="rv rounded-[24px] bg-white p-6 ring-1 ring-ndm-ink/[.06] md:p-8">
+          <p className="font-inter text-[16px] leading-[1.7] text-ndm-ink/85">{a.text}</p>
+          <p className="mt-6 font-inter text-[12.5px] font-semibold uppercase tracking-[.14em] text-ndm-deep">What we look at</p>
+          <ul className="mt-3 grid gap-2.5 sm:grid-cols-2" role="list">
+            {a.points.map((x) => <li key={x} className="flex items-start gap-2.5 font-inter text-[15px] leading-[1.55] text-ndm-ink/85"><span aria-hidden="true" className="mt-[3px] grid size-[18px] shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconTick size={10} /></span>{x}</li>)}
+          </ul>
+          <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
+            <a href="#/visia-skin-analysis" className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-deep">About the VISIA® skin analysis<IconArrow className="transition-transform group-hover:translate-x-1" /></a>
+          </div>
         </div>
-        <button type="button" onClick={() => step(-1)} disabled={edge[0]} aria-label="Previous treatments" className="side-arrow is-l"><IconArrow className="rotate-180" /></button>
-        <button type="button" onClick={() => step(1)} disabled={edge[1]} aria-label="Next treatments" className="side-arrow is-r"><IconArrow /></button>
+        <div className="rv peach relative min-h-[300px] overflow-hidden rounded-[24px] bg-ndm-line lg:min-h-[420px]" style={{ transitionDelay: '.1s' }}>
+          <img src="assets/home/v3/visia-1440.webp" srcSet="assets/home/v3/visia-720.webp 720w, assets/home/v3/visia-1440.webp 1440w" sizes="(min-width: 1024px) 40vw, 100vw" alt="A NewDermaMed provider reviewing VISIA skin analysis results with a patient" loading="lazy" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: '28% 60%' }} />
+          <span className="absolute bottom-3 left-3 rounded-[14px] bg-white/95 px-4 py-2.5 font-inter text-[13.5px] text-ndm-ink shadow-[0_18px_40px_-20px_rgba(27,36,43,.55)] backdrop-blur-[8px] sm:bottom-4 sm:left-4">Free VISIA® skin analysis with every consultation</span>
+        </div>
       </div>
     </section>
   );
 }
+
+/* ---------------------------------------------------------------- the options: one card per treatment, the bio-stimulator group, the prescription note */
+const cnRole = (r) => `cn-role cn-role-${r.toLowerCase()}`;
+function CnOptionCard({ o, i, dark }) {
+  return (
+    <li className="rv" style={{ transitionDelay: `${0.05 * (i % 6)}s` }}>
+      <article className={`cn-card group flex h-full flex-col overflow-hidden rounded-[22px] ${dark ? 'bg-white/[.08] text-white ring-1 ring-white/15 backdrop-blur-[6px]' : 'bg-white ring-1 ring-ndm-ink/[.06]'}`}>
+        {o.img && (
+          <a href={o.file} tabIndex={-1} aria-hidden="true" className="relative block aspect-[16/9] overflow-hidden bg-ndm-mist">
+            <img src={o.img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-[1.05]" style={{ objectPosition: '50% 30%' }} />
+            <span className={`absolute left-3 top-3 ${cnRole(o.role)}`}>{o.role}</span>
+          </a>
+        )}
+        <div className="flex flex-1 flex-col p-5 md:p-6">
+        <div className="flex items-center justify-between gap-3">
+          {!o.img && <span className={cnRole(o.role)}>{o.role}</span>}
+          <span className={`font-inter text-[13px] ${dark ? 'text-white/70' : 'text-ndm-muted'}`}>{o.price[0]}</span>
+        </div>
+        <h3 className={`mt-4 font-aeonik text-[clamp(21px,1.8vw,25px)] font-normal leading-[1.15] tracking-[-0.02em] ${dark ? 'text-white' : 'text-ndm-ink'}`}>{o.n}</h3>
+        <p className={`mt-2 font-inter text-[15px] font-medium leading-[1.5] ${dark ? 'text-[#C9C2F4]' : 'text-ndm-deep'}`}>{o.fit}</p>
+        <p className={`mt-2 flex-1 font-inter text-[14.5px] leading-[1.6] ${dark ? 'text-white/80' : 'text-ndm-ink/75'}`}>{o.line}</p>
+        <div className={`mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 border-t pt-4 ${dark ? 'border-white/15' : 'border-ndm-line'}`}>
+          <a href={o.file} className={`group inline-flex items-center gap-1.5 font-inter text-[14px] font-semibold ${dark ? 'text-white' : 'text-ndm-deep'}`}>About this treatment<IconArrow size={12} className="transition-transform group-hover:translate-x-0.5" /></a>
+          {o.price[1] && o.price[1] !== o.file && <a href={o.price[1]} className={`font-inter text-[14px] underline-offset-4 hover:underline ${dark ? 'text-white/75' : 'text-ndm-muted'}`}>See prices</a>}
+        </div>
+        </div>
+      </article>
+    </li>
+  );
+}
+function CnOptions({ p }) {
+  const ref = useRef(null);
+  useReveal(ref);
+  const n = p.opts.length + (p.bio ? p.bio.length : 0);
+  return (
+    <section ref={ref} id="options" aria-labelledby="options-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
+      <TxHead p={p} id="options" tag="Treatment options" hid="options-title" lead="Treatments that" strong="may help" text={`${n} options we offer for ${p.short.toLowerCase()}, with the role each one usually plays. Your provider recommends one or a combination at your free consultation.`} />
+      <ul role="list" className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid gap-4 sm:grid-cols-2 lg:grid-cols-3`}>
+        {p.opts.map((o, i) => <CnOptionCard key={o.key} o={o} i={i} />)}
+      </ul>
+      {p.bio && (
+        <div className={`${TX_WRAP} cn-bio relative mt-6 overflow-hidden rounded-[26px] p-6 text-ndm-ink md:p-8`}>
+          <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+            <div>
+              <p className="inline-flex items-center gap-2 rounded-full border border-ndm-deep/20 bg-white px-3.5 py-1.5 font-inter text-[13px] font-medium text-ndm-deep">Bio-stimulators</p>
+              <h3 className="mt-4 font-aeonik text-[clamp(26px,2.6vw,38px)] font-normal leading-[1.1] tracking-[-0.025em]">Collagen support<br /><span className="tt-strong text-ndm-deep">that builds over time</span></h3>
+              <p className="mt-3 max-w-[58ch] font-inter text-[15.5px] leading-[1.65] text-ndm-ink/80">Aptos threads, Sculptra® and Radiesse® all prompt your own collagen, so the change develops over months and tends to last longer. The Aptos Thread Lift gives a lift right away and is also a long-lasting bio-stimulator.</p>
+            </div>
+            <a href="pricing.html#pg-skin-booster-and-bio-stimulators-h" className="group inline-flex items-center gap-2 font-inter text-[14px] font-semibold text-ndm-deep">Bio-stimulator prices<IconArrow size={12} className="transition-transform group-hover:translate-x-0.5" /></a>
+          </div>
+          <ul role="list" className="mt-6 grid gap-4 md:grid-cols-3">
+            {p.bio.map((o, i) => <CnOptionCard key={o.key} o={o} i={i} />)}
+          </ul>
+        </div>
+      )}
+      {p.rx && (
+        <div className={`${TX_WRAP} cn-rx rv mt-6 flex flex-col gap-4 rounded-[22px] p-5 md:flex-row md:items-center md:justify-between md:p-6`}>
+          <p className="flex items-start gap-3 font-inter text-[15px] leading-[1.6] text-ndm-ink/85"><span aria-hidden="true" className="mt-[2px] grid size-6 shrink-0 place-items-center rounded-full bg-[#FFE7C2] text-[#8A5A12]"><IconInfoSm size={13} /></span><span>{p.rx.text}</span></p>
+          <ul className="flex shrink-0 flex-wrap gap-2" role="list">
+            {p.rx.links.map((l) => <li key={l.file}><a href={l.file} className="inline-flex rounded-full bg-white px-3.5 py-2 font-inter text-[14px] text-ndm-ink ring-1 ring-ndm-ink/10 hover:ring-ndm-deep">{l.n}</a></li>)}
+          </ul>
+        </div>
+      )}
+      <div className={`${TX_WRAP} mt-8 flex flex-wrap justify-center gap-3`}>
+        <Btn href="#/book" v="book">Book Free Consultation</Btn>
+        <Btn href="pricing.html#prices" v="line">All treatment prices</Btn>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------- side by side: one compact, scannable table so every option can be compared at a glance (icon headers, thumbnails, price pills) */
+const CN_COLS = [['visit', 'Typical visit', 'clock'], ['course', 'Typical course', 'cal'], ['down', 'Downtime', 'leaf'], ['res', 'Changes may appear', 'star'], ['from', 'From', 'tag']];
+function CnCompare({ p }) {
+  const ref = useRef(null);
+  useReveal(ref);
+  const rows = p.compare;
+  if (!rows.length) return null;
+  const icon = { list: NAV_ICONS.list, clock: TX_ICONS.clock, cal: TX_ICONS.cal, leaf: TX_ICONS.leaf, star: NAV_ICONS.star, tag: NAV_ICONS.tag };
+  return (
+    <section ref={ref} id="compare" aria-labelledby="compare-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] pb-[clamp(64px,7vw,104px)]">
+      <TxHead p={p} id="compare" tag="Side by side" hid="compare-title" lead="Compare" strong="the options" text="Typical figures from each treatment page. Your plan, timing and final price are confirmed at your free consultation. Individual results may vary." />
+      <div className={`${TX_WRAP} rv mt-[clamp(28px,3.4vw,44px)] hidden overflow-hidden rounded-[24px] bg-white ring-1 ring-ndm-ink/[.06] shadow-[0_30px_60px_-50px_rgba(27,36,43,.4)] md:block`}>
+        <div className="cn-scroll">
+          <table className="cn-table">
+            <thead><tr>
+              <th scope="col"><span className="cn-th">Treatment</span></th>
+              {CN_COLS.map(([k, l, ic]) => <th key={k} scope="col"><span className="cn-th"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{icon[ic]}</svg>{l}</span></th>)}
+            </tr></thead>
+            <tbody>
+              {rows.map((r) => {
+                const isFrom = /^from/i.test(r.price[0]);
+                return (
+                <tr key={r.key}>
+                  <td>
+                    <a href={r.file} className="cn-name">
+                      {r.img && <img src={r.img} alt="" loading="lazy" className="cn-thumb" />}
+                      <span className="min-w-0"><span className="cn-nm">{r.n}</span>{r.role && <span className="cn-sub">{r.role}</span>}</span>
+                    </a>
+                  </td>
+                  {CN_COLS.map(([k]) => (
+                    <td key={k}>
+                      {k === 'from'
+                        ? <a href={r.price[1]} className="cn-from">{isFrom && <span className="cn-fl">From</span>}{isFrom ? r.price[0].replace(/^from\s*/i, '') : r.price[0]}</a>
+                        : (r[k] || 'At your consultation')}
+                    </td>
+                  ))}
+                </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {/* mobile: an expandable list, so every option is visible at a glance and taps open the detail (no sideways scrolling) */}
+      <ul role="list" className={`${TX_WRAP} rv mt-[clamp(28px,3.4vw,44px)] grid gap-2.5 md:hidden`}>
+        {rows.map((r) => {
+          const isFrom = /^from/i.test(r.price[0]);
+          return (
+          <li key={r.key}>
+            <details className="cn-m overflow-hidden rounded-[18px] bg-white ring-1 ring-ndm-ink/[.06]">
+              <summary className="flex cursor-pointer items-center gap-3 p-4">
+                {r.img && <img src={r.img} alt="" loading="lazy" className="size-11 shrink-0 rounded-[12px] object-cover ring-1 ring-ndm-ink/[.06]" />}
+                <span className="min-w-0 flex-1">
+                  <span className="block font-aeonik text-[16.5px] leading-[1.15] tracking-[-0.01em] text-ndm-ink">{r.n}</span>
+                  <a href={r.price[1]} onClick={(e) => e.stopPropagation()} className="cn-from mt-1.5">{isFrom && <span className="cn-fl">From</span>}{isFrom ? r.price[0].replace(/^from\s*/i, '') : r.price[0]}</a>
+                </span>
+                <svg aria-hidden="true" className="cn-chev shrink-0 text-ndm-muted transition-transform duration-200" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+              </summary>
+              <div className="border-t border-ndm-line px-4 pb-4 pt-3">
+                {r.role && <p className="font-inter text-[11px] font-semibold uppercase tracking-[.1em] text-ndm-deep">{r.role}</p>}
+                <dl className="mt-2.5 grid grid-cols-2 gap-2.5">
+                  {CN_COLS.filter(([k]) => k !== 'how' && k !== 'from').map(([k, l, ic]) => (
+                    <div key={k} className="rounded-[13px] bg-ndm-paper p-3 ring-1 ring-ndm-ink/[.05]">
+                      <dt className="flex items-center gap-1.5 font-inter text-[10px] font-semibold uppercase tracking-[.1em] text-ndm-muted"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-ndm-deep">{icon[ic]}</svg><span className="min-w-0">{l}</span></dt>
+                      <dd className="mt-1.5 font-inter text-[13px] leading-[1.45] text-ndm-ink/85">{r[k] || 'At your consultation'}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </details>
+          </li>
+          );
+        })}
+      </ul>
+      <p className="cn-hint hidden md:flex xl:hidden" aria-hidden="true"><IconArrow className="rotate-180 opacity-60" />Swipe to see every column<IconArrow className="opacity-60" /></p>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------- skincare at home: the shop categories that match this concern */
+function CnHome({ p }) {
+  const ref = useRef(null);
+  useReveal(ref);
+  return (
+    <section ref={ref} id="home-care" aria-labelledby="home-title" className="relative z-10 scroll-mt-[170px] bg-ndm-mist px-[var(--gx)] py-[clamp(56px,6vw,96px)]">
+      <TxHead p={p} id="home-care" tag="Between visits" hid="home-title" lead="Skincare" strong="at home" text="Medical-grade skincare from our shop supports your treatment between visits. Your provider suggests a routine at your consultation." />
+      <ul role="list" className={`${TX_WRAP} mt-[clamp(28px,3.4vw,44px)] grid gap-4 sm:grid-cols-2 lg:grid-cols-3`}>
+        {p.home.map((h, i) => (
+          <li key={h.t} className="rv" style={{ transitionDelay: `${0.05 * i}s` }}>
+            {h.href ? (
+              <a href={h.href} className="cn-card group flex h-full flex-col rounded-[22px] bg-white p-5 ring-1 ring-ndm-ink/[.06] md:p-6">
+                <span className="font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-deep">{h.cat}</span>
+                <span className="mt-3 block font-aeonik text-[22px] leading-[1.15] tracking-[-0.01em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{h.t}</span>
+                <span className="mt-2 block flex-1 font-inter text-[14.5px] leading-[1.6] text-ndm-ink/75">{h.text}</span>
+                <span className="mt-5 inline-flex items-center gap-1.5 font-inter text-[14px] font-semibold text-ndm-deep">Shop {h.cat.toLowerCase()}<IconArrow size={12} className="transition-transform group-hover:translate-x-0.5" /></span>
+              </a>
+            ) : (
+              <div className="flex h-full flex-col rounded-[22px] bg-white/70 p-5 ring-1 ring-ndm-ink/[.06] md:p-6">
+                <span className="font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-muted">{h.cat}</span>
+                <span className="mt-3 block font-aeonik text-[22px] leading-[1.15] tracking-[-0.01em] text-ndm-ink">{h.t}</span>
+                <span className="mt-2 block flex-1 font-inter text-[14.5px] leading-[1.6] text-ndm-ink/75">{h.text}</span>
+                <span className="mt-5 inline-flex items-center gap-1.5 font-inter text-[14px] font-semibold text-ndm-muted">Advice at your visit</span>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+      <div className={`${TX_WRAP} mt-8 flex justify-center`}><Btn href={SHOP_URL} target="_blank" rel="noopener" v="line">Visit the skincare shop</Btn></div>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------- articles from our journal about this concern */
+function CnArticles({ p }) {
+  const ref = useRef(null);
+  useReveal(ref);
+  if (!p.articles.length) return null;
+  return (
+    <section ref={ref} id="read" aria-labelledby="read-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(56px,6vw,96px)]">
+      <div className={`${TX_WRAP} flex flex-wrap items-end justify-between gap-x-10 gap-y-6`}>
+        <div>
+          <Eyebrow className="rv">From the journal</Eyebrow>
+          <TwoTone id="read-title" className="rv mt-4" size="text-[clamp(32px,3.4vw,50px)]" lead={<>Read more about<br /></>} strong={p.short.toLowerCase()} style={{ transitionDelay: '.05s' }} />
+        </div>
+        <div className="rv" style={{ transitionDelay: '.12s' }}><Btn href="blog.html" v="line">All articles</Btn></div>
+      </div>
+      <ul role="list" className={`${TX_WRAP} mt-[clamp(28px,3.4vw,44px)] grid gap-4 sm:grid-cols-2 lg:grid-cols-3`}>
+        {p.articles.map((a, i) => (
+          <li key={a.file} className="rv" style={{ transitionDelay: `${0.05 * i}s` }}>
+            <a href={a.file} className="cn-card group flex h-full flex-col rounded-[22px] bg-white p-2.5 ring-1 ring-ndm-ink/[.06]">
+              <span className="peach relative block aspect-[16/10] overflow-hidden rounded-[16px] bg-ndm-mist"><img src={a.img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" /></span>
+              <span className="flex flex-1 flex-col px-2.5 pb-2.5 pt-4">
+                <span className="font-inter text-[12.5px] text-ndm-muted">{a.topic} · {a.d}</span>
+                <span className="mt-1.5 block font-aeonik text-[clamp(19px,1.6vw,22px)] leading-[1.2] tracking-[-0.015em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{a.t}</span>
+                <span className="mt-2 block flex-1 font-inter text-[14px] leading-[1.55] text-ndm-ink/75">{a.ex}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------- related concerns and the way back to the hub */
+function CnRelated({ p }) {
+  const ref = useRef(null);
+  useReveal(ref);
+  return (
+    <section ref={ref} id="related" aria-labelledby="related-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] pb-[clamp(48px,5vw,80px)]">
+      <div className={`${TX_WRAP} rv rounded-[24px] bg-white p-6 ring-1 ring-ndm-ink/[.06] md:p-8`}>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h2 id="related-title" className="font-aeonik text-[clamp(22px,2vw,28px)] font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink">Related concerns</h2>
+          <a href="#/concerns" className="group inline-flex items-center gap-1.5 font-inter text-[14px] font-semibold text-ndm-deep">All concerns<IconArrow size={12} className="transition-transform group-hover:translate-x-0.5" /></a>
+        </div>
+        <ul className="mt-4 flex flex-wrap gap-2" role="list">
+          {p.rel.map((r) => <li key={r.file}><a href={r.file} className="inline-flex items-center gap-2 rounded-full bg-ndm-paper px-4 py-2 font-inter text-[14px] text-ndm-ink ring-1 ring-ndm-ink/[.08] transition-colors hover:border-ndm-blue hover:text-ndm-deep hover:ring-ndm-deep">{r.n}<IconArrow size={11} className="text-ndm-deep" /></a></li>)}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
