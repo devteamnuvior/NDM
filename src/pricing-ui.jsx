@@ -65,20 +65,21 @@ function TreatmentRow({ cat, it, uid, open, onToggle }) {
   );
 }
 
-/* ---------------------------------------------------------------- hero: NDM's fees page video */
-const FEES_VIDEO = `${NDM}/wp-content/uploads/2025/09/Fees-Financin.-`;
+/* ---------------------------------------------------------------- hero: the one clinic video (round 25, assets/clinic/ndm-clinic.mp4,
+   also the home page's Inside our clinics and the Botox clinic film; never copied) */
+const PRICING_FILM = { src: 'assets/clinic/ndm-clinic.mp4', poster: 'assets/clinic/ndm-clinic-poster.jpg' };
 const IconPause = () => <Svg size={14} vb="0 0 14 14"><path d="M4.5 2.5v9M9.5 2.5v9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></Svg>;
 const IconPlay = () => <Svg size={14} vb="0 0 14 14"><path d="M4 2.6v8.8a.5.5 0 0 0 .76.43l7.1-4.4a.5.5 0 0 0 0-.86l-7.1-4.4A.5.5 0 0 0 4 2.6Z" fill="currentColor" /></Svg>;
 
 function PricingHero() {
   const ref = useRef(null), vid = useRef(null);
   useReveal(ref);
-  const small = useMedia('(max-width: 767px)');
   const [paused, setPaused] = useState(REDUCED);
   useEffect(() => {
     const v = vid.current; if (!v) return;
+    v.muted = true;
     if (paused) v.pause(); else { const p = v.play(); if (p) p.catch(() => {}); }
-  }, [paused, small]);
+  }, [paused]);
   const browse = (e) => {
     e.preventDefault();
     const el = document.getElementById('prices');
@@ -87,7 +88,7 @@ function PricingHero() {
   const stats = [[`${PRICE_TOTAL} treatments`, 'Current prices and offers'], ['Free consultation', 'Before every treatment'], ['2 Toronto clinics', 'Uptown and Downtown']];
   return (
     <section ref={ref} data-nav="dark" aria-labelledby="pricing-title" className="relative isolate flex min-h-[100svh] flex-col justify-end pt-[150px] md:h-[100svh] md:min-h-[640px] md:max-h-[1040px] md:pt-0 overflow-hidden bg-ndm-night text-white">
-      <video ref={vid} key={small ? 'm' : 'd'} src={`${FEES_VIDEO}${small ? 'mobile' : 'desktop'}-version.mp4`} autoPlay={!REDUCED} muted loop playsInline preload="auto" aria-hidden="true"
+      <video ref={vid} src={PRICING_FILM.src} poster={PRICING_FILM.poster} autoPlay={!REDUCED} muted loop playsInline preload="auto" aria-hidden="true"
         className="absolute inset-0 -z-20 h-full w-full object-cover" />
       <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(180deg,rgba(11,15,19,.62) 0%,rgba(11,15,19,.08) 28%,rgba(11,15,19,.12) 50%,rgba(11,15,19,.84) 100%)' }} />
       <button type="button" onClick={() => setPaused(!paused)} aria-label={paused ? 'Play background video' : 'Pause background video'}
@@ -171,6 +172,33 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }) {
         </div>
       </div>
     </li>
+  );
+}
+
+/* monthly specials (round 22, Ray's cards): Up to tag, price, name, Buy opens that category in the price list below */
+function PriceSpecials() {
+  const ref = useRef(null);
+  useReveal(ref);
+  const sp = PRICE_SPECIALS;
+  const go = (e, id) => { const el = document.getElementById(id + '-h'); if (!el) return; e.preventDefault(); if (el.getAttribute('aria-expanded') !== 'true') el.click(); scrollToY(el.getBoundingClientRect().top + window.scrollY - 150); };
+  return (
+    <section ref={ref} id="specials" aria-labelledby="specials-title" className="relative z-10 scroll-mt-[150px] px-[var(--gx)] py-[clamp(48px,5.5vw,80px)]">
+      <div className="mx-auto max-w-[760px] text-center">
+        <Eyebrow className="rv">Monthly specials</Eyebrow>
+        <TwoTone id="specials-title" className="rv mx-auto mt-5" size="text-[clamp(30px,3.2vw,46px)]" lead={<>Exclusive<br /></>} strong="monthly specials" style={{ transitionDelay: '.06s' }} />
+        <p className="rv mx-auto mt-4 font-inter text-[15px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>{sp.sub}</p>
+      </div>
+      <ul role="list" className="mx-auto mt-[clamp(28px,3.4vw,44px)] grid w-full max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-4">
+        {sp.items.map(([n, price, id], i) => (
+          <li key={n} className="rv rounded-[20px] bg-white p-4 ring-1 ring-ndm-ink/[.06] md:p-5" style={{ transitionDelay: `${0.04 * i}s` }}>
+            <span className="inline-flex rounded-full bg-ndm-blue/10 px-2.5 py-1 font-inter text-[11px] font-semibold uppercase tracking-[.12em] text-ndm-deep">Up to</span>
+            <span className="mt-3 block font-aeonik text-[clamp(26px,2.4vw,34px)] leading-none tracking-[-0.03em] text-ndm-ink">{price}</span>
+            <span className="mt-2 block font-inter text-[15px] font-medium leading-[1.3] text-ndm-ink">{n}</span>
+            <span className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1"><a href={`#${id}`} onClick={(e) => go(e, id)} className="btn btn-buy h-9 px-4 text-[13px]">Buy</a><span className="font-inter text-[12.5px] text-ndm-muted">{sp.note}</span></span>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 

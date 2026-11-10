@@ -36,7 +36,8 @@ css = r'''
   .pr-sub>.pr-item{padding-block:10px}
   /* room either side of the clipping fold so the panel's outline and shadow are not cut off */
   .pr-group>.pr-body>div{margin:0 -16px;padding:0 16px}
-  .pr-group.is-open>.pr-ghead{position:sticky;top:100px;z-index:5;background:#FAFAF8}
+  /* the open category title stays under the header without a paper band of its own: rows passing under it are blurred away */
+  .pr-group.is-open>.pr-ghead{position:sticky;top:100px;z-index:5;background:transparent;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
   @media (min-width:1280px){.pr-group.is-open>.pr-ghead{top:120px}}
   .pr-gplus{width:44px;height:44px}
   .pr-ghead button:hover .pr-gplus{border-color:#1B242B}
@@ -111,6 +112,7 @@ app = r'''function App() {
       <main id="main" className="seamless">
         <Breadcrumb items={['Pricing']} dark />
         <PricingHero />
+        <PriceSpecials />
         <PriceList />
         <Team />
         <Process />
@@ -118,6 +120,7 @@ app = r'''function App() {
         <PromoReviews />
         <Faq items={PRICE_FAQS} lead="Your top questions," strong="answered" intro="Everything you need to know before starting your journey with us." />
         <Appointment />
+        <Social />
       </main>
       <Footer />
       <CartPill onOpen={() => setCartOpen(true)} hidden={cartOpen || drawer || search} />
