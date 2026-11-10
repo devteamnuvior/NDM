@@ -536,6 +536,14 @@
   .eyebrow.is-amber{color:#6E4410;background:linear-gradient(180deg,#FFB942,#FFA617) padding-box,linear-gradient(115deg,rgba(255,166,23,.95),rgba(224,138,0,.55)) border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 12px 26px -16px rgba(255,166,23,.8)}
   .eyebrow.is-amber .eyebrow-mark{background:radial-gradient(circle at 32% 28%,#fff,#FFE3AC 75%);box-shadow:inset 0 0 0 1px rgba(255,166,23,.35),0 4px 10px -6px rgba(224,138,0,.8)}
   .eyebrow.is-amber::after{background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.3) 50%,transparent 65%)}
+  /* round 21: the deal from the price list as a red badge (offer wheel and grid) */
+  .deal-badge{position:relative;display:inline-flex;align-items:center;gap:7px;overflow:hidden;border-radius:999px;padding:6px 13px 6px 6px;white-space:nowrap;font:700 11.5px/1 "Helvetica Neue",Inter,Arial,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#EC3A50 0%,#C8182E 55%,#A0102A 100%);box-shadow:0 12px 24px -12px rgba(200,24,46,.85),inset 0 1px 0 rgba(255,255,255,.28)}
+  .deal-badge i{display:grid;place-items:center;width:20px;height:20px;border-radius:999px;background:#fff;color:#C8182E;font:800 11px/1 "Helvetica Neue",Inter,Arial,sans-serif;font-style:normal}
+  .deal-badge::after{content:"";position:absolute;inset:-40% -60%;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.38) 50%,transparent 60%);transform:translateX(-70%);animation:dealShine 4.5s ease-in-out infinite}
+  @keyframes dealShine{0%,55%{transform:translateX(-70%)}85%,100%{transform:translateX(70%)}}
+  @media (prefers-reduced-motion:reduce){.deal-badge::after{animation:none;display:none}}
+  .soc-ico.soc-ico-line:not(:hover):not(:focus-visible){background:transparent}
+  .soc-ico-line:hover,.soc-ico-line:focus-visible{border-color:transparent}
   /* campaign looks: tokens per look (html[data-campaign-bar] on every page, html[data-campaign] where accents apply) */
   html[data-campaign-bar="black-friday"]{--cmp-bar:#0B0B0C;--cmp-bar-fg:#F4EBDD;--cmp-gold:#D2B57B;--cmp-acc:#8C6D36;--cmp-acc-dk:#DCC28E;--cmp-badge-bg:#0B0B0C;--cmp-badge-fg:#EBD7AA;--cmp-badge-line:rgba(210,181,123,.6);--cmp-edge:linear-gradient(115deg,rgba(200,169,106,.85),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(11,11,12,.55));--cmp-tint:linear-gradient(90deg,rgba(6,6,7,.9) 0%,rgba(6,6,7,.62) 52%,rgba(6,6,7,.38) 100%),radial-gradient(60% 70% at 85% 20%,rgba(210,181,123,.22),transparent 70%)}
   html[data-campaign-bar="holiday"]{--cmp-bar:#173D2E;--cmp-bar-fg:#F6F1E6;--cmp-gold:#D6B46A;--cmp-acc:#1F5A41;--cmp-acc-dk:#E2C583;--cmp-badge-bg:#173D2E;--cmp-badge-fg:#F6F1E6;--cmp-badge-line:rgba(214,180,106,.65);--cmp-edge:linear-gradient(115deg,rgba(31,90,65,.8),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(122,31,43,.55));--cmp-tint:linear-gradient(90deg,rgba(12,36,27,.9) 0%,rgba(12,36,27,.62) 55%,rgba(84,20,30,.4) 100%),radial-gradient(55% 65% at 85% 15%,rgba(214,180,106,.22),transparent 70%)}
@@ -1766,9 +1774,9 @@ const PROCESS = [
    three photos on the right. Pinned on wide screens; each scroll step sends the top photo up and away while the
    step text fades out and the next one fades in. Photo and text are both links; a CTA sits under the text. */
 const PROCESS_MEDIA = [
-  { img: 'assets/hero/clinic-reception.jpg', alt: 'Reception at NewDermaMed Toronto', h: '#/book', cta: 'Book Free Consultation', v: 'book' },
-  { img: 'assets/hero/treatment-room.jpg', alt: 'A NewDermaMed consultation room with VISIA® skin analysis', h: '#treatments', cta: 'Explore treatments', v: 'ink' },
-  { img: 'assets/clinic/clinic-2.jpg', alt: 'A treatment suite at NewDermaMed Toronto', h: '#visit', cta: 'Find a clinic', v: 'ink' },
+  { img: 'assets/home/visia-consult.jpg', alt: 'A provider and a patient reviewing VISIA® skin analysis results', h: '#/book', cta: 'Book Free Consultation', v: 'book' },
+  { img: 'assets/home/visia-screen.jpg', alt: 'VISIA® skin analysis results on the consultation room screen', h: '#treatments', cta: 'Explore treatments', v: 'ink' },
+  { img: 'assets/home/mirror-check.jpg', alt: 'A patient checking her skin in a hand mirror in the treatment chair', h: '#visit', cta: 'Find a clinic', v: 'ink' },
 ];
 
 function ProcessText({ i, on, small }) {
@@ -1804,7 +1812,7 @@ function Process() {
   }, [wide]);
   const head = (
     <>
-      <Eyebrow className="rv">Process</Eyebrow>
+      <Eyebrow className="rv">How it works</Eyebrow>
       <TwoTone id="process" className="rv mt-5 max-w-[14ch]" lead="How your treatment" strong="journey works" style={{ transitionDelay: '.06s' }} />
     </>
   );
@@ -2172,7 +2180,7 @@ function Social() {
   useReveal(ref);
   const icons = [[SOCIAL.instagram, IconInstagram, 'Instagram'], [SOCIAL.facebook, IconFacebook, 'Facebook'], [SOCIAL.youtube, IconYouTube, 'YouTube'], [SOCIAL.x, IconX, 'X'], [SOCIAL.linkedin, IconLinkedIn, 'LinkedIn']];
   return (
-    <section ref={ref} aria-labelledby="social" className="relative z-10 overflow-hidden bg-ndm-paper px-[var(--gx)] pt-[clamp(72px,8vw,120px)]">
+    <section ref={ref} aria-labelledby="social" className="relative z-10 overflow-hidden bg-ndm-paper px-[var(--gx)] pt-[clamp(40px,4.5vw,72px)]">
       <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div className="pb-[clamp(8px,4vw,96px)]">
           <p className="rv eyebrow font-mont">
@@ -2186,7 +2194,7 @@ function Social() {
             <Btn href={SOCIAL.instagram} target="_blank" rel="noopener" v="ink">Follow along</Btn>
             <ul className="flex gap-2" role="list">
               {icons.map(([h, I, n]) => (
-                <li key={n}><a href={h} target="_blank" rel="noopener" aria-label={`NewDermaMed on ${n}`} className="grid size-11 place-items-center rounded-full border border-ndm-ink/15 text-ndm-ink transition-colors hover:border-ndm-ink hover:bg-ndm-ink hover:text-white"><I /></a></li>
+                <li key={n}><a href={h} target="_blank" rel="noopener" aria-label={`NewDermaMed on ${n}`} data-net={n.toLowerCase()} className="soc-ico soc-ico-line grid size-11 place-items-center rounded-full border border-ndm-ink/15 text-ndm-ink"><I /></a></li>
               ))}
             </ul>
           </div>
@@ -2203,16 +2211,17 @@ function Social() {
 /* ---------------------------------------------------------------- exclusive monthly specials */
 const NDM = 'https://newdermamedlaserclinic.com';
 const FEES = `${NDM}/fees-financing/`;
-const SPECIALS = [ /* from newdermamedlaserclinic.com/promotion */
-  { n: 'Radiesse® Collagen Lift', img: 'assets/promotion/collagen-lift.webp', pos: '50% 42%', p: 499, u: 'per syringe', tag: 'Bio-stimulator', area: 'Face', icon: 'syringe', h: '/promotion/', d: 'Restore lost volume and stimulate natural collagen production.' },
-  { n: 'Radiesse® Jawline Lift', img: 'assets/promotion/jawline.webp', pos: '50% 50%', p: 499, u: 'per syringe', tag: 'Bio-stimulator', area: 'Face', icon: 'face', h: '/promotion/', d: 'Sculpt a more defined, contoured jawline.' },
-  { n: 'Hand Rejuvenation with Radiesse®', img: 'assets/promotion/hands.webp', pos: '50% 58%', p: 499, u: 'per syringe', tag: 'Bio-stimulator', area: 'Body', icon: 'hand', h: '/promotion/', d: 'Restore youthful volume to aging hands.' },
-  { n: 'Non-Surgical Butt Lift (60 mL)', img: 'assets/promotion/butt-lift.webp', pos: '50% 56%', p: 3999, u: 'package', tag: 'Body', area: 'Body', icon: 'body', h: '/fees-financing/#non_surgical_butt_lift', d: 'Add natural-looking volume and lift with no surgery required.' },
-  { n: 'Hip Dip Enhancement', img: 'assets/promotion/hip-dip.webp', pos: '50% 56%', p: 1999, u: 'package', tag: 'Body', area: 'Body', icon: 'body', h: '/fees-financing/#non_surgical_butt_lift', d: 'Smooth and contour the hip area for balanced curves.' },
-  { n: 'Crepey Arm Rejuvenation with Radiesse®', img: 'assets/promotion/crepey-arms.webp', pos: '50% 55%', p: 599, u: 'per syringe', tag: 'Bio-stimulator', area: 'Body', icon: 'syringe', h: '/fees-financing/#skin_booster_and_bio_stimulators', d: 'Tighten and smooth crepey skin on the arms.' },
-  { n: 'Above the Knee Tightening', img: 'assets/promotion/above-knee.webp', pos: '50% 55%', p: 599, u: 'per syringe', tag: 'Bio-stimulator', area: 'Body', icon: 'drop', h: '/fees-financing/#skin_booster_and_bio_stimulators', d: 'Firm and lift loose, sagging skin above the knees.' },
-  { n: 'Liquid Facelift', img: 'assets/pricing/price-4.jpg', p: 599, u: 'package', tag: 'Face', area: 'Face', icon: 'face', h: '/promotion/', d: 'Restore volume and lift with no downtime.' },
-  { n: 'Liquid Facelift with Sculptra®', img: 'assets/promotion/sculptra-face.webp', pos: '50% 45%', p: 599, u: 'package', tag: 'Bio-stimulator', area: 'Face', icon: 'drop', h: '/fees-financing/#skin_booster_and_bio_stimulators', d: 'Long-lasting, collagen-stimulating facial rejuvenation.' },
+const SPECIALS = [ /* ten most-wanted treatments; prices pulled from the pricing page (src/live/pricing.json) by src/patches-applied/promo_offers_patch.py, rerun on every build */
+  { n: 'Lip Filler', img: 'assets/treatments/lip-filler.jpg', pos: '50% 35%', p: '562.50', u: 'per syringe', deal: 'Buy 1 get 1 50% off', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
+  { n: 'Microneedling', img: 'assets/treatments/microneedling.jpg', pos: '50% 40%', p: '245', u: '', deal: 'Up to 50% off', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
+  { n: 'Chemical Peel', img: 'assets/treatments/chemical-peel.jpg', pos: '50% 40%', p: '104.30', u: 'per session', deal: 'Up to 30% off', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
+  { n: 'Laser Skin Resurfacing', img: 'assets/treatments/laser-resurfacing.jpg', pos: '50% 40%', p: '140', u: 'per session', deal: 'Up to 30% off', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
+  { n: 'Photo Rejuvenation', img: 'assets/treatments/photo-rejuvenation.jpg', pos: '50% 40%', p: '192.50', u: 'per session', deal: 'Up to 60% off', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
+  { n: 'Skin Booster', img: 'assets/treatments/skin-booster.jpg', pos: '50% 40%', p: '399', u: '', deal: 'Buy 1 get 1 50% off', tag: 'Skin Booster and Bio-stimulators', area: 'Face', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Deep hydration for a fresh, dewy glow.' },
+  { n: 'Sculptra® Liquid Facelift', img: 'assets/promotion/sculptra-face.webp', pos: '50% 45%', p: '699', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Gradual, collagen-building facial lift.' },
+  { n: 'Hand Rejuvenation with Radiesse®', img: 'assets/promotion/hands.webp', pos: '50% 58%', p: '599', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'hand', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Restore youthful volume to aging hands.' },
+  { n: 'Crepey Arm Rejuvenation', img: 'assets/promotion/crepey-arms.webp', pos: '50% 55%', p: '599', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Smooth and firm crepey skin on the arms.' },
+  { n: 'Above the Knee Tightening', img: 'assets/promotion/above-knee.webp', pos: '50% 55%', p: '599', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Firm loose, sagging skin above the knees.' }
 ];
 const SW_ICONS = {
   pen: <><path d="M15.5 3.5 20.5 8.5 11 18l-5-5 9.5-9.5Z" /><path d="m6 13-2.5 2.5M8.5 15.5 6 18M11 18l-2.5 2.5" /></>,
@@ -2316,6 +2325,7 @@ function Promotions() {
                       </>
                     ) : (
                       <>
+                        {s.deal && <span className="deal-badge mb-3"><i aria-hidden="true">%</i>{s.deal}</span>}
                         <span className="sw-muted font-inter text-[11px] uppercase tracking-[.18em]">From</span>
                         <span className="sw-price mt-1 whitespace-nowrap font-aeonik leading-none tracking-[-0.035em]" style={{ fontSize: 40 * k }}><span className="sw-cur">$</span>{s.p}</span>
                         <span className="sw-muted mt-2 font-inter text-[12.5px]">{s.u || 'for selected packages'}</span>
@@ -4124,6 +4134,7 @@ function PromoGrid() {
               <div className="relative aspect-[16/10] overflow-hidden rounded-[16px] bg-ndm-mist">
                 <img src={s.img} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" style={{ transitionTimingFunction: 'var(--e-out)', objectPosition: s.pos }} />
                 {CAMPAIGN_LOOK && <span className="cmp-badge absolute left-3 top-3">{CAMPAIGN.badge}</span>}
+                {s.deal && !CAMPAIGN_LOOK && <span className="deal-badge absolute left-3 top-3"><i aria-hidden="true">%</i>{s.deal}</span>}
               </div>
               <div className="relative mt-5 flex items-center justify-between gap-2 px-3">
                 <span className="promo-badge grid size-12 shrink-0 place-items-center rounded-full"><SpecialIcon k={s.icon} /></span>
