@@ -1306,7 +1306,7 @@ function MegaMenu({ open, onLink }) {
           <a href="#specials" onClick={onLink} className="bf-mm-strip-a">See the offers <IconArrow size={12} /></a>
         </span>
       </div>
-      <div className="grid gap-4 p-4 2xl:p-5 grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]">
+      <div className={`grid gap-4 p-4 2xl:p-5 ${act === 'aptos' ? 'grid-cols-[210px_minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] 2xl:grid-cols-[260px_minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)]' : 'grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]'}`}>
       <ul className="bf-mm-rail rounded-[16px] bg-ndm-mist/70 p-2" role="list">
         {PROCEDURES.map((c) => {
           const on = c.id === act;
@@ -1327,13 +1327,13 @@ function MegaMenu({ open, onLink }) {
       <div className="h-[516px] px-5 py-4 2xl:h-[456px]">
         <div className="flex items-baseline justify-between gap-4 border-b border-ndm-line pb-4">
           <div>
-            {slug(cat.label).endsWith('.html')
+            {slug(cat.label).endsWith('.html') && act !== 'aptos'
               ? <a href={slug(cat.label)} onClick={onLink} className="group inline-flex items-center gap-2 font-aeonik text-[26px] leading-tight hover:text-ndm-deep">{cat.label}<IconArrow size={14} className="text-ndm-deep transition-transform group-hover:translate-x-0.5" /></a>
               : <p className="font-aeonik text-[26px] leading-tight">{cat.label}</p>}
             <p className="mt-1 text-[13.5px] text-ndm-muted max-w-[46ch]">{cat.blurb}</p>
           </div>
         </div>
-        {(
+        {act === 'aptos' ? <AptosMenu items={cat.groups[0].items.filter((it) => it !== cat.label)} onLink={onLink} /> : (
         <div className={`mt-4 grid gap-6 ${cat.groups.length > 1 ? 'grid-cols-[1.9fr_1fr]' : ''}`}>
           {cat.groups.map((g) => (
             <div key={g.title || 'g'}>
@@ -1352,6 +1352,7 @@ function MegaMenu({ open, onLink }) {
         </div>
         )}
       </div>
+      {act === 'aptos' && <AptosCard onLink={onLink} />}
       <a href="#/book" onClick={onLink} className="bf-ticket bf-mm-ticket group">
         <p className="bf-tix-head"><span>Black Friday <b>·</b> Admit one</span><span>{CAMPAIGN.when}</span></p>
         <span className="relative block min-h-0 flex-1 overflow-hidden rounded-[12px]"><img src="assets/clinic/clinic-2.jpg" alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" /></span>

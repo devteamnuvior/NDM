@@ -202,7 +202,7 @@ rep('v="ink">View all offers</Btn>', 'v="light">View all offers</Btn>')
 rep('{n.label}{n.ext && <IconExternal className="opacity-60" />}', "{n.label}{n.ext && <IconExternal className=\"opacity-60\" />}{n.id === 'promotion' && <i aria-hidden=\"true\" className=\"bf-nav-dot\" />}")
 
 # mega menu: event strip, black rail, ticket card
-rep('<div className="grid gap-4 p-4 2xl:p-5 grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]">', """<div className="bf-mm-strip bf-grain">
+rep("<div className={`grid gap-4 p-4 2xl:p-5 ${act === 'aptos' ? 'grid-cols-[210px_minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] 2xl:grid-cols-[260px_minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)]' : 'grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]'}`}>", """<div className="bf-mm-strip bf-grain">
         <span className="cmp-badge">{CAMPAIGN.badge}</span>
         <span className="truncate">Treatment offers Friday to Monday, {CAMPAIGN.when}</span>
         <span className="ml-auto flex items-center gap-4">
@@ -210,7 +210,7 @@ rep('<div className="grid gap-4 p-4 2xl:p-5 grid-cols-[210px_1fr_340px] 2xl:grid
           <a href="#specials" onClick={onLink} className="bf-mm-strip-a">See the offers <IconArrow size={12} /></a>
         </span>
       </div>
-      <div className="grid gap-4 p-4 2xl:p-5 grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]">""")
+      <div className={`grid gap-4 p-4 2xl:p-5 ${act === 'aptos' ? 'grid-cols-[210px_minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] 2xl:grid-cols-[260px_minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)]' : 'grid-cols-[210px_1fr_340px] 2xl:grid-cols-[260px_1fr_340px]'}`}>""")
 rep('<ul className="rounded-[16px] bg-ndm-mist/70 p-2" role="list">', '<ul className="bf-mm-rail rounded-[16px] bg-ndm-mist/70 p-2" role="list">')
 _a = s.index('<a href="#/book" onClick={onLink} className="group relative overflow-hidden rounded-[16px] min-h-[380px] text-white">')
 _b = s.index('</a>', _a) + len('</a>')
