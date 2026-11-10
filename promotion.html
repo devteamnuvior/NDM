@@ -510,6 +510,18 @@
   .is-grab{cursor:grabbing !important;scroll-snap-type:none !important;scroll-behavior:auto !important;user-select:none}
   .is-grab *{pointer-events:none}
   /* chat assistant */
+  /* chat bot (round 27) */
+  .chat-launch{padding:3px;background:linear-gradient(145deg,#26B1E7,#0F80C3 55%,#0A4F7A);box-shadow:0 18px 40px -14px rgba(15,128,195,.8),inset 0 1px 0 rgba(255,255,255,.35)}
+  .chat-launch:hover{transform:translateY(-2px)}
+  .chat-launch.is-open{background:#0A4F7A}
+  .chat-launch-img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid #fff}
+  .chat-launch-badge{position:absolute;right:-3px;bottom:-3px;display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:#FFA617;color:#fff;border:2px solid #fff}
+  .chat-head{background:radial-gradient(110% 120% at 100% 0%,#26B1E7 0%,rgba(38,177,231,0) 58%),linear-gradient(150deg,#0F80C3,#0A4F7A);transition:padding .35s ease}
+  .chat-quick a{display:flex;flex-direction:column;gap:8px;border-radius:16px;background:#fff;padding:11px 11px 12px;font:500 12.5px/1.25 Inter,"Helvetica Neue",Arial,sans-serif;color:#1B242B;box-shadow:0 16px 30px -18px rgba(11,15,19,.5),0 0 0 1px rgba(27,36,43,.06);transition:transform .3s ease,color .2s ease}
+  .chat-quick a:hover{transform:translateY(-2px);color:#0F80C3}
+  .chat-quick i{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(15,128,195,.1);color:#0F80C3}
+  .chat-quick a:first-child i{background:#FFA617;color:#fff}
+  .chat-body{background:linear-gradient(180deg,#F3F8FB 0%,#FAFAF8 140px)}
   .chat-btn{transition:opacity .3s ease,transform .3s ease,background-color .3s ease}
   .chat-btn.is-off{opacity:0;transform:scale(.8);pointer-events:none}
   .chat-note{animation:chatNote .5s var(--e-out) both}
@@ -4820,23 +4832,32 @@ function ChatBot({ ready, hidden }) {
         </div>
       )}
       <button ref={btn} type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} aria-controls="chat-panel" aria-label={open ? 'Close chat' : 'Chat with NewDermaMed'} tabIndex={off ? -1 : 0}
-        className={`chat-btn fixed z-[61] grid size-[52px] place-items-center rounded-full bg-ndm-deep text-white shadow-[0_18px_40px_-16px_rgba(15,128,195,.7)] ring-1 ring-white/20 transition hover:bg-ndm-ink md:size-[58px] ${off ? 'is-off' : ''} ${note && !open ? 'has-note' : ''}`}
+        className={`chat-btn chat-launch fixed z-[61] grid size-[56px] place-items-center rounded-full text-white md:size-[62px] ${off ? 'is-off' : ''} ${note && !open ? 'has-note' : ''} ${open ? 'is-open' : ''}`}
         style={{ right: small ? 16 : 24, bottom: `calc(${bottom}px + env(safe-area-inset-bottom))` }}>
-        {open ? <IconClose /> : <IconChat />}
-        {note && !open && <i aria-hidden="true" className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-ndm-amber px-1 font-inter text-[11px] font-semibold not-italic leading-none text-white ring-2 ring-white">1</i>}
+        {open ? <IconClose /> : <><img src={CHAT_AGENT.img} alt="" className="chat-launch-img" /><span aria-hidden="true" className="chat-launch-badge"><IconChat size={13} /></span></>}
+        {note && !open && <i aria-hidden="true" className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#E5484D] px-1 font-inter text-[11px] font-semibold not-italic leading-none text-white ring-2 ring-white">1</i>}
       </button>
       <section id="chat-panel" role="dialog" aria-label={`Chat with ${CHAT_AGENT.name} from NewDermaMed`} aria-hidden={!open} {...(open ? {} : { inert: '' })} data-lenis-prevent=""
-        className={`chat-panel fixed z-[62] flex flex-col overflow-hidden bg-white shadow-[0_40px_80px_-30px_rgba(11,15,19,.55)] ring-1 ring-ndm-ink/[.06] ${open ? 'is-on' : ''} ${small ? 'inset-x-2 bottom-2 top-[76px] rounded-[22px]' : 'h-[min(600px,calc(100vh-140px))] w-[380px] rounded-[22px]'}`}
-        style={small ? {} : { right: 24, bottom: bottom + 72 }}>
-        <header className="flex items-center gap-3 bg-ndm-night px-4 py-3.5 text-white">
-          <span className="relative size-10 shrink-0"><img src={CHAT_AGENT.img} alt="" className="size-10 rounded-full object-cover ring-2 ring-white/15" /><i className="absolute bottom-0 right-0 size-2.5 rounded-full bg-[#3DDC84] ring-2 ring-ndm-night" /></span>
-          <span className="min-w-0 flex-1">
-            <span className="block font-inter text-[15px] font-semibold">{CHAT_AGENT.name} <span className="font-normal text-white/70">· NewDermaMed</span></span>
-            <span className="block font-inter text-[12px] text-white/70">Virtual assistant, our care team follows up</span>
-          </span>
-          <button type="button" onClick={() => setOpen(false)} aria-label="Close chat" className="grid size-9 place-items-center rounded-full text-white/85 hover:bg-white/10 hover:text-white"><IconClose size={18} /></button>
+        className={`chat-panel fixed z-[62] flex flex-col overflow-hidden bg-white shadow-[0_40px_80px_-30px_rgba(11,15,19,.55)] ring-1 ring-ndm-ink/[.06] ${open ? 'is-on' : ''} ${small ? 'inset-x-2 bottom-2 top-[76px] rounded-[26px]' : 'h-[min(640px,calc(100vh-140px))] w-[400px] rounded-[26px]'}`}
+        style={small ? {} : { right: 24, bottom: bottom + 76 }}>
+        <header className={`chat-head relative px-5 pt-4 text-white ${msgs.length ? 'pb-4' : 'pb-14'}`}>
+          <div className="flex items-center gap-3">
+            <span className="relative size-11 shrink-0"><img src={CHAT_AGENT.img} alt="" className="size-11 rounded-full object-cover ring-2 ring-white/40" /><i className="absolute bottom-0 right-0 size-3 rounded-full bg-[#3DDC84] ring-2 ring-[#0F80C3]" /></span>
+            <span className="min-w-0 flex-1">
+              <span className="block font-inter text-[15px] font-semibold">{CHAT_AGENT.name} <span className="font-normal text-white/75">· NewDermaMed</span></span>
+              <span className="block font-inter text-[12px] text-white/75">Virtual assistant, our care team follows up</span>
+            </span>
+            <button type="button" onClick={() => setOpen(false)} aria-label="Close chat" className="grid size-9 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20"><IconClose size={16} /></button>
+          </div>
+          {!msgs.length && <p className="mt-5 font-aeonik text-[26px] leading-[1.1] tracking-[-0.02em]">Hi there,<br /><span className="tt-strong">how can we help?</span></p>}
         </header>
-        <div ref={list} className="flex-1 space-y-3 overflow-y-auto overscroll-contain bg-ndm-paper px-4 py-4" aria-live="polite">
+        {!msgs.length && (
+          <div className="chat-quick relative z-[1] -mt-9 grid grid-cols-3 gap-2 px-4">
+            <a href="#/book" onClick={() => setOpen(false)}><i aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><rect x="3.5" y="5" width="17" height="15" rx="3" /><path d="M8 3v4M16 3v4M3.5 10h17" /></svg></i>Book a free consultation</a>
+            {PHONES.map((ph) => <a key={ph.label} href={tel(ph.num)}><i aria-hidden="true"><IconPhone /></i>Call {ph.label}<span className="-mt-1.5 block whitespace-nowrap text-[11px] font-normal tabular-nums tracking-[-0.01em] text-ndm-muted">{ph.num}</span></a>)}
+          </div>
+        )}
+        <div ref={list} className="chat-body flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-4" aria-live="polite">
           <div className="chat-msg max-w-[88%] rounded-[16px] rounded-tl-[6px] bg-white px-3.5 py-2.5 font-inter text-[14px] leading-[1.5] text-ndm-ink shadow-[0_6px_16px_-12px_rgba(27,36,43,.4)]">
             Hi, I’m {CHAT_AGENT.name} from NewDermaMed. I can help with booking, our two Toronto clinics, hours, payment plans and treatments. Pick a question or type your own.
           </div>
@@ -4851,10 +4872,10 @@ function ChatBot({ ready, hidden }) {
           {typing && <div className="chat-msg flex w-fit gap-1 rounded-[16px] rounded-tl-[6px] bg-white px-3.5 py-3 shadow-[0_6px_16px_-12px_rgba(27,36,43,.4)]" aria-label="Typing">{[0, 1, 2].map((d) => <i key={d} className="chat-dot size-1.5 rounded-full bg-ndm-muted" style={{ animationDelay: `${d * 0.15}s` }} />)}</div>}
           {left.length > 0 && !typing && (
             <div className="pt-1">
-              <p className="font-inter text-[12px] text-ndm-muted">{msgs.length ? 'You can also ask' : 'Common questions'}</p>
-              <ul className="mt-2 flex flex-wrap gap-2" role="list">
-                {left.slice(0, msgs.length ? 3 : 6).map((pq) => (
-                  <li key={pq[0]}><button type="button" onClick={() => ask(pq[0], pq)} className="rounded-full border border-ndm-deep/25 bg-white px-3 py-1.5 text-left font-inter text-[13px] text-ndm-deep transition-colors hover:border-ndm-deep hover:bg-ndm-deep hover:text-white">{pq[0]}</button></li>
+              <p className="font-inter text-[11.5px] font-medium uppercase tracking-[.12em] text-ndm-muted">{msgs.length ? 'You can also ask' : 'Common questions'}</p>
+              <ul className="mt-2 grid gap-1.5" role="list">
+                {left.slice(0, msgs.length ? 3 : 5).map((pq) => (
+                  <li key={pq[0]}><button type="button" onClick={() => ask(pq[0], pq)} className="group flex w-full items-center justify-between gap-3 rounded-[14px] bg-white px-3.5 py-2.5 text-left font-inter text-[13.5px] text-ndm-ink ring-1 ring-ndm-ink/[.07] transition hover:text-ndm-deep hover:ring-ndm-deep/50">{pq[0]}<IconArrow size={11} className="shrink-0 text-ndm-deep transition-transform group-hover:translate-x-0.5" /></button></li>
                 ))}
               </ul>
             </div>
