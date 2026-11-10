@@ -23,19 +23,68 @@ def rep(a, b, n=1):
 
 faqs = re.search(r"  faqs: \[\n(.*?)\n  \],\n", ui, re.S).group(1)
 faq_pairs = re.findall(r"\['(.+?)', '(.+?)'\],?", faqs)
-assert len(faq_pairs) == 5, len(faq_pairs)
+assert len(faq_pairs) >= 10, len(faq_pairs)
+
+# SEO round 16 (after barbeauty.ca/botox): title with the price, a description with both neighbourhoods, canonical and social
+# tags, and structured data for the page, the procedure, the price, both clinics, the booking steps and the FAQ
+SITE = 'https://newdermamedlaserclinic.com/'
+URL = SITE + OUT
+TITLE = 'Botox Toronto from $12/Unit, Free Consultation | NewDermaMed'
+DESC = ('Botox® Cosmetic in Toronto from $12 per unit, packages up to 30% off. Free consultation and VISIA® skin analysis at our '
+        'Uptown (Yonge & Sheppard) and Downtown (Bay & College) clinics.')
+IMG = SITE + 'assets/botox/hero.jpg'
+UPDATED = '2026-11-10'
+HOURS = [{'@type': 'OpeningHoursSpecification', 'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'opens': '09:00', 'closes': '19:00'},
+         {'@type': 'OpeningHoursSpecification', 'dayOfWeek': 'Saturday', 'opens': '10:00', 'closes': '17:00'}]
+def clinic(key, name, street, code, phone, area):
+    return {'@type': 'MedicalClinic', '@id': SITE + '#clinic-' + key, 'name': 'NewDermaMed ' + name, 'url': SITE + 'about.html#contact', 'telephone': '+1-' + phone,
+            'image': SITE + 'assets/clinic/clinic-4.jpg', 'priceRange': '$$',
+            'address': {'@type': 'PostalAddress', 'streetAddress': street, 'addressLocality': 'Toronto', 'addressRegion': 'ON', 'postalCode': code, 'addressCountry': 'CA'},
+            'areaServed': area, 'openingHoursSpecification': HOURS, 'medicalSpecialty': 'Dermatology'}
+UPTOWN = clinic('uptown', 'Uptown', '4763 Yonge Street', 'M2N 5M5', '416-224-8800', 'North York, Toronto')
+DOWNTOWN = clinic('downtown', 'Downtown', '790 Bay Street, Suite 900', 'M5G 1N8', '416-671-9766', 'Downtown Toronto')
+PROCEDURE = {'@type': 'MedicalProcedure', '@id': URL + '#procedure', 'name': 'Botox® Cosmetic injections', 'alternateName': ['Botox', 'Botox Cosmetic', 'neuromodulator injections'],
+             'procedureType': 'https://schema.org/NoninvasiveProcedure', 'bodyLocation': 'Face',
+             'howPerformed': 'Small amounts of a prescription neuromodulator are injected with a very fine needle into specific facial muscles, after an in-person medical assessment.',
+             'preparation': 'A free in-person consultation and VISIA® skin analysis with our licensed medical team.',
+             'followup': 'Results are reviewed at about two weeks; treatments are usually repeated every three to four months.'}
 ld = {'@context': 'https://schema.org', '@graph': [
-    {'@type': 'BreadcrumbList', 'itemListElement': [
-        {'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'index.html'},
-        {'@type': 'ListItem', 'position': 2, 'name': 'Procedures'},
-        {'@type': 'ListItem', 'position': 3, 'name': 'Injectables'},
-        {'@type': 'ListItem', 'position': 4, 'name': 'Botox®'}]},
-    {'@type': 'FAQPage', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a.replace("\\'", "'")}} for q, a in faq_pairs]},
+    {'@type': 'MedicalWebPage', '@id': URL + '#webpage', 'url': URL, 'name': TITLE, 'description': DESC, 'inLanguage': 'en-CA', 'dateModified': UPDATED,
+     'primaryImageOfPage': {'@type': 'ImageObject', 'url': IMG}, 'about': {'@id': URL + '#procedure'}, 'breadcrumb': {'@id': URL + '#breadcrumb'},
+     'medicalAudience': {'@type': 'MedicalAudience', 'audienceType': 'Patient'}},
+    {'@type': 'BreadcrumbList', '@id': URL + '#breadcrumb', 'itemListElement': [
+        {'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': SITE},
+        {'@type': 'ListItem', 'position': 2, 'name': 'Procedures', 'item': SITE + 'pricing.html'},
+        {'@type': 'ListItem', 'position': 3, 'name': 'Injectables', 'item': SITE + 'pricing.html#prices'},
+        {'@type': 'ListItem', 'position': 4, 'name': 'Botox®', 'item': URL}]},
+    PROCEDURE,
+    {'@type': 'Service', '@id': URL + '#service', 'name': 'Botox® Cosmetic in Toronto', 'serviceType': 'Cosmetic injectable treatment', 'url': URL,
+     'provider': [{'@id': UPTOWN['@id']}, {'@id': DOWNTOWN['@id']}], 'areaServed': {'@type': 'City', 'name': 'Toronto'},
+     'offers': [{'@type': 'Offer', 'name': 'Botox® Cosmetic, per unit', 'price': '12.00', 'priceCurrency': 'CAD', 'url': URL + '#prices',
+                 'priceSpecification': {'@type': 'UnitPriceSpecification', 'price': '12.00', 'priceCurrency': 'CAD', 'unitText': 'unit'}},
+                {'@type': 'Offer', 'name': 'Dysport®, per unit', 'price': '11.00', 'priceCurrency': 'CAD', 'url': URL + '#prices',
+                 'priceSpecification': {'@type': 'UnitPriceSpecification', 'price': '11.00', 'priceCurrency': 'CAD', 'unitText': 'unit'}}]},
+    UPTOWN, DOWNTOWN,
+    {'@type': 'HowTo', '@id': URL + '#booking', 'name': 'How a Botox® appointment works at NewDermaMed', 'totalTime': 'PT30M', 'step': [
+        {'@type': 'HowToStep', 'position': 1, 'name': 'Book a free consultation', 'text': 'Choose the Uptown or Downtown clinic and a time that suits you, online or by phone.'},
+        {'@type': 'HowToStep', 'position': 2, 'name': 'Assessment and VISIA® skin analysis', 'text': 'Our licensed medical team reviews your health history, your goals and how your face moves.'},
+        {'@type': 'HowToStep', 'position': 3, 'name': 'Treatment', 'text': 'If the treatment suits you, it takes about 15 to 20 minutes with a very fine needle.'},
+        {'@type': 'HowToStep', 'position': 4, 'name': 'Review and maintenance', 'text': 'Your provider reviews the result at about two weeks; many people return every three to four months.'}]},
+    {'@type': 'FAQPage', '@id': URL + '#faq', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a.replace("\\'", "'")}} for q, a in faq_pairs]},
 ]}
-rep('<title>Promotions, NewDermaMed Toronto</title>', '<title>Botox® Cosmetic in Toronto, Prices &amp; Free Consultation, NewDermaMed</title>')
+H = lambda x: x.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;')
+HEAD = '\n'.join([
+    f'<link rel="canonical" href="{URL}">',
+    '<meta name="robots" content="index,follow,max-image-preview:large">',
+    '<meta property="og:locale" content="en_CA">', '<meta property="og:type" content="website">', '<meta property="og:site_name" content="NewDermaMed">',
+    f'<meta property="og:url" content="{URL}">', f'<meta property="og:title" content="{H(TITLE)}">', f'<meta property="og:description" content="{H(DESC)}">',
+    f'<meta property="og:image" content="{IMG}">', f'<meta property="og:image:alt" content="Botox® Cosmetic at NewDermaMed, Toronto">',
+    '<meta name="twitter:card" content="summary_large_image">', '<meta name="twitter:site" content="@NewDermaMed">',
+    f'<meta name="twitter:title" content="{H(TITLE)}">', f'<meta name="twitter:description" content="{H(DESC)}">', f'<meta name="twitter:image" content="{IMG}">',
+    '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>'])
+rep('<title>Promotions, NewDermaMed Toronto</title>', f'<title>{H(TITLE)}</title>')
 rep('<meta name="description" content="NewDermaMed is Toronto\'s award-winning cosmetic and laser clinic, with Uptown and Downtown locations. Book a free consultation and VISIA® skin analysis.">',
-    '<meta name="description" content="Botox® Cosmetic at NewDermaMed, Uptown and Downtown Toronto: $12 per unit, packages up to 30% off, and a free consultation with our medical team.">\n'
-    '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>')
+    f'<meta name="description" content="{H(DESC)}">\n' + HEAD)
 
 css = '''
   /* procedure page */
@@ -144,6 +193,14 @@ SPACING = '''
   main>section#visit{padding-bottom:clamp(16px,2vw,28px)!important}
   /* Botox (round 14): the price list and the FAQ take the same spacing as Before & after too */
   main>section#prices,main>section[aria-labelledby="faq"]{padding-top:clamp(64px,7vw,104px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
+  /* round 15: Our team, Testimonials, the price list and the FAQ line up with the 1180px content of the other sections */
+  main{--tx:max(var(--gx),calc((100% - 1180px) / 2))}
+  main>section[aria-labelledby="team"],main>section[aria-labelledby="faq"],main>section[aria-labelledby="testimonials"]{padding-left:var(--tx)!important;padding-right:var(--tx)!important}
+  main>section[aria-labelledby="testimonials"]>div,main>section[aria-labelledby="testimonials"]>p{padding-left:0!important;padding-right:0!important}
+  main>section#prices>div{max-width:1180px!important}
+  /* the free skin analysis band sits tight between Visit us and the FAQ */
+  main>section[aria-labelledby="analysis-title"]{padding-top:0!important;padding-bottom:0!important}
+  main>section[aria-labelledby="faq"]{padding-top:clamp(48px,5vw,72px)!important}
 '''
 anchor = '<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>'
 i = s.rindex('</style>', 0, s.index(anchor))
@@ -181,6 +238,7 @@ function App() {
         <TxReel p={PROC} />
         <TxResults p={PROC} />
         <ProcPrices p={PROC} />
+        <ProcGuide p={PROC} />
         <TxWhy p={PROC} />
         <Team />
         <PromoReviews />

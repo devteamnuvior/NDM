@@ -7,25 +7,29 @@ const PROC = {
      own sections. It is the live site's wording; it names Botox® beside its effects, so it needs Raymond's approval before publishing */
   crumbs: [['Procedures'], ['Injectables'], 'Botox®'],
   /* the sticky section bar (TxNav): the same items as Ray's Botox page */
-  nav: [['benefits', 'Benefits'], ['film', 'The clinic'], ['overview', 'About'], ['why-choose', 'Why choose'], ['watch', 'Watch'], ['results', 'Results'], ['prices', 'Prices'], ['why', 'Why NewDermaMed'], ['visit', 'Visit us'], ['faq', 'FAQ']],
+  nav: [['benefits', 'Benefits'], ['film', 'The clinic'], ['overview', 'About'], ['why-choose', 'Why choose'], ['watch', 'Watch'], ['results', 'Results'], ['prices', 'Prices'], ['guide', 'Good to know'], ['why', 'Why NewDermaMed'], ['visit', 'Visit us'], ['faq', 'FAQ']],
   title: ['Botox®', 'in Toronto'],
   sub: 'Smooth wrinkles with trusted Botox® safe, expert care for natural, youthful results.',
-  hero: { d: 'assets/botox/hero.jpg', m: 'assets/botox/hero-m.jpg', pos: '50% 30%' },
+  hero: { d: 'assets/botox/hero.jpg', m: 'assets/botox/hero-m.jpg', pos: '50% 30%', alt: 'A woman with her fingertips at her temples, Botox® Cosmetic at NewDermaMed, Toronto' },
+  /* SEO round 16: both clinics named under the heading */
+  where: 'At our Uptown clinic, Yonge & Sheppard, and our Downtown clinic, Bay & College, Toronto.',
   offer: { tag: 'Current offer', title: 'Botox® Cosmetic packages', big: ['Up to', '30%', 'off'], href: '#prices', cta: 'See the prices' },
   facts: [['Treatment Type', 'Injectable'], ['Duration', '30 minutes'], ['Recovery Time', 'Minimal downtime']],
   glance: 'A short treatment, planned after a free, in-person assessment by our medical team.',
-  /* Benefits (TxIntro, id "benefits"): Ray's five benefit points beside his photo */
+  /* Benefits (TxIntro, id "benefits"): an overview written for this page (round 15, after the structure of barbeauty.ca/botox:
+     what it is, how it works, the areas treated, who it may not suit), in qualified language; the live safety paragraph closes it */
   intro: {
-    id: 'benefits', tag: 'Benefits', lead: 'Benefits', strong: 'of Botox®',
-    img: 'assets/botox/benefits.webp', alt: 'Botox® at NewDermaMed, Toronto', pos: '50% 40%',
-    text: [],
-    points: [
-      ['Smooths Fine Lines & Wrinkles', 'Softens crow’s feet, frown lines, and forehead creases.'],
-      ['Prevents New Wrinkle Formation', 'Relaxes facial muscles to reduce future expression lines.'],
-      ['Quick & Convenient', 'Treatment takes only minutes with no downtime required.'],
-      ['Natural-Looking Results', 'Refreshes appearance without affecting facial expressions.'],
-      ['Clinically Proven & Safe', 'Backed by 20+ years of research and global trust.'],
+    id: 'benefits', tag: 'Benefits', lead: 'What is Botox® Cosmetic', strong: 'and how does it work?',
+    img: 'assets/botox/why-choose.jpg', fit: 'contain', bg: '#EFEDE7', /* the treatment-area diagram, shown whole */
+    alt: 'Treatment areas: forehead lines, frown lines, crow’s feet, jawline slimming, neck bands and hyperhidrosis',
+    text: [
+      'Botox® Cosmetic is a Health Canada approved prescription neuromodulator. At NewDermaMed it is given only by our licensed medical team, after a free in-person assessment at our Uptown clinic near Yonge and Sheppard or our Downtown clinic near Bay and College.',
+      'The treatment briefly quiets the nerve signal that tells a small facial muscle to contract. As the muscle relaxes, the lines that form when you frown, squint or raise your brows may soften, and over about three to four months movement gradually returns. Your provider plans the dose around how your face moves, often starting conservatively. Individual results may vary.',
+      'Pregnancy, breastfeeding, some neuromuscular conditions and certain medications can mean it is not the right choice, so your health history is reviewed first.',
     ],
+    chips: ['Forehead lines', 'Frown lines', 'Crow’s feet', 'Brow lift', 'Gummy smile', 'Jawline slimming'],
+    note: 'When administered by a qualified, licensed professional, Botox® has a demonstrated safety profile. The injection site may experience mild redness, swelling, or bruising, but these side effects are rare and usually go away in a few hours to days.',
+    points: [],
   },
   /* The clinic (TxFilm): the clinic footage, Ray's words */
   film: { src: 'assets/botox/clinic-film.mp4', src_m: 'assets/botox/clinic-film-m.mp4', poster: 'assets/botox/clinic-film.webp', lead: 'Botox®', strong: 'at NewDermaMed Toronto',
@@ -33,7 +37,7 @@ const PROC = {
     chips: ['4763 Yonge St, Uptown', '790 Bay St, Downtown', 'Free consultation', 'VISIA® skin analysis'] },
   /* About (ProcOverview tabs): Ray's five tabs; the key numbers beside them are this page's */
   overview: {
-    tag: 'About', lead: 'From first visit', strong: 'to maintenance',
+    tag: 'About', lead: 'What can I expect', strong: 'from Botox® treatment?',
     tabs: [
       { label: 'Treatment Overview', stat: ['20+', 'years of clinical research'], text: [
         'By momentarily relaxing the underlying muscles that cause expression lines, Botox® Cosmetic is a reliable, non-surgical procedure that reduces wrinkles and fine lines. Botox® is one of the most researched and secure cosmetic procedures in the world, having been used in more than 78 countries and undergoing more than 20 years of clinical research. Our experts at NewDermaMed use precise injections to produce refreshed, natural-looking results without changing your distinctive facial expressions.'] },
@@ -59,36 +63,54 @@ const PROC = {
       ['Starting price', ['$12 per unit', 'From $750', 'From $200', 'From $399']],
     ],
   },
-  /* Why choose (ProcChoose): Ray's candidate list and safety paragraph; the short card titles are this page's */
+  /* Why choose (ProcChoose): the live page's five benefits, plus who it may suit (round 15) */
   choose: {
-    img: 'assets/botox/why-choose.jpg', alt: 'Botox® at NewDermaMed, Toronto', tag: 'Why choose', lead: 'Why choose', strong: 'Botox®?',
+    img: 'assets/botox/benefits.webp', alt: 'A provider giving Botox® Cosmetic at NewDermaMed, Toronto', tag: 'Why choose', lead: 'Why choose', strong: 'Botox®?',
     cards: [
-      ['A good candidate', 'People seeking a non-invasive anti-aging treatment who have moderate to severe fine lines or wrinkles'],
-      ['Understated results', 'Anyone seeking understated, organic improvements'],
-      ['Preventative care', 'Those looking for preventative wrinkle care'],
-      ['Is Botox® safe?', 'When administered by a qualified, licensed professional, Botox® has a demonstrated safety profile. The injection site may experience mild redness, swelling, or bruising, but these side effects are rare and usually go away in a few hours to days. Choosing an experienced provider ensures natural-looking results and minimized risk of complications.'],
+      ['Smooths Fine Lines & Wrinkles', 'Softens crow’s feet, frown lines, and forehead creases.'],
+      ['Prevents New Wrinkle Formation', 'Relaxes facial muscles to reduce future expression lines.'],
+      ['Quick & Convenient', 'Treatment takes only minutes with no downtime required.'],
+      ['Natural-Looking Results', 'Refreshes appearance without affecting facial expressions.'],
+      ['Clinically Proven & Safe', 'Backed by 20+ years of research and global trust.'],
+      ['A Good Candidate', 'People seeking a non-invasive anti-aging treatment who have moderate to severe fine lines or wrinkles, anyone seeking understated, organic improvements, and those looking for preventative wrinkle care.'],
     ],
   },
   /* Watch (TxReel): the clinic's Instagram reel */
-  reel: { src: 'assets/botox/reel.mp4', poster: 'assets/botox/reel.webp', tag: 'Botox®', lead: 'See it', strong: 'at NewDermaMed', text: 'A short clip from our Instagram, filmed at the clinic. Follow @newdermamed for more.' },
+  reel: { src: `${NDM}/wp-content/uploads/2025/09/botox-.mp4`, /* played from the NDM site, not kept in this project */ poster: 'assets/botox/reel.webp', tag: 'Botox®', lead: 'See it', strong: 'at NewDermaMed', text: 'A short clip from our Instagram, filmed at the clinic. Follow @newdermamed for more.' },
   /* Why NewDermaMed (TxWhy) */
   why: {
-    img: 'assets/home/team-award.jpg', alt: 'The NewDermaMed team celebrating their Top Choice Award at the clinic', pos: '50% 35%',
+    img: 'assets/home/team-award.jpg', alt: 'The NewDermaMed medical team with their Top Choice Award at the Toronto clinic', pos: '50% 35%',
     lead: 'Expert care at', strong: 'two Toronto clinics',
     items: [['16+', 'Years', 'Caring for patients in Toronto'], ['8', 'Awards', 'Top Choice Award, 2019 to 2026'], ['Licensed', 'Medical team', 'Treatments are given only by our licensed medical team'], ['Free', 'Consultation', 'Every plan starts with an in-person assessment']],
   },
   /* Results (TxResults): the live gallery's Botox® cases (each photo shows before and after side by side) */
-  results: { lead: 'Before', strong: 'and after', text: 'Cases from our before and after gallery, photographed at NewDermaMed.', more: 'before-after.html',
+  results: { lead: 'Botox® before', strong: 'and after photos', text: 'Cases from our before and after gallery, photographed at NewDermaMed.', more: 'before-after.html',
     pics: [{ src: 'assets/botox/case-1.webp', label: 'Botox®' }, { src: 'assets/botox/case-2.webp', label: 'Botox®' }, { src: 'assets/botox/case-3.webp', label: 'Botox®' }] },
   /* Prices (ProcPrices): Ray's two groups, Botox Cosmetic and Dysport */
   prices: {
-    lead: 'Botox® and Dysport®', cat: 'Botox / Dysport', unitLabel: 'Regular',
+    lead: 'How much does Botox®', strong: 'cost in Toronto?', cat: 'Botox / Dysport', unitLabel: 'Regular',
     groups: [
       { name: 'Botox Cosmetic', title: 'Botox® Cosmetic', blurb: 'A prescription product priced per unit, given only after an in-person medical assessment.',
         rows: [['Regular', 12, 0], ['60 units', 648, 720, '10% OFF'], ['120 units', 1152, 1440, '20% OFF'], ['180 units', 1512, 2160, '30% OFF'], ['220 units', 1848, 2640, '30% OFF']] },
       { name: 'Dysport', title: 'Dysport®', blurb: 'A prescription product priced per unit, given only after an in-person medical assessment.',
         rows: [['Regular', 11, 0], ['60 units', 594, 660, '10% OFF'], ['120 units', 1056, 1320, '20% OFF'], ['180 units', 1386, 1980, '30% OFF'], ['220 units', 1694, 2420, '30% OFF']] },
     ],
+  },
+  /* Good to know (ProcGuide, SEO round 16): the questions people search for, after the structure of barbeauty.ca/botox. New copy in
+     qualified language, waiting for Raymond's review. Units are the product's approved doses; prices come from the price list */
+  guide: {
+    tag: 'Good to know', lead: 'Botox® in Toronto:', strong: 'cost, care and choices',
+    items: [
+      { q: 'How many units of Botox® will I need?', a: ['Your dose depends on the areas treated and how strong those muscles are. As a guide, the approved doses are about 20 units for the frown lines between the brows and about 24 units for crow’s feet across both eyes. Your provider confirms your units at your free consultation.'] },
+      { q: 'How much does Botox® cost per area?', a: ['Botox® Cosmetic is $12 per unit at NewDermaMed, and packages of 60 to 220 units are currently 10% to 30% off. At the regular price, 20 units are $240 and 24 units are $288. Your final price is confirmed after your assessment.'] },
+      { q: 'Who performs Botox® at NewDermaMed?', a: ['Botox® is given only by our licensed medical team, under the medical direction of Dr. Negin Mastouri, and only after an in-person assessment of your health history, your goals and how your face moves.'] },
+      { q: 'What should I do before and after my appointment?', a: ['Your provider gives you written aftercare for your treatment. Common advice includes:'],
+        list: ['Tell your provider about any medicines or supplements you take, especially blood thinners', 'Avoid alcohol the day before, as it can make bruising more likely', 'Stay upright and avoid rubbing or massaging the treated area for the rest of the day', 'Skip strenuous exercise, saunas and hot yoga until the next day'] },
+      { q: 'Botox® or Dysport®: which is right for me?', a: ['Both are Health Canada approved prescription neuromodulators that work in a similar way. Their formulations differ and their units are not interchangeable, so each is dosed on its own. At NewDermaMed, Botox® Cosmetic is $12 per unit and Dysport® is $11 per unit. Your provider recommends the one that suits your goals.'] },
+    ],
+    trust: 'Treatments are given by our licensed medical team under the medical direction of Dr. Negin Mastouri, Medical Director.',
+    updated: ['2026-11-10', 'November 10, 2026'],
+    related: [['Wrinkles & fine lines', 'wrinkles-fine-lines.html'], ['Aptos Thread Lift', 'aptos-thread-lift.html'], ['Dermal fillers', '#/dermal-fillers'], ['Skin boosters', '#/skin-boosters'], ['Before & after gallery', 'before-after.html'], ['All treatment prices', 'pricing.html#prices']],
   },
   faq: { lead: 'FAQ For', strong: 'Botox®', sub: 'Everything you need to know before starting your journey with us.' },
   faqs: [
@@ -97,6 +119,16 @@ const PROC = {
     ['How soon will I see results from Botox®?', 'Results typically appear within 3–7 days, with full effects visible in about 2 weeks after treatment.'],
     ['How long do Botox® results last?', 'Results generally last 3–4 months, with maintenance treatments recommended to preserve a youthful, refreshed look.'],
     ['Is Botox® safe?', 'Yes. Botox® has been extensively studied with over 20 years of clinical use worldwide, and is safe when performed by licensed professionals.'],
+    ['Does Botox® hurt?', 'Most patients describe the slight discomfort as a momentary pinch. A very fine needle is used, and each injection takes only a few seconds.'],
+    ['Will I bruise after Botox®?', 'Mild redness, swelling or bruising at the injection sites may occur. These effects are uncommon and usually settle within a few hours to days.'],
+    ['How soon can I go back to work?', 'Most people return to their regular activities, including work, straight after treatment.'],
+    ['When can I exercise after Botox®?', 'Many providers suggest waiting until the next day before strenuous exercise. Your provider gives you aftercare for your treatment.'],
+    ['How many units of Botox® will I need?', 'It depends on the areas treated. As a guide, frown lines often need about 20 units and crow’s feet about 24 units across both eyes. Your provider confirms your units at your free consultation.'],
+    ['Is Botox® covered by OHIP or insurance?', 'Cosmetic treatments are not covered by OHIP, and most private insurance plans do not cover them. We offer flexible payment plans instead.'],
+    ['Do you offer payment plans?', 'Yes. We offer flexible payment plans through Affirm for Canadian residents aged 19+, with a minimum $500 purchase.'],
+    ['Can I reschedule or cancel my appointment?', 'Yes. Please call your clinic at least 24 hours before your appointment to change or cancel it.'],
+    ['Botox® or Dysport®, which is better?', 'Neither is better for everyone. Both are Health Canada approved neuromodulators, dosed separately because their units differ. Your provider recommends the one that suits your goals.'],
+    ['Where are your Toronto clinics?', 'Uptown: 4763 Yonge Street, near Sheppard-Yonge Station, with parking at Hallmark Centre, 4800 Yonge or 25 Sheppard Ave W. Downtown: 790 Bay Street, Suite 900, near College Station, with parking at 88 or 100 College Street.'],
   ],
 };
 
@@ -137,7 +169,7 @@ function ProcHero({ p }) {
   return (
     <section ref={ref} data-nav="dark" aria-labelledby="proc-title" className="relative isolate overflow-hidden bg-ndm-night text-white">
       <div aria-hidden="true" className="absolute inset-0 -z-20 overflow-hidden">
-        <img ref={pic} src={small ? p.hero.m : p.hero.d} alt="" fetchpriority="high" className="absolute inset-x-0 -top-[10%] h-[120%] w-full object-cover will-change-transform" style={{ objectPosition: p.hero.pos }} />
+        <img ref={pic} src={small ? p.hero.m : p.hero.d} alt={p.hero.alt || ""} fetchpriority="high" className="absolute inset-x-0 -top-[10%] h-[120%] w-full object-cover will-change-transform" style={{ objectPosition: p.hero.pos }} />
       </div>
       <div aria-hidden="true" className="absolute inset-0 -z-10 hidden lg:block" style={{ background: 'linear-gradient(90deg,rgba(11,15,19,.72) 0%,rgba(11,15,19,.38) 50%,rgba(11,15,19,.18) 100%),linear-gradient(180deg,rgba(11,15,19,.55) 0%,rgba(11,15,19,0) 30%,rgba(11,15,19,.35) 100%)' }} />
       <div aria-hidden="true" className="absolute inset-0 -z-10 lg:hidden" style={{ background: 'linear-gradient(180deg,rgba(11,15,19,.55) 0%,rgba(11,15,19,.25) 30%,rgba(11,15,19,.6) 62%,rgba(11,15,19,.88) 100%)' }} />
@@ -145,6 +177,7 @@ function ProcHero({ p }) {
         <div className="max-w-[640px]">
           <TwoTone as="h1" id="proc-title" dark className="rv" size="text-[clamp(44px,5.6vw,88px)]" lead={<>{p.title[0]}<br /></>} strong={p.title[1]} />
           <p className="rv mt-5 max-w-[48ch] font-inter text-[16.5px] leading-[1.6] text-white/80" style={{ transitionDelay: '.08s' }}>{p.sub}</p>
+          {p.where && <p className="rv mt-3 flex items-start gap-2 font-inter text-[14px] leading-[1.5] text-white/75" style={{ transitionDelay: '.1s' }}><IconPin size={15} className="mt-0.5 shrink-0 text-ndm-sky" />{p.where}</p>}
           {/* the offer, at a glance: frosted glass with a light that sweeps across it now and then; no photo */}
           {o && <a href={o.href} aria-label={`${o.tag}: ${o.title}, ${o.big.join(' ')}. ${o.cta}`} className="rv offer-glass offer-shine group mb-5 mt-7 inline-flex max-w-full items-center gap-4 overflow-hidden rounded-[18px] lg:mb-0 py-3 pl-4 pr-3" style={{ transitionDelay: '.16s' }}>
             <span className="min-w-0">
@@ -203,7 +236,6 @@ function ProcOverview({ p }) {
   useReveal(ref);
   const o = p.overview;
   const [act, setAct] = useState(0);
-  const t = o.tabs[act];
   const key = (e, i) => {
     const k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
     if (!k) return;
@@ -217,17 +249,18 @@ function ProcOverview({ p }) {
       <div className={`${TX_WRAP} rv mt-[clamp(32px,4vw,52px)] overflow-hidden rounded-[28px] bg-white ring-1 ring-ndm-ink/[.06] shadow-[0_30px_60px_-46px_rgba(27,36,43,.45)]`} style={{ transitionDelay: '.08s' }}>
         <div role="tablist" aria-label="About the treatment" className="no-scrollbar mx-[clamp(14px,2.2vw,28px)] mt-[clamp(14px,2.2vw,28px)] flex gap-1 overflow-x-auto rounded-full bg-ndm-mist p-1">
           {o.tabs.map((x, i) => (
-            <button key={x.label} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" id={`ov-t-${i}`} aria-controls="ov-panel" aria-selected={i === act} tabIndex={i === act ? 0 : -1}
+            <button key={x.label} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" id={`ov-t-${i}`} aria-controls={`ov-panel-${i}`} aria-selected={i === act} tabIndex={i === act ? 0 : -1}
               onClick={() => setAct(i)} onKeyDown={(e) => key(e, i)}
               className={`shrink-0 rounded-full px-4 py-2.5 font-inter text-[14px] font-medium transition-colors sm:flex-1 sm:px-5 ${i === act ? 'bg-white text-ndm-deep shadow-[0_6px_16px_-10px_rgba(27,36,43,.45)]' : 'text-ndm-muted hover:text-ndm-ink'}`}>
               {x.label}
             </button>
           ))}
         </div>
-        <div id="ov-panel" role="tabpanel" aria-labelledby={`ov-t-${act}`} key={act} className="ov-in grid gap-7 p-[clamp(20px,2.8vw,40px)] md:grid-cols-[minmax(0,1fr)_minmax(0,300px)] md:items-start md:gap-[clamp(28px,4vw,56px)]">
+        {o.tabs.map((t, i) => (
+        <div key={t.label} id={`ov-panel-${i}`} role="tabpanel" aria-labelledby={`ov-t-${i}`} hidden={i !== act} data-pre-keep="" className={`${i === act ? 'ov-in ' : ''}grid gap-7 p-[clamp(20px,2.8vw,40px)] md:grid-cols-[minmax(0,1fr)_minmax(0,300px)] md:items-start md:gap-[clamp(28px,4vw,56px)]`}>
           <div>
             <h3 className="font-aeonik text-[clamp(26px,2.4vw,34px)] font-normal leading-[1.1] tracking-[-0.025em] text-ndm-ink">{t.label}</h3>
-            {t.text.map((x, i) => <p key={i} className="mt-4 max-w-[62ch] font-inter text-[16px] leading-[1.75] text-ndm-ink/80">{x}</p>)}
+            {t.text.map((x, k) => <p key={k} className="mt-4 max-w-[62ch] font-inter text-[16px] leading-[1.75] text-ndm-ink/80">{x}</p>)}
             <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
               <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
               {t.link && <a href={t.link[0]} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-deep">{t.link[1]}<IconArrow className="transition-transform group-hover:translate-x-1" /></a>}
@@ -244,6 +277,7 @@ function ProcOverview({ p }) {
             </dl>
           </aside>
         </div>
+        ))}
       </div>
     </section>
   );
@@ -353,10 +387,10 @@ function ProcChoose({ p }) {
       </div>
       <div className="mx-auto mt-[clamp(36px,4vw,56px)] grid max-w-[1180px] gap-3 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-4">
         <div className="rv rv-clip relative min-h-[360px] overflow-hidden rounded-[22px] bg-ndm-line md:col-span-2 lg:order-2 lg:col-span-1 lg:min-h-0" style={{ transitionDelay: '.08s' }}>
-          <img src={p.choose.img} alt={p.choose.alt || 'Close-up of a woman’s face in soft natural light'} loading="lazy" className="absolute inset-0 h-full w-full object-cover object-[50%_40%]" />
+          <img src={p.choose.img} alt={p.choose.alt || 'Close-up of a woman’s face in soft natural light'} loading="lazy" className={`absolute inset-0 h-full w-full ${p.choose.fit === 'contain' ? 'object-contain' : 'object-cover object-[50%_40%]'}`} style={p.choose.bg ? { background: p.choose.bg } : undefined} />
         </div>
-        <ul className="grid gap-3 lg:order-1 lg:gap-4" role="list">{c.slice(0, 2).map(card)}</ul>
-        <ul className="grid gap-3 lg:order-3 lg:gap-4" role="list">{c.slice(2).map((x, i) => card(x, i + 2))}</ul>
+        <ul className="grid gap-3 lg:order-1 lg:gap-4" role="list">{c.slice(0, Math.ceil(c.length / 2)).map(card)}</ul>
+        <ul className="grid gap-3 lg:order-3 lg:gap-4" role="list">{c.slice(Math.ceil(c.length / 2)).map((x, i) => card(x, i + Math.ceil(c.length / 2)))}</ul>
       </div>
     </section>
   );
@@ -377,7 +411,7 @@ function ProcPrices({ p }) {
       <div className="mx-auto max-w-[1040px]">
         <div className="text-center">
           <Eyebrow className="rv">{txNum(p, 'prices') && <span className="tabular-nums text-ndm-deep">{txNum(p, 'prices')}</span>}Price list</Eyebrow>
-          <TwoTone id="prices-title" className="rv mx-auto mt-5" lead={twoLine(pr.lead || 'Botox® Cosmetic')} strong="prices and packages" style={{ transitionDelay: '.06s' }} />
+          <TwoTone id="prices-title" className="rv mx-auto mt-5" lead={twoLine(pr.lead || 'Botox® Cosmetic')} strong={pr.strong || 'prices and packages'} style={{ transitionDelay: '.06s' }} />
           <p className="rv mx-auto mt-5 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>Prices per unit and per package, with current offers. Your plan and final price are confirmed at your free consultation.</p>
         </div>
         <ul className="pr-groups rv mt-[clamp(40px,4.5vw,64px)]" role="list" style={{ transitionDelay: '.14s' }}>
@@ -436,6 +470,47 @@ function ProcPrices({ p }) {
           Prices in CAD from the current NewDermaMed price list and subject to change. Your final price is confirmed at your free consultation.
         </p>
       </div>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------- good to know (SEO round 16, after barbeauty.ca/botox): the questions
+   people search for as question headings with short answers, then who gives the treatment, when the page was updated, and
+   links to related treatments, concerns, the gallery and the prices */
+function ProcGuide({ p }) {
+  const ref = useRef(null);
+  useReveal(ref);
+  const g = p.guide;
+  return (
+    <section ref={ref} id="guide" aria-labelledby="guide-title" className="relative z-10 scroll-mt-[150px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
+      <TxHead p={p} id="guide" tag={g.tag} hid="guide-title" lead={g.lead} strong={g.strong} />
+      <ul className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid gap-3 md:grid-cols-2 md:gap-4`} role="list">
+        {g.items.map((it, i) => (
+          <li key={it.q} className={`rv rounded-[22px] bg-white p-[clamp(20px,2.2vw,30px)] ring-1 ring-ndm-ink/[.06] shadow-[0_22px_44px_-38px_rgba(27,36,43,.35)] ${i === g.items.length - 1 && g.items.length % 2 ? 'md:col-span-2' : ''}`} style={{ transitionDelay: `${0.05 * (i % 2)}s` }}>
+            <h3 className="font-aeonik text-[clamp(21px,1.7vw,25px)] font-normal leading-[1.2] tracking-[-0.015em] text-ndm-ink">{it.q}</h3>
+            {it.a.map((x, k) => <p key={k} className="mt-3 font-inter text-[15.5px] leading-[1.7] text-ndm-ink/80">{x}</p>)}
+            {it.list && (
+              <ul className="mt-3 grid gap-2" role="list">
+                {it.list.map((x) => <li key={x} className="flex items-start gap-2.5 font-inter text-[15px] leading-[1.6] text-ndm-ink/80"><IconCheckBadge className="mt-[3px] shrink-0 text-ndm-deep" />{x}</li>)}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+      <div className={`${TX_WRAP} rv mt-6 flex flex-col gap-4 rounded-[22px] bg-ndm-mist/80 p-[clamp(18px,2vw,26px)] md:flex-row md:items-center md:justify-between`}>
+        <p className="flex items-start gap-2.5 font-inter text-[14px] leading-[1.55] text-ndm-ink/80">
+          <IconCheckBadge className="mt-[2px] shrink-0 text-ndm-deep" />
+          <span>{g.trust} <span className="text-ndm-muted">Page updated <time dateTime={g.updated[0]}>{g.updated[1]}</time>.</span></span>
+        </p>
+      </div>
+      <nav aria-label="Related treatments" className={`${TX_WRAP} rv mt-6`}>
+        <p className="font-inter text-[12px] font-semibold uppercase tracking-[.16em] text-ndm-muted">Related</p>
+        <ul className="mt-3 flex flex-wrap gap-2" role="list">
+          {g.related.map(([t, h]) => (
+            <li key={t}><a href={h} className="group inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 font-inter text-[14px] text-ndm-ink ring-1 ring-ndm-ink/10 transition-colors hover:text-ndm-deep hover:ring-ndm-deep">{t}<IconArrow size={12} className="text-ndm-deep transition-transform group-hover:translate-x-0.5" /></a></li>
+          ))}
+        </ul>
+      </nav>
     </section>
   );
 }
