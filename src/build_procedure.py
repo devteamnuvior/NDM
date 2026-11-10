@@ -195,8 +195,10 @@ SPACING = '''
   main>section#prices,main>section[aria-labelledby="faq"]{padding-top:clamp(64px,7vw,104px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
   /* round 15: Our team, Testimonials, the price list and the FAQ line up with the 1180px content of the other sections */
   main{--tx:max(var(--gx),calc((100% - 1180px) / 2))}
-  main>section[aria-labelledby="team"],main>section[aria-labelledby="faq"],main>section[aria-labelledby="testimonials"]{padding-left:var(--tx)!important;padding-right:var(--tx)!important}
-  main>section[aria-labelledby="testimonials"]>div,main>section[aria-labelledby="testimonials"]>p{padding-left:0!important;padding-right:0!important}
+  main>section[aria-labelledby="team"],main>section[aria-labelledby="faq"]{padding-left:var(--tx)!important;padding-right:var(--tx)!important}
+  /* testimonials (round 22): the words line up with the content, the card row runs edge to edge */
+  main>section[aria-labelledby="testimonials"]{padding-left:0!important;padding-right:0!important}
+  main>section[aria-labelledby="testimonials"]>div:not(.promo-rev-rows),main>section[aria-labelledby="testimonials"]>p{padding-left:var(--tx)!important;padding-right:var(--tx)!important}
   main>section#prices>div{max-width:1180px!important}
   /* the free skin analysis band sits tight between Visit us and the FAQ */
   main>section[aria-labelledby="analysis-title"]{padding-top:clamp(40px,4.5vw,64px)!important;padding-bottom:0!important}
@@ -206,6 +208,9 @@ SPACING = '''
   .guide-num{background:linear-gradient(135deg,#26B1E7,#0F80C3);box-shadow:0 10px 20px -12px rgba(15,128,195,.9)}
   .guide-q{box-shadow:0 22px 44px -38px rgba(27,36,43,.35);transition:box-shadow .5s var(--e-out),transform .5s var(--e-out)}
   .guide-q:hover{transform:translateY(-2px);box-shadow:0 30px 56px -38px rgba(15,128,195,.4)}
+  /* round 24: the book card in Good to know */
+  .guide-book{background:radial-gradient(120% 90% at 100% 0%,#1C7FC0 0%,rgba(28,127,192,0) 55%),linear-gradient(155deg,#0F5E92 0%,#0A3D60 55%,#0B2234 100%);box-shadow:0 40px 70px -40px rgba(10,61,96,.75)}
+  .guide-book-glow{position:absolute;right:-60px;bottom:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(255,166,23,.35),transparent 65%);pointer-events:none}
   .guide-doc{background:radial-gradient(90% 80% at 100% 0%,rgba(38,177,231,.14),transparent 60%),linear-gradient(160deg,#fff,#F6F4EF);box-shadow:0 0 0 1px rgba(27,36,43,.06),0 26px 50px -40px rgba(27,36,43,.4)}
 '''
 anchor = '<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>'

@@ -3,8 +3,8 @@
    Each reads one key of the page object (film, reel). MEDIA_CSS is added to the page by the build. */
 const MEDIA_CSS = `
 .tx-film{isolation:isolate;background:#0B0F13}
-/* the clips carry a caption in their bottom fifth: the frame is taller than the band and top-aligned, so only its upper part shows */
-.tx-film video{position:absolute;left:0;top:-4%;height:142%;width:100%;object-fit:cover;object-position:50% 0;will-change:transform}
+/* the one clinic video (round 22, shared with the home page): a little taller than the band so it can drift on scroll */
+.tx-film video{position:absolute;left:0;top:-6%;height:112%;width:100%;object-fit:cover;object-position:50% 50%;will-change:transform}
 .tx-film-shade{background:linear-gradient(90deg,rgba(11,15,19,.82) 0%,rgba(11,15,19,.5) 48%,rgba(11,15,19,.25) 100%),linear-gradient(180deg,rgba(11,15,19,.35),rgba(11,15,19,0) 35%,rgba(11,15,19,.55) 100%)}
 .tx-film-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .tx-film-ring{position:absolute;right:max(var(--gx),calc((100% - 1180px) / 2));bottom:clamp(56px,9vw,140px);width:clamp(96px,10vw,140px);aspect-ratio:1;animation:txSpin 22s linear infinite} /* inside the section padding, at the right edge of the content */
@@ -42,10 +42,20 @@ function useClipInView(ref, vid) {
 }
 
 /* the clinic on film: the home page's own clinic footage, slowly drifting behind the page's name, with the two addresses */
+function TxSoundIcon({ on }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor" stroke="none" />
+      {on ? <><path d="M15.5 8.5a5 5 0 0 1 0 7" /><path d="M18.5 5.5a9 9 0 0 1 0 13" /></> : <><path d="m16 9 5 6" /><path d="m21 9-5 6" /></>}
+    </svg>
+  );
+}
 function TxFilm({ p }) {
   const ref = useRef(null), vid = useRef(null), box = useRef(null);
+  const [sound, setSound] = useState(false);
   useReveal(ref);
   useClipInView(ref, vid);
+  useEffect(() => { const v = vid.current; if (v) v.muted = !sound; }, [sound]);
   useOnScroll(() => {
     const el = ref.current, v = vid.current; if (!el || !v || REDUCED) return;
     const r = el.getBoundingClientRect(), vh = window.innerHeight;
@@ -55,10 +65,7 @@ function TxFilm({ p }) {
   const f = p.film;
   return (
     <section ref={ref} id="film" data-nav="dark" aria-labelledby="film-title" className="tx-film relative z-10 scroll-mt-[120px] overflow-hidden px-[var(--gx)] py-[clamp(56px,9vw,140px)] text-white">
-      <video ref={vid} muted loop playsInline preload="none" poster={f.poster} aria-hidden="true" tabIndex={-1}>
-        <source src={f.src_m} type="video/mp4" media="(max-width: 767px)" />
-        <source src={f.src} type="video/mp4" />
-      </video>
+      <video ref={vid} muted loop playsInline preload="none" poster={f.poster} src={f.src} aria-label="A walk through the NewDermaMed clinic" />
       <span aria-hidden="true" className="tx-film-shade absolute inset-0" />
       <svg aria-hidden="true" className="tx-film-ring hidden text-white/80 md:block" viewBox="0 0 100 100">
         <defs><path id="tx-film-ring-path" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" /></defs>
@@ -75,6 +82,10 @@ function TxFilm({ p }) {
         <div className="rv mt-8 flex flex-wrap items-center gap-3" style={{ transitionDelay: '.18s' }}>
           <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
           <span className="hidden sm:contents"><Btn href="about.html#contact" v="glass">Find a clinic</Btn></span>
+          <button type="button" onClick={() => setSound((x) => !x)} aria-pressed={sound} aria-label={sound ? 'Turn the sound off' : 'Turn the sound on'}
+            className="tx-film-sound grid size-11 place-items-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-[12px] transition-colors hover:bg-white/20">
+            <TxSoundIcon on={sound} />
+          </button>
         </div>
       </div>
     </section>

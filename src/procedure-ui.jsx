@@ -32,7 +32,7 @@ const PROC = {
     points: [],
   },
   /* The clinic (TxFilm): the clinic footage, Ray's words */
-  film: { src: 'assets/botox/clinic-film.mp4', src_m: 'assets/botox/clinic-film-m.mp4', poster: 'assets/botox/clinic-film.webp', lead: 'Botox®', strong: 'at NewDermaMed Toronto',
+  film: { src: 'assets/clinic/ndm-clinic.mp4', poster: 'assets/clinic/ndm-clinic-poster.jpg', /* the one clinic video, shared with the home page */ lead: 'Botox®', strong: 'at NewDermaMed Toronto',
     text: 'Two clinics, Uptown on Yonge Street and Downtown on Bay Street. Every visit starts with a free consultation and a VISIA® skin analysis with our licensed medical team.',
     chips: ['4763 Yonge St, Uptown', '790 Bay St, Downtown', 'Free consultation', 'VISIA® skin analysis'] },
   /* About (ProcOverview tabs): Ray's five tabs; the key numbers beside them are this page's */
@@ -112,8 +112,11 @@ const PROC = {
     updated: ['2026-11-10', 'November 10, 2026'],
     intro: 'Short answers to what people ask most before their first Botox® visit. Your provider confirms everything at your free consultation.',
     doctor: { name: 'Dr. Negin Mastouri', role: 'Medical Director', img: 'assets/team/negin.jpg' },
-    /* related pages as photo cards: [title, link, photo, kind] */
-    related: [['Wrinkles & fine lines', 'wrinkles-fine-lines.html', 'assets/home/v3/mirror-720.webp', 'Concern'], ['Aptos Thread Lift', 'aptos-thread-lift.html', 'assets/aptos/midface-vectors.jpg', 'Treatment'], ['Dermal fillers', '#/dermal-fillers', 'assets/home/v3/lips-720.webp', 'Treatment'], ['Skin boosters', '#/skin-boosters', 'assets/home/v3/booster-720.webp', 'Treatment'], ['Before & after gallery', 'before-after.html', 'assets/before-after/Botox-e1762379266837.webp', 'Gallery'], ['All treatment prices', 'pricing.html#prices', 'assets/pricing/price-2.jpg', 'Prices']],
+    /* related treatments as photo cards: [title, link to the treatment's own page, photo, group]; slug() opens the page once it
+       exists (PAGE_LINKS) and a #/slug placeholder until then */
+    related: [['Dermal Fillers', slug('Dermal Fillers'), 'assets/home/v3/jawline-720.webp', 'Injectable'], ['Lip Augmentation', slug('Lip Augmentation'), 'assets/home/v3/lips-720.webp', 'Injectable'],
+      ['Skin Boosters', slug('Skin Boosters'), 'assets/home/v3/booster-720.webp', 'Injectable'], ['Aptos Thread Lift', slug('Aptos Thread Lift'), 'assets/aptos/midface-vectors.jpg', 'Bio-stimulator'],
+      ['Sculptra®', slug('Sculptra®'), 'assets/home/v3/sculptra-720.webp', 'Bio-stimulator'], ['Microneedling', slug('Microneedling'), 'assets/home/v3/mneedle-720.webp', 'Skin']],
   },
   faq: { lead: 'FAQ For', strong: 'Botox®', sub: 'Everything you need to know before starting your journey with us.' },
   faqs: [
@@ -332,6 +335,9 @@ const JR_CSS = `
 .jr-card.is-on{clip-path:inset(0 0 0 0 round 32px)}
 .jr-card .jr-pic{transform:scale(1.12);transition:transform 2.2s cubic-bezier(.2,.7,.2,1)}
 .jr-card.is-on .jr-pic{transform:scale(1)}
+/* desktop: the photo fills the right two thirds and fades into the navy card, so the face sits right of the words; phones: face centred */
+.jr-card{background:#0B1B29}
+@media (min-width:768px){.jr-card .jr-pic{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 34%);mask-image:linear-gradient(90deg,transparent 0,#000 34%)}}
 .jr-shade{background:linear-gradient(90deg,rgba(9,22,34,.9) 0%,rgba(9,22,34,.72) 34%,rgba(9,22,34,.18) 66%,rgba(9,22,34,0) 100%),linear-gradient(0deg,rgba(10,52,84,.72) 0%,rgba(10,52,84,0) 55%)}
 @media (max-width:767px){.jr-card{clip-path:inset(0 50% 0 50% round 24px)}.jr-card.is-on{clip-path:inset(0 0 0 0 round 24px)}
   .jr-shade{background:linear-gradient(0deg,rgba(9,22,34,.94) 0%,rgba(9,22,34,.8) 42%,rgba(9,22,34,.1) 78%,rgba(9,22,34,0) 100%)}}
@@ -360,7 +366,7 @@ function ProcAnalysis() {
     <section aria-labelledby="analysis-title" className="relative z-10 px-[var(--gx)] py-[clamp(40px,5vw,72px)]">
       <style>{JR_CSS}</style>
       <div ref={card} className={`jr-card ${TX_WRAP} relative isolate flex min-h-[600px] flex-col justify-end md:min-h-[clamp(460px,40vw,520px)] overflow-hidden rounded-[24px] p-6 text-white md:justify-center md:rounded-[32px] md:p-[56px] ${on ? 'is-on' : ''}`}>
-        <img src="assets/treatments/journey-skin.webp" alt="" loading="lazy" decoding="async" className="jr-pic absolute inset-0 -z-20 h-full w-full object-cover object-[62%_28%] md:object-[70%_30%]" />
+        <img src="assets/treatments/journey-skin.webp" alt="" loading="lazy" decoding="async" className="jr-pic absolute inset-0 -z-20 h-full w-full object-cover object-[47%_28%] md:left-auto md:w-[66%] md:object-[50%_30%]" />
         <span aria-hidden="true" className="jr-shade absolute inset-0 -z-10" />
         <div className="max-w-[620px]">
           <div className="jr-t" style={t(0)}><Eyebrow dark>Start your journey</Eyebrow></div>
@@ -499,19 +505,22 @@ function ProcGuide({ p }) {
           <Eyebrow className="rv">{n && <span className="tabular-nums text-ndm-deep">{n}</span>}{g.tag}</Eyebrow>
           <TwoTone id="guide-title" className="rv mt-5" size="text-[clamp(32px,3.4vw,50px)]" lead={twoLine(g.lead)} strong={g.strong} style={{ transitionDelay: '.06s' }} />
           <p className="rv mt-4 max-w-[44ch] font-inter text-[15.5px] leading-[1.65] text-ndm-muted" style={{ transitionDelay: '.1s' }}>{g.intro}</p>
-          <div className="rv guide-doc mt-7 rounded-[22px] p-5" style={{ transitionDelay: '.14s' }}>
-            <div className="flex items-center gap-3.5">
-              <img src={g.doctor.img} alt={`${g.doctor.name}, ${g.doctor.role}, NewDermaMed`} loading="lazy" decoding="async" className="size-14 shrink-0 rounded-full object-cover object-[50%_20%] ring-2 ring-white" />
-              <span className="min-w-0">
-                <span className="block font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-muted">Medical direction</span>
-                <span className="mt-0.5 block font-aeonik text-[19px] leading-[1.2] text-ndm-ink">{g.doctor.name}</span>
-                <span className="block font-inter text-[13px] text-ndm-muted">{g.doctor.role}</span>
-              </span>
+          {/* round 24: a book card instead of the medical-direction card */}
+          <div className="rv guide-book relative mt-7 overflow-hidden rounded-[26px] p-6 text-white" style={{ transitionDelay: '.14s' }}>
+            <span aria-hidden="true" className="guide-book-glow" />
+            <span className="relative inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 font-inter text-[12px] font-medium text-white/90 ring-1 ring-white/20"><i aria-hidden="true" className="size-1.5 rounded-full bg-ndm-amber" />Free consultation</span>
+            <p className="relative mt-4 font-aeonik text-[clamp(26px,2.2vw,32px)] font-normal leading-[1.08] tracking-[-0.02em]">Talk it through<br /><span className="tt-strong text-ndm-sky">with our team</span></p>
+            <ul className="relative mt-4 grid gap-2" role="list">
+              {['Free consultation and VISIA® skin analysis', 'Uptown or Downtown Toronto', 'No pressure, just a clear plan'].map((x) => (
+                <li key={x} className="flex items-start gap-2.5 font-inter text-[14.5px] leading-[1.45] text-white/85"><IconCheckBadge className="mt-[2px] shrink-0 text-ndm-sky" />{x}</li>
+              ))}
+            </ul>
+            <div className="relative mt-6 flex flex-wrap items-center gap-x-4 gap-y-3">
+              <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
+              <a href={tel(PHONES[0].num)} className="font-inter text-[14px] text-white/80 underline-offset-4 hover:text-white hover:underline">or call {PHONES[0].num}</a>
             </div>
-            <p className="mt-4 font-inter text-[14px] leading-[1.55] text-ndm-ink/80">{g.trust}</p>
-            <p className="mt-3 flex items-center gap-2 font-inter text-[12.5px] text-ndm-muted"><IconCheckBadge size={14} className="shrink-0 text-ndm-deep" />Page updated <time dateTime={g.updated[0]}>{g.updated[1]}</time></p>
-            <Btn href="#/book" v="book" hot sm className="mt-5">Book Free Consultation</Btn>
           </div>
+          <p className="rv mt-4 flex items-center gap-2 font-inter text-[12.5px] text-ndm-muted" style={{ transitionDelay: '.16s' }}><IconCheckBadge size={14} className="shrink-0 text-ndm-deep" />Page updated <time dateTime={g.updated[0]}>{g.updated[1]}</time></p>
         </div>
         <ol className="grid gap-3" role="list">
           {g.items.map((it, i) => (
@@ -530,7 +539,7 @@ function ProcGuide({ p }) {
       </div>
       <nav aria-labelledby="related-title" className={`${TX_WRAP} mt-[clamp(48px,5vw,72px)]`}>
         <div className="flex items-end justify-between gap-4">
-          <h3 id="related-title" className="rv font-aeonik text-[clamp(24px,2.2vw,32px)] font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink">Related <span className="tt-strong text-ndm-deep">treatments and pages</span></h3>
+          <h3 id="related-title" className="rv font-aeonik text-[clamp(24px,2.2vw,32px)] font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink">Related <span className="tt-strong text-ndm-deep">treatments</span></h3>
         </div>
         <ul className="no-scrollbar -mx-[var(--gx)] mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-[var(--gx)] pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 xl:grid-cols-6" role="list" style={{ scrollPaddingInline: 'var(--gx)' }}>
           {g.related.map(([t, h, img, kind], i) => (
