@@ -38,6 +38,8 @@ Read `HANDOFF.md` before starting: it has the page-by-page status, content sourc
 - The builders find the shell's meta description by its exact text (since 9 Nov 2026 the promotion page's own description: "Current offers on lip filler, ..."); if it changes in promotion.html, change it in the 11 builders too.
 - Review tools (campaign look switcher, the promotion page's Dark / Light test switch) show only on localhost, under `/staging/`, or with `?campaign=` / `?review` in the address (`REVIEW_TOOLS`, both shells); visitors on the live site never see them.
 - Site audit of 9 Nov 2026: findings, fixes and open decisions are in `AUDIT-2026-11-09.md`. Its one-time patches are in `src/patches-applied/` (`audit_links_patch.py`, `review_tools_patch.py`, `search_patch.py`, `hash_link_patch.py`; already applied, idempotent).
+- Design finish of 10 Nov 2026 (main look only): one CSS block at the end of the main `<style>` of both shells, between the `finish:start` and `finish:end` comments, written by `src/patches-applied/finish_patch.py` (safe to run again: edit the patch, run it, then do the full rebuild; never edit the block by hand). What it covers and how to undo it: HANDOFF.md section 11.
+- The builders insert each page's CSS before the last `</style>` that precedes the React script, so nothing may add a `<style>` after the main one in a shell's head. The static copy's head block is written above the embedded fonts for this reason; `tools/prerender.py` and `seo_patch.py` stop if they find an oversized block (10 Nov 2026: 187 pages had lost their own styles this way).
 - One booking form (`BookForm`, both shells) everywhere: the home form, the booking popup and, in `compact` layout, the hero card and the phone form of every treatment and concern page (`ProcForm`). Its first step is the category picker (`BOOK_INTEREST_GROUPS`); add new options there. Media sections for treatment and concern pages live in `src/live-media-ui.jsx` (film band, Instagram reel, before/after cases, visit us) with their page data from `src/live_media.py`; `TxWhy` (treatment-ui.jsx) is the dark counting band.
 - **Site-wide change** (header, menu, footer, cart, popup, colours): write a small Python patch, apply it to index.html and promotion.html, then rebuild the five generated pages. Past patches are kept in `src/patches-applied/` for reference; they are already applied, do not run them again.
 - `index-fraunces.html` and `tools/make_serif.py` are obsolete (replaced by `FONT_CHANGE`).
@@ -66,6 +68,7 @@ Read `HANDOFF.md` before starting: it has the page-by-page status, content sourc
 
 ## Git commits
 - Repo: https://github.com/devteamnuvior/NDM, branch `main`. Commit and push only when the user asks.
+- Since 9 Nov 2026 a push to `Ray-Dev` is also a staging release: `.github/workflows/deploy.yml` and `.cpanel.yml` (added by the development team) make the clinic's host copy `assets`, `ray` and the root pages into `public_html/staging/`. Details: HANDOFF.md section 11.
 - Every commit follows Conventional Commits: `type(scope): short descriptive message`.
 - Types: `feat` (new feature), `fix` (bug fix), `chore` (maintenance, config, tooling), `refactor` (restructure, same behaviour), `docs` (documentation), `style` (formatting, styling), `test` (tests), `perf` (performance), `build` (build system or dependencies), `ci` (CI/CD config).
 - Rules:
