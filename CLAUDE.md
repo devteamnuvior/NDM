@@ -6,7 +6,7 @@ Read `HANDOFF.md` before starting: it has the current state, content sources (Ap
 
 ## Stack
 - Each page is one HTML file: React 18.3.1 UMD + Babel standalone 7.24.7 (JSX in a `<script type="text/babel">`), Tailwind Play CDN 3.4.5 with `ndm.*` colours, Lenis 1.1.13 smooth scroll. about.html also loads Leaflet 1.9.4 from cdnjs.
-- `const FONT_CHANGE = true` in the Tailwind config: Fraunces headings (`font-aeonik` class), Manrope text (`font-inter`), Helvetica Neue / Inter for menu, buttons and fields.
+- Fonts: Fraunces headings (`font-aeonik` class), Manrope text (`font-inter`), Helvetica Neue / Inter for menu, buttons and fields, all from Google Fonts. `const FONT_CHANGE = true` only adds the `html.font-change` class the font styles hang on. The old Aeonik font (embedded as base64) was removed in round 35 at the user's request; there is no switch back.
 - Colours: ink #1B242B, muted #5A646C, brand blue #209ED9 / deep #0F80C3 / sky #26B1E7, amber #FFA617, paper #FAFAF8 (page background), mist #F2F2EF, night #0B0F13.
 - Side gutter is the CSS var `--gx`; every section uses `px-[var(--gx)]`.
 
