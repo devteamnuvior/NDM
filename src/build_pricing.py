@@ -116,7 +116,7 @@ app = r'''function App() {
       <main id="main" className="seamless">
         <Breadcrumb items={['Pricing']} dark />
         <PricingHero />
-        <Promotions level="h2" />
+        <PriceSpecials />
         <PriceList />
         <Team />
         <Process />
