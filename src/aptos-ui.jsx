@@ -88,7 +88,7 @@ const APT = {
     intro: 'The price for the midface, the area Visage Excellence is licensed for in Canada. Your plan and final price are confirmed at your free consultation.',
     title: 'Aptos Thread Lift', name: 'Aptos Excellence Visage Method EV', cat: 'Aptos Thread Method',
     blurb: 'Bioabsorbable P(LA/CL) threads, placed without surgery. A lifting result may last up to 24 months.',
-    rows: [['Mid face', 2500, 0]],
+    rows: priceRows('aptos-thread-method', 'Aptos').filter((o) => /^mid face$/i.test(o[0])), /* round 29: from the price list */
   },
   pair: {
     tag: 'Elevate your results', lead: 'Elevate your', strong: 'Aptos results',
@@ -111,6 +111,6 @@ const APT = {
     ['How many sessions will I need?', 'One session produces the lift for most plans. Some people later choose a smaller session to refresh the result.'],
     ['Is there downtime?', 'Most people plan up to two weeks of lighter social commitments while swelling, bruising and tightness settle.'],
     ['Is a thread lift safe?', 'Aptos threads are licensed by Health Canada and placed by trained medical professionals under local anaesthetic. Your provider reviews possible side effects and how they are managed before treatment.'],
-    ['How much does it cost?', 'Aptos for the mid face is $2,500. Your plan and final price are confirmed at your free consultation.'],
+    ['How much does it cost?', 'Aptos for the mid face is $2500. Your plan and final price are confirmed at your free consultation.'],
   ],
 };

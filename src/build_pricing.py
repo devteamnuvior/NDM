@@ -36,7 +36,8 @@ css = r'''
   .pr-sub>.pr-item{padding-block:10px}
   /* room either side of the clipping fold so the panel's outline and shadow are not cut off */
   .pr-group>.pr-body>div{margin:0 -16px;padding:0 16px}
-  .pr-group.is-open>.pr-ghead{position:sticky;top:100px;z-index:5;background:#FAFAF8}
+  /* the open category title stays under the header without a paper band of its own: rows passing under it are blurred away */
+  .pr-group.is-open>.pr-ghead{position:sticky;top:100px;z-index:5;background:transparent;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
   @media (min-width:1280px){.pr-group.is-open>.pr-ghead{top:120px}}
   .pr-gplus{width:44px;height:44px}
   .pr-ghead button:hover .pr-gplus{border-color:#1B242B}
@@ -51,9 +52,11 @@ css = r'''
   .pr-plus i+i{transform:rotate(90deg)}
   .pr-head:hover .pr-plus,.pr-ghead button:hover .pr-gplus{border-color:#1B242B}
   /* hero scroll hint */
-  .pr-scroll svg{animation:prScroll 1.8s ease-in-out infinite}
+  .pr-scroll-line{position:relative;display:block;width:1px;height:64px;overflow:hidden;background:rgba(255,255,255,.28)}
+  .pr-scroll-line::after{content:"";position:absolute;left:0;top:-45%;width:100%;height:45%;background:#fff;animation:prLine 1.9s ease-in-out infinite}
+  @keyframes prLine{to{top:100%}}
   @keyframes prScroll{0%,100%{transform:translateY(-2px)}50%{transform:translateY(4px)}}
-  @media (prefers-reduced-motion:reduce){.pr-scroll svg{animation:none}}
+  @media (prefers-reduced-motion:reduce){.pr-scroll-line::after{animation:none}}
   /* treatments inside an open category: a blue circle with a white plus, easier to see */
   .pr-sub .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
   .pr-sub .pr-head:hover .pr-plus{background:#209ED9;border-color:#209ED9}
@@ -78,7 +81,9 @@ s = s[:i] + css + s[i:]
 data = (scratch / 'pricing-data.jsx').read_text()
 ui = (scratch / 'pricing-ui.jsx').read_text()
 helper = "/* laser hair removal: every package carries the site's BUY 1 GET 1 FREE badge */\nconst lhrB = (a, b, c, d) => [['Single session', a, 0], ['Package of 3', b, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', c, 0, 'BUY 1 GET 1 FREE'], ...(d ? [['Package of 8', d, 0, 'BUY 1 GET 1 FREE']] : [])];\n"
-data = data.replace('const PRICE_CATS = [', helper + 'const PRICE_CATS = [', 1)
+# round 29: PRICE_CATS and lhrB already live in the shell (src/sync_prices.py); keep only the rest of the data file
+_i = data.index('const PRICE_CATS = ['); _j = data.index('\n];\n', _i) + 4
+data = data[:_i] + data[_j:]
 
 a = s.index('function App() {')
 b = s.index('ReactDOM.createRoot', a)
@@ -111,6 +116,7 @@ app = r'''function App() {
       <main id="main" className="seamless">
         <Breadcrumb items={['Pricing']} dark />
         <PricingHero />
+        <PriceSpecials />
         <PriceList />
         <Team />
         <Process />
@@ -118,6 +124,7 @@ app = r'''function App() {
         <PromoReviews />
         <Faq items={PRICE_FAQS} lead="Your top questions," strong="answered" intro="Everything you need to know before starting your journey with us." />
         <Appointment />
+        <Social />
       </main>
       <Footer />
       <CartPill onOpen={() => setCartOpen(true)} hidden={cartOpen || drawer || search} />

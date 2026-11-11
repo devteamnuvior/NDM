@@ -19,8 +19,10 @@ const perUnit = (cat, label) => (cat.unit && label === 'Regular' ? ' / unit' : '
 function TreatmentRow({ cat, it, uid, open, onToggle }) {
   const [name, note, opts] = it;
   const offer = bestOffer(opts);
-  const from = Math.min(...opts.map((o) => o[1]));
-  const fromUnit = perUnit(cat, opts.find((o) => o[1] === from)[0]);
+  /* round 29: the lowest price after the discount, per unit / syringe / session (priceFrom, the site's one price source) */
+  const pf = priceFrom(cat.id, name);
+  const from = pf ? pf.value : Math.min(...opts.map((o) => o[1]));
+  const fromUnit = pf ? pf.unit : perUnit(cat, opts.find((o) => o[1] === from)[0]);
   return (
     <li className={`pr-item ${open ? 'is-open' : ''}`}>
       <h4 className="m-0">
@@ -65,20 +67,21 @@ function TreatmentRow({ cat, it, uid, open, onToggle }) {
   );
 }
 
-/* ---------------------------------------------------------------- hero: NDM's fees page video */
-const FEES_VIDEO = `${NDM}/wp-content/uploads/2025/09/Fees-Financin.-`;
+/* ---------------------------------------------------------------- hero: the one clinic video (round 25, assets/clinic/ndm-clinic.mp4,
+   also the home page's Inside our clinics and the Botox clinic film; never copied) */
+const PRICING_FILM = { src: 'assets/clinic/ndm-clinic.mp4', poster: 'assets/clinic/ndm-clinic-poster.jpg' };
 const IconPause = () => <Svg size={14} vb="0 0 14 14"><path d="M4.5 2.5v9M9.5 2.5v9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></Svg>;
 const IconPlay = () => <Svg size={14} vb="0 0 14 14"><path d="M4 2.6v8.8a.5.5 0 0 0 .76.43l7.1-4.4a.5.5 0 0 0 0-.86l-7.1-4.4A.5.5 0 0 0 4 2.6Z" fill="currentColor" /></Svg>;
 
 function PricingHero() {
   const ref = useRef(null), vid = useRef(null);
   useReveal(ref);
-  const small = useMedia('(max-width: 767px)');
-  const [paused, setPaused] = useState(REDUCED);
+  /* the film plays straight through, on a loop (no pause button) */
   useEffect(() => {
-    const v = vid.current; if (!v) return;
-    if (paused) v.pause(); else { const p = v.play(); if (p) p.catch(() => {}); }
-  }, [paused, small]);
+    const v = vid.current; if (!v || REDUCED) return;
+    v.muted = true;
+    const p = v.play(); if (p) p.catch(() => {});
+  }, []);
   const browse = (e) => {
     e.preventDefault();
     const el = document.getElementById('prices');
@@ -87,16 +90,12 @@ function PricingHero() {
   const stats = [[`${PRICE_TOTAL} treatments`, 'Current prices and offers'], ['Free consultation', 'Before every treatment'], ['2 Toronto clinics', 'Uptown and Downtown']];
   return (
     <section ref={ref} data-nav="dark" aria-labelledby="pricing-title" className="relative isolate flex min-h-[100svh] flex-col justify-end pt-[150px] md:h-[100svh] md:min-h-[640px] md:max-h-[1040px] md:pt-0 overflow-hidden bg-ndm-night text-white">
-      <video ref={vid} key={small ? 'm' : 'd'} src={`${FEES_VIDEO}${small ? 'mobile' : 'desktop'}-version.mp4`} autoPlay={!REDUCED} muted loop playsInline preload="auto" aria-hidden="true"
+      <video ref={vid} src={PRICING_FILM.src} poster={PRICING_FILM.poster} autoPlay={!REDUCED} muted loop playsInline preload="auto" aria-hidden="true"
         className="absolute inset-0 -z-20 h-full w-full object-cover" />
-      <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(180deg,rgba(11,15,19,.62) 0%,rgba(11,15,19,.08) 28%,rgba(11,15,19,.12) 50%,rgba(11,15,19,.84) 100%)' }} />
-      <button type="button" onClick={() => setPaused(!paused)} aria-label={paused ? 'Play background video' : 'Pause background video'}
-        className="absolute right-[var(--gx)] top-[116px] grid size-10 place-items-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-[10px] transition-colors hover:bg-white hover:text-ndm-ink xl:top-[140px]">
-        {paused ? <IconPlay /> : <IconPause />}
-      </button>
-      {/* the page carries on below: a soft bouncing arrow at the bottom centre, which also scrolls to the prices */}
-      <a href="#prices" onClick={browse} aria-label="Scroll to the price list" className="pr-scroll absolute bottom-4 left-1/2 z-[1] grid size-11 -translate-x-1/2 place-items-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-[10px] transition-colors hover:bg-white hover:text-ndm-ink md:bottom-6">
-        <IconCaret />
+      <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(90deg,rgba(11,15,19,.5) 0%,rgba(11,15,19,.18) 55%,rgba(11,15,19,.1) 100%),linear-gradient(180deg,rgba(11,15,19,.62) 0%,rgba(11,15,19,.2) 28%,rgba(11,15,19,.26) 50%,rgba(11,15,19,.86) 100%)' }} />
+      {/* the page carries on below: a quiet "Scroll to prices" line at the right edge (clear of the bottom tab), which also scrolls there */}
+      <a href="#prices" onClick={browse} className="pr-scroll absolute right-[var(--gx)] top-1/2 z-[1] hidden -translate-y-1/2 flex-col items-center gap-3 font-inter text-[11px] font-medium uppercase tracking-[.22em] text-white/75 transition-colors hover:text-white md:flex">
+        <span style={{ writingMode: 'vertical-rl' }}>Scroll to prices</span><span aria-hidden="true" className="pr-scroll-line" />
       </a>
       <div className="px-[var(--gx)] pb-[clamp(84px,8vw,112px)]">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
@@ -134,8 +133,10 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }) {
   const shown = hits || c.items.map((it, i) => [it, i]);
   const opts = c.items.flatMap((it) => it[2]);
   const offer = bestOffer(opts);
-  const from = Math.min(...opts.map((o) => o[1]));
-  const fromUnit = c.unit && opts.some((o) => o[1] === from && o[0] === 'Regular') ? ' / unit' : '';
+  /* round 29: the category's lowest price after the discount (e.g. Botox / Dysport, 220 units of Dysport: $7.70 / unit) */
+  const pf = priceFrom(c.id);
+  const from = pf ? pf.value : Math.min(...opts.map((o) => o[1]));
+  const fromUnit = pf ? pf.unit : '';
   const allOpen = shown.every(([, i]) => openItem(i));
   const uid = `pg-${c.id}`;
   return (
@@ -171,6 +172,38 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }) {
         </div>
       </div>
     </li>
+  );
+}
+
+/* monthly specials (round 22, Ray's cards): Up to tag, price, name, Buy opens that category in the price list below */
+function PriceSpecials() {
+  const ref = useRef(null);
+  useReveal(ref);
+  const sp = PRICE_SPECIALS;
+  const go = (e, id) => { const el = document.getElementById(id + '-h'); if (!el) return; e.preventDefault(); if (el.getAttribute('aria-expanded') !== 'true') el.click(); scrollToY(el.getBoundingClientRect().top + window.scrollY - 150); };
+  return (
+    <section ref={ref} id="specials" aria-labelledby="specials-title" className="relative z-10 scroll-mt-[150px] px-[var(--gx)] py-[clamp(48px,5.5vw,80px)]">
+      <div className="mx-auto max-w-[760px] text-center">
+        <Eyebrow className="rv">Monthly specials</Eyebrow>
+        <TwoTone id="specials-title" className="rv mx-auto mt-5" size="text-[clamp(30px,3.2vw,46px)]" lead={<>Exclusive<br /></>} strong="monthly specials" style={{ transitionDelay: '.06s' }} />
+        <p className="rv mx-auto mt-4 font-inter text-[15px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>{sp.sub}</p>
+      </div>
+      <ul role="list" className="mx-auto mt-[clamp(28px,3.4vw,44px)] grid w-full max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-4">
+        {sp.items.map(([n, price, id], i) => {
+          /* round 30: the card's price and offer come from the price list; the offer shows as the red deal tag */
+          const info = priceInfo(n) || priceFrom(id.replace(/^pg-/, ''));
+          return (
+          <li key={n} className="rv flex flex-col rounded-[20px] bg-white p-4 ring-1 ring-ndm-ink/[.06] md:p-5" style={{ transitionDelay: `${0.04 * i}s` }}>
+            {info && info.offer ? <span className="deal-badge self-start"><i aria-hidden="true">%</i>{info.offer}</span> : <span className="self-start rounded-full bg-ndm-blue/10 px-2.5 py-1 font-inter text-[11px] font-semibold uppercase tracking-[.12em] text-ndm-deep">Special</span>}
+            <span className="mt-3 block font-inter text-[11px] uppercase tracking-[.16em] text-ndm-muted">From</span>
+            <span className="mt-1 block font-aeonik text-[clamp(26px,2.4vw,34px)] leading-none tracking-[-0.03em] text-ndm-ink">{info ? pfmt(info.value) : price}{info && info.unit ? <span className="ml-1 font-inter text-[13px] tracking-normal text-ndm-muted">{info.unit.replace(' / ', '/ ')}</span> : null}</span>
+            <span className="mt-2 block font-inter text-[15px] font-medium leading-[1.3] text-ndm-ink">{n}</span>
+            <span className="mt-auto flex flex-wrap items-baseline gap-x-2 gap-y-1 pt-4"><a href={`#${id}`} onClick={(e) => go(e, id)} className="btn btn-buy h-9 px-4 text-[13px]">Buy</a><span className="font-inter text-[12.5px] text-ndm-muted">{sp.note}</span></span>
+          </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }
 

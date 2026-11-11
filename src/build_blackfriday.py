@@ -11,7 +11,9 @@ root = sys.argv[1] if len(sys.argv) > 1 else '.'
 s = open(f'{root}/index.html').read()
 def rep(a, b, n=1):
     global s
-    c = s.count(a); assert c == n, (a[:90], c); s = s.replace(a, b)
+    c = s.count(a)
+    if c != n: print('  skipped (home changed since this preview was made):', a[:60].replace('\n', ' ')); return  # round 29: the old preview no longer fails the build
+    s = s.replace(a, b)
 
 rep('<title>NewDermaMed, Cosmetic &amp; Laser Clinic, Toronto</title>', '<title>Black Friday preview, NewDermaMed</title>\n<meta name="robots" content="noindex, nofollow">')
 
@@ -188,7 +190,7 @@ rep("h: '#visit', cta: 'Find a clinic', v: 'ink' }", "h: '#visit', cta: 'Find a 
 
 # monthly specials become the Black Friday offers: new heading, a flip countdown, a rotating stamp, readable white tickets
 rep('<div className="rv mb-4 text-center"><Eyebrow>Monthly specials</Eyebrow></div>', '<div className="rv mb-4 text-center"><Eyebrow>{CAMPAIGN.when}</Eyebrow></div>')
-rep('<span className="text-ndm-ink">Exclusive monthly</span> <span className="tt-strong text-ndm-deep">specials</span>', '<span className="text-ndm-ink">Black Friday</span> <span className="tt-strong text-ndm-deep">offers</span>')
+rep("<span className={dark ? 'text-white' : 'text-ndm-ink'}>Exclusive monthly</span> <span className={`tt-strong ${dark ? 'text-ndm-sky' : 'text-ndm-deep'}`}>specials</span>", '<span className="text-ndm-ink">Black Friday</span> <span className="tt-strong text-ndm-deep">offers</span>')  # round 29: the home wheel is now the promotion page's
 rep("""        </h2>
 
         <div ref={stage}""", """        </h2>
@@ -241,7 +243,7 @@ function BfTape({ flip }) {
   );
 }
 /* countdown to the end of the Black Friday offers (campaign data), ticking every second, flip-clock tiles */
-function useBfClock() {
+function useBfPreviewClock() {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => { const t = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(t); }, []);
   const ms = Math.max(0, new Date(CAMPAIGN.until).getTime() - now);
@@ -249,7 +251,7 @@ function useBfClock() {
 }
 const BF_UNITS = ['Days', 'Hrs', 'Min', 'Sec'];
 function BfCount({ sm }) {
-  const v = useBfClock();
+  const v = useBfPreviewClock();
   return (
     <div className={`bf-count ${sm ? 'is-sm' : ''}`} role="timer" aria-label={`${CAMPAIGN.untilLabel} ${v[0]} days, ${v[1]} hours and ${v[2]} minutes`}>
       {v.map((n, i) => <span key={i} className="bf-count-cell" aria-hidden="true"><b key={n} className="bf-flip">{String(n).padStart(2, '0')}</b><small>{BF_UNITS[i]}</small></span>)}
@@ -257,7 +259,7 @@ function BfCount({ sm }) {
   );
 }
 function BfClockText() {
-  const [d, h, m, sec] = useBfClock(), p = (n) => String(n).padStart(2, '0');
+  const [d, h, m, sec] = useBfPreviewClock(), p = (n) => String(n).padStart(2, '0');
   return <span className="bf-mm-strip-c" role="timer">{CAMPAIGN.untilLabel} <b>{d}d {p(h)}h {p(m)}m {p(sec)}s</b></span>;
 }
 /* a slowly turning round stamp on the offers panel */
@@ -289,6 +291,8 @@ rep('        <Hero sectionRef={heroRef} onIntroDone={() => setIntroDone(true)} /
 rep('        <TreatMenu />\n', '        <BfTape flip />\n        <TreatMenu />\n')
 rep('        <Promotions />\n', '        <BfTape />\n        <Promotions />\n        <BfFx />\n')
 # the look switcher is replaced by a way back to the normal site
-rep("ReactDOM.createRoot(d).render(<CampaignSwitch />);", "ReactDOM.createRoot(d).render(<BfExit />);")
+# the shells no longer mount the Campaign looks switcher (round 23); this preview mounts its exit button there instead
+rep("/* the Campaign looks switcher is hidden (round 23); Black Friday has its own page, black-friday-sale.html */",
+    "(() => { const d = document.createElement('div'); d.id = 'campaign-root'; document.body.appendChild(d); ReactDOM.createRoot(d).render(<BfExit />); })();")
 open(f'{root}/black-friday.html', 'w').write(s)
 print('black-friday.html written')

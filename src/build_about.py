@@ -182,6 +182,7 @@ function App() {
         <Process />
         <Faq items={ABOUT_FAQS} lead="Your top questions," strong="answered" intro="Everything you need to know about our team, our clinics and your first visit." />
         <AboutContact />
+        <Social />
       </main>
       <Footer />
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} onBrowse={() => { window.location.href = 'pricing.html#prices'; }} />

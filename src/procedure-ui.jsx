@@ -32,7 +32,7 @@ const PROC = {
     points: [],
   },
   /* The clinic (TxFilm): the clinic footage, Ray's words */
-  film: { src: 'assets/botox/clinic-film.mp4', src_m: 'assets/botox/clinic-film-m.mp4', poster: 'assets/botox/clinic-film.webp', lead: 'Botox®', strong: 'at NewDermaMed Toronto',
+  film: { src: 'assets/clinic/ndm-clinic.mp4', poster: 'assets/clinic/ndm-clinic-poster.jpg', /* the one clinic video, shared with the home page */ lead: 'Botox®', strong: 'at NewDermaMed Toronto',
     text: 'Two clinics, Uptown on Yonge Street and Downtown on Bay Street. Every visit starts with a free consultation and a VISIA® skin analysis with our licensed medical team.',
     chips: ['4763 Yonge St, Uptown', '790 Bay St, Downtown', 'Free consultation', 'VISIA® skin analysis'] },
   /* About (ProcOverview tabs): Ray's five tabs; the key numbers beside them are this page's */
@@ -91,9 +91,9 @@ const PROC = {
     lead: 'How much does Botox®', strong: 'cost in Toronto?', cat: 'Botox / Dysport', unitLabel: 'Regular',
     groups: [
       { name: 'Botox Cosmetic', title: 'Botox® Cosmetic', blurb: 'A prescription product priced per unit, given only after an in-person medical assessment.',
-        rows: [['Regular', 12, 0], ['60 units', 648, 720, '10% OFF'], ['120 units', 1152, 1440, '20% OFF'], ['180 units', 1512, 2160, '30% OFF'], ['220 units', 1848, 2640, '30% OFF']] },
+        rows: priceRows('botox-dysport', 'Botox Cosmetic') }, /* round 29: from the price list */
       { name: 'Dysport', title: 'Dysport®', blurb: 'A prescription product priced per unit, given only after an in-person medical assessment.',
-        rows: [['Regular', 11, 0], ['60 units', 594, 660, '10% OFF'], ['120 units', 1056, 1320, '20% OFF'], ['180 units', 1386, 1980, '30% OFF'], ['220 units', 1694, 2420, '30% OFF']] },
+        rows: priceRows('botox-dysport', 'Dysport') },
     ],
   },
   /* Good to know (ProcGuide, SEO round 16): the questions people search for, after the structure of barbeauty.ca/botox. New copy in
@@ -112,8 +112,11 @@ const PROC = {
     updated: ['2026-11-10', 'November 10, 2026'],
     intro: 'Short answers to what people ask most before their first Botox® visit. Your provider confirms everything at your free consultation.',
     doctor: { name: 'Dr. Negin Mastouri', role: 'Medical Director', img: 'assets/team/negin.jpg' },
-    /* related pages as photo cards: [title, link, photo, kind] */
-    related: [['Wrinkles & fine lines', 'wrinkles-fine-lines.html', 'assets/home/v3/mirror-720.webp', 'Concern'], ['Aptos Thread Lift', 'aptos-thread-lift.html', 'assets/aptos/midface-vectors.jpg', 'Treatment'], ['Dermal fillers', '#/dermal-fillers', 'assets/home/v3/lips-720.webp', 'Treatment'], ['Skin boosters', '#/skin-boosters', 'assets/home/v3/booster-720.webp', 'Treatment'], ['Before & after gallery', 'before-after.html', 'assets/before-after/Botox-e1762379266837.webp', 'Gallery'], ['All treatment prices', 'pricing.html#prices', 'assets/pricing/price-2.jpg', 'Prices']],
+    /* related treatments as photo cards: [title, link to the treatment's own page, photo, group]; slug() opens the page once it
+       exists (PAGE_LINKS) and a #/slug placeholder until then */
+    related: [['Dermal Fillers', slug('Dermal Fillers'), 'assets/home/v3/jawline-720.webp', 'Injectable'], ['Lip Augmentation', slug('Lip Augmentation'), 'assets/home/v3/lips-720.webp', 'Injectable'],
+      ['Skin Boosters', slug('Skin Boosters'), 'assets/home/v3/booster-720.webp', 'Injectable'], ['Aptos Thread Lift', slug('Aptos Thread Lift'), 'assets/aptos/midface-vectors.jpg', 'Bio-stimulator'],
+      ['Sculptra®', slug('Sculptra®'), 'assets/home/v3/sculptra-720.webp', 'Bio-stimulator'], ['Microneedling', slug('Microneedling'), 'assets/home/v3/mneedle-720.webp', 'Skin']],
   },
   faq: { lead: 'FAQ For', strong: 'Botox®', sub: 'Everything you need to know before starting your journey with us.' },
   faqs: [
@@ -234,53 +237,70 @@ function ProcGlance({ p, wide }) {
 
 /* ---------------------------------------------------------------- your treatment, in tabs (the thread lift page's treatment overview,
    in the site's own look): a tab row, then the words on the left and the key number on the right */
+/* round 29: About, redesigned with its own theme: a deep navy band with slowly drifting light orbs and a turning dotted ring,
+   numbered tabs down the left (a scrolling row on phones) and a glass panel with the tab's text and its key number.
+   All five panels stay in the page for crawlers (hidden ones carry data-pre-keep). */
 function ProcOverview({ p }) {
   const ref = useRef(null), tabs = useRef([]);
   useReveal(ref);
   const o = p.overview;
+  const n = txNum(p, 'overview');
   const [act, setAct] = useState(0);
   const key = (e, i) => {
-    const k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    const k = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
     if (!k) return;
     e.preventDefault();
-    const n = (i + k + o.tabs.length) % o.tabs.length;
-    setAct(n); if (tabs.current[n]) tabs.current[n].focus();
+    const m = (i + k + o.tabs.length) % o.tabs.length;
+    setAct(m); if (tabs.current[m]) tabs.current[m].focus();
   };
   return (
-    <section ref={ref} id="overview" aria-labelledby="overview-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
-      <TxHead p={p} id="overview" tag={o.tag} hid="overview-title" lead={o.lead} strong={o.strong} />
-      <div className={`${TX_WRAP} rv mt-[clamp(32px,4vw,52px)] overflow-hidden rounded-[28px] bg-white ring-1 ring-ndm-ink/[.06] shadow-[0_30px_60px_-46px_rgba(27,36,43,.45)]`} style={{ transitionDelay: '.08s' }}>
-        <div role="tablist" aria-label="About the treatment" className="no-scrollbar mx-[clamp(14px,2.2vw,28px)] mt-[clamp(14px,2.2vw,28px)] flex gap-1 overflow-x-auto rounded-full bg-ndm-mist p-1">
-          {o.tabs.map((x, i) => (
-            <button key={x.label} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" id={`ov-t-${i}`} aria-controls={`ov-panel-${i}`} aria-selected={i === act} tabIndex={i === act ? 0 : -1}
-              onClick={() => setAct(i)} onKeyDown={(e) => key(e, i)}
-              className={`shrink-0 rounded-full px-4 py-2.5 font-inter text-[14px] font-medium transition-colors sm:flex-1 sm:px-5 ${i === act ? 'bg-white text-ndm-deep shadow-[0_6px_16px_-10px_rgba(27,36,43,.45)]' : 'text-ndm-muted hover:text-ndm-ink'}`}>
-              {x.label}
-            </button>
-          ))}
-        </div>
-        {o.tabs.map((t, i) => (
-        <div key={t.label} id={`ov-panel-${i}`} role="tabpanel" aria-labelledby={`ov-t-${i}`} hidden={i !== act} data-pre-keep="" className={`${i === act ? 'ov-in grid' : 'hidden'} gap-7 p-[clamp(20px,2.8vw,40px)] md:grid-cols-[minmax(0,1fr)_minmax(0,300px)] md:items-start md:gap-[clamp(28px,4vw,56px)]`}>
+    <section ref={ref} id="overview" aria-labelledby="overview-title" data-nav="dark" className="ov2 relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(80px,9vw,128px)] text-white">
+      <span aria-hidden="true" className="ov2-orb ov2-orb-a" /><span aria-hidden="true" className="ov2-orb ov2-orb-b" /><span aria-hidden="true" className="ov2-orb ov2-orb-c" />
+      <svg aria-hidden="true" viewBox="0 0 400 400" className="ov2-ring"><circle cx="200" cy="200" r="190" /><circle cx="200" cy="200" r="150" /></svg>
+      <div className={`${TX_WRAP} relative`}>
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,.8fr)] lg:items-end">
           <div>
-            <h3 className="font-aeonik text-[clamp(26px,2.4vw,34px)] font-normal leading-[1.1] tracking-[-0.025em] text-ndm-ink">{t.label}</h3>
-            {t.text.map((x, k) => <p key={k} className="mt-4 max-w-[62ch] font-inter text-[16px] leading-[1.75] text-ndm-ink/80">{x}</p>)}
-            <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
-              <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
-              {t.link && <a href={t.link[0]} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-deep">{t.link[1]}<IconArrow className="transition-transform group-hover:translate-x-1" /></a>}
-            </div>
+            <Eyebrow dark className="rv">{n && <span className="tabular-nums text-ndm-sky">{n}</span>}{o.tag}</Eyebrow>
+            <TwoTone id="overview-title" dark className="rv mt-5" size="text-[clamp(32px,3.6vw,54px)]" lead={twoLine(o.lead)} strong={o.strong} style={{ transitionDelay: '.06s' }} />
           </div>
-          <aside className="ov-side flex flex-col rounded-[20px] p-5 ring-1 ring-ndm-ink/[.06]">
-            <span className="font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-muted">At a glance</span>
-            <span className="mt-3 flex items-baseline gap-2.5">
-              <span className="font-aeonik text-[34px] leading-none tracking-[-0.03em] text-ndm-deep tabular-nums">{t.stat[0]}</span>
-              <span className="font-inter text-[14px] leading-[1.35] text-ndm-ink">{t.stat[1]}</span>
-            </span>
-            <dl className="mt-5 grid gap-2.5 border-t border-ndm-line pt-4">
-              {p.facts.map(([k, v]) => <div key={k} className="flex items-baseline justify-between gap-3 font-inter text-[13.5px]"><dt className="text-ndm-muted">{k}</dt><dd className="text-right font-medium text-ndm-ink">{v}</dd></div>)}
-            </dl>
-          </aside>
+          <p className="rv max-w-[44ch] font-inter text-[15.5px] leading-[1.65] text-white/70 lg:justify-self-end lg:pb-2" style={{ transitionDelay: '.1s' }}>Five things to know before your first appointment. Pick a topic.</p>
         </div>
-        ))}
+        <div className="rv mt-[clamp(32px,4vw,52px)] grid gap-4 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-6" style={{ transitionDelay: '.12s' }}>
+          <div role="tablist" aria-label="About the treatment" aria-orientation="vertical" className="no-scrollbar -mx-[var(--gx)] flex gap-2 overflow-x-auto px-[var(--gx)] lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0">
+            {o.tabs.map((x, i) => (
+              <button key={x.label} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" id={`ov-t-${i}`} aria-controls={`ov-panel-${i}`} aria-selected={i === act} tabIndex={i === act ? 0 : -1}
+                onClick={() => setAct(i)} onKeyDown={(e) => key(e, i)} className={`ov2-tab group shrink-0 ${i === act ? 'is-on' : ''}`}>
+                <span className="ov2-num font-aeonik tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                <span className="font-inter text-[15px] font-medium leading-[1.3]">{x.label}</span>
+                <span aria-hidden="true" className="ov2-go ml-auto hidden lg:grid"><IconArrow size={12} /></span>
+              </button>
+            ))}
+          </div>
+          <div className="ov2-panel relative overflow-hidden rounded-[28px]">
+            {o.tabs.map((t, i) => (
+              <div key={t.label} id={`ov-panel-${i}`} role="tabpanel" aria-labelledby={`ov-t-${i}`} hidden={i !== act} data-pre-keep="" className={`${i === act ? 'ov-in grid' : 'hidden'} gap-8 p-[clamp(22px,3vw,44px)] md:grid-cols-[minmax(0,1fr)_200px] md:items-start`}>
+                <div>
+                  <h3 className="font-aeonik text-[clamp(26px,2.4vw,34px)] font-normal leading-[1.1] tracking-[-0.025em] text-white">{t.label}</h3>
+                  {t.text.map((x, k) => <p key={k} className="mt-4 max-w-[60ch] font-inter text-[16px] leading-[1.75] text-white/80">{x}</p>)}
+                  <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+                    <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
+                    {t.link && <a href={t.link[0]} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-sky">{t.link[1]}<IconArrow className="transition-transform group-hover:translate-x-1" /></a>}
+                  </div>
+                </div>
+                <aside className="ov2-stat relative grid aspect-square w-[180px] place-items-center justify-self-start md:w-full md:justify-self-end">
+                  <svg aria-hidden="true" viewBox="0 0 100 100" className="ov2-stat-ring absolute inset-0"><circle cx="50" cy="50" r="46" /></svg>
+                  <span className="relative px-5 text-center">
+                    <span className="block font-aeonik text-[clamp(38px,3.6vw,52px)] leading-none tracking-[-0.03em] text-white tabular-nums">{t.stat[0]}</span>
+                    <span className="mt-2 block font-inter text-[12.5px] leading-[1.35] text-white/70">{t.stat[1]}</span>
+                  </span>
+                </aside>
+              </div>
+            ))}
+            <dl className="grid grid-cols-1 border-t border-white/10 px-[clamp(22px,3vw,44px)] py-5 sm:grid-cols-3 sm:gap-6">
+              {p.facts.map(([k, v]) => <div key={k} className="flex items-baseline justify-between gap-3 py-1 font-inter text-[13.5px] sm:block"><dt className="text-white/55">{k}</dt><dd className="font-medium text-white sm:mt-1">{v}</dd></div>)}
+            </dl>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -332,6 +352,9 @@ const JR_CSS = `
 .jr-card.is-on{clip-path:inset(0 0 0 0 round 32px)}
 .jr-card .jr-pic{transform:scale(1.12);transition:transform 2.2s cubic-bezier(.2,.7,.2,1)}
 .jr-card.is-on .jr-pic{transform:scale(1)}
+/* desktop: the photo fills the right two thirds and fades into the navy card, so the face sits right of the words; phones: face centred */
+.jr-card{background:#0B1B29}
+@media (min-width:768px){.jr-card .jr-pic{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 34%);mask-image:linear-gradient(90deg,transparent 0,#000 34%)}}
 .jr-shade{background:linear-gradient(90deg,rgba(9,22,34,.9) 0%,rgba(9,22,34,.72) 34%,rgba(9,22,34,.18) 66%,rgba(9,22,34,0) 100%),linear-gradient(0deg,rgba(10,52,84,.72) 0%,rgba(10,52,84,0) 55%)}
 @media (max-width:767px){.jr-card{clip-path:inset(0 50% 0 50% round 24px)}.jr-card.is-on{clip-path:inset(0 0 0 0 round 24px)}
   .jr-shade{background:linear-gradient(0deg,rgba(9,22,34,.94) 0%,rgba(9,22,34,.8) 42%,rgba(9,22,34,.1) 78%,rgba(9,22,34,0) 100%)}}
@@ -360,7 +383,7 @@ function ProcAnalysis() {
     <section aria-labelledby="analysis-title" className="relative z-10 px-[var(--gx)] py-[clamp(40px,5vw,72px)]">
       <style>{JR_CSS}</style>
       <div ref={card} className={`jr-card ${TX_WRAP} relative isolate flex min-h-[600px] flex-col justify-end md:min-h-[clamp(460px,40vw,520px)] overflow-hidden rounded-[24px] p-6 text-white md:justify-center md:rounded-[32px] md:p-[56px] ${on ? 'is-on' : ''}`}>
-        <img src="assets/treatments/journey-skin.webp" alt="" loading="lazy" decoding="async" className="jr-pic absolute inset-0 -z-20 h-full w-full object-cover object-[62%_28%] md:object-[70%_30%]" />
+        <img src="assets/treatments/journey-skin.webp" alt="" loading="lazy" decoding="async" className="jr-pic absolute inset-0 -z-20 h-full w-full object-cover object-[47%_28%] md:left-auto md:w-[66%] md:object-[50%_30%]" />
         <span aria-hidden="true" className="jr-shade absolute inset-0 -z-10" />
         <div className="max-w-[620px]">
           <div className="jr-t" style={t(0)}><Eyebrow dark>Start your journey</Eyebrow></div>
@@ -499,19 +522,22 @@ function ProcGuide({ p }) {
           <Eyebrow className="rv">{n && <span className="tabular-nums text-ndm-deep">{n}</span>}{g.tag}</Eyebrow>
           <TwoTone id="guide-title" className="rv mt-5" size="text-[clamp(32px,3.4vw,50px)]" lead={twoLine(g.lead)} strong={g.strong} style={{ transitionDelay: '.06s' }} />
           <p className="rv mt-4 max-w-[44ch] font-inter text-[15.5px] leading-[1.65] text-ndm-muted" style={{ transitionDelay: '.1s' }}>{g.intro}</p>
-          <div className="rv guide-doc mt-7 rounded-[22px] p-5" style={{ transitionDelay: '.14s' }}>
-            <div className="flex items-center gap-3.5">
-              <img src={g.doctor.img} alt={`${g.doctor.name}, ${g.doctor.role}, NewDermaMed`} loading="lazy" decoding="async" className="size-14 shrink-0 rounded-full object-cover object-[50%_20%] ring-2 ring-white" />
-              <span className="min-w-0">
-                <span className="block font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-muted">Medical direction</span>
-                <span className="mt-0.5 block font-aeonik text-[19px] leading-[1.2] text-ndm-ink">{g.doctor.name}</span>
-                <span className="block font-inter text-[13px] text-ndm-muted">{g.doctor.role}</span>
-              </span>
+          {/* round 24: a book card instead of the medical-direction card */}
+          <div className="rv guide-book relative mt-7 overflow-hidden rounded-[26px] p-6 text-white" style={{ transitionDelay: '.14s' }}>
+            <span aria-hidden="true" className="guide-book-glow" />
+            <span className="relative inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 font-inter text-[12px] font-medium text-white/90 ring-1 ring-white/20"><i aria-hidden="true" className="size-1.5 rounded-full bg-ndm-amber" />Free consultation</span>
+            <p className="relative mt-4 font-aeonik text-[clamp(26px,2.2vw,32px)] font-normal leading-[1.08] tracking-[-0.02em]">Talk it through<br /><span className="tt-strong text-ndm-sky">with our team</span></p>
+            <ul className="relative mt-4 grid gap-2" role="list">
+              {['Free consultation and VISIA® skin analysis', 'Uptown or Downtown Toronto', 'No pressure, just a clear plan'].map((x) => (
+                <li key={x} className="flex items-start gap-2.5 font-inter text-[14.5px] leading-[1.45] text-white/85"><IconCheckBadge className="mt-[2px] shrink-0 text-ndm-sky" />{x}</li>
+              ))}
+            </ul>
+            <div className="relative mt-6 flex flex-wrap items-center gap-x-4 gap-y-3">
+              <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
+              <a href={tel(PHONES[0].num)} className="font-inter text-[14px] text-white/80 underline-offset-4 hover:text-white hover:underline">or call {PHONES[0].num}</a>
             </div>
-            <p className="mt-4 font-inter text-[14px] leading-[1.55] text-ndm-ink/80">{g.trust}</p>
-            <p className="mt-3 flex items-center gap-2 font-inter text-[12.5px] text-ndm-muted"><IconCheckBadge size={14} className="shrink-0 text-ndm-deep" />Page updated <time dateTime={g.updated[0]}>{g.updated[1]}</time></p>
-            <Btn href="#/book" v="book" hot sm className="mt-5">Book Free Consultation</Btn>
           </div>
+          <p className="rv mt-4 flex items-center gap-2 font-inter text-[12.5px] text-ndm-muted" style={{ transitionDelay: '.16s' }}><IconCheckBadge size={14} className="shrink-0 text-ndm-deep" />Page updated <time dateTime={g.updated[0]}>{g.updated[1]}</time></p>
         </div>
         <ol className="grid gap-3" role="list">
           {g.items.map((it, i) => (
@@ -530,7 +556,7 @@ function ProcGuide({ p }) {
       </div>
       <nav aria-labelledby="related-title" className={`${TX_WRAP} mt-[clamp(48px,5vw,72px)]`}>
         <div className="flex items-end justify-between gap-4">
-          <h3 id="related-title" className="rv font-aeonik text-[clamp(24px,2.2vw,32px)] font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink">Related <span className="tt-strong text-ndm-deep">treatments and pages</span></h3>
+          <h3 id="related-title" className="rv font-aeonik text-[clamp(24px,2.2vw,32px)] font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink">Related <span className="tt-strong text-ndm-deep">treatments</span></h3>
         </div>
         <ul className="no-scrollbar -mx-[var(--gx)] mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-[var(--gx)] pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 xl:grid-cols-6" role="list" style={{ scrollPaddingInline: 'var(--gx)' }}>
           {g.related.map(([t, h, img, kind], i) => (

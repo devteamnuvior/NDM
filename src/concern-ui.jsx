@@ -7,7 +7,23 @@ const CN_CSS = `
 .cn-role-primary{background:#0F80C3;color:#fff}
 .cn-role-supporting{background:rgba(15,128,195,.1);color:#0A4F7A}
 .cn-role-combination{background:#FFF1DB;color:#8A5A12}
-.cn-role-bio{background:#0A4F7A;color:#fff}
+/* round 24: home care cards */
+.cn-hc{background:linear-gradient(180deg,#FAFAF8 0%,#F1F6F9 45%,#FAFAF8 100%)}
+.cn-hc-field.cn-hc-blue{background:linear-gradient(160deg,#EAF4FA,#D5E9F5)}
+.cn-hc-field.cn-hc-peach{background:linear-gradient(160deg,#FBF1E6,#F4DFC8)}
+.cn-hc-field.cn-hc-mist{background:linear-gradient(160deg,#F4F3EF,#E7E4DC)}
+.cn-hc-orb{position:absolute;left:50%;top:54%;width:62%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,255,255,0) 70%)}
+.cn-hc-img{filter:drop-shadow(0 26px 30px rgba(27,36,43,.22));transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+.cn-hc-card:hover .cn-hc-img{transform:translateY(-8px) rotate(-2deg)}
+.cn-hc-sun{background:rgba(255,255,255,.75);color:#C98A2B;box-shadow:0 20px 40px -24px rgba(201,138,43,.6)}
+.cn-hc-card{transition:box-shadow .5s ease}
+.cn-hc-card:hover{box-shadow:0 34px 60px -40px rgba(15,60,95,.45)}
+@media (prefers-reduced-motion:reduce){.cn-hc-img,.cn-hc-card{transition:none}}
+.cn-role-bio,.cn-role-bio-stimulator{background:#0A4F7A;color:#fff}
+/* round 22: tags on photos are the site's white glass pill with a colour dot for the role */
+.cn-ptag{display:inline-flex;align-items:center;gap:7px;border-radius:999px;background:rgba(255,255,255,.88);padding:6px 12px 6px 10px;font:500 12px/1.2 Inter,"Helvetica Neue",Arial,sans-serif;color:#1B242B;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.cn-ptag i{width:7px;height:7px;border-radius:99px;background:#0F80C3}
+.cn-ptag-supporting i{background:#26B1E7}.cn-ptag-combination i{background:#FFA617}.cn-ptag-bio-stimulator i{background:#0A4F7A}
 .cn-card{transition:transform .5s var(--e-out),box-shadow .5s var(--e-out)}
 .cn-card:hover{transform:translateY(-3px);box-shadow:0 30px 50px -34px rgba(15,60,95,.4)}
 .cn-bio{isolation:isolate;background:linear-gradient(135deg,#EAF5FB 0%,#F4F9FC 55%,#FBF3EC 100%);box-shadow:0 0 0 1px rgba(15,128,195,.14)} /* NDM blue to warm paper, no purple (round 21) */
@@ -49,6 +65,7 @@ function CnIntro({ p }) {
     <section ref={ref} id="about" aria-labelledby="about-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] pt-[clamp(40px,5vw,72px)] pb-[clamp(24px,3vw,40px)]">
       <div className={`${TX_WRAP} grid gap-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,.75fr)] lg:gap-[clamp(40px,5vw,80px)]`}>
         <div>
+          <Eyebrow className="rv mb-6">{txNum(p, 'about') && <span className="tabular-nums text-ndm-deep">{txNum(p, 'about')}</span>}Overview</Eyebrow>
           <h2 id="about-title" className="sr-only">About this concern</h2>
           {p.lede.map((x, i) => <p key={i} className="rv max-w-[62ch] font-inter text-[clamp(17px,1.35vw,20px)] leading-[1.7] text-ndm-ink/90 [&+p]:mt-5" style={{ transitionDelay: `${0.04 * i}s` }}>{x}</p>)}
         </div>
@@ -134,7 +151,7 @@ function CnOptionCard({ o, i, dark }) {
         {o.img && (
           <a href={o.file} tabIndex={-1} aria-hidden="true" className="relative block aspect-[16/9] overflow-hidden bg-ndm-mist">
             <img src={o.img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-[1.05]" style={{ objectPosition: '50% 30%' }} />
-            <span className={`absolute left-3 top-3 ${cnRole(o.role)}`}>{o.role}</span>
+            <span className={`cn-ptag cn-ptag-${o.role.toLowerCase()} absolute left-3 top-3`}><i aria-hidden="true" />{o.role}</span>
           </a>
         )}
         <div className="flex flex-1 flex-col p-5 md:p-6">
@@ -275,34 +292,51 @@ function CnCompare({ p }) {
 }
 
 /* ---------------------------------------------------------------- skincare at home: the shop categories that match this concern */
+/* round 24: home care, redesigned. Heading on the left, a short note and the shop on the right, then one card per need with the
+   product photo from our shop on a soft colour field (sun protection stays advice at the visit, as we stock no SPF online) */
+const CN_HOME_TINT = ['cn-hc-blue', 'cn-hc-peach', 'cn-hc-mist'];
 function CnHome({ p }) {
   const ref = useRef(null);
   useReveal(ref);
+  const n = txNum(p, 'home-care');
   return (
-    <section ref={ref} id="home-care" aria-labelledby="home-title" className="relative z-10 scroll-mt-[170px] bg-ndm-mist px-[var(--gx)] py-[clamp(56px,6vw,96px)]">
-      <TxHead p={p} id="home-care" tag="Between visits" hid="home-title" lead="Skincare" strong="at home" text="Medical-grade skincare from our shop supports your treatment between visits. Your provider suggests a routine at your consultation." />
-      <ul role="list" className={`${TX_WRAP} mt-[clamp(28px,3.4vw,44px)] grid gap-4 sm:grid-cols-2 lg:grid-cols-3`}>
+    <section ref={ref} id="home-care" aria-labelledby="home-title" className="cn-hc relative z-10 scroll-mt-[170px] overflow-hidden px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
+      <div className={`${TX_WRAP} grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,.9fr)] lg:items-end`}>
+        <div>
+          <Eyebrow className="rv">{n && <span className="tabular-nums text-ndm-deep">{n}</span>}Home care</Eyebrow>
+          <TwoTone id="home-title" className="rv mt-5" size="text-[clamp(32px,3.4vw,50px)]" lead={<>Your skin,<br /></>} strong="between treatments" style={{ transitionDelay: '.06s' }} />
+        </div>
+        <div className="rv lg:pb-1" style={{ transitionDelay: '.1s' }}>
+          <p className="max-w-[46ch] font-inter text-[15.5px] leading-[1.65] text-ndm-muted">Medical-grade skincare from our shop supports your treatment at home. Your provider suggests a routine for your skin at your consultation.</p>
+          <div className="mt-5"><Btn href={SHOP_URL} target="_blank" rel="noopener" v="line" sm>Visit the skincare shop<span className="sr-only"> (opens in a new tab)</span></Btn></div>
+        </div>
+      </div>
+      <ul role="list" className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid gap-4 md:grid-cols-3`}>
         {p.home.map((h, i) => (
-          <li key={h.t} className="rv" style={{ transitionDelay: `${0.05 * i}s` }}>
-            {h.href ? (
-              <a href={h.href} className="cn-card group flex h-full flex-col rounded-[22px] bg-white p-5 ring-1 ring-ndm-ink/[.06] md:p-6">
-                <span className="font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-deep">{h.cat}</span>
-                <span className="mt-3 block font-aeonik text-[22px] leading-[1.15] tracking-[-0.01em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{h.t}</span>
-                <span className="mt-2 block flex-1 font-inter text-[14.5px] leading-[1.6] text-ndm-ink/75">{h.text}</span>
-                <span className="mt-5 inline-flex items-center gap-1.5 font-inter text-[14px] font-semibold text-ndm-deep">Shop {h.cat.toLowerCase()}<IconArrow size={12} className="transition-transform group-hover:translate-x-0.5" /></span>
-              </a>
-            ) : (
-              <div className="flex h-full flex-col rounded-[22px] bg-white/70 p-5 ring-1 ring-ndm-ink/[.06] md:p-6">
-                <span className="font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-muted">{h.cat}</span>
-                <span className="mt-3 block font-aeonik text-[22px] leading-[1.15] tracking-[-0.01em] text-ndm-ink">{h.t}</span>
-                <span className="mt-2 block flex-1 font-inter text-[14.5px] leading-[1.6] text-ndm-ink/75">{h.text}</span>
-                <span className="mt-5 inline-flex items-center gap-1.5 font-inter text-[14px] font-semibold text-ndm-muted">Advice at your visit</span>
+          <li key={h.t} className="rv" style={{ transitionDelay: `${0.06 * i}s` }}>
+            <article className="cn-hc-card group flex h-full flex-col overflow-hidden rounded-[26px] bg-white ring-1 ring-ndm-ink/[.06]">
+              <div className={`cn-hc-field ${CN_HOME_TINT[i % 3]} relative grid aspect-[5/4] place-items-center overflow-hidden`}>
+                <span aria-hidden="true" className="cn-hc-orb" />
+                {h.product
+                  ? <img src={SHOP_IMG + h.product.img} alt={`${h.product.n}, ${h.product.size}`} loading="lazy" decoding="async" className="cn-hc-img relative h-[78%] w-auto object-contain" />
+                  : <span aria-hidden="true" className="cn-hc-sun relative grid size-[44%] place-items-center rounded-full"><svg viewBox="0 0 24 24" className="size-[46%]" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="4.2" /><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" /></svg></span>}
+                <span className="absolute left-4 top-4 rounded-full bg-white/85 px-3 py-1.5 font-inter text-[12px] font-medium text-ndm-ink backdrop-blur-[8px]">{String(i + 1).padStart(2, '0')} · {h.cat}</span>
               </div>
-            )}
+              <div className="flex flex-1 flex-col p-5 md:p-6">
+                <h3 className="font-aeonik text-[clamp(22px,1.9vw,26px)] font-normal leading-[1.15] tracking-[-0.015em] text-ndm-ink">{h.t}</h3>
+                <p className="mt-2 flex-1 font-inter text-[14.5px] leading-[1.6] text-ndm-ink/75">{h.text}</p>
+                {h.product ? (
+                  <a href={h.product.href} target="_blank" rel="noopener" className="mt-5 flex items-center justify-between gap-3 rounded-[14px] bg-ndm-paper px-4 py-3 transition-colors hover:bg-ndm-mist">
+                    <span className="min-w-0"><span className="block font-inter text-[11.5px] uppercase tracking-[.14em] text-ndm-muted">In our shop</span><span className="mt-0.5 block truncate font-inter text-[14.5px] font-medium capitalize text-ndm-ink">{h.product.n} · {h.product.size}</span></span>
+                    <span aria-hidden="true" className="grid size-8 shrink-0 place-items-center rounded-full bg-ndm-deep text-white transition-transform duration-500 group-hover:-rotate-45"><IconArrow size={12} /></span>
+                    <span className="sr-only"> (opens the shop in a new tab)</span>
+                  </a>
+                ) : <p className="mt-5 rounded-[14px] bg-ndm-paper px-4 py-3 font-inter text-[14px] font-medium text-ndm-muted">Ask us for a recommendation at your visit</p>}
+              </div>
+            </article>
           </li>
         ))}
       </ul>
-      <div className={`${TX_WRAP} mt-8 flex justify-center`}><Btn href={SHOP_URL} target="_blank" rel="noopener" v="line">Visit the skincare shop</Btn></div>
     </section>
   );
 }
@@ -340,20 +374,33 @@ function CnArticles({ p }) {
 }
 
 /* ---------------------------------------------------------------- related concerns and the way back to the hub */
+/* round 24: related treatments as photo cards (the Botox page's Related row), each linking to the treatment's own page */
 function CnRelated({ p }) {
   const ref = useRef(null);
   useReveal(ref);
   return (
-    <section ref={ref} id="related" aria-labelledby="related-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] pb-[clamp(48px,5vw,80px)]">
-      <div className={`${TX_WRAP} rv rounded-[24px] bg-white p-6 ring-1 ring-ndm-ink/[.06] md:p-8`}>
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <h2 id="related-title" className="font-aeonik text-[clamp(22px,2vw,28px)] font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink">Related concerns</h2>
-          <a href="#/concerns" className="group inline-flex items-center gap-1.5 font-inter text-[14px] font-semibold text-ndm-deep">All concerns<IconArrow size={12} className="transition-transform group-hover:translate-x-0.5" /></a>
+    <section ref={ref} id="related" aria-labelledby="related-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] pb-[clamp(56px,6vw,96px)]">
+      <nav aria-labelledby="related-title" className={TX_WRAP}>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h2 id="related-title" className="rv font-aeonik text-[clamp(26px,2.4vw,36px)] font-normal leading-[1.1] tracking-[-0.02em] text-ndm-ink">Related <span className="tt-strong text-ndm-deep">treatments</span></h2>
+          <a href={slug('Pricing')} className="rv group inline-flex items-center gap-1.5 font-inter text-[14px] font-semibold text-ndm-deep">All treatments and prices<IconArrow size={12} className="transition-transform group-hover:translate-x-0.5" /></a>
         </div>
-        <ul className="mt-4 flex flex-wrap gap-2" role="list">
-          {p.rel.map((r) => <li key={r.file}><a href={r.file} className="inline-flex items-center gap-2 rounded-full bg-ndm-paper px-4 py-2 font-inter text-[14px] text-ndm-ink ring-1 ring-ndm-ink/[.08] transition-colors hover:border-ndm-blue hover:text-ndm-deep hover:ring-ndm-deep">{r.n}<IconArrow size={11} className="text-ndm-deep" /></a></li>)}
+        <ul className="no-scrollbar -mx-[var(--gx)] mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-[var(--gx)] pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 xl:grid-cols-6" role="list" style={{ scrollPaddingInline: 'var(--gx)' }}>
+          {p.related_tx.map(([t, k, img, kind], i) => (
+            <li key={t} className="rv w-[62%] shrink-0 snap-start sm:w-auto" style={{ transitionDelay: `${0.04 * i}s` }}>
+              <a href={slug(k)} className="guide-rel group relative block aspect-[4/5] overflow-hidden rounded-[20px] bg-ndm-mist text-white">
+                <img src={img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.06]" />
+                <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#0B0F13]/85 via-[#0B0F13]/20 to-transparent" />
+                <span className="absolute left-3 top-3 rounded-full bg-white/85 px-2.5 py-1 font-inter text-[11.5px] font-medium text-ndm-ink backdrop-blur-[6px]">{kind}</span>
+                <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3.5">
+                  <span className="font-aeonik text-[18px] leading-[1.15]">{t}</span>
+                  <span aria-hidden="true" className="grid size-8 shrink-0 place-items-center rounded-full bg-white text-ndm-deep transition-transform duration-500 group-hover:-rotate-45"><IconArrow size={12} /></span>
+                </span>
+              </a>
+            </li>
+          ))}
         </ul>
-      </div>
+      </nav>
     </section>
   );
 }

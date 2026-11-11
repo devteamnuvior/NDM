@@ -53,7 +53,9 @@ rep('<meta name="description" content="NewDermaMed is Toronto\'s award-winning c
 
 css = CSS_PROC + SPACING + CN_CSS + '''
   /* concern page (round 20): sections that came with their own grey band share the paper colour of the Botox page */
-  main>section#assess,main>section#home-care{background-color:#FAFAF8!important}
+  main>section#assess{background-color:#FAFAF8!important}
+  /* round 24: home care keeps its soft blue wash between paper edges */
+  html main>section#home-care.cn-hc{background-image:linear-gradient(180deg,#FAFAF8 0%,#EEF5FA 40%,#F4F1EA 75%,#FAFAF8 100%)!important}
   /* the same section spacing as the Botox page */
   main>section#understand,main>section#assess,main>section#home-care,main>section#read{padding-top:clamp(64px,7vw,104px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
 '''
@@ -116,7 +118,8 @@ function App() {
 }
 
 '''
-data = '/* ---------------------------------------------------------------- the concern (src/concern-data.json) */\nconst CN = ' + json.dumps(CN, ensure_ascii=False) + ';\n'
+data = '/* ---------------------------------------------------------------- the concern (src/concern-data.json) */\nconst CN = ' + json.dumps(CN, ensure_ascii=False) + ';\n' + \
+  '/* round 29: option prices come from the price list (priceFor) */\n[...CN.opts, ...(CN.bio || [])].forEach((o) => { const v = priceFor(o.n); if (v && o.price) o.price[0] = v; });\n'
 s = s[:a] + '\n' + ui + '\n' + data + '\n/* ---------------------------------------------------------------- app (concern page) */' + app + s[b:]
 (root / OUT).write_text(s, encoding='utf-8')
 print('wrote', OUT, len(s))

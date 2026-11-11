@@ -277,7 +277,7 @@ function AboutFilm({ hero = false }) {
 
 /* ---------------------------------------------------------------- our clinics: one compact light section per clinic.
    A full-width map (Leaflet + Esri light grey tiles) with the clinic photo popped up on its pin and numbered parking pins; the details sit below in one tidy row. */
-function ClinicMap({ c }) {
+function ClinicMap({ c, h = 'h-[clamp(320px,40vw,500px)]' }) {
   const box = useRef(null);
   const [on, setOn] = useState(false);
   useEffect(() => {
@@ -302,14 +302,14 @@ function ClinicMap({ c }) {
         .bindTooltip(info, { direction: 'top', offset: [0, -16], className: 'map-tip' })
         .bindPopup(`${info}<br><a href="${href}" target="_blank" rel="noopener">Directions</a>`, { offset: [0, -14] });
     });
-    map.fitBounds(L.latLngBounds([c.ll, ...c.parking.map((x) => x[3])]), { paddingTopLeft: [80, 200], paddingBottomRight: [80, 80], maxZoom: 16 });
+    map.fitBounds(L.latLngBounds([c.ll, ...c.parking.map((x) => x[3])]), { paddingTopLeft: [40, 200], paddingBottomRight: [40, 50], maxZoom: 16 });
     const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setOn(true); io.disconnect(); } }, { threshold: 0.35 });
     io.observe(el);
     return () => { io.disconnect(); map.remove(); };
   }, []);
   return (
     <div className={`clinic-map relative isolate overflow-hidden rounded-[22px] ring-1 ring-ndm-ink/[.08] ${on ? 'is-on' : ''}`}>
-      <div ref={box} role="img" aria-label={`Map of the ${c.name} clinic at ${c.addr.join(', ')} and ${c.parking.length} nearby parking lots`} className="h-[clamp(320px,40vw,500px)] w-full bg-[#F2F2EF]" />
+      <div ref={box} role="img" aria-label={`Map of the ${c.name} clinic at ${c.addr.join(', ')} and ${c.parking.length} nearby parking lots`} className={`${h} w-full bg-[#F2F2EF]`} />
       <div className="pointer-events-none absolute bottom-7 left-3 z-[500] flex flex-wrap gap-2 sm:bottom-8 sm:left-4">
         <span className="map-legend"><i className="map-legend-dot" />Clinic</span>
         <span className="map-legend"><i className="map-legend-p">P</i><span>Parking<span className="map-hint-hover">, hover for address</span><span className="map-hint-tap">, tap for address</span></span></span>
@@ -318,58 +318,61 @@ function ClinicMap({ c }) {
   );
 }
 
-function ClinicBand({ c, i }) {
-  const ref = useRef(null);
-  useReveal(ref);
+/* round 22: the two clinics side by side in one section (stacked on phones), each a white card with its map and details */
+function ClinicCard({ c, i }) {
   const hid = `clinic-${c.id}`;
   const num = tel(c.phone).replace('tel:', '');
-  const label = 'font-inter text-[12px] uppercase tracking-[.14em] text-ndm-muted';
+  const label = 'font-inter text-[11px] uppercase tracking-[.14em] text-ndm-muted';
   const link = 'underline-offset-4 transition-colors hover:text-ndm-deep hover:underline';
   return (
-    <section ref={ref} id={c.id} aria-labelledby={hid} className={`relative z-10 scroll-mt-[100px] pb-[clamp(48px,6vw,80px)] pt-[clamp(48px,6vw,80px)] ${i ? 'bg-white' : 'bg-ndm-paper'}`}>
-      <div className="flex flex-col gap-5 px-[var(--gx)] md:flex-row md:items-end md:justify-between">
-        <div>
-          <span className="rv inline-flex items-center gap-1.5 rounded-full bg-ndm-blue/10 px-3.5 py-1.5 font-inter text-[13px] font-medium text-ndm-deep"><IconPin size={13} />{c.tag}</span>
-          <h2 id={hid} className="rv mt-4 font-aeonik text-[clamp(32px,3.6vw,52px)] font-normal leading-[1.04] tracking-[-0.035em] text-ndm-ink" style={{ transitionDelay: '.05s' }}>
-            {c.title[0]}<br /><span className="tt-strong text-ndm-deep">{c.title[1]}</span>
-          </h2>
-          <p className="rv mt-3 max-w-[56ch] font-inter text-[15px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.08s' }}>{c.blurb}</p>
-        </div>
-        <div className="rv flex shrink-0 flex-wrap gap-2.5" style={{ transitionDelay: '.1s' }}>
-          <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
-          <Btn href={c.map} target="_blank" rel="noopener" v="line">Get directions<span className="sr-only"> to the {c.name} clinic (opens in a new tab)</span></Btn>
+    <article id={c.id} aria-labelledby={hid} className="rv flex scroll-mt-[100px] flex-col overflow-hidden rounded-[24px] bg-white ring-1 ring-ndm-ink/[.06] shadow-[0_30px_60px_-46px_rgba(15,60,95,.45)]" style={{ transitionDelay: `${0.08 * i}s` }}>
+      <div className="relative">
+        <ClinicMap c={c} h="h-[clamp(250px,22vw,310px)]" />
+        <div className="pointer-events-none absolute inset-x-3 top-3 z-[500] flex items-start justify-between gap-3">
+          <span className="rounded-[16px] bg-white/95 px-4 py-2.5 shadow-[0_14px_30px_-18px_rgba(11,15,19,.5)] backdrop-blur-[8px]">
+            <span className="flex items-center gap-1.5 font-inter text-[11.5px] font-medium text-ndm-deep"><IconPin size={12} />{c.area}</span>
+            <h3 id={hid} className="mt-0.5 font-aeonik text-[clamp(22px,1.9vw,27px)] font-normal leading-[1.1] tracking-[-0.02em] text-ndm-ink">{c.title[0]} <span className="tt-strong text-ndm-deep">{c.title[1]}</span></h3>
+          </span>
         </div>
       </div>
-      <div className="rv mt-8 px-[var(--gx)]" style={{ transitionDelay: '.12s' }}><ClinicMap c={c} /></div>
-      <div className="mt-8 grid gap-6 px-[var(--gx)] sm:grid-cols-3 lg:gap-8">
-        <div className="rv">
+      <div className="grid gap-x-5 gap-y-4 px-5 pt-5 sm:grid-cols-[1.15fr_1fr_1fr]">
+        <div>
           <p className={label}>Address</p>
-          <p className="mt-2 font-inter text-[15px] leading-[1.5] text-ndm-ink"><a href={c.map} target="_blank" rel="noopener" className={link}>{c.addr[0]}<br />{c.addr[1]}<span className="sr-only"> (opens Google Maps)</span></a></p>
-          <p className="mt-1 font-inter text-[13.5px] text-ndm-muted">{c.area}</p>
+          <p className="mt-1.5 font-inter text-[14px] leading-[1.45] text-ndm-ink"><a href={c.map} target="_blank" rel="noopener" className={link}>{c.addr[0]}<br />{c.addr[1]}<span className="sr-only"> (opens Google Maps)</span></a></p>
         </div>
-        <div className="rv" style={{ transitionDelay: '.04s' }}>
-          <p className={label}>Phone &amp; email</p>
-          <p className="mt-2 font-inter text-[15px] leading-[1.6] text-ndm-ink">
+        <div>
+          <p className={label}>Contact</p>
+          <p className="mt-1.5 font-inter text-[14px] leading-[1.45] text-ndm-ink">
             <a href={tel(c.phone)} className={link}>{c.phone}</a> · <a href={`sms:${num}`} className={`${link} text-ndm-muted`}>Text</a><br />
-            <a href={`mailto:${ABOUT_EMAIL}`} className={link}>{ABOUT_EMAIL}</a>
+            <a href={`mailto:${ABOUT_EMAIL}`} className={`${link} break-all`}>{ABOUT_EMAIL}</a>
           </p>
         </div>
-        <div className="rv" style={{ transitionDelay: '.08s' }}>
+        <div>
           <p className={label}>Hours</p>
-          <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 font-inter text-[15px] leading-[1.5]">
+          <dl className="mt-1.5 grid grid-cols-[auto_1fr] gap-x-3 font-inter text-[14px] leading-[1.45]">
             {HOURS.map(([d, h]) => <Fragment key={d}><dt className="text-ndm-muted">{d.replace(' – ', ' to ').replace('Monday', 'Mon').replace('Friday', 'Fri').replace('Saturday', 'Sat')}</dt><dd className="text-ndm-ink">{h.replace(' – ', ' to ')}</dd></Fragment>)}
           </dl>
         </div>
       </div>
-    </section>
+      <div className="mt-auto flex flex-wrap items-center gap-2.5 px-5 pb-5 pt-5">
+        <Btn href="#/book" v="book" hot sm>Book Free Consultation</Btn>
+        <Btn href={c.map} target="_blank" rel="noopener" v="line" sm>Get directions<span className="sr-only"> to the {c.name} clinic (opens in a new tab)</span></Btn>
+      </div>
+    </article>
   );
 }
 
 function AboutClinics() {
+  const ref = useRef(null);
+  useReveal(ref);
   return (
-    <div id="clinics" className="scroll-mt-[100px]">
-      {ABOUT_CLINICS.map((c, i) => <ClinicBand key={c.id} c={c} i={i} />)}
-    </div>
+    <section ref={ref} id="clinics" aria-labelledby="clinics-title" className="relative z-10 scroll-mt-[100px] bg-ndm-paper px-[var(--gx)] py-[clamp(56px,6vw,96px)]">
+      <Eyebrow className="rv">Our clinics</Eyebrow>
+      <TwoTone id="clinics-title" className="rv mt-4" lead={<>Visit us in<br /></>} strong="Uptown or Downtown" style={{ transitionDelay: '.05s' }} />
+      <div className="mt-[clamp(28px,3.4vw,48px)] grid gap-5 lg:grid-cols-2 lg:gap-6">
+        {ABOUT_CLINICS.map((c, i) => <ClinicCard key={c.id} c={c} i={i} />)}
+      </div>
+    </section>
   );
 }
 
