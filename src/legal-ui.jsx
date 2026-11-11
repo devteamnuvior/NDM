@@ -12,17 +12,45 @@ function LegalPage() {
     LEGAL_TOC.forEach(([id]) => { const e = document.getElementById(id); if (e && e.getBoundingClientRect().top < 220) cur = id; });
     setOn(cur);
   }, []);
-  const go = (id) => (e) => { e.preventDefault(); const el = document.getElementById(id); if (el) scrollToY(el.getBoundingClientRect().top + window.scrollY - 150); };
+  const go = (id) => (e) => { e.preventDefault(); const el = document.getElementById(id); if (el) scrollToY(el.getBoundingClientRect().top + window.scrollY - 190); };
+  const [docs, setDocs] = useState(false);
+  const box = useRef(null);
+  useEffect(() => {
+    if (!docs) return;
+    const off = (e) => { if (box.current && !box.current.contains(e.target)) setDocs(false); };
+    const key = (e) => { if (e.key === 'Escape') setDocs(false); };
+    document.addEventListener('pointerdown', off); window.addEventListener('keydown', key);
+    return () => { document.removeEventListener('pointerdown', off); window.removeEventListener('keydown', key); };
+  }, [docs]);
   return (
-    <section aria-labelledby="lg-title" className="px-[var(--gx)] pb-[clamp(72px,8vw,120px)]">
-      <div className="mx-auto grid max-w-[1180px] gap-10 lg:grid-cols-[250px_minmax(0,1fr)] lg:gap-14">
-        <aside className="lg-side lg:sticky lg:top-[150px] lg:self-start">
-          <p className="lg-k">Legal</p>
-          <ul className="grid gap-1" role="list">{LEGAL_DOCS.map(([t, h]) => <li key={t}><a href={h} aria-current={h === 'privacy.html' ? 'page' : undefined} className="lg-doc">{t}</a></li>)}</ul>
-          <p className="lg-k mt-8">On this page</p>
-          <ul className="lg-toc" role="list">{LEGAL_TOC.map(([id, t]) => <li key={id}><a href={`#${id}`} onClick={go(id)} className={on === id ? 'is-on' : ''}>{t}</a></li>)}</ul>
-          <button type="button" onClick={() => window.print()} className="lg-print mt-7">Print this policy</button>
-        </aside>
+    <>
+    {/* round 30: "On this page" moves to a sticky bar at the top, like the Botox page's section bar; the other legal
+        documents sit in its submenu */}
+    <nav aria-label="On this page" className="tx-nav sticky top-[100px] z-30 bg-ndm-paper/85 backdrop-blur-[10px] xl:top-[120px]">
+      <div className="mx-auto flex max-w-[1180px] items-center gap-2 px-[var(--gx)] py-2.5 xl:px-0">
+        <div ref={box} className="relative shrink-0">
+          <button type="button" onClick={() => setDocs(!docs)} aria-expanded={docs} aria-controls="lg-docs" className="lg-docs-btn">
+            Legal documents<svg width="11" height="11" viewBox="0 0 12 8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true" style={{ transform: docs ? 'rotate(180deg)' : 'none', transition: 'transform .25s ease' }}><path d="M1 2l5 5 5-5" /></svg>
+          </button>
+          <ul id="lg-docs" role="list" className={`lg-docs ${docs ? 'is-on' : ''}`}>
+            {LEGAL_DOCS.map(([t, h]) => <li key={t}><a href={h} aria-current={h === 'privacy.html' ? 'page' : undefined} className="lg-doc">{t}</a></li>)}
+          </ul>
+        </div>
+        <span aria-hidden="true" className="h-6 w-px shrink-0 bg-ndm-ink/10" />
+        <div className="no-scrollbar min-w-0 flex-1 overflow-x-auto">
+          <ul className="flex w-max gap-1" role="list">
+            {LEGAL_TOC.map(([id, t], k) => (
+              <li key={id} className="shrink-0"><a href={`#${id}`} onClick={go(id)} aria-current={on === id ? 'location' : undefined}
+                className={`flex items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 font-inter text-[14px] transition-colors ${on === id ? 'bg-ndm-deep font-medium text-white' : 'text-ndm-ink/80 hover:bg-white hover:text-ndm-ink'}`}>
+                <span className={`tabular-nums ${on === id ? 'text-white/70' : 'text-ndm-muted'}`}>{k < 7 ? k + 1 : ''}</span>{t}</a></li>
+            ))}
+          </ul>
+        </div>
+        <button type="button" onClick={() => window.print()} className="lg-print hidden shrink-0 md:block">Print</button>
+      </div>
+    </nav>
+    <section aria-labelledby="lg-title" className="px-[var(--gx)] pb-[clamp(72px,8vw,120px)] pt-[clamp(28px,3vw,44px)]">
+      <div className="mx-auto max-w-[1180px]">
         <article className="lg-doc-body max-w-[78ch]">
           <TwoTone as="h1" id="lg-title" size="text-[clamp(40px,4.6vw,64px)]" lead={<>Privacy<br /></>} strong="Policy" />
           <p className="lg-meta">Last updated {legalTodo('effective date')}</p>
@@ -109,5 +137,6 @@ function LegalPage() {
         </article>
       </div>
     </section>
+    </>
   );
 }

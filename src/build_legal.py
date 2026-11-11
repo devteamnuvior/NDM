@@ -17,6 +17,9 @@ css = '''
   .lg-toc a{display:block;margin-left:-1px;border-left:2px solid transparent;padding:6px 0 6px 15px;font:13.5px/1.4 Inter,sans-serif;color:#8A949B;transition:color .2s ease,border-color .2s ease}
   .lg-toc a:hover{color:#0F80C3}
   .lg-toc a.is-on{color:#0F80C3;border-left-color:#0F80C3;font-weight:600}
+  .lg-docs-btn{display:inline-flex;align-items:center;gap:8px;border-radius:99px;background:#fff;padding:9px 14px;font:600 14px/1 Inter,sans-serif;color:#0A4F7A;box-shadow:inset 0 0 0 1px rgba(27,36,43,.08)}
+  .lg-docs{position:absolute;left:0;top:calc(100% + 8px);z-index:40;display:grid;gap:2px;min-width:260px;border-radius:18px;background:#fff;padding:8px;box-shadow:0 30px 60px -30px rgba(11,15,19,.45),0 0 0 1px rgba(27,36,43,.06);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .22s ease,transform .22s ease,visibility .22s}
+  .lg-docs.is-on{opacity:1;visibility:visible;transform:none}
   .lg-print{border-radius:99px;border:1px solid #E3E5E7;padding:9px 16px;font:600 13px/1 Inter,sans-serif;color:#5A646C;transition:border-color .2s ease,color .2s ease}
   .lg-print:hover{border-color:#0F80C3;color:#0F80C3}
   .lg-doc-body{counter-reset:sec}

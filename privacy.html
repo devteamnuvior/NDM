@@ -666,6 +666,9 @@
   .lg-toc a{display:block;margin-left:-1px;border-left:2px solid transparent;padding:6px 0 6px 15px;font:13.5px/1.4 Inter,sans-serif;color:#8A949B;transition:color .2s ease,border-color .2s ease}
   .lg-toc a:hover{color:#0F80C3}
   .lg-toc a.is-on{color:#0F80C3;border-left-color:#0F80C3;font-weight:600}
+  .lg-docs-btn{display:inline-flex;align-items:center;gap:8px;border-radius:99px;background:#fff;padding:9px 14px;font:600 14px/1 Inter,sans-serif;color:#0A4F7A;box-shadow:inset 0 0 0 1px rgba(27,36,43,.08)}
+  .lg-docs{position:absolute;left:0;top:calc(100% + 8px);z-index:40;display:grid;gap:2px;min-width:260px;border-radius:18px;background:#fff;padding:8px;box-shadow:0 30px 60px -30px rgba(11,15,19,.45),0 0 0 1px rgba(27,36,43,.06);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .22s ease,transform .22s ease,visibility .22s}
+  .lg-docs.is-on{opacity:1;visibility:visible;transform:none}
   .lg-print{border-radius:99px;border:1px solid #E3E5E7;padding:9px 16px;font:600 13px/1 Inter,sans-serif;color:#5A646C;transition:border-color .2s ease,color .2s ease}
   .lg-print:hover{border-color:#0F80C3;color:#0F80C3}
   .lg-doc-body{counter-reset:sec}
@@ -2660,15 +2663,6 @@ function Promotions({ level = 'h1' }) {
   const entered = useInView(stage, { threshold: 0.2 });
   const [settled, setSettled] = useState(REDUCED);
   useEffect(() => { if (!entered || settled) return; const t = setTimeout(() => setSettled(true), 2300); return () => clearTimeout(t); }, [entered]);
-  /* alpha (round 29): the cards travel along the wheel's circle from the left into place as the stage comes into view */
-  const [spin, setSpin] = useState(REDUCED ? 0 : 5);
-  useEffect(() => {
-    if (!entered || REDUCED) return;
-    let raf, t0;
-    const step = (t) => { if (!t0) t0 = t; const q = Math.min(1, (t - t0) / 1900); setSpin(5 * Math.pow(1 - q, 3)); if (q < 1) raf = requestAnimationFrame(step); };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [entered]);
   useEffect(() => {
     /* full-screen stage: size the wheel to both the width and the viewport height */
     const fit = () => { const w = stage.current ? stage.current.clientWidth : window.innerWidth; setK(Math.max(0.72, Math.min(1.12, w / 1240, (window.innerHeight - 340) / 520))); };
@@ -2699,13 +2693,13 @@ function Promotions({ level = 'h1' }) {
           className="sw-stage relative mt-4 select-none outline-none md:mt-6" style={{ height: 500 * k + 28, touchAction: 'pan-y' }}>
           {SPECIALS.map((s, i) => {
             let d = i - act; if (d > n / 2) d -= n; if (d < -n / 2) d += n;
-            const [x, y, r] = arcAt(d - spin);
-            const on = d === 0, far = Math.abs(d - spin) > 3.6;
+            const [x, y, r] = arcAt(d);
+            const on = d === 0, far = Math.abs(d) > 3;
             const wrap = prevD.current[i] !== undefined && Math.abs(d - prevD.current[i]) > 2;
             nextD[i] = d;
             /* before the stage is in view, cards wait outside the screen on their own side, then sweep onto the arc, centre card last */
             const side = d < 0 ? -1 : 1;
-            const ox = 0, oy = 0, or = 0; /* the old sweep from both sides is replaced by the alpha spin */
+            const ox = entered ? 0 : side * (window.innerWidth * 0.75 + 200), oy = entered ? 0 : 260, or = entered ? 0 : side * 32;
             return (
               <article key={s.n} aria-hidden={!on} onClick={() => { if (!on && !(sw.current && sw.current.moved)) setAct(i); }}
                 className={`sw-card absolute left-1/2 top-7 rounded-[22px] ${on ? 'is-on' : 'cursor-pointer'}`}
@@ -2713,7 +2707,7 @@ function Promotions({ level = 'h1' }) {
                   width: 300 * k, height: 392 * k,
                   transform: `translateX(-50%) translate(${(x * k + ox).toFixed(1)}px, ${(y * k + oy).toFixed(1)}px) rotate(${(r + or).toFixed(2)}deg) scale(${on ? 1.03 : 1})`,
                   opacity: far ? 0 : 1, zIndex: 10 - Math.abs(d), pointerEvents: far ? 'none' : 'auto',
-                  ...(spin > 0.001 ? { transition: 'opacity .35s ease' } : {}),
+                  ...(!settled ? { transition: `transform 1.5s var(--e-out) ${(0.1 + (3 - Math.min(3, Math.abs(d))) * 0.14).toFixed(2)}s` } : {}),
                   ...(wrap ? { transition: 'none' } : {}),
                 }}>
                 <span aria-hidden="true" className="sw-ring pointer-events-none absolute -bottom-20 -right-20 size-48 rounded-full" />
@@ -5193,17 +5187,45 @@ function LegalPage() {
     LEGAL_TOC.forEach(([id]) => { const e = document.getElementById(id); if (e && e.getBoundingClientRect().top < 220) cur = id; });
     setOn(cur);
   }, []);
-  const go = (id) => (e) => { e.preventDefault(); const el = document.getElementById(id); if (el) scrollToY(el.getBoundingClientRect().top + window.scrollY - 150); };
+  const go = (id) => (e) => { e.preventDefault(); const el = document.getElementById(id); if (el) scrollToY(el.getBoundingClientRect().top + window.scrollY - 190); };
+  const [docs, setDocs] = useState(false);
+  const box = useRef(null);
+  useEffect(() => {
+    if (!docs) return;
+    const off = (e) => { if (box.current && !box.current.contains(e.target)) setDocs(false); };
+    const key = (e) => { if (e.key === 'Escape') setDocs(false); };
+    document.addEventListener('pointerdown', off); window.addEventListener('keydown', key);
+    return () => { document.removeEventListener('pointerdown', off); window.removeEventListener('keydown', key); };
+  }, [docs]);
   return (
-    <section aria-labelledby="lg-title" className="px-[var(--gx)] pb-[clamp(72px,8vw,120px)]">
-      <div className="mx-auto grid max-w-[1180px] gap-10 lg:grid-cols-[250px_minmax(0,1fr)] lg:gap-14">
-        <aside className="lg-side lg:sticky lg:top-[150px] lg:self-start">
-          <p className="lg-k">Legal</p>
-          <ul className="grid gap-1" role="list">{LEGAL_DOCS.map(([t, h]) => <li key={t}><a href={h} aria-current={h === 'privacy.html' ? 'page' : undefined} className="lg-doc">{t}</a></li>)}</ul>
-          <p className="lg-k mt-8">On this page</p>
-          <ul className="lg-toc" role="list">{LEGAL_TOC.map(([id, t]) => <li key={id}><a href={`#${id}`} onClick={go(id)} className={on === id ? 'is-on' : ''}>{t}</a></li>)}</ul>
-          <button type="button" onClick={() => window.print()} className="lg-print mt-7">Print this policy</button>
-        </aside>
+    <>
+    {/* round 30: "On this page" moves to a sticky bar at the top, like the Botox page's section bar; the other legal
+        documents sit in its submenu */}
+    <nav aria-label="On this page" className="tx-nav sticky top-[100px] z-30 bg-ndm-paper/85 backdrop-blur-[10px] xl:top-[120px]">
+      <div className="mx-auto flex max-w-[1180px] items-center gap-2 px-[var(--gx)] py-2.5 xl:px-0">
+        <div ref={box} className="relative shrink-0">
+          <button type="button" onClick={() => setDocs(!docs)} aria-expanded={docs} aria-controls="lg-docs" className="lg-docs-btn">
+            Legal documents<svg width="11" height="11" viewBox="0 0 12 8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true" style={{ transform: docs ? 'rotate(180deg)' : 'none', transition: 'transform .25s ease' }}><path d="M1 2l5 5 5-5" /></svg>
+          </button>
+          <ul id="lg-docs" role="list" className={`lg-docs ${docs ? 'is-on' : ''}`}>
+            {LEGAL_DOCS.map(([t, h]) => <li key={t}><a href={h} aria-current={h === 'privacy.html' ? 'page' : undefined} className="lg-doc">{t}</a></li>)}
+          </ul>
+        </div>
+        <span aria-hidden="true" className="h-6 w-px shrink-0 bg-ndm-ink/10" />
+        <div className="no-scrollbar min-w-0 flex-1 overflow-x-auto">
+          <ul className="flex w-max gap-1" role="list">
+            {LEGAL_TOC.map(([id, t], k) => (
+              <li key={id} className="shrink-0"><a href={`#${id}`} onClick={go(id)} aria-current={on === id ? 'location' : undefined}
+                className={`flex items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 font-inter text-[14px] transition-colors ${on === id ? 'bg-ndm-deep font-medium text-white' : 'text-ndm-ink/80 hover:bg-white hover:text-ndm-ink'}`}>
+                <span className={`tabular-nums ${on === id ? 'text-white/70' : 'text-ndm-muted'}`}>{k < 7 ? k + 1 : ''}</span>{t}</a></li>
+            ))}
+          </ul>
+        </div>
+        <button type="button" onClick={() => window.print()} className="lg-print hidden shrink-0 md:block">Print</button>
+      </div>
+    </nav>
+    <section aria-labelledby="lg-title" className="px-[var(--gx)] pb-[clamp(72px,8vw,120px)] pt-[clamp(28px,3vw,44px)]">
+      <div className="mx-auto max-w-[1180px]">
         <article className="lg-doc-body max-w-[78ch]">
           <TwoTone as="h1" id="lg-title" size="text-[clamp(40px,4.6vw,64px)]" lead={<>Privacy<br /></>} strong="Policy" />
           <p className="lg-meta">Last updated {legalTodo('effective date')}</p>
@@ -5290,6 +5312,7 @@ function LegalPage() {
         </article>
       </div>
     </section>
+    </>
   );
 }
 
