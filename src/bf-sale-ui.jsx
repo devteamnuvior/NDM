@@ -374,15 +374,14 @@ function BfsDealCard({ d, plan, toggle }) {
   return (
     <li id={`bf-${d.id}`} className="scroll-mt-[96px]">
       <article className={`bfs-card flex h-full flex-col overflow-hidden rounded-[24px] bg-white p-5 ring-1 ring-black/[.06] sm:p-6 ${inPlan ? 'is-in' : ''}`}>
-        <div className="bfs-head relative -mx-5 -mt-5 mb-5 flex min-h-[150px] flex-col justify-between overflow-hidden p-5 text-white sm:-mx-6 sm:-mt-6 sm:p-6">
+        <div className="bfs-head relative -mx-5 -mt-5 mb-5 flex min-h-[180px] flex-col justify-between gap-5 overflow-hidden p-5 text-white sm:-mx-6 sm:-mt-6 sm:p-6">
           <span aria-hidden="true" className="bfs-head-mark font-aeonik">%</span>
-          <span className="relative font-inter text-[11.5px] font-semibold uppercase tracking-[.16em] text-white/65">{d.group}</span>
+          <h3 className="relative max-w-[16ch] font-aeonik text-[clamp(26px,2.3vw,32px)] font-normal leading-[1.05] tracking-[-0.02em] text-white">{cat}</h3>
           {d.pct
             ? <span className="relative flex items-baseline gap-2"><span className="font-inter text-[12px] font-semibold uppercase tracking-[.16em] text-white/70">Up to</span><b className="font-aeonik text-[60px] font-normal leading-[.9] tracking-[-0.04em] text-[#EE3A45]">{d.pct}%</b><span className="tt-strong font-aeonik text-[26px] leading-none">off</span></span>
             : <span className="relative max-w-[11ch] font-aeonik text-[32px] leading-[1.02] tracking-[-0.02em]">{d.offer.replace(/ (free|50% off)$/, '')} <span className="tt-strong whitespace-nowrap text-[#EE3A45]">{(/(free|50% off)$/.exec(d.offer) || [''])[0]}</span></span>}
         </div>
-        <h3 className="font-aeonik text-[clamp(23px,2vw,28px)] font-normal leading-[1.1] tracking-[-0.02em] text-[#0B0B0C]">{cat}</h3>
-        <p className="mt-2 font-inter text-[14px] leading-[1.55] text-ndm-muted">{d.c.blurb}</p>
+        <p className="font-inter text-[14px] leading-[1.55] text-ndm-muted">{d.c.blurb}</p>
         {d.items.length > 1 && (
           <label className="mt-5 block">
             <span className="font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-ndm-muted">Treatment or area</span>
@@ -633,7 +632,7 @@ function BfsFooter() {
         </div>
         <div className="mt-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-10">
           <p className="max-w-[90ch] font-inter text-[12px] leading-[1.6] text-white/45">© 2026 NewDermaMed. Offers apply {BFS.when}, at both clinics, to the packages shown, and may not be combined with other promotions. Treatments are given after a medical assessment. Individual results may vary.</p>
-          <a href="https://nexthealthmarketing.com" target="_blank" rel="noopener" className="bfs-credit group flex shrink-0 items-center gap-2.5 font-inter text-[11px] uppercase tracking-[.16em] text-white/35 transition-colors hover:text-white/70">
+          <a href="https://thenexthealth.ca/" target="_blank" rel="noopener" className="bfs-credit group flex shrink-0 items-center gap-2.5 font-inter text-[11px] uppercase tracking-[.16em] text-white/35 transition-colors hover:text-white/70">
             Site by<img src="assets/partners/next-health-white.svg" alt="Next Health" width="88" height="16" className="h-4 w-auto opacity-40 transition-opacity group-hover:opacity-80" />
           </a>
         </div>
