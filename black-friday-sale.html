@@ -749,28 +749,41 @@ html.bfs .btn-ink:hover,html.bfs .btn-buy:hover{background:var(--r);border-color
 .bfs-tear{border-top:2px dashed rgba(11,11,12,.14)}
 .bfs-dark{background:radial-gradient(50% 60% at 100% 0%,rgba(211,18,29,.22),transparent 60%),var(--k)}
 .bfs-bar{background:rgba(11,11,12,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
-/* round 29: the booking pop-up in the Black Friday look (black card, white type, signal red accents) */
-html.bfs .book-card{background:radial-gradient(70% 50% at 100% 0%,rgba(211,18,29,.32),transparent 60%),#0B0B0C!important;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 60px 120px -40px rgba(0,0,0,.9)}
-html.bfs .book-card::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent,#EE3A45 30%,#D3121F 70%,transparent)}
-html.bfs .book-card .text-ndm-ink,html.bfs .book-card h2,html.bfs .book-card h3,html.bfs .book-card label{color:#fff!important}
-html.bfs .book-card .text-ndm-muted,html.bfs .book-card .text-ndm-soft{color:rgba(255,255,255,.62)!important}
-html.bfs .book-card .text-ndm-deep,html.bfs .book-card .text-ndm-blue,html.bfs .book-card .tt-strong{color:#FF5A63!important}
-html.bfs .book-card .bg-white,html.bfs .book-card .bg-ndm-paper,html.bfs .book-card .bg-ndm-mist,html.bfs .book-card [class*="bg-ndm-mist"]{background-color:rgba(255,255,255,.06)!important}
-html.bfs .book-card [class*="ring-ndm-ink"],html.bfs .book-card [class*="border-ndm"],html.bfs .book-card [class*="ring-black"]{--tw-ring-color:rgba(255,255,255,.14)!important;border-color:rgba(255,255,255,.14)!important}
-html.bfs .book-card input,html.bfs .book-card select,html.bfs .book-card textarea{background:rgba(255,255,255,.06)!important;color:#fff!important;border-color:rgba(255,255,255,.18)!important}
-html.bfs .book-card input::placeholder,html.bfs .book-card textarea::placeholder{color:rgba(255,255,255,.4)!important}
-html.bfs .book-card [aria-selected="true"],html.bfs .book-card [aria-pressed="true"],html.bfs .book-card [aria-checked="true"],html.bfs .book-card .bg-ndm-deep,html.bfs .book-card .bg-ndm-blue{background-color:#D3121F!important;border-color:#D3121F!important;color:#fff!important}
-html.bfs .book-card .eyebrow{background:rgba(211,18,29,.14)!important;color:#FF9AA0!important;border-color:rgba(238,58,69,.35)!important}
+/* round 30: menu underline, like the home menu */
+.bfs-nav{position:relative;color:rgba(255,255,255,.8);padding:6px 0;transition:color .2s ease}
+.bfs-nav::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;border-radius:2px;background:linear-gradient(90deg,#EE3A45,#D3121F);transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.bfs-nav:hover{color:#fff}.bfs-nav:hover::after,.bfs-nav.is-on::after{transform:scaleX(1)}
+.bfs-nav.is-on{color:#fff}
+.bfs-empty{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border:1px dashed rgba(255,255,255,.18)}
+.bfs-empty-icon{background:rgba(211,18,29,.16);color:#FF5A63;animation:bfsBob 2.4s ease-in-out infinite}
+@keyframes bfsBob{50%{transform:translateY(-5px)}}
+/* round 30: the booking pop-up, light, in the Black Friday style: white card, black type, signal red accents, a red tape on top;
+   wider on desktop so the steps fit without scrolling */
+html.bfs .book-card{background:#fff!important;box-shadow:0 0 0 1px rgba(11,11,12,.06),0 60px 120px -40px rgba(0,0,0,.65)}
+@media (min-width:1024px){html.bfs .book-card{width:min(1080px,calc(100vw - 64px))!important;max-width:none!important;max-height:none!important;overflow:visible!important}}
+html.bfs .book-card::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;border-radius:24px 24px 0 0;background:linear-gradient(90deg,#0B0B0C,#D3121F 45%,#EE3A45 70%,#0B0B0C)}
+html.bfs .book-card .text-ndm-deep,html.bfs .book-card .text-ndm-blue,html.bfs .book-card .tt-strong{color:#D3121F!important}
+html.bfs .book-card [aria-selected="true"],html.bfs .book-card [aria-pressed="true"],html.bfs .book-card [aria-checked="true"],html.bfs .book-card .bg-ndm-deep,html.bfs .book-card .bg-ndm-blue{background-color:#0B0B0C!important;border-color:#0B0B0C!important;color:#fff!important}
+html.bfs .book-card .eyebrow{background:#0B0B0C!important;color:#fff!important;border-color:#0B0B0C!important}
 html.bfs .book-card .eyebrow-mark{display:none}
-html.bfs .book-card [role="tab"]{color:rgba(255,255,255,.78)!important}
-html.bfs .book-card [role="tab"][aria-selected="true"]{color:#fff!important}
 html.bfs .book-card .bg-ndm-amber{background-color:#D3121F!important}
-html.bfs .book-card [class*="bg-ndm-amber\/"]{background-color:rgba(211,18,29,.14)!important}
-html.bfs .book-card [class*="text-ndm-amber"],html.bfs .book-card [class*="text-[#8A5A12]"]{color:#FF9AA0!important}
-html.bfs .book-card .btn-ink,html.bfs .book-card .btn-buy{background:#D3121F;border-color:#D3121F}
-html.bfs .book-card .btn-line{color:#fff;border-color:rgba(255,255,255,.3)}
-html.bfs .book-card button[aria-label^="Close"]{color:#fff}
-html.bfs .book-card button[aria-label^="Close"]:hover{background:rgba(255,255,255,.1)}
+html.bfs .book-card [class*="bg-ndm-amber\/"]{background-color:rgba(211,18,29,.08)!important}
+html.bfs .book-card [class*="text-ndm-amber"],html.bfs .book-card [class*="text-[#8A5A12]"]{color:#A50E18!important}
+html.bfs .book-card .btn-ink,html.bfs .book-card .btn-buy{background:#0B0B0C;border-color:#0B0B0C;color:#fff}
+html.bfs .book-card .btn-ink:hover,html.bfs .book-card .btn-buy:hover{background:#D3121F;border-color:#D3121F}
+html.bfs .book-card input[role="switch"]:checked+span{background-color:#D3121F!important}
+@media (min-width:1024px){
+  html.bfs .book-card [class*="grid-area:1/1"]{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  html.bfs .book-card{padding-top:26px!important;padding-bottom:26px!important}
+  html.bfs .book-card h2{font-size:38px!important}
+  /* the heading sits in a left column and the form beside it, so the card is wide and short */
+  html.bfs .book-card{display:grid!important;grid-template-columns:280px minmax(0,1fr);grid-template-rows:auto auto 1fr;column-gap:44px;align-content:start}
+  html.bfs .book-card>p.eyebrow{grid-column:1;grid-row:1;align-self:start;justify-self:start;white-space:nowrap;font-size:12.5px!important}
+  html.bfs .book-card>h2{grid-column:1;grid-row:2;margin-top:18px}
+  html.bfs .book-card>div.mt-6{grid-column:2;grid-row:1 / span 3;margin-top:0!important}
+}
+html.bfs .book-card input:focus,html.bfs .book-card select:focus{border-color:#D3121F!important;--tw-ring-color:rgba(211,18,29,.15)!important}
+html.bfs .book-card [class*="bg-ndm-night"],html.bfs .book-card [class*="bg-[#0B0F13]"]{background:radial-gradient(80% 60% at 100% 0%,rgba(211,18,29,.45),transparent 60%),#0B0B0C!important}
 @media (prefers-reduced-motion:reduce){.bfs-tick-in,.bfs-live{animation:none}.bfs-card,.bfs-chip{transition:none}}
 </style>
 </head>
@@ -2739,15 +2752,6 @@ function Promotions({ level = 'h1' }) {
   const entered = useInView(stage, { threshold: 0.2 });
   const [settled, setSettled] = useState(REDUCED);
   useEffect(() => { if (!entered || settled) return; const t = setTimeout(() => setSettled(true), 2300); return () => clearTimeout(t); }, [entered]);
-  /* alpha (round 29): the cards travel along the wheel's circle from the left into place as the stage comes into view */
-  const [spin, setSpin] = useState(REDUCED ? 0 : 5);
-  useEffect(() => {
-    if (!entered || REDUCED) return;
-    let raf, t0;
-    const step = (t) => { if (!t0) t0 = t; const q = Math.min(1, (t - t0) / 1900); setSpin(5 * Math.pow(1 - q, 3)); if (q < 1) raf = requestAnimationFrame(step); };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [entered]);
   useEffect(() => {
     /* full-screen stage: size the wheel to both the width and the viewport height */
     const fit = () => { const w = stage.current ? stage.current.clientWidth : window.innerWidth; setK(Math.max(0.72, Math.min(1.12, w / 1240, (window.innerHeight - 340) / 520))); };
@@ -2778,13 +2782,13 @@ function Promotions({ level = 'h1' }) {
           className="sw-stage relative mt-4 select-none outline-none md:mt-6" style={{ height: 500 * k + 28, touchAction: 'pan-y' }}>
           {SPECIALS.map((s, i) => {
             let d = i - act; if (d > n / 2) d -= n; if (d < -n / 2) d += n;
-            const [x, y, r] = arcAt(d - spin);
-            const on = d === 0, far = Math.abs(d - spin) > 3.6;
+            const [x, y, r] = arcAt(d);
+            const on = d === 0, far = Math.abs(d) > 3;
             const wrap = prevD.current[i] !== undefined && Math.abs(d - prevD.current[i]) > 2;
             nextD[i] = d;
             /* before the stage is in view, cards wait outside the screen on their own side, then sweep onto the arc, centre card last */
             const side = d < 0 ? -1 : 1;
-            const ox = 0, oy = 0, or = 0; /* the old sweep from both sides is replaced by the alpha spin */
+            const ox = entered ? 0 : side * (window.innerWidth * 0.75 + 200), oy = entered ? 0 : 260, or = entered ? 0 : side * 32;
             return (
               <article key={s.n} aria-hidden={!on} onClick={() => { if (!on && !(sw.current && sw.current.moved)) setAct(i); }}
                 className={`sw-card absolute left-1/2 top-7 rounded-[22px] ${on ? 'is-on' : 'cursor-pointer'}`}
@@ -2792,7 +2796,7 @@ function Promotions({ level = 'h1' }) {
                   width: 300 * k, height: 392 * k,
                   transform: `translateX(-50%) translate(${(x * k + ox).toFixed(1)}px, ${(y * k + oy).toFixed(1)}px) rotate(${(r + or).toFixed(2)}deg) scale(${on ? 1.03 : 1})`,
                   opacity: far ? 0 : 1, zIndex: 10 - Math.abs(d), pointerEvents: far ? 'none' : 'auto',
-                  ...(spin > 0.001 ? { transition: 'opacity .35s ease' } : {}),
+                  ...(!settled ? { transition: `transform 1.5s var(--e-out) ${(0.1 + (3 - Math.min(3, Math.abs(d))) * 0.14).toFixed(2)}s` } : {}),
                   ...(wrap ? { transition: 'none' } : {}),
                 }}>
                 <span aria-hidden="true" className="sw-ring pointer-events-none absolute -bottom-20 -right-20 size-48 rounded-full" />
@@ -5401,28 +5405,41 @@ html.bfs .btn-ink:hover,html.bfs .btn-buy:hover{background:var(--r);border-color
 .bfs-tear{border-top:2px dashed rgba(11,11,12,.14)}
 .bfs-dark{background:radial-gradient(50% 60% at 100% 0%,rgba(211,18,29,.22),transparent 60%),var(--k)}
 .bfs-bar{background:rgba(11,11,12,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
-/* round 29: the booking pop-up in the Black Friday look (black card, white type, signal red accents) */
-html.bfs .book-card{background:radial-gradient(70% 50% at 100% 0%,rgba(211,18,29,.32),transparent 60%),#0B0B0C!important;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 60px 120px -40px rgba(0,0,0,.9)}
-html.bfs .book-card::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent,#EE3A45 30%,#D3121F 70%,transparent)}
-html.bfs .book-card .text-ndm-ink,html.bfs .book-card h2,html.bfs .book-card h3,html.bfs .book-card label{color:#fff!important}
-html.bfs .book-card .text-ndm-muted,html.bfs .book-card .text-ndm-soft{color:rgba(255,255,255,.62)!important}
-html.bfs .book-card .text-ndm-deep,html.bfs .book-card .text-ndm-blue,html.bfs .book-card .tt-strong{color:#FF5A63!important}
-html.bfs .book-card .bg-white,html.bfs .book-card .bg-ndm-paper,html.bfs .book-card .bg-ndm-mist,html.bfs .book-card [class*="bg-ndm-mist"]{background-color:rgba(255,255,255,.06)!important}
-html.bfs .book-card [class*="ring-ndm-ink"],html.bfs .book-card [class*="border-ndm"],html.bfs .book-card [class*="ring-black"]{--tw-ring-color:rgba(255,255,255,.14)!important;border-color:rgba(255,255,255,.14)!important}
-html.bfs .book-card input,html.bfs .book-card select,html.bfs .book-card textarea{background:rgba(255,255,255,.06)!important;color:#fff!important;border-color:rgba(255,255,255,.18)!important}
-html.bfs .book-card input::placeholder,html.bfs .book-card textarea::placeholder{color:rgba(255,255,255,.4)!important}
-html.bfs .book-card [aria-selected="true"],html.bfs .book-card [aria-pressed="true"],html.bfs .book-card [aria-checked="true"],html.bfs .book-card .bg-ndm-deep,html.bfs .book-card .bg-ndm-blue{background-color:#D3121F!important;border-color:#D3121F!important;color:#fff!important}
-html.bfs .book-card .eyebrow{background:rgba(211,18,29,.14)!important;color:#FF9AA0!important;border-color:rgba(238,58,69,.35)!important}
+/* round 30: menu underline, like the home menu */
+.bfs-nav{position:relative;color:rgba(255,255,255,.8);padding:6px 0;transition:color .2s ease}
+.bfs-nav::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;border-radius:2px;background:linear-gradient(90deg,#EE3A45,#D3121F);transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.bfs-nav:hover{color:#fff}.bfs-nav:hover::after,.bfs-nav.is-on::after{transform:scaleX(1)}
+.bfs-nav.is-on{color:#fff}
+.bfs-empty{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border:1px dashed rgba(255,255,255,.18)}
+.bfs-empty-icon{background:rgba(211,18,29,.16);color:#FF5A63;animation:bfsBob 2.4s ease-in-out infinite}
+@keyframes bfsBob{50%{transform:translateY(-5px)}}
+/* round 30: the booking pop-up, light, in the Black Friday style: white card, black type, signal red accents, a red tape on top;
+   wider on desktop so the steps fit without scrolling */
+html.bfs .book-card{background:#fff!important;box-shadow:0 0 0 1px rgba(11,11,12,.06),0 60px 120px -40px rgba(0,0,0,.65)}
+@media (min-width:1024px){html.bfs .book-card{width:min(1080px,calc(100vw - 64px))!important;max-width:none!important;max-height:none!important;overflow:visible!important}}
+html.bfs .book-card::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;border-radius:24px 24px 0 0;background:linear-gradient(90deg,#0B0B0C,#D3121F 45%,#EE3A45 70%,#0B0B0C)}
+html.bfs .book-card .text-ndm-deep,html.bfs .book-card .text-ndm-blue,html.bfs .book-card .tt-strong{color:#D3121F!important}
+html.bfs .book-card [aria-selected="true"],html.bfs .book-card [aria-pressed="true"],html.bfs .book-card [aria-checked="true"],html.bfs .book-card .bg-ndm-deep,html.bfs .book-card .bg-ndm-blue{background-color:#0B0B0C!important;border-color:#0B0B0C!important;color:#fff!important}
+html.bfs .book-card .eyebrow{background:#0B0B0C!important;color:#fff!important;border-color:#0B0B0C!important}
 html.bfs .book-card .eyebrow-mark{display:none}
-html.bfs .book-card [role="tab"]{color:rgba(255,255,255,.78)!important}
-html.bfs .book-card [role="tab"][aria-selected="true"]{color:#fff!important}
 html.bfs .book-card .bg-ndm-amber{background-color:#D3121F!important}
-html.bfs .book-card [class*="bg-ndm-amber\/"]{background-color:rgba(211,18,29,.14)!important}
-html.bfs .book-card [class*="text-ndm-amber"],html.bfs .book-card [class*="text-[#8A5A12]"]{color:#FF9AA0!important}
-html.bfs .book-card .btn-ink,html.bfs .book-card .btn-buy{background:#D3121F;border-color:#D3121F}
-html.bfs .book-card .btn-line{color:#fff;border-color:rgba(255,255,255,.3)}
-html.bfs .book-card button[aria-label^="Close"]{color:#fff}
-html.bfs .book-card button[aria-label^="Close"]:hover{background:rgba(255,255,255,.1)}
+html.bfs .book-card [class*="bg-ndm-amber\/"]{background-color:rgba(211,18,29,.08)!important}
+html.bfs .book-card [class*="text-ndm-amber"],html.bfs .book-card [class*="text-[#8A5A12]"]{color:#A50E18!important}
+html.bfs .book-card .btn-ink,html.bfs .book-card .btn-buy{background:#0B0B0C;border-color:#0B0B0C;color:#fff}
+html.bfs .book-card .btn-ink:hover,html.bfs .book-card .btn-buy:hover{background:#D3121F;border-color:#D3121F}
+html.bfs .book-card input[role="switch"]:checked+span{background-color:#D3121F!important}
+@media (min-width:1024px){
+  html.bfs .book-card [class*="grid-area:1/1"]{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  html.bfs .book-card{padding-top:26px!important;padding-bottom:26px!important}
+  html.bfs .book-card h2{font-size:38px!important}
+  /* the heading sits in a left column and the form beside it, so the card is wide and short */
+  html.bfs .book-card{display:grid!important;grid-template-columns:280px minmax(0,1fr);grid-template-rows:auto auto 1fr;column-gap:44px;align-content:start}
+  html.bfs .book-card>p.eyebrow{grid-column:1;grid-row:1;align-self:start;justify-self:start;white-space:nowrap;font-size:12.5px!important}
+  html.bfs .book-card>h2{grid-column:1;grid-row:2;margin-top:18px}
+  html.bfs .book-card>div.mt-6{grid-column:2;grid-row:1 / span 3;margin-top:0!important}
+}
+html.bfs .book-card input:focus,html.bfs .book-card select:focus{border-color:#D3121F!important;--tw-ring-color:rgba(211,18,29,.15)!important}
+html.bfs .book-card [class*="bg-ndm-night"],html.bfs .book-card [class*="bg-[#0B0F13]"]{background:radial-gradient(80% 60% at 100% 0%,rgba(211,18,29,.45),transparent 60%),#0B0B0C!important}
 @media (prefers-reduced-motion:reduce){.bfs-tick-in,.bfs-live{animation:none}.bfs-card,.bfs-chip{transition:none}}
 `;
 
@@ -5434,15 +5451,22 @@ function BfsTape({ tone = 'red', rev = false }) {
 }
 
 function BfsHeader({ count }) {
-  const links = [['deals', 'Deals'], ['specials', 'Specials'], ['how', 'How it works'], ['clinics', 'Clinics']];
+  /* round 30: the links follow the page's own order, the section in view is underlined, and the plan count shows only when
+     something is in the plan */
+  const links = [['concerns', 'Concerns'], ['deals', 'Deals'], ['specials', 'Specials'], ['how', 'How it works'], ['plan', 'My plan'], ['clinics', 'Clinics']];
+  const [here, setHere] = useState('');
+  useOnScroll(() => { let cur = ''; links.forEach(([id]) => { const e = document.getElementById(id); if (e && e.getBoundingClientRect().top < 140) cur = id; }); setHere(cur); }, []);
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0B0B0C]/95 text-white backdrop-blur-[14px]">
       <div className="mx-auto flex h-[68px] max-w-[1280px] items-center justify-between gap-4 px-[var(--gx)]">
         <a href="index.html" className="shrink-0" aria-label="NewDermaMed home"><img src="assets/icons/logo-white.svg" alt="NewDermaMed" className="h-7 w-auto min-[400px]:h-8 sm:h-10" /></a>
         <nav aria-label="Black Friday page" className="hidden items-center gap-5 whitespace-nowrap lg:flex xl:gap-7">
-          <a href="index.html" className="font-inter text-[14.5px] text-white/80 transition-colors hover:text-white">Home</a>
-          {links.map(([id, l]) => <a key={id} href={`#${id}`} onClick={bfsGo(id)} className="font-inter text-[14.5px] text-white/80 transition-colors hover:text-white">{l}</a>)}
-          <a href="#plan" onClick={bfsGo('plan')} className="inline-flex items-center gap-2 font-inter text-[14.5px] text-white/80 transition-colors hover:text-white">My plan<span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#D3121F] px-1.5 text-[11px] font-semibold text-white tabular-nums">{count}</span></a>
+          <a href="index.html" className="bfs-nav font-inter text-[14.5px]">Home</a>
+          {links.map(([id, l]) => (
+            <a key={id} href={`#${id}`} onClick={bfsGo(id)} aria-current={here === id ? 'location' : undefined} className={`bfs-nav inline-flex items-center gap-2 font-inter text-[14.5px] ${here === id ? 'is-on' : ''}`}>
+              {l}{id === 'plan' && count > 0 && <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#D3121F] px-1.5 text-[11px] font-semibold text-white tabular-nums">{count}</span>}
+            </a>
+          ))}
         </nav>
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <a href={tel(PHONES[0].num)} className="hidden items-center gap-2 font-inter text-[14px] text-white/85 hover:text-white md:inline-flex"><IconPhone />{PHONES[0].num}</a>
@@ -5758,7 +5782,7 @@ function BfsHow() {
         </div>
         <ol className="bfs-how mt-10 grid gap-4 md:grid-cols-3 md:gap-5">
           {steps.map(([t, d], i) => (
-            <li key={t} className="rv bfs-how-card relative rounded-[26px] bg-white p-6 ring-1 ring-black/[.06] md:p-7" style={{ transitionDelay: `${0.08 * i}s` }}>
+            <li key={t} className="rv bfs-how-card relative rounded-[26px] bg-white p-6 ring-1 ring-black/[.06] md:p-7" style={{ transitionDelay: `${0.08 * i}s`, zIndex: 3 - i }}>
               <span className="flex items-center justify-between gap-4">
                 <span aria-hidden="true" className="bfs-how-n font-aeonik"><i>0</i>{i + 1}</span>
                 <span className="rounded-full bg-[#0B0B0C] px-3 py-1.5 font-inter text-[11px] font-semibold uppercase tracking-[.16em] text-white">Step {i + 1}</span>
@@ -5799,7 +5823,18 @@ function BfsPlan({ plan, toggle, clear }) {
                 </li>
               ))}
             </ul>
-          ) : <p className="mt-8 max-w-[46ch] font-inter text-[15.5px] leading-[1.6] text-white/70">Your plan is empty. Choose a treatment and package above to begin. <a href="#deals" onClick={bfsGo('deals')} className="text-white underline underline-offset-4">See the deals</a></p>}
+          ) : (
+            <div className="bfs-empty mt-8 rounded-[26px] p-6 sm:p-8">
+              <span aria-hidden="true" className="bfs-empty-icon grid size-14 place-items-center rounded-full"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 7h14l-1.5 11a2 2 0 0 1-2 1.7h-7a2 2 0 0 1-2-1.7L5 7Z" /><path d="M9 7V5.5a3 3 0 0 1 6 0V7" /><path d="M12 11v5M9.5 13.5h5" /></svg></span>
+              <p className="mt-5 font-aeonik text-[clamp(26px,2.4vw,34px)] leading-[1.1] tracking-[-0.02em] text-white">Nothing in your plan yet</p>
+              <p className="mt-2 max-w-[46ch] font-inter text-[15px] leading-[1.6] text-white/70">Pick a concern or browse the deals, choose a package and tap Add to my plan. Your total and savings add up here.</p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a href="#deals" onClick={bfsGo('deals')} className="btn bfd-cta">Browse the deals</a>
+                <Btn href="#concerns" v="glass" onClick={bfsGo('concerns')}>Start from a concern</Btn>
+              </div>
+              <ul className="mt-6 flex flex-wrap gap-2" role="list">{BFS_DEALS.filter((d) => d.pct >= 50).slice(0, 4).map((d) => <li key={d.id}><a href={`#bf-${d.id}`} onClick={bfsGo(`bf-${d.id}`)} className="inline-flex items-center gap-2 rounded-full bg-white/[.07] px-3.5 py-2 font-inter text-[13px] text-white/85 ring-1 ring-white/10 transition-colors hover:bg-white/15"><b className="font-semibold text-[#FF5A63]">{d.offer}</b>{d.c.name}</a></li>)}</ul>
+            </div>
+          )}
         </div>
         <aside className="self-start rounded-[26px] bg-white p-6 text-[#0B0B0C] lg:sticky lg:top-[96px]">
           <p className="font-inter text-[12px] font-semibold uppercase tracking-[.16em] text-ndm-muted">Plan total</p>
