@@ -208,6 +208,30 @@ SPACING = '''
   .guide-num{background:linear-gradient(135deg,#26B1E7,#0F80C3);box-shadow:0 10px 20px -12px rgba(15,128,195,.9)}
   .guide-q{box-shadow:0 22px 44px -38px rgba(27,36,43,.35);transition:box-shadow .5s var(--e-out),transform .5s var(--e-out)}
   .guide-q:hover{transform:translateY(-2px);box-shadow:0 30px 56px -38px rgba(15,128,195,.4)}
+  /* round 29: About (ProcOverview) has its own theme: deep navy, drifting light orbs, a turning dotted ring, glass panel */
+  main>section#overview.ov2{background:radial-gradient(60% 70% at 90% 0%,rgba(38,177,231,.28),transparent 60%),radial-gradient(50% 60% at 0% 100%,rgba(255,166,23,.12),transparent 65%),linear-gradient(160deg,#0E2A40 0%,#0A1B2B 55%,#0B0F13 100%)!important}
+  .ov2-orb{position:absolute;border-radius:50%;filter:blur(40px);opacity:.55;pointer-events:none;animation:ov2Drift 16s ease-in-out infinite alternate}
+  .ov2-orb-a{width:340px;height:340px;left:-80px;top:10%;background:radial-gradient(circle,rgba(38,177,231,.55),transparent 70%)}
+  .ov2-orb-b{width:260px;height:260px;right:6%;bottom:-60px;background:radial-gradient(circle,rgba(255,166,23,.35),transparent 70%);animation-duration:19s;animation-delay:-6s}
+  .ov2-orb-c{width:200px;height:200px;right:30%;top:-60px;background:radial-gradient(circle,rgba(15,128,195,.6),transparent 70%);animation-duration:22s;animation-delay:-11s}
+  .ov2-ring{position:absolute;right:-120px;top:50%;width:560px;height:560px;transform:translateY(-50%);pointer-events:none;animation:ov2Spin 90s linear infinite}
+  .ov2-ring circle{fill:none;stroke:rgba(255,255,255,.12);stroke-width:1;stroke-dasharray:2 7}
+  .ov2-tab{display:flex;align-items:center;gap:14px;min-width:220px;border-radius:18px;padding:14px 16px;text-align:left;color:rgba(255,255,255,.72);background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:background-color .3s ease,color .3s ease,box-shadow .3s ease,transform .3s ease}
+  .ov2-tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+  .ov2-tab.is-on{color:#fff;background:linear-gradient(120deg,rgba(38,177,231,.28),rgba(15,128,195,.12));box-shadow:inset 0 0 0 1px rgba(38,177,231,.45),0 18px 40px -24px rgba(38,177,231,.6)}
+  .ov2-num{font-size:24px;line-height:1;color:rgba(255,255,255,.35);transition:color .3s ease}
+  .ov2-tab.is-on .ov2-num{color:#26B1E7}
+  .ov2-go{place-items:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.08);opacity:0;transform:translateX(-6px);transition:opacity .3s ease,transform .3s ease}
+  .ov2-tab.is-on .ov2-go{opacity:1;transform:none;background:#26B1E7;color:#0B0F13}
+  .ov2-panel{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 50px 90px -50px rgba(0,0,0,.7);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+  .ov2-stat-ring{animation:ov2Spin 30s linear infinite}
+  .ov2-stat-ring circle{fill:rgba(255,255,255,.04);stroke:rgba(38,177,231,.6);stroke-width:1.2;stroke-dasharray:3 5}
+  @keyframes ov2Drift{to{transform:translate3d(60px,-40px,0) scale(1.15)}}
+  @keyframes ov2Spin{to{transform:translateY(-50%) rotate(360deg)}}
+  .ov2-stat-ring{transform-origin:50% 50%}
+  @keyframes ov2SpinS{to{transform:rotate(360deg)}}
+  .ov2-stat-ring{animation-name:ov2SpinS}
+  @media (prefers-reduced-motion:reduce){.ov2-orb,.ov2-ring,.ov2-stat-ring{animation:none}}
   /* round 24: the book card in Good to know */
   .guide-book{background:radial-gradient(120% 90% at 100% 0%,#1C7FC0 0%,rgba(28,127,192,0) 55%),linear-gradient(155deg,#0F5E92 0%,#0A3D60 55%,#0B2234 100%);box-shadow:0 40px 70px -40px rgba(10,61,96,.75)}
   .guide-book-glow{position:absolute;right:-60px;bottom:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(255,166,23,.35),transparent 65%);pointer-events:none}

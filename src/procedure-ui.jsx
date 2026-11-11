@@ -237,53 +237,70 @@ function ProcGlance({ p, wide }) {
 
 /* ---------------------------------------------------------------- your treatment, in tabs (the thread lift page's treatment overview,
    in the site's own look): a tab row, then the words on the left and the key number on the right */
+/* round 29: About, redesigned with its own theme: a deep navy band with slowly drifting light orbs and a turning dotted ring,
+   numbered tabs down the left (a scrolling row on phones) and a glass panel with the tab's text and its key number.
+   All five panels stay in the page for crawlers (hidden ones carry data-pre-keep). */
 function ProcOverview({ p }) {
   const ref = useRef(null), tabs = useRef([]);
   useReveal(ref);
   const o = p.overview;
+  const n = txNum(p, 'overview');
   const [act, setAct] = useState(0);
   const key = (e, i) => {
-    const k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    const k = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
     if (!k) return;
     e.preventDefault();
-    const n = (i + k + o.tabs.length) % o.tabs.length;
-    setAct(n); if (tabs.current[n]) tabs.current[n].focus();
+    const m = (i + k + o.tabs.length) % o.tabs.length;
+    setAct(m); if (tabs.current[m]) tabs.current[m].focus();
   };
   return (
-    <section ref={ref} id="overview" aria-labelledby="overview-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(72px,8vw,112px)]">
-      <TxHead p={p} id="overview" tag={o.tag} hid="overview-title" lead={o.lead} strong={o.strong} />
-      <div className={`${TX_WRAP} rv mt-[clamp(32px,4vw,52px)] overflow-hidden rounded-[28px] bg-white ring-1 ring-ndm-ink/[.06] shadow-[0_30px_60px_-46px_rgba(27,36,43,.45)]`} style={{ transitionDelay: '.08s' }}>
-        <div role="tablist" aria-label="About the treatment" className="no-scrollbar mx-[clamp(14px,2.2vw,28px)] mt-[clamp(14px,2.2vw,28px)] flex gap-1 overflow-x-auto rounded-full bg-ndm-mist p-1">
-          {o.tabs.map((x, i) => (
-            <button key={x.label} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" id={`ov-t-${i}`} aria-controls={`ov-panel-${i}`} aria-selected={i === act} tabIndex={i === act ? 0 : -1}
-              onClick={() => setAct(i)} onKeyDown={(e) => key(e, i)}
-              className={`shrink-0 rounded-full px-4 py-2.5 font-inter text-[14px] font-medium transition-colors sm:flex-1 sm:px-5 ${i === act ? 'bg-white text-ndm-deep shadow-[0_6px_16px_-10px_rgba(27,36,43,.45)]' : 'text-ndm-muted hover:text-ndm-ink'}`}>
-              {x.label}
-            </button>
-          ))}
-        </div>
-        {o.tabs.map((t, i) => (
-        <div key={t.label} id={`ov-panel-${i}`} role="tabpanel" aria-labelledby={`ov-t-${i}`} hidden={i !== act} data-pre-keep="" className={`${i === act ? 'ov-in grid' : 'hidden'} gap-7 p-[clamp(20px,2.8vw,40px)] md:grid-cols-[minmax(0,1fr)_minmax(0,300px)] md:items-start md:gap-[clamp(28px,4vw,56px)]`}>
+    <section ref={ref} id="overview" aria-labelledby="overview-title" data-nav="dark" className="ov2 relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(80px,9vw,128px)] text-white">
+      <span aria-hidden="true" className="ov2-orb ov2-orb-a" /><span aria-hidden="true" className="ov2-orb ov2-orb-b" /><span aria-hidden="true" className="ov2-orb ov2-orb-c" />
+      <svg aria-hidden="true" viewBox="0 0 400 400" className="ov2-ring"><circle cx="200" cy="200" r="190" /><circle cx="200" cy="200" r="150" /></svg>
+      <div className={`${TX_WRAP} relative`}>
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,.8fr)] lg:items-end">
           <div>
-            <h3 className="font-aeonik text-[clamp(26px,2.4vw,34px)] font-normal leading-[1.1] tracking-[-0.025em] text-ndm-ink">{t.label}</h3>
-            {t.text.map((x, k) => <p key={k} className="mt-4 max-w-[62ch] font-inter text-[16px] leading-[1.75] text-ndm-ink/80">{x}</p>)}
-            <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
-              <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
-              {t.link && <a href={t.link[0]} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-deep">{t.link[1]}<IconArrow className="transition-transform group-hover:translate-x-1" /></a>}
-            </div>
+            <Eyebrow dark className="rv">{n && <span className="tabular-nums text-ndm-sky">{n}</span>}{o.tag}</Eyebrow>
+            <TwoTone id="overview-title" dark className="rv mt-5" size="text-[clamp(32px,3.6vw,54px)]" lead={twoLine(o.lead)} strong={o.strong} style={{ transitionDelay: '.06s' }} />
           </div>
-          <aside className="ov-side flex flex-col rounded-[20px] p-5 ring-1 ring-ndm-ink/[.06]">
-            <span className="font-inter text-[11.5px] font-semibold uppercase tracking-[.14em] text-ndm-muted">At a glance</span>
-            <span className="mt-3 flex items-baseline gap-2.5">
-              <span className="font-aeonik text-[34px] leading-none tracking-[-0.03em] text-ndm-deep tabular-nums">{t.stat[0]}</span>
-              <span className="font-inter text-[14px] leading-[1.35] text-ndm-ink">{t.stat[1]}</span>
-            </span>
-            <dl className="mt-5 grid gap-2.5 border-t border-ndm-line pt-4">
-              {p.facts.map(([k, v]) => <div key={k} className="flex items-baseline justify-between gap-3 font-inter text-[13.5px]"><dt className="text-ndm-muted">{k}</dt><dd className="text-right font-medium text-ndm-ink">{v}</dd></div>)}
-            </dl>
-          </aside>
+          <p className="rv max-w-[44ch] font-inter text-[15.5px] leading-[1.65] text-white/70 lg:justify-self-end lg:pb-2" style={{ transitionDelay: '.1s' }}>Five things to know before your first appointment. Pick a topic.</p>
         </div>
-        ))}
+        <div className="rv mt-[clamp(32px,4vw,52px)] grid gap-4 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-6" style={{ transitionDelay: '.12s' }}>
+          <div role="tablist" aria-label="About the treatment" aria-orientation="vertical" className="no-scrollbar -mx-[var(--gx)] flex gap-2 overflow-x-auto px-[var(--gx)] lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0">
+            {o.tabs.map((x, i) => (
+              <button key={x.label} ref={(el) => (tabs.current[i] = el)} type="button" role="tab" id={`ov-t-${i}`} aria-controls={`ov-panel-${i}`} aria-selected={i === act} tabIndex={i === act ? 0 : -1}
+                onClick={() => setAct(i)} onKeyDown={(e) => key(e, i)} className={`ov2-tab group shrink-0 ${i === act ? 'is-on' : ''}`}>
+                <span className="ov2-num font-aeonik tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                <span className="font-inter text-[15px] font-medium leading-[1.3]">{x.label}</span>
+                <span aria-hidden="true" className="ov2-go ml-auto hidden lg:grid"><IconArrow size={12} /></span>
+              </button>
+            ))}
+          </div>
+          <div className="ov2-panel relative overflow-hidden rounded-[28px]">
+            {o.tabs.map((t, i) => (
+              <div key={t.label} id={`ov-panel-${i}`} role="tabpanel" aria-labelledby={`ov-t-${i}`} hidden={i !== act} data-pre-keep="" className={`${i === act ? 'ov-in grid' : 'hidden'} gap-8 p-[clamp(22px,3vw,44px)] md:grid-cols-[minmax(0,1fr)_200px] md:items-start`}>
+                <div>
+                  <h3 className="font-aeonik text-[clamp(26px,2.4vw,34px)] font-normal leading-[1.1] tracking-[-0.025em] text-white">{t.label}</h3>
+                  {t.text.map((x, k) => <p key={k} className="mt-4 max-w-[60ch] font-inter text-[16px] leading-[1.75] text-white/80">{x}</p>)}
+                  <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+                    <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
+                    {t.link && <a href={t.link[0]} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-sky">{t.link[1]}<IconArrow className="transition-transform group-hover:translate-x-1" /></a>}
+                  </div>
+                </div>
+                <aside className="ov2-stat relative grid aspect-square w-[180px] place-items-center justify-self-start md:w-full md:justify-self-end">
+                  <svg aria-hidden="true" viewBox="0 0 100 100" className="ov2-stat-ring absolute inset-0"><circle cx="50" cy="50" r="46" /></svg>
+                  <span className="relative px-5 text-center">
+                    <span className="block font-aeonik text-[clamp(38px,3.6vw,52px)] leading-none tracking-[-0.03em] text-white tabular-nums">{t.stat[0]}</span>
+                    <span className="mt-2 block font-inter text-[12.5px] leading-[1.35] text-white/70">{t.stat[1]}</span>
+                  </span>
+                </aside>
+              </div>
+            ))}
+            <dl className="grid grid-cols-1 border-t border-white/10 px-[clamp(22px,3vw,44px)] py-5 sm:grid-cols-3 sm:gap-6">
+              {p.facts.map(([k, v]) => <div key={k} className="flex items-baseline justify-between gap-3 py-1 font-inter text-[13.5px] sm:block"><dt className="text-white/55">{k}</dt><dd className="font-medium text-white sm:mt-1">{v}</dd></div>)}
+            </dl>
+          </div>
+        </div>
       </div>
     </section>
   );
