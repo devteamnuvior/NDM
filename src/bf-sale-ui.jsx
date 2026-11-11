@@ -148,9 +148,8 @@ html.bfs .btn-ink:hover,html.bfs .btn-buy:hover{background:var(--r);border-color
 .bfs-empty-icon{background:rgba(211,18,29,.16);color:#FF5A63;animation:bfsBob 2.4s ease-in-out infinite}
 @keyframes bfsBob{50%{transform:translateY(-5px)}}
 /* round 30: the booking pop-up, light, in the Black Friday style: white card, black type, signal red accents, a red tape on top;
-   wider on desktop so the steps fit without scrolling */
+   the card keeps the home page's size */
 html.bfs .book-card{background:#fff!important;box-shadow:0 0 0 1px rgba(11,11,12,.06),0 60px 120px -40px rgba(0,0,0,.65)}
-@media (min-width:1024px){html.bfs .book-card{width:min(1080px,calc(100vw - 64px))!important;max-width:none!important;max-height:none!important;overflow:visible!important}}
 html.bfs .book-card::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;border-radius:24px 24px 0 0;background:linear-gradient(90deg,#0B0B0C,#D3121F 45%,#EE3A45 70%,#0B0B0C)}
 html.bfs .book-card .text-ndm-deep,html.bfs .book-card .text-ndm-blue,html.bfs .book-card .tt-strong{color:#D3121F!important}
 html.bfs .book-card [aria-selected="true"],html.bfs .book-card [aria-pressed="true"],html.bfs .book-card [aria-checked="true"],html.bfs .book-card .bg-ndm-deep,html.bfs .book-card .bg-ndm-blue{background-color:#0B0B0C!important;border-color:#0B0B0C!important;color:#fff!important}
@@ -162,16 +161,6 @@ html.bfs .book-card [class*="text-ndm-amber"],html.bfs .book-card [class*="text-
 html.bfs .book-card .btn-ink,html.bfs .book-card .btn-buy{background:#0B0B0C;border-color:#0B0B0C;color:#fff}
 html.bfs .book-card .btn-ink:hover,html.bfs .book-card .btn-buy:hover{background:#D3121F;border-color:#D3121F}
 html.bfs .book-card input[role="switch"]:checked+span{background-color:#D3121F!important}
-@media (min-width:1024px){
-  html.bfs .book-card [class*="grid-area:1/1"]{grid-template-columns:repeat(4,minmax(0,1fr))!important}
-  html.bfs .book-card{padding-top:26px!important;padding-bottom:26px!important}
-  html.bfs .book-card h2{font-size:38px!important}
-  /* the heading sits in a left column and the form beside it, so the card is wide and short */
-  html.bfs .book-card{display:grid!important;grid-template-columns:280px minmax(0,1fr);grid-template-rows:auto auto 1fr;column-gap:44px;align-content:start}
-  html.bfs .book-card>p.eyebrow{grid-column:1;grid-row:1;align-self:start;justify-self:start;white-space:nowrap;font-size:12.5px!important}
-  html.bfs .book-card>h2{grid-column:1;grid-row:2;margin-top:18px}
-  html.bfs .book-card>div.mt-6{grid-column:2;grid-row:1 / span 3;margin-top:0!important}
-}
 html.bfs .book-card input:focus,html.bfs .book-card select:focus{border-color:#D3121F!important;--tw-ring-color:rgba(211,18,29,.15)!important}
 html.bfs .book-card [class*="bg-ndm-night"],html.bfs .book-card [class*="bg-[#0B0F13]"]{background:radial-gradient(80% 60% at 100% 0%,rgba(211,18,29,.45),transparent 60%),#0B0B0C!important}
 @media (prefers-reduced-motion:reduce){.bfs-tick-in,.bfs-live{animation:none}.bfs-card,.bfs-chip{transition:none}}

@@ -19,6 +19,18 @@ CSS = r'''
   .co-opt:hover{border-color:rgba(27,36,43,.35)}
   .co-opt.is-on{border-color:#0F80C3;box-shadow:0 0 0 3px rgba(32,158,217,.14);background:#F7FBFE}
   .co-opt.is-off{cursor:not-allowed;background:#FAFAF8;border-style:dashed}
+  /* round 32: alerts (green ok, amber heads-up, red needs action), the summary card, the thank-you head */
+  .co-alert.is-ok{background:#ECF8F1;color:#14532D;box-shadow:inset 0 0 0 1px rgba(22,163,74,.18)}.co-alert.is-ok .co-alert-ico{background:#16A34A;color:#fff}
+  .co-alert.is-warn{background:#FFF6E6;color:#713F12;box-shadow:inset 0 0 0 1px rgba(217,119,6,.22)}.co-alert.is-warn .co-alert-ico{background:#F59E0B;color:#fff}
+  .co-alert.is-err{background:#FDECEC;color:#7F1D1D;box-shadow:inset 0 0 0 1px rgba(220,38,38,.22)}.co-alert.is-err .co-alert-ico{background:#DC2626;color:#fff}
+  .co-sumcard{background:linear-gradient(180deg,#EEF6FC 0,#fff 120px)!important}
+  .co-thanks{background:radial-gradient(90% 120% at 100% 0%,#26B1E7 0%,rgba(38,177,231,0) 55%),linear-gradient(150deg,#0F80C3,#0A4F7A 70%,#0B2234)}
+  .co-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.18);pointer-events:none;animation:coRing 3.6s ease-out infinite}
+  .co-ring-a{left:-30px;top:-30px;width:200px;height:200px}.co-ring-b{left:-70px;top:-70px;width:280px;height:280px;animation-delay:1.2s}
+  .co-tick-path{stroke-dasharray:24;stroke-dashoffset:24;animation:coTick .8s .3s cubic-bezier(.2,.7,.2,1) forwards}
+  @keyframes coTick{to{stroke-dashoffset:0}}
+  @keyframes coRing{0%{transform:scale(.8);opacity:0}30%{opacity:1}100%{transform:scale(1.15);opacity:0}}
+  @media (prefers-reduced-motion:reduce){.co-ring{animation:none;opacity:.5}.co-tick-path{animation:none;stroke-dashoffset:0}}
   /* checkout blocks: a thin rule above each one; the floated legend keeps it off the rule */
   .co-fs{margin:0;min-width:0;border:0;border-top:1px solid rgba(27,36,43,.1);padding:20px 0 0}
   /* compact checkout fields */

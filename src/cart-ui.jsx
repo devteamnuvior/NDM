@@ -43,6 +43,16 @@ function CheckoutSteps({ at, onStep }) {
     </ol>
   );
 }
+/* round 32: one alert style for the cart and checkout: ok (green), warn (amber), err (red) */
+function CoAlert({ tone = 'ok', title, children, className = '' }) {
+  const icon = tone === 'ok' ? <path d="m4.5 8.3 2.2 2.2L11.5 5.7" /> : tone === 'warn' ? <><path d="M8 4.8v4" /><path d="M8 11.2h.01" /></> : <><path d="m5.6 5.6 4.8 4.8" /><path d="m10.4 5.6-4.8 4.8" /></>;
+  return (
+    <div role={tone === 'err' ? 'alert' : 'status'} className={`co-alert is-${tone} flex items-start gap-3 rounded-[14px] px-4 py-3 font-inter text-[13.5px] leading-[1.5] ${className}`}>
+      <span aria-hidden="true" className="co-alert-ico mt-px grid size-6 shrink-0 place-items-center rounded-full"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">{icon}</svg></span>
+      <span>{title && <b className="block font-semibold">{title}</b>}{children}</span>
+    </div>
+  );
+}
 const IconTick = ({ size = 14, ...p }) => <Svg size={size} vb="0 0 14 14" {...p}><path d="m3 7.3 2.6 2.6L11 4.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></Svg>;
 const IconLock = (p) => <Svg size={15} vb="0 0 16 16" {...p}><rect x="3" y="7" width="10" height="7" rx="2" stroke="currentColor" strokeWidth="1.4" /><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" strokeWidth="1.4" /></Svg>;
 
@@ -130,7 +140,7 @@ function CartPage() {
   const cart = React.useContext(CartCtx);
   const t = totalsOf(cart.lines);
   const [code, setCode] = useState('');
-  const [codeMsg, setCodeMsg] = useState('');
+  const [codeMsg, setCodeMsg] = useState(null); /* [tone, text] */
   const empty = cart.lines.length === 0;
   return (
     <section aria-labelledby="co-title" className={`co-band ${coWrap}`}>
@@ -157,19 +167,23 @@ function CartPage() {
               </div>
               <ul className="divide-y divide-ndm-ink/10" role="list">{cart.lines.map((l) => <CartLine key={l.key} l={l} />)}</ul>
             </div>
+            <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+              <CoAlert tone="ok" title="Free consultation included">Every treatment starts with an in-person consultation and VISIA® skin analysis, at no charge.</CoAlert>
+              <CoAlert tone="warn" title="Prices are estimates">HST is estimated. Your provider confirms your plan and final price at the clinic.</CoAlert>
+            </div>
           </div>
           {/* the summary and the suggestions stay together; on wide screens the column sticks and scrolls on its own when it is taller than the window */}
           <div className="co-side grid gap-4" data-lenis-prevent="">
-          <aside className={`${CO_CARD} p-[clamp(20px,2.4vw,28px)]`} aria-label="Cart summary">
+          <aside className={`${CO_CARD} co-sumcard overflow-hidden p-[clamp(20px,2.4vw,28px)]`} aria-label="Cart summary">
             <h2 className="font-aeonik text-[22px] font-normal tracking-[-0.01em] text-ndm-ink">Summary</h2>
             <div className="mt-3"><SumRows t={t} /></div>
             <details className="co-code mt-4 rounded-[14px] bg-ndm-mist px-4 py-3">
               <summary className="cursor-pointer font-inter text-[14px] font-medium text-ndm-ink">Have a promo code?</summary>
-              <form className="mt-3 flex gap-2" onSubmit={(e) => { e.preventDefault(); setCodeMsg(code.trim() ? 'Thanks. Our team checks promo codes before you pay at the clinic.' : 'Please enter a code.'); }}>
+              <form className="mt-3 flex gap-2" onSubmit={(e) => { e.preventDefault(); setCodeMsg(code.trim() ? ['warn', 'Thanks. Our team checks promo codes before you pay at the clinic.'] : ['err', 'Please enter a promo code first.']); }}>
                 <input value={code} onChange={(e) => setCode(e.target.value)} aria-label="Promo code" placeholder="Promo code" className={`${fieldCls} h-11`} />
                 <Btn as="button" type="submit" v="line" sm>Apply</Btn>
               </form>
-              {codeMsg && <p role="status" className="mt-2 font-inter text-[13px] text-ndm-muted">{codeMsg}</p>}
+              {codeMsg && <CoAlert tone={codeMsg[0]} className="mt-3">{codeMsg[1]}</CoAlert>}
             </details>
             <Btn href="checkout.html" v="ink" block className="mt-5">Proceed to checkout</Btn>
             <p className="mt-2.5 flex items-center justify-center gap-2 font-inter text-[12.5px] text-ndm-muted"><IconLock />Nothing is charged online</p>
@@ -221,13 +235,16 @@ function CheckoutPage() {
   const [step, setStep] = useState(0); /* 0 details, 1 appointment, 2 payment, 3 review */
   const [when, setWhen] = useState({ day: '', time: 'Morning', call: false });
   const [seen, setSeen] = useState({});
+  const [miss, setMiss] = useState(false);
   const formRef = useRef(null);
   const empty = cart.lines.length === 0;
   const STEP_HEAD = [['Your', 'details', 'Your details are used only to arrange your treatment.'], ['Your', 'appointment', 'Pick your clinic and a preferred time. We confirm it by email and text.'], ['How you', 'pay', 'Nothing is charged online: you pay at the clinic once your provider confirms your plan.'], ['Review your', 'request', 'Check everything, then place your request.']];
   const next = (e) => {
     e.preventDefault();
     const fs = formRef.current && formRef.current.querySelector(`[data-step="${step}"]`);
-    if (fs && [...fs.querySelectorAll('input,select,textarea')].some((x) => !x.checkValidity())) { [...fs.querySelectorAll('input,select,textarea')].find((x) => !x.checkValidity()).reportValidity(); return; }
+    const bad = fs ? [...fs.querySelectorAll('input,select,textarea')].filter((x) => !x.disabled && !x.checkValidity()) : [];
+    if (bad.length) { setMiss(true); bad[0].reportValidity(); return; }
+    setMiss(false);
     if (fs) { const fd = new FormData(formRef.current); setSeen(Object.fromEntries(fd.entries())); }
     if (step < 3) { setStep(step + 1); window.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' }); return; }
     place(e);
@@ -268,7 +285,7 @@ function CheckoutPage() {
           </details>
 
           <form ref={formRef} onSubmit={next} noValidate className={`${CO_CARD} co-form grid gap-5 p-[clamp(18px,2.4vw,32px)]`}>
-            <div data-step="0" hidden={step !== 0} className="grid gap-5">
+            <div data-step="0" className={step === 0 ? 'grid gap-5' : 'hidden'}>
             <fieldset className={block}>
               <legend className={legend}>Contact information</legend>
               <p className="mt-0.5 font-inter text-[13px] text-ndm-muted">You are checking out as a guest.</p>
@@ -301,7 +318,7 @@ function CheckoutPage() {
             </fieldset>
 
             </div>
-            <div data-step="1" hidden={step !== 1} className="grid gap-5">
+            <div data-step="1" className={step === 1 ? 'grid gap-5' : 'hidden'}>
             <fieldset className={block}>
               <legend className={legend}>Your clinic</legend>
               <p className="mt-0.5 font-inter text-[13px] text-ndm-muted">Where you would like your treatment.</p>
@@ -329,7 +346,7 @@ function CheckoutPage() {
               </div>
             </fieldset>
             </div>
-            <div data-step="2" hidden={step !== 2} className="grid gap-5">
+            <div data-step="2" className={step === 2 ? 'grid gap-5' : 'hidden'}>
             <fieldset className={block}>
               <legend className={legend}>Payment</legend>
               <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
@@ -345,7 +362,7 @@ function CheckoutPage() {
             </fieldset>
 
             </div>
-            <div data-step="3" hidden={step !== 3} className="grid gap-5">
+            <div data-step="3" className={step === 3 ? 'grid gap-5' : 'hidden'}>
             <fieldset className={block}>
               <legend className={legend}>Your request</legend>
               <dl className="mt-3 grid gap-2 rounded-[16px] bg-ndm-mist/70 p-4 font-inter text-[14px]">
@@ -361,14 +378,17 @@ function CheckoutPage() {
               <p className="mt-2.5 rounded-[12px] bg-ndm-mist px-3.5 py-2.5 font-inter text-[12.5px] leading-[1.5] text-ndm-muted">Please don’t include medical details here. Your provider reviews your health history in person at your consultation.</p>
             </fieldset>
 
-            <label className="flex items-start gap-2.5 font-inter text-[13.5px] leading-[1.5] text-ndm-ink"><input type="checkbox" required name="agree" className="mt-0.5 size-4 shrink-0 accent-[#0F80C3]" /><span>I accept the <a href="#/terms" className="text-ndm-deep underline-offset-4 hover:underline">Terms</a>, the <a href="privacy.html" className="text-ndm-deep underline-offset-4 hover:underline">Privacy Policy</a> and the <a href="#/casl" className="text-ndm-deep underline-offset-4 hover:underline">CASL consent</a>.</span></label>
+            <label className="flex items-start gap-2.5 font-inter text-[13.5px] leading-[1.5] text-ndm-ink"><input type="checkbox" required name="agree" className="mt-0.5 size-4 shrink-0 accent-[#0F80C3]" /><span>I accept the <a href="terms.html" className="text-ndm-deep underline-offset-4 hover:underline">Terms of Service</a>, the <a href="privacy.html" className="text-ndm-deep underline-offset-4 hover:underline">Privacy Policy</a> and the <a href="refunds.html" className="text-ndm-deep underline-offset-4 hover:underline">Refund Policy</a>.</span></label>
             </div>
             <div className="flex flex-col gap-3 border-t border-ndm-ink/10 pt-5">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                {step > 0 ? <button type="button" onClick={() => setStep(step - 1)} className="font-inter text-[14px] font-medium text-ndm-deep hover:underline">Back</button> : <a href="cart.html" className="font-inter text-[14px] font-medium text-ndm-deep hover:underline">Back to cart</a>}
-                <span className="font-inter text-[12.5px] text-ndm-muted">Step {step + 1} of 4</span>
+              {miss && <CoAlert tone="err" title="A few details are missing">Please fill in the highlighted field to continue.</CoAlert>}
+              {step === 1 && <CoAlert tone="warn">Your preferred time is a request. Our team confirms the exact time with you by email and text.</CoAlert>}
+              {step === 2 && <CoAlert tone="ok">Nothing is charged online. You pay at the clinic once your provider confirms your plan.</CoAlert>}
+              <p className="font-inter text-[12.5px] text-ndm-muted">Step {step + 1} of 4</p>
+              <div className="flex flex-col-reverse gap-2.5 sm:flex-row sm:items-center">
+                {step > 0 ? <button type="button" onClick={() => { setMiss(false); setStep(step - 1); }} className="btn btn-line sm:w-auto">Back</button> : <a href="cart.html" className="btn btn-line sm:w-auto">Back to cart</a>}
+                <span className="sm:flex-1"><Btn as="button" type="submit" v="ink" block disabled={busy}>{busy ? 'Placing your request…' : step < 3 ? `Continue to ${['appointment', 'payment', 'review'][step]}` : `Place order request · ${money2(t.total)}`}</Btn></span>
               </div>
-              <Btn as="button" type="submit" v="ink" block disabled={busy}>{busy ? 'Placing your request…' : step < 3 ? `Continue to ${['appointment', 'payment', 'review'][step]}` : `Place order request · ${money2(t.total)}`}</Btn>
               <p className="flex items-center justify-center gap-2 font-inter text-[12.5px] text-ndm-muted"><IconLock />Prototype: nothing is charged or sent</p>
             </div>
           </form>
@@ -405,12 +425,20 @@ function ConfirmPage() {
         </div>
       ) : (
         <div className="mt-8 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)] lg:items-start">
-          <div className={`${CO_CARD} p-[clamp(22px,3vw,44px)]`}>
-            <span aria-hidden="true" className="co-tick grid size-[72px] place-items-center rounded-full bg-ndm-deep text-white"><IconTick size={30} /></span>
-            <TwoTone as="h1" id="co-title" className="mt-6" size="text-[clamp(34px,3.6vw,54px)]" lead={<>Thank you{o.first ? `, ${o.first}` : ''},<br /></>} strong="your request is in" />
-            <p className="mt-4 max-w-[52ch] font-inter text-[16px] leading-[1.65] text-ndm-muted">We have your order request. Our team contacts you within one business day to book your visit{clinic ? ` at NewDermaMed ${clinic.name}` : ''}. Nothing has been charged.</p>
-            <dl className="mt-7 grid grid-cols-2 overflow-hidden rounded-[18px] border border-ndm-line bg-ndm-line [gap:1px] sm:grid-cols-4">
-              {[['Order number', o.no], ['Date', date], ['Total', money2(o.total)], ['Payment', o.pay]].map(([k, v]) => (
+          <div className={`${CO_CARD} overflow-hidden`}>
+            {/* round 32: a calm, celebratory head: the tick draws itself inside soft rings */}
+            <div className="co-thanks relative px-[clamp(22px,3vw,44px)] pb-8 pt-[clamp(28px,3.4vw,48px)] text-white">
+              <span aria-hidden="true" className="co-ring co-ring-a" /><span aria-hidden="true" className="co-ring co-ring-b" />
+              <span aria-hidden="true" className="relative grid size-[76px] place-items-center rounded-full bg-white text-ndm-deep shadow-[0_18px_40px_-16px_rgba(0,0,0,.45)]">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path className="co-tick-path" d="m5 12.5 4.5 4.5L19 7.5" /></svg>
+              </span>
+              <TwoTone as="h1" id="co-title" dark className="relative mt-6" size="text-[clamp(34px,3.6vw,54px)]" lead={<>Thank you{o.first ? `, ${o.first}` : ''},<br /></>} strong="your request is in" />
+              <p className="relative mt-3 max-w-[52ch] font-inter text-[16px] leading-[1.6] text-white/85">Our team contacts you within one business day to book your visit{clinic ? ` at NewDermaMed ${clinic.name}` : ''}. Nothing has been charged.</p>
+              <span className="relative mt-5 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 font-inter text-[13.5px] ring-1 ring-white/25">Order number <b className="font-semibold tabular-nums">{o.no}</b></span>
+            </div>
+            <div className="p-[clamp(22px,3vw,44px)] pt-6">
+            <dl className="grid grid-cols-3 overflow-hidden rounded-[18px] border border-ndm-line bg-ndm-line [gap:1px]">
+              {[['Date', date], ['Estimated total', money2(o.total)], ['Payment', 'At the clinic']].map(([k, v]) => (
                 <div key={k} className="bg-white px-4 py-3.5"><dt className="font-inter text-[12px] text-ndm-muted">{k}</dt><dd className="mt-1 font-inter text-[14.5px] font-medium leading-[1.35] text-ndm-ink">{v}</dd></div>
               ))}
             </dl>
@@ -427,7 +455,8 @@ function ConfirmPage() {
                 </li>
               ))}
             </ol>
-            <div className="mt-8 flex flex-wrap gap-3"><Btn href="index.html" v="ink">Back to home</Btn><Btn href="pricing.html#prices" v="line">Browse more treatments</Btn></div>
+            <div className="mt-8 flex flex-wrap gap-3"><Btn href="account.html#plans" v="ink">See it in my account</Btn><Btn href="index.html" v="line">Back to home</Btn></div>
+            </div>
           </div>
           <aside className="grid gap-4 lg:sticky lg:top-[140px]">
             <div className={`${CO_CARD} p-[clamp(20px,2.4vw,28px)]`}>

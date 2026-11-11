@@ -128,21 +128,28 @@ function TxNav({ p }) {
     if (b && r) r.scrollTo({ left: b.offsetLeft - r.clientWidth / 2 + b.offsetWidth / 2, behavior: REDUCED ? 'auto' : 'smooth' });
   }, [on]);
   const go = (e, id) => { const el = document.getElementById(id); if (!el) return; e.preventDefault(); scrollToY(el.getBoundingClientRect().top + window.scrollY - 160); };
+  /* round 31: like the header, the bar turns dark glass while it sits over a dark section */
+  const [dk, setDk] = useState(false);
+  useOnScroll(() => {
+    const b = bar.current; if (!b) return;
+    const r = b.getBoundingClientRect(), y = r.top + r.height / 2;
+    setDk([...document.querySelectorAll('[data-nav="dark"]')].some((el) => { const q = el.getBoundingClientRect(); return q.top <= y && q.bottom >= y; }));
+  }, []);
   return (
-    <nav ref={bar} aria-label="On this page" className="tx-nav sticky top-[100px] z-30 mt-8 bg-ndm-paper/85 backdrop-blur-[10px] xl:top-[120px]">
+    <nav ref={bar} aria-label="On this page" className={`tx-nav sticky top-[100px] z-30 mt-8 backdrop-blur-[14px] transition-colors duration-300 xl:top-[120px] ${dk ? 'bg-[rgba(10,13,16,.42)] shadow-[inset_0_-1px_0_rgba(255,255,255,.08)]' : 'bg-ndm-paper/85'}`}>
       <div className="tx-nav-scroll no-scrollbar relative overflow-x-auto px-[var(--gx)] py-2.5">
       <ul className="relative mx-auto flex w-max gap-1" role="list">
         <li className="shrink-0">
           <a href="#top" aria-label="Back to top" onClick={(e) => { e.preventDefault(); scrollToY(0); }}
-            className="flex items-center whitespace-nowrap rounded-full px-2.5 py-2 text-ndm-deep transition-colors hover:bg-white hover:text-ndm-ink">
+            className={`flex items-center whitespace-nowrap rounded-full px-2.5 py-2 transition-colors ${dk ? 'text-white hover:bg-white/10' : 'text-ndm-deep hover:bg-white hover:text-ndm-ink'}`}>
             <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{NAV_ICONS.home}</svg>
           </a>
         </li>
         {p.nav.map(([id, label]) => (
           <li key={id} data-k={id} className="shrink-0">
             <a href={`#${id}`} onClick={(e) => go(e, id)} aria-current={on === id ? 'true' : undefined}
-              className={`flex items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 font-inter text-[14px] transition-colors ${on === id ? 'bg-ndm-deep font-medium text-white' : 'text-ndm-ink/80 hover:bg-white hover:text-ndm-ink'}`}>
-              <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={on === id ? 'text-white' : 'text-ndm-deep'}>{NAV_ICONS[navIcon(id, label)]}</svg>{label}
+              className={`flex items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 font-inter text-[14px] transition-colors ${on === id ? 'bg-ndm-deep font-medium text-white' : dk ? 'text-white/85 hover:bg-white/10 hover:text-white' : 'text-ndm-ink/80 hover:bg-white hover:text-ndm-ink'}`}>
+              <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={on === id ? 'text-white' : dk ? 'text-ndm-sky' : 'text-ndm-deep'}>{NAV_ICONS[navIcon(id, label)]}</svg>{label}
             </a>
           </li>
         ))}
@@ -564,7 +571,7 @@ function TxPrices({ p }) {
   const pr = p.prices;
   const unit = (label) => (pr.unitLabel && label === pr.unitLabel ? ' / unit' : '');
   const pct = Math.max(0, ...pr.rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
-  const from = Math.min(...pr.rows.map((r) => r[1]));
+  const from = rowsFrom(pr.rows, !!pr.unitLabel); /* round 31: after the discount, per unit when priced per unit */
   return (
     <section ref={ref} id="prices" aria-labelledby="prices-title" className="proc-peach relative z-10 scroll-mt-[170px] px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
       <TxHead p={p} id="prices" tag="Price list" hid="prices-title" lead={pr.lead} strong={pr.strong} text={pr.intro} />
@@ -580,7 +587,7 @@ function TxPrices({ p }) {
                 </span>
                 <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
                   {pct > 0 && <span className="pr-badge">Up to {pct}% off</span>}
-                  <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{money(from)}</span>{pr.unitLabel ? ' / unit' : ''}</span>
+                  <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{pfmt(from)}</span>{pr.unitLabel ? ' / unit' : ''}</span>
                 </span>
                 <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
               </button>

@@ -216,10 +216,13 @@ SPACING = '''
   .ov2-orb-c{width:200px;height:200px;right:30%;top:-60px;background:radial-gradient(circle,rgba(15,128,195,.6),transparent 70%);animation-duration:22s;animation-delay:-11s}
   .ov2-ring{position:absolute;right:-120px;top:50%;width:560px;height:560px;transform:translateY(-50%);pointer-events:none;animation:ov2Spin 90s linear infinite}
   .ov2-ring circle{fill:none;stroke:rgba(255,255,255,.12);stroke-width:1;stroke-dasharray:2 7}
-  .ov2-tab{display:flex;align-items:center;gap:14px;min-width:220px;border-radius:18px;padding:14px 16px;text-align:left;color:rgba(255,255,255,.72);background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:background-color .3s ease,color .3s ease,box-shadow .3s ease,transform .3s ease}
+  /* round 31: compact, so the whole About section fits one view under the header and the section bar */
+  main>section#overview.ov2{padding-top:clamp(28px,4.4vh,56px)!important;padding-bottom:clamp(28px,4.4vh,56px)!important;scroll-margin-top:170px}
+  .ov2-tabs{border-bottom:1px solid rgba(255,255,255,.1)}
+  .ov2-tab{display:flex;align-items:center;justify-content:center;gap:10px;border-radius:16px;padding:11px 16px;white-space:nowrap;font:500 14.5px/1.2 Inter,"Helvetica Neue",Arial,sans-serif;color:rgba(255,255,255,.7);transition:background-color .3s ease,color .3s ease,box-shadow .3s ease}
   .ov2-tab:hover{color:#fff;background:rgba(255,255,255,.08)}
   .ov2-tab.is-on{color:#fff;background:linear-gradient(120deg,rgba(38,177,231,.28),rgba(15,128,195,.12));box-shadow:inset 0 0 0 1px rgba(38,177,231,.45),0 18px 40px -24px rgba(38,177,231,.6)}
-  .ov2-num{font-size:24px;line-height:1;color:rgba(255,255,255,.35);transition:color .3s ease}
+  .ov2-num{font-size:17px;line-height:1;color:rgba(255,255,255,.35);transition:color .3s ease}
   .ov2-tab.is-on .ov2-num{color:#26B1E7}
   .ov2-go{place-items:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.08);opacity:0;transform:translateX(-6px);transition:opacity .3s ease,transform .3s ease}
   .ov2-tab.is-on .ov2-go{opacity:1;transform:none;background:#26B1E7;color:#0B0F13}

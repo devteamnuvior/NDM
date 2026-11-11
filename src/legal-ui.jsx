@@ -1,59 +1,106 @@
-/* ---------------------------------------------------------------- privacy policy (privacy.html, round 29)
-   Layout and text after the NUVIOR legal sample (../new website Odoo/nuvior-legal-privacy_1.html): a legal sidebar (other policies,
-   "On this page" with the section in view, print), the numbered policy and the IPC Ontario card. NUVIOR is replaced by NewDermaMed;
-   the sample's duplicated "Information We Disclose" section appears once. Items the clinic still has to supply are marked. */
-const LEGAL_DOCS = [['Privacy Policy', 'privacy.html'], ['Terms of Service', '#/terms'], ['CASL / Anti-spam consent', '#/casl'], ['Refund & cancellation policy', '#/refunds'], ['Accessibility (AODA)', '#/accessibility']];
-const LEGAL_TOC = [['s1', 'Confidentiality and Security'], ['s2', 'Purposes'], ['s3', 'Information We Disclose'], ['s4', 'Consent'], ['s5', 'SMS Messaging and TCR Compliance'], ['s6', 'Sharing Your Information'], ['s7', 'Your Rights'], ['s8', 'Contact and Resources']];
-const legalTodo = (t) => <span className="lg-todo">COPY NEEDED: {t}</span>;
-function LegalPage() {
-  const [on, setOn] = useState('s1');
-  useOnScroll(() => {
-    let cur = 's1';
-    LEGAL_TOC.forEach(([id]) => { const e = document.getElementById(id); if (e && e.getBoundingClientRect().top < 220) cur = id; });
-    setOn(cur);
-  }, []);
-  const go = (id) => (e) => { e.preventDefault(); const el = document.getElementById(id); if (el) scrollToY(el.getBoundingClientRect().top + window.scrollY - 190); };
-  const [docs, setDocs] = useState(false);
-  const box = useRef(null);
-  useEffect(() => {
-    if (!docs) return;
-    const off = (e) => { if (box.current && !box.current.contains(e.target)) setDocs(false); };
-    const key = (e) => { if (e.key === 'Escape') setDocs(false); };
-    document.addEventListener('pointerdown', off); window.addEventListener('keydown', key);
-    return () => { document.removeEventListener('pointerdown', off); window.removeEventListener('keydown', key); };
-  }, [docs]);
+/* ---------------------------------------------------------------- legal pages (privacy.html, terms.html, refunds.html; round 32)
+   One page per document. Laid out like the promotion page (left-aligned, the site's side padding), with the document switch under
+   the title and the site's one sub-menu (SubNav) for "On this page". The privacy text is after the NUVIOR legal sample; the terms and
+   the refund policy are written for an Ontario medical aesthetics clinic (round 32). They need a legal review before publishing. */
+const LEGAL_DOCS = [['privacy', 'Privacy Policy', 'privacy.html'], ['terms', 'Terms of Service', 'terms.html'], ['refunds', 'Refunds & Cancellations', 'refunds.html']];
+const LEGAL = {
+  privacy: { lead: 'Privacy', strong: 'Policy', toc: [['s1', 'Confidentiality and Security'], ['s2', 'Purposes'], ['s3', 'Information We Disclose'], ['s4', 'Consent'], ['s5', 'SMS Messaging'], ['s6', 'Sharing Your Information'], ['s7', 'Your Rights'], ['s8', 'Contact']] },
+  terms: { lead: 'Terms of', strong: 'Service', toc: [['t1', 'Medical Information'], ['t2', 'Using the Site'], ['t3', 'Bookings and Prices'], ['t4', 'Promotions'], ['t5', 'Payments'], ['t6', 'Products'], ['t7', 'Content and Links'], ['t8', 'Liability'], ['t9', 'Privacy'], ['t10', 'Governing Law'], ['t11', 'Contact']] },
+  refunds: { lead: 'Refunds &', strong: 'Cancellations', toc: [['r1', 'Consultations'], ['r2', 'Changing a Treatment'], ['r3', 'Treatments Received'], ['r4', 'Packages'], ['r5', 'Gift Cards'], ['r6', 'Product Returns'], ['r7', 'How Refunds Are Paid'], ['r8', 'Your Rights'], ['r9', 'Contact']] },
+};
+const LEGAL_UPDATED = 'November 2026';
+function LegalBody({ doc }) {
+  if (doc === 'terms') return (
+        <>
+          <p className="lg-lede">These Terms of Service set the rules for using the NewDermaMed website, our online booking and our online shop. By using the site you agree to them. If you do not agree, please do not use the site.</p>
+          <p>In these terms, “NewDermaMed”, “we” and “us” mean NewDermaMed and its clinics in Toronto, Ontario. “You” means the person using the site.</p>
+
+          <h2 id="t1">Medical Information</h2>
+          <div className="lg-callout"><p>The content on this site is general education. It is not medical advice and it does not create a doctor and patient relationship. Every treatment starts with an in-person consultation, where a licensed practitioner decides whether a treatment is suitable for you. Results vary from person to person and no specific result can be promised. In an emergency, call 911.</p></div>
+
+          <h2 id="t2">Using the Site and Your Account</h2>
+          <ul>
+            <li>You must be 18 or older to book or buy on the site, or have a parent or guardian do so for you.</li>
+            <li>Please give accurate information and keep your account password private. You are responsible for activity under your account; tell us promptly if you think it has been used without your permission.</li>
+            <li>Do not misuse the site, for example by trying to access it without permission, interfering with its operation or copying its content for commercial use.</li>
+          </ul>
+
+          <h2 id="t3">Bookings and Prices</h2>
+          <ul>
+            <li>An online booking is a request. It is confirmed only when we confirm it with you by email, text or phone.</li>
+            <li>Prices on the site are estimates in Canadian dollars and taxes may apply. Your final price depends on your treatment plan and is agreed with you at your consultation, before any treatment.</li>
+            <li>If a price or other detail on the site is shown in error, we may correct it. If the correction changes what you agreed to pay, we will tell you first and you may cancel without charge.</li>
+            <li>Cancellations, deposits and refunds are covered by our <a href="refunds.html">Refund and Cancellation Policy</a>.</li>
+          </ul>
+
+          <h2 id="t4">Promotions</h2>
+          <p>Promotions run for a limited time and while availability lasts. Unless a promotion says otherwise, offers cannot be combined, have no cash value and apply to new bookings only. Each offer follows the terms shown with it, and treatment under any offer still needs a consultation and a practitioner’s approval.</p>
+
+          <h2 id="t5">Payments and Financing</h2>
+          <p>Unless we agree otherwise, payment is made at the clinic. Financing is offered by third-party lenders, subject to their approval and their own terms; we are not a party to your financing agreement.</p>
+
+          <h2 id="t6">Products</h2>
+          <p>Products are sold for use as directed on their labels or by your practitioner. Some products are only available after a consultation. Returns follow our <a href="refunds.html">Refund and Cancellation Policy</a>.</p>
+
+          <h2 id="t7">Content and Links</h2>
+          <p>The text, photos, video and design on this site belong to NewDermaMed or its licensors and may not be copied or reused without our written permission. Links to other websites are for convenience; we are not responsible for their content or practices.</p>
+
+          <h2 id="t8">Limits of Liability</h2>
+          <p>We work to keep the site accurate and available, but it is provided “as is” and may change or be unavailable at times. To the extent the law allows, NewDermaMed is not liable for indirect or consequential loss arising from your use of the site. Nothing in these terms limits any liability that cannot be limited by law, or your rights under the Ontario <i>Consumer Protection Act, 2002</i>. Care you receive at our clinics is governed by your consent and treatment records and by the standards of the regulated health professions.</p>
+
+          <h2 id="t9">Privacy</h2>
+          <p>How we handle your personal information, including personal health information, is set out in our <a href="privacy.html">Privacy Policy</a>.</p>
+
+          <h2 id="t10">Changes and Governing Law</h2>
+          <p>We may update these terms from time to time; the date at the top shows the latest version, and changes apply from that date. These terms are governed by the laws of Ontario and the federal laws of Canada that apply there, and the courts of Ontario sitting in Toronto have jurisdiction.</p>
+
+          <h2 id="t11" className="no-num">Contact</h2>
+          <p>Questions about these terms? Email <a href="mailto:info@newdermamed.com">info@newdermamed.com</a>, or call either clinic: Uptown <a href="tel:+14162248800">416-224-8800</a>, Downtown <a href="tel:+14166719766">416-671-9766</a>.</p>
+        </>
+  );
+  if (doc === 'refunds') return (
+        <>
+          <p className="lg-lede">We want every visit to feel clear and fair. This policy explains how appointment changes, deposits, packages, gift cards and product returns work at NewDermaMed.</p>
+
+          <h2 id="r1">Consultations</h2>
+          <p>Consultations are free. You can reschedule or cancel a consultation at any time; we only ask that you let us know as early as you can so another client can use the time.</p>
+
+          <h2 id="r2">Changing or Cancelling a Treatment</h2>
+          <ul>
+            <li>Please give at least <b>48 hours’ notice</b> to change or cancel a treatment appointment, by phone, email or reply to your reminder.</li>
+            <li>Some treatments need a deposit to hold the time. The deposit is applied in full to your treatment, and it is refunded or moved to a new date when you give 48 hours’ notice.</li>
+            <li>With less notice, or if you miss the appointment, the deposit may be kept. We will always tell you the deposit amount before you book.</li>
+            <li>If we need to change or cancel your appointment, any deposit is moved or refunded in full, as you prefer.</li>
+          </ul>
+
+          <h2 id="r3">Treatments Already Received</h2>
+          <p>Treatments are medical services provided after your consultation and consent, so treatments already received are not refundable. Results vary from person to person. If you have a concern about your result, please contact us within <b>14 days</b>; your practitioner will review it with you and may recommend a follow-up or adjustment where clinically appropriate.</p>
+
+          <h2 id="r4">Packages and Series</h2>
+          <p>Prepaid packages are personal and non-transferable. If you want to stop a package, or your practitioner advises that you should not continue for medical reasons, we will refund the unused part: the amount you paid, less the sessions you have had at the regular single-session price.</p>
+
+          <h2 id="r5">Gift Cards</h2>
+          <p>Gift cards do not expire and can be used towards any treatment or product. They are not exchangeable for cash, except where the law requires.</p>
+
+          <h2 id="r6">Product Returns</h2>
+          <ul>
+            <li>Unopened products in their original packaging can be returned within <b>14 days</b> of purchase with proof of purchase.</li>
+            <li>For health and safety reasons, opened skincare and medical products cannot be returned, unless they are faulty.</li>
+            <li>If a product is faulty or arrives damaged, tell us within 14 days and we will replace it or refund it.</li>
+          </ul>
+
+          <h2 id="r7">How Refunds Are Paid</h2>
+          <p>Refunds are paid to the original payment method, usually within 10 business days. Refunds on treatments paid with financing are processed through your lender. Promotional purchases are refunded at the price you paid.</p>
+
+          <h2 id="r8">Your Rights</h2>
+          <p>Nothing in this policy limits your rights under the Ontario <i>Consumer Protection Act, 2002</i> or other law that applies to you.</p>
+
+          <h2 id="r9" className="no-num">Contact</h2>
+          <p>To change an appointment or ask about a refund, email <a href="mailto:info@newdermamed.com">info@newdermamed.com</a>, or call either clinic: Uptown <a href="tel:+14162248800">416-224-8800</a>, Downtown <a href="tel:+14166719766">416-671-9766</a>.</p>
+        </>
+  );
   return (
-    <>
-    {/* round 30: "On this page" moves to a sticky bar at the top, like the Botox page's section bar; the other legal
-        documents sit in its submenu */}
-    <nav aria-label="On this page" className="tx-nav sticky top-[100px] z-30 bg-ndm-paper/85 backdrop-blur-[10px] xl:top-[120px]">
-      <div className="mx-auto flex max-w-[1180px] items-center gap-2 px-[var(--gx)] py-2.5 xl:px-0">
-        <div ref={box} className="relative shrink-0">
-          <button type="button" onClick={() => setDocs(!docs)} aria-expanded={docs} aria-controls="lg-docs" className="lg-docs-btn">
-            Legal documents<svg width="11" height="11" viewBox="0 0 12 8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true" style={{ transform: docs ? 'rotate(180deg)' : 'none', transition: 'transform .25s ease' }}><path d="M1 2l5 5 5-5" /></svg>
-          </button>
-          <ul id="lg-docs" role="list" className={`lg-docs ${docs ? 'is-on' : ''}`}>
-            {LEGAL_DOCS.map(([t, h]) => <li key={t}><a href={h} aria-current={h === 'privacy.html' ? 'page' : undefined} className="lg-doc">{t}</a></li>)}
-          </ul>
-        </div>
-        <span aria-hidden="true" className="h-6 w-px shrink-0 bg-ndm-ink/10" />
-        <div className="no-scrollbar min-w-0 flex-1 overflow-x-auto">
-          <ul className="flex w-max gap-1" role="list">
-            {LEGAL_TOC.map(([id, t], k) => (
-              <li key={id} className="shrink-0"><a href={`#${id}`} onClick={go(id)} aria-current={on === id ? 'location' : undefined}
-                className={`flex items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 font-inter text-[14px] transition-colors ${on === id ? 'bg-ndm-deep font-medium text-white' : 'text-ndm-ink/80 hover:bg-white hover:text-ndm-ink'}`}>
-                <span className={`tabular-nums ${on === id ? 'text-white/70' : 'text-ndm-muted'}`}>{k < 7 ? k + 1 : ''}</span>{t}</a></li>
-            ))}
-          </ul>
-        </div>
-        <button type="button" onClick={() => window.print()} className="lg-print hidden shrink-0 md:block">Print</button>
-      </div>
-    </nav>
-    <section aria-labelledby="lg-title" className="px-[var(--gx)] pb-[clamp(72px,8vw,120px)] pt-[clamp(28px,3vw,44px)]">
-      <div className="mx-auto max-w-[1180px]">
-        <article className="lg-doc-body max-w-[78ch]">
-          <TwoTone as="h1" id="lg-title" size="text-[clamp(40px,4.6vw,64px)]" lead={<>Privacy<br /></>} strong="Policy" />
-          <p className="lg-meta">Last updated {legalTodo('effective date')}</p>
+        <>
           <p className="lg-lede">NewDermaMed is committed to protecting the personal information (includes personal health information) that you provide to us.</p>
           <p>This Privacy Notice (“Notice”) explains how we collect, use and disclose your personal information. The information contained in this Notice applies to you if you have visited NewDermaMed, called in or emailed us and provided us with your personal information.</p>
 
@@ -128,15 +175,48 @@ function LegalPage() {
           <ol className="lg-alpha" style={{ counterReset: 'lg 2' }}><li>ask for a review of the NewDermaMed decision by the Commissioner; or</li><li>submit a statement of disagreement setting out the requested correction or amendment and your reasons for disagreeing with our decision.</li></ol>
 
           <h2 id="s8" className="no-num">Contact and Resources</h2>
-          <p>In order to exercise this right and in order to obtain information about our privacy practices and about our collection, use and disclosure of personal information, both by us and any service providers we contract with in Ontario or in other provinces, you can contact our Privacy Officer at: {legalTodo('Privacy Officer name, email and phone')}</p>
+          <p>In order to exercise this right and in order to obtain information about our privacy practices and about our collection, use and disclosure of personal information, both by us and any service providers we contract with in Ontario or in other provinces, you can contact our Privacy Officer at: <a href="mailto:info@newdermamed.com">info@newdermamed.com</a>, or by phone at either clinic: Uptown <a href="tel:+14162248800">416-224-8800</a>, Downtown <a href="tel:+14166719766">416-671-9766</a>.</p>
           <p>For a copy of the Personal Health Information Protection Act, 2004 see: <a href="https://www.ontario.ca/laws/statute/04p03" target="_blank" rel="noopener">ontario.ca/laws/statute/04p03</a></p>
           <div className="lg-card">
             <h4>Information and Privacy Commissioner of Ontario</h4>
             <p>2 Bloor Street East, Suite 1400<br />Toronto, Ontario M4W 1A8<br />Phone: <a href="tel:+14163263333">416-326-3333</a> or <a href="tel:+18003870073">1-800-387-0073</a></p>
           </div>
-        </article>
-      </div>
+        </>
+  );
+}
+function LegalPage({ doc = 'privacy' }) {
+  const d = LEGAL[doc];
+  const [on, setOn] = useState(d.toc[0][0]);
+  useOnScroll(() => {
+    let cur = d.toc[0][0];
+    d.toc.forEach(([id]) => { const e = document.getElementById(id); if (e && e.getBoundingClientRect().top < 220) cur = id; });
+    setOn(cur);
+  }, []);
+  const go = (id, e) => { e.preventDefault(); const el = document.getElementById(id); if (el) scrollToY(el.getBoundingClientRect().top + window.scrollY - 190); };
+  const items = d.toc.map(([id, t], k) => [id, <><span className={`tabular-nums ${on === id ? 'text-white/70' : 'text-ndm-muted'}`}>{k + 1}</span>{t}</>]);
+  return (
+    <>
+    <section aria-labelledby="lg-title" className="px-[var(--gx)] pb-6 pt-[clamp(28px,3vw,44px)]">
+      <TwoTone as="h1" id="lg-title" size="text-[clamp(40px,4.6vw,64px)]" lead={<>{d.lead}<br /></>} strong={d.strong} />
+      <nav aria-label="Legal documents" className="no-scrollbar -mx-[var(--gx)] mt-6 overflow-x-auto px-[var(--gx)]">
+        <ul role="list" className="flex w-max gap-1 rounded-full bg-white p-1 shadow-[inset_0_0_0_1px_rgba(27,36,43,.08)]">
+          {LEGAL_DOCS.map(([k, t, h]) => (
+            <li key={k}><a href={h} aria-current={k === doc ? 'page' : undefined}
+              className={`block whitespace-nowrap rounded-full px-4 py-2 font-inter text-[14px] transition-colors ${k === doc ? 'bg-ndm-ink font-medium text-white' : 'text-ndm-ink/75 hover:bg-ndm-paper hover:text-ndm-ink'}`}>{t}</a></li>
+          ))}
+        </ul>
+      </nav>
+      <p className="mt-5 font-inter text-[13px] text-ndm-muted">Last updated {LEGAL_UPDATED}</p>
+    </section>
+    <SubNav label="On this page" items={items} on={on} onPick={go} />
+    <section className="px-[var(--gx)] pb-[clamp(72px,8vw,120px)] pt-2">
+      <article className="lg-doc-body max-w-[820px]">
+        <LegalBody doc={doc} />
+      </article>
     </section>
     </>
   );
 }
+const PrivacyPage = () => <LegalPage doc="privacy" />;
+const TermsPage = () => <LegalPage doc="terms" />;
+const RefundsPage = () => <LegalPage doc="refunds" />;

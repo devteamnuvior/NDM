@@ -42,28 +42,25 @@ function AccOrders({ rows }) {
 }
 function AccountPage() {
   const [tab, setTab] = useState(() => { const h = (window.location.hash || '').slice(1); return ACC_TABS.some(([k]) => k === h) ? h : 'dashboard'; });
-  const go = (k) => { setTab(k); try { history.replaceState(null, '', '#' + k); } catch (e) {} window.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' }); };
+  const go = (k) => { setTab(k); try { history.replaceState(null, '', '#' + k); } catch (e) {} const n = document.querySelector('.tx-nav'); if (n && n.getBoundingClientRect().top <= 130) scrollToY(document.getElementById('acc-title').getBoundingClientRect().top + window.scrollY + 70); };
   const [plan] = useState(() => { try { return JSON.parse(localStorage.getItem('ndm-bf-plan') || '[]'); } catch (e) { return []; } });
   const [wish, setWish] = useState(() => PRODUCTS.slice(0, 6));
   const [notes, setNotes] = useState({ orders: true, offers: false, news: true, events: false });
   const label = 'mb-1 block font-inter text-[12.5px] font-medium text-ndm-ink/80';
   const fld = `${fieldCls} co-fld`;
   return (
-    <section aria-labelledby="acc-title" className="px-[var(--gx)] pb-[clamp(72px,8vw,120px)]">
-      <div className="mx-auto max-w-[1280px]">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <TwoTone as="h1" id="acc-title" size="text-[clamp(40px,4.6vw,64px)]" lead={<>My<br /></>} strong="account" />
-          <p className="font-inter text-[14px] text-ndm-muted">Signed in as <b className="font-semibold text-ndm-ink">Alex M.</b> · <a href="#" onClick={(e) => e.preventDefault()} className="text-ndm-deep hover:underline">Sign out</a></p>
-        </div>
-        <div className="mt-8 grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
-          <nav aria-label="Account" className="acc-side no-scrollbar -mx-[var(--gx)] flex gap-2 overflow-x-auto px-[var(--gx)] lg:sticky lg:top-[150px] lg:mx-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:rounded-[22px] lg:bg-white lg:p-2 lg:ring-1 lg:ring-ndm-ink/[.06]">
-            {ACC_TABS.map(([k, t, soon]) => (
-              <button key={k} type="button" onClick={() => go(k)} aria-current={tab === k ? 'page' : undefined} className={`acc-link shrink-0 ${tab === k ? 'is-on' : ''}`}>
-                <span>{t}</span>{k === 'wishlist' && <span className="acc-count">{wish.length}</span>}{soon && <span className="acc-soon">{soon}</span>}
-              </button>
-            ))}
-          </nav>
-
+    <>
+    <section aria-labelledby="acc-title" className="px-[var(--gx)] pb-6 pt-[clamp(8px,1.4vw,20px)]">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <h1 id="acc-title" className="font-aeonik text-[clamp(36px,4vw,56px)] font-normal leading-[1.05] tracking-[-0.03em] text-ndm-ink">My account</h1>
+        <p className="font-inter text-[14px] text-ndm-muted">Signed in as <b className="font-semibold text-ndm-ink">Alex M.</b> · <a href="#" onClick={(e) => e.preventDefault()} className="text-ndm-deep hover:underline">Sign out</a></p>
+      </div>
+    </section>
+    <SubNav label="Account" items={ACC_TABS.map(([k, t, soon]) => [k, t, k === 'wishlist' ? <span className={`grid h-5 min-w-5 place-items-center rounded-full px-1.5 text-[11px] font-semibold ${tab === k ? 'bg-white text-ndm-deep' : 'bg-ndm-deep text-white'}`}>{wish.length}</span> : soon ? <span className={`rounded-full px-2 py-0.5 text-[10.5px] font-semibold ${tab === k ? 'bg-white/20' : 'bg-ndm-mist text-ndm-muted'}`}>{soon}</span> : null])}
+      on={tab} onPick={(k, e) => { e.preventDefault(); go(k); }} />
+    <section className="px-[var(--gx)] pb-[clamp(72px,8vw,120px)] pt-[clamp(24px,3vw,40px)]">
+      <div>
+        <div>
           <div className="min-w-0">
             {tab === 'dashboard' && (<>
               <AccHead k="Dashboard" title="Welcome back, Alex" text="Your appointments, plans, orders and membership in one place." />
@@ -159,11 +156,11 @@ function AccountPage() {
               <AccHead k="Wishlist" title={`${wish.length} saved products`} text="Clinic skincare you saved from our online shop." />
               {wish.length ? (
                 <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  {wish.map(([n, sz, img, sl]) => (
-                    <div key={sl} className="flex items-center gap-3 rounded-[18px] bg-white p-3 ring-1 ring-ndm-ink/[.06]">
-                      <span className="grid size-[68px] shrink-0 place-items-center overflow-hidden rounded-[12px] bg-ndm-mist"><img src={SHOP_IMG + img} alt="" loading="lazy" className="h-[86%] w-[86%] object-contain" /></span>
+                  {wish.map(({ n, d: sz, img, h }) => (
+                    <div key={h} className="flex items-center gap-3 rounded-[18px] bg-white p-3 ring-1 ring-ndm-ink/[.06]">
+                      <span className="grid size-[68px] shrink-0 place-items-center overflow-hidden rounded-[12px] bg-ndm-mist"><img src={img} alt="" loading="lazy" className="h-[86%] w-[86%] object-contain" /></span>
                       <span className="min-w-0 flex-1"><span className="block truncate font-inter text-[14.5px] capitalize text-ndm-ink">{n}</span><span className="block font-inter text-[13px] text-ndm-muted">{sz}</span>
-                        <span className="mt-1.5 flex gap-3 font-inter text-[13px]"><a href={`https://shop.newdermamedlaserclinic.com/product/${sl}/`} target="_blank" rel="noopener" className="font-medium text-ndm-deep hover:underline">Shop</a><button type="button" onClick={() => setWish(wish.filter((x) => x[3] !== sl))} className="text-ndm-muted hover:text-ndm-ink">Remove</button></span></span>
+                        <span className="mt-1.5 flex gap-3 font-inter text-[13px]"><a href={h} target="_blank" rel="noopener" className="font-medium text-ndm-deep hover:underline">Shop</a><button type="button" onClick={() => setWish(wish.filter((x) => x.h !== h))} className="text-ndm-muted hover:text-ndm-ink">Remove</button></span></span>
                     </div>
                   ))}
                 </div>
@@ -217,5 +214,6 @@ function AccountPage() {
         <p className="mt-10 font-inter text-[12.5px] text-ndm-muted">Prototype: sample account data only. Nothing is loaded from or sent to a server.</p>
       </div>
     </section>
+    </>
   );
 }

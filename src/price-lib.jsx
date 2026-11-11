@@ -50,3 +50,5 @@ function priceFor(name) {
 const priceInfo = (name) => { const k = pNorm(name); const hit = PRICE_NAMES[k] || (() => { const c = PRICE_CATS.find((x) => pNorm(x.name) === k); return c ? [c.id] : null; })(); return hit ? { id: hit[0], item: hit[1], ...priceFrom(hit[0], hit[1]) } : null; };
 /* the price rows of one treatment, for the treatment pages' price tables: [option, price, regular, badge] */
 const priceRows = (id, item) => { const c = PRICE_BY_ID[id]; const it = c && c.items.find((x) => pNorm(x[0]).includes(pNorm(item))); return it ? it[2] : []; };
+/* the lowest price in one price table after its discounts; per unit when the table is priced per unit (e.g. 220 units $1848 -> $8.40) */
+const rowsFrom = (rows, perUnit) => Math.round(Math.min(...rows.map((r) => (perUnit && !/regular/i.test(r[0]) ? r[1] / pCount(r[0]) : r[1]))) * 100) / 100;

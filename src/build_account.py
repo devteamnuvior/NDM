@@ -8,7 +8,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from shellpage import make_page
 
 root, src = Path(sys.argv[1]), Path(sys.argv[2])
-ui = (src / 'account-ui.jsx').read_text(encoding='utf-8')
+ui = (src / 'subnav-ui.jsx').read_text(encoding='utf-8') + (src / 'account-ui.jsx').read_text(encoding='utf-8')
 css = '''
   /* my account (round 29) */
   .acc-link{display:flex;align-items:center;gap:8px;border-radius:14px;padding:11px 14px;text-align:left;font:500 14.5px/1.3 Inter,"Helvetica Neue",Arial,sans-serif;color:#5A646C;background:#fff;box-shadow:inset 0 0 0 1px rgba(27,36,43,.06);transition:background-color .25s ease,color .25s ease}

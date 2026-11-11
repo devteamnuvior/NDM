@@ -1,4 +1,4 @@
-"""Build privacy.html (round 29): the Privacy Policy after the NUVIOR legal sample, in the NDM look. Built from promotion.html with
+"""Build privacy.html, terms.html and refunds.html (round 29, split in round 32): the Privacy Policy after the NUVIOR legal sample, in the NDM look. Built from promotion.html with
 src/legal-ui.jsx. usage: python3 src/build_legal.py <NDM dir> <src dir>"""
 import sys
 from pathlib import Path
@@ -6,7 +6,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from shellpage import make_page
 
 root, src = Path(sys.argv[1]), Path(sys.argv[2])
-ui = (src / 'legal-ui.jsx').read_text(encoding='utf-8')
+ui = (src / 'subnav-ui.jsx').read_text(encoding='utf-8') + (src / 'legal-ui.jsx').read_text(encoding='utf-8')
 css = '''
   /* legal pages (round 29) */
   .lg-k{font:600 11.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#8A949B;margin-bottom:12px}
@@ -17,11 +17,6 @@ css = '''
   .lg-toc a{display:block;margin-left:-1px;border-left:2px solid transparent;padding:6px 0 6px 15px;font:13.5px/1.4 Inter,sans-serif;color:#8A949B;transition:color .2s ease,border-color .2s ease}
   .lg-toc a:hover{color:#0F80C3}
   .lg-toc a.is-on{color:#0F80C3;border-left-color:#0F80C3;font-weight:600}
-  .lg-docs-btn{display:inline-flex;align-items:center;gap:8px;border-radius:99px;background:#fff;padding:9px 14px;font:600 14px/1 Inter,sans-serif;color:#0A4F7A;box-shadow:inset 0 0 0 1px rgba(27,36,43,.08)}
-  .lg-docs{position:absolute;left:0;top:calc(100% + 8px);z-index:40;display:grid;gap:2px;min-width:260px;border-radius:18px;background:#fff;padding:8px;box-shadow:0 30px 60px -30px rgba(11,15,19,.45),0 0 0 1px rgba(27,36,43,.06);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .22s ease,transform .22s ease,visibility .22s}
-  .lg-docs.is-on{opacity:1;visibility:visible;transform:none}
-  .lg-print{border-radius:99px;border:1px solid #E3E5E7;padding:9px 16px;font:600 13px/1 Inter,sans-serif;color:#5A646C;transition:border-color .2s ease,color .2s ease}
-  .lg-print:hover{border-color:#0F80C3;color:#0F80C3}
   .lg-doc-body{counter-reset:sec}
   .lg-meta{margin-top:14px;padding-bottom:22px;border-bottom:1px solid #E3E5E7;font:13px/1.5 Inter,sans-serif;color:#8A949B}
   .lg-doc-body p,.lg-doc-body li{font:15.5px/1.75 Inter,sans-serif;color:#4A545C}
@@ -48,4 +43,9 @@ css = '''
   .lg-todo{display:inline-flex;border-radius:6px;background:#FFF6E8;border:1px solid rgba(201,138,43,.35);padding:2px 8px;font:600 12.5px/1.4 Inter,sans-serif;color:#8A5A12}
   @media print{header,footer,.lg-side,.crumbs,#bf-dock-root,.chat-btn{display:none!important}.lg-doc-body{max-width:none}}
 '''
-make_page(root, 'privacy.html', 'Privacy Policy, NewDermaMed Toronto', 'How NewDermaMed collects, uses and discloses personal information, including personal health information.', ui, css, 'LegalPage', "['Legal', 'Privacy Policy']", noindex=False)
+for out, title, desc, page, crumb in [
+    ('privacy.html', 'Privacy Policy, NewDermaMed Toronto', 'How NewDermaMed collects, uses and discloses personal information, including personal health information.', 'PrivacyPage', 'Privacy Policy'),
+    ('terms.html', 'Terms of Service, NewDermaMed Toronto', 'The terms for using the NewDermaMed website, online booking and online shop.', 'TermsPage', 'Terms of Service'),
+    ('refunds.html', 'Refund and Cancellation Policy, NewDermaMed Toronto', 'How appointment changes, deposits, packages, gift cards and product returns work at NewDermaMed.', 'RefundsPage', 'Refunds & Cancellations'),
+]:
+    make_page(root, out, title, desc, ui, css, page, f"['Legal', '{crumb}']", noindex=False)
