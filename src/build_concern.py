@@ -118,7 +118,8 @@ function App() {
 }
 
 '''
-data = '/* ---------------------------------------------------------------- the concern (src/concern-data.json) */\nconst CN = ' + json.dumps(CN, ensure_ascii=False) + ';\n'
+data = '/* ---------------------------------------------------------------- the concern (src/concern-data.json) */\nconst CN = ' + json.dumps(CN, ensure_ascii=False) + ';\n' + \
+  '/* round 29: option prices come from the price list (priceFor) */\n[...CN.opts, ...(CN.bio || [])].forEach((o) => { const v = priceFor(o.n); if (v && o.price) o.price[0] = v; });\n'
 s = s[:a] + '\n' + ui + '\n' + data + '\n/* ---------------------------------------------------------------- app (concern page) */' + app + s[b:]
 (root / OUT).write_text(s, encoding='utf-8')
 print('wrote', OUT, len(s))

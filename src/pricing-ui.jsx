@@ -19,8 +19,10 @@ const perUnit = (cat, label) => (cat.unit && label === 'Regular' ? ' / unit' : '
 function TreatmentRow({ cat, it, uid, open, onToggle }) {
   const [name, note, opts] = it;
   const offer = bestOffer(opts);
-  const from = Math.min(...opts.map((o) => o[1]));
-  const fromUnit = perUnit(cat, opts.find((o) => o[1] === from)[0]);
+  /* round 29: the lowest price after the discount, per unit / syringe / session (priceFrom, the site's one price source) */
+  const pf = priceFrom(cat.id, name);
+  const from = pf ? pf.value : Math.min(...opts.map((o) => o[1]));
+  const fromUnit = pf ? pf.unit : perUnit(cat, opts.find((o) => o[1] === from)[0]);
   return (
     <li className={`pr-item ${open ? 'is-open' : ''}`}>
       <h4 className="m-0">
@@ -131,8 +133,10 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }) {
   const shown = hits || c.items.map((it, i) => [it, i]);
   const opts = c.items.flatMap((it) => it[2]);
   const offer = bestOffer(opts);
-  const from = Math.min(...opts.map((o) => o[1]));
-  const fromUnit = c.unit && opts.some((o) => o[1] === from && o[0] === 'Regular') ? ' / unit' : '';
+  /* round 29: the category's lowest price after the discount (e.g. Botox / Dysport, 220 units of Dysport: $7.70 / unit) */
+  const pf = priceFrom(c.id);
+  const from = pf ? pf.value : Math.min(...opts.map((o) => o[1]));
+  const fromUnit = pf ? pf.unit : '';
   const allOpen = shown.every(([, i]) => openItem(i));
   const uid = `pg-${c.id}`;
   return (

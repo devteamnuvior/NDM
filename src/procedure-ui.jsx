@@ -91,9 +91,9 @@ const PROC = {
     lead: 'How much does Botox®', strong: 'cost in Toronto?', cat: 'Botox / Dysport', unitLabel: 'Regular',
     groups: [
       { name: 'Botox Cosmetic', title: 'Botox® Cosmetic', blurb: 'A prescription product priced per unit, given only after an in-person medical assessment.',
-        rows: [['Regular', 12, 0], ['60 units', 648, 720, '10% OFF'], ['120 units', 1152, 1440, '20% OFF'], ['180 units', 1512, 2160, '30% OFF'], ['220 units', 1848, 2640, '30% OFF']] },
+        rows: priceRows('botox-dysport', 'Botox Cosmetic') }, /* round 29: from the price list */
       { name: 'Dysport', title: 'Dysport®', blurb: 'A prescription product priced per unit, given only after an in-person medical assessment.',
-        rows: [['Regular', 11, 0], ['60 units', 594, 660, '10% OFF'], ['120 units', 1056, 1320, '20% OFF'], ['180 units', 1386, 1980, '30% OFF'], ['220 units', 1694, 2420, '30% OFF']] },
+        rows: priceRows('botox-dysport', 'Dysport') },
     ],
   },
   /* Good to know (ProcGuide, SEO round 16): the questions people search for, after the structure of barbeauty.ca/botox. New copy in

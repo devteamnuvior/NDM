@@ -81,7 +81,9 @@ s = s[:i] + css + s[i:]
 data = (scratch / 'pricing-data.jsx').read_text()
 ui = (scratch / 'pricing-ui.jsx').read_text()
 helper = "/* laser hair removal: every package carries the site's BUY 1 GET 1 FREE badge */\nconst lhrB = (a, b, c, d) => [['Single session', a, 0], ['Package of 3', b, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', c, 0, 'BUY 1 GET 1 FREE'], ...(d ? [['Package of 8', d, 0, 'BUY 1 GET 1 FREE']] : [])];\n"
-data = data.replace('const PRICE_CATS = [', helper + 'const PRICE_CATS = [', 1)
+# round 29: PRICE_CATS and lhrB already live in the shell (src/sync_prices.py); keep only the rest of the data file
+_i = data.index('const PRICE_CATS = ['); _j = data.index('\n];\n', _i) + 4
+data = data[:_i] + data[_j:]
 
 a = s.index('function App() {')
 b = s.index('ReactDOM.createRoot', a)
@@ -114,7 +116,7 @@ app = r'''function App() {
       <main id="main" className="seamless">
         <Breadcrumb items={['Pricing']} dark />
         <PricingHero />
-        <PriceSpecials />
+        <Promotions level="h2" />
         <PriceList />
         <Team />
         <Process />

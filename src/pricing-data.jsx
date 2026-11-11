@@ -180,6 +180,6 @@ const PRICE_CATS = [
 /* monthly specials above the price list (round 22): Ray's "Exclusive monthly specials" cards (NDM-Ray-Dev, commit 8b887a5,
    the version in the designer's screenshot). Each card's Buy opens its category in the price list: [name, price, category id] */
 const PRICE_SPECIALS = { title: 'Exclusive monthly specials', sub: 'Save on cosmetic treatment, apply for financing now', note: 'for selected packages', items: [
-  ['Microneedling', '$249', 'pg-microneedling'], ['Radiesse for Hand', '$599', 'pg-skin-booster-and-bio-stimulators'], ['PRP Hair Rejuvenation', '$399', 'pg-hair-loss'], ['Non-Surgical BBL', '$3,999', 'pg-non-surgical-butt-lift'],
+  ['Microneedling', '$249', 'pg-microneedling'], ['Radiesse for Hand', '$599', 'pg-skin-booster-and-bio-stimulators'], ['PRP Hair Rejuvenation', '$399', 'pg-hair-loss'], ['Non-Surgical BBL', '$3999', 'pg-non-surgical-butt-lift'],
   ['Lip Filler', '$299', 'pg-dermal-fillers'], ['Sculptra Face Lift', '$699', 'pg-skin-booster-and-bio-stimulators'], ['Sculptra', '$699', 'pg-skin-booster-and-bio-stimulators'], ['Radiesse', '$599', 'pg-skin-booster-and-bio-stimulators'],
 ] };

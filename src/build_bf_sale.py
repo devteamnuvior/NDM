@@ -41,11 +41,7 @@ anchor = '<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.j
 i = s.rindex('</style>', 0, s.index(anchor))
 s = s[:i] + css + s[i:]
 
-data = (src / 'pricing-data.jsx').read_text(encoding='utf-8')
-data = data.split('\nconst PRICE_TOTAL')[0]  # the price list only
-lhr = re.search(r'helper = "(.*?)\\n"\n', (src / 'build_pricing.py').read_text(encoding='utf-8')).group(1)
-lhr = lhr.split('\\n', 1)[1] if '\\n' in lhr else lhr
-data = data.replace('const PRICE_CATS = [', lhr + '\nconst PRICE_CATS = [', 1)
+data = ''  # round 29: the price list (PRICE_CATS, lhrB) already lives in the shell (src/sync_prices.py)
 
 a = s.index('\nfunction App() {')
 b = s.index('ReactDOM.createRoot', a)
