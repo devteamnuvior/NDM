@@ -36,7 +36,7 @@ for p in sorted(glob.glob(os.path.join(ROOT, '*.html'))):
     s2 = re.sub(r"h: '/fees-financing/#([a-z_]+)'", lambda m: "h: 'pricing.html#pg-" + ANCH[m.group(1)] + "-h'" if m.group(1) in ANCH else "h: 'pricing.html#prices'", s2)
     s2 = s2.replace("h: '/fees-financing/'", "h: 'pricing.html#prices'").replace("h: '/promotion/'", "h: 'promotion.html'")
     s2 = s2.replace("href={NDM + s.h}", "href={s.h}")
-    if os.path.basename(p) not in ('index.html', 'index-fraunces.html', 'black-friday.html'):   # the process cards point at two home page sections
+    if os.path.basename(p) not in ('index.html', 'index-fraunces.html', 'index-v2.html', 'black-friday.html'):   # the process cards point at two home page sections (every version of the home page has them)
         s2 = s2.replace("h: '#treatments'", "h: 'index.html#treatments'").replace("h: '#visit'", "h: 'index.html#visit'")
     if s2 != s: n += 1; s = s2
 

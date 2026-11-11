@@ -37,7 +37,7 @@ if '--workers' in argv:
     i = argv.index('--workers'); WORKERS = int(argv[i + 1]); del argv[i:i + 2]
 ONLY = [a for a in argv if a.endswith('.html')]
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
-SKIP = {'index-fraunces.html'}   # obsolete test page
+SKIP = {'index-fraunces.html', 'index-v2.html'}   # the obsolete test page; the home page concept, kept outside the build
 
 START, END = '<div class="ndm-pre">', '</div><!-- /ndm-pre -->'
 HEAD_START, HEAD_END = '<!-- ndm-pre-head -->', '<!-- /ndm-pre-head -->'
@@ -46,6 +46,24 @@ HEAD = (HEAD_START + '\n<style>html.ndm-js .ndm-pre{display:none}.ndm-pre{max-wi
         '.ndm-pre img{max-width:100%;height:auto}.ndm-pre a{color:#0F80C3}.ndm-pre nav ul,.ndm-pre footer ul{display:flex;flex-wrap:wrap;'
         'gap:6px 18px;padding:0;list-style:none}</style>\n<script>document.documentElement.classList.add("ndm-js");setTimeout(function(){'
         'if(document.querySelector("#root>.ndm-pre"))document.documentElement.classList.remove("ndm-js")},8000)</script>\n' + HEAD_END)
+
+
+def put_head(s, name):
+    """Writes the head block above the embedded fonts, never last in <head>.
+    Every builder adds its page styles before the last </style> that precedes the React script. A <style> of ours in that
+    spot takes those styles in, and the next run deletes them together with the block: on 9 November 2026 that cost every
+    generated page its own styles (dark bands without their background, and more). Up here no builder can reach it."""
+    old = re.search(re.escape(HEAD_START) + r'.*?' + re.escape(HEAD_END), s, flags=re.S)
+    if old and len(old.group(0)) > 2 * len(HEAD):
+        sys.exit(f'prerender: {name} has page styles inside the static-copy block. Rebuild the page from its shell first, '
+                 'so those styles are not deleted here.')
+    s = re.sub(r'\n?' + re.escape(HEAD_START) + r'.*?' + re.escape(HEAD_END), '', s, flags=re.S)
+    end = s.index('</head>')
+    for anchor in ('<!--FONT-EMBED-->', '<style'):
+        i = s.find(anchor, 0, end)
+        if i != -1:
+            return s[:i] + HEAD + '\n' + s[i:]
+    return s[:end] + HEAD + '\n' + s[end:]
 
 # the page loads in a 1280px frame; every element the browser does not show is marked so the copy keeps what a visitor sees
 # (menus excepted: their links are the site's navigation, so they stay even while folded away)
@@ -205,9 +223,8 @@ def main():
             failed.append(p.name); continue
         s = p.read_text(encoding='utf-8')
         body = clean(raw, page_tabs(s))
-        s = re.sub(r'\n?' + re.escape(HEAD_START) + r'.*?' + re.escape(HEAD_END), '', s, flags=re.S)
+        s = put_head(s, p.name)
         s = re.sub(r'(<div id="root">)' + re.escape(START) + r'.*?' + re.escape(END) + r'(</div>)', r'\1\2', s, flags=re.S)
-        s = s.replace('</head>', HEAD + '\n</head>', 1)
         assert s.count('<div id="root"></div>') == 1, p.name
         s = s.replace('<div id="root"></div>', '<div id="root">' + START + body + END + '</div>', 1)
         p.write_text(s, encoding='utf-8')

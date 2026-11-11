@@ -246,6 +246,10 @@ def patch(path):
     s = re.sub(r'\n?<!-- seo -->.*?<!-- /seo -->', '', s, count=1, flags=re.S)
     # the static copy for crawlers belongs to one page only (tools/prerender.py writes it after this patch); a builder that
     # copied a shell carries the shell's copy, so every copy goes here and tools/prerender.py adds each page's own
+    old = re.search(r'<!-- ndm-pre-head -->.*?<!-- /ndm-pre-head -->', s, flags=re.S)
+    if old and len(old.group(0)) > 2000:   # the block is about 700 characters: anything more is a builder's page styles, which must never be deleted with it
+        sys.exit(f'seo: {path.name} has page styles inside the static-copy block (ndm-pre-head). Run tools/prerender.py on '
+                 'index.html and promotion.html first (it moves the block above the fonts), then rebuild the pages.')
     s = re.sub(r'\n?<!-- ndm-pre-head -->.*?<!-- /ndm-pre-head -->', '', s, count=1, flags=re.S)
     s = re.sub(r'(<div id="root">)<div class="ndm-pre">.*?</div><!-- /ndm-pre -->(</div>)', r'\1\2', s, count=1, flags=re.S)
     s = s.replace('<html lang="en">', '<html lang="en-CA">', 1)
@@ -266,7 +270,8 @@ def patch(path):
     return title, desc
 
 
-pages = sorted(p for p in ROOT.glob('*.html'))
+SKIP = {'index-v2.html'}   # the home page concept: kept outside the build, the sitemap and the index for AI search
+pages = sorted(p for p in ROOT.glob('*.html') if p.name not in SKIP)
 index = []
 for p in pages:
     title, desc = patch(p)
