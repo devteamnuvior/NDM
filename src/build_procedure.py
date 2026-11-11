@@ -9,7 +9,7 @@ from pathlib import Path
 root, scratch = Path(sys.argv[1]), Path(sys.argv[2])
 s = (root / 'promotion.html').read_text()
 s = re.sub(r'\n<script type="application/ld\+json" id="ld-crumbs">.*?</script>', '', s, count=1)
-ui = (scratch / 'procedure-ui.jsx').read_text() + '\n' + (scratch / 'treatment-ui.jsx').read_text() + '\n' + (scratch / 'media-ui.jsx').read_text()
+ui = (scratch / 'procedure-ui.jsx').read_text() + '\n' + (scratch / 'journey-ui.jsx').read_text() + '\n' + (scratch / 'treatment-ui.jsx').read_text() + '\n' + (scratch / 'media-ui.jsx').read_text()
 MEDIA_CSS = re.search(r'const MEDIA_CSS = `(.*?)`;', ui, re.S).group(1)  # the film and reel styles (round 12)
 OUT = 'botox.html'
 
@@ -209,26 +209,26 @@ SPACING = '''
   .guide-q{box-shadow:0 22px 44px -38px rgba(27,36,43,.35);transition:box-shadow .5s var(--e-out),transform .5s var(--e-out)}
   .guide-q:hover{transform:translateY(-2px);box-shadow:0 30px 56px -38px rgba(15,128,195,.4)}
   /* round 29: About (ProcOverview) has its own theme: deep navy, drifting light orbs, a turning dotted ring, glass panel */
-  main>section#overview.ov2{background:radial-gradient(60% 70% at 90% 0%,rgba(38,177,231,.28),transparent 60%),radial-gradient(50% 60% at 0% 100%,rgba(255,166,23,.12),transparent 65%),linear-gradient(160deg,#0E2A40 0%,#0A1B2B 55%,#0B0F13 100%)!important}
-  .ov2-orb{position:absolute;border-radius:50%;filter:blur(40px);opacity:.55;pointer-events:none;animation:ov2Drift 16s ease-in-out infinite alternate}
+  main>section#overview.ov2{background:radial-gradient(60% 70% at 90% 0%,rgba(38,177,231,.12),transparent 60%),radial-gradient(50% 60% at 0% 100%,rgba(255,166,23,.08),transparent 65%),linear-gradient(160deg,#F5F9FC 0%,#ECF3F8 100%)}
+  .ov2-orb{position:absolute;border-radius:50%;filter:blur(40px);opacity:.35;pointer-events:none;animation:ov2Drift 16s ease-in-out infinite alternate}
   .ov2-orb-a{width:340px;height:340px;left:-80px;top:10%;background:radial-gradient(circle,rgba(38,177,231,.55),transparent 70%)}
   .ov2-orb-b{width:260px;height:260px;right:6%;bottom:-60px;background:radial-gradient(circle,rgba(255,166,23,.35),transparent 70%);animation-duration:19s;animation-delay:-6s}
   .ov2-orb-c{width:200px;height:200px;right:30%;top:-60px;background:radial-gradient(circle,rgba(15,128,195,.6),transparent 70%);animation-duration:22s;animation-delay:-11s}
   .ov2-ring{position:absolute;right:-120px;top:50%;width:560px;height:560px;transform:translateY(-50%);pointer-events:none;animation:ov2Spin 90s linear infinite}
-  .ov2-ring circle{fill:none;stroke:rgba(255,255,255,.12);stroke-width:1;stroke-dasharray:2 7}
+  .ov2-ring circle{fill:none;stroke:rgba(15,128,195,.16);stroke-width:1;stroke-dasharray:2 7}
   /* round 31: compact, so the whole About section fits one view under the header and the section bar */
-  main>section#overview.ov2{padding-top:clamp(28px,4.4vh,56px)!important;padding-bottom:clamp(28px,4.4vh,56px)!important;scroll-margin-top:170px}
-  .ov2-tabs{border-bottom:1px solid rgba(255,255,255,.1)}
-  .ov2-tab{display:flex;align-items:center;justify-content:center;gap:10px;border-radius:16px;padding:11px 16px;white-space:nowrap;font:500 14.5px/1.2 Inter,"Helvetica Neue",Arial,sans-serif;color:rgba(255,255,255,.7);transition:background-color .3s ease,color .3s ease,box-shadow .3s ease}
-  .ov2-tab:hover{color:#fff;background:rgba(255,255,255,.08)}
-  .ov2-tab.is-on{color:#fff;background:linear-gradient(120deg,rgba(38,177,231,.28),rgba(15,128,195,.12));box-shadow:inset 0 0 0 1px rgba(38,177,231,.45),0 18px 40px -24px rgba(38,177,231,.6)}
-  .ov2-num{font-size:17px;line-height:1;color:rgba(255,255,255,.35);transition:color .3s ease}
-  .ov2-tab.is-on .ov2-num{color:#26B1E7}
+  main>section#overview.ov2{padding-top:clamp(56px,8.5vh,104px)!important;padding-bottom:clamp(56px,8.5vh,104px)!important;scroll-margin-top:170px}
+  .ov2-tabs{border-bottom:1px solid rgba(27,36,43,.08)}
+  .ov2-tab{display:flex;align-items:center;justify-content:center;gap:10px;border-radius:16px;padding:11px 16px;white-space:nowrap;font:500 14.5px/1.2 Inter,"Helvetica Neue",Arial,sans-serif;color:#5A646C;transition:background-color .3s ease,color .3s ease,box-shadow .3s ease}
+  .ov2-tab:hover{color:#1B242B;background:rgba(15,128,195,.06)}
+  .ov2-tab.is-on{color:#0F80C3;background:linear-gradient(120deg,rgba(38,177,231,.14),rgba(15,128,195,.06));box-shadow:inset 0 0 0 1px rgba(15,128,195,.3),0 18px 40px -26px rgba(15,128,195,.45)}
+  .ov2-num{font-size:17px;line-height:1;color:rgba(27,36,43,.3);transition:color .3s ease}
+  .ov2-tab.is-on .ov2-num{color:#0F80C3}
   .ov2-go{place-items:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.08);opacity:0;transform:translateX(-6px);transition:opacity .3s ease,transform .3s ease}
   .ov2-tab.is-on .ov2-go{opacity:1;transform:none;background:#26B1E7;color:#0B0F13}
-  .ov2-panel{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 50px 90px -50px rgba(0,0,0,.7);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+  .ov2-panel{background:rgba(255,255,255,.92);box-shadow:inset 0 0 0 1px rgba(27,36,43,.06),0 50px 90px -60px rgba(11,15,19,.35)}
   .ov2-stat-ring{animation:ov2Spin 30s linear infinite}
-  .ov2-stat-ring circle{fill:rgba(255,255,255,.04);stroke:rgba(38,177,231,.6);stroke-width:1.2;stroke-dasharray:3 5}
+  .ov2-stat-ring circle{fill:rgba(15,128,195,.04);stroke:rgba(15,128,195,.5);stroke-width:1.2;stroke-dasharray:3 5}
   @keyframes ov2Drift{to{transform:translate3d(60px,-40px,0) scale(1.15)}}
   @keyframes ov2Spin{to{transform:translateY(-50%) rotate(360deg)}}
   .ov2-stat-ring{transform-origin:50% 50%}
@@ -270,11 +270,11 @@ function App() {
         <section aria-label="Book a free consultation" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-6 lg:hidden"><ProcForm id="mobile-form" className="ring-1 ring-ndm-ink/[.06]" /></section>
         <TxNav p={PROC} />
         <TxIntro p={PROC} />
-        <TxFilm p={PROC} />
         <ProcOverview p={PROC} />
         <ProcChoose p={PROC} />
         <TxReel p={PROC} />
-        <TxResults p={PROC} />
+        <TxResults p={PROC} dark />
+        <TxFilm p={PROC} />
         <ProcPrices p={PROC} />
         <ProcGuide p={PROC} />
         <TxWhy p={PROC} />

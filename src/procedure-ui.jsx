@@ -7,7 +7,7 @@ const PROC = {
      own sections. It is the live site's wording; it names Botox® beside its effects, so it needs Raymond's approval before publishing */
   crumbs: [['Procedures'], ['Injectables'], 'Botox®'],
   /* the sticky section bar (TxNav): the same items as Ray's Botox page */
-  nav: [['benefits', 'Benefits'], ['film', 'The clinic'], ['overview', 'About'], ['why-choose', 'Why choose'], ['watch', 'Watch'], ['results', 'Results'], ['prices', 'Prices'], ['guide', 'Good to know'], ['why', 'Why NewDermaMed'], ['visit', 'Visit us'], ['faq', 'FAQ']],
+  nav: [['benefits', 'Benefits'], ['overview', 'About'], ['why-choose', 'Why choose'], ['watch', 'Watch'], ['results', 'Results'], ['film', 'The clinic'], ['prices', 'Prices'], ['guide', 'Good to know'], ['why', 'Why NewDermaMed'], ['visit', 'Visit us'], ['faq', 'FAQ']],
   title: ['Botox®', 'in Toronto'],
   sub: 'Smooth wrinkles with trusted Botox® safe, expert care for natural, youthful results.',
   hero: { d: 'assets/botox/hero.jpg', m: 'assets/botox/hero-m.jpg', pos: '50% 30%', alt: 'A woman with her fingertips at her temples, Botox® Cosmetic at NewDermaMed, Toronto' },
@@ -47,8 +47,6 @@ const PROC = {
         'Purified botulinum toxin type A, which temporarily stops nerve signals to the targeted muscles, is an ingredient in Botox®. The skin above these muscles smoothes out and wrinkles like frown lines, forehead lines, and crow’s feet are lessened by lowering repetitive contractions. Instead of adding volume, the treatment prevents and corrects dynamic wrinkles brought on by facial movement.'] },
       { label: 'Maintenance', stat: ['3–4', 'months, typical duration'], text: [
         'Although longevity can vary depending on lifestyle, metabolism, and treatment area, Botox® results typically last three to four months. Patients are advised to arrange maintenance procedures three to four times a year in order to preserve a young, refreshed appearance. Over time, results might last longer with regular treatments.'] },
-      { label: 'Pricing', stat: ['$12', 'per unit'], text: [
-        'Treatment plans are completely customized because each face is different. We invite you to schedule a free consultation with one of our experts so that you can go over your options, talk about your objectives, and create a plan that is specifically for you.'], link: ['#prices', 'See the price list'] },
     ],
   },
   /* compare the options (website v3 concern pages): this treatment beside the other options for lines. A general guide only */
@@ -237,7 +235,8 @@ function ProcGlance({ p, wide }) {
 
 /* ---------------------------------------------------------------- your treatment, in tabs (the thread lift page's treatment overview,
    in the site's own look): a tab row, then the words on the left and the key number on the right */
-/* round 29: About, redesigned with its own theme: a deep navy band with slowly drifting light orbs and a turning dotted ring,
+/* round 34: About is light again (the dark look moved to Before & after) and has four tabs.
+   round 29: About, redesigned with its own theme: a deep navy band with slowly drifting light orbs and a turning dotted ring,
    numbered tabs down the left (a scrolling row on phones) and a glass panel with the tab's text and its key number.
    All five panels stay in the page for crawlers (hidden ones carry data-pre-keep). */
 function ProcOverview({ p }) {
@@ -254,13 +253,13 @@ function ProcOverview({ p }) {
     setAct(m); if (tabs.current[m]) tabs.current[m].focus();
   };
   return (
-    <section ref={ref} id="overview" aria-labelledby="overview-title" data-nav="dark" className="ov2 relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)] text-white">
+    <section ref={ref} id="overview" aria-labelledby="overview-title" className="ov2 relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)] text-ndm-ink">
       <span aria-hidden="true" className="ov2-orb ov2-orb-a" /><span aria-hidden="true" className="ov2-orb ov2-orb-b" /><span aria-hidden="true" className="ov2-orb ov2-orb-c" />
       <svg aria-hidden="true" viewBox="0 0 400 400" className="ov2-ring"><circle cx="200" cy="200" r="190" /><circle cx="200" cy="200" r="150" /></svg>
       <div className={`${TX_WRAP} relative`}>
         <div className="text-center">
-          <Eyebrow dark className="rv">{n && <span className="tabular-nums text-ndm-sky">{n}</span>}{o.tag}</Eyebrow>
-          <TwoTone id="overview-title" dark className="rv mx-auto mt-3" size="text-[clamp(26px,min(2.8vw,4.6vh),40px)]" lead={twoLine(o.lead)} strong={o.strong} style={{ transitionDelay: '.06s' }} />
+          <Eyebrow className="rv">{n && <span className="tabular-nums text-ndm-deep">{n}</span>}{o.tag}</Eyebrow>
+          <TwoTone id="overview-title" className="rv mx-auto mt-3" size="text-[clamp(26px,min(2.8vw,4.6vh),40px)]" lead={twoLine(o.lead)} strong={o.strong} style={{ transitionDelay: '.06s' }} />
         </div>
         {/* round 31: the tab names sit in one row on top again; the panel below is compact so the section fits one view */}
         <div className="rv ov2-panel relative mt-[clamp(16px,2.6vh,28px)] overflow-hidden rounded-[26px]" style={{ transitionDelay: '.1s' }}>
@@ -275,23 +274,23 @@ function ProcOverview({ p }) {
           {o.tabs.map((t, i) => (
             <div key={t.label} id={`ov-panel-${i}`} role="tabpanel" aria-labelledby={`ov-t-${i}`} hidden={i !== act} data-pre-keep="" className={`${i === act ? 'ov-in grid' : 'hidden'} gap-6 px-[clamp(20px,2.8vw,40px)] pb-[clamp(18px,2.8vh,30px)] pt-[clamp(14px,2.4vh,24px)] md:grid-cols-[minmax(0,1fr)_230px] md:items-center md:gap-[clamp(28px,4vw,56px)]`}>
               <div>
-                <h3 className="font-aeonik text-[clamp(22px,2vw,28px)] font-normal leading-[1.1] tracking-[-0.025em] text-white">{t.label}</h3>
-                {t.text.map((x, k) => <p key={k} className="mt-2.5 max-w-[72ch] font-inter text-[14.5px] leading-[1.6] text-white/80">{x}</p>)}
+                <h3 className="font-aeonik text-[clamp(22px,2vw,28px)] font-normal leading-[1.1] tracking-[-0.025em] text-ndm-ink">{t.label}</h3>
+                {t.text.map((x, k) => <p key={k} className="mt-2.5 max-w-[72ch] font-inter text-[14.5px] leading-[1.6] text-ndm-muted">{x}</p>)}
                 <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
                   <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
-                  {t.link && <a href={t.link[0]} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-sky">{t.link[1]}<IconArrow className="transition-transform group-hover:translate-x-1" /></a>}
+                  {t.link && <a href={t.link[0]} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-deep">{t.link[1]}<IconArrow className="transition-transform group-hover:translate-x-1" /></a>}
                 </div>
               </div>
               <aside className="hidden md:block">
                 <div className="ov2-stat relative mx-auto grid aspect-square w-[128px] place-items-center">
                   <svg aria-hidden="true" viewBox="0 0 100 100" className="ov2-stat-ring absolute inset-0"><circle cx="50" cy="50" r="46" /></svg>
                   <span className="relative px-4 text-center">
-                    <span className="block font-aeonik text-[32px] leading-none tracking-[-0.03em] text-white tabular-nums">{t.stat[0]}</span>
-                    <span className="mt-1 block font-inter text-[11px] leading-[1.3] text-white/70">{t.stat[1]}</span>
+                    <span className="block font-aeonik text-[32px] leading-none tracking-[-0.03em] text-ndm-ink tabular-nums">{t.stat[0]}</span>
+                    <span className="mt-1 block font-inter text-[11px] leading-[1.3] text-ndm-muted">{t.stat[1]}</span>
                   </span>
                 </div>
-                <dl className="mt-3 grid gap-1 border-t border-white/10 pt-2.5">
-                  {p.facts.map(([k, v]) => <div key={k} className="flex items-baseline justify-between gap-3 font-inter text-[12.5px]"><dt className="text-white/55">{k}</dt><dd className="text-right font-medium text-white">{v}</dd></div>)}
+                <dl className="mt-3 grid gap-1 border-t border-ndm-ink/10 pt-2.5">
+                  {p.facts.map(([k, v]) => <div key={k} className="flex items-baseline justify-between gap-3 font-inter text-[12.5px]"><dt className="text-ndm-muted">{k}</dt><dd className="text-right font-medium text-ndm-ink">{v}</dd></div>)}
                 </dl>
               </aside>
             </div>
@@ -335,62 +334,6 @@ function ProcCompare({ p }) {
         </table>
       </div>
       <p className={`${TX_WRAP} mt-4 font-inter text-[12.5px] leading-[1.5] text-ndm-muted`}>A general guide for comparison. Your plan is individual, and individual results may vary.</p>
-    </section>
-  );
-}
-
-/* ---------------------------------------------------------------- start with a free skin analysis (round 19, after the
-   futuron.framer.website "Join a Community" card): a rounded photo card at the content width; a deep NDM-navy gradient
-   over the left and the bottom carries the words, which sit left: tag, heading, line and the two actions. When it comes into
-   view the card opens from the middle out to both sides and the words sharpen from a blur */
-const JR_CSS = `
-.jr-card{clip-path:inset(0 50% 0 50% round 32px);transition:clip-path 1.2s cubic-bezier(.7,0,.2,1);box-shadow:0 40px 80px -50px rgba(11,15,19,.6)}
-.jr-card.is-on{clip-path:inset(0 0 0 0 round 32px)}
-.jr-card .jr-pic{transform:scale(1.12);transition:transform 2.2s cubic-bezier(.2,.7,.2,1)}
-.jr-card.is-on .jr-pic{transform:scale(1)}
-/* desktop: the photo fills the right two thirds and fades into the navy card, so the face sits right of the words; phones: face centred */
-.jr-card{background:#0B1B29}
-@media (min-width:768px){.jr-card .jr-pic{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 34%);mask-image:linear-gradient(90deg,transparent 0,#000 34%)}}
-.jr-shade{background:linear-gradient(90deg,rgba(9,22,34,.9) 0%,rgba(9,22,34,.72) 34%,rgba(9,22,34,.18) 66%,rgba(9,22,34,0) 100%),linear-gradient(0deg,rgba(10,52,84,.72) 0%,rgba(10,52,84,0) 55%)}
-@media (max-width:767px){.jr-card{clip-path:inset(0 50% 0 50% round 24px)}.jr-card.is-on{clip-path:inset(0 0 0 0 round 24px)}
-  .jr-shade{background:linear-gradient(0deg,rgba(9,22,34,.94) 0%,rgba(9,22,34,.8) 42%,rgba(9,22,34,.1) 78%,rgba(9,22,34,0) 100%)}}
-.jr-card .jr-t{opacity:0;filter:blur(14px);transform:translateY(12px);transition:opacity .9s ease,filter 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1)}
-.jr-card.is-on .jr-t{opacity:1;filter:blur(0);transform:none}
-@media (prefers-reduced-motion:reduce){.jr-card,.jr-card .jr-pic,.jr-card .jr-t{clip-path:none;transform:none;filter:none;opacity:1;transition:none}}
-`;
-function ProcAnalysis() {
-  const card = useRef(null);
-  const [on, setOn] = useState(false);
-  useEffect(() => {
-    const el = card.current; if (!el) return;
-    /* the card is clipped to nothing until it opens, so watch its section */
-    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setOn(true); io.disconnect(); } }, { threshold: 0.2 });
-    if (el.getBoundingClientRect().top < window.innerHeight * 0.8) setOn(true);
-    io.observe(el.parentElement);
-    return () => io.disconnect();
-  }, []);
-  /* a second trigger from the scroll position, in case the browser delays the visibility check */
-  useOnScroll(() => {
-    const el = card.current; if (!el || el.classList.contains('is-on')) return;
-    if (el.parentElement.getBoundingClientRect().top < window.innerHeight * 0.85) setOn(true);
-  }, []);
-  const t = (k) => ({ transitionDelay: `${0.75 + k * 0.12}s` });
-  return (
-    <section aria-labelledby="analysis-title" className="relative z-10 px-[var(--gx)] py-[clamp(40px,5vw,72px)]">
-      <style>{JR_CSS}</style>
-      <div ref={card} className={`jr-card ${TX_WRAP} relative isolate flex min-h-[600px] flex-col justify-end md:min-h-[clamp(460px,40vw,520px)] overflow-hidden rounded-[24px] p-6 text-white md:justify-center md:rounded-[32px] md:p-[56px] ${on ? 'is-on' : ''}`}>
-        <img src="assets/treatments/journey-skin.webp" alt="" loading="lazy" decoding="async" className="jr-pic absolute inset-0 -z-20 h-full w-full object-cover object-[47%_28%] md:left-auto md:w-[66%] md:object-[50%_30%]" />
-        <span aria-hidden="true" className="jr-shade absolute inset-0 -z-10" />
-        <div className="max-w-[620px]">
-          <div className="jr-t" style={t(0)}><Eyebrow dark>Start your journey</Eyebrow></div>
-          <TwoTone id="analysis-title" dark className="jr-t mt-5" size="text-[clamp(32px,3.4vw,48px)]" lead={<>Start with a free<br /></>} strong="skin analysis" style={t(1)} />
-          <p className="jr-t mt-4 max-w-[46ch] font-inter text-[15.5px] leading-[1.65] text-white/80" style={t(2)}>Your first consultation and VISIA® skin analysis are free, at Uptown or Downtown. No pressure, just a clear plan.</p>
-          <div className="jr-t mt-7 flex flex-wrap items-center gap-x-5 gap-y-3" style={t(3)}>
-            <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
-            <Btn href="about.html#contact" v="light">Find a clinic</Btn>
-          </div>
-        </div>
-      </div>
     </section>
   );
 }
@@ -557,13 +500,14 @@ function ProcGuide({ p }) {
         <ul className="no-scrollbar -mx-[var(--gx)] mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-[var(--gx)] pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 xl:grid-cols-6" role="list" style={{ scrollPaddingInline: 'var(--gx)' }}>
           {g.related.map(([t, h, img, kind], i) => (
             <li key={t} className="rv w-[62%] shrink-0 snap-start sm:w-auto" style={{ transitionDelay: `${0.04 * i}s` }}>
-              <a href={h} className="guide-rel group relative block aspect-[4/5] overflow-hidden rounded-[20px] bg-ndm-mist text-white">
-                <img src={img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.06]" />
-                <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#0B0F13]/85 via-[#0B0F13]/20 to-transparent" />
-                <span className="absolute left-3 top-3 rounded-full bg-white/85 px-2.5 py-1 font-inter text-[11.5px] font-medium text-ndm-ink backdrop-blur-[6px]">{kind}</span>
-                <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3.5">
-                  <span className="font-aeonik text-[18px] leading-[1.15]">{t}</span>
-                  <span aria-hidden="true" className="grid size-8 shrink-0 place-items-center rounded-full bg-white text-ndm-deep transition-transform duration-500 group-hover:-rotate-45"><IconArrow size={12} /></span>
+              <a href={h} className="guide-rel group flex h-full flex-col rounded-[20px] bg-white p-2 ring-1 ring-ndm-ink/[.06] transition-shadow duration-500 hover:shadow-[0_24px_44px_-30px_rgba(11,15,19,.4)]">
+                <span className="relative block aspect-square overflow-hidden rounded-[14px] bg-ndm-mist">
+                  <img src={img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.06]" />
+                  <span className="absolute left-2.5 top-2.5 rounded-full bg-white/90 px-2.5 py-1 font-inter text-[11.5px] font-medium text-ndm-ink backdrop-blur-[6px]">{kind}</span>
+                </span>
+                <span className="flex flex-1 items-center justify-between gap-2 px-1.5 pb-1 pt-3">
+                  <span className="font-aeonik text-[17px] leading-[1.2] text-ndm-ink">{t}</span>
+                  <span aria-hidden="true" className="grid size-8 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep transition-transform duration-500 group-hover:-rotate-45"><IconArrow size={12} /></span>
                 </span>
               </a>
             </li>

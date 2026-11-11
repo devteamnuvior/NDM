@@ -15,6 +15,16 @@ const BFS_GROUP = {
   'laser-vaginal-tightening': 'Wellness', 'snoring-treatment': 'Wellness', 'toenail-fungus-removal': 'Wellness',
 };
 /* treatment photos for the deal cards (only where the site has one) */
+/* the Black Friday page keeps its own six specials (the site's monthly specials changed in round 34); price, unit and offer from the price list */
+const BFS_SPECIALS = [
+  { n: 'Lip Filler', img: 'assets/treatments/lip-filler.jpg', pos: '50% 35%', p: '562.50', u: 'per syringe', deal: 'Buy 1 get 1 50% off', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
+  { n: 'Microneedling', img: 'assets/treatments/microneedling.jpg', pos: '50% 40%', p: '245', u: '', deal: 'Up to 50% off', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
+  { n: 'Chemical Peel', img: 'assets/treatments/chemical-peel.jpg', pos: '50% 40%', p: '104.30', u: 'per session', deal: 'Up to 30% off', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
+  { n: 'Laser Skin Resurfacing', img: 'assets/treatments/laser-resurfacing.jpg', pos: '50% 40%', p: '140', u: 'per session', deal: 'Up to 30% off', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
+  { n: 'Photo Rejuvenation', img: 'assets/treatments/photo-rejuvenation.jpg', pos: '50% 40%', p: '192.50', u: 'per session', deal: 'Up to 60% off', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
+  { n: 'Skin Booster', img: 'assets/treatments/skin-booster.jpg', pos: '50% 40%', p: '399', u: '', deal: 'Buy 1 get 1 50% off', tag: 'Skin Booster and Bio-stimulators', area: 'Face', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Deep hydration for a fresh, dewy glow.' }
+];
+BFS_SPECIALS.forEach((s) => { const m = /#pg-([a-z0-9-]+)-h/.exec(s.h || ''); const info = priceInfo(s.n) || (m && priceFrom(m[1]) ? priceFrom(m[1]) : null); if (!info || !info.value) return; s.p = info.value % 1 ? info.value.toFixed(2) : String(info.value); if (info.per) s.u = info.per; if (info.offer) s.deal = info.offer; });
 const BFS_TABS = ['All deals', 'Laser', 'Skin', 'Injectables', 'Body', 'Hair', 'Wellness'];
 const BFS_CONCERNS = [
   ['Unwanted hair', 'Choose your area and laser hair removal package.', ['laser-hair-removal']],
@@ -235,7 +245,7 @@ function BfsCountdown() {
 /* round 27: the offer tickets turn like a carousel. Every few seconds the front ticket moves left, the right one comes forward
    and the next one enters from behind; hovering pauses it, and clicking a side ticket brings it to the front */
 function BfsFan() {
-  const cards = SPECIALS.filter((x) => !/botox|dysport/i.test(x.n) && x.deal).slice(0, 5);
+  const cards = BFS_SPECIALS.filter((x) => x.deal).slice(0, 5);
   const n = cards.length;
   const [k, setK] = useState(0);
   const [hold, setHold] = useState(false);
@@ -453,7 +463,7 @@ function BfsDeals({ pick, setPick, plan, toggle }) {
 function BfsSpecials() {
   const ref = useRef(null);
   useReveal(ref);
-  const list = SPECIALS.filter((s) => !/botox|dysport/i.test(s.n)).slice(0, 6);
+  const list = BFS_SPECIALS;
   const catOf = (s) => { const m = /#pg-([a-z0-9-]+)-h/.exec(s.h || ''); return m && BFS_DEALS.some((d) => d.id === m[1]) ? m[1] : null; };
   return (
     <section ref={ref} id="specials" aria-labelledby="bfs-s-title" data-nav="dark" className="bfs-dark bfs-band relative mt-[clamp(64px,7vw,104px)] scroll-mt-[68px] overflow-hidden px-[var(--gx)] py-[clamp(72px,8vw,120px)] text-white">

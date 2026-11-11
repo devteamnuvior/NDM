@@ -958,7 +958,7 @@ const PRICE_CATS = [
    priceFor(name) finds a treatment by its name anywhere on the site and returns "From $X" (or null when it is not on the list). */
 const PRICE_BY_ID = Object.fromEntries(PRICE_CATS.map((c) => [c.id, c]));
 const pfmt = (n) => '$' + (Math.round(n * 100) / 100).toLocaleString('en-CA', { useGrouping: false, minimumFractionDigits: Math.round(n * 100) % 100 ? 2 : 0, maximumFractionDigits: 2 });
-const pCount = (label) => { const m = /(\d+)\s*(units?|syringes?|sessions?|vials?|treatments?)\b/i.exec(label) || /package of (\d+)/i.exec(label); return m ? +m[1] : 1; };
+const pCount = (label) => { const m = /(\d+)\s*(units?|syringes?|sessions?|vials?|treatments?|zones?)\b/i.exec(label) || /package of (\d+)/i.exec(label); return m ? +m[1] : 1; };
 const pPct = (tag) => { const m = /^(\d+)% OFF$/i.exec(tag || ''); return m ? +m[1] : 0; };
 const pNorm = (s) => String(s || '').toLowerCase().replace(/[®™]/g, '').replace(/[–-]/g, ' ').replace(/\s+/g, ' ').trim();
 function priceOptions(id, item) {
@@ -973,7 +973,7 @@ function priceFrom(id, item) {
   const pct = Math.max(0, ...os.map((o) => pPct(o.tag)));
   const tags = os.map((o) => o.tag).filter(Boolean);
   const offer = pct ? `Up to ${pct}% off` : (tags[0] ? tags[0].replace(/\bOFF\b/g, 'off').replace(/^BUY 1 GET 1/i, 'Buy 1 get 1').replace(/\bFREE\b/, 'free').replace(/^Save \$(\d+)\sOff$/i, 'Save $$$1') : '');
-  return { value: Math.round(best.v * 100) / 100, unit: c.unit ? ' / unit' : '', per: c.unit ? 'per unit' : /syringe/i.test(best.o.label) ? 'per syringe' : best.n > 1 || /session/i.test(best.o.label) ? 'per session' : '', pct, offer };
+  return { value: Math.round(best.v * 100) / 100, unit: c.unit ? ' / unit' : '', per: c.unit ? 'per unit' : /syringe/i.test(best.o.label) ? 'per syringe' : /zone/i.test(best.o.label) ? 'per zone' : best.n > 1 || /session/i.test(best.o.label) ? 'per session' : '', pct, offer };
 }
 const priceLabel = (id, item) => { const f = priceFrom(id, item); return f ? `From ${pfmt(f.value)}${f.unit}` : null; };
 /* names used on the site's cards and menus, mapped to the price list: [category id, treatment] */
@@ -991,7 +991,7 @@ const PRICE_NAMES = {
   'acnelan': ['chemical-peel', 'Acnelan'], 'cosmelan & dermamelan': ['depigmenting-treatment'], 'dermamelan': ['depigmenting-treatment', 'Dermamelan'], 'cosmelan': ['depigmenting-treatment', 'Cosmelan'],
   'laser acne treatment': ['laser-acne-treatment'], 'acne treatments': ['laser-acne-treatment'], 'laser hair removal': ['laser-hair-removal'],
   'laser vein removal': ['laser-vein'], 'spider vein removal': ['laser-vein'], 'coolsculpting': ['coolsculpting-tight-sculpting', 'Coolsculpting'], 'tightsculpting': ['coolsculpting-tight-sculpting', 'Tight Sculpting'],
-  'non surgical butt lift': ['non-surgical-butt-lift'], 'non surgical bbl': ['non-surgical-butt-lift'], 'prp hair restoration': ['hair-loss', 'PRP Scalp'], 'hair loss treatments': ['hair-loss'],
+  'non surgical butt lift': ['non-surgical-butt-lift'], 'non surgical bbl': ['non-surgical-butt-lift'], 'prp hair restoration': ['hair-loss', 'PRP Scalp'], 'prp face': ['microneedling', 'Microneedling with PRP'], 'hair loss treatments': ['hair-loss'],
   'laser hair rejuvenation': ['hair-loss'], 'vaginal tightening': ['laser-vaginal-tightening'], 'snoring treatment': ['snoring-treatment'], 'nail fungus treatment': ['toenail-fungus-removal'],
 };
 function priceFor(name) {
@@ -2186,7 +2186,7 @@ function ProcessText({ i, on, small }) {
   const [t, d] = PROCESS[i], m = PROCESS_MEDIA[i];
   return (
     <a href={m.h} tabIndex={on ? 0 : -1} aria-hidden={!on} className="group block">
-      <span className="block font-inter text-[13px] uppercase tracking-[.14em] text-ndm-deep">Step 0{i + 1} <span className="text-ndm-muted">/ 0{PROCESS.length}</span></span>
+      <span className="flex items-baseline gap-2.5 font-inter text-[14px] font-semibold uppercase tracking-[.16em] text-ndm-deep">Step<span className="font-aeonik text-[clamp(34px,3vw,44px)] font-normal normal-case leading-none tracking-[-0.03em]">0{i + 1}</span><span className="font-medium text-ndm-muted">/ 0{PROCESS.length}</span></span>
       <h3 className={`mt-3 font-aeonik font-normal leading-[1.08] tracking-[-0.03em] text-ndm-ink transition-colors group-hover:text-ndm-deep ${small ? 'text-[clamp(24px,2.1vw,31px)] [hyphens:manual]' : 'text-[clamp(30px,3vw,44px)]'}`}>{t.replace('follow-up', 'follow\u2011up')}</h3>
       <p className="mt-3 max-w-[42ch] font-inter text-[16.5px] leading-[1.6] text-ndm-muted">{d}</p>
     </a>
@@ -2614,17 +2614,19 @@ function Social() {
 /* ---------------------------------------------------------------- exclusive monthly specials */
 const NDM = 'https://newdermamedlaserclinic.com';
 const FEES = `${NDM}/fees-financing/`;
-const SPECIALS = [ /* ten most-wanted treatments; prices pulled from the pricing page (src/live/pricing.json) by src/patches-applied/promo_offers_patch.py, rerun on every build */
-  { n: 'Lip Filler', img: 'assets/treatments/lip-filler.jpg', pos: '50% 35%', p: '562.50', u: 'per syringe', deal: 'Buy 1 get 1 50% off', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
-  { n: 'Microneedling', img: 'assets/treatments/microneedling.jpg', pos: '50% 40%', p: '245', u: '', deal: 'Up to 50% off', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
-  { n: 'Chemical Peel', img: 'assets/treatments/chemical-peel.jpg', pos: '50% 40%', p: '104.30', u: 'per session', deal: 'Up to 30% off', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
-  { n: 'Laser Skin Resurfacing', img: 'assets/treatments/laser-resurfacing.jpg', pos: '50% 40%', p: '140', u: 'per session', deal: 'Up to 30% off', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
-  { n: 'Photo Rejuvenation', img: 'assets/treatments/photo-rejuvenation.jpg', pos: '50% 40%', p: '192.50', u: 'per session', deal: 'Up to 60% off', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
-  { n: 'Skin Booster', img: 'assets/treatments/skin-booster.jpg', pos: '50% 40%', p: '399', u: '', deal: 'Buy 1 get 1 50% off', tag: 'Skin Booster and Bio-stimulators', area: 'Face', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Deep hydration for a fresh, dewy glow.' },
-  { n: 'Sculptra® Liquid Facelift', img: 'assets/promotion/sculptra-face.webp', pos: '50% 45%', p: '699', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Gradual, collagen-building facial lift.' },
-  { n: 'Hand Rejuvenation with Radiesse®', img: 'assets/promotion/hands.webp', pos: '50% 58%', p: '599', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'hand', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Restore youthful volume to aging hands.' },
-  { n: 'Crepey Arm Rejuvenation', img: 'assets/promotion/crepey-arms.webp', pos: '50% 55%', p: '599', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Smooth and firm crepey skin on the arms.' },
-  { n: 'Above the Knee Tightening', img: 'assets/promotion/above-knee.webp', pos: '50% 55%', p: '599', u: '', deal: '', tag: 'Skin Booster and Bio-stimulators', area: 'Body', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Firm loose, sagging skin above the knees.' }
+const SPECIALS = [ /* round 34: the twelve monthly specials the designer picked; price, unit and offer come from the price list (below) */
+  { n: 'Botox', img: 'assets/pricing/price-1.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Botox / Dysport', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-botox-dysport-h', d: 'Priced per unit, planned at your free consultation.' },
+  { n: 'Lip Augmentation', img: 'assets/pricing/price-2.jpg', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Shape and definition for the lips, planned with you.' },
+  { n: 'Laser Hair Removal', img: 'assets/journal/laser-hair-removal.webp', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Laser Hair Removal', area: 'Body', icon: 'body', h: 'pricing.html#pg-laser-hair-removal-h', d: 'Medical-grade laser hair reduction, priced per area.' },
+  { n: 'Lip Filler', img: 'assets/treatments/lip-filler.jpg', pos: '50% 35%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
+  { n: 'Microneedling', img: 'assets/treatments/microneedling.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
+  { n: 'Chemical Peel', img: 'assets/treatments/chemical-peel.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
+  { n: 'CoolSculpting', img: 'assets/home/v3/hipdip-720.webp', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Body Contouring', area: 'Body', icon: 'body', h: 'pricing.html#pg-coolsculpting-tight-sculpting-h', d: 'Non-invasive body contouring, priced per zone.' },
+  { n: 'Sculptra', img: 'assets/treatments/sculptra.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Bio-stimulators', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Gradual, collagen-building facial lift.' },
+  { n: 'Laser Skin Resurfacing', img: 'assets/treatments/laser-resurfacing.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
+  { n: 'Photo Rejuvenation', img: 'assets/treatments/photo-rejuvenation.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
+  { n: 'PRP Hair Restoration', img: 'assets/pricing/price-7.jpg', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Hair Loss', area: 'Hair', icon: 'hair', h: 'pricing.html#pg-hair-loss-h', d: 'PRP scalp treatment for thinning hair, priced by area.' },
+  { n: 'PRP Face', img: 'assets/pricing/price-4.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Microneedling with PRP for the face.' }
 ];
 
 /* round 29: each special shows the price list's lowest price after the discount, its unit and its offer (priceInfo / priceFrom) */
@@ -3310,7 +3312,7 @@ const BA_ALL = 'before-after.html';
 
 /* before & after (website v3 "Real results"): heading row with the button to the full gallery, then a row of compare cards
    (four in view on wide screens) with arrows on both sides of the row */
-function BeforeAfter() {
+function BeforeAfter({ tight = false }) {
   const ref = useRef(null), rail = useRef(null);
   useReveal(ref);
   const [edge, setEdge] = useState([true, false]);
@@ -3325,7 +3327,7 @@ function BeforeAfter() {
     r.scrollBy({ left: d * (k ? k.offsetWidth + 16 : r.clientWidth * 0.8), behavior: REDUCED ? 'auto' : 'smooth' });
   };
   return (
-    <section ref={ref} aria-labelledby="results" className="relative z-10 bg-ndm-paper pb-[clamp(40px,4vw,64px)] pt-[clamp(80px,9vw,140px)]">
+    <section ref={ref} aria-labelledby="results" className={`relative z-10 bg-ndm-paper pb-[clamp(40px,4vw,64px)] ${tight ? 'pt-[clamp(8px,1.5vw,24px)]' : 'pt-[clamp(80px,9vw,140px)]'}`}>
       <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6 px-[var(--gx)]">
         <div>
           <Eyebrow className="rv">Before &amp; after</Eyebrow>
@@ -5188,8 +5190,9 @@ function ChatBot({ ready, hidden }) {
 /* monthly specials above the price list (round 22): Ray's "Exclusive monthly specials" cards (NDM-Ray-Dev, commit 8b887a5,
    the version in the designer's screenshot). Each card's Buy opens its category in the price list: [name, price, category id] */
 const PRICE_SPECIALS = { title: 'Exclusive monthly specials', sub: 'Save on cosmetic treatment, apply for financing now', note: 'for selected packages', items: [
-  ['Microneedling', '$249', 'pg-microneedling'], ['Radiesse for Hand', '$599', 'pg-skin-booster-and-bio-stimulators'], ['PRP Hair Rejuvenation', '$399', 'pg-hair-loss'], ['Non-Surgical BBL', '$3999', 'pg-non-surgical-butt-lift'],
-  ['Lip Filler', '$299', 'pg-dermal-fillers'], ['Sculptra Face Lift', '$699', 'pg-skin-booster-and-bio-stimulators'], ['Sculptra', '$699', 'pg-skin-booster-and-bio-stimulators'], ['Radiesse', '$599', 'pg-skin-booster-and-bio-stimulators'],
+  ['Botox', 'pg-botox-dysport'], ['Lip Augmentation', 'pg-dermal-fillers'], ['Laser Hair Removal', 'pg-laser-hair-removal'], ['Lip Filler', 'pg-dermal-fillers'],
+  ['Microneedling', 'pg-microneedling'], ['Chemical Peel', 'pg-chemical-peel'], ['CoolSculpting', 'pg-coolsculpting-tight-sculpting'], ['Sculptra', 'pg-skin-booster-and-bio-stimulators'],
+  ['Laser Skin Resurfacing', 'pg-laser-skin-resurfacing'], ['Photo Rejuvenation', 'pg-photo-rejuvenation'], ['PRP Hair Restoration', 'pg-hair-loss'], ['PRP Face', 'pg-microneedling'],
 ] };
 
 const PRICE_TOTAL = PRICE_CATS.reduce((n, c) => n + c.items.length, 0);
@@ -5369,7 +5372,7 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }) {
   );
 }
 
-/* monthly specials (round 22, Ray's cards): Up to tag, price, name, Buy opens that category in the price list below */
+/* monthly specials (round 22, Ray's cards; centred in round 34): deal tag, From, price, name, Buy opens that category in the price list below */
 function PriceSpecials() {
   const ref = useRef(null);
   useReveal(ref);
@@ -5382,17 +5385,18 @@ function PriceSpecials() {
         <TwoTone id="specials-title" className="rv mx-auto mt-5" size="text-[clamp(30px,3.2vw,46px)]" lead={<>Exclusive<br /></>} strong="monthly specials" style={{ transitionDelay: '.06s' }} />
         <p className="rv mx-auto mt-4 font-inter text-[15px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>{sp.sub}</p>
       </div>
-      <ul role="list" className="mx-auto mt-[clamp(28px,3.4vw,44px)] grid w-full max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-4">
-        {sp.items.map(([n, price, id], i) => {
-          /* round 30: the card's price and offer come from the price list; the offer shows as the red deal tag */
+      {/* round 34: centred cards after the designer's reference: From chip, large price with its unit, name, Buy and the note; the red deal tag on top */}
+      <ul role="list" className="mx-auto mt-[clamp(28px,3.4vw,44px)] grid w-full max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
+        {sp.items.map(([n, id], i) => {
           const info = priceInfo(n) || priceFrom(id.replace(/^pg-/, ''));
+          const unit = info ? (info.unit || (info.per ? ' / ' + info.per.replace(/^per /, '') : '')) : '';
           return (
-          <li key={n} className="rv flex flex-col rounded-[20px] bg-white p-4 ring-1 ring-ndm-ink/[.06] md:p-5" style={{ transitionDelay: `${0.04 * i}s` }}>
-            {info && info.offer ? <span className="deal-badge self-start"><i aria-hidden="true">%</i>{info.offer}</span> : <span className="self-start rounded-full bg-ndm-blue/10 px-2.5 py-1 font-inter text-[11px] font-semibold uppercase tracking-[.12em] text-ndm-deep">Special</span>}
-            <span className="mt-3 block font-inter text-[11px] uppercase tracking-[.16em] text-ndm-muted">From</span>
-            <span className="mt-1 block font-aeonik text-[clamp(26px,2.4vw,34px)] leading-none tracking-[-0.03em] text-ndm-ink">{info ? pfmt(info.value) : price}{info && info.unit ? <span className="ml-1 font-inter text-[13px] tracking-normal text-ndm-muted">{info.unit.replace(' / ', '/ ')}</span> : null}</span>
-            <span className="mt-2 block font-inter text-[15px] font-medium leading-[1.3] text-ndm-ink">{n}</span>
-            <span className="mt-auto flex flex-wrap items-baseline gap-x-2 gap-y-1 pt-4"><a href={`#${id}`} onClick={(e) => go(e, id)} className="btn btn-buy h-9 px-4 text-[13px]">Buy</a><span className="font-inter text-[12.5px] text-ndm-muted">{sp.note}</span></span>
+          <li key={n} className="rv ps-card flex flex-col items-center rounded-[22px] bg-white px-3 pb-5 pt-4 text-center ring-1 ring-ndm-ink/[.06] md:px-5 md:pb-6 md:pt-5" style={{ transitionDelay: `${0.04 * i}s` }}>
+            {info && info.offer ? <span className="deal-badge"><i aria-hidden="true">%</i>{info.offer}</span> : <span className="deal-badge invisible" aria-hidden="true"><i>%</i>Offer</span>}
+            <span className="mt-4 rounded-full bg-ndm-blue/10 px-3 py-1 font-inter text-[11px] font-semibold uppercase tracking-[.16em] text-ndm-deep">From</span>
+            <span className="mt-3 flex flex-wrap items-baseline justify-center gap-x-1"><span className="font-aeonik text-[clamp(30px,3vw,44px)] leading-none tracking-[-0.03em] text-ndm-ink">{info ? pfmt(info.value) : ''}</span>{unit && <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted md:text-[14px]">{unit}</span>}</span>
+            <span className="mt-2.5 block font-inter text-[15px] font-medium leading-[1.3] text-ndm-ink md:text-[16.5px]">{n}</span>
+            <span className="mt-auto flex flex-col items-center pt-4"><a href={`#${id}`} onClick={(e) => go(e, id)} className="btn btn-buy h-10 px-6 text-[14px]">Buy</a><span className="mt-2 font-inter text-[12.5px] text-ndm-muted">{sp.note}</span></span>
           </li>
           );
         })}

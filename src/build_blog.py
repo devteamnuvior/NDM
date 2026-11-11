@@ -9,7 +9,7 @@ from pathlib import Path
 
 root, scratch = Path(sys.argv[1]), Path(sys.argv[2])
 s = (root / 'promotion.html').read_text()
-ui = (scratch / 'blog-ui.jsx').read_text()
+ui = (scratch / 'blog-ui.jsx').read_text() + '\n' + (scratch / 'journey-ui.jsx').read_text()
 
 # the shell's own breadcrumb data belongs to the promotion page
 s = re.sub(r'\n<script type="application/ld\+json" id="ld-crumbs">.*?</script>', '', s, count=1)
@@ -103,6 +103,7 @@ function App() {
         <FeaturedStory p={featured} />
         <LatestStories posts={rest} />
         <BlogNewsletter />
+        <ProcAnalysis />
         <Faq />
       </main>
       <Footer />

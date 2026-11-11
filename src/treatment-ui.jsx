@@ -405,7 +405,18 @@ const TX_MORE_CSS = `
 .tx-more-glass{background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.32);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%)}
 @media (prefers-reduced-motion:reduce){.tx-more-mesh{animation:none}.tx-more,.tx-more-pic{transition:none}}
 `;
-function TxResults({ p }) {
+/* round 34: Before & after on a dark modern band (Botox and concern pages): a deep navy gradient with two slow light orbs,
+   cards in dark glass */
+const RS_DARK_CSS = `
+.rs-dark{background:radial-gradient(60% 70% at 90% 0%,rgba(38,177,231,.26),transparent 60%),radial-gradient(50% 60% at 0% 100%,rgba(255,166,23,.1),transparent 65%),linear-gradient(160deg,#0E2A40 0%,#0A1B2A 55%,#081521 100%)}
+.rs-orb{position:absolute;border-radius:50%;filter:blur(40px);opacity:.5;pointer-events:none;animation:rsDrift 18s ease-in-out infinite alternate}
+.rs-orb-a{width:360px;height:360px;left:-90px;top:12%;background:radial-gradient(circle,rgba(38,177,231,.5),transparent 70%)}
+.rs-orb-b{width:280px;height:280px;right:4%;bottom:-70px;background:radial-gradient(circle,rgba(15,128,195,.55),transparent 70%);animation-duration:22s;animation-delay:-8s}
+.rs-card{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 40px 70px -46px rgba(0,0,0,.7);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+@keyframes rsDrift{to{transform:translate3d(60px,-40px,0) scale(1.15)}}
+@media (prefers-reduced-motion:reduce){.rs-orb{animation:none}}
+`;
+function TxResults({ p, dark = false }) {
   const ref = useRef(null);
   useReveal(ref);
   const t = p.results;
@@ -413,25 +424,26 @@ function TxResults({ p }) {
   const more = t.more || BA_ALL;
   const cases = (t.cases || []).slice(0, 4);
   return (
-    <section ref={ref} id="results" aria-labelledby="results-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
-      <div className={TX_WRAP}>
+    <section ref={ref} id="results" aria-labelledby="results-title" {...(dark ? { 'data-nav': 'dark' } : {})} className={`relative z-10 scroll-mt-[170px] px-[var(--gx)] py-[clamp(64px,7vw,104px)] ${dark ? 'rs-dark overflow-hidden text-white' : 'bg-ndm-paper'}`}>
+      {dark && <><style>{RS_DARK_CSS}</style><span aria-hidden="true" className="rs-orb rs-orb-a" /><span aria-hidden="true" className="rs-orb rs-orb-b" /></>}
+      <div className={`${TX_WRAP} relative`}>
         <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
           <div>
-            <Eyebrow className="rv">{n && <span className="tabular-nums text-ndm-deep">{n}</span>}Before &amp; after</Eyebrow>
-            <TwoTone id="results-title" className="rv mt-4" size="text-[clamp(32px,3.4vw,50px)]" lead={twoLine(t.lead)} strong={t.strong} style={{ transitionDelay: '.05s' }} />
-            <p className="rv mt-4 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>{t.text}</p>
+            <Eyebrow dark={dark} className="rv">{n && <span className={`tabular-nums ${dark ? 'text-ndm-sky' : 'text-ndm-deep'}`}>{n}</span>}Before &amp; after</Eyebrow>
+            <TwoTone id="results-title" dark={dark} className="rv mt-4" size="text-[clamp(32px,3.4vw,50px)]" lead={twoLine(t.lead)} strong={t.strong} style={{ transitionDelay: '.05s' }} />
+            <p className={`rv mt-4 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] ${dark ? 'text-white/75' : 'text-ndm-muted'}`} style={{ transitionDelay: '.1s' }}>{t.text}{/results may vary/i.test(t.text) ? '' : ' Individual results may vary.'}</p>
           </div>
-          <div className="rv" style={{ transitionDelay: '.12s' }}><Btn href={more} target="_blank" rel="noopener" v="line">See all before &amp; after</Btn></div>
+          <div className="rv" style={{ transitionDelay: '.12s' }}><Btn href={more} target="_blank" rel="noopener" v={dark ? 'light' : 'line'}>See all before &amp; after</Btn></div>
         </div>
         {t.pics ? (<>
           <ul role="list" className="mt-[clamp(32px,4vw,52px)] grid gap-4 sm:grid-cols-3">
             {t.pics.map((c, i) => (
               <li key={c.src} className="rv" style={{ transitionDelay: `${0.06 * i}s` }}>
-                <figure className="m-0 overflow-hidden rounded-[22px] bg-white p-2.5 ring-1 ring-ndm-ink/[.06] shadow-[0_22px_44px_-36px_rgba(27,36,43,.35)]">
+                <figure className={`m-0 overflow-hidden rounded-[22px] p-2.5 ${dark ? 'rs-card' : 'bg-white ring-1 ring-ndm-ink/[.06] shadow-[0_22px_44px_-36px_rgba(27,36,43,.35)]'}`}>
                   <span className="relative block aspect-[431/310] overflow-hidden rounded-[16px] bg-ndm-mist"><img src={c.src} alt={`${c.label}, before and after`} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" /></span>
                   <figcaption className="flex items-baseline justify-between gap-3 px-1.5 pb-1 pt-3">
-                    <span className="font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">{c.label}</span>
-                    <span className="font-inter text-[12.5px] text-ndm-muted">Before · After</span>
+                    <span className={`font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] ${dark ? 'text-white' : 'text-ndm-ink'}`}>{c.label}</span>
+                    <span className={`font-inter text-[12.5px] ${dark ? 'text-white/60' : 'text-ndm-muted'}`}>Before · After</span>
                   </figcaption>
                 </figure>
               </li>
@@ -444,8 +456,8 @@ function TxResults({ p }) {
               <figure className="m-0">
                 <BaCompare c={c} i={i} nudge={i < 2} />
                 <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
-                  <span className="font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">Case {c.id}</span>
-                  <span className="font-inter text-[13px] text-ndm-muted">{c.view}</span>
+                  <span className={`font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] ${dark ? 'text-white' : 'text-ndm-ink'}`}>Case {c.id}</span>
+                  <span className={`font-inter text-[13px] ${dark ? 'text-white/60' : 'text-ndm-muted'}`}>{c.view}</span>
                 </figcaption>
               </figure>
             </li>

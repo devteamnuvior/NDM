@@ -11,7 +11,7 @@ from pathlib import Path
 root, src = Path(sys.argv[1]), Path(sys.argv[2])
 s = (root / 'promotion.html').read_text(encoding='utf-8')
 s = re.sub(r'\n<script type="application/ld\+json" id="ld-crumbs">.*?</script>', '', s, count=1)
-ui = '\n'.join((src / f).read_text(encoding='utf-8') for f in ['procedure-ui.jsx', 'treatment-ui.jsx', 'concern-ui.jsx'])
+ui = '\n'.join((src / f).read_text(encoding='utf-8') for f in ['procedure-ui.jsx', 'journey-ui.jsx', 'treatment-ui.jsx', 'concern-ui.jsx'])
 CN = json.load(open(src / 'concern-data.json', encoding='utf-8'))
 OUT = 'wrinkles-fine-lines.html'
 proc_build = (src / 'build_procedure.py').read_text(encoding='utf-8')
@@ -94,7 +94,7 @@ function App() {
         <CnOptions p={CN} />
         <CnCompare p={CN} />
         <TxExpect p={CN} />
-        <TxResults p={CN} />
+        <TxResults p={CN} dark />
         <CnHome p={CN} />
         <TxWhy p={CN} />
         <Team />

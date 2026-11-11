@@ -6,7 +6,7 @@
    priceFor(name) finds a treatment by its name anywhere on the site and returns "From $X" (or null when it is not on the list). */
 const PRICE_BY_ID = Object.fromEntries(PRICE_CATS.map((c) => [c.id, c]));
 const pfmt = (n) => '$' + (Math.round(n * 100) / 100).toLocaleString('en-CA', { useGrouping: false, minimumFractionDigits: Math.round(n * 100) % 100 ? 2 : 0, maximumFractionDigits: 2 });
-const pCount = (label) => { const m = /(\d+)\s*(units?|syringes?|sessions?|vials?|treatments?)\b/i.exec(label) || /package of (\d+)/i.exec(label); return m ? +m[1] : 1; };
+const pCount = (label) => { const m = /(\d+)\s*(units?|syringes?|sessions?|vials?|treatments?|zones?)\b/i.exec(label) || /package of (\d+)/i.exec(label); return m ? +m[1] : 1; };
 const pPct = (tag) => { const m = /^(\d+)% OFF$/i.exec(tag || ''); return m ? +m[1] : 0; };
 const pNorm = (s) => String(s || '').toLowerCase().replace(/[®™]/g, '').replace(/[–-]/g, ' ').replace(/\s+/g, ' ').trim();
 function priceOptions(id, item) {
@@ -21,7 +21,7 @@ function priceFrom(id, item) {
   const pct = Math.max(0, ...os.map((o) => pPct(o.tag)));
   const tags = os.map((o) => o.tag).filter(Boolean);
   const offer = pct ? `Up to ${pct}% off` : (tags[0] ? tags[0].replace(/\bOFF\b/g, 'off').replace(/^BUY 1 GET 1/i, 'Buy 1 get 1').replace(/\bFREE\b/, 'free').replace(/^Save \$(\d+)\sOff$/i, 'Save $$$1') : '');
-  return { value: Math.round(best.v * 100) / 100, unit: c.unit ? ' / unit' : '', per: c.unit ? 'per unit' : /syringe/i.test(best.o.label) ? 'per syringe' : best.n > 1 || /session/i.test(best.o.label) ? 'per session' : '', pct, offer };
+  return { value: Math.round(best.v * 100) / 100, unit: c.unit ? ' / unit' : '', per: c.unit ? 'per unit' : /syringe/i.test(best.o.label) ? 'per syringe' : /zone/i.test(best.o.label) ? 'per zone' : best.n > 1 || /session/i.test(best.o.label) ? 'per session' : '', pct, offer };
 }
 const priceLabel = (id, item) => { const f = priceFrom(id, item); return f ? `From ${pfmt(f.value)}${f.unit}` : null; };
 /* names used on the site's cards and menus, mapped to the price list: [category id, treatment] */
@@ -39,7 +39,7 @@ const PRICE_NAMES = {
   'acnelan': ['chemical-peel', 'Acnelan'], 'cosmelan & dermamelan': ['depigmenting-treatment'], 'dermamelan': ['depigmenting-treatment', 'Dermamelan'], 'cosmelan': ['depigmenting-treatment', 'Cosmelan'],
   'laser acne treatment': ['laser-acne-treatment'], 'acne treatments': ['laser-acne-treatment'], 'laser hair removal': ['laser-hair-removal'],
   'laser vein removal': ['laser-vein'], 'spider vein removal': ['laser-vein'], 'coolsculpting': ['coolsculpting-tight-sculpting', 'Coolsculpting'], 'tightsculpting': ['coolsculpting-tight-sculpting', 'Tight Sculpting'],
-  'non surgical butt lift': ['non-surgical-butt-lift'], 'non surgical bbl': ['non-surgical-butt-lift'], 'prp hair restoration': ['hair-loss', 'PRP Scalp'], 'hair loss treatments': ['hair-loss'],
+  'non surgical butt lift': ['non-surgical-butt-lift'], 'non surgical bbl': ['non-surgical-butt-lift'], 'prp hair restoration': ['hair-loss', 'PRP Scalp'], 'prp face': ['microneedling', 'Microneedling with PRP'], 'hair loss treatments': ['hair-loss'],
   'laser hair rejuvenation': ['hair-loss'], 'vaginal tightening': ['laser-vaginal-tightening'], 'snoring treatment': ['snoring-treatment'], 'nail fungus treatment': ['toenail-fungus-removal'],
 };
 function priceFor(name) {

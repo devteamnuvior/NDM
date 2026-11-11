@@ -121,20 +121,6 @@ function ArticleBody({ a }) {
           );
           return <p key={i} className="rv font-inter">{x}</p>;
         })}
-        <aside aria-labelledby="takeaway" className="take-card mt-[clamp(48px,5vw,72px)] grid overflow-hidden rounded-[22px] md:grid-cols-[minmax(0,.85fr)_minmax(0,1.15fr)] lg:-mx-[clamp(0px,9vw,140px)]">
-          <div className="rv rv-clip take-pic relative min-h-[300px] overflow-hidden bg-ndm-mist md:min-h-full">
-            <img src="assets/testimonials/t-1.jpg" alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[50%_20%]" />
-          </div>
-          <div className="rv p-[clamp(24px,3vw,44px)]" style={{ transitionDelay: '.15s' }}>
-          <Eyebrow>Key takeaway</Eyebrow>
-          <p id="takeaway" className="mt-5 font-aeonik text-[clamp(21px,1.8vw,26px)] leading-[1.4] tracking-[-0.01em] text-ndm-ink">{a.takeaway}</p>
-          <p className="mt-4 font-inter text-[14px] leading-[1.6] text-ndm-muted">Every plan starts with a free consultation at our Uptown or Downtown clinic. Individual results may vary.</p>
-          <div className="mt-6 flex flex-wrap gap-2.5">
-            <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
-            <Btn href="blog.html" v="line">More articles</Btn>
-          </div>
-          </div>
-        </aside>
       </div>
     </section>
   );
