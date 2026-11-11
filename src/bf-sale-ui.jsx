@@ -156,6 +156,7 @@ function BfsHeader({ count }) {
       <div className="mx-auto flex h-[68px] max-w-[1280px] items-center justify-between gap-4 px-[var(--gx)]">
         <a href="index.html" className="shrink-0" aria-label="NewDermaMed home"><img src="assets/icons/logo-white.svg" alt="NewDermaMed" className="h-7 w-auto min-[400px]:h-8 sm:h-10" /></a>
         <nav aria-label="Black Friday page" className="hidden items-center gap-7 lg:flex">
+          <a href="index.html" className="font-inter text-[14.5px] text-white/80 transition-colors hover:text-white">Home</a>
           {links.map(([id, l]) => <a key={id} href={`#${id}`} onClick={bfsGo(id)} className="font-inter text-[14.5px] text-white/80 transition-colors hover:text-white">{l}</a>)}
           <a href="#plan" onClick={bfsGo('plan')} className="inline-flex items-center gap-2 font-inter text-[14.5px] text-white/80 transition-colors hover:text-white">My plan<span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#D3121F] px-1.5 text-[11px] font-semibold text-white tabular-nums">{count}</span></a>
         </nav>

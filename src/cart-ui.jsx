@@ -11,7 +11,7 @@ const totalsOf = (lines) => {
   const tax = round2(sub * HST);
   return { sub: round2(sub), saved: round2(saved), tax, total: round2(sub + tax) };
 };
-const money2 = (n) => '$' + n.toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const money2 = (n) => '$' + n.toLocaleString('en-CA', { useGrouping: false, minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const CO_STEPS = [['Cart', 'cart.html'], ['Checkout', 'checkout.html'], ['Confirmation', null]];
 const PROVINCES = ['Alberta', 'British Columbia', 'Manitoba', 'New Brunswick', 'Newfoundland and Labrador', 'Northwest Territories', 'Nova Scotia', 'Nunavut', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon'];
 /* pairs well with your treatment: lines straight from the price list (same keys as the Pricing page, so the cart stays one cart) */
