@@ -68,7 +68,7 @@ Rebuild order after any change to `promotion.html`: `build_pricing build_about b
 - **Preview pane:** it pauses animations and scroll effects while hidden, and the offer pop-up reopens on every page load, so screenshots can look blurred or frozen. Verify with JavaScript, and close the pop-up before a screenshot.
 - **`black-friday.html` builder** broke twice when the shells changed (the switcher mount line, a duplicate `useBfClock`); both fixed in `build_blackfriday.py`.
 
-## 7. Round 29 (11 November 2026), in progress
+## 7. Round 29 (11 November 2026), done
 
 Asked by the user in one message; status of each item:
 
@@ -85,13 +85,15 @@ Asked by the user in one message; status of each item:
 | Monthly specials like the promotion page (red deal tags) + "alpha" entrance (cards travel along the circle from the left) | Done on home, promotion and pricing (`r29_specials.py`; revert alpha by restoring the old ox/oy/or sweep there) |
 | Remove the Dark / Light switch on promotion | Done |
 | "Save on cosmetic treatment" above the financing button, centred | Done |
-| About menu like Procedures (links left, the two clinic boxes right) | To do |
-| Our signature (home Aptos): remove the price, make it less text-based | To do |
-| Black Friday page: booking form in the Black Friday style | To do |
-| Botox About section: redesign with its own theme, light motion, keep the 5 tabs | To do |
-| Account page (from `../new website Odoo/nuvior-account_3.html`, "premium membership" instead of Nuvicoin, NDM-specific), cart and checkout steps after `nuvior-checkout-flow-prp-requirement (1).html`, privacy page after `nuvior-legal-privacy_1.html` | To do |
+| About menu like Procedures (links left, the two clinic boxes right) | Done (both shells) |
+| Our signature (home Aptos): remove the price, make it less text-based | Done: three dials whose blue arcs draw in (60 min, 2 weeks, 24 months) and icon chips |
+| Black Friday page: booking form in the Black Friday style | Done (black card, red accents, CSS in `BFS_CSS`) |
+| Botox About section: redesign with its own theme, light motion, keep the 5 tabs | Done (`ProcOverview`, `.ov2-*` in build_procedure.py: navy band, drifting orbs, turning ring, numbered tabs, glass panel) |
+| Account page, checkout steps, privacy page (from the three NUVIOR samples) | Done: `account.html` ← `src/build_account.py` + `src/account-ui.jsx` (Premium membership instead of Nuvicoin, health and consent forms instead of B2B verification, sample member "Alex M."; benefits, price and renewal marked "To confirm"); checkout is Cart, Details, Appointment, Payment, Review, Confirmation (`src/cart-ui.jsx`); `privacy.html` ← `src/build_legal.py` + `src/legal-ui.jsx` (the sample's PHIPA text with NewDermaMed, its duplicated section shown once; effective date and Privacy Officer marked COPY NEEDED). Both use `src/shellpage.py`. The header account icon opens account.html; policy links open privacy.html. |
 
 Rebuild everything with `./src/rebuild_all.sh pre` (syncs prices, builds every page, checks JSX and duplicate names, refreshes the Botox and concern crawler copies). `black-friday.html` (old preview) now skips the steps that no longer match the home page instead of failing.
+
+Still open after round 29: Raymond must approve the Premium membership (benefits, price, terms), the privacy text for NewDermaMed (it is NUVIOR's sample adapted, plus the Privacy Officer and effective date), and the per-unit "From" prices (for example $7.70 / unit is the 220-unit Dysport package). Terms, CASL, refunds and accessibility pages are linked as `#/...` placeholders.
 
 ## 6. What should be done next
 
