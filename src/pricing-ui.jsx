@@ -11,8 +11,8 @@ const PRICE_FAQS = [
 function bestOffer(opts) {
   const tags = opts.map((o) => o[3]).filter(Boolean);
   if (!tags.length) return '';
-  const pct = Math.max(0, ...tags.map((t) => { const m = /^(\d+)% OFF$/i.exec(t); return m ? +m[1] : 0; }));
-  return pct ? `Up to ${pct}% off` : tags[0];
+  const pct = Math.max(0, ...tags.map((t) => { const m = /^(\d+)% OFF$/i.exec(t); return m ? +m[1] : 0; }));
+  return pct ? `Up to ${pct}% off` : tags[0];
 }
 const perUnit = (cat, label) => (cat.unit && label === 'Regular' ? ' / unit' : '');
 

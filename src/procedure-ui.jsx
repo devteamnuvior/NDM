@@ -102,7 +102,7 @@ const PROC = {
     tag: 'Good to know', lead: 'Botox® in Toronto:', strong: 'cost, care and choices',
     items: [
       { q: 'How many units of Botox® will I need?', a: ['Your dose depends on the areas treated and how strong those muscles are. As a guide, the approved doses are about 20 units for the frown lines between the brows and about 24 units for crow’s feet across both eyes. Your provider confirms your units at your free consultation.'] },
-      { q: 'How much does Botox® cost per area?', a: ['Botox® Cosmetic is $12 per unit at NewDermaMed, and packages of 60 to 220 units are currently 10% to 30% off. At the regular price, 20 units are $240 and 24 units are $288. Your final price is confirmed after your assessment.'] },
+      { q: 'How much does Botox® cost per area?', a: ['Botox® Cosmetic is $12 per unit at NewDermaMed, and packages of 60 to 220 units are currently 10% to 30% off. At the regular price, 20 units are $240 and 24 units are $288. Your final price is confirmed after your assessment.'] },
       { q: 'Who performs Botox® at NewDermaMed?', a: ['Botox® is given only by our licensed medical team, under the medical direction of Dr. Negin Mastouri, and only after an in-person assessment of your health history, your goals and how your face moves.'] },
       { q: 'What should I do before and after my appointment?', a: ['Your provider gives you written aftercare for your treatment. Common advice includes:'],
         list: ['Tell your provider about any medicines or supplements you take, especially blood thinners', 'Avoid alcohol the day before, as it can make bruising more likely', 'Stay upright and avoid rubbing or massaging the treated area for the rest of the day', 'Skip strenuous exercise, saunas and hot yoga until the next day'] },
@@ -434,7 +434,7 @@ function ProcPrices({ p }) {
   const groups = pr.groups || [{ name: pr.name, title: 'Botox® Cosmetic', blurb: pr.blurb, rows: pr.rows }];
   const [open, setOpen] = useState(() => groups.map((g, i) => i === 0));
   const unit = (label) => (label === pr.unitLabel ? ' / unit' : '');
-  const pctOf = (rows) => Math.max(...rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
+  const pctOf = (rows) => Math.max(...rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
   return (
     <section ref={ref} id="prices" aria-labelledby="prices-title" className="proc-peach relative z-10 scroll-mt-[150px] px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
       <div className="mx-auto max-w-[1040px]">
@@ -456,7 +456,7 @@ function ProcPrices({ p }) {
                       <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{g.title}</span>
                     </span>
                     <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                      {pct > 0 && <span className="pr-badge">Up to {pct}% off</span>}
+                      {pct > 0 && <span className="pr-badge">Up to {pct}% off</span>}
                       <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{pfmt(rowsFrom(g.rows, true))}</span> / unit</span>
                     </span>
                     <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>

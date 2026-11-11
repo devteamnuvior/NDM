@@ -7,6 +7,7 @@ for b in build_pricing build_about build_blog build_article build_procedure buil
   python3 src/$b.py . src >/dev/null 2>&1 || { echo "FAIL $b"; python3 src/$b.py . src 2>&1 | tail -3; }
 done
 python3 src/build_blackfriday.py . >/dev/null 2>&1 || echo "FAIL build_blackfriday"
+python3 src/nbsp_off.py *.html
 for f in *.html; do
   [ "$f" = index-fraunces.html ] && continue
   node tools/jsxcheck.js "$f" --html 2>&1 | grep -q "^OK" || { echo "JSX FAIL $f"; node tools/jsxcheck.js "$f" --html 2>&1 | head -3; }
@@ -14,4 +15,5 @@ for f in *.html; do
   [ -n "$d" ] && echo "DUP $f: $d"
 done
 [ "$1" = "pre" ] && { python3 tools/prerender.py . botox.html | tail -1; python3 tools/prerender.py . wrinkles-fine-lines.html | tail -1; }
+python3 src/nbsp_off.py botox.html wrinkles-fine-lines.html
 echo rebuilt

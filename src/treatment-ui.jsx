@@ -570,7 +570,7 @@ function TxPrices({ p }) {
   const [on, setOn] = useState(true);
   const pr = p.prices;
   const unit = (label) => (pr.unitLabel && label === pr.unitLabel ? ' / unit' : '');
-  const pct = Math.max(0, ...pr.rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
+  const pct = Math.max(0, ...pr.rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
   const from = rowsFrom(pr.rows, !!pr.unitLabel); /* round 31: after the discount, per unit when priced per unit */
   return (
     <section ref={ref} id="prices" aria-labelledby="prices-title" className="proc-peach relative z-10 scroll-mt-[170px] px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
@@ -586,7 +586,7 @@ function TxPrices({ p }) {
                   <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{pr.title}</span>
                 </span>
                 <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                  {pct > 0 && <span className="pr-badge">Up to {pct}% off</span>}
+                  {pct > 0 && <span className="pr-badge">Up to {pct}% off</span>}
                   <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{pfmt(from)}</span>{pr.unitLabel ? ' / unit' : ''}</span>
                 </span>
                 <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>

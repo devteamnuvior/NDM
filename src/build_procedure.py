@@ -30,7 +30,7 @@ assert len(faq_pairs) >= 10, len(faq_pairs)
 SITE = 'https://newdermamedlaserclinic.com/'
 URL = SITE + OUT
 TITLE = 'Botox Toronto from $12/Unit, Free Consultation | NewDermaMed'
-DESC = ('Botox® Cosmetic in Toronto from $12 per unit, packages up to 30% off. Free consultation and VISIA® skin analysis at our '
+DESC = ('Botox® Cosmetic in Toronto from $12 per unit, packages up to 30% off. Free consultation and VISIA® skin analysis at our '
         'Uptown (Yonge & Sheppard) and Downtown (Bay & College) clinics.')
 IMG = SITE + 'assets/botox/hero.jpg'
 UPDATED = '2026-11-10'

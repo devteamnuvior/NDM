@@ -15,11 +15,6 @@ const BFS_GROUP = {
   'laser-vaginal-tightening': 'Wellness', 'snoring-treatment': 'Wellness', 'toenail-fungus-removal': 'Wellness',
 };
 /* treatment photos for the deal cards (only where the site has one) */
-const BFS_PIC = {
-  'laser-skin-resurfacing': 'assets/treatments/laser-resurfacing.jpg', 'photo-rejuvenation': 'assets/treatments/photo-rejuvenation.jpg', microneedling: 'assets/treatments/microneedling.jpg',
-  facial: 'assets/treatments/age-element-facial.jpg', 'chemical-peel': 'assets/treatments/chemical-peel.jpg', 'dermal-fillers': 'assets/treatments/lip-filler.jpg',
-  'skin-booster-and-bio-stimulators': 'assets/treatments/skin-booster.jpg', 'aptos-thread-method': 'assets/aptos/midface-vectors.jpg',
-};
 const BFS_TABS = ['All deals', 'Laser', 'Skin', 'Injectables', 'Body', 'Hair', 'Wellness'];
 const BFS_CONCERNS = [
   ['Unwanted hair', 'Choose your area and laser hair removal package.', ['laser-hair-removal']],
@@ -32,14 +27,14 @@ const BFS_CONCERNS = [
   ['Veins and redness', 'Laser and light for visible veins and redness.', ['laser-vein', 'photo-rejuvenation']],
   ['Hair thinning', 'PRP scalp treatments.', ['hair-loss']],
 ];
-const bfsPct = (t) => { const m = /(\d+)% OFF$/i.exec(t || ''); return m && !/GET 1/i.test(t) ? +m[1] : 0; };
-const bfsTag = (t) => (t ? t.replace(/\bOFF\b/g, 'off').replace(/^BUY 1 GET 1/i, 'Buy 1 get 1').replace(/\bFREE\b/, 'free').replace(/^Save \$(\d+) Off$/i, 'Save $$$1') : '');
+const bfsPct = (t) => { const m = /(\d+)% OFF$/i.exec(t || ''); return m && !/GET 1/i.test(t) ? +m[1] : 0; };
+const bfsTag = (t) => (t ? t.replace(/\bOFF\b/g, 'off').replace(/^BUY 1 GET 1/i, 'Buy 1 get 1').replace(/\bFREE\b/, 'free').replace(/^Save \$(\d+)\sOff$/i, 'Save $$$1') : '');
 /* the deals: one card per price-list category, with the treatments (areas) that carry an offer */
 const BFS_DEALS = PRICE_CATS.filter((c) => !BFS_SKIP.includes(c.id) && BFS_GROUP[c.id]).map((c) => {
   const items = c.items.filter((it) => it[2].some((o) => o[2] > 0 || o[3]));
   const tags = items.flatMap((it) => it[2].map((o) => o[3]).filter(Boolean));
   const pct = Math.max(0, ...tags.map(bfsPct));
-  const offer = pct ? `Up to ${pct}% off` : bfsTag(tags[0]);
+  const offer = pct ? `Up to ${pct}% off` : bfsTag(tags[0]);
   const prices = items.flatMap((it) => it[2].filter((o) => o[2] > 0 || o[3]).map((o) => o[1]));
   return { c, id: c.id, group: BFS_GROUP[c.id], items, pct, offer, from: Math.min(...prices) };
 }).filter((d) => d.items.length);
@@ -99,17 +94,17 @@ html.bfs .btn-ink:hover,html.bfs .btn-buy:hover{background:var(--r);border-color
 .bfs-chip[aria-pressed="true"] .bfs-chip-n{color:#FF4B55}.bfs-chip[aria-pressed="true"] .bfs-chip-k,.bfs-chip[aria-pressed="true"] .bfs-chip-d{color:rgba(255,255,255,.65)}
 .bfs-chip[aria-pressed="true"] .bfs-chip-go{background:var(--r);color:#fff;transform:rotate(90deg)}
 .bfs-head{background:radial-gradient(90% 120% at 0% 100%,rgba(211,18,29,.5),transparent 60%),#0B0B0C}
-.bfs-head-pic{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 70%);mask-image:linear-gradient(90deg,transparent 0,#000 70%);opacity:.85;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
-.bfs-card:hover .bfs-head-pic{transform:scale(1.06)}
+.bfs-head-mark{position:absolute;right:-.04em;bottom:-.3em;font-size:210px;line-height:1;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.14);pointer-events:none;user-select:none;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.bfs-card:hover .bfs-head-mark{transform:translateX(-8px) rotate(-4deg)}
 .bfs-ticket.on-k::before,.bfs-ticket.on-k::after{background:#0B0B0C}
 .bfs-ticket{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .bfs-ticket:hover{transform:translateY(-6px) rotate(-.6deg)}
-.bfs-how-n{font-size:clamp(64px,6vw,88px);line-height:.8;letter-spacing:-.05em;color:var(--r)}
+.bfs-how-n{flex:none;font-size:clamp(48px,4.4vw,60px);line-height:.8;letter-spacing:-.05em;color:var(--r)}
 .bfs-how-n i{font-style:normal;color:rgba(11,11,12,.12)}
 .bfs-how-card{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease}
 .bfs-how-card:hover{transform:translateY(-5px);box-shadow:0 34px 60px -40px rgba(60,10,14,.5)}
-.bfs-how-go{position:absolute;z-index:1;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--r);color:#fff;box-shadow:0 0 0 6px var(--pp);left:50%;bottom:-27px;transform:translateX(-50%) rotate(90deg)}
-@media (min-width:768px){.bfs-how-go{left:auto;right:-29px;bottom:auto;top:50%;transform:translateY(-50%)}}
+.bfs-how-go{position:absolute;z-index:1;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--r);color:#fff;box-shadow:0 0 0 5px var(--pp);left:50%;bottom:-23px;transform:translateX(-50%) rotate(90deg)}
+@media (min-width:768px){.bfs-how-go{left:auto;right:-25px;bottom:auto;top:50%;transform:translateY(-50%)}}
 @keyframes bfsDrift{to{transform:translate3d(-2vw,1.5vw,0)}}
 @keyframes bfsShine{from{background-position:125% 0}to{background-position:-125% 0}}
 @keyframes bfsRise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
@@ -136,6 +131,17 @@ html.bfs .btn-ink:hover,html.bfs .btn-buy:hover{background:var(--r);border-color
 .bfs-ticket{position:relative;background:#fff}
 .bfs-ticket::before,.bfs-ticket::after{content:"";position:absolute;top:58%;width:22px;height:22px;border-radius:99px;background:var(--pp)}
 .bfs-ticket::before{left:-11px}.bfs-ticket::after{right:-11px}
+.bfs-ticket::before,.bfs-ticket::after{content:none}
+.bfs-ticket .bfs-tear{position:relative}
+.bfs-ticket .bfs-tear::before,.bfs-ticket .bfs-tear::after{content:"";position:absolute;z-index:5;top:-12px;width:22px;height:22px;border-radius:99px;background:#0B0B0C}
+.bfs-ticket .bfs-tear::before{left:-31px}.bfs-ticket .bfs-tear::after{right:-31px}
+.bfs-marq{overflow:hidden;padding:12px 0 16px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.bfs-marq-track{display:flex;width:max-content;animation:bfsMarq 46s linear infinite}
+.bfs-marq:hover .bfs-marq-track,.bfs-marq:focus-within .bfs-marq-track{animation-play-state:paused}
+.bfs-marq-set{display:flex;gap:20px;padding-right:20px}
+.bfs-marq-set>li{flex:none;width:clamp(286px,29vw,372px)}
+@keyframes bfsMarq{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.bfs-marq{overflow-x:auto}.bfs-marq-track{animation:none}.bfs-marq-set[aria-hidden]{display:none}}
 .bfs-tear{border-top:2px dashed rgba(11,11,12,.14)}
 .bfs-dark{background:radial-gradient(50% 60% at 100% 0%,rgba(211,18,29,.22),transparent 60%),var(--k)}
 .bfs-bar{background:rgba(11,11,12,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
@@ -167,7 +173,7 @@ html.bfs .book-card [class*="bg-ndm-night"],html.bfs .book-card [class*="bg-[#0B
 `;
 
 /* round 26: moving tapes. Two crossed strips close the hero; one strip divides sections */
-const BFS_WORDS = [`Black Friday · ${BFS.whenShort}`, `Up to ${BFS_MAX}% off selected treatments`, 'Buy 1 get 1 offers', 'Free consultation and VISIA® skin analysis', 'Uptown and Downtown Toronto'];
+const BFS_WORDS = [`Black Friday · ${BFS.whenShort}`, `Up to ${BFS_MAX}% off selected treatments`, 'Buy 1 get 1 offers', 'Free consultation and VISIA® skin analysis', 'Uptown and Downtown Toronto'];
 function BfsTape({ tone = 'red', rev = false }) {
   const row = <span>{BFS_WORDS.map((w) => <Fragment key={w}>{w}<i /></Fragment>)}</span>;
   return <div aria-hidden="true" className={`bfs-tape bfs-tape-${tone}`}><div className={`bfs-tick-in ${rev ? 'is-rev' : ''}`}>{row}{row}{row}{row}</div></div>;
@@ -176,7 +182,7 @@ function BfsTape({ tone = 'red', rev = false }) {
 function BfsHeader({ count }) {
   /* round 30: the links follow the page's own order, the section in view is underlined, and the plan count shows only when
      something is in the plan */
-  const links = [['concerns', 'Concerns'], ['deals', 'Deals'], ['specials', 'Specials'], ['how', 'How it works'], ['plan', 'My plan'], ['clinics', 'Clinics']];
+  const links = [['how', 'How it works'], ['concerns', 'Concerns'], ['deals', 'Deals'], ['specials', 'Specials'], ['plan', 'My plan'], ['clinics', 'Clinics']];
   const [here, setHere] = useState('');
   useOnScroll(() => { let cur = ''; links.forEach(([id]) => { const e = document.getElementById(id); if (e && e.getBoundingClientRect().top < 140) cur = id; }); setHere(cur); }, []);
   return (
@@ -359,11 +365,11 @@ function BfsDealCard({ d, plan, toggle }) {
     <li id={`bf-${d.id}`} className="scroll-mt-[96px]">
       <article className={`bfs-card flex h-full flex-col overflow-hidden rounded-[24px] bg-white p-5 ring-1 ring-black/[.06] sm:p-6 ${inPlan ? 'is-in' : ''}`}>
         <div className="bfs-head relative -mx-5 -mt-5 mb-5 flex min-h-[150px] flex-col justify-between overflow-hidden p-5 text-white sm:-mx-6 sm:-mt-6 sm:p-6">
-          {BFS_PIC[d.id] && <img src={BFS_PIC[d.id]} alt="" loading="lazy" decoding="async" className="bfs-head-pic absolute inset-y-0 right-0 h-full w-[62%] object-cover" />}
+          <span aria-hidden="true" className="bfs-head-mark font-aeonik">%</span>
           <span className="relative font-inter text-[11.5px] font-semibold uppercase tracking-[.16em] text-white/65">{d.group}</span>
           {d.pct
             ? <span className="relative flex items-baseline gap-2"><span className="font-inter text-[12px] font-semibold uppercase tracking-[.16em] text-white/70">Up to</span><b className="font-aeonik text-[60px] font-normal leading-[.9] tracking-[-0.04em] text-[#EE3A45]">{d.pct}%</b><span className="tt-strong font-aeonik text-[26px] leading-none">off</span></span>
-            : <span className="relative max-w-[11ch] font-aeonik text-[32px] leading-[1.02] tracking-[-0.02em]">{d.offer.replace(/ (free|50% off)$/, '')} <span className="tt-strong text-[#EE3A45]">{(/(free|50% off)$/.exec(d.offer) || [''])[0]}</span></span>}
+            : <span className="relative max-w-[11ch] font-aeonik text-[32px] leading-[1.02] tracking-[-0.02em]">{d.offer.replace(/ (free|50% off)$/, '')} <span className="tt-strong whitespace-nowrap text-[#EE3A45]">{(/(free|50% off)$/.exec(d.offer) || [''])[0]}</span></span>}
         </div>
         <h3 className="font-aeonik text-[clamp(23px,2vw,28px)] font-normal leading-[1.1] tracking-[-0.02em] text-[#0B0B0C]">{cat}</h3>
         <p className="mt-2 font-inter text-[14px] leading-[1.55] text-ndm-muted">{d.c.blurb}</p>
@@ -457,29 +463,35 @@ function BfsSpecials() {
           <p className="rv font-inter text-[12px] font-semibold uppercase tracking-[.18em] text-[#EE3A45]">Six Black Friday specials</p>
           <h2 id="bfs-s-title" className="rv mt-4 font-aeonik text-[clamp(36px,4.4vw,64px)] font-normal leading-[1.04] tracking-[-0.03em] text-white" style={{ transitionDelay: '.05s' }}>Our most wanted,<br /><span className="tt-strong text-[#EE3A45]">at their best price</span></h2>
         </div>
-        <ul role="list" className="relative mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {list.map((s, i) => {
-            const id = catOf(s);
-            return (
-              <li key={s.n} className="rv" style={{ transitionDelay: `${0.04 * i}s` }}>
-                <article className="bfs-ticket on-k flex h-full flex-col overflow-hidden rounded-[24px] text-[#0B0B0C]">
-                  <div className="relative aspect-[16/10] overflow-hidden bg-[#F3F1EF]">
-                    <img src={s.img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: s.pos }} />
-                    {s.deal && <span className="bfs-off absolute left-3 top-3 rounded-full px-3 py-1.5 font-inter text-[12px] font-semibold">{s.deal}</span>}
-                  </div>
-                  <div className="flex flex-1 flex-col p-5">
-                    <h3 className="font-aeonik text-[24px] font-normal leading-[1.1] tracking-[-0.02em] text-[#0B0B0C]">{s.n}</h3>
-                    <p className="mt-1.5 font-inter text-[14px] leading-[1.5] text-ndm-muted">{s.d}</p>
-                    <div className="bfs-tear mt-auto flex items-end justify-between gap-3 pt-5">
-                      <p><span className="block font-inter text-[11px] uppercase tracking-[.16em] text-ndm-muted">From</span><b className="font-aeonik text-[30px] font-normal leading-none tracking-[-0.03em] text-[#0B0B0C]">${s.p}</b>{s.u && <span className="ml-1.5 font-inter text-[12.5px] text-ndm-muted">{s.u}</span>}</p>
-                      {id ? <Btn href={`#bf-${id}`} v="ink" sm onClick={bfsGo(`bf-${id}`)}>See packages</Btn> : <Btn href="#/book" v="ink" sm>Book</Btn>}
-                    </div>
-                  </div>
-                </article>
-              </li>
-            );
-          })}
-        </ul>
+      </div>
+      <div className="bfs-marq rv relative -mx-[var(--gx)] mt-10" style={{ transitionDelay: '.1s' }}>
+        <div className="bfs-marq-track">
+          {[0, 1].map((copy) => (
+            <ul key={copy} role="list" className="bfs-marq-set" {...(copy ? { 'aria-hidden': 'true', inert: '' } : {})}>
+              {list.map((s) => {
+                const id = catOf(s);
+                return (
+                  <li key={s.n}>
+                    <article className="bfs-ticket on-k flex h-full flex-col overflow-hidden rounded-[24px] text-[#0B0B0C]">
+                      <div className="relative aspect-[16/10] overflow-hidden bg-[#F3F1EF]">
+                        <img src={s.img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: s.pos }} />
+                        {s.deal && <span className="bfs-off absolute left-3 top-3 rounded-full px-3 py-1.5 font-inter text-[12px] font-semibold">{s.deal}</span>}
+                      </div>
+                      <div className="flex flex-1 flex-col p-5">
+                        <h3 className="font-aeonik text-[24px] font-normal leading-[1.1] tracking-[-0.02em] text-[#0B0B0C]">{s.n}</h3>
+                        <p className="mt-1.5 font-inter text-[14px] leading-[1.5] text-ndm-muted">{s.d}</p>
+                        <div className="bfs-tear mt-auto flex items-end justify-between gap-3 pt-5">
+                          <p><span className="block font-inter text-[11px] uppercase tracking-[.16em] text-ndm-muted">From</span><b className="font-aeonik text-[30px] font-normal leading-none tracking-[-0.03em] text-[#0B0B0C]">${s.p}</b>{s.u && <span className="ml-1.5 font-inter text-[12.5px] text-ndm-muted">{s.u}</span>}</p>
+                          {id ? <Btn href={`#bf-${id}`} v="ink" sm onClick={bfsGo(`bf-${id}`)}>See packages</Btn> : <Btn href="#/book" v="ink" sm>Book</Btn>}
+                        </div>
+                      </div>
+                    </article>
+                  </li>
+                );
+              })}
+            </ul>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -488,30 +500,16 @@ function BfsSpecials() {
 function BfsHow() {
   const ref = useRef(null);
   useReveal(ref);
-  const steps = [
-    ['Choose your treatment', 'Pick a concern or browse the deals, then choose the treatment or area that fits you.'],
-    ['Pick your package', 'Choose the sessions or units you want. Every package shows its price and what you save.'],
-    ['Book to claim it', 'Book a free consultation. Your provider confirms your plan, and you pay at your appointment.'],
-  ];
+  const steps = [['Choose', 'a concern or a treatment'], ['Pick', 'a package and see your savings'], ['Book', 'a free consultation to claim it']];
   return (
-    <section ref={ref} id="how" aria-labelledby="bfs-h-title" className="scroll-mt-[84px] px-[var(--gx)] pt-[clamp(64px,7vw,104px)]">
+    <section ref={ref} id="how" aria-labelledby="bfs-h-title" className="scroll-mt-[84px] px-[var(--gx)] pt-[clamp(40px,5vw,64px)]">
       <div className="mx-auto max-w-[1180px]">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <p className="rv font-inter text-[12px] font-semibold uppercase tracking-[.18em] text-[#D3121F]">How it works</p>
-            <h2 id="bfs-h-title" className="rv mt-4 font-aeonik text-[clamp(36px,4.4vw,64px)] font-normal leading-[1] tracking-[-0.035em] text-[#0B0B0C]" style={{ transitionDelay: '.05s' }}>Your plan, in<br /><span className="tt-strong text-[#D3121F]">three simple steps</span></h2>
-          </div>
-          <div className="rv" style={{ transitionDelay: '.1s' }}><Btn href="#deals" v="book" hot onClick={bfsGo('deals')}>Build my plan</Btn></div>
-        </div>
-        <ol className="bfs-how mt-10 grid gap-4 md:grid-cols-3 md:gap-5">
+        <h2 id="bfs-h-title" className="rv font-inter text-[12px] font-semibold uppercase tracking-[.18em] text-[#D3121F]">How it works</h2>
+        <ol className="bfs-how mt-4 grid gap-3 md:grid-cols-3 md:gap-4">
           {steps.map(([t, d], i) => (
-            <li key={t} className="rv bfs-how-card relative rounded-[26px] bg-white p-6 ring-1 ring-black/[.06] md:p-7" style={{ transitionDelay: `${0.08 * i}s`, zIndex: 3 - i }}>
-              <span className="flex items-center justify-between gap-4">
-                <span aria-hidden="true" className="bfs-how-n font-aeonik"><i>0</i>{i + 1}</span>
-                <span className="rounded-full bg-[#0B0B0C] px-3 py-1.5 font-inter text-[11px] font-semibold uppercase tracking-[.16em] text-white">Step {i + 1}</span>
-              </span>
-              <h3 className="mt-6 font-aeonik text-[clamp(24px,2.2vw,30px)] font-normal leading-[1.1] tracking-[-0.02em] text-[#0B0B0C]">{t}</h3>
-              <p className="mt-2 font-inter text-[15px] leading-[1.6] text-ndm-muted">{d}</p>
+            <li key={t} className="rv bfs-how-card relative flex items-center gap-4 rounded-[22px] bg-white px-5 py-4 ring-1 ring-black/[.06]" style={{ transitionDelay: `${0.06 * i}s`, zIndex: 3 - i }}>
+              <span aria-hidden="true" className="bfs-how-n font-aeonik"><i>0</i>{i + 1}</span>
+              <p className="font-inter text-[15px] leading-[1.4] text-ndm-muted"><b className="font-aeonik text-[22px] font-normal tracking-[-0.02em] text-[#0B0B0C]">{t}</b><br />{d}</p>
               {i < 2 && <span aria-hidden="true" className="bfs-how-go"><IconArrow size={13} /></span>}
             </li>
           ))}
@@ -623,7 +621,12 @@ function BfsFooter() {
             <a href="index.html" className="hover:text-white">Main site</a><a href="pricing.html" className="hover:text-white">Full price list</a><a href={SHOP_URL} target="_blank" rel="noopener" className="hover:text-white">Skincare shop ↗</a>
           </p>
         </div>
-        <p className="mt-8 font-inter text-[12px] leading-[1.6] text-white/45">© 2026 NewDermaMed. Offers apply {BFS.when}, at both clinics, to the packages shown, and may not be combined with other promotions. Treatments are given after a medical assessment. Individual results may vary.</p>
+        <div className="mt-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-10">
+          <p className="max-w-[90ch] font-inter text-[12px] leading-[1.6] text-white/45">© 2026 NewDermaMed. Offers apply {BFS.when}, at both clinics, to the packages shown, and may not be combined with other promotions. Treatments are given after a medical assessment. Individual results may vary.</p>
+          <a href="https://nexthealthmarketing.com" target="_blank" rel="noopener" className="bfs-credit group flex shrink-0 items-center gap-2.5 font-inter text-[11px] uppercase tracking-[.16em] text-white/35 transition-colors hover:text-white/70">
+            Site by<img src="assets/partners/next-health-white.svg" alt="Next Health" width="88" height="16" className="h-4 w-auto opacity-40 transition-opacity group-hover:opacity-80" />
+          </a>
+        </div>
       </div>
     </footer>
   );

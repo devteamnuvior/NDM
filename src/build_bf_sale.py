@@ -22,7 +22,7 @@ def rep(a, b, n=1):
 
 s = re.sub(r'\n<script type="application/ld\+json" id="ld-crumbs">.*?</script>', '', s, count=1)
 SITE = 'https://newdermamedlaserclinic.com/'
-TITLE = 'Black Friday 2026: Up to 60% Off Treatments | NewDermaMed Toronto'
+TITLE = 'Black Friday 2026: Up to 60% Off Treatments | NewDermaMed Toronto'
 DESC = ('NewDermaMed Black Friday, November 27 to 30: offers on laser, skin, injectable and body treatments at our Uptown and Downtown '
         'Toronto clinics. Build your plan and book a free consultation.')
 H = lambda x: x.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;')
@@ -59,10 +59,10 @@ function App() {
       <main id="main">
         <BfsHero />
         <BfsStats />
+        <BfsHow />
         <BfsConcerns pick={pick} setPick={setPick} />
         <BfsDeals pick={pick} setPick={setPick} plan={plan} toggle={toggle} />
         <BfsSpecials />
-        <BfsHow />
         <BfsPlan plan={plan} toggle={toggle} clear={() => setPlan([])} />
         <BfsClinics />
       </main>

@@ -7,7 +7,7 @@
 const PRICE_BY_ID = Object.fromEntries(PRICE_CATS.map((c) => [c.id, c]));
 const pfmt = (n) => '$' + (Math.round(n * 100) / 100).toLocaleString('en-CA', { useGrouping: false, minimumFractionDigits: Math.round(n * 100) % 100 ? 2 : 0, maximumFractionDigits: 2 });
 const pCount = (label) => { const m = /(\d+)\s*(units?|syringes?|sessions?|vials?|treatments?)\b/i.exec(label) || /package of (\d+)/i.exec(label); return m ? +m[1] : 1; };
-const pPct = (tag) => { const m = /^(\d+)% OFF$/i.exec(tag || ''); return m ? +m[1] : 0; };
+const pPct = (tag) => { const m = /^(\d+)% OFF$/i.exec(tag || ''); return m ? +m[1] : 0; };
 const pNorm = (s) => String(s || '').toLowerCase().replace(/[®™]/g, '').replace(/[–-]/g, ' ').replace(/\s+/g, ' ').trim();
 function priceOptions(id, item) {
   const c = PRICE_BY_ID[id]; if (!c) return [];
@@ -20,7 +20,7 @@ function priceFrom(id, item) {
   os.forEach((o) => { const n = /regular/i.test(o.label) ? 1 : pCount(o.label); const v = o.price / n; if (!best || v < best.v - 0.001) best = { v, o, n }; });
   const pct = Math.max(0, ...os.map((o) => pPct(o.tag)));
   const tags = os.map((o) => o.tag).filter(Boolean);
-  const offer = pct ? `Up to ${pct}% off` : (tags[0] ? tags[0].replace(/\bOFF\b/g, 'off').replace(/^BUY 1 GET 1/i, 'Buy 1 get 1').replace(/\bFREE\b/, 'free').replace(/^Save \$(\d+) Off$/i, 'Save $$$1') : '');
+  const offer = pct ? `Up to ${pct}% off` : (tags[0] ? tags[0].replace(/\bOFF\b/g, 'off').replace(/^BUY 1 GET 1/i, 'Buy 1 get 1').replace(/\bFREE\b/, 'free').replace(/^Save \$(\d+)\sOff$/i, 'Save $$$1') : '');
   return { value: Math.round(best.v * 100) / 100, unit: c.unit ? ' / unit' : '', per: c.unit ? 'per unit' : /syringe/i.test(best.o.label) ? 'per syringe' : best.n > 1 || /session/i.test(best.o.label) ? 'per session' : '', pct, offer };
 }
 const priceLabel = (id, item) => { const f = priceFrom(id, item); return f ? `From ${pfmt(f.value)}${f.unit}` : null; };
