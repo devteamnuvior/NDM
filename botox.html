@@ -2818,15 +2818,6 @@ function Promotions({ level = 'h1' }) {
   const entered = useInView(stage, { threshold: 0.2 });
   const [settled, setSettled] = useState(REDUCED);
   useEffect(() => { if (!entered || settled) return; const t = setTimeout(() => setSettled(true), 2300); return () => clearTimeout(t); }, [entered]);
-  /* alpha (round 29): the cards travel along the wheel's circle from the left into place as the stage comes into view */
-  const [spin, setSpin] = useState(REDUCED ? 0 : 5);
-  useEffect(() => {
-    if (!entered || REDUCED) return;
-    let raf, t0;
-    const step = (t) => { if (!t0) t0 = t; const q = Math.min(1, (t - t0) / 1900); setSpin(5 * Math.pow(1 - q, 3)); if (q < 1) raf = requestAnimationFrame(step); };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [entered]);
   useEffect(() => {
     /* full-screen stage: size the wheel to both the width and the viewport height */
     const fit = () => { const w = stage.current ? stage.current.clientWidth : window.innerWidth; setK(Math.max(0.72, Math.min(1.12, w / 1240, (window.innerHeight - 340) / 520))); };
@@ -2857,13 +2848,13 @@ function Promotions({ level = 'h1' }) {
           className="sw-stage relative mt-4 select-none outline-none md:mt-6" style={{ height: 500 * k + 28, touchAction: 'pan-y' }}>
           {SPECIALS.map((s, i) => {
             let d = i - act; if (d > n / 2) d -= n; if (d < -n / 2) d += n;
-            const [x, y, r] = arcAt(d - spin);
-            const on = d === 0, far = Math.abs(d - spin) > 3.6;
+            const [x, y, r] = arcAt(d);
+            const on = d === 0, far = Math.abs(d) > 3;
             const wrap = prevD.current[i] !== undefined && Math.abs(d - prevD.current[i]) > 2;
             nextD[i] = d;
             /* before the stage is in view, cards wait outside the screen on their own side, then sweep onto the arc, centre card last */
             const side = d < 0 ? -1 : 1;
-            const ox = 0, oy = 0, or = 0; /* the old sweep from both sides is replaced by the alpha spin */
+            const ox = entered ? 0 : side * (window.innerWidth * 0.75 + 200), oy = entered ? 0 : 260, or = entered ? 0 : side * 32;
             return (
               <article key={s.n} aria-hidden={!on} onClick={() => { if (!on && !(sw.current && sw.current.moved)) setAct(i); }}
                 className={`sw-card absolute left-1/2 top-7 rounded-[22px] ${on ? 'is-on' : 'cursor-pointer'}`}
@@ -2871,7 +2862,7 @@ function Promotions({ level = 'h1' }) {
                   width: 300 * k, height: 392 * k,
                   transform: `translateX(-50%) translate(${(x * k + ox).toFixed(1)}px, ${(y * k + oy).toFixed(1)}px) rotate(${(r + or).toFixed(2)}deg) scale(${on ? 1.03 : 1})`,
                   opacity: far ? 0 : 1, zIndex: 10 - Math.abs(d), pointerEvents: far ? 'none' : 'auto',
-                  ...(spin > 0.001 ? { transition: 'opacity .35s ease' } : {}),
+                  ...(!settled ? { transition: `transform 1.5s var(--e-out) ${(0.1 + (3 - Math.min(3, Math.abs(d))) * 0.14).toFixed(2)}s` } : {}),
                   ...(wrap ? { transition: 'none' } : {}),
                 }}>
                 <span aria-hidden="true" className="sw-ring pointer-events-none absolute -bottom-20 -right-20 size-48 rounded-full" />
