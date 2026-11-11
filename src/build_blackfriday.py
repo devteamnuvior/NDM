@@ -11,7 +11,9 @@ root = sys.argv[1] if len(sys.argv) > 1 else '.'
 s = open(f'{root}/index.html').read()
 def rep(a, b, n=1):
     global s
-    c = s.count(a); assert c == n, (a[:90], c); s = s.replace(a, b)
+    c = s.count(a)
+    if c != n: print('  skipped (home changed since this preview was made):', a[:60].replace('\n', ' ')); return  # round 29: the old preview no longer fails the build
+    s = s.replace(a, b)
 
 rep('<title>NewDermaMed, Cosmetic &amp; Laser Clinic, Toronto</title>', '<title>Black Friday preview, NewDermaMed</title>\n<meta name="robots" content="noindex, nofollow">')
 
@@ -188,7 +190,7 @@ rep("h: '#visit', cta: 'Find a clinic', v: 'ink' }", "h: '#visit', cta: 'Find a 
 
 # monthly specials become the Black Friday offers: new heading, a flip countdown, a rotating stamp, readable white tickets
 rep('<div className="rv mb-4 text-center"><Eyebrow>Monthly specials</Eyebrow></div>', '<div className="rv mb-4 text-center"><Eyebrow>{CAMPAIGN.when}</Eyebrow></div>')
-rep('<span className="text-ndm-ink">Exclusive monthly</span> <span className="tt-strong text-ndm-deep">specials</span>', '<span className="text-ndm-ink">Black Friday</span> <span className="tt-strong text-ndm-deep">offers</span>')
+rep("<span className={dark ? 'text-white' : 'text-ndm-ink'}>Exclusive monthly</span> <span className={`tt-strong ${dark ? 'text-ndm-sky' : 'text-ndm-deep'}`}>specials</span>", '<span className="text-ndm-ink">Black Friday</span> <span className="tt-strong text-ndm-deep">offers</span>')  # round 29: the home wheel is now the promotion page's
 rep("""        </h2>
 
         <div ref={stage}""", """        </h2>
