@@ -95,6 +95,8 @@ Rebuild everything with `./src/rebuild_all.sh pre` (syncs prices, builds every p
 
 Still open after round 29: Raymond must approve the Premium membership (benefits, price, terms), the privacy text for NewDermaMed (it is NUVIOR's sample adapted, plus the Privacy Officer and effective date), and the per-unit "From" prices (for example $7.70 / unit is the 220-unit Dysport package). Terms, CASL, refunds and accessibility pages are linked as `#/...` placeholders.
 
+**Round 30 (11 November 2026):** alpha reverted; pricing has its own specials grid again (red deal tags, live prices); privacy page has a sticky On this page bar with a Legal documents submenu; Black Friday page menu order, underline, plan count, arrows, empty plan state and a light, wide booking pop-up. See CLAUDE.md.
+
 ## 6. What should be done next
 
 1. **Raymond's written approval before anything goes live** (raymond@nuvior.com):
