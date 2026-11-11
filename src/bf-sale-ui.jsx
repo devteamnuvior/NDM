@@ -139,6 +139,28 @@ html.bfs .btn-ink:hover,html.bfs .btn-buy:hover{background:var(--r);border-color
 .bfs-tear{border-top:2px dashed rgba(11,11,12,.14)}
 .bfs-dark{background:radial-gradient(50% 60% at 100% 0%,rgba(211,18,29,.22),transparent 60%),var(--k)}
 .bfs-bar{background:rgba(11,11,12,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+/* round 29: the booking pop-up in the Black Friday look (black card, white type, signal red accents) */
+html.bfs .book-card{background:radial-gradient(70% 50% at 100% 0%,rgba(211,18,29,.32),transparent 60%),#0B0B0C!important;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 60px 120px -40px rgba(0,0,0,.9)}
+html.bfs .book-card::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent,#EE3A45 30%,#D3121F 70%,transparent)}
+html.bfs .book-card .text-ndm-ink,html.bfs .book-card h2,html.bfs .book-card h3,html.bfs .book-card label{color:#fff!important}
+html.bfs .book-card .text-ndm-muted,html.bfs .book-card .text-ndm-soft{color:rgba(255,255,255,.62)!important}
+html.bfs .book-card .text-ndm-deep,html.bfs .book-card .text-ndm-blue,html.bfs .book-card .tt-strong{color:#FF5A63!important}
+html.bfs .book-card .bg-white,html.bfs .book-card .bg-ndm-paper,html.bfs .book-card .bg-ndm-mist,html.bfs .book-card [class*="bg-ndm-mist"]{background-color:rgba(255,255,255,.06)!important}
+html.bfs .book-card [class*="ring-ndm-ink"],html.bfs .book-card [class*="border-ndm"],html.bfs .book-card [class*="ring-black"]{--tw-ring-color:rgba(255,255,255,.14)!important;border-color:rgba(255,255,255,.14)!important}
+html.bfs .book-card input,html.bfs .book-card select,html.bfs .book-card textarea{background:rgba(255,255,255,.06)!important;color:#fff!important;border-color:rgba(255,255,255,.18)!important}
+html.bfs .book-card input::placeholder,html.bfs .book-card textarea::placeholder{color:rgba(255,255,255,.4)!important}
+html.bfs .book-card [aria-selected="true"],html.bfs .book-card [aria-pressed="true"],html.bfs .book-card [aria-checked="true"],html.bfs .book-card .bg-ndm-deep,html.bfs .book-card .bg-ndm-blue{background-color:#D3121F!important;border-color:#D3121F!important;color:#fff!important}
+html.bfs .book-card .eyebrow{background:rgba(211,18,29,.14)!important;color:#FF9AA0!important;border-color:rgba(238,58,69,.35)!important}
+html.bfs .book-card .eyebrow-mark{display:none}
+html.bfs .book-card [role="tab"]{color:rgba(255,255,255,.78)!important}
+html.bfs .book-card [role="tab"][aria-selected="true"]{color:#fff!important}
+html.bfs .book-card .bg-ndm-amber{background-color:#D3121F!important}
+html.bfs .book-card [class*="bg-ndm-amber\/"]{background-color:rgba(211,18,29,.14)!important}
+html.bfs .book-card [class*="text-ndm-amber"],html.bfs .book-card [class*="text-[#8A5A12]"]{color:#FF9AA0!important}
+html.bfs .book-card .btn-ink,html.bfs .book-card .btn-buy{background:#D3121F;border-color:#D3121F}
+html.bfs .book-card .btn-line{color:#fff;border-color:rgba(255,255,255,.3)}
+html.bfs .book-card button[aria-label^="Close"]{color:#fff}
+html.bfs .book-card button[aria-label^="Close"]:hover{background:rgba(255,255,255,.1)}
 @media (prefers-reduced-motion:reduce){.bfs-tick-in,.bfs-live{animation:none}.bfs-card,.bfs-chip{transition:none}}
 `;
 
@@ -155,7 +177,7 @@ function BfsHeader({ count }) {
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0B0B0C]/95 text-white backdrop-blur-[14px]">
       <div className="mx-auto flex h-[68px] max-w-[1280px] items-center justify-between gap-4 px-[var(--gx)]">
         <a href="index.html" className="shrink-0" aria-label="NewDermaMed home"><img src="assets/icons/logo-white.svg" alt="NewDermaMed" className="h-7 w-auto min-[400px]:h-8 sm:h-10" /></a>
-        <nav aria-label="Black Friday page" className="hidden items-center gap-7 lg:flex">
+        <nav aria-label="Black Friday page" className="hidden items-center gap-5 whitespace-nowrap lg:flex xl:gap-7">
           <a href="index.html" className="font-inter text-[14.5px] text-white/80 transition-colors hover:text-white">Home</a>
           {links.map(([id, l]) => <a key={id} href={`#${id}`} onClick={bfsGo(id)} className="font-inter text-[14.5px] text-white/80 transition-colors hover:text-white">{l}</a>)}
           <a href="#plan" onClick={bfsGo('plan')} className="inline-flex items-center gap-2 font-inter text-[14.5px] text-white/80 transition-colors hover:text-white">My plan<span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#D3121F] px-1.5 text-[11px] font-semibold text-white tabular-nums">{count}</span></a>
