@@ -11,6 +11,8 @@ export const NEXT_URL = "http://localhost:3100";
 
 export default defineConfig({
   testDir: "./tests",
+  /* tests/admin edits the price list in WooCommerce while it runs: only on request (npm run test:admin), on its own */
+  testIgnore: process.env.ADMIN_TESTS ? [] : ["**/admin/**"],
   outputDir: "./test-results",
   fullyParallel: false,
   workers: 3,
@@ -21,6 +23,7 @@ export default defineConfig({
   use: { channel: "chrome", headless: true },
   webServer: [
     { command: "python3 -m http.server 5174 --directory ..", url: `${LEGACY_URL}/index.html`, reuseExistingServer: true, stdout: "ignore", stderr: "ignore" },
-    { command: "npm run start -- -p 3100", url: NEXT_URL, reuseExistingServer: true, stdout: "ignore", stderr: "pipe" },
+    /* SITE_URL: the pricing manager's sign-in needs to know this site's own address */
+    { command: "npm run start -- -p 3100", url: NEXT_URL, reuseExistingServer: true, stdout: "ignore", stderr: "pipe", env: { SITE_URL: NEXT_URL } },
   ],
 });

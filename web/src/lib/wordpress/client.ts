@@ -13,6 +13,18 @@ export interface WPRequest {
    * cached answer can never contain something only a signed-in user may see.
    */
   auth?: boolean;
+  /**
+   * A ready-made Authorization header of one signed-in person (the price list's administrators), used
+   * instead of the server's own credentials. WordPress checks what that person may do on every request.
+   */
+  authorization?: string;
+  /** Extra request headers (for example a shared secret of one route). Never sent to anything but WordPress. */
+  headers?: Record<string, string>;
+  /** JSON body; the request is then sent as a POST. */
+  body?: unknown;
+  method?: "GET" | "POST" | "DELETE";
+  /** A longer (or shorter) time limit for this request than the configured one, in milliseconds. */
+  timeoutMs?: number;
   /** Lets the caller cancel the request; the time limit applies as well. */
   signal?: AbortSignal;
 }
@@ -48,8 +60,9 @@ function isRestError(body: unknown): body is WPRestError {
 }
 
 /**
- * The one place this site talks to WordPress: a GET against the REST API (`path` is relative to the API
- * root, for example "wp/v2/posts"), with a time limit and every failure turned into a WordPressError.
+ * The one place this site talks to WordPress: a request to the REST API (`path` is relative to the API
+ * root, for example "wp/v2/posts"), a GET unless a body or a method is given, with a time limit and
+ * every failure turned into a WordPressError.
  *
  * It does not cache by itself. The content modules beside this file wrap it in `"use cache"` with a
  * lifetime and tags; a read that must be fresh on every request calls it directly, inside <Suspense>.
@@ -57,23 +70,29 @@ function isRestError(body: unknown): body is WPRestError {
 export async function wpFetch<T>(path: string, request: WPRequest = {}): Promise<WPResponse<T>> {
   const config = getWordPressConfig();
 
-  const headers: Record<string, string> = { Accept: "application/json" };
-  if (request.auth) {
+  const headers: Record<string, string> = { ...request.headers, Accept: "application/json" };
+  if (request.authorization) {
+    headers.Authorization = request.authorization;
+  } else if (request.auth) {
     if (!config.authorization) {
       throw new WordPressError("config", "This request needs WordPress credentials, and none are configured.", { path });
     }
     headers.Authorization = config.authorization;
   }
 
-  const limit = AbortSignal.timeout(config.timeoutMs);
+  const timeoutMs = request.timeoutMs ?? config.timeoutMs;
+  const limit = AbortSignal.timeout(timeoutMs);
   const signal = request.signal ? AbortSignal.any([request.signal, limit]) : limit;
 
   let response: Response;
   try {
-    response = await fetch(buildUrl(config.apiUrl, path, request.query), { headers, signal, redirect: "error" });
+    const method = request.method ?? (request.body === undefined ? "GET" : "POST");
+    const body = request.body === undefined ? undefined : JSON.stringify(request.body);
+    if (body !== undefined) headers["Content-Type"] = "application/json";
+    response = await fetch(buildUrl(config.apiUrl, path, request.query), { method, headers, body, signal, redirect: "error" });
   } catch (cause) {
     if (limit.aborted) {
-      throw new WordPressError("timeout", `WordPress did not answer within ${config.timeoutMs} ms.`, { path, cause });
+      throw new WordPressError("timeout", `WordPress did not answer within ${timeoutMs} ms.`, { path, cause });
     }
     throw new WordPressError("network", "WordPress could not be reached.", { path, cause });
   }

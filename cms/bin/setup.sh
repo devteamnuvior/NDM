@@ -55,6 +55,15 @@ wp plugin delete hello akismet >/dev/null 2>&1 || true
 # keep the one active default theme (WordPress requires one; it never renders, see the ndm-headless plugin)
 wp theme delete --all >/dev/null 2>&1 || true
 
+echo "Setting up WooCommerce for the Pricing page..."
+# WooCommerce holds the price list (products, variations, categories); ndm-pricing serves it to the site
+wp plugin is-installed woocommerce >/dev/null 2>&1 || wp plugin install woocommerce >/dev/null
+wp plugin activate woocommerce ndm-pricing >/dev/null
+wp option update woocommerce_currency CAD >/dev/null
+wp option update woocommerce_default_country "CA:ON" >/dev/null
+# no store pages exist on this host, so there is nothing for the setup wizard to build
+wp option update woocommerce_onboarding_profile '{"skipped":true}' --format=json >/dev/null
+
 echo
 echo "Done."
 echo "  Admin:    ${NDM_CMS_URL}/wp-admin/"

@@ -6,5 +6,8 @@
 # WordPress core, uploads and database dumps never live in git: only our own code does
 /wp-content/*
 !/wp-content/mu-plugins/
+!/wp-content/plugins/
+/wp-content/plugins/*
+!/wp-content/plugins/ndm-pricing/
 *.sql
 *.sql.gz

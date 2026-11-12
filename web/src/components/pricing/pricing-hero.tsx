@@ -10,8 +10,11 @@ import { useReveal } from "@/hooks/use-reveal";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
 
-/** Pricing header: the clinic film (playing straight through, on a loop), the title, and three facts. */
-export function PricingHero({ total }: { total: number }) {
+/**
+ * Pricing header: the clinic film (playing straight through, on a loop), the title, and three facts.
+ * `total` is null while the price list is loading or cannot be read.
+ */
+export function PricingHero({ total }: { total: number | null }) {
   const section = useRef<HTMLElement>(null);
   const film = useRef<HTMLVideoElement>(null);
   useReveal(section);
@@ -29,7 +32,7 @@ export function PricingHero({ total }: { total: number }) {
     if (el) scrollToY(el.getBoundingClientRect().top + window.scrollY - 40);
   };
   const stats: [string, string][] = [
-    [`${total} treatments`, "Current prices and offers"],
+    [total ? `${total} treatments` : "All treatments", "Current prices and offers"],
     ["Free consultation", "Before every treatment"],
     ["2 Toronto clinics", "Uptown and Downtown"],
   ];

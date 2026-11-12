@@ -9,6 +9,8 @@ export const WP_TAGS = {
   all: "wp",
   /** Every entry of one content type: "wp:posts". */
   type: (type: string) => `wp:${type}`,
+  /** The price list read from WooCommerce (the Pricing page). */
+  pricing: "pricing",
   /** One entry: "wp:posts:what-causes-rosacea-redness". */
   entry: (type: string, slug: string) => `wp:${type}:${slug}`,
 } as const;

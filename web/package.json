@@ -9,7 +9,8 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "build:parity": "LEGACY_ORIGIN=http://localhost:5174 next build",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:admin": "ADMIN_TESTS=1 playwright test tests/admin --workers=1"
   },
   "dependencies": {
     "leaflet": "1.9.4",

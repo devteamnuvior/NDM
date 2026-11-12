@@ -20,7 +20,13 @@ wp-content/mu-plugins/
     rest.php                       the site's own namespace, ndm/v1 (health check)
 ```
 
-WordPress core, uploads and the database are not in git (they live in Docker volumes).
+wp-content/plugins/ndm-pricing/    the Pricing page's link to WooCommerce (see "Pricing page" below)
+```
+
+WordPress core, WooCommerce, uploads and the database are not in git (they live in Docker volumes).
+`bin/setup.sh` installs WooCommerce and switches `ndm-pricing` on.
+
+```
 
 ## Run it locally
 
@@ -60,9 +66,54 @@ application passwords need HTTPS.
   XML-RPC is off. Anything not public needs a WordPress user and an application password.
 - **`ndm/v1/health`.** Says the backend is up, nothing else.
 
+## Pricing page (WooCommerce)
+
+WooCommerce is the single source of truth for the Pricing page of the Next.js site: categories are
+product categories (`product_cat`), treatments are products, price options are variations, prices and
+sale prices are WooCommerce's own. The `ndm-pricing` plugin adds no tables and never recreates
+anything, so every product, variation and category keeps its ID. Administrators can change regular and
+sale prices, add an option (a new variation, for products with one simple option list) and remove one
+(its variation goes to WooCommerce's trash); products and categories are never deleted.
+
+**Display settings (metadata)**
+
+| Where | Key | Meaning |
+|---|---|---|
+| category (term meta) | `ndm_pricing_visible` | `1` shows the category on the Pricing page; missing means hidden |
+| category | `ndm_pricing_order` | position on the page, 0 first |
+| category | `ndm_pricing_per_unit` | `1` when priced per unit |
+| category | `ndm_pricing_product_order` | product IDs in display order inside this category |
+| product, variation (post meta) | `_ndm_pricing_hidden` | `1` hides it on the Pricing page only |
+| product, variation | `_ndm_pricing_label` | promotional label text ("Save $1000 Off"); never a price |
+| product, variation | `_ndm_pricing_label_on` | `1` when the label shows |
+
+**Routes (`ndm/v1`)**
+
+| Route | Who | What |
+|---|---|---|
+| `GET /pricing` | public | the list visitors see (visible categories, published products, shown variations with a price) |
+| `GET /pricing/admin/me` | manager | who is signed in |
+| `GET /pricing/admin/tree` | manager | everything, with the display settings |
+| `GET /pricing/admin/products?search=&exclude=` | manager | search WooCommerce products |
+| `POST /pricing/admin/save` | manager | one set of changes (the order of variations is WooCommerce's own menu order), checked as a whole before anything is written (format: `includes/save.php`) |
+
+"Manager" is a signed-in WordPress user with the `manage_woocommerce` capability (Administrator or Shop
+manager), checked on the server for every request. The management screen is on the Next.js site at
+`/manage/pricing`; it signs in through WordPress's own "authorize application" screen and uses the
+application password WordPress issues (revocable on the user's profile, deleted on sign-out).
+
+**Cache.** The public list is kept in a transient and dropped whenever a product, variation or product
+category changes, wherever the change was made. WordPress then calls `NDM_REVALIDATE_URL` with
+`NDM_REVALIDATE_SECRET` so the Next.js site drops its copy too.
+
+**First import.** `web/scripts/export-price-list.mjs` prints the site's original price list;
+`wp ndm-pricing import` (reads it from standard input) creates the categories, variable products and
+variations once. It never touches anything that already exists.
+
 ## Production (not set up yet)
 
 Open decisions: where WordPress is hosted and the public address of the Next.js site. When they are
-known, production needs: the `mu-plugins` folder deployed as is, the four settings above in its own
+known, production needs: the `mu-plugins` folder deployed as is, WooCommerce and the `plugins/ndm-pricing` folder, the four settings above plus `NDM_REVALIDATE_URL` and
+`NDM_REVALIDATE_SECRET` in its own
 environment or `wp-config.php` (with `WP_ENVIRONMENT_TYPE=production`), its own database credentials
 and salts, HTTPS, and `DISALLOW_FILE_EDIT`. Nothing in `.env` or `docker-compose.yml` is used there.
