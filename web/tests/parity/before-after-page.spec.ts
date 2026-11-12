@@ -15,7 +15,14 @@ const photos = async (p: Page) => {
 
 pageParity({
   name: "before-after",
-  paths: { legacy: "/before-after.html", next: "/before-after" },
+  paths: {
+    legacy: "/before-after.html",
+    next: "/before-after",
+    /* Deliberate difference (asked by the user, 2026-11-12): the prototype's two filters "Laser Acne" (1 case)
+       and "Laser acne" (3 cases) are one category, "Laser acne", in WordPress. The prototype's data is given the
+       same merge here, so everything else is still compared. */
+    legacyHtml: (html) => html.replaceAll('"Laser Acne"', '"Laser acne"').replace('"Laser acne", "Botox", "Laser acne"]', '"Laser acne", "Botox"]'),
+  },
   sectionCount: 2,
   sections: [
     { name: "breadcrumb", selector: "nav.crumbs" },

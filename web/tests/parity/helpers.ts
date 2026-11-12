@@ -22,6 +22,8 @@ export type Site = "legacy" | "next";
 export interface PagePaths {
   legacy: string;
   next: string;
+  /** Changes the prototype page's HTML before it loads, for content that was deliberately changed since (said where it is used). */
+  legacyHtml?: (html: string) => string;
 }
 const HOME: PagePaths = { legacy: "/index.html", next: "/" };
 
@@ -41,6 +43,13 @@ export async function open(browser: Browser, site: Site, vp: { width: number; he
   /* one fixed date and time for both pages, so the Black Friday countdown and the booking calendar's
      "today" are the same on both (timers still run; only the clock's reading is fixed) */
   await page.clock.setFixedTime(new Date("2026-11-16T15:00:00-05:00"));
+  const rewrite = site === "legacy" ? paths.legacyHtml : undefined;
+  if (rewrite) {
+    await page.route(`${LEGACY_URL}${paths.legacy}*`, async (route) => {
+      const response = await route.fetch();
+      await route.fulfill({ response, body: rewrite(await response.text()) });
+    });
+  }
   await page.goto(site === "legacy" ? `${LEGACY_URL}${paths.legacy}${query}` : `${NEXT_URL}${paths.next}${query}`);
   await page.waitForSelector("header nav, header button", { state: "attached", timeout: 60_000 });
   await page.evaluate(() => document.fonts.ready);

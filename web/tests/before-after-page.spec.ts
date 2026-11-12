@@ -29,7 +29,7 @@ test("fifty cases; a treatment filter narrows them and All brings them back", as
   const g = page.locator(GALLERY);
   const cards = g.locator("ul button");
   await expect(cards).toHaveCount(50);
-  await expect(g.getByRole("group", { name: "Filter by treatment" }).getByRole("button")).toHaveCount(17);
+  await expect(g.getByRole("group", { name: "Filter by treatment" }).getByRole("button")).toHaveCount(16);
   const pick = g.getByRole("button", { name: "Tear Troughs", exact: true });
   await pick.click();
   await expect(pick).toHaveAttribute("aria-pressed", "true");
