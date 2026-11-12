@@ -1,0 +1,72 @@
+# Local WordPress for the NewDermaMed headless backend.
+# WordPress is the CMS and REST API only; the Next.js app in ../web is the only frontend.
+# Every value comes from .env (copy .env.example to .env first). Nothing here is used in production.
+name: ndm-cms
+
+services:
+  db:
+    image: mariadb:11.8
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${DB_NAME:?set DB_NAME in cms/.env}
+      MARIADB_USER: ${DB_USER:?set DB_USER in cms/.env}
+      MARIADB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in cms/.env}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?set DB_ROOT_PASSWORD in cms/.env}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  wordpress:
+    image: wordpress:7.1-php8.3-apache
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      # reachable from this computer only
+      - "127.0.0.1:${CMS_PORT:-8080}:80"
+    environment: &wp_env
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: ${DB_NAME}
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_TABLE_PREFIX: ${DB_TABLE_PREFIX:-ndm_}
+      WORDPRESS_DEBUG: ${WP_DEBUG:-0}
+      # read by WordPress itself: local, development, staging or production
+      WP_ENVIRONMENT_TYPE: ${WP_ENVIRONMENT_TYPE:-local}
+      # read by the ndm-headless must-use plugin
+      NDM_FRONTEND_URL: ${NDM_FRONTEND_URL:-}
+      NDM_FRONTEND_ORIGINS: ${NDM_FRONTEND_ORIGINS:-}
+      NDM_CMS_URL: ${NDM_CMS_URL:-http://localhost:8080}
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'WP_HOME', getenv( 'NDM_CMS_URL' ) );
+        define( 'WP_SITEURL', getenv( 'NDM_CMS_URL' ) );
+        define( 'DISALLOW_FILE_EDIT', true );
+        define( 'AUTOMATIC_UPDATER_DISABLED', true );
+    volumes:
+      - wp_data:/var/www/html
+      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+
+  # wp-cli, only started on demand: docker compose run --rm cli <command>
+  cli:
+    image: wordpress:cli-2.12-php8.3
+    profiles: ["tools"]
+    depends_on:
+      db:
+        condition: service_healthy
+      wordpress:
+        condition: service_started
+    # the same user id as the web server in the wordpress image, so files stay writable by it
+    user: "33:33"
+    environment: *wp_env
+    volumes:
+      - wp_data:/var/www/html
+      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+
+volumes:
+  db_data:
+  wp_data:

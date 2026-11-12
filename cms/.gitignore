@@ -1,0 +1,10 @@
+# real settings and secrets
+.env
+.env.*
+!.env.example
+
+# WordPress core, uploads and database dumps never live in git: only our own code does
+/wp-content/*
+!/wp-content/mu-plugins/
+*.sql
+*.sql.gz
