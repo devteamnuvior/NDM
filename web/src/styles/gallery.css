@@ -1,0 +1,4 @@
+/* before & after gallery: on this page the prototype gives .peach photos its own lighter glow, and no
+   warm filter on the image (the home carousel's .peach is stronger) */
+.ba-gallery .peach::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 18% 8%,rgba(255,186,148,.35),rgba(255,186,148,0) 62%);mix-blend-mode:soft-light}
+.ba-gallery .peach img{filter:none}

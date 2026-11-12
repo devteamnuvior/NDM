@@ -1,0 +1,16 @@
+/* First-visit offer pop-up: a bottom sheet on phones, a centred card above. Copied rule for rule from the prototype. */
+.offer-badge{animation:offerSpin 22s linear infinite}
+@keyframes offerSpin{to{transform:rotate(360deg)}}
+.offer-scrim{background:rgba(11,15,19,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;transition:opacity .45s ease}
+.offer-card{opacity:0;transform:translateY(100%);transition:transform .7s var(--e-out),opacity .35s ease}
+@media (min-width:640px){.offer-card{transform:translateY(40px) scale(.97)}}
+.offer-pop-root.is-open .offer-scrim{opacity:1}
+.offer-pop-root.is-open .offer-card{opacity:1;transform:none}
+.offer-pic{transform:scale(1.18);transition:transform 1.8s var(--e-out)}
+.offer-pop-root.is-open .offer-pic{transform:scale(1.03)}
+.offer-in{opacity:0;transform:translateY(16px);transition:opacity .6s var(--e-out) var(--d,0s),transform .8s var(--e-out) var(--d,0s)}
+.offer-pop-root.is-open .offer-in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){
+  .offer-in,.offer-card{opacity:1;transform:none}
+  .offer-badge{animation:none !important}
+}

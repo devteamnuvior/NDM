@@ -1,0 +1,242 @@
+/* Header, dropdown panels, announcement bar and mobile menu. Ported 1:1 from the prototype's <style> block. */
+/* dropdown panels: a clipped reveal from the top edge */
+.panel {
+  transition: clip-path 0.5s var(--e-out), opacity 0.25s ease, visibility 0s linear 0.5s;
+}
+.panel[data-open="false"] {
+  opacity: 0;
+  clip-path: inset(0 0 100% 0 round 28px);
+  visibility: hidden;
+  pointer-events: none;
+}
+.panel[data-open="true"] {
+  opacity: 1;
+  clip-path: inset(0 0 0 0 round 28px);
+  visibility: visible;
+  transition: clip-path 0.55s var(--e-out), opacity 0.2s ease, visibility 0s;
+}
+.panel > div {
+  transition: opacity 0.4s ease 0.1s, transform 0.55s var(--e-out) 0.1s;
+}
+.panel[data-open="false"] > div {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.menu-scrim {
+  transition: opacity 0.45s ease, visibility 0s linear 0.45s;
+}
+.menu-scrim[data-open="true"] {
+  transition: opacity 0.45s ease, visibility 0s;
+}
+
+/* dropdown links */
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+  font-size: 14px;
+  line-height: 1.35;
+  color: rgba(27, 36, 43, 0.9);
+  transition: color 0.25s ease;
+}
+.menu-item:hover,
+.menu-item:focus-visible {
+  color: #0f80c3;
+}
+.menu-arrow {
+  flex-shrink: 0;
+  color: #209ed9;
+  transition: transform 0.25s ease;
+}
+.menu-item:hover .menu-arrow,
+.menu-item:focus-visible .menu-arrow {
+  transform: translateX(3px);
+}
+.menu-item-m {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+  font-size: 14px;
+  line-height: 1.35;
+  color: rgba(27, 36, 43, 0.85);
+  border-bottom: 1px solid rgba(27, 36, 43, 0.08);
+}
+.menu-item-m:active {
+  color: #0f80c3;
+}
+/* a thin line between submenu items */
+.panel .menu-item {
+  border-bottom: 1px solid rgba(27, 36, 43, 0.08);
+}
+
+/* you are here: a short blue line under the top item, a blue dot on the dropdown link */
+.nav-is-here {
+  color: #0f80c3;
+}
+.nav-is-here.is-dark {
+  color: #fff;
+}
+.nav-here {
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  width: 22px;
+  height: 3px;
+  margin-left: -11px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #0f80c3, #26b1e7);
+  box-shadow: 0 3px 10px -1px rgba(32, 158, 217, 0.75);
+  transform-origin: left center;
+  animation: navHere 0.9s var(--e-out) 0.35s both;
+  pointer-events: none;
+}
+.nav-here.is-dark {
+  background: linear-gradient(90deg, #fff, #7fd3f5);
+  box-shadow: 0 3px 12px -1px rgba(38, 177, 231, 0.9);
+}
+.nav-here.is-left {
+  left: 0;
+  margin-left: 0;
+  bottom: -9px;
+}
+.menu-item[aria-current="page"],
+.menu-item-m[aria-current="page"] {
+  color: #0f80c3;
+  font-weight: 600;
+}
+.menu-item[aria-current="page"]::before,
+.menu-item-m[aria-current="page"]::before {
+  content: "";
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #209ed9;
+  box-shadow: 0 0 0 3px rgba(32, 158, 217, 0.18);
+}
+
+/* Aptos NAMICA card (NUVIOR purple) */
+.namica {
+  background: radial-gradient(70% 80% at 20% 62%, #5b4e9e 0%, #352862 72%);
+}
+.namica-sphere {
+  animation: nmTurn 40s linear infinite, nmFloat 7s ease-in-out infinite;
+  filter: drop-shadow(0 30px 40px rgba(10, 6, 30, 0.45));
+}
+.namica-sphere-2 {
+  animation-duration: 30s, 6s;
+  animation-direction: reverse, normal;
+}
+
+/* announcement bar */
+.promo-attn {
+  background: linear-gradient(90deg, #0f80c3, #209ed9 30%, #26b1e7 50%, #209ed9 70%, #0f80c3);
+  background-size: 200% 100%;
+  animation: promoFlow 9s linear infinite;
+}
+.promo-shine {
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 65%);
+  background-size: 250% 100%;
+  background-repeat: no-repeat;
+  background-position: 150% 0;
+  mix-blend-mode: soft-light;
+  animation: promoShine 5.5s cubic-bezier(0.45, 0, 0.25, 1) 1.4s infinite;
+}
+.promo-ping::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #ffa617;
+  animation: promoPing 1.6s ease-out infinite;
+}
+.promo-new {
+  animation: promoNudge 5.5s ease-in-out 1.4s infinite;
+}
+
+/* phones: floating search button */
+.float-search {
+  transition: bottom 0.5s var(--e-out), transform 0.45s var(--e-out), opacity 0.3s ease;
+}
+.float-search.is-off {
+  transform: scale(0.6);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes navHere {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes nmTurn {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes nmFloat {
+  50% {
+    translate: 0 -16px;
+  }
+}
+@keyframes promoFlow {
+  to {
+    background-position: -200% 0;
+  }
+}
+@keyframes promoShine {
+  0% {
+    background-position: 150% 0;
+  }
+  35%,
+  100% {
+    background-position: -60% 0;
+  }
+}
+@keyframes promoPing {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+@keyframes promoNudge {
+  0%,
+  8%,
+  100% {
+    transform: none;
+  }
+  2% {
+    transform: translateY(-2px) scale(1.06);
+  }
+  4% {
+    transform: translateY(1px);
+  }
+  6% {
+    transform: translateY(-1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-here,
+  .promo-attn {
+    animation: none;
+  }
+  .namica-sphere {
+    animation: none !important;
+  }
+  .promo-shine,
+  .promo-ping::after {
+    display: none;
+  }
+}

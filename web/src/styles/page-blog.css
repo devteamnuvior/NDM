@@ -1,0 +1,24 @@
+/* Blog page. Copied rule for rule from the prototype by scripts/port_page_css.py: do not edit by hand.
+   The prototype adds these rules to this page only, so every selector is tied to <main data-page="blog">
+   with :where(), which adds no specificity: the rules rank exactly as they did there. */
+  /* blog page (Orléva journal motion) */
+  :where(main[data-page="blog"]) .rv.bw-wrap{opacity:1;transform:none;filter:none}
+  :where(main[data-page="blog"]) .bw{display:inline-block;opacity:0;filter:blur(12px);transform:translate3d(0,42%,0);transition:opacity .9s var(--e-out),filter 1s var(--e-out),transform 1.15s var(--e-out);transition-delay:var(--d,0s)}
+  :where(main[data-page="blog"]) .bw-wrap.in .bw{opacity:1;filter:none;transform:none}
+  :where(main[data-page="blog"]) .blog-ring{animation:ringPulse 7s ease-in-out infinite;animation-delay:calc(var(--i) * -1.4s)}
+  :where(main[data-page="blog"]) .blog-dot{animation:dotPulse 3.5s ease-in-out infinite}
+  @keyframes ringPulse{0%,100%{opacity:.35;transform:scale(.985)}50%{opacity:1;transform:scale(1.02)}}
+  @keyframes dotPulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.35);opacity:1}}
+  :where(main[data-page="blog"]) .story-img{transform:scale(1.1);transition:transform 1.4s var(--e-out)}
+  :where(main[data-page="blog"]) .story-card.in .story-img{transform:scale(1)}
+  :where(main[data-page="blog"]) .story-card article:hover .story-img{transform:scale(1.05)}
+  /* article cards: plain white, neutral shadow, a small lift on hover */
+  :where(main[data-page="blog"]) .story-box{background:#fff;border:1px solid #E3E9EF;box-shadow:0 22px 44px -36px rgba(27,36,43,.28);transition:transform .6s var(--e-out),box-shadow .6s ease}
+  @media (hover:hover){:where(main[data-page="blog"]) .story-box:hover{transform:translateY(-4px);box-shadow:0 30px 56px -38px rgba(27,36,43,.34)}}
+  /* white cards in the promotion-card look */
+  :where(main[data-page="blog"]) .lead-card,:where(main[data-page="blog"]) .take-card{background:#fff;border:1px solid #E3E9EF;box-shadow:0 26px 50px -34px rgba(15,60,95,.3)}
+  :where(main[data-page="blog"]) .take-pic img{transform:scale(1.14);transition:transform 1.8s var(--e-out) .1s}
+  :where(main[data-page="blog"]) .take-pic.in img{transform:scale(1)}
+  @media (prefers-reduced-motion:reduce){:where(main[data-page="blog"]) .bw,:where(main[data-page="blog"]) .story-img{transition:none;opacity:1;filter:none;transform:none}:where(main[data-page="blog"]) .blog-ring,:where(main[data-page="blog"]) .blog-dot{animation:none}}
+/* the pricing page blurs what passes under its open category title; here that title is not sticky */
+:where(main[data-page="blog"]) .pr-group.is-open>.pr-ghead{-webkit-backdrop-filter:none;backdrop-filter:none}

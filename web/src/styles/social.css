@@ -1,0 +1,10 @@
+/* Social icons take each network's colour on hover. Copied rule for rule from the prototype. */
+.soc-ico.soc-ico-line:not(:hover):not(:focus-visible){background:transparent}
+.soc-ico-line:hover,.soc-ico-line:focus-visible{border-color:transparent}
+.soc-ico{background:rgba(255,255,255,.12);transition:background .3s ease,color .3s ease,transform .3s ease}
+.soc-ico:hover,.soc-ico:focus-visible{color:#fff;transform:translateY(-2px)}
+.soc-ico[data-net="instagram"]:hover,.soc-ico[data-net="instagram"]:focus-visible{background:radial-gradient(circle at 30% 107%,#FDF497 0%,#FD5949 45%,#D6249F 60%,#285AEB 90%)}
+.soc-ico[data-net="facebook"]:hover,.soc-ico[data-net="facebook"]:focus-visible{background:#1877F2}
+.soc-ico[data-net="youtube"]:hover,.soc-ico[data-net="youtube"]:focus-visible{background:#FF0000}
+.soc-ico[data-net="x"]:hover,.soc-ico[data-net="x"]:focus-visible{background:#000}
+.soc-ico[data-net="linkedin"]:hover,.soc-ico[data-net="linkedin"]:focus-visible{background:#0A66C2}

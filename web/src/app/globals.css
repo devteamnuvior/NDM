@@ -1,0 +1,55 @@
+/*
+ * Stylesheet order. It reproduces the prototype's cascade exactly:
+ *   1. Tailwind's theme and reset (layered, so everything below outranks them)
+ *   2. the ported CSS, in the same order as the prototype's <style> block
+ *   3. Tailwind's utilities, last and unlayered, as the Tailwind CDN injected them after the page's own CSS
+ * So a ported rule and a utility meet with their normal specificity, and at equal specificity the utility
+ * wins, just like in the prototype. Do not wrap ported CSS in @layer: it would then lose to every utility.
+ */
+@layer theme, base;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+/* the map library's own styles (About page), before the ported CSS, as the prototype loads them before its <style> block */
+@import "leaflet/dist/leaflet.css";
+
+@import "../styles/base.css";
+@import "../styles/buttons.css";
+@import "../styles/reveal.css";
+@import "../styles/eyebrow.css";
+@import "../styles/sections.css";
+@import "../styles/header.css";
+@import "../styles/hero.css";
+@import "../styles/start.css";
+@import "../styles/carousel.css";
+@import "../styles/aptos.css";
+@import "../styles/clinic-film.css";
+@import "../styles/team.css";
+@import "../styles/before-after.css";
+@import "../styles/process.css";
+@import "../styles/specials.css";
+@import "../styles/reviews.css";
+@import "../styles/awards.css";
+@import "../styles/visit.css";
+@import "../styles/booking.css";
+@import "../styles/shop.css";
+@import "../styles/social.css";
+@import "../styles/offer.css";
+@import "../styles/cart.css";
+@import "../styles/chat.css";
+@import "../styles/black-friday.css";
+@import "../styles/inner.css";
+@import "../styles/pricing.css";
+@import "../styles/type-scale.css";
+/* CSS the prototype adds to one page only. Its build scripts put it at the very end of the page's <style>,
+   after everything above, so it comes last here too (each file is tied to its page with :where()). */
+@import "../styles/gallery.css";
+@import "../styles/page-aptos.css";
+@import "../styles/page-botox.css";
+@import "../styles/page-concern.css";
+@import "../styles/page-about.css";
+@import "../styles/page-blog.css";
+@import "../styles/page-article.css";
+@import "../styles/page-legal.css";
+@import "../styles/page-bf-sale.css";
+
+@import "tailwindcss/utilities.css";

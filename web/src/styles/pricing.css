@@ -1,0 +1,46 @@
+/* Pricing page: folding categories, folding treatment rows, sale prices and the scroll hint.
+   Copied rule for rule from the prototype's build script. */
+.pr-group{border-bottom:1px solid rgba(27,36,43,.24)}
+.pr-groups>.pr-group:first-child{border-top:1px solid rgba(27,36,43,.24)}
+.pr-sub{margin:14px 0 30px;padding:4px clamp(14px,2.4vw,28px);border-radius:22px;background:#fff;box-shadow:0 0 0 1px rgba(27,36,43,.08),0 18px 40px -32px rgba(15,60,95,.35)}
+.pr-sub .pr-opt{background:#FAFAF8}
+/* more air between treatments inside a category; option rows keep their spacing */
+.pr-sub>.pr-item{padding-block:10px}
+/* room either side of the clipping fold so the panel's outline and shadow are not cut off */
+.pr-group>.pr-body>div{margin:0 -16px;padding:0 16px}
+/* the open category title stays under the header without a paper band of its own: rows passing under it are blurred away */
+.pr-group.is-open>.pr-ghead{position:sticky;top:100px;z-index:5;background:transparent;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+@media (min-width:1280px){.pr-group.is-open>.pr-ghead{top:120px}}
+.pr-gplus{width:44px;height:44px}
+.pr-ghead button:hover .pr-gplus{border-color:#1B242B}
+.pr-group.is-open>.pr-ghead .pr-gplus{background:#0F80C3;border-color:#0F80C3;color:#fff}
+.pr-group.is-open>.pr-ghead .pr-gplus i+i{transform:rotate(0deg)}
+.pr-group.is-open>.pr-body{grid-template-rows:1fr}
+.pr-group.is-open>.pr-body>div{visibility:visible;transition-delay:0s}
+.pr-group .pr-item:last-child{border-bottom:0}
+.pr-item{border-bottom:1px solid rgba(27,36,43,.1)}
+.pr-plus{position:relative;display:block;width:36px;height:36px;border-radius:999px;border:1px solid rgba(27,36,43,.22);color:#1B242B;transition:background-color .35s ease,border-color .35s ease,color .35s ease}
+.pr-plus i{position:absolute;left:50%;top:50%;width:13px;height:1.5px;margin:-.75px 0 0 -6.5px;border-radius:2px;background:currentColor;transition:transform .45s var(--e-out)}
+.pr-plus i+i{transform:rotate(90deg)}
+.pr-head:hover .pr-plus,.pr-ghead button:hover .pr-gplus{border-color:#1B242B}
+/* hero scroll hint */
+.pr-scroll-line{position:relative;display:block;width:1px;height:64px;overflow:hidden;background:rgba(255,255,255,.28)}
+.pr-scroll-line::after{content:"";position:absolute;left:0;top:-45%;width:100%;height:45%;background:#fff;animation:prLine 1.9s ease-in-out infinite}
+@keyframes prLine{to{top:100%}}
+@keyframes prScroll{0%,100%{transform:translateY(-2px)}50%{transform:translateY(4px)}}
+@media (prefers-reduced-motion:reduce){.pr-scroll-line::after{animation:none}}
+/* treatments inside an open category: a blue circle with a white plus, easier to see */
+.pr-sub .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
+.pr-sub .pr-head:hover .pr-plus{background:#209ED9;border-color:#209ED9}
+.pr-item.is-open>h4 .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
+.pr-item.is-open>h4 .pr-plus i+i{transform:rotate(0deg)}
+.pr-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--e-out)}
+.pr-body>div{min-height:0;overflow:hidden;visibility:hidden;transition:visibility 0s linear .5s}
+.pr-item.is-open>.pr-body{grid-template-rows:1fr}
+.pr-item.is-open>.pr-body>div{visibility:visible;transition-delay:0s}
+.pr-opt{box-shadow:0 0 0 1px rgba(27,36,43,.07)}
+/* every offer badge, percentage or package deal, is red */
+.pr-badge,.pr-tag{display:inline-flex;align-items:center;border-radius:999px;white-space:nowrap;font-weight:700;line-height:1;background:#fff;color:#C0182C;box-shadow:inset 0 0 0 1.5px rgba(192,24,44,.55)}
+.pr-badge{padding:7px 12px;font-size:14px}
+.pr-tag{padding:6px 10px;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
+@media (prefers-reduced-motion:reduce){.pr-body,.pr-body>div,.pr-plus i,.cart-pill{transition:none}.cart-bump,.pr-qty{animation:none}}

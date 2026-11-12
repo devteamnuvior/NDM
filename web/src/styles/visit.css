@@ -1,0 +1,14 @@
+/* Visit us: the two clinic cards, their photo slideshow and the lift on hover.
+   Copied rule for rule from the prototype. */
+.visit-card{box-shadow:0 24px 50px -38px rgba(27,36,43,.35);transition:transform .7s var(--e-out),box-shadow .7s var(--e-out),border-color .4s ease}
+.visit-img{transition:transform 1.2s var(--e-out)}
+@media (hover:hover){
+  .visit-cell:hover .visit-card{border-color:rgba(27,36,43,.14);box-shadow:0 44px 80px -44px rgba(27,36,43,.5)}
+}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  .visit-cell:hover .visit-card{transform:translate3d(0,-4px,0)}
+  .visit-cell:hover .visit-img{transform:scale(1.04)}
+}
+.visit-slide{opacity:0;transform:scale(1.06);transition:opacity 1.4s ease,transform 6s linear}
+.visit-slide.is-on{opacity:1;transform:scale(1)}
+@media (prefers-reduced-motion: reduce){.visit-slide{transition:none;transform:none}}

@@ -1,0 +1,231 @@
+/* Concern pages (Wrinkles & fine lines). Copied rule for rule from the prototype by scripts/port_page_css.py: do not edit by hand.
+   The prototype adds these rules to this page only, so every selector is tied to <main data-page="concern">
+   with :where(), which adds no specificity: the rules rank exactly as they did there. */
+  /* procedure page */
+  :where(main[data-page="concern"]) .offer-glass{background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:0 24px 50px -30px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.25)}
+  :where(main[data-page="concern"]) .offer-pill{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.25)}
+  :where(main[data-page="concern"]) .offer-dot{animation:offerPing 1.8s ease-in-out infinite}
+  @keyframes offerPing{0%,100%{box-shadow:0 0 0 0 rgba(255,166,23,.6)}50%{box-shadow:0 0 0 5px rgba(255,166,23,0)}}
+  /* the offer card: a soft light sweeps across it every few seconds */
+  :where(main[data-page="concern"]) .offer-shine{position:relative;isolation:isolate;box-shadow:0 30px 60px -34px rgba(0,0,0,.7);transition:transform .5s var(--e-out),box-shadow .5s var(--e-out)}
+  :where(main[data-page="concern"]) .offer-shine:hover{transform:translateY(-3px);box-shadow:0 36px 70px -34px rgba(0,0,0,.75)}
+  :where(main[data-page="concern"]) .offer-shine::after{content:"";position:absolute;inset:-20% -40%;pointer-events:none;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.08) 44%,rgba(255,255,255,.34) 50%,rgba(255,255,255,.08) 56%,transparent 62%);transform:translateX(-75%);animation:offerSweep 5.5s ease-in-out infinite}
+  :where(main[data-page="concern"]) .offer-shine::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;background:radial-gradient(70% 90% at 100% 50%,rgba(255,166,23,.22),transparent 70%)}
+  @keyframes offerSweep{0%,52%{transform:translateX(-75%)}82%,100%{transform:translateX(75%)}}
+  :where(main[data-page="concern"]) .offer-big{padding-left:clamp(16px,2vw,28px);border-left:1px solid rgba(255,255,255,.22)}
+  /* your treatment tabs: the panel fades in; the key number sits on a deep blue card */
+  :where(main[data-page="concern"]) .ov-in{animation:ovIn .6s var(--e-out) both}
+  @keyframes ovIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  :where(main[data-page="concern"]) .ov-side{background:linear-gradient(180deg,#FAFAF8,#F4F7F9)}
+  :where(main[data-page="concern"]) .analysis-card{background:rgba(11,15,19,.42);border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(16px) saturate(130%);backdrop-filter:blur(16px) saturate(130%);box-shadow:0 40px 80px -40px rgba(0,0,0,.7)}
+  /* compare the options */
+  :where(main[data-page="concern"]) .cmp-t th,:where(main[data-page="concern"]) .cmp-t td{border-bottom:1px solid rgba(27,36,43,.08)}
+  :where(main[data-page="concern"]) .cmp-t tbody tr:last-child>*{border-bottom:0}
+  :where(main[data-page="concern"]) .cmp-t .cmp-me{background:rgba(32,158,217,.06)}
+  :where(main[data-page="concern"]) .cmp-t thead .cmp-me{box-shadow:inset 0 3px 0 #0F80C3}
+  /* warm peach light (photos and the price list band) */
+  :where(main[data-page="concern"]) .peach{position:relative}
+  :where(main[data-page="concern"]) .peach::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 18% 8%,rgba(255,186,148,.55),rgba(255,186,148,0) 62%),linear-gradient(180deg,rgba(255,206,176,.14),rgba(255,170,130,.08));mix-blend-mode:soft-light}
+  :where(main[data-page="concern"]) .peach img{filter:sepia(.1) saturate(1.06) brightness(1.02)}
+  /* every light section on this page: one paper colour; soft glows on a layer that fades at the top and bottom, so no join shows */
+  main:where([data-page="concern"])>section:not([data-nav="dark"]){background-color:#FAFAF8!important;background-image:none!important;isolation:isolate}
+  main:where([data-page="concern"])>section:not([data-nav="dark"])::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;-webkit-mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);background:radial-gradient(40% 50% at 96% 45%,rgba(255,190,160,.18),transparent 70%)}
+  main:where([data-page="concern"])>section:not([data-nav="dark"]):nth-of-type(even)::before{background:radial-gradient(40% 50% at 4% 55%,rgba(255,206,182,.18),transparent 70%)}
+  /* the price list keeps a light peach wash, on the same fading layer */
+  main:where([data-page="concern"])>section.proc-peach:not([data-nav="dark"]):nth-of-type(n)::before{background:radial-gradient(55% 60% at 12% 35%,rgba(255,190,158,.3),transparent 70%),radial-gradient(50% 55% at 92% 70%,rgba(255,176,140,.22),transparent 70%)}
+  :where(main[data-page="concern"]) .proc-peach .pr-group.is-open>.pr-ghead{position:static;background:transparent}
+  @media (prefers-reduced-motion:reduce){:where(main[data-page="concern"]) .offer-shine::after,:where(main[data-page="concern"]) .ov-in{animation:none}}
+  :where(main[data-page="concern"]) .proc-form{box-shadow:0 40px 80px -40px rgba(11,15,19,.65)}
+  :where(main[data-page="concern"]) .band-card{background:rgba(11,15,19,.62);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 30px 60px -40px rgba(0,0,0,.8)}
+  /* what is this treatment: the statement's words darken as it scrolls into place */
+  :where(main[data-page="concern"]) .say-w{color:rgba(27,36,43,.2);transition:color .45s ease}
+  :where(main[data-page="concern"]) .say-w.is-on{color:#1B242B}
+  :where(main[data-page="concern"]) .say-w.say-accent.is-on{color:#0F80C3}
+  :where(main[data-page="concern"]) .ov-card{box-shadow:0 0 0 1px rgba(27,36,43,.06),0 22px 44px -36px rgba(27,36,43,.28)}
+  :where(main[data-page="concern"]) .ba-grid .ba-box{aspect-ratio:1/1}
+  /* treatment sections */
+  :where(main[data-page="concern"]) .tx-ba .ba-box{aspect-ratio:1/1}
+  @media (max-width:639px){:where(main[data-page="concern"]) .tx-ba>li{flex:0 0 min(76vw,300px);scroll-snap-align:start}}
+  :where(main[data-page="concern"]) .tx-step{opacity:0;transform:translateY(18px);transition:opacity .6s ease var(--d,0s),transform .8s var(--e-out) var(--d,0s)}
+  :where(main[data-page="concern"]) .tx-steps.in .tx-step{opacity:1;transform:none}
+  :where(main[data-page="concern"]) .tx-line i{transform:scaleX(0);transition:transform 1s var(--e-out) calc(var(--d,0s) + .2s)}
+  :where(main[data-page="concern"]) .tx-steps.in .tx-line i{transform:scaleX(1)}
+  :where(main[data-page="concern"]) .tx-step:last-child .tx-line{visibility:hidden}
+  /* NAMICA ring on the intro photo: the words turn slowly around the sphere */
+  :where(main[data-page="concern"]) .tx-ring{filter:drop-shadow(0 18px 30px rgba(53,40,98,.35))}
+  :where(main[data-page="concern"]) .tx-ring-text{animation:nmTurn 24s linear infinite}
+  /* licensed product card and the how-long-it-lasts card, in NUVIOR's Aptos purple */
+  :where(main[data-page="concern"]) .tx-product{background:radial-gradient(120% 90% at 50% 0%,#5B48B0 0%,#352862 55%,#221a45 100%)}
+  :where(main[data-page="concern"]) .tx-product-img{filter:drop-shadow(0 30px 40px rgba(10,6,30,.55));animation:nmFloat 7s ease-in-out infinite}
+  :where(main[data-page="concern"]) .tx-lasts{background:radial-gradient(90% 120% at 100% 0%,#5B48B0 0%,#352862 52%,#1d1640 100%)}
+  :where(main[data-page="concern"]) .tx-thread-line{background:linear-gradient(90deg,rgba(201,194,244,.25),#C9C2F4 40%,rgba(201,194,244,.5));box-shadow:0 0 18px rgba(201,194,244,.55)}
+  :where(main[data-page="concern"]) .tx-bub{aspect-ratio:1/1;background:radial-gradient(circle at 35% 30%,#fff,#C9C2F4 45%,rgba(91,72,176,.6));opacity:0;transform:translateY(0) scale(.4)}
+  :where(main[data-page="concern"]) .tx-thread.in .tx-bub{animation:txBub 5.5s ease-in-out var(--d,0s) infinite}
+  @keyframes txBub{0%{opacity:0;transform:translateY(10px) scale(.4)}20%{opacity:.95;transform:translateY(0) scale(1)}70%{opacity:.75;transform:translateY(-14px) scale(1)}100%{opacity:0;transform:translateY(-26px) scale(1.25)}}
+  :where(main[data-page="concern"]) .tx-nav a{transition:background-color .3s ease,color .3s ease}
+  @media (prefers-reduced-motion:reduce){:where(main[data-page="concern"]) .tx-step{opacity:1;transform:none;transition:none}:where(main[data-page="concern"]) .tx-line i{transform:none;transition:none}:where(main[data-page="concern"]) .tx-ring-text,:where(main[data-page="concern"]) .tx-product-img,:where(main[data-page="concern"]) .tx-thread.in .tx-bub{animation:none}:where(main[data-page="concern"]) .tx-bub{opacity:.8;transform:none}}
+  /* prices, same look as the Pricing page */
+  :where(main[data-page="concern"]) .pr-group{border-bottom:1px solid rgba(27,36,43,.24)}
+  :where(main[data-page="concern"]) .pr-groups>.pr-group:first-child{border-top:1px solid rgba(27,36,43,.24)}
+  :where(main[data-page="concern"]) .pr-sub{margin:14px 0 30px;padding:4px clamp(14px,2.4vw,28px);border-radius:22px;background:#fff;box-shadow:0 0 0 1px rgba(27,36,43,.08),0 18px 40px -32px rgba(15,60,95,.35)}
+  :where(main[data-page="concern"]) .pr-sub .pr-opt{background:#FAFAF8}
+  /* more air between treatments inside a category; option rows keep their spacing */
+  :where(main[data-page="concern"]) .pr-sub>.pr-item{padding-block:10px}
+  /* room either side of the clipping fold so the panel's outline and shadow are not cut off */
+  :where(main[data-page="concern"]) .pr-group>.pr-body>div{margin:0 -16px;padding:0 16px}
+  :where(main[data-page="concern"]) .pr-group.is-open>.pr-ghead{position:sticky;top:100px;z-index:5;background:#FAFAF8}
+  @media (min-width:1280px){:where(main[data-page="concern"]) .pr-group.is-open>.pr-ghead{top:120px}}
+  :where(main[data-page="concern"]) .pr-gplus{width:44px;height:44px}
+  :where(main[data-page="concern"]) .pr-ghead button:hover .pr-gplus{border-color:#1B242B}
+  :where(main[data-page="concern"]) .pr-group.is-open>.pr-ghead .pr-gplus{background:#0F80C3;border-color:#0F80C3;color:#fff}
+  :where(main[data-page="concern"]) .pr-group.is-open>.pr-ghead .pr-gplus i+i{transform:rotate(0deg)}
+  :where(main[data-page="concern"]) .pr-group.is-open>.pr-body{grid-template-rows:1fr}
+  :where(main[data-page="concern"]) .pr-group.is-open>.pr-body>div{visibility:visible;transition-delay:0s}
+  :where(main[data-page="concern"]) .pr-group .pr-item:last-child{border-bottom:0}
+  :where(main[data-page="concern"]) .pr-item{border-bottom:1px solid rgba(27,36,43,.1)}
+  :where(main[data-page="concern"]) .pr-plus{position:relative;display:block;width:36px;height:36px;border-radius:999px;border:1px solid rgba(27,36,43,.22);color:#1B242B;transition:background-color .35s ease,border-color .35s ease,color .35s ease}
+  :where(main[data-page="concern"]) .pr-plus i{position:absolute;left:50%;top:50%;width:13px;height:1.5px;margin:-.75px 0 0 -6.5px;border-radius:2px;background:currentColor;transition:transform .45s var(--e-out)}
+  :where(main[data-page="concern"]) .pr-plus i+i{transform:rotate(90deg)}
+  :where(main[data-page="concern"]) .pr-head:hover .pr-plus,:where(main[data-page="concern"]) .pr-ghead button:hover .pr-gplus{border-color:#1B242B}
+  :where(main[data-page="concern"]) .pr-item.is-open>h4 .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
+  :where(main[data-page="concern"]) .pr-item.is-open>h4 .pr-plus i+i{transform:rotate(0deg)}
+  :where(main[data-page="concern"]) .pr-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--e-out)}
+  :where(main[data-page="concern"]) .pr-body>div{min-height:0;overflow:hidden;visibility:hidden;transition:visibility 0s linear .5s}
+  :where(main[data-page="concern"]) .pr-item.is-open>.pr-body{grid-template-rows:1fr}
+  :where(main[data-page="concern"]) .pr-item.is-open>.pr-body>div{visibility:visible;transition-delay:0s}
+  :where(main[data-page="concern"]) .pr-opt{box-shadow:0 0 0 1px rgba(27,36,43,.07)}
+  /* every offer badge, percentage or package deal, is red */
+  :where(main[data-page="concern"]) .pr-badge,:where(main[data-page="concern"]) .pr-tag{display:inline-flex;align-items:center;border-radius:999px;white-space:nowrap;font-weight:700;line-height:1;background:#fff;color:#C0182C;box-shadow:inset 0 0 0 1.5px rgba(192,24,44,.55)}
+  :where(main[data-page="concern"]) .pr-badge{padding:7px 12px;font-size:14px}
+  :where(main[data-page="concern"]) .pr-tag{padding:6px 10px;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
+  @media (prefers-reduced-motion:reduce){:where(main[data-page="concern"]) .offer-dot{animation:none}:where(main[data-page="concern"]) .say-w,:where(main[data-page="concern"]) .pr-body,:where(main[data-page="concern"]) .pr-body>div,:where(main[data-page="concern"]) .pr-plus i{transition:none}}
+  /* round 12: Our team, Testimonials and Visit us use the same spacing as the treatment sections (e.g. Elevate your results);
+     Visit us sits close to the band after it */
+  main:where([data-page="concern"])>section[aria-labelledby="team"],main:where([data-page="concern"])>section[aria-labelledby="testimonials"],main:where([data-page="concern"])>section#visit{padding-top:clamp(64px,7vw,104px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
+  main:where([data-page="concern"])>section#visit{padding-bottom:clamp(16px,2vw,28px)!important}
+  /* Botox (round 14): the price list and the FAQ take the same spacing as Before & after too */
+  main:where([data-page="concern"])>section#prices,main:where([data-page="concern"])>section[aria-labelledby="faq"]{padding-top:clamp(64px,7vw,104px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
+  /* round 15: Our team, Testimonials, the price list and the FAQ line up with the 1180px content of the other sections */
+  main:where([data-page="concern"]){--tx:max(var(--gx),calc((100% - 1180px) / 2))}
+  main:where([data-page="concern"])>section[aria-labelledby="team"],main:where([data-page="concern"])>section[aria-labelledby="faq"]{padding-left:var(--tx)!important;padding-right:var(--tx)!important}
+  /* testimonials (round 22): the words line up with the content, the card row runs edge to edge */
+  main:where([data-page="concern"])>section[aria-labelledby="testimonials"]{padding-left:0!important;padding-right:0!important}
+  main:where([data-page="concern"])>section[aria-labelledby="testimonials"]>div:not(.promo-rev-rows),main:where([data-page="concern"])>section[aria-labelledby="testimonials"]>p{padding-left:var(--tx)!important;padding-right:var(--tx)!important}
+  main:where([data-page="concern"])>section#prices>div{max-width:1180px!important}
+  /* the free skin analysis band sits tight between Visit us and the FAQ */
+  main:where([data-page="concern"])>section[aria-labelledby="analysis-title"]{padding-top:clamp(40px,4.5vw,64px)!important;padding-bottom:0!important}
+  main:where([data-page="concern"])>section[aria-labelledby="faq"]{padding-top:clamp(48px,5vw,72px)!important}
+  /* round 18: the FAQ's sticky heading stops below the section bar; Good to know: number badges, doctor card */
+  main:where([data-page="concern"])>section[aria-labelledby="faq"] .lg\:sticky{top:200px}
+  :where(main[data-page="concern"]) .guide-num{background:linear-gradient(135deg,#26B1E7,#0F80C3);box-shadow:0 10px 20px -12px rgba(15,128,195,.9)}
+  :where(main[data-page="concern"]) .guide-q{box-shadow:0 22px 44px -38px rgba(27,36,43,.35);transition:box-shadow .5s var(--e-out),transform .5s var(--e-out)}
+  :where(main[data-page="concern"]) .guide-q:hover{transform:translateY(-2px);box-shadow:0 30px 56px -38px rgba(15,128,195,.4)}
+  /* round 29: About (ProcOverview) has its own theme: deep navy, drifting light orbs, a turning dotted ring, glass panel */
+  main:where([data-page="concern"])>section#overview.ov2{background:radial-gradient(60% 70% at 90% 0%,rgba(38,177,231,.28),transparent 60%),radial-gradient(50% 60% at 0% 100%,rgba(255,166,23,.12),transparent 65%),linear-gradient(160deg,#0E2A40 0%,#0A1B2B 55%,#0B0F13 100%)!important}
+  :where(main[data-page="concern"]) .ov2-orb{position:absolute;border-radius:50%;filter:blur(40px);opacity:.55;pointer-events:none;animation:ov2Drift 16s ease-in-out infinite alternate}
+  :where(main[data-page="concern"]) .ov2-orb-a{width:340px;height:340px;left:-80px;top:10%;background:radial-gradient(circle,rgba(38,177,231,.55),transparent 70%)}
+  :where(main[data-page="concern"]) .ov2-orb-b{width:260px;height:260px;right:6%;bottom:-60px;background:radial-gradient(circle,rgba(255,166,23,.35),transparent 70%);animation-duration:19s;animation-delay:-6s}
+  :where(main[data-page="concern"]) .ov2-orb-c{width:200px;height:200px;right:30%;top:-60px;background:radial-gradient(circle,rgba(15,128,195,.6),transparent 70%);animation-duration:22s;animation-delay:-11s}
+  :where(main[data-page="concern"]) .ov2-ring{position:absolute;right:-120px;top:50%;width:560px;height:560px;transform:translateY(-50%);pointer-events:none;animation:ov2Spin 90s linear infinite}
+  :where(main[data-page="concern"]) .ov2-ring circle{fill:none;stroke:rgba(255,255,255,.12);stroke-width:1;stroke-dasharray:2 7}
+  /* round 31: compact, so the whole About section fits one view under the header and the section bar */
+  main:where([data-page="concern"])>section#overview.ov2{padding-top:clamp(28px,4.4vh,56px)!important;padding-bottom:clamp(28px,4.4vh,56px)!important;scroll-margin-top:170px}
+  :where(main[data-page="concern"]) .ov2-tabs{border-bottom:1px solid rgba(255,255,255,.1)}
+  :where(main[data-page="concern"]) .ov2-tab{display:flex;align-items:center;justify-content:center;gap:10px;border-radius:16px;padding:11px 16px;white-space:nowrap;font:500 14.5px/1.2 Inter,"Helvetica Neue",Arial,sans-serif;color:rgba(255,255,255,.7);transition:background-color .3s ease,color .3s ease,box-shadow .3s ease}
+  :where(main[data-page="concern"]) .ov2-tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+  :where(main[data-page="concern"]) .ov2-tab.is-on{color:#fff;background:linear-gradient(120deg,rgba(38,177,231,.28),rgba(15,128,195,.12));box-shadow:inset 0 0 0 1px rgba(38,177,231,.45),0 18px 40px -24px rgba(38,177,231,.6)}
+  :where(main[data-page="concern"]) .ov2-num{font-size:17px;line-height:1;color:rgba(255,255,255,.35);transition:color .3s ease}
+  :where(main[data-page="concern"]) .ov2-tab.is-on .ov2-num{color:#26B1E7}
+  :where(main[data-page="concern"]) .ov2-go{place-items:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.08);opacity:0;transform:translateX(-6px);transition:opacity .3s ease,transform .3s ease}
+  :where(main[data-page="concern"]) .ov2-tab.is-on .ov2-go{opacity:1;transform:none;background:#26B1E7;color:#0B0F13}
+  :where(main[data-page="concern"]) .ov2-panel{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 50px 90px -50px rgba(0,0,0,.7);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+  :where(main[data-page="concern"]) .ov2-stat-ring{animation:ov2Spin 30s linear infinite}
+  :where(main[data-page="concern"]) .ov2-stat-ring circle{fill:rgba(255,255,255,.04);stroke:rgba(38,177,231,.6);stroke-width:1.2;stroke-dasharray:3 5}
+  @keyframes ov2Drift{to{transform:translate3d(60px,-40px,0) scale(1.15)}}
+  @keyframes ov2Spin{to{transform:translateY(-50%) rotate(360deg)}}
+  :where(main[data-page="concern"]) .ov2-stat-ring{transform-origin:50% 50%}
+  @keyframes ov2SpinS{to{transform:rotate(360deg)}}
+  :where(main[data-page="concern"]) .ov2-stat-ring{animation-name:ov2SpinS}
+  @media (prefers-reduced-motion:reduce){:where(main[data-page="concern"]) .ov2-orb,:where(main[data-page="concern"]) .ov2-ring,:where(main[data-page="concern"]) .ov2-stat-ring{animation:none}}
+  /* round 24: the book card in Good to know */
+  :where(main[data-page="concern"]) .guide-book{background:radial-gradient(120% 90% at 100% 0%,#1C7FC0 0%,rgba(28,127,192,0) 55%),linear-gradient(155deg,#0F5E92 0%,#0A3D60 55%,#0B2234 100%);box-shadow:0 40px 70px -40px rgba(10,61,96,.75)}
+  :where(main[data-page="concern"]) .guide-book-glow{position:absolute;right:-60px;bottom:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(255,166,23,.35),transparent 65%);pointer-events:none}
+  :where(main[data-page="concern"]) .guide-doc{background:radial-gradient(90% 80% at 100% 0%,rgba(38,177,231,.14),transparent 60%),linear-gradient(160deg,#fff,#F6F4EF);box-shadow:0 0 0 1px rgba(27,36,43,.06),0 26px 50px -40px rgba(27,36,43,.4)}
+:where(main[data-page="concern"]) .cn-role{font:600 11px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:7px 10px;border-radius:999px;box-shadow:0 6px 16px -8px rgba(11,15,19,.5)}
+:where(main[data-page="concern"]) .cn-role-primary{background:#0F80C3;color:#fff}
+:where(main[data-page="concern"]) .cn-role-supporting{background:rgba(15,128,195,.1);color:#0A4F7A}
+:where(main[data-page="concern"]) .cn-role-combination{background:#FFF1DB;color:#8A5A12}
+/* round 24: home care cards */
+:where(main[data-page="concern"]) .cn-hc{background:linear-gradient(180deg,#FAFAF8 0%,#F1F6F9 45%,#FAFAF8 100%)}
+:where(main[data-page="concern"]) .cn-hc-field.cn-hc-blue{background:linear-gradient(160deg,#EAF4FA,#D5E9F5)}
+:where(main[data-page="concern"]) .cn-hc-field.cn-hc-peach{background:linear-gradient(160deg,#FBF1E6,#F4DFC8)}
+:where(main[data-page="concern"]) .cn-hc-field.cn-hc-mist{background:linear-gradient(160deg,#F4F3EF,#E7E4DC)}
+:where(main[data-page="concern"]) .cn-hc-orb{position:absolute;left:50%;top:54%;width:62%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,255,255,0) 70%)}
+:where(main[data-page="concern"]) .cn-hc-img{filter:drop-shadow(0 26px 30px rgba(27,36,43,.22));transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+:where(main[data-page="concern"]) .cn-hc-card:hover .cn-hc-img{transform:translateY(-8px) rotate(-2deg)}
+:where(main[data-page="concern"]) .cn-hc-sun{background:rgba(255,255,255,.75);color:#C98A2B;box-shadow:0 20px 40px -24px rgba(201,138,43,.6)}
+:where(main[data-page="concern"]) .cn-hc-card{transition:box-shadow .5s ease}
+:where(main[data-page="concern"]) .cn-hc-card:hover{box-shadow:0 34px 60px -40px rgba(15,60,95,.45)}
+@media (prefers-reduced-motion:reduce){:where(main[data-page="concern"]) .cn-hc-img,:where(main[data-page="concern"]) .cn-hc-card{transition:none}}
+:where(main[data-page="concern"]) .cn-role-bio,:where(main[data-page="concern"]) .cn-role-bio-stimulator{background:#0A4F7A;color:#fff}
+/* round 22: tags on photos are the site's white glass pill with a colour dot for the role */
+:where(main[data-page="concern"]) .cn-ptag{display:inline-flex;align-items:center;gap:7px;border-radius:999px;background:rgba(255,255,255,.88);padding:6px 12px 6px 10px;font:500 12px/1.2 Inter,"Helvetica Neue",Arial,sans-serif;color:#1B242B;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+:where(main[data-page="concern"]) .cn-ptag i{width:7px;height:7px;border-radius:99px;background:#0F80C3}
+:where(main[data-page="concern"]) .cn-ptag-supporting i{background:#26B1E7}:where(main[data-page="concern"]) .cn-ptag-combination i{background:#FFA617}:where(main[data-page="concern"]) .cn-ptag-bio-stimulator i{background:#0A4F7A}
+:where(main[data-page="concern"]) .cn-card{transition:transform .5s var(--e-out),box-shadow .5s var(--e-out)}
+:where(main[data-page="concern"]) .cn-card:hover{transform:translateY(-3px);box-shadow:0 30px 50px -34px rgba(15,60,95,.4)}
+:where(main[data-page="concern"]) .cn-bio{isolation:isolate;background:linear-gradient(135deg,#EAF5FB 0%,#F4F9FC 55%,#FBF3EC 100%);box-shadow:0 0 0 1px rgba(15,128,195,.14)} /* NDM blue to warm paper, no purple (round 21) */
+:where(main[data-page="concern"]) .cn-bio::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(55% 70% at 100% 0%,rgba(38,177,231,.16),transparent 60%),radial-gradient(45% 60% at 0% 100%,rgba(255,190,160,.18),transparent 60%)}
+:where(main[data-page="concern"]) .cn-table{width:100%;border-collapse:separate;border-spacing:0;min-width:720px}
+:where(main[data-page="concern"]) .cn-table th,:where(main[data-page="concern"]) .cn-table td{padding:13px 16px;vertical-align:top;text-align:left;border-bottom:1px solid rgba(27,36,43,.07);font-size:13.5px;line-height:1.5;color:rgba(27,36,43,.82)}
+:where(main[data-page="concern"]) .cn-table th{font:600 11px/1.3 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#5A646C;background:#F6F6F3;position:sticky;top:0;z-index:2;white-space:nowrap}
+:where(main[data-page="concern"]) .cn-table th .cn-th{display:inline-flex;align-items:center;gap:6px}
+:where(main[data-page="concern"]) .cn-table th .cn-th svg{color:#0F80C3}
+:where(main[data-page="concern"]) .cn-table th:first-child,:where(main[data-page="concern"]) .cn-table td:first-child{position:sticky;left:0;background:#fff;z-index:1;min-width:214px}
+:where(main[data-page="concern"]) .cn-table th:first-child{background:#F6F6F3;z-index:3}
+:where(main[data-page="concern"]) .cn-table tr:last-child td{border-bottom:0}
+:where(main[data-page="concern"]) .cn-table tbody tr{transition:background-color .15s ease}
+:where(main[data-page="concern"]) .cn-table tbody tr:hover td{background:rgba(32,158,217,.05)}
+:where(main[data-page="concern"]) .cn-table tbody tr:hover td:first-child{background:#fbfcfd}
+:where(main[data-page="concern"]) .cn-name{display:flex;align-items:center;gap:11px;color:#1B242B}
+:where(main[data-page="concern"]) .cn-name:hover{color:#0F80C3}
+:where(main[data-page="concern"]) .cn-name .cn-nm{font-family:Fraunces,Georgia,serif;font-size:16.5px;line-height:1.18;letter-spacing:-.01em}
+:where(main[data-page="concern"]) .cn-thumb{width:42px;height:42px;border-radius:11px;object-fit:cover;flex:none;box-shadow:inset 0 0 0 1px rgba(27,36,43,.06)}
+:where(main[data-page="concern"]) .cn-sub{display:block;margin-top:3px;font:400 11.5px/1.35 Inter,sans-serif;letter-spacing:0;text-transform:none;color:#5A646C}
+:where(main[data-page="concern"]) .cn-from{display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap;border-radius:999px;background:rgba(32,158,217,.1);color:#0F80C3;font:600 13.5px/1 Inter,sans-serif;padding:7px 12px;transition:background-color .15s ease}
+:where(main[data-page="concern"]) .cn-from:hover{background:rgba(32,158,217,.16)}
+:where(main[data-page="concern"]) .cn-from .cn-fl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.72}
+:where(main[data-page="concern"]) .cn-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+:where(main[data-page="concern"]) .cn-hint{align-items:center;gap:6px;justify-content:center;margin-top:10px;font:500 12px/1 Inter,sans-serif;color:#5A646C}
+:where(main[data-page="concern"]) .cn-m summary{list-style:none}
+:where(main[data-page="concern"]) .cn-m summary::-webkit-details-marker{display:none}
+:where(main[data-page="concern"]) .cn-m[open] .cn-chev{transform:rotate(180deg)}
+:where(main[data-page="concern"]) .cn-m[open]{box-shadow:0 22px 44px -36px rgba(27,36,43,.45)}
+:where(main[data-page="concern"]) .cn-rx{background:#FFF6EA;border:1px solid rgba(255,166,23,.3)}
+  /* concern page (round 20): sections that came with their own grey band share the paper colour of the Botox page */
+  main:where([data-page="concern"])>section#assess{background-color:#FAFAF8!important}
+  /* round 24: home care keeps its soft blue wash between paper edges */
+  html main:where([data-page="concern"])>section#home-care.cn-hc{background-image:linear-gradient(180deg,#FAFAF8 0%,#EEF5FA 40%,#F4F1EA 75%,#FAFAF8 100%)!important}
+  /* the same section spacing as the Botox page */
+  main:where([data-page="concern"])>section#understand,main:where([data-page="concern"])>section#assess,main:where([data-page="concern"])>section#home-care,main:where([data-page="concern"])>section#read{padding-top:clamp(64px,7vw,104px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
+/* the pricing page blurs what passes under its open category title; here that title is not sticky */
+:where(main[data-page="concern"]) .pr-group.is-open>.pr-ghead{-webkit-backdrop-filter:none;backdrop-filter:none}
+/* visit us */
+:where(main[data-page="concern"]) .tx-visit-pic{transition:transform 1.1s var(--e-out)}
+:where(main[data-page="concern"]) .tx-visit:hover .tx-visit-pic{transform:scale(1.05)}
+:where(main[data-page="concern"]) .tx-pill{background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 18px 40px -20px rgba(27,36,43,.55)}
+@media (prefers-reduced-motion:reduce){:where(main[data-page="concern"]) .tx-visit-pic{transition:none}}
+/* start your journey */
+:where(main[data-page="concern"]) .jr-card{clip-path:inset(0 50% 0 50% round 32px);transition:clip-path 1.2s cubic-bezier(.7,0,.2,1);box-shadow:0 40px 80px -50px rgba(11,15,19,.6)}
+:where(main[data-page="concern"]) .jr-card.is-on{clip-path:inset(0 0 0 0 round 32px)}
+:where(main[data-page="concern"]) .jr-card .jr-pic{transform:scale(1.12);transition:transform 2.2s cubic-bezier(.2,.7,.2,1)}
+:where(main[data-page="concern"]) .jr-card.is-on .jr-pic{transform:scale(1)}
+/* desktop: the photo fills the right two thirds and fades into the navy card, so the face sits right of the words; phones: face centred */
+:where(main[data-page="concern"]) .jr-card{background:#0B1B29}
+@media (min-width:768px){:where(main[data-page="concern"]) .jr-card .jr-pic{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 34%);mask-image:linear-gradient(90deg,transparent 0,#000 34%)}}
+:where(main[data-page="concern"]) .jr-shade{background:linear-gradient(90deg,rgba(9,22,34,.9) 0%,rgba(9,22,34,.72) 34%,rgba(9,22,34,.18) 66%,rgba(9,22,34,0) 100%),linear-gradient(var(--up,0deg),rgba(10,52,84,.72) 0%,rgba(10,52,84,0) 55%)}
+@media (max-width:767px){:where(main[data-page="concern"]) .jr-card{clip-path:inset(0 50% 0 50% round 24px)}:where(main[data-page="concern"]) .jr-card.is-on{clip-path:inset(0 0 0 0 round 24px)}
+  :where(main[data-page="concern"]) .jr-shade{background:linear-gradient(var(--up,0deg),rgba(9,22,34,.94) 0%,rgba(9,22,34,.8) 42%,rgba(9,22,34,.1) 78%,rgba(9,22,34,0) 100%)}}
+:where(main[data-page="concern"]) .jr-card .jr-t{opacity:0;filter:blur(14px);transform:translateY(12px);transition:opacity .9s ease,filter 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1)}
+:where(main[data-page="concern"]) .jr-card.is-on .jr-t{opacity:1;filter:blur(0);transform:none}
+@media (prefers-reduced-motion:reduce){:where(main[data-page="concern"]) .jr-card,:where(main[data-page="concern"]) .jr-card .jr-pic,:where(main[data-page="concern"]) .jr-card .jr-t{clip-path:none;transform:none;filter:none;opacity:1;transition:none}}
