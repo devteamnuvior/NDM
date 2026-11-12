@@ -27,3 +27,4 @@ require_once NDM_HEADLESS_DIR . '/includes/frontend.php';
 require_once NDM_HEADLESS_DIR . '/includes/security.php';
 require_once NDM_HEADLESS_DIR . '/includes/rest.php';
 require_once NDM_HEADLESS_DIR . '/includes/search.php';
+require_once NDM_HEADLESS_DIR . '/includes/pages.php';

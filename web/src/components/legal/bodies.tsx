@@ -1,4 +1,6 @@
-/* The legal documents' text, copied from the prototype's src/legal-ui.jsx by script (only the links between the
+/* The legal documents' built-in text: shown only when WordPress has no published page for a document or cannot be
+   reached (the live text is the WordPress page, see lib/legal.ts), and the source of the one-time import
+   (scripts/export-legal-pages.mjs). Copied from the prototype's src/legal-ui.jsx by script (only the links between the
    three documents are rewritten). The Privacy Policy follows the NUVIOR legal sample. PUBLISH GATE: the Terms of
    Service and the Refund and Cancellation Policy are first drafts for an Ontario clinic; they need a legal review
    and Raymond Valadkhani's approval before they are published. */

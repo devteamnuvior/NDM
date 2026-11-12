@@ -19,6 +19,7 @@ wp-content/mu-plugins/
     security.php                   XML-RPC off, users endpoint private, application passwords over HTTPS
     rest.php                       the site's own namespace, ndm/v1 (health check)
     search.php                     popular searches of the site search (see "Site search" below)
+    pages.php                      WordPress pages the site shows (see "Legal pages" below)
 ```
 
 wp-content/plugins/ndm-pricing/    the Pricing page's link to WooCommerce (see "Pricing page" below)
@@ -133,6 +134,35 @@ a result with that name still exists; until six results have been searched, the 
 
 WordPress posts are not searched yet: the site's blog is not read from WordPress, so a post found
 would have no page to open.
+
+## Legal pages (Privacy, Terms, Refunds)
+
+The site's `/privacy`, `/terms` and `/refunds` show three ordinary WordPress pages, found by their
+slugs: `privacy`, `terms`, `refunds` (Pages in wp-admin; do not change the slugs). The site reads them
+from WordPress's own `GET wp/v2/pages?slug=`, published pages only.
+
+- **What comes from WordPress:** the title, the text, the "On this page" bar (one entry per Heading 2,
+  in order) and "Last updated" (the month the page was last saved).
+- **Blocks:** the text is normal blocks (paragraph, heading, list, group). The site's look hangs on a
+  few "Additional CSS class" names: `lg-lede` (opening paragraph), `no-num` (a Heading 2 without a
+  number), `lg-alpha` / `lg-roman` (lists numbered (a), (b) / (i), (ii); a list's "Start value" is
+  respected), and on a Group `lg-callout` (blue note) or `lg-card` (white card).
+- **Headings:** the original headings carry an HTML anchor (`s1`, `t1`, `r1`, ...) that gives them
+  their short name in the bar; a new Heading 2 shows in the bar with its own words.
+- **Text stays as typed:** WordPress's automatic punctuation (dashes, curly quotes) is switched off.
+- **Refresh:** saving, trashing or deleting any page calls `NDM_REVALIDATE_URL` (tag `wp:pages`), so
+  the site shows the change at once.
+- **Fallback:** when a page is not published or WordPress cannot be reached, the site shows its
+  built-in copy of the original text (`web/src/components/legal/bodies.tsx`).
+
+One-time import of the original text (a page whose slug already exists is never touched):
+
+```
+node ../web/scripts/export-legal-pages.mjs | docker compose run --rm -T cli wp ndm legal-import
+```
+
+The Terms and Refunds texts are first drafts: they need a legal review and Raymond Valadkhani's
+approval before the site goes public.
 
 ## Order requests (cart and checkout)
 
