@@ -1,9 +1,23 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { NEXT_URL } from "../playwright.config";
 
-/** Behaviour of the migrated booking pop-up and the booking form on the Next.js build. */
+/**
+ * Behaviour of the migrated booking pop-up and the booking form on the Next.js build. The form's request
+ * (POST /api/booking, which saves it in WordPress) is answered here, so no record is made; the real
+ * round trip is tests/admin/booking.spec.ts.
+ */
 
 test.use({ viewport: { width: 1440, height: 900 } });
+
+/** Answers the form's request and keeps what was sent. */
+async function answerBooking(page: Page, status = 201, body: Record<string, unknown> = { ok: true }) {
+  const sent: Record<string, unknown>[] = [];
+  await page.route("**/api/booking", async (route) => {
+    sent.push(route.request().postDataJSON() as Record<string, unknown>);
+    await route.fulfill({ status, json: body });
+  });
+  return sent;
+}
 
 test("every booking button opens the pop-up; Escape, the backdrop and the button close it; focus returns", async ({ page }) => {
   await page.goto(NEXT_URL);
@@ -28,6 +42,7 @@ test("every booking button opens the pop-up; Escape, the backdrop and the button
 });
 
 test("the form: validation at each step, the call-back path, and a fresh form each time", async ({ page }) => {
+  const sent = await answerBooking(page);
   await page.goto(NEXT_URL);
   await page.waitForTimeout(800);
   await page.locator("header").getByRole("link", { name: "Book Free Consultation" }).click();
@@ -60,6 +75,9 @@ test("the form: validation at each step, the call-back path, and a fresh form ea
   await dialog.getByRole("button", { name: "Request a call" }).click();
   await expect(dialog.getByRole("status")).toContainText("Request sent, Sam.");
   await expect(dialog.getByRole("status")).toContainText("We’ll call you in the afternoon within one business day");
+  expect(sent).toEqual([
+    { interests: ["Something else"], other: "neck lines", visia: true, first: "Sam", last: "Tester", phone: "416 555 0100", email: "sam@example.com", via: ["Call", "Text"], path: "call", clinic: "Either", callTime: "Afternoon", page: "/", company: "" },
+  ]);
   /* closing and opening again starts from an empty form */
   await page.keyboard.press("Escape");
   await page.locator("header").getByRole("link", { name: "Book Free Consultation" }).click();
@@ -68,6 +86,7 @@ test("the form: validation at each step, the call-back path, and a fresh form ea
 });
 
 test("the calendar closes Sundays and past days, and a booked time is confirmed", async ({ page }) => {
+  const sent = await answerBooking(page);
   await page.goto(NEXT_URL);
   await page.waitForTimeout(800);
   await page.locator("header").getByRole("link", { name: "Book Free Consultation" }).click();
@@ -94,4 +113,59 @@ test("the calendar closes Sundays and past days, and a booked time is confirmed"
   await dialog.getByRole("button", { name: "Book this time" }).click();
   await expect(dialog.getByRole("status")).toContainText("You’re booked, Sam.");
   await expect(dialog.getByRole("status")).toContainText("with your VISIA® skin analysis");
+  expect(sent).toHaveLength(1);
+  expect(sent[0]).toMatchObject({ interests: ["Volume loss"], path: "book", clinic: "Uptown", first: "Sam" });
+  expect(sent[0].day).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  expect(new Date(`${String(sent[0].day)}T00:00:00Z`).getUTCDay()).not.toBe(0);
+  expect(sent[0].hour).toBeGreaterThanOrEqual(9);
 });
+
+test("a request that could not be saved is not confirmed: the form stays, with the reason", async ({ page }) => {
+  await answerBooking(page, 503, { ok: false, reason: "unreachable", message: "Your request could not be sent right now. Please try again in a moment, or please call the clinic." });
+  await page.goto(NEXT_URL);
+  await page.waitForTimeout(800);
+  await page.locator("header").getByRole("link", { name: "Book Free Consultation" }).click();
+  const dialog = page.getByRole("dialog", { name: /Book a free consultation/ });
+  await dialog.getByRole("checkbox", { name: "Volume loss" }).check();
+  await dialog.getByRole("button", { name: "Continue" }).click();
+  await dialog.locator('input[name="first"]').fill("Sam");
+  await dialog.locator('input[name="last"]').fill("Tester");
+  await dialog.locator('input[name="phone"]').fill("416 555 0100");
+  await dialog.locator('input[name="email"]').fill("sam@example.com");
+  await dialog.getByRole("button", { name: "Continue" }).click();
+  await dialog.getByRole("button", { name: /Have us call you/ }).click();
+  await dialog.getByRole("radio", { name: "Morning" }).check();
+  await dialog.getByRole("button", { name: "Request a call" }).click();
+  await expect(dialog.getByRole("alert")).toContainText("could not be sent right now");
+  await expect(dialog.getByRole("status")).toHaveCount(0);
+  await expect(dialog.getByRole("button", { name: "Request a call" })).toBeEnabled();
+});
+
+/* every page with a Book Free Consultation button: the button opens the pop-up, on a desktop and on a phone */
+const PAGES = ["/", "/pricing", "/promotion", "/before-after", "/aptos-thread-lift", "/botox", "/wrinkles-fine-lines", "/about", "/blog", "/what-causes-rosacea-redness", "/privacy", "/cart", "/black-friday-sale"];
+for (const size of [
+  { name: "desktop", width: 1440, height: 900 },
+  { name: "phone", width: 375, height: 812 },
+]) {
+  test(`the pop-up opens from a booking button on every page @ ${size.name}`, async ({ page }) => {
+    test.setTimeout(240_000);
+    await page.setViewportSize(size);
+    for (const path of PAGES) {
+      await page.goto(`${NEXT_URL}${path}`);
+      await page.waitForTimeout(900);
+      const links = page.locator('a[href="#/book"]:visible');
+      expect(await links.count(), `${path}: a booking button`).toBeGreaterThan(0);
+      await links.first().click();
+      const dialog = page.getByRole("dialog", { name: /Book a free consultation/ });
+      await expect(dialog, path).toBeVisible();
+      await expect(dialog.getByText("Step 1 of 4 · Your concern"), path).toBeVisible();
+      await page.waitForTimeout(700); /* the card slides in */
+      /* the whole card is on the screen, with no sideways scroll */
+      const box = await dialog.boundingBox();
+      expect(box && box.x >= 0 && box.x + box.width <= size.width + 0.5 && box.y >= 0 && box.y + box.height <= size.height + 0.5, `${path}: the card fits the window`).toBe(true);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), `${path}: no sideways scroll`).toBe(true);
+      await dialog.getByRole("button", { name: "Close booking form" }).click();
+      await expect(dialog, path).toBeHidden();
+    }
+  });
+}

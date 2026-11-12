@@ -16,6 +16,8 @@ for (const vp of VIEWPORTS) {
 
     test.beforeAll(async ({ browser }) => {
       [legacy, next] = await Promise.all([open(browser, "legacy", vp), open(browser, "next", vp)]);
+      /* the prototype sends nothing; the new form saves the request in WordPress, answered here so no record is made */
+      await next.route("**/api/booking", (route) => route.fulfill({ status: 201, json: { ok: true } }));
     });
     test.afterAll(async () => {
       await legacy?.context().close();
@@ -26,7 +28,23 @@ for (const vp of VIEWPORTS) {
       await fn(legacy);
       await fn(next);
     };
+    /* The new form no longer promises an email and a text (nothing sends them yet): the prototype is given
+       the same two sentences, so everything else is still compared. */
+    const reword = () =>
+      legacy.evaluate((sel) => {
+        const swaps: [string, string][] = [
+          ["You’ll receive the details by email and text.", "Our team will contact you to confirm it."],
+          ["We will confirm your time by email and text.", "Our team will contact you to confirm your time."],
+        ];
+        const root = document.querySelector(sel);
+        if (!root) return;
+        const walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+          for (const [from, to] of swaps) if (n.nodeValue?.includes(from)) n.nodeValue = n.nodeValue.replace(from, to);
+        }
+      }, SECTION);
     const check = async (state: string, testInfo: Parameters<typeof expectSamePixels>[0]) => {
+      await reword();
       const [a, b] = [await showSection(legacy, SECTION), await showSection(next, SECTION)];
       const d = diff(await fingerprint(legacy, SECTION), await fingerprint(next, SECTION));
       report(`${vp.name}-booking-${state}`, d);

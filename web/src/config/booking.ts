@@ -34,14 +34,17 @@ export const BOOK_CLINIC_OPTIONS: [value: string, label: string][] = [
 /** The clinic's live online booking calendar. */
 export const BOOK_ONLINE_URL = "https://newdermamedlaserclinic.com/online-booking/";
 
+/** First and last request hour of a weekday (0 is Sunday), or null when the clinics are closed. */
+export const bookHours = (weekday: number): [first: number, last: number] | null => (weekday === 0 ? null : weekday === 6 ? [10, 16] : [9, 18]);
+
 /**
  * Request times of a day, as hours. Monday to Friday 9 to 7, Saturday 10 to 5, Sunday closed; one slot
  * every hour, the last an hour before closing. Today: only the times still ahead.
  */
 export function bookSlots(d: Date): number[] {
-  const w = d.getDay();
-  if (w === 0) return [];
-  const [a, b] = w === 6 ? [10, 16] : [9, 18];
+  const hours = bookHours(d.getDay());
+  if (!hours) return [];
+  const [a, b] = hours;
   const now = new Date();
   const from = d.toDateString() === now.toDateString() ? now.getHours() + 1 : 0;
   return Array.from({ length: b - a + 1 }, (_, i) => a + i).filter((h) => h >= from);

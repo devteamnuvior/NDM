@@ -71,7 +71,8 @@ export function BookPopup() {
           className="book-card pointer-events-auto relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white px-[clamp(20px,2.4vw,32px)] pt-6 pb-[max(22px,env(safe-area-inset-bottom))] shadow-[0_40px_80px_-30px_rgba(11,15,19,.6)] sm:max-w-[680px] sm:rounded-[20px] sm:pt-[clamp(20px,2.4vw,32px)]"
         >
           <span aria-hidden="true" className="absolute top-2.5 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-ndm-ink/15 sm:hidden" />
-          <button type="button" onClick={close} aria-label="Close booking form" className="absolute top-3 right-3 grid size-10 place-items-center rounded-full text-ndm-ink transition-colors hover:bg-ndm-mist sm:top-4 sm:right-4">
+          {/* above the tag line, which on a phone is wide enough to lie over this button (in the prototype it swallowed the tap) */}
+          <button type="button" onClick={close} aria-label="Close booking form" className="absolute top-3 right-3 z-[1] grid size-10 place-items-center rounded-full text-ndm-ink transition-colors hover:bg-ndm-mist sm:top-4 sm:right-4">
             <IconClose />
           </button>
           <Eyebrow amber>Book now at our two Toronto locations</Eyebrow>

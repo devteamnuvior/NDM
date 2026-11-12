@@ -257,7 +257,8 @@ interface BookFormProps {
 /**
  * Consultation booking, shared by the booking section and the Book Free Consultation pop-up: the concern,
  * then contact details (so every request reaches the team), then a choice: book a time now, or ask us to
- * call. Front end only for now: nothing is sent anywhere and no payment is taken.
+ * call. The request goes to POST /api/booking, which saves it in WordPress as a "Consultation" record;
+ * the thank-you shows only once it was saved. No payment is taken.
  */
 export function BookForm({ thanksId, summary = false, compact = false }: BookFormProps) {
   const box = useRef<HTMLFormElement>(null);
@@ -267,6 +268,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
   const [err, setErr] = useState("");
   const [f, setF] = useState<FormState>(EMPTY);
   const [hold, setHold] = useState(0);
+  const [busy, setBusy] = useState(false);
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) => {
     setErr("");
@@ -335,8 +337,9 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
     }
     go(step + 1);
   };
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
+    if (busy) return;
     if (step === 2) {
       setErr("Choose how to continue: book a time now, or have us call you.");
       return;
@@ -353,8 +356,49 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
       setErr("Please pick a day and a time.");
       return;
     }
-    setHold(box.current ? box.current.offsetHeight : 0);
-    setSent(true);
+    const form = box.current;
+    if (!form) return;
+    const field = (name: string) => form.querySelector<HTMLInputElement>(`input[name="${name}"]`)?.value ?? "";
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const height = form.offsetHeight;
+    setErr("");
+    setBusy(true);
+    let problem = `Your request could not be sent right now. Please try again in a moment, or call ${clinicPhone}.`;
+    try {
+      const answer = await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          interests: f.interest,
+          other: f.other,
+          visia: f.visia,
+          first: f.first,
+          last: field("last"),
+          phone: field("phone"),
+          email: field("email"),
+          via: f.via,
+          path,
+          clinic: path === "call" ? f.callClinic : f.clinic,
+          day: path === "book" && f.day ? `${f.day.getFullYear()}-${pad(f.day.getMonth() + 1)}-${pad(f.day.getDate())}` : undefined,
+          hour: path === "book" ? f.time : undefined,
+          callTime: path === "call" ? f.callTime : undefined,
+          page: window.location.pathname,
+          company: field("company"),
+        }),
+      });
+      const result = (await answer.json().catch(() => null)) as { ok?: boolean; message?: string } | null;
+      if (answer.ok && result?.ok === true) {
+        setHold(height);
+        setSent(true);
+        return;
+      }
+      if (typeof result?.message === "string" && result.message) problem = result.message;
+    } catch {
+      /* no connection: the message above */
+    } finally {
+      setBusy(false);
+    }
+    setErr(problem);
   };
   const reset = () => {
     setSent(false);
@@ -392,7 +436,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
               You’re booked{f.first ? `, ${f.first}` : ""}.
             </p>
             <p className="max-w-[46ch] font-inter text-[14.5px] leading-[1.55] text-ndm-muted">
-              Your free consultation{f.visia ? ", with your VISIA® skin analysis," : ""} is on <b className="font-semibold text-ndm-ink">{when}</b> at our {f.clinic} clinic. You’ll receive the details by email and text.
+              Your free consultation{f.visia ? ", with your VISIA® skin analysis," : ""} is on <b className="font-semibold text-ndm-ink">{when}</b> at our {f.clinic} clinic. Our team will contact you to confirm it.
             </p>
             <p className="font-inter text-[13px] leading-[1.5] text-ndm-muted">
               Need to change it? Call{" "}
@@ -511,6 +555,8 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
             ))}
           </div>
           <p className="mt-3 font-inter text-[12px] text-ndm-muted">Please don’t include medical details. We use your details only to arrange your visit.</p>
+          {/* left empty by people, filled in by form-filling robots */}
+          <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
         </fieldset>
 
         <fieldset data-step="2" className={stepClass("2")} {...stepAttr("2")}>
@@ -559,7 +605,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
           <div className="mt-4">
             <BookCalendar day={f.day} time={f.time} stack={compact} onDay={(d) => setF((o) => ({ ...o, day: d, time: null }))} onTime={(h) => set("time", h)} />
           </div>
-          <p className="mt-3 font-inter text-[12px] text-ndm-muted">We will confirm your time by email and text.</p>
+          <p className="mt-3 font-inter text-[12px] text-ndm-muted">Our team will contact you to confirm your time.</p>
         </fieldset>
 
         <fieldset data-step="3c" className={stepClass("3c")} {...stepAttr("3c")}>
@@ -590,7 +636,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
       </p>
       <div className="mt-auto flex min-h-[60px] items-center gap-2.5 pt-3 sm:flex-wrap">
         {step > 0 && (
-          <Button as="button" type="button" v="line" sm onClick={() => go(step - 1)}>
+          <Button as="button" type="button" v="line" sm disabled={busy} onClick={() => go(step - 1)}>
             Back
           </Button>
         )}
@@ -600,11 +646,11 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
             Continue
           </Button>
         ) : path === "book" ? (
-          <Button key="pay" as="button" type="submit" v="ink" className="min-w-0 flex-1 sm:flex-none">
+          <Button key="pay" as="button" type="submit" v="ink" disabled={busy} aria-busy={busy || undefined} className="min-w-0 flex-1 sm:flex-none">
             Book this time
           </Button>
         ) : (
-          <Button key="call" as="button" type="submit" v="ink" className="min-w-0 flex-1 sm:flex-none">
+          <Button key="call" as="button" type="submit" v="ink" disabled={busy} aria-busy={busy || undefined} className="min-w-0 flex-1 sm:flex-none">
             Request a call
           </Button>
         )}

@@ -300,6 +300,33 @@ price list when it loads, and "Place order request" creates a real WooCommerce o
 - Tax: WooCommerce tax is off, so the order total has no tax; the site shows 13% HST as an estimate.
   When taxes are switched on in WooCommerce, the site shows WooCommerce's tax instead.
 
+## Consultation requests ("Book a free consultation")
+
+The booking form of the Next.js site (the booking section of the home page, the pop-up behind every
+Book Free Consultation button, and the forms in the treatment pages' headers) saves each request in
+WordPress. The team reads them in wp-admin under **Consultation**.
+
+| Route | Who | What |
+|---|---|---|
+| `POST /bookings` | the Next.js server (header `X-NDM-Site-Key` = `NDM_REVALIDATE_SECRET`) | saves one request as a private post of the post type `ndm_booking`; answers only `{ saved, number }` |
+
+- Mu-plugin `includes/bookings.php`. The post type is private: no public address, not in the REST API,
+  not searchable, not exported. No route returns a request. Editors, shop managers and administrators
+  see the list; nobody can add one by hand.
+- A request holds the name, mobile number, email, how to be reached, the chosen concerns, the VISIA
+  choice, and either a clinic with a day and hour ("Book a time") or a time of day and clinic ("Call
+  back"), plus the page it was sent from (post meta `_ndm_booking`).
+- Status (post meta `_ndm_booking_status`): New, Contacted, Booked, Closed, set by hand on the request's
+  screen. The menu shows how many are still New. The title and visibility cannot be changed.
+- The site checks the form first (`web/src/app/api/booking/route.ts`): only the options the form
+  offers, a day the clinics are open, an hour still ahead (Toronto time), same-site requests only, a
+  hidden anti-robot field and a small per-address limit.
+- A picked time is a **request**: nothing checks it against the clinic calendar, two visitors can pick
+  the same hour, and no email or text is sent. The team confirms each one.
+- These records are personal information (PHIPA / PIPEDA): decide how long they are kept, and host
+  the database in Canada, before production.
+- Test: `web/tests/admin/booking.spec.ts` (`npm run test:admin`; makes two records and deletes them).
+
 ## Production (not set up yet)
 
 Open decisions: where WordPress is hosted and the public address of the Next.js site. When they are
