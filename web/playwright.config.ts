@@ -7,7 +7,9 @@ import { defineConfig } from "@playwright/test";
  *   - the new site:  the production build on port 3100 (run `npm run build:parity` first)
  */
 export const LEGACY_URL = "http://localhost:5174";
-export const NEXT_URL = "http://localhost:3100";
+/* NEXT_PORT: another port for the new site, when 3100 is taken by another run */
+const NEXT_PORT = process.env.NEXT_PORT || "3100";
+export const NEXT_URL = `http://localhost:${NEXT_PORT}`;
 
 export default defineConfig({
   testDir: "./tests",
@@ -24,6 +26,6 @@ export default defineConfig({
   webServer: [
     { command: "python3 -m http.server 5174 --directory ..", url: `${LEGACY_URL}/index.html`, reuseExistingServer: true, stdout: "ignore", stderr: "ignore" },
     /* SITE_URL: the pricing manager's sign-in needs to know this site's own address */
-    { command: "npm run start -- -p 3100", url: NEXT_URL, reuseExistingServer: true, stdout: "ignore", stderr: "pipe", env: { SITE_URL: NEXT_URL } },
+    { command: `npm run start -- -p ${NEXT_PORT}`, url: NEXT_URL, reuseExistingServer: true, stdout: "ignore", stderr: "pipe", env: { SITE_URL: NEXT_URL } },
   ],
 });

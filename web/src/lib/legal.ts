@@ -21,7 +21,7 @@ const MONTHS = ["January", "February", "March", "April", "May", "June", "July", 
 const NAMED: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
 
 /** Text of a piece of WordPress HTML: tags out, character references read. */
-function plain(html: string): string {
+export function plain(html: string): string {
   return html
     .replace(/<[^>]*>/g, "")
     .replace(/&(?:#(\d+)|#x([0-9a-f]+)|(\w+));/gi, (all, dec, hex, name) => (dec ? String.fromCodePoint(Number(dec)) : hex ? String.fromCodePoint(parseInt(hex, 16)) : (NAMED[name.toLowerCase()] ?? all)))

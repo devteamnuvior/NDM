@@ -20,6 +20,7 @@ wp-content/mu-plugins/
     rest.php                       the site's own namespace, ndm/v1 (health check)
     search.php                     popular searches of the site search (see "Site search" below)
     pages.php                      WordPress pages the site shows (see "Legal pages" below)
+    before-after.php               the Before & After gallery (see "Before & After gallery" below)
 ```
 
 wp-content/plugins/ndm-pricing/    the Pricing page's link to WooCommerce (see "Pricing page" below)
@@ -191,6 +192,36 @@ node ../web/scripts/export-legal-pages.mjs | docker compose run --rm -T cli wp n
 
 The Terms and Refunds texts are first drafts: they need a legal review and Raymond Valadkhani's
 approval before the site goes public.
+
+## Before & After gallery
+
+The site's `/before-after` page shows what WordPress holds:
+
+- **Post type "Before & After"** (`ndm_before_after`, in the admin menu): one post is one case. Its
+  featured image is the before and after photo, its title is the editor's own name for it, and "Order"
+  places it in the gallery (lowest first, then newest first). A case without a photo is not shown.
+- **Taxonomy "Category"** (`ndm_ba_category`): the treatment a case belongs to. The gallery's filter
+  buttons are the categories in use, in the order their first case appears; the card shows the case's
+  first category.
+- **Page "Before & After"** (slug `before-after`): the page every case is shown on. Its paragraphs are
+  the intro under the site's heading (the built-in intro shows when the page is empty or unpublished).
+
+| Route (`ndm/v1`) | Who | What |
+|---|---|---|
+| `GET /before-after` | public | the page and every published case with its categories and photo, in gallery order |
+
+When a case, a category or the page changes, WordPress tells the site to drop its cached copy (tag
+`before-after` through `/api/revalidate`). The post type has no pages of its own in WordPress.
+
+One-time import of the original 50 cases and the page (the page is created only when its slug is free,
+the cases only when WordPress holds none):
+
+```
+node ../web/scripts/export-before-after.mjs | docker compose run --rm -T -v "$PWD/../assets/before-after:/tmp/ba:ro" cli wp ndm before-after-import --images=/tmp/ba
+```
+
+Before anything is published: every before/after asset must say "Individual results may vary" (the
+site adds it), and prescription-drug cases (the "Botox" category) need Raymond Valadkhani's review.
 
 ## Order requests (cart and checkout)
 

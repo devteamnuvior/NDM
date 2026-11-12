@@ -7,6 +7,7 @@ import "server-only";
  * Adding a content type: add its answer type to `@/types/wordpress`, then a module like `posts.ts`
  * (REST path, fields, cached readers built on `content.ts`), and export it below.
  */
+export { getBeforeAfter } from "./before-after";
 export { isWordPressConfigured } from "./config";
 export { settle, WordPressError, type Settled, type WordPressErrorKind } from "./errors";
 export { getWordPressHealth } from "./health";

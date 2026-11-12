@@ -1,12 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { IconClose, IconInfo } from "@/components/ui/icons";
 import { TwoTone } from "@/components/ui/two-tone";
-import type { GalleryCase } from "@/config/gallery";
+import type { GalleryCase } from "@/lib/gallery";
 import { ACTIONS } from "@/config/routes";
 import { useReveal } from "@/hooks/use-reveal";
 
@@ -24,6 +23,9 @@ const altOf = (c: GalleryCase) => (c.label ? `${c.label}, before and after` : "B
 
 /**
  * The before & after gallery: every case, a filter by treatment and a full-size view.
+ * The cases are the posts of the type "Before & After" in WordPress and the filter is their taxonomy "Category";
+ * a photo is the post's featured image, served by WordPress in its own sizes, so it is a plain image rather than
+ * one resized by this site.
  * Fixed here (2026-11-12, asked by the user): in the prototype the full-size view lives inside this section's
  * layer (z-10), so the site header stayed above it and covered its Close button. While the view is open the
  * section now rises above the header, so the view covers the whole page and Close can be clicked.
@@ -33,7 +35,7 @@ export function Gallery({ eyebrow, lead, strong, subs, labels, note, cases }: Ga
   useReveal(section);
   const [on, setOn] = useState("All");
   const [open, setOpen] = useState<GalleryCase | null>(null);
-  const list = cases.filter((c) => on === "All" || c.label === on);
+  const list = cases.filter((c) => on === "All" || c.labels.includes(on));
 
   useEffect(() => {
     if (!open) return;
@@ -83,12 +85,17 @@ export function Gallery({ eyebrow, lead, strong, subs, labels, note, cases }: Ga
       </div>
       <ul className="mx-auto mt-7 grid max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4" role="list">
         {list.map((c, i) => (
-          <li key={c.photo.src} className="rv in">
+          <li key={c.id} className="rv in">
             <button type="button" onClick={() => setOpen(c)} className="group block w-full overflow-hidden rounded-[18px] bg-white p-2 text-left shadow-[0_22px_44px_-36px_rgba(27,36,43,.35)] ring-1 ring-ndm-ink/[.06]">
               <span className="peach relative block aspect-[4/3] overflow-hidden rounded-[12px] bg-ndm-mist">
-                <Image
-                  src={c.photo}
+                {/* eslint-disable-next-line @next/next/no-img-element -- already sized by WordPress */}
+                <img
+                  src={c.photo.src}
+                  srcSet={c.photo.srcSet || undefined}
+                  width={c.photo.width}
+                  height={c.photo.height}
                   alt={altOf(c)}
+                  decoding="async"
                   sizes="(min-width: 1024px) 290px, (min-width: 768px) 33vw, 50vw"
                   loading={i < 8 ? "eager" : "lazy"}
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.04]"
@@ -114,7 +121,8 @@ export function Gallery({ eyebrow, lead, strong, subs, labels, note, cases }: Ga
       {open && (
         <div role="dialog" aria-modal="true" aria-label={open.label || "Before and after"} className="fixed inset-0 z-[95] flex items-center justify-center bg-[#0B0F13]/85 p-4" onClick={() => setOpen(null)}>
           <figure className="m-0 max-h-full max-w-[1100px]" onClick={(e) => e.stopPropagation()}>
-            <Image src={open.photo} alt={altOf(open)} unoptimized className="max-h-[80vh] w-auto max-w-full rounded-[14px] object-contain" />
+            {/* eslint-disable-next-line @next/next/no-img-element -- the photo at its full size, as WordPress holds it */}
+            <img src={open.photo.src} width={open.photo.width} height={open.photo.height} alt={altOf(open)} decoding="async" className="max-h-[80vh] w-auto max-w-full rounded-[14px] object-contain" />
             <figcaption className="mt-3 flex items-center justify-between font-inter text-[14px] text-white/85">
               <span>{open.label}</span>
               <span className="text-white/60">Individual results may vary</span>

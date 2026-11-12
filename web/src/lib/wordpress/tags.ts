@@ -13,6 +13,8 @@ export const WP_TAGS = {
   pricing: "pricing",
   /** The current offers (the Promotion page, the offers wheel). */
   promotions: "promotions",
+  /** The Before & After gallery (its cases, categories and page). */
+  beforeAfter: "before-after",
   /** The popular searches counted by WordPress. */
   search: "search-popular",
   /** One entry: "wp:posts:what-causes-rosacea-redness". */
