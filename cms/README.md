@@ -110,6 +110,26 @@ category changes, wherever the change was made. WordPress then calls `NDM_REVALI
 `wp ndm-pricing import` (reads it from standard input) creates the categories, variable products and
 variations once. It never touches anything that already exists.
 
+## Order requests (cart and checkout)
+
+The Next.js site's cart remembers only what was chosen (WooCommerce product and variation IDs and
+quantities). Names and prices always come from WooCommerce: the cart is checked against the public
+price list when it loads, and "Place order request" creates a real WooCommerce order.
+
+| Route | Who | What |
+|---|---|---|
+| `POST /orders` | the website's own account | creates an order, **on hold and unpaid** ("Pay at the clinic"), from IDs and quantities; WooCommerce puts its own current prices on it. Only what is on the public price list can be ordered. |
+
+- The caller is a dedicated WordPress account, `ndm-site`, whose role `ndm_site` (made by the plugin) can
+  do one thing: place order requests (`ndm_place_order_requests`). `bin/setup.sh` creates the account;
+  its application password goes in `web/.env.local` (`WORDPRESS_AUTH_USER`, `WORDPRESS_AUTH_APP_PASSWORD`).
+- The order holds the billing details the visitor entered, the clinic (`_ndm_clinic`) and the preferred
+  time (`_ndm_preferred_time`), and a note saying nothing has been charged. `created_via` is `ndm-site`.
+- WooCommerce sends its usual emails for an on-hold order (to the store and to the customer) once
+  outgoing mail is set up.
+- Tax: WooCommerce tax is off, so the order total has no tax; the site shows 13% HST as an estimate.
+  When taxes are switched on in WooCommerce, the site shows WooCommerce's tax instead.
+
 ## Production (not set up yet)
 
 Open decisions: where WordPress is hosted and the public address of the Next.js site. When they are

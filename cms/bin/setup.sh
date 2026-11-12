@@ -64,6 +64,14 @@ wp option update woocommerce_default_country "CA:ON" >/dev/null
 # no store pages exist on this host, so there is nothing for the setup wizard to build
 wp option update woocommerce_onboarding_profile '{"skipped":true}' --format=json >/dev/null
 
+# the website's own account: it can place order requests and nothing else (role ndm_site, made by ndm-pricing)
+if ! wp user get ndm-site --field=ID >/dev/null 2>&1; then
+  wp user create ndm-site site@example.test --role=ndm_site --user_pass="$(openssl rand -hex 24)" >/dev/null
+  echo "Created the website account ndm-site. Give the Next.js server its application password:"
+  echo "  docker compose run --rm cli wp user application-password create ndm-site website --porcelain"
+  echo "  then set WORDPRESS_AUTH_USER=ndm-site and WORDPRESS_AUTH_APP_PASSWORD in web/.env.local"
+fi
+
 echo
 echo "Done."
 echo "  Admin:    ${NDM_CMS_URL}/wp-admin/"

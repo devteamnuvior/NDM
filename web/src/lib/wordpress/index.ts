@@ -12,5 +12,6 @@ export { settle, WordPressError, type Settled, type WordPressErrorKind } from ".
 export { getWordPressHealth } from "./health";
 export { getPageBySlug, getPages, type PagesQuery, type WPPageSummary } from "./pages";
 export { getPricingAdminTree, getPricingAdminUser, getPricingTree, savePricing, searchPricingProducts } from "./pricing";
+export { placeOrderRequest, type OrderRequestInput, type PlacedOrder } from "./orders";
 export { getPostBySlug, getPosts, type PostsQuery, type WPPostSummary } from "./posts";
 export { WP_TAGS } from "./tags";

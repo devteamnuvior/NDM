@@ -42,6 +42,7 @@ function ndm_pricing_boot() {
 	require_once NDM_PRICING_DIR . '/includes/variations.php';
 	require_once NDM_PRICING_DIR . '/includes/save.php';
 	require_once NDM_PRICING_DIR . '/includes/rest.php';
+	require_once NDM_PRICING_DIR . '/includes/orders.php';
 
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		require_once NDM_PRICING_DIR . '/includes/cli.php';

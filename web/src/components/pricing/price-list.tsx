@@ -6,7 +6,7 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { IconSearch } from "@/components/ui/icons";
 import { TwoTone } from "@/components/ui/two-tone";
 import { useReveal } from "@/hooks/use-reveal";
-import { money } from "@/lib/cart";
+import { cartKey, money } from "@/lib/cart";
 import type { PriceCategoryView, PriceItemView } from "@/lib/pricing-view";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
@@ -52,7 +52,7 @@ function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView
         <div>
           <ul className="grid gap-2 pb-5" role="list">
             {it.options.map((o) => {
-              const line = { key: `${it.name}|${o.label}`, cat: cat.name, name: it.name, label: o.label, price: o.price, was: o.was, unit: o.unit };
+              const line = { key: cartKey(o.productId, o.variationId), cat: cat.name, name: it.name, label: o.label, price: o.price, was: o.was, unit: o.unit, productId: o.productId, variationId: o.variationId };
               return (
                 <li key={o.label} className="pr-opt grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-[14px] bg-white py-3 pr-3 pl-4 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6 sm:pl-5">
                   <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">

@@ -34,6 +34,9 @@ const nextConfig: NextConfig = {
       { source: "/refunds.html", destination: "/refunds", permanent: false },
       { source: "/what-causes-rosacea-redness.html", destination: "/what-causes-rosacea-redness", permanent: false },
       { source: "/wrinkles-fine-lines.html", destination: "/wrinkles-fine-lines", permanent: false },
+      { source: "/cart.html", destination: "/cart", permanent: false },
+      { source: "/checkout.html", destination: "/checkout", permanent: false },
+      { source: "/order-confirmed.html", destination: "/order-confirmed", permanent: false },
     ];
   },
   async rewrites() {

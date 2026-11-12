@@ -9,7 +9,7 @@ import { expectSamePixels, open, report, VIEWPORTS } from "./helpers";
  */
 const LINES = [
   { key: "dermal-fillers|Lip Enhancement|2 Syringes", cat: "Dermal Fillers", name: "Lip Enhancement", label: "2 Syringes", price: 1125, unit: "", was: 1500, qty: 1 },
-  { key: "microneedling|Microneedling Face|Single session", cat: "Microneedling", name: "Microneedling Face", label: "Single session", price: 350, unit: "", qty: 2 },
+  { key: "microneedling|Microneedling Face|Single session", cat: "Microneedling", name: "Microneedling-Face", label: "Single session", price: 245, unit: "", was: 490, qty: 2 },
 ];
 const DRAWER = '[role="dialog"][aria-labelledby="cart-title"]';
 

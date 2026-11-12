@@ -175,7 +175,16 @@ test.describe("desktop", () => {
   test("cart badge shows the number of items saved by the original pages", async ({ page }) => {
     await page.goto(NEXT_URL);
     await expect(page.getByRole("button", { name: "Cart, 0 items" })).toBeVisible();
-    await page.evaluate(() => localStorage.setItem("ndm-cart", JSON.stringify([{ key: "a", qty: 2, price: 10 }, { key: "b", qty: 1, price: 5 }])));
+    /* real entries of the price list: the cart drops anything WooCommerce does not know */
+    await page.evaluate(() =>
+      localStorage.setItem(
+        "ndm-cart",
+        JSON.stringify([
+          { key: "a", cat: "Botox / Dysport", name: "Botox Cosmetic", label: "60 units", qty: 2, price: 648 },
+          { key: "b", cat: "Dermal Fillers", name: "Lip Enhancement", label: "2 Syringes", qty: 1, price: 1125 },
+        ]),
+      ),
+    );
     await page.reload();
     await expect(page.getByRole("button", { name: "Cart, 3 items" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Cart, 3 items" }).locator("span")).toHaveText("3");
