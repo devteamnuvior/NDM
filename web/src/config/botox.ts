@@ -76,7 +76,7 @@ export const BOTOX: ProcedurePage = {
     "title": "Botox® Cosmetic packages",
     "big": [
       "Up to",
-      "30%",
+      "{{botoxMax}}",
       "off"
     ],
     "href": "#prices",
@@ -181,7 +181,7 @@ export const BOTOX: ProcedurePage = {
       {
         "label": "Pricing",
         "stat": [
-          "$12",
+          "{{botox}}",
           "per unit"
         ],
         "text": [
@@ -315,7 +315,7 @@ export const BOTOX: ProcedurePage = {
       {
         "q": "How much does Botox® cost per area?",
         "a": [
-          "Botox® Cosmetic is $12 per unit at NewDermaMed, and packages of 60 to 220 units are currently 10% to 30% off. At the regular price, 20 units are $240 and 24 units are $288. Your final price is confirmed after your assessment."
+          "Botox® Cosmetic is {{botox}} per unit at NewDermaMed, and packages of 60 to 220 units are currently {{botoxOff}} off. At the regular price, 20 units are {{botox20}} and 24 units are {{botox24}}. Your final price is confirmed after your assessment."
         ]
       },
       {
@@ -339,7 +339,7 @@ export const BOTOX: ProcedurePage = {
       {
         "q": "Botox® or Dysport®: which is right for me?",
         "a": [
-          "Both are Health Canada approved prescription neuromodulators that work in a similar way. Their formulations differ and their units are not interchangeable, so each is dosed on its own. At NewDermaMed, Botox® Cosmetic is $12 per unit and Dysport® is $11 per unit. Your provider recommends the one that suits your goals."
+          "Both are Health Canada approved prescription neuromodulators that work in a similar way. Their formulations differ and their units are not interchangeable, so each is dosed on its own. At NewDermaMed, Botox® Cosmetic is {{botox}} per unit and Dysport® is {{dysport}} per unit. Your provider recommends the one that suits your goals."
         ]
       }
     ],

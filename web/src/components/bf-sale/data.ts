@@ -1,10 +1,10 @@
 import type { Offer } from "@/components/specials/offers";
-import { PRICE_CATEGORIES } from "@/config/prices";
+import type { PriceCategory } from "@/config/prices";
 
 /*
  * Data of the Black Friday sale page, from the prototype's src/bf-sale-ui.jsx. The deals are built from the price
- * list: one per category, with the treatments (areas) and packages that carry an offer. This page shows the
- * packages and their prices interactively, so the price list is part of its script (it is not on other pages).
+ * list in WooCommerce (read by the page on the server and handed down): one per category, with the treatments
+ * (areas) and packages that carry an offer. No price is written here.
  */
 
 export const BFS = { start: '2026-11-27T00:00:00-05:00', end: '2026-11-30T23:59:00-05:00', when: 'Friday, Nov 27 to Monday, Nov 30', whenShort: 'Nov 27 to 30' };
@@ -82,7 +82,9 @@ export const bfsTag = (t: string | undefined): string =>
         .replace(/^Save \$(\d+)\sOff$/i, "Save $$$1")
     : "";
 
-export const BFS_DEALS: Deal[] = PRICE_CATEGORIES.filter((c) => !BFS_SKIP.includes(c.id) && BFS_GROUP[c.id])
+/** The deals of the sale, from the price list in WooCommerce. */
+export const bfsDeals = (categories: PriceCategory[]): Deal[] =>
+  categories.filter((c) => !BFS_SKIP.includes(c.id) && BFS_GROUP[c.id])
   .map((c) => {
     const all: Item[] = c.items.map((it) => [it.name, it.note, it.options.map((o): Opt => [o.label, o.price, o.regular, o.tag])]);
     const items = all.filter((it) => it[2].some((o) => o[2] > 0 || o[3]));
@@ -93,7 +95,8 @@ export const BFS_DEALS: Deal[] = PRICE_CATEGORIES.filter((c) => !BFS_SKIP.includ
   })
   .filter((d) => d.items.length);
 
-export const BFS_MAX = Math.max(...BFS_DEALS.map((d) => d.pct));
+/** The largest percentage offer among the deals, 0 when there is none. */
+export const bfsMax = (deals: Deal[]): number => Math.max(0, ...deals.map((d) => d.pct));
 
 /** A treatment's name without its category in front ("Laser Hair Removal - Underarms" -> "Underarms"). */
 export const bfsShort = (name: string, cat: string): string =>

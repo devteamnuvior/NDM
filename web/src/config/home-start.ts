@@ -1,13 +1,12 @@
 /**
  * "Where would you like to start?" on the home page: one panel per area, each with its concerns and the
- * options that may help. Content and prices come from the original prototype (generated there from the
- * price list), unchanged. Links starting with "#/" are pages that do not exist yet.
+ * options that may help. Content comes from the original prototype, unchanged; prices are read from WooCommerce (see components/home/start.tsx). Links starting with "#/" are pages that do not exist yet.
  */
 
 export interface StartOption {
   name: string;
   what: string;
-  /** "From $200", or a plain note when there is no price. */
+  /** Filled in from WooCommerce when the page is built ("From $200"); here only a plain note for a treatment that is not sold by price ("At consultation"). */
   price: string;
   href: string;
 }
@@ -60,19 +59,19 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "Laser Skin Resurfacing",
             "what": "Surface renewal for fine lines and texture",
-            "price": "From $200",
+            "price": "",
             "href": "#/laser-skin-resurfacing"
           },
           {
             "name": "Dermal Fillers",
             "what": "Can soften deeper folds at rest",
-            "price": "From $750",
+            "price": "",
             "href": "#/dermal-fillers"
           },
           {
             "name": "Skin Boosters",
             "what": "Hydration and quality for crepey skin",
-            "price": "From $399",
+            "price": "",
             "href": "#/skin-boosters"
           }
         ],
@@ -92,25 +91,25 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "Dermal Fillers",
             "what": "Can restore volume right away",
-            "price": "From $750",
+            "price": "",
             "href": "#/dermal-fillers"
           },
           {
             "name": "Sculptra®",
             "what": "Gradual volume through your own collagen",
-            "price": "From $699",
+            "price": "",
             "href": "#/sculptra"
           },
           {
             "name": "Radiesse®",
             "what": "Structure plus collagen support",
-            "price": "From $599",
+            "price": "",
             "href": "#/radiesse"
           },
           {
             "name": "Aptos Thread Lift",
             "what": "Repositions tissue alongside volume",
-            "price": "From $2500",
+            "price": "",
             "href": "/aptos-thread-lift"
           }
         ],
@@ -129,19 +128,19 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "Aptos Thread Lift",
             "what": "Can lift mild to moderate laxity",
-            "price": "From $2500",
+            "price": "",
             "href": "/aptos-thread-lift"
           },
           {
             "name": "Laser Skin Tightening",
             "what": "Gradual firming, little to no downtime",
-            "price": "From $480",
+            "price": "",
             "href": "#/laser-skin-tightening"
           },
           {
             "name": "Radiesse®",
             "what": "Jawline structure and collagen support",
-            "price": "From $599",
+            "price": "",
             "href": "#/radiesse"
           }
         ],
@@ -160,25 +159,25 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "Under-Eye Filler",
             "what": "Can soften a true hollow",
-            "price": "From $850",
+            "price": "",
             "href": "#/under-eye-filler"
           },
           {
             "name": "Skin Boosters",
             "what": "Hydration for thin, crepey skin",
-            "price": "From $399",
+            "price": "",
             "href": "#/skin-boosters"
           },
           {
             "name": "Laser Skin Tightening",
             "what": "Smooth Eye for fine lines and firmness",
-            "price": "From $480",
+            "price": "",
             "href": "#/laser-skin-tightening"
           },
           {
             "name": "Microneedling",
             "what": "Skin quality and fine texture",
-            "price": "From $245",
+            "price": "",
             "href": "#/microneedling"
           }
         ],
@@ -197,19 +196,19 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "CoolSculpting®",
             "what": "Mini applicator for fat under the chin",
-            "price": "From $850",
+            "price": "",
             "href": "#/coolsculpting"
           },
           {
             "name": "Radiesse®",
             "what": "Jawline definition",
-            "price": "From $599",
+            "price": "",
             "href": "#/radiesse"
           },
           {
             "name": "Aptos Thread Lift",
             "what": "Lift for the lower face and neck",
-            "price": "From $2500",
+            "price": "",
             "href": "/aptos-thread-lift"
           }
         ],
@@ -229,7 +228,7 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "Lip Fillers",
             "what": "Usually one session",
-            "price": "From $750",
+            "price": "",
             "href": "#/lip-fillers"
           }
         ],
@@ -272,19 +271,19 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "Laser Acne Treatment",
             "what": "May calm active inflammatory acne",
-            "price": "From $375",
+            "price": "",
             "href": "#/laser-acne-treatment"
           },
           {
             "name": "Chemical Peels",
             "what": "Acnelan® and peels to unclog and calm",
-            "price": "From $149",
+            "price": "",
             "href": "#/chemical-peels"
           },
           {
             "name": "Medical Facials",
             "what": "Purifying Acne Relief facial between treatments",
-            "price": "From $249",
+            "price": "",
             "href": "#/medical-facials"
           }
         ],
@@ -303,19 +302,19 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "Microneedling",
             "what": "Collagen induction for texture",
-            "price": "From $245",
+            "price": "",
             "href": "#/microneedling"
           },
           {
             "name": "Laser Skin Resurfacing",
             "what": "Fractional laser for deeper texture",
-            "price": "From $200",
+            "price": "",
             "href": "#/laser-skin-resurfacing"
           },
           {
             "name": "Chemical Peels",
             "what": "Evens tone and marks",
-            "price": "From $149",
+            "price": "",
             "href": "#/chemical-peels"
           }
         ],
@@ -334,25 +333,25 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "Photo-Rejuvenation (IPL)",
             "what": "Light-based treatment for sun spots",
-            "price": "From $275",
+            "price": "",
             "href": "#/photo-rejuvenation"
           },
           {
             "name": "Cosmelan® & Dermamelan®",
             "what": "Depigmenting protocol for stubborn pigment",
-            "price": "From $799.20",
+            "price": "",
             "href": "#/cosmelan-dermamelan"
           },
           {
             "name": "Chemical Peels",
             "what": "Brightening peels for tone",
-            "price": "From $149",
+            "price": "",
             "href": "#/chemical-peels"
           },
           {
             "name": "Laser Skin Resurfacing",
             "what": "Surface renewal for sun damage",
-            "price": "From $200",
+            "price": "",
             "href": "#/laser-skin-resurfacing"
           }
         ],
@@ -371,19 +370,19 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "Cosmelan® & Dermamelan®",
             "what": "Depigmenting protocol designed for melasma",
-            "price": "From $799.20",
+            "price": "",
             "href": "#/cosmelan-dermamelan"
           },
           {
             "name": "Chemical Peels",
             "what": "Gentle brightening peels",
-            "price": "From $149",
+            "price": "",
             "href": "#/chemical-peels"
           },
           {
             "name": "Microneedling",
             "what": "With depigmenting serums, case by case",
-            "price": "From $245",
+            "price": "",
             "href": "#/microneedling"
           }
         ],
@@ -402,19 +401,19 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "Photo-Rejuvenation (IPL)",
             "what": "Light-based treatment for diffuse redness",
-            "price": "From $275",
+            "price": "",
             "href": "#/photo-rejuvenation"
           },
           {
             "name": "Laser Vein Removal",
             "what": "Excel V+ for visible vessels",
-            "price": "From $240",
+            "price": "",
             "href": "#/laser-vein-removal"
           },
           {
             "name": "Medical Facials",
             "what": "Calming facials for sensitive skin",
-            "price": "From $249",
+            "price": "",
             "href": "#/medical-facials"
           }
         ],
@@ -433,19 +432,19 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "Microneedling",
             "what": "Collagen induction for pores and texture",
-            "price": "From $245",
+            "price": "",
             "href": "#/microneedling"
           },
           {
             "name": "4D Rejuvalift",
             "what": "Surface renewal and firmness",
-            "price": "From $600",
+            "price": "",
             "href": "#/laser-rejuvenation"
           },
           {
             "name": "Chemical Peels",
             "what": "Regular exfoliation",
-            "price": "From $149",
+            "price": "",
             "href": "#/chemical-peels"
           }
         ],
@@ -479,19 +478,19 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "CoolSculpting®",
             "what": "Controlled cooling for pinchable fat",
-            "price": "From $850",
+            "price": "",
             "href": "#/coolsculpting"
           },
           {
             "name": "TightSculpting®",
             "what": "Laser contouring with skin tightening",
-            "price": "From $600",
+            "price": "",
             "href": "#/tightsculpting"
           },
           {
             "name": "Non-Surgical Butt Lift",
             "what": "Shape and contour for the buttocks and hips",
-            "price": "From $1999",
+            "price": "",
             "href": "#/non-surgical-bbl"
           }
         ],
@@ -510,7 +509,7 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "Laser Hair Removal",
             "what": "Usually 6 to 8 sessions, 4 to 8 weeks apart",
-            "price": "From $90",
+            "price": "",
             "href": "#/laser-hair-removal"
           }
         ],
@@ -538,7 +537,7 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "Laser Vein Removal",
             "what": "Excel V+ laser for fine veins",
-            "price": "From $240",
+            "price": "",
             "href": "#/laser-vein-removal"
           },
           {
@@ -588,13 +587,13 @@ export const START_PANELS: StartPanel[] = [
           {
             "name": "PRP Hair Restoration",
             "what": "Your own platelets to support follicles",
-            "price": "From $399",
+            "price": "",
             "href": "#/prp-hair-restoration"
           },
           {
             "name": "Laser Hair Rejuvenation",
             "what": "Needle-free laser for the scalp",
-            "price": "From $350",
+            "price": "",
             "href": "#/laser-hair-rejuvenation"
           }
         ],

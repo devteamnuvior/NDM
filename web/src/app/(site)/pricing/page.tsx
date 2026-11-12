@@ -11,7 +11,7 @@ import { PricingHero } from "@/components/pricing/pricing-hero";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Faq } from "@/components/ui/faq";
 import { PRICE_FAQS, PRICE_SPECIALS } from "@/config/pricing";
-import { PRICE_NAMES } from "@/config/prices";
+import { PRICE_NAMES } from "@/config/price-names";
 import { buildPricingView } from "@/lib/pricing-view";
 import { getPricingTree } from "@/lib/wordpress";
 import { PriceListNotice } from "@/components/pricing/price-list-notice";

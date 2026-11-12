@@ -22,7 +22,7 @@ import { TxWhy } from "@/components/treatment/tx-why";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Faq } from "@/components/ui/faq";
 import { APTOS, APTOS_PRICE } from "@/config/aptos";
-import { priceRows } from "@/lib/prices";
+import { fillPricesDeep, getSitePrices } from "@/lib/site-prices";
 import { priceGroup } from "@/lib/treatment-prices";
 
 export const metadata: Metadata = {
@@ -30,13 +30,14 @@ export const metadata: Metadata = {
   description: "Aptos Thread Lift at NewDermaMed, Uptown and Downtown Toronto: bioabsorbable threads for the midface, about an hour in clinic, results that may last up to 24 months. Free consultation.",
 };
 
-/* the page's price rows come from the price list, resolved here on the server */
-const OPTIONS = priceRows(APTOS_PRICE.category, APTOS_PRICE.item).filter((o) => APTOS_PRICE.area.test(o.label));
-const PRICES = priceGroup({ name: APTOS.prices.name, title: APTOS.prices.title, blurb: APTOS.prices.blurb }, OPTIONS);
-
 /** Aptos Thread Lift: header with the booking form, quick facts, the section bar, then the treatment sections. */
-export default function AptosPage() {
-  const p = APTOS;
+export default async function AptosPage() {
+  /* the price rows, and the amount inside the copy ({{aptos}}), are read from WooCommerce; nothing is typed.
+     When WooCommerce cannot be reached the price table and the sentence with the price are left out. */
+  const prices = await getSitePrices();
+  const options = (prices?.book.priceRows(APTOS_PRICE.category, APTOS_PRICE.item) ?? []).filter((o) => APTOS_PRICE.area.test(o.label));
+  const group = options.length ? priceGroup({ name: APTOS.prices.name, title: APTOS.prices.title, blurb: APTOS.prices.blurb }, options) : null;
+  const p = fillPricesDeep(APTOS, { aptos: group?.from });
   const n = (id: string) => txNumber(p.nav, id);
   return (
     <main id="main" data-shell="inner" data-page="aptos">
@@ -56,7 +57,7 @@ export default function AptosPage() {
       <TxResults results={p.results} number={n("results")} />
       <TxCare care={p.care} number={n("care")} />
       <TxPair pair={p.pair} number={n("combinations")} />
-      <TxPrices prices={p.prices} sessions={p.sessions} number={n("prices")} group={PRICES} />
+      {group && <TxPrices prices={p.prices} sessions={p.sessions} number={n("prices")} group={group} />}
       <TxWhy why={p.why} number={n("why")} />
       <Team inner />
       <Saying />

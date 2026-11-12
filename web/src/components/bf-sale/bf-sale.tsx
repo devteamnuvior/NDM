@@ -11,7 +11,7 @@
 import Link from "next/link";
 import { createContext, Fragment, useContext, useEffect, useRef, useState, type MouseEvent } from "react";
 import { useBfClock, type BfClock } from "@/components/black-friday/bf-timer";
-import { BFS, BFS_CONCERNS, BFS_DEALS, BFS_MAX, BFS_TABS, bfsShort, bfsTag, type Deal, type Opt, type PlanLine, type SpecialCard } from "@/components/bf-sale/data";
+import { BFS, BFS_CONCERNS, BFS_TABS, bfsMax, bfsShort, bfsTag, type Deal, type Opt, type PlanLine, type SpecialCard } from "@/components/bf-sale/data";
 import { Button } from "@/components/ui/button";
 import { IconArrow, IconClose, IconPhone } from "@/components/ui/icons";
 import { SHOP_URL } from "@/config/shop";
@@ -40,8 +40,11 @@ const bfsGo = (id: string) => (e?: MouseEvent) => {
 };
 
 /* round 26: moving tapes. Two crossed strips close the hero; one strip divides sections */
-const BFS_WORDS = [`Black Friday · ${BFS.whenShort}`, `Up to ${BFS_MAX}% off selected treatments`, 'Buy 1 get 1 offers', 'Free consultation and VISIA® skin analysis', 'Uptown and Downtown Toronto'];
+/** The sale's deals (from WooCommerce, handed down by the page) and their best percentage. */
+const BfsData = createContext<{ deals: Deal[]; max: number }>({ deals: [], max: 0 });
 function BfsTape({ tone = "red", rev = false }: { tone?: "red" | "white"; rev?: boolean }) {
+  const { max: BFS_MAX } = useContext(BfsData);
+  const BFS_WORDS = [`Black Friday · ${BFS.whenShort}`, `Up to ${BFS_MAX}% off selected treatments`, 'Buy 1 get 1 offers', 'Free consultation and VISIA® skin analysis', 'Uptown and Downtown Toronto'];
   const row = <span>{BFS_WORDS.map((w) => <Fragment key={w}>{w}<i /></Fragment>)}</span>;
   return <div aria-hidden="true" className={`bfs-tape bfs-tape-${tone}`}><div className={`bfs-tick-in ${rev ? 'is-rev' : ''}`}>{row}{row}{row}{row}</div></div>;
 }
@@ -149,6 +152,7 @@ function BfsFan() {
 
 /* round 26: the hero. A giant outlined percentage behind the words, a fan of three offer tickets with the countdown, crossed tapes */
 function BfsHero() {
+  const { max: BFS_MAX } = useContext(BfsData);
   return (
     <section aria-labelledby="bfs-title" className="bfs-hero relative isolate overflow-hidden text-white">
       {/* round 28: the clinic at night sits behind the tickets and the countdown, fading into the black on the left and at the bottom */}
@@ -177,6 +181,7 @@ function BfsHero() {
 
 /* round 26: the sale in four numbers */
 function BfsStats() {
+  const { deals: BFS_DEALS, max: BFS_MAX } = useContext(BfsData);
   const ref = useRef<HTMLElement>(null);
   useReveal(ref);
   const items: [figure: string, label: string][] = [[`${BFS_MAX}%`, 'Up to, on selected packages'], [String(BFS_DEALS.length), 'Treatment groups on offer'], ['4', 'Days only, Friday to Monday'], ['$0', 'Consultation and VISIA® analysis']];
@@ -195,6 +200,7 @@ function BfsStats() {
 }
 
 function BfsConcerns({ pick, setPick }: PickProps) {
+  const { deals: BFS_DEALS } = useContext(BfsData);
   const ref = useRef<HTMLElement>(null);
   useReveal(ref);
   return (
@@ -296,6 +302,7 @@ function BfsDealCard({ d, plan, toggle }: { d: Deal; plan: PlanLine[]; toggle: (
 }
 
 function BfsDeals({ pick, setPick, plan, toggle }: PickProps & { plan: PlanLine[]; toggle: (x: PlanLine) => void }) {
+  const { deals: BFS_DEALS } = useContext(BfsData);
   const ref = useRef<HTMLElement>(null);
   useReveal(ref);
   const [tab, setTab] = useState('All deals');
@@ -332,6 +339,7 @@ function BfsDeals({ pick, setPick, plan, toggle }: PickProps & { plan: PlanLine[
 }
 
 function BfsSpecials() {
+  const { deals: BFS_DEALS } = useContext(BfsData);
   const ref = useRef<HTMLElement>(null);
   useReveal(ref);
   const list = useContext(Specials).filter((s) => !/botox|dysport/i.test(s.n)).slice(0, 6);
@@ -402,6 +410,7 @@ function BfsHow() {
 }
 
 function BfsPlan({ plan, toggle, clear }: { plan: PlanLine[]; toggle: (x: PlanLine) => void; clear: () => void }) {
+  const { deals: BFS_DEALS } = useContext(BfsData);
   const total = plan.reduce((n, p) => n + p.price, 0);
   const saved = plan.reduce((n, p) => n + (p.reg ? p.reg - p.price : 0), 0);
   return (
@@ -527,7 +536,8 @@ function BfsPlanBar({ plan }: { plan: PlanLine[] }) {
 
 
 /** The page: the plan lives here (and in localStorage), shared by the deal cards, the plan section and the phone bar. */
-export function BfSalePage({ specials }: { specials: SpecialCard[] }) {
+export function BfSalePage({ specials, deals }: { specials: SpecialCard[]; deals: Deal[] }) {
+  const data = { deals, max: bfsMax(deals) };
   const [plan, setPlan] = useState<PlanLine[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [pick, setPick] = useState<string | null>(null);
@@ -553,6 +563,7 @@ export function BfSalePage({ specials }: { specials: SpecialCard[] }) {
   }, [plan, loaded]);
   const toggle = (x: PlanLine) => setPlan((p) => (p.some((y) => y.key === x.key) ? p.filter((y) => y.key !== x.key) : [...p, x]));
   return (
+    <BfsData value={data}>
     <Specials.Provider value={specials}>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[90] focus:rounded-full focus:bg-[#D3121F] focus:px-4 focus:py-2 focus:font-mont focus:text-white">
         Skip to content
@@ -571,5 +582,6 @@ export function BfSalePage({ specials }: { specials: SpecialCard[] }) {
       <BfsFooter />
       <BfsPlanBar plan={plan} />
     </Specials.Provider>
+    </BfsData>
   );
 }

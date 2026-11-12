@@ -100,6 +100,13 @@ export function createPriceBook(categories: PriceCategory[], names: PriceNames =
     return byName ? [byName.id] : null;
   }
 
+  /** The lowest price of a treatment by any name the site uses for it, with the category it sits in; null when it is not on the price list. */
+  function priceLow(name: string): (LowestPrice & { categoryId: string }) | null {
+    const hit = locate(name);
+    const lowest = hit ? lowestPrice(hit[0], hit[1]) : null;
+    return hit && lowest ? { ...lowest, categoryId: hit[0] } : null;
+  }
+
   /** "From $262.50" for a treatment name, or null when it is not on the price list. */
   function priceFor(name: string): string | null {
     const hit = locate(name);
@@ -127,7 +134,7 @@ export function createPriceBook(categories: PriceCategory[], names: PriceNames =
     return it ? it.options : [];
   }
 
-  return { lowestPrice, priceFor, priceInfo, priceRows };
+  return { lowestPrice, priceFor, priceInfo, priceLow, priceRows };
 }
 
 export type PriceBook = ReturnType<typeof createPriceBook>;

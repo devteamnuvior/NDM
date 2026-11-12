@@ -7,7 +7,7 @@
 export interface TreatmentCard {
   name: string;
   text: string;
-  /** Fallback only: the shown price comes from the price list when the treatment is on it. */
+  /** Filled in from WooCommerce when the page is built ("From $750"); never written here. */
   price: string;
   href: string;
   image: { src: string; srcSet: string };
@@ -35,7 +35,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Dermal Fillers",
         "text": "Hyaluronic acid fillers that can restore lost volume, soften folds and refine contours, placed with restraint.",
-        "price": "From $750",
+        "price": "",
         "href": "#/dermal-fillers",
         "image": {
           "src": "/assets/home/v3/sface-1000.webp",
@@ -46,7 +46,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Lip Fillers",
         "text": "Hyaluronic acid lip enhancement for definition, balance and hydration, planned to suit your face.",
-        "price": "From $750",
+        "price": "",
         "href": "#/lip-fillers",
         "image": {
           "src": "/assets/home/v3/lips-1000.webp",
@@ -57,7 +57,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Under-Eye Filler",
         "text": "Careful placement of a soft filler that can soften hollows under the eyes and the shadow they cast.",
-        "price": "From $850",
+        "price": "",
         "href": "#/under-eye-filler",
         "image": {
           "src": "/assets/home/v3/p1-683.webp",
@@ -68,7 +68,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Sculptra®",
         "text": "A poly-L-lactic acid biostimulator that supports your own collagen, for gradual, natural-looking volume.",
-        "price": "From $699",
+        "price": "",
         "href": "#/sculptra",
         "image": {
           "src": "/assets/home/v3/sculptra-1000.webp",
@@ -79,7 +79,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Radiesse®",
         "text": "A calcium hydroxylapatite biostimulator that gives structure and supports collagen, for facial contour and the hands.",
-        "price": "From $599",
+        "price": "",
         "href": "#/radiesse",
         "image": {
           "src": "/assets/home/v3/collagen-1000.webp",
@@ -90,7 +90,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Skin Boosters",
         "text": "Micro-injections of hyaluronic acid that can improve hydration, smoothness and skin quality.",
-        "price": "From $399",
+        "price": "",
         "href": "#/skin-boosters",
         "image": {
           "src": "/assets/home/v3/booster-1000.webp",
@@ -111,7 +111,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Laser Skin Resurfacing",
         "text": "Fotona laser resurfacing that can refine texture, tone and fine lines, from a light laser peel to fractional and deeper options.",
-        "price": "From $200",
+        "price": "",
         "href": "#/laser-skin-resurfacing",
         "image": {
           "src": "/assets/home/v3/resurf-1000.webp",
@@ -122,7 +122,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Laser Skin Tightening",
         "text": "Non-invasive Fotona protocols that gently heat deeper layers of skin to improve the look of mild laxity.",
-        "price": "From $480",
+        "price": "",
         "href": "#/laser-skin-tightening",
         "image": {
           "src": "/assets/home/v3/jawline-1000.webp",
@@ -133,7 +133,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "4D Rejuvalift",
         "text": "Multi-step Fotona protocols, including 4D Rejuvalift, for tone, texture and firmness in a single visit.",
-        "price": "From $600",
+        "price": "",
         "href": "#/laser-rejuvenation",
         "image": {
           "src": "/assets/home/v3/facial-1000.webp",
@@ -144,7 +144,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Photo-Rejuvenation (IPL)",
         "text": "Intense pulsed light that can reduce the look of sun spots, redness and uneven tone.",
-        "price": "From $275",
+        "price": "",
         "href": "#/photo-rejuvenation",
         "image": {
           "src": "/assets/home/v3/ipl-1000.webp",
@@ -155,7 +155,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Laser Hair Removal",
         "text": "Medical-grade laser hair reduction for the face and body, planned for your skin and hair type.",
-        "price": "From $90",
+        "price": "",
         "href": "#/laser-hair-removal",
         "image": {
           "src": "/assets/home/v3/p6-1024.webp",
@@ -166,7 +166,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Laser Acne Treatment",
         "text": "Laser sessions that can calm active breakouts on the face and upper back.",
-        "price": "From $375",
+        "price": "",
         "href": "#/laser-acne-treatment",
         "image": {
           "src": "/assets/home/v3/peel-1000.webp",
@@ -198,7 +198,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Microneedling",
         "text": "Collagen induction with Dermapen 4, with options to add PRP, PDRN or exosomes for your skin’s needs.",
-        "price": "From $245",
+        "price": "",
         "href": "#/microneedling",
         "image": {
           "src": "/assets/home/v3/mneedle-1000.webp",
@@ -209,7 +209,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Chemical Peels",
         "text": "Light, medium and deep professional peels, including Acnelan®, chosen for your skin type and goals.",
-        "price": "From $149",
+        "price": "",
         "href": "#/chemical-peels",
         "image": {
           "src": "/assets/home/v3/peel-1000.webp",
@@ -220,7 +220,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Cosmelan® & Dermamelan®",
         "text": "Professional depigmenting protocols by Mesoestetic for melasma, sun spots and uneven tone.",
-        "price": "From $799.20",
+        "price": "",
         "href": "#/cosmelan-dermamelan",
         "image": {
           "src": "/assets/home/v3/p3-682.webp",
@@ -231,7 +231,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Medical Facials",
         "text": "Clinical facials, including Age Element®, Purifying Acne Relief and Glass Glow, tailored at each visit.",
-        "price": "From $249",
+        "price": "",
         "href": "#/medical-facials",
         "image": {
           "src": "/assets/home/v3/facial-1000.webp",
@@ -252,7 +252,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "CoolSculpting®",
         "text": "Controlled cooling that can reduce stubborn fat in treated areas, without surgery.",
-        "price": "From $850",
+        "price": "",
         "href": "#/coolsculpting",
         "image": {
           "src": "/assets/home/v3/knee-1000.webp",
@@ -263,7 +263,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "TightSculpting®",
         "text": "Fotona laser body contouring that can reduce fat and tighten skin in the same treatment.",
-        "price": "From $600",
+        "price": "",
         "href": "#/tightsculpting",
         "image": {
           "src": "/assets/home/v3/arms-1000.webp",
@@ -274,7 +274,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Non-Surgical Butt Lift",
         "text": "Injectable collagen stimulators planned to improve the shape and contour of the buttocks and hips, without surgery.",
-        "price": "From $1999",
+        "price": "",
         "href": "#/non-surgical-bbl",
         "image": {
           "src": "/assets/home/v3/bbl-1000.webp",
@@ -295,7 +295,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Laser Vein Removal",
         "text": "Cutera Excel V+ laser for small visible veins and spider veins on the face and legs.",
-        "price": "From $240",
+        "price": "",
         "href": "#/laser-vein-removal",
         "image": {
           "src": "/assets/home/v3/p6-1024.webp",
@@ -338,7 +338,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "PRP Hair Restoration",
         "text": "Platelet-rich plasma from your own blood, applied to the scalp to support thinning hair.",
-        "price": "From $399",
+        "price": "",
         "href": "#/prp-hair-restoration",
         "image": {
           "src": "/assets/home/v3/u2-1000.webp",
@@ -349,7 +349,7 @@ export const TREATMENT_TABS: TreatmentTab[] = [
       {
         "name": "Laser Hair Rejuvenation",
         "text": "A gentle Fotona laser treatment for the scalp that may support thinning hair, with no needles and little downtime.",
-        "price": "From $350",
+        "price": "",
         "href": "#/laser-hair-rejuvenation",
         "image": {
           "src": "/assets/home/v3/u4-720.webp",

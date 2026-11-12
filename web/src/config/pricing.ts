@@ -9,20 +9,19 @@ export const PRICE_FAQS: [question: string, answer: string][] = [
 ];
 
 /**
- * Exclusive monthly specials shown above the price list. `price` is only used when the treatment is not on
- * the price list; `category` is the price-list category the Buy button opens.
+ * Exclusive monthly specials shown above the price list. Their prices are read from WooCommerce; `category` is the price-list category the Buy button opens.
  */
 export const PRICE_SPECIALS = {
   sub: "Save on cosmetic treatment, apply for financing now",
   note: "for selected packages",
   items: [
-    { name: "Microneedling", price: "$249", category: "microneedling" },
-    { name: "Radiesse for Hand", price: "$599", category: "skin-booster-and-bio-stimulators" },
-    { name: "PRP Hair Rejuvenation", price: "$399", category: "hair-loss" },
-    { name: "Non-Surgical BBL", price: "$3999", category: "non-surgical-butt-lift" },
-    { name: "Lip Filler", price: "$299", category: "dermal-fillers" },
-    { name: "Sculptra Face Lift", price: "$699", category: "skin-booster-and-bio-stimulators" },
-    { name: "Sculptra", price: "$699", category: "skin-booster-and-bio-stimulators" },
-    { name: "Radiesse", price: "$599", category: "skin-booster-and-bio-stimulators" },
+    { name: "Microneedling", category: "microneedling" },
+    { name: "Radiesse for Hand", category: "skin-booster-and-bio-stimulators" },
+    { name: "PRP Hair Rejuvenation", category: "hair-loss" },
+    { name: "Non-Surgical BBL", category: "non-surgical-butt-lift" },
+    { name: "Lip Filler", category: "dermal-fillers" },
+    { name: "Sculptra Face Lift", category: "skin-booster-and-bio-stimulators" },
+    { name: "Sculptra", category: "skin-booster-and-bio-stimulators" },
+    { name: "Radiesse", category: "skin-booster-and-bio-stimulators" },
   ],
 };

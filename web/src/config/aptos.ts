@@ -353,7 +353,7 @@ export const APTOS: TreatmentPage = {
     ],
     [
       "How much does it cost?",
-      "Aptos for the mid face is $2500. Your plan and final price are confirmed at your free consultation."
+      "Aptos for the mid face is {{aptos}}. Your plan and final price are confirmed at your free consultation."
     ]
   ]
 };
