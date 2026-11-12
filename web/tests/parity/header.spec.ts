@@ -28,6 +28,11 @@ for (const vp of VIEWPORTS) {
 
     test.beforeAll(async ({ browser }) => {
       [legacy, next] = await Promise.all([open(browser, "legacy", vp), open(browser, "next", vp)]);
+      /* the prototype's search knows the menu only: compare the sheet without the price list's rows and
+         with the built-in Popular chips (the live search has its own test in tests/header.spec.ts) */
+      await next.route("**/api/search/popular", (r) => r.fulfill({ json: { terms: [] } }));
+      await next.route("**/api/search?**", (r) => r.fulfill({ json: { hits: [] } }));
+      await next.route("**/api/search/log", (r) => r.fulfill({ json: { counted: false } }));
     });
     test.afterAll(async () => {
       await legacy?.context().close();

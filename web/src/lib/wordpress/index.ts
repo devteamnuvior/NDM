@@ -14,4 +14,5 @@ export { getPageBySlug, getPages, type PagesQuery, type WPPageSummary } from "./
 export { getPricingAdminTree, getPricingAdminUser, getPricingTree, savePricing, searchPricingProducts } from "./pricing";
 export { placeOrderRequest, type OrderRequestInput, type PlacedOrder } from "./orders";
 export { getPostBySlug, getPosts, type PostsQuery, type WPPostSummary } from "./posts";
+export { getPopularSearchTerms, logSearchTerm } from "./search";
 export { WP_TAGS } from "./tags";

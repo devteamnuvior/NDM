@@ -18,6 +18,7 @@ wp-content/mu-plugins/
     frontend.php                   no public pages: redirect to the Next.js site, noindex
     security.php                   XML-RPC off, users endpoint private, application passwords over HTTPS
     rest.php                       the site's own namespace, ndm/v1 (health check)
+    search.php                     popular searches of the site search (see "Site search" below)
 ```
 
 wp-content/plugins/ndm-pricing/    the Pricing page's link to WooCommerce (see "Pricing page" below)
@@ -109,6 +110,29 @@ category changes, wherever the change was made. WordPress then calls `NDM_REVALI
 **First import.** `web/scripts/export-price-list.mjs` prints the site's original price list;
 `wp ndm-pricing import` (reads it from standard input) creates the categories, variable products and
 variations once. It never touches anything that already exists.
+
+## Site search
+
+The search in the site header finds the menu's treatments and concerns plus the price list in
+WooCommerce (the same categories and treatments `GET /pricing` serves); a price-list result opens its
+category on the Pricing page. The Popular chips under the search field come from the searches people
+made.
+
+| Route (`ndm/v1`) | Who | What |
+|---|---|---|
+| `GET /search/popular?limit=` | public | names of the most searched results, most searched first, last 90 days |
+| `POST /search/log` | the Next.js server (header `X-NDM-Search-Key` = `NDM_REVALIDATE_SECRET`) | adds one to a result's count: `{ "label": "..." }` |
+
+Counts live in one small table, `<prefix>ndm_search_terms` (name of the result, count, last date),
+created by the must-use plugin on first load. It never holds what a visitor typed or anything about
+the visitor: the Next.js server (`web/src/app/api/search/log`) runs the search again and sends the
+name of the result the visitor chose, which must be one of its own results. A chip is shown only while
+a result with that name still exists; until six results have been searched, the built-in list
+(`POPULAR_SEARCHES` in `web/src/config/navigation.ts`) fills the row. To start the counts again:
+`docker compose run --rm cli wp db query "TRUNCATE $(docker compose run --rm -T cli wp db prefix)ndm_search_terms"`.
+
+WordPress posts are not searched yet: the site's blog is not read from WordPress, so a post found
+would have no page to open.
 
 ## Order requests (cart and checkout)
 

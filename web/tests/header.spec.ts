@@ -155,6 +155,10 @@ test.describe("desktop", () => {
   });
 
   test("search: opens from the header, focuses the field, filters, and closes with Escape", async ({ page }) => {
+    /* the menu's own entries only; the price list and the counted searches have the next test */
+    await page.route("**/api/search/popular", (r) => r.fulfill({ json: { terms: [] } }));
+    await page.route("**/api/search?**", (r) => r.fulfill({ json: { hits: [] } }));
+    await page.route("**/api/search/log", (r) => r.fulfill({ json: { counted: false } }));
     await page.goto(NEXT_URL);
     await page.waitForTimeout(800);
     await page.locator("header").getByRole("button", { name: "Search treatments" }).click();
@@ -170,6 +174,37 @@ test.describe("desktop", () => {
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
     expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("");
+  });
+
+  test("search: finds the price list in WooCommerce, shows the counted Popular searches, counts a chosen result", async ({ page }) => {
+    /* needs WordPress running (the cms containers); the count itself is caught here, so the test leaves no trace */
+    const counted: unknown[] = [];
+    await page.route("**/api/search/popular", (r) => r.fulfill({ json: { terms: ["Laser Acne Treatment", "Dermal Fillers"] } }));
+    await page.route("**/api/search/log", (r) => {
+      counted.push(r.request().postDataJSON());
+      return r.fulfill({ json: { counted: true } });
+    });
+    await page.goto(NEXT_URL);
+    await page.waitForTimeout(800);
+    await page.locator("header").getByRole("button", { name: "Search treatments" }).click();
+    const dialog = page.getByRole("dialog", { name: "Search treatments" });
+    await expect(dialog.getByRole("button", { name: "Laser Acne Treatment" })).toBeVisible();
+    await expect(dialog.locator(".flex-wrap button")).toHaveText(["Laser Acne Treatment", "Dermal Fillers"]);
+
+    await page.locator("#site-search").fill("laser acne");
+    const row = dialog.getByRole("link", { name: /^Laser Acne Treatment/ });
+    await expect(row).toHaveAttribute("href", "/pricing#pg-laser-acne-treatment-h");
+    await row.click();
+    await expect(page).toHaveURL(/\/pricing#pg-laser-acne-treatment-h$/);
+    await expect(page.locator("#pg-laser-acne-treatment-h:visible")).toHaveAttribute("aria-expanded", "true");
+    expect(counted).toEqual([{ q: "laser acne", picked: "Laser Acne Treatment" }]);
+  });
+
+  test("search: only a result of the site can be counted, never typed text", async ({ request }) => {
+    const send = async (data: unknown) => (await (await request.post(`${NEXT_URL}/api/search/log`, { data })).json()) as { counted: boolean };
+    expect(await send({ q: "laser acne", picked: "someone's name" })).toEqual({ counted: false });
+    expect(await send({ q: "zzzz", picked: "zzzz" })).toEqual({ counted: false });
+    expect(await send({ q: "laser acne" })).toEqual({ counted: false });
   });
 
   test("cart badge shows the number of items saved by the original pages", async ({ page }) => {

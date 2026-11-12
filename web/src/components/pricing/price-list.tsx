@@ -10,6 +10,7 @@ import { cartKey, money } from "@/lib/cart";
 import type { PriceCategoryView, PriceItemView } from "@/lib/pricing-view";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
+import { jumpToPriceGroup, PRICE_GROUP_HASH } from "@/lib/price-jump";
 
 const Stroke = ({ d }: { d: string }) => (
   <svg width={16} height={16} viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -54,7 +55,7 @@ function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView
             {it.options.map((o) => {
               const line = { key: cartKey(o.productId, o.variationId), cat: cat.name, name: it.name, label: o.label, price: o.price, was: o.was, unit: o.unit, productId: o.productId, variationId: o.variationId };
               return (
-                <li key={o.label} className="pr-opt grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-[14px] bg-white py-3 pr-3 pl-4 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6 sm:pl-5">
+                <li key={o.variationId || o.label} data-product={o.productId} data-variation={o.variationId || undefined} className="pr-opt grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-[14px] bg-white py-3 pr-3 pl-4 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6 sm:pl-5">
                   <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
                     <span className="font-inter text-[15px] text-ndm-ink">{o.label}</span>
                     {o.tag && <span className="pr-tag">{o.tag}</span>}
@@ -194,10 +195,17 @@ export function PriceList({ categories, total }: { categories: PriceCategoryView
   /* other pages' empty cart links here with #prices: go there once the page has loaded, so the
      browser's own scroll restoration cannot undo it */
   useEffect(() => {
-    if (window.location.hash !== "#prices") return;
+    const hash = window.location.hash;
+    /* the site search links to one category (#pg-<slug>-h): open it and go there */
+    const group = PRICE_GROUP_HASH.test(hash);
+    if (hash !== "#prices" && !group) return;
     let t: ReturnType<typeof setTimeout> | undefined;
     const go = () => {
       t = setTimeout(() => {
+        if (group) {
+          jumpToPriceGroup(hash.slice(1), true);
+          return;
+        }
         const el = byId("prices");
         if (el) scrollToY(el.getBoundingClientRect().top + window.scrollY - 40, true);
       }, 120);
