@@ -21,6 +21,8 @@ export const STATE_COOKIE = "ndm_pricing_state";
 export const APP_NAME = "NewDermaMed pricing manager";
 export const APP_ID = "5d0c2b1e-7a44-4f0b-9d55-6f1e2a8c3b70";
 export const MANAGE_PATH = "/manage/pricing";
+/** The offers' management screen: the same sign-in, the same session. */
+export const PROMOTIONS_PATH = "/manage/promotions";
 
 const SESSION_HOURS = 8;
 

@@ -80,6 +80,9 @@ function ndm_pricing_product_data( $product, $admin ) {
 		// Whether options can be added to this product on the management screen.
 		$data['addable']     = null !== ndm_pricing_option_attribute( $product );
 		$data['categoryIds'] = array_values( array_map( 'intval', $product->get_category_ids() ) );
+		// Whether it is one of the current offers (Promotions), with its card settings and photo.
+		$data['promo']       = ndm_promo_settings( $product->get_meta( NDM_PROMO_META ) );
+		$data['image']       = ndm_promo_image( $product );
 	}
 
 	if ( $product->is_type( 'variable' ) ) {

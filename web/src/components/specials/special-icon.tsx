@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { SpecialIconName } from "@/config/specials";
+import type { PromoIcon as SpecialIconName } from "@/types/promotions";
 
 const PATHS: Record<SpecialIconName, ReactNode> = {
   pen: (

@@ -99,6 +99,16 @@ export function changesOf(saved: Draft, draft: Draft): Changes {
     if (p.hidden !== was.hidden) entry.hidden = p.hidden;
     if (!sameLabel(p.label, was.label)) entry.label = cleanLabel(p.label);
 
+    /* its card in Promotions: taken out, put in, or changed */
+    if (!p.promo && was.promo) entry.promo = null;
+    else if (p.promo) {
+      const { order, imageId, ...card } = p.promo;
+      const clean = { ...card, name: card.name.trim(), text: card.text.trim() };
+      const old = saved.products[p.id]?.promo ?? null; /* a product just added from the search has no saved copy: its card is sent as it stands */
+      const same = old && old.name === clean.name && old.text === clean.text && old.area === clean.area && old.icon === clean.icon && old.focus === clean.focus && old.scope === clean.scope;
+      if (!same || imageId || order !== old.order) entry.promo = { ...clean, ...(!old || order !== old.order ? { position: order } : {}), ...(imageId ? { imageId } : {}) };
+    }
+
     /* a product without variations carries its own price */
     if (!p.variations.length && !was.variations.length && (p.regularPrice.trim() !== was.regularPrice || p.salePrice.trim() !== was.salePrice)) {
       const bad = priceProblem(p.regularPrice, p.salePrice);

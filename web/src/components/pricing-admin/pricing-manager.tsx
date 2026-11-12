@@ -10,6 +10,7 @@ import { money } from "@/lib/cart";
 import { buildPricingView } from "@/lib/pricing-view";
 import { lockScroll } from "@/lib/scroll-lock";
 import type { WooAdminProduct, WooAdminTree, WooAdminVariation, WooPromoLabel } from "@/types/pricing";
+import { PromoEditor } from "./promo-editor";
 import { changesOf, moved, newVariation, priceProblem, relocated, toDraft, toPublicTree, withPrices, type Changes, type Draft, type DraftCategory } from "./model";
 
 /**
@@ -460,6 +461,8 @@ export function PricingManager({ tree, user, csrf, wpAdmin }: PricingManagerProp
     const v = buildPricingView(toPublicTree(draft));
     return new Map(v.categories.map((c) => [c.id, { ...c, byId: new Map(c.items.map((it) => [it.id, it])) }]));
   }, [draft]);
+  /* how many treatments are in Promotions, for the position picker and the limit */
+  const promoCount = useMemo(() => Object.values(draft.products).filter((p) => p.promo).length, [draft]);
   const total = useMemo(() => new Set(draft.categories.flatMap((c) => c.productIds)).size, [draft]);
 
   /* leaving with unsaved changes asks first */
@@ -553,6 +556,15 @@ export function PricingManager({ tree, user, csrf, wpAdmin }: PricingManagerProp
           <p role="status" className={`${pill} ${dirty ? "bg-ndm-amber/20 text-[#8A5A00]" : "bg-[#E7F6EC] text-[#1B6B3A]"}`}>
             {busy ? "Working" : dirty ? `${changes.count} unsaved ${changes.count === 1 ? "change" : "changes"}` : "All changes saved"}
           </p>
+          <a
+            href="/manage/promotions"
+            className={quiet}
+            onClick={(e) => {
+              if (dirty && !window.confirm("Open the offers and lose the unsaved changes?")) e.preventDefault();
+            }}
+          >
+            Promotions
+          </a>
           <button type="button" className={quiet} onClick={() => setPreview(true)}>
             Preview
           </button>
@@ -596,7 +608,7 @@ export function PricingManager({ tree, user, csrf, wpAdmin }: PricingManagerProp
             <Eyebrow>Price list</Eyebrow>
             <TwoTone id="prices-title" className="mt-5" lead="Prices and" strong="current offers" />
             <p className="mx-auto mt-5 max-w-[56ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted">
-              This is the Pricing page&rsquo;s list. Use the pencil on any box to edit it (names, prices, labels, options), and its handle or arrows to rearrange. Nothing reaches visitors until you save.
+              This is the Pricing page&rsquo;s list. Use the pencil on any box to edit it (names, prices, labels, options, and whether a treatment shows in Promotions), and its handle or arrows to rearrange. Nothing reaches visitors until you save.
             </p>
             <label className="relative mx-auto mt-6 block max-w-[560px]">
               <span className="sr-only">Search treatments</span>
@@ -760,6 +772,7 @@ export function PricingManager({ tree, user, csrf, wpAdmin }: PricingManagerProp
                                       <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
                                         {itemDirty && <Unsaved />}
                                         {p.hidden && <Muted>Hidden</Muted>}
+                                        {p.promo && <span className={`${pill} bg-[#E3F2FB] text-ndm-deep`}>In Promotions</span>}
                                         {p.status !== "publish" && <Muted>Not published in WooCommerce</Muted>}
                                         {pubItem?.offer && <span className="pr-badge">{pubItem.offer}</span>}
                                         {pubItem && (
@@ -795,6 +808,7 @@ export function PricingManager({ tree, user, csrf, wpAdmin }: PricingManagerProp
                                             <span className={caption}>Promotional label for the whole product (shows on every option without a label of its own)</span>
                                             <LabelEditor value={p.label} onChange={(label) => setProduct({ ...p, label })} what={itemName} />
                                           </div>
+                                          <PromoEditor product={p} count={promoCount} csrf={csrf} onSignedOut={signedOut} onChange={(change) => setDraft((d) => (d.products[id] ? { ...d, products: { ...d.products, [id]: change(d.products[id]) } } : d))} />
                                           {p.variations.length === 0 && (
                                             <div className="mt-4">
                                               <PriceFields regular={p.regularPrice} sale={p.salePrice} onChange={(regular, sale) => setProduct(withPrices(p, regular, sale))} what={itemName} />

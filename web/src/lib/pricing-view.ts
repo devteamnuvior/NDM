@@ -90,7 +90,7 @@ function option(fields: WooPriceFields, label: string, tag: string | undefined, 
 }
 
 /** The WooCommerce list in the shape the price helpers read, leaving out anything without a usable price. */
-function toCategories(tree: WooPricingTree): Category[] {
+export function toCategories(tree: WooPricingTree): Category[] {
   return tree.categories
     .map((c) => ({
       id: c.slug,

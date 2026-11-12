@@ -1,3 +1,5 @@
+import type { PromoArea, PromoIcon, PromoScope, WooPromoImage } from "@/types/promotions";
+
 /**
  * The price list as WooCommerce serves it through the ndm-pricing plugin (`ndm/v1/pricing`, see
  * cms/wp-content/plugins/ndm-pricing). Every id is WooCommerce's own: a product category, a product,
@@ -80,6 +82,26 @@ export interface WooAdminProduct extends WooProduct {
   /** Whether options can be added on the management screen (one simple option list). */
   addable: boolean;
   categoryIds: number[];
+  /** Its card in Promotions (the Promotion page's offers and the offers wheel); null when it is not shown there. */
+  promo: WooProductPromo | null;
+  /** The product's own image in WooCommerce: the photo of that card. */
+  image: WooPromoImage | null;
+}
+
+/** A product's Promotions card, as the price list's management screen edits it. */
+export interface WooProductPromo {
+  /** Position among the offers, 0 first. */
+  order: number;
+  /** Card title; empty shows the product's name. */
+  name: string;
+  text: string;
+  area: PromoArea;
+  icon: PromoIcon;
+  /** Focus point of the photo, "50% 40%". */
+  focus: string;
+  scope: PromoScope;
+  /** A photo uploaded on the screen and not saved yet. */
+  imageId?: number;
 }
 
 export interface WooAdminCategory extends WooCategory<WooAdminProduct> {
@@ -103,6 +125,8 @@ export interface PricingPatch {
     note?: string;
     hidden?: boolean;
     label?: WooPromoLabel;
+    /** null takes the product out of Promotions; an object puts it there or changes its card. */
+    promo?: null | { name: string; text: string; area: PromoArea; icon: PromoIcon; focus: string; scope: PromoScope; position?: number; imageId?: number };
     /** The price of a product without variations. An empty sale price means none. */
     regularPrice?: string;
     salePrice?: string;

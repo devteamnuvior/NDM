@@ -34,6 +34,7 @@ function ndm_pricing_flush() {
 	static $queued = false;
 
 	delete_transient( NDM_PRICING_TRANSIENT );
+	delete_transient( 'ndm_promotions_public' ); // The offers show the same prices (see promotions.php).
 
 	if ( ! $queued ) {
 		$queued = true;

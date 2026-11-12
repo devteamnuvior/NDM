@@ -1,5 +1,5 @@
 import { WordPressError, getPricingAdminUser } from "@/lib/wordpress";
-import { MANAGE_PATH, basicAuth, isPricingAdminConfigured, revokeApplicationPassword, safeEqual, siteOrigin, startPricingSession, takeSignInState, wordpressOrigin } from "@/lib/pricing-admin/session";
+import { MANAGE_PATH, PROMOTIONS_PATH, basicAuth, isPricingAdminConfigured, revokeApplicationPassword, safeEqual, siteOrigin, startPricingSession, takeSignInState, wordpressOrigin } from "@/lib/pricing-admin/session";
 
 /**
  * WordPress returns here after the person approved the sign-in, with their login and a new application
@@ -9,10 +9,12 @@ import { MANAGE_PATH, basicAuth, isPricingAdminConfigured, revokeApplicationPass
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const site = siteOrigin(request) ?? url.origin;
+  /* back to the screen that asked for the sign-in: one of our two, chosen by name */
+  const home = url.searchParams.get("to") === "promotions" ? PROMOTIONS_PATH : MANAGE_PATH;
   const back = (problem?: string) =>
     new Response(null, {
       status: 303,
-      headers: { Location: `${site}${MANAGE_PATH}${problem ? `?problem=${problem}` : ""}`, "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" },
+      headers: { Location: `${site}${home}${problem ? `?problem=${problem}` : ""}`, "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" },
     });
 
   if (!isPricingAdminConfigured()) return back("setup");

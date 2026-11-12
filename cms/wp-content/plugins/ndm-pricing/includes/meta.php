@@ -14,6 +14,8 @@
  *   _ndm_pricing_label         Promotional label text, for example "Save $1000 Off". Never a price.
  *   _ndm_pricing_label_on      "1" when the label is shown.
  *
+ * A product that is a current offer also carries _ndm_promo (see promotions.php).
+ *
  * Names, descriptions, prices, sale prices, SKUs, stock and attributes are WooCommerce's own fields.
  *
  * @package NDM_Pricing

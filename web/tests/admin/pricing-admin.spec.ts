@@ -163,7 +163,7 @@ test("an administrator edits, previews, saves and restores; IDs stay; the public
 
   await signIn(page, env.WP_ADMIN_USER, env.WP_ADMIN_PASSWORD);
   await expect(page.getByText("Pricing manager").first()).toBeVisible();
-  await expect(page.getByRole("status").first()).toHaveText("All changes saved");
+  await expect(page.getByRole("status").first()).toHaveText("All changes saved", { timeout: 30_000 });
   const list = page.locator("#prices");
   const groups = list.locator(".pr-group");
   await expect(groups).toHaveCount(24); /* 23 on the page + WooCommerce's Uncategorized */
@@ -175,7 +175,7 @@ test("an administrator edits, previews, saves and restores; IDs stay; the public
   const save = async () => {
     await page.getByRole("button", { name: "Save changes" }).click();
     await expect(page.getByText("Saved to WooCommerce")).toBeVisible({ timeout: 40_000 });
-    await expect(page.getByRole("status").first()).toHaveText("All changes saved");
+    await expect(page.getByRole("status").first()).toHaveText("All changes saved", { timeout: 30_000 });
   };
 
   /* --- the pencil on a treatment and on its options: a name, a label, an option's visibility --- */

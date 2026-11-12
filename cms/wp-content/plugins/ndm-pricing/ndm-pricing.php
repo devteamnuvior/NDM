@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       NewDermaMed Pricing
- * Description:       Serves the Pricing page of the Next.js site from WooCommerce (categories, products, variations, prices, promotional labels) and takes the changes its administrators make there. No settings, no admin pages.
+ * Description:       Serves the Pricing page and the current offers of the Next.js site from WooCommerce (categories, products, variations, prices, promotional labels) and takes the changes its administrators make there. No settings, no admin pages.
  * Version:           0.1.0
  * Author:            NewDermaMed
  * License:           GPL-2.0-or-later
@@ -43,6 +43,7 @@ function ndm_pricing_boot() {
 	require_once NDM_PRICING_DIR . '/includes/save.php';
 	require_once NDM_PRICING_DIR . '/includes/rest.php';
 	require_once NDM_PRICING_DIR . '/includes/orders.php';
+	require_once NDM_PRICING_DIR . '/includes/promotions.php';
 
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		require_once NDM_PRICING_DIR . '/includes/cli.php';

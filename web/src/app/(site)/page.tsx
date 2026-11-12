@@ -16,6 +16,7 @@ import { VisitUs } from "@/components/home/visit-us";
 import { Specials } from "@/components/specials/specials";
 import { Faq } from "@/components/ui/faq";
 import { FAQS } from "@/config/home";
+import { Suspense } from "react";
 
 /** Home page: every section, top to bottom. The header and footer come from the root layout. */
 export default function HomePage() {
@@ -30,7 +31,10 @@ export default function HomePage() {
       <Team />
       <BeforeAfter />
       <Process />
-      <Specials />
+      {/* the offers come from WooCommerce: the rest of the page never waits for them */}
+      <Suspense fallback={null}>
+        <Specials />
+      </Suspense>
       <Saying />
       <VisitUs />
       <Faq items={FAQS} />

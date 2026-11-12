@@ -112,6 +112,34 @@ category changes, wherever the change was made. WordPress then calls `NDM_REVALI
 `wp ndm-pricing import` (reads it from standard input) creates the categories, variable products and
 variations once. It never touches anything that already exists.
 
+## Current offers (Promotion page, offers wheel)
+
+An offer is a WooCommerce product with one piece of post meta, `_ndm_promo`: `order`, `name` (card
+title, empty shows the product's name), `text`, `area` (`Face` or `Body`), `icon`, `focus` (photo focus
+point, `50% 40%`) and `scope` (`product`: the card shows this treatment's lowest price and offer;
+`category`: the lowest of its whole category). It holds no price: the site works the price and the
+offer line out from the price list. The photo is the product's own image.
+
+| Route (`ndm/v1`) | Who | What |
+|---|---|---|
+| `GET /promotions` | public | the offers visitors see, in order (only treatments on the public price list) |
+| `GET /promotions/admin` | manager | every offer, including ones the page cannot show yet |
+| `POST /promotions/admin/save` | manager | the whole list in its new order; products on it become offers, the others stop being one |
+
+The price list's own save (`POST /pricing/admin/save`) takes the same settings per product: `products[].promo` is `null`
+(take it out of the offers) or `{ name, text, area, icon, focus, scope, position?, imageId? }`.
+
+No product is created, deleted or re-priced by these routes. Photos are uploaded through WordPress's own
+`wp/v2/media` (the account needs `upload_files`, which Administrators and Shop managers have). The
+management screen is on the Next.js site at `/manage/promotions`. The public list is stored with the
+price list and thrown away with it.
+
+One-time import of the site's original ten offers (does nothing when offers already exist):
+
+```
+node ../web/scripts/export-promotions.mjs | docker compose run --rm -T -v "<folder with the photos>:/tmp/promo:ro" cli wp ndm-pricing promotions --images=/tmp/promo
+```
+
 ## Site search
 
 The search in the site header finds the menu's treatments and concerns plus the price list in

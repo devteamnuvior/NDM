@@ -9,9 +9,9 @@
  * Every price and offer comes from the price list; prescription drugs are left out of the promotion (C.01.044).
  */
 import Link from "next/link";
-import { Fragment, useEffect, useRef, useState, type MouseEvent } from "react";
+import { createContext, Fragment, useContext, useEffect, useRef, useState, type MouseEvent } from "react";
 import { useBfClock, type BfClock } from "@/components/black-friday/bf-timer";
-import { BFS, BFS_CONCERNS, BFS_DEALS, BFS_MAX, BFS_SPECIALS, BFS_TABS, bfsShort, bfsTag, type Deal, type Opt, type PlanLine, type SpecialCard } from "@/components/bf-sale/data";
+import { BFS, BFS_CONCERNS, BFS_DEALS, BFS_MAX, BFS_TABS, bfsShort, bfsTag, type Deal, type Opt, type PlanLine, type SpecialCard } from "@/components/bf-sale/data";
 import { Button } from "@/components/ui/button";
 import { IconArrow, IconClose, IconPhone } from "@/components/ui/icons";
 import { SHOP_URL } from "@/config/shop";
@@ -24,7 +24,8 @@ import { tel } from "@/lib/routes";
 import { scrollToY } from "@/lib/smooth-scroll";
 
 const PLAN_KEY = "ndm-bf-plan";
-const SPECIALS = BFS_SPECIALS;
+/* the current offers, read from WooCommerce by the page and handed to the two sections that show them */
+const Specials = createContext<SpecialCard[]>([]);
 const PHONES = SITE_CLINICS.map((c) => ({ num: c.phone }));
 const CLINIC_PHOTOS = { uptown: "/assets/clinic/clinic-4.jpg", downtown: "/assets/clinic/clinic-1.jpg" };
 const CLINICS = SITE_CLINICS.map((c) => ({ name: c.name, addr: c.address, phone: c.phone, note: c.directions, img: CLINIC_PHOTOS[c.id] }));
@@ -114,7 +115,7 @@ function BfsCountdownCard({ t }: { t: BfClock }) {
 /* round 27: the offer tickets turn like a carousel. Every few seconds the front ticket moves left, the right one comes forward
    and the next one enters from behind; hovering pauses it, and clicking a side ticket brings it to the front */
 function BfsFan() {
-  const cards = SPECIALS.filter((x) => !/botox|dysport/i.test(x.n) && x.deal).slice(0, 5);
+  const cards = useContext(Specials).filter((x) => !/botox|dysport/i.test(x.n) && x.deal).slice(0, 5);
   const n = cards.length;
   const [k, setK] = useState(0);
   const [hold, setHold] = useState(false);
@@ -123,6 +124,7 @@ function BfsFan() {
     const t = setInterval(() => setK((x) => x + 1), 2600);
     return () => clearInterval(t);
   }, [hold]);
+  if (!n) return null;
   return (
     <ul role="list" onMouseEnter={() => setHold(true)} onMouseLeave={() => setHold(false)} className="bfs-fan relative mx-auto mb-8 hidden h-[clamp(250px,24vw,330px)] w-full max-w-[520px] md:block">
       {cards.map((x, i) => {
@@ -131,7 +133,7 @@ function BfsFan() {
           <li key={x.n} className={`bfs-fan-card bfs-pos-${Math.min(pos, 3)}`} aria-hidden={pos > 2}>
             <a href="#specials" tabIndex={pos > 2 ? -1 : 0} onClick={(e) => { if (pos !== 1 && pos < 3) { e.preventDefault(); setK((v) => v + (pos === 2 ? 1 : -1)); } else bfsGo('specials')(e); }}
               className="block h-full w-full overflow-hidden rounded-[22px] bg-white text-[#0B0B0C] shadow-[0_40px_70px_-30px_rgba(0,0,0,.85)]">
-              <span className="relative block h-[62%] overflow-hidden"><img src={x.img} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: x.pos }} /><span className="bfs-off absolute left-2.5 top-2.5 rounded-full px-2.5 py-1 font-inter text-[11px] font-semibold">{x.deal}</span></span>
+              <span className="relative block h-[62%] overflow-hidden"><img src={x.img || undefined} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: x.pos }} /><span className="bfs-off absolute left-2.5 top-2.5 rounded-full px-2.5 py-1 font-inter text-[11px] font-semibold">{x.deal}</span></span>
               <span className="block border-t-2 border-dashed border-black/10 px-3.5 pt-2.5">
                 <span className="block truncate font-aeonik text-[18px] leading-[1.15]">{x.n}</span>
                 <span className="mt-0.5 block font-inter text-[12.5px] text-ndm-muted">From <b className="font-semibold text-[#D3121F]">${x.p}</b></span>
@@ -332,7 +334,8 @@ function BfsDeals({ pick, setPick, plan, toggle }: PickProps & { plan: PlanLine[
 function BfsSpecials() {
   const ref = useRef<HTMLElement>(null);
   useReveal(ref);
-  const list = SPECIALS.filter((s) => !/botox|dysport/i.test(s.n)).slice(0, 6);
+  const list = useContext(Specials).filter((s) => !/botox|dysport/i.test(s.n)).slice(0, 6);
+  if (!list.length) return null;
   const catOf = (s: SpecialCard) => { const m = /#pg-([a-z0-9-]+)-h/.exec(s.h || ''); return m && BFS_DEALS.some((d) => d.id === m[1]) ? m[1] : null; };
   return (
     <section ref={ref} id="specials" aria-labelledby="bfs-s-title" data-nav="dark" className="bfs-dark bfs-band relative mt-[clamp(64px,7vw,104px)] scroll-mt-[68px] overflow-hidden px-[var(--gx)] py-[clamp(72px,8vw,120px)] text-white">
@@ -353,7 +356,7 @@ function BfsSpecials() {
                   <li key={s.n}>
                     <article className="bfs-ticket on-k flex h-full flex-col overflow-hidden rounded-[24px] text-[#0B0B0C]">
                       <div className="relative aspect-[16/10] overflow-hidden bg-[#F3F1EF]">
-                        <img src={s.img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: s.pos }} />
+                        <img src={s.img || undefined} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: s.pos }} />
                         {s.deal && <span className="bfs-off absolute left-3 top-3 rounded-full px-3 py-1.5 font-inter text-[12px] font-semibold">{s.deal}</span>}
                       </div>
                       <div className="flex flex-1 flex-col p-5">
@@ -524,7 +527,7 @@ function BfsPlanBar({ plan }: { plan: PlanLine[] }) {
 
 
 /** The page: the plan lives here (and in localStorage), shared by the deal cards, the plan section and the phone bar. */
-export function BfSalePage() {
+export function BfSalePage({ specials }: { specials: SpecialCard[] }) {
   const [plan, setPlan] = useState<PlanLine[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [pick, setPick] = useState<string | null>(null);
@@ -550,7 +553,7 @@ export function BfSalePage() {
   }, [plan, loaded]);
   const toggle = (x: PlanLine) => setPlan((p) => (p.some((y) => y.key === x.key) ? p.filter((y) => y.key !== x.key) : [...p, x]));
   return (
-    <>
+    <Specials.Provider value={specials}>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[90] focus:rounded-full focus:bg-[#D3121F] focus:px-4 focus:py-2 focus:font-mont focus:text-white">
         Skip to content
       </a>
@@ -567,6 +570,6 @@ export function BfSalePage() {
       </main>
       <BfsFooter />
       <BfsPlanBar plan={plan} />
-    </>
+    </Specials.Provider>
   );
 }

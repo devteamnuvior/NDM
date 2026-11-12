@@ -1,7 +1,8 @@
 "use client";
 
-import Image, { type StaticImageData } from "next/image";
 import { useEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from "react";
+import { OfferImg } from "@/components/specials/offer-photo";
+import type { OfferPhoto } from "@/components/specials/offers";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { IconArrow } from "@/components/ui/icons";
@@ -11,8 +12,10 @@ import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
 
 export interface WheelOffer {
+  /** WooCommerce product ID. */
+  id: number;
   name: string;
-  photo: StaticImageData;
+  photo: OfferPhoto | null;
   position: string;
   tag: string;
   /** Lowest price, without the dollar sign. */
@@ -193,7 +196,7 @@ export function SpecialsWheel({ offers, level: Heading, offersHref, children }: 
               const or = entered ? 0 : side * 32;
               return (
                 <article
-                  key={s.name}
+                  key={s.id}
                   aria-hidden={!on}
                   onClick={() => {
                     if (!on && !swipe.current?.moved) show(i);
@@ -215,7 +218,7 @@ export function SpecialsWheel({ offers, level: Heading, offersHref, children }: 
                   <span className="relative flex h-full flex-col p-[clamp(14px,1.6vw,22px)]">
                     <span className="flex items-center justify-between gap-2">
                       <span className="sw-photo block shrink-0 overflow-hidden rounded-full" style={{ width: 52 * k, height: 52 * k }}>
-                        <Image src={s.photo} alt="" sizes="64px" draggable={false} className="h-full w-full object-cover" style={{ objectPosition: s.position }} />
+                        <OfferImg photo={s.photo} sizes="64px" className="h-full w-full object-cover" style={{ objectPosition: s.position }} />
                       </span>
                       <span className={`sw-tag truncate rounded-full px-3 py-1.5 font-mont text-[10.5px] tracking-[.12em] uppercase ${i === 0 ? "is-feature" : ""}`}>{i === 0 ? "Featured" : s.tag}</span>
                     </span>
@@ -278,7 +281,7 @@ export function SpecialsWheel({ offers, level: Heading, offersHref, children }: 
             </div>
             <div className="flex items-center gap-1.5" aria-hidden="true">
               {offers.map((o, i) => (
-                <i key={o.name} className={`sw-dot h-1.5 rounded-full transition-all duration-500 ${i === act ? "is-on w-6" : "w-1.5"}`} />
+                <i key={o.id} className={`sw-dot h-1.5 rounded-full transition-all duration-500 ${i === act ? "is-on w-6" : "w-1.5"}`} />
               ))}
             </div>
             {children}

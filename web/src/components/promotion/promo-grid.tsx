@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useRef, useState } from "react";
+import { OfferImg } from "@/components/specials/offer-photo";
 import type { Offer } from "@/components/specials/offers";
 import { SpecialIcon } from "@/components/specials/special-icon";
 import { Button } from "@/components/ui/button";
@@ -59,13 +59,12 @@ export function PromoGrid({ offers }: { offers: Offer[] }) {
       </div>
       <ul key={pick} role="list" className="mt-10 grid gap-4 sm:grid-cols-2 md:mt-14 lg:grid-cols-3">
         {list.map((s, i) => (
-          <li key={s.name} className="promo-in" style={{ animationDelay: `${0.05 * i}s` }}>
+          <li key={s.id} className="promo-in" style={{ animationDelay: `${0.05 * i}s` }}>
             <article className="promo-card group relative flex h-full flex-col overflow-hidden rounded-[22px] p-3 pb-6">
               <span aria-hidden="true" className="sw-ring pointer-events-none absolute -right-20 -bottom-20 size-48 rounded-full" />
               <div className="relative aspect-[16/10] overflow-hidden rounded-[16px] bg-ndm-mist">
-                <Image
-                  src={s.photo}
-                  alt=""
+                <OfferImg
+                  photo={s.photo}
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]"
                   style={{ transitionTimingFunction: "var(--e-out)", objectPosition: s.position }}

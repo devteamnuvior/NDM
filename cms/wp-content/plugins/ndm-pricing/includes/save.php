@@ -9,6 +9,7 @@
  *     "categories":       [ { "id": 12 | "new-1", "name"?, "description"?, "visible"?, "perUnit"?, "products"?: [ 33, 34 ] } ],
  *     "categoryOrder":    [ 12, "new-1", 7 ],
  *     "products":         [ { "id": 33, "name"?, "note"?, "hidden"?, "label"?: { "text": "...", "enabled": true },
+ *                               "promo"?: null | { "name", "text", "area", "icon", "focus", "scope", "position"?, "imageId"? },
  *                             "regularPrice"?: "120", "salePrice"?: "",          (a product without variations)
  *                             "addVariations"?: [ { "ref": "newv-1", "name": "Package of 3", "regularPrice": "300",
  *                                                   "salePrice"?, "hidden"?, "label"? } ],
@@ -195,6 +196,7 @@ function ndm_pricing_plan( $body ) {
 		'categories' => array(),
 		'order'      => null,
 		'products'   => array(),
+		'promos'     => array(),
 		'variations' => array(),
 	);
 
@@ -423,7 +425,20 @@ function ndm_pricing_plan( $body ) {
 			$clean['variationOrder'] = $order;
 		}
 
+		// Whether the product is one of the current offers, and how its card reads (see promotions.php).
+		if ( array_key_exists( 'promo', $entry ) ) {
+			$promo = ndm_promo_clean_product_change( $entry['promo'], $id );
+			if ( is_wp_error( $promo ) ) {
+				return $promo;
+			}
+			$plan['promos'][ $id ] = $promo;
+		}
+
 		$plan['products'][ $id ] = $clean;
+	}
+
+	if ( count( ndm_promo_order_after( $plan['promos'] ) ) > NDM_PROMO_MAX ) {
+		return ndm_pricing_invalid( sprintf( 'At most %d treatments can be shown in Promotions.', NDM_PROMO_MAX ) );
 	}
 
 	// Variations.
@@ -644,6 +659,8 @@ function ndm_pricing_apply( $plan ) {
 		wc_delete_product_transients( $parent_id );
 		WC_Product_Variable::sync( $parent_id );
 	}
+
+	ndm_promo_apply_product_changes( $plan['promos'] );
 
 	ndm_pricing_flush();
 

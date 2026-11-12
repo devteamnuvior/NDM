@@ -11,6 +11,8 @@ export const WP_TAGS = {
   type: (type: string) => `wp:${type}`,
   /** The price list read from WooCommerce (the Pricing page). */
   pricing: "pricing",
+  /** The current offers (the Promotion page, the offers wheel). */
+  promotions: "promotions",
   /** The popular searches counted by WordPress. */
   search: "search-popular",
   /** One entry: "wp:posts:what-causes-rosacea-redness". */

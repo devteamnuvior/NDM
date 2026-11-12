@@ -1,4 +1,4 @@
-import { OFFERS } from "@/components/specials/offers";
+import type { Offer } from "@/components/specials/offers";
 import { PRICE_CATEGORIES } from "@/config/prices";
 
 /*
@@ -114,4 +114,5 @@ export interface SpecialCard {
   h: string;
 }
 
-export const BFS_SPECIALS: SpecialCard[] = OFFERS.map((o) => ({ n: o.name, img: o.photo.src, pos: o.position, p: o.price, u: o.unit, deal: o.deal, d: o.text, h: o.href }));
+/** The current offers (read from WooCommerce by the page) as this page's tickets. */
+export const bfsSpecials = (offers: Offer[]): SpecialCard[] => offers.map((o) => ({ n: o.name, img: o.photo?.src ?? "", pos: o.position, p: o.price, u: o.unit, deal: o.deal, d: o.text, h: o.href }));

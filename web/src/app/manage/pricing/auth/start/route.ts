@@ -12,10 +12,12 @@ export async function GET(request: Request) {
   }
 
   const state = await newSignInState();
+  /* which management screen asked: only a known name is passed on, never an address */
+  const to = new URL(request.url).searchParams.get("to") === "promotions" ? "&to=promotions" : "";
   const target = new URL("/wp-admin/authorize-application.php", wordpressOrigin());
   target.searchParams.set("app_name", APP_NAME);
   target.searchParams.set("app_id", APP_ID);
-  target.searchParams.set("success_url", `${site}${MANAGE_PATH}/auth/callback?state=${state}`);
+  target.searchParams.set("success_url", `${site}${MANAGE_PATH}/auth/callback?state=${state}${to}`);
   target.searchParams.set("reject_url", `${site}${MANAGE_PATH}?problem=declined`);
 
   return new Response(null, { status: 303, headers: { Location: target.toString(), "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" } });
