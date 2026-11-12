@@ -6,10 +6,11 @@ import { IconArrow } from "@/components/ui/icons";
 import { SiteLink } from "@/components/ui/site-link";
 import { CONCERNS } from "@/config/navigation";
 import { ACTIONS } from "@/config/routes";
-import { resolveLabel } from "@/lib/routes";
+import { useMenuLink } from "@/components/layout/concern-paths";
 
 /** Concerns: four groups of concerns, then the skin-analysis photo card. */
 export function ConcernsMenu({ open, current, onLink, eager }: MenuPanelProps) {
+  const menuLink = useMenuLink();
   return (
     <div className={PANEL_CLASS} data-open={open}>
       <div className="grid grid-cols-[1fr_340px] gap-4 p-4 2xl:p-5">
@@ -27,7 +28,7 @@ export function ConcernsMenu({ open, current, onLink, eager }: MenuPanelProps) {
                 <ul role="list">
                   {g.items.map((it) => (
                     <li key={it}>
-                      <SiteLink to={resolveLabel(it)} current={current} onClick={onLink} className="menu-item group font-mont">
+                      <SiteLink to={menuLink(it)} current={current} onClick={onLink} className="menu-item group font-mont">
                         <span className="min-w-0">{it}</span>
                         <IconArrow size={11} className="menu-arrow" />
                       </SiteLink>

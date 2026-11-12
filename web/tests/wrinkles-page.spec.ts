@@ -41,6 +41,8 @@ test("side by side: a table of eleven rows on desktop", async ({ page }) => {
   await expect(compare.locator("tbody tr")).toHaveCount(11);
   await expect(compare.locator("thead th")).toHaveText(["Treatment", "Typical visit", "Typical course", "Downtime", "Changes may appear", "From"]);
   await expect(compare.locator("details").first()).toBeHidden();
+  /* prices are WooCommerce's, with the unit spelled out */
+  await expect(compare.locator("tbody tr", { hasText: "Chemical Peels" })).toContainText("$104.30 per session");
   await expect(compare).toContainText("Individual results may vary.");
 });
 
@@ -69,4 +71,10 @@ test.describe("phone", () => {
     await page.waitForTimeout(400);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
   });
+});
+
+test("an address with no concern behind it shows the not-found page", async ({ page }) => {
+  await page.goto(`${NEXT_URL}/no-such-concern`);
+  await expect(page.getByText("This page could not be found.")).toBeVisible();
+  await expect(page.locator("main[data-page='concern']")).toHaveCount(0);
 });

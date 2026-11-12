@@ -7,7 +7,7 @@ import { TwoTone } from "@/components/ui/two-tone";
 import { contentLink, pageLink } from "@/lib/routes";
 import type { ConcernPage } from "@/types/concern";
 
-/** From the journal: articles about this concern (they open on the clinic's live blog). */
+/** From the journal: the WordPress posts chosen for this concern. */
 export function CnArticles({ articles, short }: { articles: ConcernPage["articles"]; short: string }) {
   if (!articles.length) return null;
   return (
@@ -44,7 +44,7 @@ export function CnArticles({ articles, short }: { articles: ConcernPage["article
               </span>
               <span className="flex flex-1 flex-col px-2.5 pt-4 pb-2.5">
                 <span className="font-inter text-[12.5px] text-ndm-muted">
-                  {a.topic} · {a.date}
+                  {[a.topic, a.date].filter(Boolean).join(" · ")}
                 </span>
                 <span className="mt-1.5 block font-aeonik text-[clamp(19px,1.6vw,22px)] leading-[1.2] tracking-[-0.015em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{a.title}</span>
                 <span className="mt-2 block flex-1 font-inter text-[14px] leading-[1.55] text-ndm-ink/75">{a.excerpt}</span>

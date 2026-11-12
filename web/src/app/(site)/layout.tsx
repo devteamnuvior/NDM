@@ -1,13 +1,17 @@
 import type { ReactNode } from "react";
+import { ConcernPathsProvider } from "@/components/layout/concern-paths";
 import { DragScroll } from "@/components/layout/drag-scroll";
 import { SiteHeader } from "@/components/layout/header/site-header";
 import { OfferPopup } from "@/components/layout/offer-popup";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { getConcernSlugs } from "@/lib/concern";
 
 /** Pages inside the site's header and footer (every page except the Black Friday sale page, which has its own). */
-export default function SiteLayout({ children }: { children: ReactNode }) {
+export default async function SiteLayout({ children }: { children: ReactNode }) {
+  /* the concern pages published in WordPress: the header links them and starts dark on them */
+  const concerns = await getConcernSlugs();
   return (
-    <>
+    <ConcernPathsProvider slugs={concerns}>
       <div className="site-root">
         <a
           href="#main"
@@ -21,6 +25,6 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
         <SiteFooter />
       </div>
       <OfferPopup />
-    </>
+    </ConcernPathsProvider>
   );
 }

@@ -5,11 +5,12 @@ import { categoryOf } from "@/components/layout/header/mega-menu";
 import { Button } from "@/components/ui/button";
 import { IconArrow, IconChevron, IconClose, IconExternal } from "@/components/ui/icons";
 import { SiteLink } from "@/components/ui/site-link";
+import { useMenuLink, useOnConcernPage } from "@/components/layout/concern-paths";
 import { ABOUT_LINKS, CONCERNS, PAGE_SECTION, PROCEDURES } from "@/config/navigation";
 import { ACTIONS, type PageId } from "@/config/routes";
 import { CLINICS } from "@/config/site";
 import { useDeferredOpen } from "@/hooks/use-deferred-open";
-import { pageLink, resolveLabel, tel } from "@/lib/routes";
+import { pageLink, tel } from "@/lib/routes";
 import type { NavSectionId, ResolvedLink } from "@/types/navigation";
 
 export interface MobileDrawerProps {
@@ -46,8 +47,9 @@ function TopLink({ to, here, onClick, children }: { to: ResolvedLink; here: bool
 }
 
 function SubLink({ label, current, onClick, nowrap }: { label: string; current?: PageId; onClick: () => void; nowrap?: boolean }) {
+  const menuLink = useMenuLink();
   return (
-    <SiteLink to={resolveLabel(label)} current={current} onClick={onClick} className="menu-item-m font-mont">
+    <SiteLink to={menuLink(label)} current={current} onClick={onClick} className="menu-item-m font-mont">
       <span className={`min-w-0 ${nowrap ? "whitespace-nowrap" : ""}`}>{label}</span>
       <IconArrow size={11} className="shrink-0 text-ndm-blue" />
     </SiteLink>
@@ -59,7 +61,8 @@ export function MobileDrawer({ open, current, onClose }: MobileDrawerProps) {
   const shown = useDeferredOpen(open);
   const [sec, setSec] = useState<Section | null>(null);
   const [cat, setCat] = useState<string | null>(() => categoryOf(current) ?? null);
-  const section: NavSectionId | undefined = current ? PAGE_SECTION[current] : undefined;
+  const onConcern = useOnConcernPage();
+  const section: NavSectionId | undefined = current ? PAGE_SECTION[current] : onConcern ? "concerns" : undefined;
   const toggle = (s: Section) => setSec(sec === s ? null : s);
   const close = useEffectEvent(onClose);
 

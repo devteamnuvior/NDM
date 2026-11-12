@@ -9,7 +9,8 @@ export function isMigrated(page: PageId): boolean {
   return PAGES[page].migrated;
 }
 
-function toSlug(label: string): string {
+/** A menu label as the slug of its page: "Wrinkles & Fine Lines" -> "wrinkles-fine-lines". */
+export function toSlug(label: string): string {
   return label
     .toLowerCase()
     .replace(/[®™]/g, "")
@@ -38,11 +39,13 @@ export function pageFromPathname(pathname: string): PageId | undefined {
 export const tel = (num: string): string => `tel:+1${num.replace(/\D/g, "")}`;
 
 /**
- * A link as the prototype's content files write it ("botox.html", "pricing.html#prices", "#/slug", a full URL)
+ * A link as the content writes it ("botox.html", "pricing.html#prices", "/botox", "#/slug", a full URL)
  * -> the same place on this site.
  */
 export function contentLink(href: string): ResolvedLink {
   if (/^(#|https?:|tel:|mailto:)/.test(href)) return { href };
+  /* already a place on this site ("/botox", "/pricing#prices"), as WordPress editors write it */
+  if (href.startsWith("/")) return { href, page: pageFromPathname(href.split("#")[0]) };
   const [file, hash] = href.split("#");
   const page = pageFromPathname(`/${file}`);
   return page ? { href: pagePath(page) + (hash ? `#${hash}` : ""), page } : { href: `/${href}` };

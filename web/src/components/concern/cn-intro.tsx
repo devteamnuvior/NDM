@@ -13,7 +13,8 @@ const Arrow = () => <IconArrow size={12} className="shrink-0 text-ndm-deep trans
 /** Overview: the concern in plain words, beside a card with the short answer and the pages on the site that cover it. */
 export function CnIntro({ page: p, number }: { page: ConcernPage; number: string }) {
   const count = p.facts[0][1].replace(" to compare", "");
-  const from = /^From/.test(p.facts[3][1]) ? `, ${p.facts[3][1].replace("From", "from")}` : "";
+  const start = p.facts[3]?.[1] ?? "";
+  const from = /^From/.test(start) ? `, ${start.replace("From", "from")}` : "";
   return (
     <RevealSection id="about" aria-labelledby="about-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] pt-[clamp(40px,5vw,72px)] pb-[clamp(24px,3vw,40px)]">
       <div className={`${TX_WRAP} grid gap-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,.75fr)] lg:gap-[clamp(40px,5vw,80px)]`}>

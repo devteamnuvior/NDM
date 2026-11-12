@@ -29,3 +29,4 @@ require_once NDM_HEADLESS_DIR . '/includes/rest.php';
 require_once NDM_HEADLESS_DIR . '/includes/search.php';
 require_once NDM_HEADLESS_DIR . '/includes/pages.php';
 require_once NDM_HEADLESS_DIR . '/includes/before-after.php';
+require_once NDM_HEADLESS_DIR . '/includes/concerns.php';

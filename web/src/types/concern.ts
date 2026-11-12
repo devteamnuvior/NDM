@@ -8,7 +8,7 @@ export interface ConcernOption {
   /** What it often suits. */
   fit: string;
   line: string;
-  /** "From $245"; replaced from the price list on the option cards. */
+  /** "From $245", from WooCommerce; empty when the treatment has no product there. Never typed. */
   price: string;
   priceHref: string;
   /** The treatment's own page. */
@@ -47,4 +47,76 @@ export interface ConcernPage extends TxHeroContent {
   related: { name: string; menu: string; img: string; kind: string }[];
   why: TxWhyContent;
   faqs: [question: string, answer: string][];
+}
+
+/** A photo of WordPress's media library. */
+export interface WPConcernImage {
+  id: number;
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+}
+
+/** A concern in the list of concerns (`ndm/v1/concerns`). */
+export interface WPConcernSummary {
+  /** Its address on the site: "/<slug>". */
+  slug: string;
+  title: string;
+}
+
+/**
+ * A concern as WordPress serves it (`ndm/v1/concerns/<slug>`, see
+ * cms/wp-content/mu-plugins/ndm-headless/includes/concerns.php): a post of the type "Concerns" with
+ * the fields of its edit screen. Only what belongs to this concern; what every concern page shares is
+ * in `@/config/concern`.
+ */
+export interface WPConcern extends WPConcernSummary {
+  id: number;
+  modified: string;
+  /** The wide header photo (the featured image). */
+  hero: WPConcernImage | null;
+  content: {
+    heading_1: string;
+    heading_2: string;
+    intro: string;
+    hero_mobile: WPConcernImage | null;
+    hero_position: string;
+    seo_title: string;
+    seo_description: string;
+    lede: string[];
+    pages: { name: string; link: string }[];
+    gallery: boolean;
+    notice: string[];
+    cause: string[];
+    assess_text: string;
+    assess_points: string[];
+    options: {
+      name: string;
+      role: string;
+      image: WPConcernImage | null;
+      fit: string;
+      line: string;
+      link: string;
+      price_link: string;
+      /** The WooCommerce product or category picked for it: "product:<id>", "category:<slug>", or empty (priced by its title). */
+      price_source: string;
+      /** The picked product's own name, short description and image: used for the title, summary and image left empty. Null for a category or no pick. */
+      product: { id: number; name: string; description: string; image: WPConcernImage | null } | null;
+      visit: string;
+      course: string;
+      down: string;
+      res: string;
+    }[];
+    rx_text: string;
+    rx_links: { name: string; link: string }[];
+    expect: { when: string; title: string; text: string }[];
+    /** Before and after photos: the cases of the "Before & After" post type chosen for this concern, in order. `label` is the case's first category. */
+    cases: { id: number; title: string; label: string; image: WPConcernImage }[];
+    home: { title: string; category: string; text: string; product_name: string; product_size: string; product_image: string; product_link: string }[];
+    /** From the journal: the WordPress posts chosen for this concern, in order (published ones only). */
+    journal: { id: number; slug: string; title: string; /** "November 7, 2025" */ date: string; /** First category; empty when it has none. */ topic: string; image: WPConcernImage | null; excerpt: string }[];
+    related: { name: string; kind: string; image: WPConcernImage | null }[];
+    faqs: { q: string; a: string }[];
+  };
 }

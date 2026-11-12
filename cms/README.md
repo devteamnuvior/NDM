@@ -21,6 +21,7 @@ wp-content/mu-plugins/
     search.php                     popular searches of the site search (see "Site search" below)
     pages.php                      WordPress pages the site shows (see "Legal pages" below)
     before-after.php               the Before & After gallery (see "Before & After gallery" below)
+    concerns.php                   the concern pages (see "Concern pages" below)
 ```
 
 wp-content/plugins/ndm-pricing/    the Pricing page's link to WooCommerce (see "Pricing page" below)
@@ -222,6 +223,62 @@ node ../web/scripts/export-before-after.mjs | docker compose run --rm -T -v "$PW
 
 Before anything is published: every before/after asset must say "Individual results may vary" (the
 site adds it), and prescription-drug cases (the "Botox" category) need Raymond Valadkhani's review.
+
+## Concern pages
+
+A concern page of the site (for example `/wrinkles-fine-lines`) is a post of the **post type "Concerns"**
+(`ndm_concern`, in the admin menu). Every concern has the same design; a post carries only its own
+content. The post's **slug is the page's address** on the site, so a new published concern is a new
+page, without a new build.
+
+Typed into the post (boxes under the title, stored as one post meta, `_ndm_concern`; the list of
+fields is `ndm_headless_concern_schema()` in `includes/concerns.php`):
+
+| Box | Fields |
+|---|---|
+| Title, Slug, Header photo | the concern's name, the address, the wide header photo (featured image) |
+| Header | heading in two lines, text under it, the tall photo for phones, photo focus |
+| Search engines | page title and description |
+| Overview | opening paragraphs, the "On our site" links, whether to link the Before & after gallery |
+| The concern | what you may notice, what causes it |
+| Assessment | text, what we look at |
+| Treatment options | one row per treatment: the WooCommerce product (searched and picked; its price is the row's price), then an optional title, label, image, subtitle and summary that replace the product's own, links, visit, course, downtime, when changes may appear; the prescription note and its links |
+| What to expect | the steps |
+| Before and after photos | cases of the "Before & After" post type, searched and picked, in any number and order. Each takes the case's photo and first category: nothing is typed |
+| Home care | cards, each with an optional product of the skincare shop |
+| From the journal | WordPress posts, searched and picked, in any number and order (left out when empty). Each card takes the post's title, date, first category, featured image and excerpt: nothing is typed |
+| Related treatments | name, tag, photo |
+| FAQ | questions and answers |
+
+**No price is ever typed.** Every "From" price on the option cards and in the table is read from
+WooCommerce: from the product (or whole category) picked in the row, else from the product with
+the row's title. A treatment without a product shows no price. Also filled in by the site: the
+number of options, the starting price (the lowest option), the
+"In short" sentence, the section bar and its numbering, the clinics line, the booking form, section
+headings, and the sections every concern page shares (Why NewDermaMed, Our team, Testimonials, Visit
+us, Start your journey).
+
+A link field takes a page of the site (`/botox`, `/pricing#pg-microneedling-h`) or a full address;
+left empty, the site links the page that has the row's name, once that page exists.
+
+| Route (`ndm/v1`) | Who | What |
+|---|---|---|
+| `GET /concerns` | public | the name and slug of every published concern |
+| `GET /concerns/<slug>` | public | one published concern with its photos |
+
+When a concern changes, WordPress tells the site to drop its cached copy (tag `concerns` through
+`/api/revalidate`). The post type has no pages of its own in WordPress.
+
+One-time import of the original Wrinkles & fine lines page (created only when its slug is free; photos
+go into the media library):
+
+```
+node ../web/scripts/export-concerns.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm concerns-import --images=/tmp/site
+```
+
+Before anything is published: copy must follow Health Canada's qualified language, a prescription drug
+is never named beside a benefit, and before/after photos of prescription treatments need Raymond
+Valadkhani's review.
 
 ## Order requests (cart and checkout)
 

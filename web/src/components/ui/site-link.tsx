@@ -16,7 +16,7 @@ interface SiteLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "h
  */
 export function SiteLink({ to, current, children, ...rest }: SiteLinkProps) {
   const here = to.page !== undefined && to.page === current ? ({ "aria-current": "page" } as const) : {};
-  if (to.page !== undefined && isMigrated(to.page)) {
+  if (to.internal || (to.page !== undefined && isMigrated(to.page))) {
     return (
       <Link href={to.href} {...here} {...rest}>
         {children}

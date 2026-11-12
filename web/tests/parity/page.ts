@@ -21,6 +21,11 @@ interface PageParityOptions {
   /** How many <section> elements <main> must hold. */
   sectionCount: number;
   sections: PageSection[];
+  /**
+   * Sections (by id, or by `aria-labelledby`) that differ from the prototype on purpose: the outline
+   * compares neither their height nor their share of the page's total height.
+   */
+  differs?: string[];
 }
 
 /**
@@ -28,7 +33,7 @@ interface PageParityOptions {
  * order and heights, the footer, the total height), then each listed section scrolled to the top of the
  * window, measured element by element and compared pixel by pixel.
  */
-export function pageParity({ name, paths, sectionCount, sections }: PageParityOptions): void {
+export function pageParity({ name, paths, sectionCount, sections, differs = [] }: PageParityOptions): void {
   for (const vp of VIEWPORTS) {
     test.describe(`${name} page parity @ ${vp.name}`, () => {
       let legacy: Page;
@@ -43,11 +48,15 @@ export function pageParity({ name, paths, sectionCount, sections }: PageParityOp
       });
 
       test("outline: sections, order, heights", async () => {
-        const outline = () => ({
-          sections: Array.from(document.querySelectorAll("main > section")).map((s) => `${s.id || s.getAttribute("aria-labelledby")}:${Math.round((s as HTMLElement).offsetHeight)}`),
-          footer: Math.round((document.querySelector("footer") as HTMLElement).offsetHeight),
-          total: document.documentElement.scrollHeight,
-        });
+        const outline = (skip: string[]) => {
+          const all = Array.from(document.querySelectorAll<HTMLElement>("main > section")).map((s) => ({ key: s.id || s.getAttribute("aria-labelledby"), height: s.offsetHeight }));
+          const skipped = all.filter((s) => skip.includes(String(s.key)));
+          return {
+            sections: all.map((s) => (skipped.includes(s) ? `${s.key}:(differs)` : `${s.key}:${Math.round(s.height)}`)),
+            footer: Math.round((document.querySelector("footer") as HTMLElement).offsetHeight),
+            total: Math.round(document.documentElement.scrollHeight - skipped.reduce((n, s) => n + s.height, 0)),
+          };
+        };
         /* Lazy images without stated dimensions take no room in the prototype until they arrive, while the
            migrated page reserves it: compare the settled layout, once every image in <main> has loaded. */
         const settle = (p: Page) =>
@@ -60,8 +69,8 @@ export function pageParity({ name, paths, sectionCount, sections }: PageParityOp
           });
         await Promise.all([settle(legacy), settle(next)]);
         await Promise.all([legacy.waitForTimeout(300), next.waitForTimeout(300)]);
-        const a = await legacy.evaluate(outline);
-        const b = await next.evaluate(outline);
+        const a = await legacy.evaluate(outline, differs);
+        const b = await next.evaluate(outline, differs);
         expect(a.sections.length).toBe(sectionCount);
         expect(b).toEqual(a);
       });

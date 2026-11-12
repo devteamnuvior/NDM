@@ -43,4 +43,6 @@ export interface SearchEntry {
 export interface ResolvedLink {
   href: string;
   page?: PageId;
+  /** A page of this site that is not in the route table (a concern page from WordPress). */
+  internal?: boolean;
 }

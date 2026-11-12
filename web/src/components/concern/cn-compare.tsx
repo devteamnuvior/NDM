@@ -25,8 +25,17 @@ const Icon = ({ size, className, children }: { size: number; className?: string;
   </svg>
 );
 
+/** A treatment's small photo: a file under /assets (optimised), or a photo of WordPress's media library, shown as it is. */
+function Thumb({ src, size, className }: { src: string; size: number; className: string }) {
+  if (!src) return null;
+  if (src.startsWith("/")) return <Image src={src} alt="" width={size} height={size} className={className} />;
+  /* eslint-disable-next-line @next/next/no-img-element -- served by WordPress */
+  return <img src={src} alt="" width={size} height={size} loading="lazy" decoding="async" className={className} />;
+}
+
 /** The price pill: "From" as a small label when the price starts with it. */
 function From({ r, className = "", stop }: { r: ConcernOption; className?: string; stop?: boolean }) {
+  if (!r.price) return null;
   const isFrom = /^from/i.test(r.price);
   return (
     <SiteLink to={contentLink(r.priceHref)} onClick={stop ? (e) => e.stopPropagation() : undefined} className={`cn-from ${className}`}>
@@ -72,7 +81,7 @@ export function CnCompare({ rows, number }: { rows: ConcernOption[]; number: str
                 <tr key={r.key}>
                   <td>
                     <SiteLink to={contentLink(r.href)} className="cn-name">
-                      <Image src={r.img} alt="" width={42} height={42} className="cn-thumb" />
+                      <Thumb src={r.img} size={42} className="cn-thumb" />
                       <span className="min-w-0">
                         <span className="cn-nm">{r.name}</span>
                         <span className="cn-sub">{r.role}</span>
@@ -93,7 +102,7 @@ export function CnCompare({ rows, number }: { rows: ConcernOption[]; number: str
           <li key={r.key}>
             <details className="cn-m overflow-hidden rounded-[18px] bg-white ring-1 ring-ndm-ink/[.06]">
               <summary className="flex cursor-pointer items-center gap-3 p-4">
-                <Image src={r.img} alt="" width={44} height={44} className="size-11 shrink-0 rounded-[12px] object-cover ring-1 ring-ndm-ink/[.06]" />
+                <Thumb src={r.img} size={44} className="size-11 shrink-0 rounded-[12px] object-cover ring-1 ring-ndm-ink/[.06]" />
                 <span className="min-w-0 flex-1">
                   <span className="block font-aeonik text-[16.5px] leading-[1.15] tracking-[-0.01em] text-ndm-ink">{r.name}</span>
                   <From r={r} className="mt-1.5" stop />

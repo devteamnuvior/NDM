@@ -48,7 +48,7 @@ export function CnHome({ home, number }: { home: ConcernPage["home"]; number: st
                 <span aria-hidden="true" className="cn-hc-orb" />
                 {h.product ? (
                   /* eslint-disable-next-line @next/next/no-img-element -- product photo served by the shop */
-                  <img src={SHOP_PHOTOS + h.product.img} alt={`${h.product.name}, ${h.product.size}`} loading="lazy" decoding="async" className="cn-hc-img relative h-[78%] w-auto object-contain" />
+                  <img src={/^https?:/.test(h.product.img) ? h.product.img : SHOP_PHOTOS + h.product.img} alt={`${h.product.name}, ${h.product.size}`} loading="lazy" decoding="async" className="cn-hc-img relative h-[78%] w-auto object-contain" />
                 ) : (
                   <span aria-hidden="true" className="cn-hc-sun relative grid size-[44%] place-items-center rounded-full">
                     <svg viewBox="0 0 24 24" className="size-[46%]" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">

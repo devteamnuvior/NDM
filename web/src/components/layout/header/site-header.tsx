@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useEffectEvent, useState } from "react";
 import { AnnouncementBar } from "@/components/layout/header/announcement-bar";
 import { FloatSearch } from "@/components/layout/header/float-search";
+import { useOnConcernPage } from "@/components/layout/concern-paths";
 import { HeaderBar } from "@/components/layout/header/header-bar";
 import { CartPill } from "@/components/cart/cart-pill";
 import { DARK_START_PAGES } from "@/config/navigation";
@@ -34,7 +35,8 @@ export function SiteHeader() {
   const pathname = usePathname();
   const current = pageFromPathname(pathname);
   /* a page that opens on a dark hero starts with the dark header */
-  const dark = useNavTone(!!current && DARK_START_PAGES.includes(current), pathname);
+  const onConcern = useOnConcernPage();
+  const dark = useNavTone((!!current && DARK_START_PAGES.includes(current)) || onConcern, pathname);
   const cart = useCart();
   const [search, setSearch] = useState(false);
   const [drawer, setDrawer] = useState(false);
