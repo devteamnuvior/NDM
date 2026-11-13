@@ -116,7 +116,7 @@ function ndm_headless_concern_schema() {
 		),
 		array(
 			'id'     => 'seo',
-			'title'  => 'Search engines',
+			'title'  => 'Search Engines',
 			'fields' => array(
 				array( 'key' => 'seo_title', 'label' => 'Page title', 'type' => 'text', 'help' => 'Empty: "<name> Treatment Toronto | NewDermaMed".' ),
 				array( 'key' => 'seo_description', 'label' => 'Description', 'type' => 'textarea' ),
@@ -143,7 +143,7 @@ function ndm_headless_concern_schema() {
 		),
 		array(
 			'id'     => 'understand',
-			'title'  => 'The concern',
+			'title'  => 'The Concern',
 			'fields' => array(
 				array( 'key' => 'notice', 'label' => 'What you may notice', 'type' => 'lines', 'help' => 'One point per line.', 'rows' => 5 ),
 				array( 'key' => 'cause', 'label' => 'What causes it', 'type' => 'lines', 'help' => 'One paragraph per line.', 'rows' => 5 ),
@@ -159,7 +159,7 @@ function ndm_headless_concern_schema() {
 		),
 		array(
 			'id'     => 'options',
-			'title'  => 'Treatment options (cards and the Side by side table)',
+			'title'  => 'Treatment Options',
 			'help'   => 'One row per treatment, in the order shown: add a row, then search for its WooCommerce product. Rows with the label "Bio-stimulator" are shown together in the Bio-stimulators group. The price always comes from the product; a row without a product is priced by its title when a product has that name, else it shows no price.',
 			'fields' => array(
 				array(
@@ -198,7 +198,7 @@ function ndm_headless_concern_schema() {
 		),
 		array(
 			'id'     => 'expect',
-			'title'  => 'What to expect',
+			'title'  => 'What to Expect',
 			'fields' => array(
 				array(
 					'key'    => 'expect',
@@ -216,7 +216,7 @@ function ndm_headless_concern_schema() {
 		),
 		array(
 			'id'     => 'results',
-			'title'  => 'Before and after photos',
+			'title'  => 'Before and After Photos',
 			'help'   => 'Cases of the "Before & After" post type shown as photos, in this order: each takes the case\'s photo and its first category (the treatment). Nothing is typed here; add or change a case under Before & After. "Individual results may vary" is added by the site.',
 			'fields' => array(
 				array( 'key' => 'cases', 'label' => 'Cases', 'type' => 'posts', 'post_type' => NDM_BA_POST_TYPE, 'rest' => 'before-after-cases', 'noun' => 'cases' ),
@@ -224,7 +224,7 @@ function ndm_headless_concern_schema() {
 		),
 		array(
 			'id'     => 'home',
-			'title'  => 'Home care',
+			'title'  => 'Home Care',
 			'fields' => array(
 				array(
 					'key'    => 'home',
@@ -246,7 +246,7 @@ function ndm_headless_concern_schema() {
 		),
 		array(
 			'id'     => 'articles',
-			'title'  => 'From the journal',
+			'title'  => 'From the Journal',
 			'help'   => 'Posts of this WordPress shown as cards, in this order: each card takes the post\'s title, date, first category, featured image and excerpt. Nothing is typed here. Empty: the section is left out.',
 			'fields' => array(
 				array( 'key' => 'journal', 'label' => 'Posts', 'type' => 'posts' ),
@@ -254,7 +254,7 @@ function ndm_headless_concern_schema() {
 		),
 		array(
 			'id'     => 'related',
-			'title'  => 'Related treatments',
+			'title'  => 'Related Treatments',
 			'fields' => array(
 				array(
 					'key'    => 'related',
