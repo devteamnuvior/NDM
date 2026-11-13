@@ -198,7 +198,7 @@ function ndm_headless_concern_schema() {
 		),
 		array(
 			'id'     => 'expect',
-			'title'  => 'What to Expect',
+			'title'  => 'What To Expect',
 			'fields' => array(
 				array(
 					'key'    => 'expect',
@@ -216,7 +216,7 @@ function ndm_headless_concern_schema() {
 		),
 		array(
 			'id'     => 'results',
-			'title'  => 'Before and After Photos',
+			'title'  => 'Before And After Photos',
 			'help'   => 'Cases of the "Before & After" post type shown as photos, in this order: each takes the case\'s photo and its first category (the treatment). Nothing is typed here; add or change a case under Before & After. "Individual results may vary" is added by the site.',
 			'fields' => array(
 				array( 'key' => 'cases', 'label' => 'Cases', 'type' => 'posts', 'post_type' => NDM_BA_POST_TYPE, 'rest' => 'before-after-cases', 'noun' => 'cases' ),
@@ -246,7 +246,7 @@ function ndm_headless_concern_schema() {
 		),
 		array(
 			'id'     => 'articles',
-			'title'  => 'From the Journal',
+			'title'  => 'From The Journal',
 			'help'   => 'Posts of this WordPress shown as cards, in this order: each card takes the post\'s title, date, first category, featured image and excerpt. Nothing is typed here. Empty: the section is left out.',
 			'fields' => array(
 				array( 'key' => 'journal', 'label' => 'Posts', 'type' => 'posts' ),

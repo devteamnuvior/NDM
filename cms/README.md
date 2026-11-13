@@ -238,16 +238,16 @@ fields is `ndm_headless_concern_schema()` in `includes/concerns.php`):
 |---|---|
 | Title, Slug, Header photo | the concern's name, the address, the wide header photo (featured image) |
 | Header | heading in two lines, text under it, the tall photo for phones, photo focus |
-| Search engines | page title and description |
+| Search Engines | page title and description |
 | Overview | opening paragraphs, the "On our site" links, whether to link the Before & after gallery |
-| The concern | what you may notice, what causes it |
+| The Concern | what you may notice, what causes it |
 | Assessment | text, what we look at |
-| Treatment options | one row per treatment: the WooCommerce product (searched and picked; its price is the row's price), then an optional title, label, image, subtitle and summary that replace the product's own, links, visit, course, downtime, when changes may appear; the prescription note and its links |
-| What to expect | the steps |
-| Before and after photos | cases of the "Before & After" post type, searched and picked, in any number and order. Each takes the case's photo and first category: nothing is typed |
-| Home care | cards, each with an optional product of the skincare shop |
-| From the journal | WordPress posts, searched and picked, in any number and order (left out when empty). Each card takes the post's title, date, first category, featured image and excerpt: nothing is typed |
-| Related treatments | one row per card: the WooCommerce product (searched and picked), then an optional title, tag and image that replace the product's name, category and image, and an optional link. A row without a product shows what is typed |
+| Treatment Options | one row per treatment: the WooCommerce product (searched and picked; its price is the row's price), then an optional title, label, image, subtitle and summary that replace the product's own, links, visit, course, downtime, when changes may appear; the prescription note and its links |
+| What To Expect | the steps |
+| Before And After Photos | cases of the "Before & After" post type, searched and picked, in any number and order. Each takes the case's photo and first category: nothing is typed |
+| Home Care | cards, each with an optional product of the skincare shop |
+| From The Journal | WordPress posts, searched and picked, in any number and order (left out when empty). Each card takes the post's title, date, first category, featured image and excerpt: nothing is typed |
+| Related Treatments | one row per card: the WooCommerce product (searched and picked), then an optional title, tag and image that replace the product's name, category and image, and an optional link. A row without a product shows what is typed |
 | FAQ | questions and answers |
 
 **No price is ever typed.** Every "From" price on the option cards and in the table is read from
