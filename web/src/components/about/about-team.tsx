@@ -8,6 +8,7 @@ import { IconArrow } from "@/components/ui/icons";
 import { SectionHead } from "@/components/ui/section-head";
 import { TEAM, TEAM_ORDER, type TeamMember } from "@/config/team";
 import { useReveal } from "@/hooks/use-reveal";
+import type { AboutCopy } from "@/types/about";
 
 const CRED = "font-inter text-[11.5px] font-[550] uppercase leading-[1.5] tracking-[.16em] text-ndm-deep";
 const PEOPLE = TEAM_ORDER.map((id) => TEAM.find((m) => m.id === id)).filter((m): m is TeamMember => !!m);
@@ -16,7 +17,7 @@ const PEOPLE = TEAM_ORDER.map((id) => TEAM.find((m) => m.id === id)).filter((m):
  * Our team: four compact cards. A card opens the same profile dialog as the home page; a member whose
  * profile has not arrived yet stays a plain card.
  */
-export function AboutTeam() {
+export function AboutTeam({ copy }: { copy: AboutCopy["team"] }) {
   const section = useRef<HTMLElement>(null);
   const opener = useRef<HTMLButtonElement | null>(null);
   useReveal(section);
@@ -32,15 +33,15 @@ export function AboutTeam() {
     <section ref={section} id="team" aria-labelledby="team-title" className="relative z-10 scroll-mt-[100px] bg-ndm-paper px-[var(--gx)] py-[clamp(80px,9vw,128px)]">
       <SectionHead
         id="team-title"
-        eyebrow="Our team"
+        eyebrow={copy.tag}
         lead={
           <>
-            The people
+            {copy.lead}
             <br />
           </>
         }
-        strong="behind your care"
-        intro="Physicians, a vascular surgeon, a nurse practitioner and medical aesthetics specialists. Every treatment plan starts with a consultation and is guided by medical training."
+        strong={copy.strong}
+        intro={copy.intro}
       />
       <ul className="mt-[clamp(36px,4vw,56px)] grid gap-4 sm:grid-cols-2 xl:grid-cols-4" role="list">
         {PEOPLE.map((m, i) => (

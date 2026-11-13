@@ -1,5 +1,7 @@
 /** About page content. Source: the original prototype (src/about-ui.jsx, src/build_about.py). */
 
+import type { AboutCopy } from "@/types/about";
+
 const UPLOADS = "https://newdermamedlaserclinic.com/wp-content/uploads/2025/09/";
 
 export const ABOUT_EMAIL = "info@newdermamed.com";
@@ -54,33 +56,6 @@ export const ABOUT_CLINICS: AboutClinic[] = [
   },
 ];
 
-export interface GalleryPhoto {
-  src: string;
-  title: string;
-  alt: string;
-}
-
-/* ten photos from the clinic's own gallery (served by its site), then four local clinic photos: fourteen tiles */
-const REMOTE: [number: string, title: string, alt: string][] = [
-  ["01", "Reception", "Reception with a sculpted white wall feature and lounge chairs"],
-  ["02", "Treatment corridor", "Bright corridor lined with frosted glass treatment rooms"],
-  ["03", "Front counter", "Framed beauty portraits above the front counter"],
-  ["04", "Treatment room", "A provider preparing a treatment in a bright treatment room"],
-  ["05", "Front desk", "Orchids and skincare display at the front desk"],
-  ["06", "Waiting lounge", "Waiting lounge with black chairs and pendant lights"],
-  ["07", "Reception desk", "Reception desk with glass treatment rooms behind it"],
-  ["08", "Treatment room", "Treatment room with a white treatment bed and side desk"],
-  ["09", "Downtown, 790 Bay Street", "Entrance of 790 Bay Street, home of the Downtown clinic"],
-  ["10", "Uptown, Yonge Street", "NewDermaMed signage on the Uptown clinic on Yonge Street"],
-];
-export const ABOUT_GALLERY: GalleryPhoto[] = [
-  ...REMOTE.map(([n, title, alt]) => ({ src: `${UPLOADS}About-us-gallery-${n}.png`, title, alt })),
-  { src: "/assets/clinic/clinic-2.jpg", title: "Treatment room", alt: "Bright treatment room with a white treatment chair" },
-  { src: "/assets/clinic/clinic-3.jpg", title: "Lounge", alt: "Clinic lounge with a sculpted white wall feature" },
-  { src: "/assets/clinic/clinic-5.jpg", title: "Skincare wall", alt: "Skincare display wall beside the reception desk" },
-  { src: "/assets/hero/treatment-room.jpg", title: "Treatment suite", alt: "Private treatment suite with a treatment bed" },
-];
-
 export interface GalleryColumn {
   /** Where the column sits in the grid, and whether phones show it. */
   place: string;
@@ -88,6 +63,7 @@ export interface GalleryColumn {
   top: number;
   /** How far the column drifts on scroll, in px. */
   drift: number;
+  /** Each tile: the place of its photo in the gallery's list, and its shape. */
   tiles: [photo: number, aspect: string][];
 }
 
@@ -106,49 +82,179 @@ export const ABOUT_GALLERY_COLUMNS: GalleryColumn[] = [
 
 export const ABOUT_FILM = { poster: "/assets/home/v3/tour-poster-1440.webp", src: "/assets/home/v3/tour-1600.mp4" };
 
-export const ABOUT_STATS: [figure: number, suffix: string, unit: string, label: string][] = [
-  [16, "+", "years", "In Toronto"],
-  [8, "", "Top Choice Awards", "In a row, 2019 to 2026"],
-  [2, "", "Toronto clinics", "Uptown and Downtown"],
-  [20, "+", "categories", "Of treatment"],
-];
-
 /** The contact form's clinic choices. */
 export const ABOUT_CLINIC_CHOICES: [name: string, street: string][] = [
   ["Uptown Clinic", "4763 Yonge Street"],
   ["Downtown Clinic", "790 Bay Street"],
 ];
 
-export const ABOUT_FAQS: [question: string, answer: string][] = [
-  [
-    "What treatments are available at NewDermaMed?",
-    "NewDermaMed focuses on advanced non-surgical medical aesthetics, including laser hair removal, injectables and dermal fillers, acne and scar treatments, skin tightening, medical facials, body contouring, chemical peels, and skin rejuvenation with microneedling and PRP."
-  ],
-  [
-    "What devices and technologies does the clinic use?",
-    "We use Health Canada approved medical devices, including Candela GentleMax Pro for laser hair removal, Cutera Excel V+ for vascular and pigmentation concerns, Morpheus8 for skin tightening and collagen stimulation, and CoolSculpting® for non-surgical fat reduction."
-  ],
-  [
-    "Are the treatments safe and effective?",
-    "Treatments are performed by trained medical professionals using FDA and Health Canada approved devices and products, and each plan is tailored to your skin type and goals. As with any medical treatment, results and side effects can vary, and your provider reviews them with you at your consultation."
-  ],
-  [
-    "Where are your clinics?",
-    "Uptown: 4763 Yonge Street, Toronto, ON M2N 5M5, near Sheppard-Yonge Station. Downtown: 790 Bay Street, Suite 900, Toronto, ON M5G 1N8, near College Station."
-  ],
-  [
-    "Where can I park?",
-    "Uptown: Lot #56 at the Hullmark Centre, uPark at 9 Bogert Ave, or Parking Indigo at 25 Sheppard Ave W. Downtown: parking at 790 Bay Street, SP+ Parking at 201 Elizabeth St, or the lot at 76 College St."
-  ],
-  [
-    "What are your clinic hours?",
-    "Both clinics are open Monday to Friday, 9am to 7pm, and Saturday, 10am to 5pm."
-  ],
-  [
-    "How do I book a consultation?",
-    "You can book a free consultation by calling either clinic, filling out the online booking form, or visiting us in person. At your consultation, a specialist assesses your needs and recommends the treatment options that suit you."
-  ]
-];
-
-/** The clinic in one sentence (the inner pages' statement). */
-export const ABOUT_STATEMENT = "At NewDermaMed, we combine advanced dermatology, innovative aesthetic treatments, and personalized care to enhance your skin’s natural beauty, so it can look healthier, smoother, and more radiant.";
+/**
+ * The page's own words and gallery photos as the original prototype had them. The page is edited in
+ * WordPress (the post type "About Page"): this copy is shown only when WordPress cannot be reached or
+ * the page is not published, and it is what `scripts/export-about.mjs` imports once. Plain JSON on
+ * purpose: the export reads it as it is.
+ */
+export const ABOUT_COPY: AboutCopy = {
+  "title": "About Us, NewDermaMed Cosmetic & Laser Clinic in Toronto",
+  "description": "Meet the NewDermaMed medical team and visit our Uptown and Downtown Toronto clinics: addresses, hours, parking, a clinic gallery and answers to common questions.",
+  "header": {
+    "tag": "About NewDermaMed",
+    "lead": "Toronto’s cosmetic",
+    "strong": "and laser clinic",
+    "text": "At NewDermaMed, we combine advanced dermatology, innovative aesthetic treatments, and personalized care to enhance your skin’s natural beauty, so it can look healthier, smoother, and more radiant. Recognized as Toronto’s Top Choice Cosmetic & Laser Clinic for eight consecutive years.",
+    "stats": [
+      {
+        "figure": "16+",
+        "unit": "years",
+        "label": "In Toronto"
+      },
+      {
+        "figure": "8",
+        "unit": "Top Choice Awards",
+        "label": "In a row, 2019 to 2026"
+      },
+      {
+        "figure": "2",
+        "unit": "Toronto clinics",
+        "label": "Uptown and Downtown"
+      },
+      {
+        "figure": "20+",
+        "unit": "categories",
+        "label": "Of treatment"
+      }
+    ]
+  },
+  "team": {
+    "tag": "Our team",
+    "lead": "The people",
+    "strong": "behind your care",
+    "intro": "Physicians, a vascular surgeon, a nurse practitioner and medical aesthetics specialists. Every treatment plan starts with a consultation and is guided by medical training."
+  },
+  "clinics": {
+    "tag": "Our clinics",
+    "lead": "Visit us in",
+    "strong": "Uptown or Downtown"
+  },
+  "gallery": {
+    "photos": [
+      {
+        "src": "https://newdermamedlaserclinic.com/wp-content/uploads/2025/09/About-us-gallery-01.png",
+        "title": "Reception",
+        "alt": "Reception with a sculpted white wall feature and lounge chairs"
+      },
+      {
+        "src": "https://newdermamedlaserclinic.com/wp-content/uploads/2025/09/About-us-gallery-02.png",
+        "title": "Treatment corridor",
+        "alt": "Bright corridor lined with frosted glass treatment rooms"
+      },
+      {
+        "src": "https://newdermamedlaserclinic.com/wp-content/uploads/2025/09/About-us-gallery-03.png",
+        "title": "Front counter",
+        "alt": "Framed beauty portraits above the front counter"
+      },
+      {
+        "src": "https://newdermamedlaserclinic.com/wp-content/uploads/2025/09/About-us-gallery-04.png",
+        "title": "Treatment room",
+        "alt": "A provider preparing a treatment in a bright treatment room"
+      },
+      {
+        "src": "https://newdermamedlaserclinic.com/wp-content/uploads/2025/09/About-us-gallery-05.png",
+        "title": "Front desk",
+        "alt": "Orchids and skincare display at the front desk"
+      },
+      {
+        "src": "https://newdermamedlaserclinic.com/wp-content/uploads/2025/09/About-us-gallery-06.png",
+        "title": "Waiting lounge",
+        "alt": "Waiting lounge with black chairs and pendant lights"
+      },
+      {
+        "src": "https://newdermamedlaserclinic.com/wp-content/uploads/2025/09/About-us-gallery-07.png",
+        "title": "Reception desk",
+        "alt": "Reception desk with glass treatment rooms behind it"
+      },
+      {
+        "src": "https://newdermamedlaserclinic.com/wp-content/uploads/2025/09/About-us-gallery-08.png",
+        "title": "Treatment room",
+        "alt": "Treatment room with a white treatment bed and side desk"
+      },
+      {
+        "src": "https://newdermamedlaserclinic.com/wp-content/uploads/2025/09/About-us-gallery-09.png",
+        "title": "Downtown, 790 Bay Street",
+        "alt": "Entrance of 790 Bay Street, home of the Downtown clinic"
+      },
+      {
+        "src": "https://newdermamedlaserclinic.com/wp-content/uploads/2025/09/About-us-gallery-10.png",
+        "title": "Uptown, Yonge Street",
+        "alt": "NewDermaMed signage on the Uptown clinic on Yonge Street"
+      },
+      {
+        "src": "/assets/clinic/clinic-2.jpg",
+        "title": "Treatment room",
+        "alt": "Bright treatment room with a white treatment chair"
+      },
+      {
+        "src": "/assets/clinic/clinic-3.jpg",
+        "title": "Lounge",
+        "alt": "Clinic lounge with a sculpted white wall feature"
+      },
+      {
+        "src": "/assets/clinic/clinic-5.jpg",
+        "title": "Skincare wall",
+        "alt": "Skincare display wall beside the reception desk"
+      },
+      {
+        "src": "/assets/hero/treatment-room.jpg",
+        "title": "Treatment suite",
+        "alt": "Private treatment suite with a treatment bed"
+      }
+    ],
+    "tag": "Awards & recognition",
+    "line": "Top Choice Award · 8 consecutive years",
+    "lead": "Trusted brands & awards for excellence",
+    "strong": "in aesthetic medicine.",
+    "text": "Recognized as Toronto’s Top Choice Cosmetic & Laser Clinic for eight consecutive years, a reflection of 16+ years of dedication to patient care, innovation and consistent, high-quality treatment."
+  },
+  "faq": {
+    "tag": "FAQ",
+    "lead": "Your top questions,",
+    "strong": "answered",
+    "intro": "Everything you need to know about our team, our clinics and your first visit.",
+    "items": [
+      [
+        "What treatments are available at NewDermaMed?",
+        "NewDermaMed focuses on advanced non-surgical medical aesthetics, including laser hair removal, injectables and dermal fillers, acne and scar treatments, skin tightening, medical facials, body contouring, chemical peels, and skin rejuvenation with microneedling and PRP."
+      ],
+      [
+        "What devices and technologies does the clinic use?",
+        "We use Health Canada approved medical devices, including Candela GentleMax Pro for laser hair removal, Cutera Excel V+ for vascular and pigmentation concerns, Morpheus8 for skin tightening and collagen stimulation, and CoolSculpting® for non-surgical fat reduction."
+      ],
+      [
+        "Are the treatments safe and effective?",
+        "Treatments are performed by trained medical professionals using FDA and Health Canada approved devices and products, and each plan is tailored to your skin type and goals. As with any medical treatment, results and side effects can vary, and your provider reviews them with you at your consultation."
+      ],
+      [
+        "Where are your clinics?",
+        "Uptown: 4763 Yonge Street, Toronto, ON M2N 5M5, near Sheppard-Yonge Station. Downtown: 790 Bay Street, Suite 900, Toronto, ON M5G 1N8, near College Station."
+      ],
+      [
+        "Where can I park?",
+        "Uptown: Lot #56 at the Hullmark Centre, uPark at 9 Bogert Ave, or Parking Indigo at 25 Sheppard Ave W. Downtown: parking at 790 Bay Street, SP+ Parking at 201 Elizabeth St, or the lot at 76 College St."
+      ],
+      [
+        "What are your clinic hours?",
+        "Both clinics are open Monday to Friday, 9am to 7pm, and Saturday, 10am to 5pm."
+      ],
+      [
+        "How do I book a consultation?",
+        "You can book a free consultation by calling either clinic, filling out the online booking form, or visiting us in person. At your consultation, a specialist assesses your needs and recommends the treatment options that suit you."
+      ]
+    ]
+  },
+  "contact": {
+    "tag": "Contact us",
+    "lead": "We’re here",
+    "strong": "to help",
+    "text": "Call or text either clinic, email us, or send a message and our team will get back to you."
+  }
+};

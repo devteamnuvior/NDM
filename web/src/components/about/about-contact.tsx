@@ -8,6 +8,7 @@ import { TwoTone } from "@/components/ui/two-tone";
 import { ABOUT_CLINIC_CHOICES, ABOUT_CLINICS, ABOUT_EMAIL } from "@/config/about";
 import { useReveal } from "@/hooks/use-reveal";
 import { tel } from "@/lib/routes";
+import type { AboutCopy } from "@/types/about";
 
 const FIELD = "block h-12 w-full rounded-[10px] border border-ndm-ink/15 bg-white px-3.5 font-inter text-[14.5px] text-ndm-ink placeholder:text-[#7D868D] outline-hidden transition focus:border-ndm-blue focus:ring-4 focus:ring-ndm-blue/15";
 
@@ -15,7 +16,7 @@ const FIELD = "block h-12 w-full rounded-[10px] border border-ndm-ink/15 bg-whit
  * Contact us: both clinics' details and a message form. There is no backend yet: sending shows the
  * thank-you note only, exactly as in the prototype.
  */
-export function AboutContact() {
+export function AboutContact({ copy }: { copy: AboutCopy["contact"] }) {
   const section = useRef<HTMLElement>(null);
   useReveal(section);
   const [sent, setSent] = useState(false);
@@ -24,21 +25,21 @@ export function AboutContact() {
     <section ref={section} id="contact" aria-labelledby="contact-title" className="relative z-10 scroll-mt-[100px] bg-ndm-paper px-[var(--gx)] py-[clamp(80px,9vw,128px)]">
       <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-[clamp(48px,6vw,110px)]">
         <div>
-          <Eyebrow className="rv">Contact us</Eyebrow>
+          <Eyebrow className="rv">{copy.tag}</Eyebrow>
           <TwoTone
             id="contact-title"
             className="rv mt-5"
             lead={
               <>
-                We’re here
+                {copy.lead}
                 <br />
               </>
             }
-            strong="to help"
+            strong={copy.strong}
             style={{ transitionDelay: ".06s" }}
           />
           <p className="rv mt-5 max-w-[46ch] font-inter text-[15.5px] leading-[1.65] text-ndm-muted" style={{ transitionDelay: ".1s" }}>
-            Call or text either clinic, email us, or send a message and our team will get back to you.
+            {copy.text}
           </p>
           <ul className="rv mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2" role="list" style={{ transitionDelay: ".14s" }}>
             {ABOUT_CLINICS.map((c) => (

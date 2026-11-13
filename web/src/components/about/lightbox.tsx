@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type TouchEvent } from "react";
 import { createPortal } from "react-dom";
 import { GalleryPhoto } from "@/components/about/gallery-photo";
-import type { GalleryPhoto as Photo } from "@/config/about";
+import type { GalleryPhoto as Photo } from "@/types/about";
 
 interface LightboxProps {
   items: Photo[];

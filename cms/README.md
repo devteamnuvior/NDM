@@ -397,6 +397,48 @@ the gallery has no Aptos case yet, so the Before & after section stays out until
 node ../web/scripts/export-aptos.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm aptos-import --images=/tmp/site
 ```
 
+## About page
+
+`/about` is the one post of the post type **About Page** (`ndm_about`, in the admin menu): a template
+of its own. The site has one About page, so once the post exists "Add page" is no longer offered. The
+address is always `/about`; the post's title is only its name in the admin. The fields work like
+those of a concern (same boxes, rows and photo field).
+
+Typed into the post (boxes under the title, stored as one post meta, `_ndm_about`; the list of fields
+is `ndm_headless_about_schema()` in `includes/about.php`):
+
+| Box | Fields |
+|---|---|
+| Header | tag, heading in two lines, text under it, the numbers beside it (number such as "16+", words, line under it) |
+| Search Engines | page title and description |
+| Our Team | tag, heading, text beside it |
+| Our Clinics | tag, heading |
+| Gallery And Awards | the gallery **photos** (photo from the media library and its title; the description is the photo's alternative text), then the awards tag, the line under the stars, heading in two lines, text |
+| FAQ | tag, heading, text, the questions. No question: no section |
+| Contact Us | tag, heading, text |
+
+The mosaic has fourteen places, filled in the order of the photos; a place without a photo stays
+empty and photos after the fourteenth show in the viewer only. Filled in by the site, not typed: the
+clinic film, the team members and their profiles, the two clinics (addresses, phones, hours, maps,
+parking: the same on every page), the Top Choice Award badges, How it works, the message form and
+@newdermamed.
+
+| Route (`ndm/v1`) | Who | What |
+|---|---|---|
+| `GET /about-page` | public | the published page with its photos (404 when it is not published) |
+
+When the page changes (or a photo's alternative text), WordPress tells the site to drop its cached
+copy (tag `about` through `/api/revalidate`). When WordPress cannot be reached, or the page is not
+published, the site shows its built-in copy (`ABOUT_COPY` in `web/src/config/about.ts`).
+
+One-time import of the original page (created only when it does not exist yet, the trash included).
+The fourteen gallery photos go into the media library: four files from `web/public`, and the ten the
+original page showed straight from newdermamedlaserclinic.com are fetched from that address.
+
+```
+node ../web/scripts/export-about.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm about-import --images=/tmp/site
+```
+
 ## Blog (the list and the articles)
 
 The blog of the site (`/blog`) and its articles are WordPress's ordinary **posts**. A post that has

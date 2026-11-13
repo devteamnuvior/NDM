@@ -9,6 +9,7 @@ import { ABOUT_CLINICS, ABOUT_EMAIL, type AboutClinic } from "@/config/about";
 import { ACTIONS } from "@/config/routes";
 import { HOURS } from "@/config/site";
 import { tel } from "@/lib/routes";
+import type { AboutCopy } from "@/types/about";
 
 const LABEL = "font-inter text-[11px] uppercase tracking-[.14em] text-ndm-muted";
 const LINK = "underline-offset-4 transition-colors hover:text-ndm-deep hover:underline";
@@ -86,20 +87,20 @@ function ClinicCard({ c, i }: { c: AboutClinic; i: number }) {
 }
 
 /** Our clinics: the two clinics side by side (stacked on phones), each a white card with its map and details. */
-export function AboutClinics() {
+export function AboutClinics({ copy }: { copy: AboutCopy["clinics"] }) {
   return (
     <RevealSection id="clinics" aria-labelledby="clinics-title" className="relative z-10 scroll-mt-[100px] bg-ndm-paper px-[var(--gx)] py-[clamp(56px,6vw,96px)]">
-      <Eyebrow className="rv">Our clinics</Eyebrow>
+      <Eyebrow className="rv">{copy.tag}</Eyebrow>
       <TwoTone
         id="clinics-title"
         className="rv mt-4"
         lead={
           <>
-            Visit us in
+            {copy.lead}
             <br />
           </>
         }
-        strong="Uptown or Downtown"
+        strong={copy.strong}
         style={{ transitionDelay: ".05s" }}
       />
       <div className="mt-[clamp(28px,3.4vw,48px)] grid gap-5 lg:grid-cols-2 lg:gap-6">

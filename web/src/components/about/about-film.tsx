@@ -5,14 +5,22 @@ import { Button } from "@/components/ui/button";
 import { CountUp } from "@/components/ui/count-up";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { TwoTone } from "@/components/ui/two-tone";
-import { ABOUT_FILM, ABOUT_STATEMENT, ABOUT_STATS } from "@/config/about";
+import { ABOUT_FILM } from "@/config/about";
 import { ACTIONS } from "@/config/routes";
 import { useReveal } from "@/hooks/use-reveal";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
+import type { AboutCopy } from "@/types/about";
+
+/** A number of the header: a whole number counts up, its sign ("+") stays after it; anything else is shown as typed. */
+function Figure({ figure }: { figure: string }) {
+  const [, number, suffix] = /^(\d+)(.*)$/.exec(figure) ?? [];
+  if (!number) return <span className="tabular-nums">{figure}</span>;
+  return <CountUp to={Number(number)} suffix={suffix} within=".about-stats" threshold={0.4} className="tabular-nums" />;
+}
 
 /** The page header: the clinic film at full width, the page title, the clinic in one sentence and four numbers. */
-export function AboutFilm() {
+export function AboutFilm({ copy }: { copy: AboutCopy["header"] }) {
   const section = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   useReveal(section);
@@ -47,7 +55,7 @@ export function AboutFilm() {
         <div className="absolute inset-x-0 bottom-0 z-[2] grid gap-8 px-[var(--gx)] pb-[clamp(28px,4.5vw,64px)] lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div>
             <Eyebrow dark className="rv">
-              About NewDermaMed
+              {copy.tag}
             </Eyebrow>
             <TwoTone
               as="h1"
@@ -57,15 +65,15 @@ export function AboutFilm() {
               size="text-[clamp(38px,4.8vw,72px)]"
               lead={
                 <>
-                  Toronto’s cosmetic
+                  {copy.lead}
                   <br />
                 </>
               }
-              strong="and laser clinic"
+              strong={copy.strong}
               style={{ transitionDelay: ".05s" }}
             />
             <p className="rv mt-3 max-w-[56ch] font-inter text-[15.5px] leading-[1.6] text-white/80" style={{ transitionDelay: ".1s" }}>
-              {ABOUT_STATEMENT} Recognized as Toronto’s Top Choice Cosmetic &amp; Laser Clinic for eight consecutive years.
+              {copy.text}
             </p>
             <div className="rv mt-7 flex flex-wrap gap-3" style={{ transitionDelay: ".14s" }}>
               <Button href={ACTIONS.book} v="book" onDark>
@@ -77,16 +85,16 @@ export function AboutFilm() {
             </div>
           </div>
           <ul className="about-stats rv grid grid-cols-2 gap-y-5 border-t border-white/15 pt-6 sm:flex sm:items-center lg:border-0 lg:pt-0" role="list" style={{ transitionDelay: ".18s" }}>
-            {ABOUT_STATS.map(([figure, suffix, unit, label], k) => (
-              <Fragment key={unit}>
+            {copy.stats.map(({ figure, unit, label }, k) => (
+              <Fragment key={k}>
                 <li className="min-w-0 px-1 py-1 text-center sm:flex-1 lg:w-[clamp(160px,11.5vw,220px)] lg:flex-none">
                   <span className="block font-inter text-[14px] leading-[1.3] font-medium text-white sm:text-[15px]">
-                    <CountUp to={figure} suffix={suffix} within=".about-stats" threshold={0.4} className="tabular-nums" />{" "}
+                    <Figure figure={figure} />{" "}
                     {unit}
                   </span>
                   <span className="mt-1.5 block font-inter text-[12px] leading-[1.35] text-ndm-soft sm:mt-2.5 sm:text-[13px]">{label}</span>
                 </li>
-                {k < ABOUT_STATS.length - 1 && <li role="presentation" aria-hidden="true" className="hidden h-[50px] w-px shrink-0 bg-[#B9B9B9]/60 sm:block" />}
+                {k < copy.stats.length - 1 && <li role="presentation" aria-hidden="true" className="hidden h-[50px] w-px shrink-0 bg-[#B9B9B9]/60 sm:block" />}
               </Fragment>
             ))}
           </ul>

@@ -8,25 +8,30 @@ import { Process } from "@/components/home/process";
 import { Social } from "@/components/home/social";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Faq } from "@/components/ui/faq";
-import { ABOUT_FAQS } from "@/config/about";
+import { getAboutCopy } from "@/lib/about";
 
-export const metadata: Metadata = {
-  title: "About Us, NewDermaMed Cosmetic & Laser Clinic in Toronto",
-  description: "Meet the NewDermaMed medical team and visit our Uptown and Downtown Toronto clinics: addresses, hours, parking, a clinic gallery and answers to common questions.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { title, description } = await getAboutCopy();
+  return { title, description };
+}
 
-/** About: the clinic film as the header, the team, the two clinics with their maps, the gallery and awards, contact. */
-export default function AboutPage() {
+/**
+ * About: the clinic film as the header, the team, the two clinics with their maps, the gallery and awards,
+ * contact. Its words and gallery photos are the WordPress post of the type "About Page"; the film, the
+ * team, the clinics, How it works and the form are the site's.
+ */
+export default async function AboutPage() {
+  const copy = await getAboutCopy();
   return (
     <main id="main" data-shell="inner" data-page="about">
       <Breadcrumb items={["About us"]} dark />
-      <AboutFilm />
-      <AboutTeam />
-      <AboutClinics />
-      <AboutGallery />
+      <AboutFilm copy={copy.header} />
+      <AboutTeam copy={copy.team} />
+      <AboutClinics copy={copy.clinics} />
+      <AboutGallery copy={copy.gallery} />
       <Process />
-      <Faq items={ABOUT_FAQS} eyebrow="FAQ" lead="Your top questions," strong="answered" intro="Everything you need to know about our team, our clinics and your first visit." />
-      <AboutContact />
+      {copy.faq.items.length > 0 && <Faq items={copy.faq.items} eyebrow={copy.faq.tag} lead={copy.faq.lead} strong={copy.faq.strong} intro={copy.faq.intro} />}
+      <AboutContact copy={copy.contact} />
       <Social />
     </main>
   );
