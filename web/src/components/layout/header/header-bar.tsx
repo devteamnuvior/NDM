@@ -7,7 +7,7 @@ import { MegaMenu, type MenuPanelProps } from "@/components/layout/header/mega-m
 import { Button } from "@/components/ui/button";
 import { IconBag, IconChevron, IconExternal, IconMenu, IconSearch, IconUser } from "@/components/ui/icons";
 import { SiteLink } from "@/components/ui/site-link";
-import { usePostSection } from "@/components/layout/concern-paths";
+import { useArticleSection, usePostSection } from "@/components/layout/concern-paths";
 import { NAV, PAGE_SECTION } from "@/config/navigation";
 import { ACTIONS, type PageId } from "@/config/routes";
 import { pageLink, resolveLabel } from "@/lib/routes";
@@ -50,7 +50,8 @@ export function HeaderBar({ dark, current, top = 36, visible = true, cartCount =
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const wrapRef = useRef<HTMLElement>(null);
   const postSection = usePostSection();
-  const section = current ? PAGE_SECTION[current] : postSection;
+  const articleSection = useArticleSection();
+  const section = current ? PAGE_SECTION[current] : (postSection ?? articleSection);
 
   const enter = (id: NavMenuId) => {
     clearTimeout(timer.current);

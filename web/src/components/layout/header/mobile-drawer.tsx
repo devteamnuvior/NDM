@@ -5,7 +5,7 @@ import { categoryOf } from "@/components/layout/header/mega-menu";
 import { Button } from "@/components/ui/button";
 import { IconArrow, IconChevron, IconClose, IconExternal } from "@/components/ui/icons";
 import { SiteLink } from "@/components/ui/site-link";
-import { useMenuLink, usePostSection } from "@/components/layout/concern-paths";
+import { useArticleSection, useMenuLink, usePostSection } from "@/components/layout/concern-paths";
 import { ABOUT_LINKS, CONCERNS, PAGE_SECTION, PROCEDURES } from "@/config/navigation";
 import { ACTIONS, type PageId } from "@/config/routes";
 import { CLINICS } from "@/config/site";
@@ -62,7 +62,8 @@ export function MobileDrawer({ open, current, onClose }: MobileDrawerProps) {
   const [sec, setSec] = useState<Section | null>(null);
   const [cat, setCat] = useState<string | null>(() => categoryOf(current) ?? null);
   const postSection = usePostSection();
-  const section: NavSectionId | undefined = current ? PAGE_SECTION[current] : postSection;
+  const articleSection = useArticleSection();
+  const section: NavSectionId | undefined = current ? PAGE_SECTION[current] : (postSection ?? articleSection);
   const toggle = (s: Section) => setSec(sec === s ? null : s);
   const close = useEffectEvent(onClose);
 

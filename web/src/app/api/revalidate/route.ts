@@ -5,10 +5,10 @@ import { WP_TAGS } from "@/lib/wordpress";
 /**
  * POST /api/revalidate: WordPress says "the price list changed" (the ndm-pricing plugin calls this after
  * a product, a variation or a category is saved in wp-admin), or "a page changed" (the ndm-headless
- * plugin, for the legal documents), or "the Before & After gallery changed", or "a concern page changed", or "a procedure page changed", and the cached copy is dropped. The call
+ * plugin, for the legal documents), or "the Before & After gallery changed", or "a concern page changed", or "a procedure page changed", or "the blog changed", and the cached copy is dropped. The call
  * must carry the shared secret; it can only clear the tags listed here, never read or change data.
  */
-const TAGS = new Set<string>([WP_TAGS.pricing, WP_TAGS.type("pages"), WP_TAGS.beforeAfter, WP_TAGS.concerns, WP_TAGS.procedures]);
+const TAGS = new Set<string>([WP_TAGS.pricing, WP_TAGS.type("pages"), WP_TAGS.beforeAfter, WP_TAGS.concerns, WP_TAGS.procedures, WP_TAGS.blog]);
 
 function secretMatches(given: string | null): boolean {
   const secret = process.env.REVALIDATE_SECRET?.trim();

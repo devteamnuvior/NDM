@@ -1,15 +1,17 @@
 /**
- * The journal: every post on the clinic's blog, newest first. Generated from the prototype's src/blog-ui.jsx.
- * Titles, dates, images and links are the clinic's; summaries are short and in qualified language. A post
- * with `external: false` has its own page on this site (see BLOG_LOCAL); the rest open on the clinic's live site.
+ * The journal as it was first built: every post on the clinic's blog, newest first. Generated from the
+ * prototype's src/blog-ui.jsx. Titles, dates, images and links are the clinic's; summaries are short and
+ * in qualified language.
+ *
+ * The blog now reads WordPress (see src/lib/blog.ts): this list is only what the page shows while
+ * WordPress cannot be reached, and what scripts/export-blog.mjs imported into WordPress once. Edit the
+ * posts in WordPress, not here.
  */
-import type { PageId } from "@/config/routes";
-
 export interface BlogPost {
   title: string;
   /** The post's address on the clinic's blog ("/what-causes-rosacea-redness/"). */
   slug: string;
-  /** Where the post opens when it is not on this site yet; empty for local posts. */
+  /** Where the post opens when it is not on this site yet; empty for the article written out in article-rosacea.ts. */
   url: string;
   external: boolean;
   date: string;
@@ -20,9 +22,7 @@ export interface BlogPost {
   excerpt: string;
 }
 
-/** Posts that have their own page here. */
-export const BLOG_LOCAL: Record<string, PageId> = { "/what-causes-rosacea-redness/": "article" };
-
+/** The filter topics in their designed order; a topic added in WordPress follows them. */
 export const BLOG_TOPICS = ["All", "Skin", "Laser", "Injectables", "Thread lift", "Body", "Veins", "Guides"];
 
 /** How many stories the list shows at first, and adds with each "Load more". */

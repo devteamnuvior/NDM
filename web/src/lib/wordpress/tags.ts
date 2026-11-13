@@ -19,6 +19,8 @@ export const WP_TAGS = {
   concerns: "concerns",
   /** The procedure pages (the post type "Procedures"). */
   procedures: "procedures",
+  /** The blog: its posts, their photos and categories. */
+  blog: "blog",
   /** The popular searches counted by WordPress. */
   search: "search-popular",
   /** One entry: "wp:posts:what-causes-rosacea-redness". */

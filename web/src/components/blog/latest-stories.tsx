@@ -6,11 +6,12 @@ import { StoryCard } from "@/components/blog/story";
 import { useRevealLive } from "@/components/blog/use-reveal-live";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
-import { BLOG_STEP, BLOG_TOPICS, type BlogPost } from "@/config/blog";
+import { BLOG_STEP } from "@/config/blog";
 import { useReveal } from "@/hooks/use-reveal";
+import type { Story } from "@/types/blog";
 
 /** Latest stories: topic filters with counts, a three-up grid, and "Load more". */
-export function LatestStories({ posts }: { posts: BlogPost[] }) {
+export function LatestStories({ posts, topics }: { posts: Story[]; topics: string[] }) {
   const section = useRef<HTMLElement>(null);
   const grid = useRef<HTMLUListElement>(null);
   const [topic, setTopic] = useState("All");
@@ -25,7 +26,7 @@ export function LatestStories({ posts }: { posts: BlogPost[] }) {
         <Eyebrow className="rv">Latest stories</Eyebrow>
         <BlurTitle id="stories-title" className="mt-5 max-w-[18ch]" lead="Ideas for healthier," strong="more confident skin." />
         <div className="rv no-scrollbar -mx-[var(--gx)] mt-9 flex gap-2 overflow-x-auto px-[var(--gx)] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0" role="group" aria-label="Filter by topic" style={{ transitionDelay: ".15s" }}>
-          {BLOG_TOPICS.map((t) => {
+          {topics.map((t) => {
             const count = t === "All" ? posts.length : posts.filter((p) => p.topic === t).length;
             const on = t === topic;
             return (

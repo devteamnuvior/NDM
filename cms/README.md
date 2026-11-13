@@ -162,8 +162,8 @@ a result with that name still exists; until six results have been searched, the 
 (`POPULAR_SEARCHES` in `web/src/config/navigation.ts`) fills the row. To start the counts again:
 `docker compose run --rm cli wp db query "TRUNCATE $(docker compose run --rm -T cli wp db prefix)ndm_search_terms"`.
 
-WordPress posts are not searched yet: the site's blog is not read from WordPress, so a post found
-would have no page to open.
+WordPress posts are not searched yet (the blog reads WordPress since 2026-11-13, see "Blog"; adding
+its articles to the search is the next step).
 
 ## Legal pages (Privacy, Terms, Refunds)
 
@@ -343,6 +343,45 @@ node ../web/scripts/export-procedures.mjs | docker compose run --rm -T -v "$PWD/
 Before anything is published: the Botox copy is the live site's wording and names Botox® beside its
 effects, which Health Canada (C.01.044) does not allow in consumer advertising of a prescription
 drug; it also names the Medical Director. Raymond Valadkhani's written approval is needed first.
+
+## Blog (the list and the articles)
+
+The blog of the site (`/blog`) and its articles are WordPress's ordinary **posts**. A post that has
+text has its own page on the site, at its **slug** (`/what-causes-rosacea-redness`), without a new
+build. A post without text shows on the list only; its card opens the "Opens at" address (the article
+on the clinic's earlier site) until its text is written here.
+
+| On the site | In WordPress |
+|---|---|
+| Title, date, summary (card and search engines) | the post's title, date and excerpt |
+| Topic (the filter chips and the tag on the card) | the post's first category |
+| The text | the block editor: headings, paragraphs, lists, photos, quotes. The first paragraph is set large, as the article's opening |
+| The wide photo at the top of the article (also the social card) | the featured image |
+| The tall photo of the card, the heading in two lines, the key takeaway, the reading time, "Opens at" | the **Article page** box under the editor (one post meta, `_ndm_post`; fields in `ndm_headless_blog_fields()`, `includes/blog.php`) |
+
+Empty fields fall back: the card photo to the featured image, the heading to the title broken in the
+middle, the takeaway to the excerpt, the reading time to the length of the text. A photo's alternative
+text is typed in the media library. Photos are served in several sizes (WordPress makes the copies).
+
+The site writes each article's search-engine tags by itself: canonical address, social card,
+`BlogPosting` and breadcrumb data, and a line in `/sitemap.xml`. They need the site's own address
+(`SITE_URL` in `web/.env.local`, set when the site is built).
+
+| Route (`ndm/v1`) | Who | What |
+|---|---|---|
+| `GET /blog` | public | every published post as a card, newest first |
+| `GET /blog/<slug>` | public | one published post that has text, with it (404 for a post without text) |
+
+When a post, its photo, its fields or a category changes, WordPress tells the site to drop its cached
+copy (tag `blog` through `/api/revalidate`).
+
+One-time import of the original 34 posts (created only when the slug is free; the three posts the
+concern import had made keep their text and photo and only get their Article page fields; the photos
+are the clinic's own, kept in `assets/blog`). Only "What Causes Rosacea Redness" came with its text:
+
+```
+node ../web/scripts/export-blog.mjs | docker compose run --rm -T -v "$PWD/../assets/blog:/tmp/blog:ro" cli wp ndm blog-import --images=/tmp/blog
+```
 
 ## Order requests (cart and checkout)
 

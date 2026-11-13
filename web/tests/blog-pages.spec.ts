@@ -99,3 +99,63 @@ test.describe("phone", () => {
     }
   });
 });
+
+/* The blog reads WordPress: these need the cms containers running, and SITE_URL at build time for full addresses. */
+test.describe("search engines", () => {
+  const graphOf = async (page: import("@playwright/test").Page) => {
+    const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
+    return blocks.flatMap((b) => (JSON.parse(b) as { "@graph": Record<string, unknown>[] })["@graph"]);
+  };
+
+  test("blog: canonical and social tags, structured data for the list and the FAQ", async ({ page }) => {
+    await page.goto(`${NEXT_URL}/blog`);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/blog$/);
+    await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "website");
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /What-Causes-Rosacea-Redness\.webp$/);
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
+    const graph = await graphOf(page);
+    expect(graph.map((g) => g["@type"])).toEqual(["BreadcrumbList", "Blog", "FAQPage"]);
+    const posts = graph[1].blogPost as { headline: string; url: string; datePublished: string }[];
+    expect(posts).toHaveLength(34);
+    expect(posts[0]).toMatchObject({ headline: "What Causes Rosacea Redness", datePublished: "2025-11-26T09:00:00+00:00" });
+    expect(posts[0].url).toMatch(/\/what-causes-rosacea-redness$/);
+    expect((graph[2].mainEntity as unknown[]).length).toBe(await page.locator("#faq").locator("xpath=ancestor::section").locator("dt, summary, button[aria-expanded]").count());
+  });
+
+  test("article: canonical, article tags, BlogPosting; photos come in sizes; it is in the sitemap", async ({ page, request }) => {
+    await page.goto(`${NEXT_URL}/what-causes-rosacea-redness`);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/what-causes-rosacea-redness$/);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", "The everyday triggers that can make rosacea flare, and why they affect some skin more than others.");
+    await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "article");
+    await expect(page.locator('meta[property="article:published_time"]')).toHaveAttribute("content", "2025-11-26T09:00:00+00:00");
+    await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute("content", "1440");
+    const graph = await graphOf(page);
+    expect(graph.map((g) => g["@type"])).toEqual(["BreadcrumbList", "BlogPosting"]);
+    expect(graph[1]).toMatchObject({ headline: "What Causes Rosacea Redness", articleSection: "Skin", timeRequired: "PT9M", author: { "@type": "Organization", name: "NewDermaMed" } });
+    expect((graph[0].itemListElement as { name: string }[]).map((i) => i.name)).toEqual(["Home", "Blog", "What Causes Rosacea Redness"]);
+
+    const hero = page.locator("main > article > div img");
+    await expect(hero).toHaveAttribute("fetchpriority", "high");
+    await expect(hero).toHaveAttribute("srcset", /768w/);
+    await expect(hero).toHaveAttribute("width", "1440");
+    const inText = page.locator("#article-body figure img");
+    await expect(inText).toHaveAttribute("alt", "Main reasons for rosacea redness");
+    await expect(inText).toHaveAttribute("loading", "lazy");
+    await expect(inText).toHaveAttribute("srcset", /300w/);
+
+    const sitemap = await (await request.get(`${NEXT_URL}/sitemap.xml`)).text();
+    expect(sitemap).toContain("/what-causes-rosacea-redness</loc>");
+    expect(sitemap).toContain("/blog</loc>");
+    /* a post without text has no page here, so it is not listed */
+    expect(sitemap).not.toContain("best-way-to-treat-rosacea");
+  });
+
+  test("a post without text has no page; an unknown address is not found", async ({ page }) => {
+    /* a one-part address is answered by the route of the WordPress pages, which sends its "not found" page marked noindex */
+    for (const path of ["/best-way-to-treat-rosacea", "/no-such-article"]) {
+      await page.goto(`${NEXT_URL}${path}`);
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex");
+      await expect(page.locator("#article-body")).toHaveCount(0);
+    }
+  });
+});

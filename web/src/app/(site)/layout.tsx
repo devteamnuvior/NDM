@@ -4,15 +4,16 @@ import { DragScroll } from "@/components/layout/drag-scroll";
 import { SiteHeader } from "@/components/layout/header/site-header";
 import { OfferPopup } from "@/components/layout/offer-popup";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { getArticleSlugs } from "@/lib/blog";
 import { getConcernSlugs } from "@/lib/concern";
 import { getProcedureSlugs } from "@/lib/procedure";
 
 /** Pages inside the site's header and footer (every page except the Black Friday sale page, which has its own). */
 export default async function SiteLayout({ children }: { children: ReactNode }) {
-  /* the concern and procedure pages published in WordPress: the header links them and starts dark on them */
-  const [concerns, procedures] = await Promise.all([getConcernSlugs(), getProcedureSlugs()]);
+  /* the concern and procedure pages published in WordPress: the header links them and starts dark on them; on an article it marks About */
+  const [concerns, procedures, articles] = await Promise.all([getConcernSlugs(), getProcedureSlugs(), getArticleSlugs()]);
   return (
-    <ConcernPathsProvider slugs={concerns} procedures={procedures}>
+    <ConcernPathsProvider slugs={concerns} procedures={procedures} articles={articles}>
       <div className="site-root">
         <a
           href="#main"

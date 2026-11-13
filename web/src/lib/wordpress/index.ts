@@ -8,6 +8,7 @@ import "server-only";
  * (REST path, fields, cached readers built on `content.ts`), and export it below.
  */
 export { getBeforeAfter } from "./before-after";
+export { getBlogList, getBlogPost } from "./blog";
 export { saveBookingRequest, type BookingRequestInput } from "./bookings";
 export { getConcern, getConcernList } from "./concerns";
 export { isWordPressConfigured } from "./config";

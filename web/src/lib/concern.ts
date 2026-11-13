@@ -1,5 +1,6 @@
 import "server-only";
 import { BUILT_IN_CONCERNS, CONCERN_SHARED } from "@/config/concern";
+import { getArticleSlugs } from "@/lib/blog";
 import type { LowestPrice } from "@/lib/price-book";
 import { pageFromPathname, resolveLabel, toSlug } from "@/lib/routes";
 import { fromText, fromTextLong, getSitePrices, lowestOfSource, type SitePrices } from "@/lib/site-prices";
@@ -48,7 +49,7 @@ function priced(o: ConcernOption, low: Low): { card: ConcernOption; row: Concern
 }
 
 /** A WordPress concern as the page's sections read it, joined with what every concern page shares. */
-function fromWordPress(wp: WPConcern, prices: SitePrices | null): ConcernView {
+function fromWordPress(wp: WPConcern, prices: SitePrices | null, articles: string[]): ConcernView {
   const c = wp.content;
   /* a row takes from its WooCommerce product whatever the editor left empty: title, summary, image */
   const rows = c.options.map((o) => ({ ...o, name: o.name || o.product?.name || "", line: o.line || o.product?.description || "", image: o.image ?? o.product?.image ?? null })).filter((o) => o.name);
@@ -105,9 +106,8 @@ function fromWordPress(wp: WPConcern, prices: SitePrices | null): ConcernView {
       text: h.text,
       product: h.product_name ? { name: h.product_name, size: h.product_size, img: h.product_image, href: h.product_link } : undefined,
     })),
-    /* a post opens its page on this site when it has one; until the blog reads WordPress, the others
-       keep the "#/slug" placeholder of a page that is not built yet */
-    articles: c.journal.map((a) => ({ title: a.title, href: pageFromPathname(`/${a.slug}`) ? `/${a.slug}` : `#/${a.slug}`, date: a.date, topic: a.topic, img: a.image?.src ?? "", excerpt: a.excerpt })),
+    /* a post that has text opens its article page on this site; one without text keeps the "#/slug" placeholder */
+    articles: c.journal.map((a) => ({ title: a.title, href: articles.includes(a.slug) || pageFromPathname(`/${a.slug}`) ? `/${a.slug}` : `#/${a.slug}`, date: a.date, topic: a.topic, img: a.image?.src ?? "", excerpt: a.excerpt })),
     /* a card takes from its WooCommerce product whatever the editor left empty: title, tag (the product's category), image */
     related: c.related
       .map((r) => ({ name: r.name || r.product?.name || "", kind: r.kind || r.product?.category || "", img: (r.image ?? r.product?.image)?.src ?? "", link: r.link }))
@@ -149,7 +149,7 @@ export async function getConcernView(slug: string): Promise<ConcernView | null> 
   const read = await settle(() => getConcern(slug));
   if (read.ok && !read.data) return null;
   const prices = await getSitePrices();
-  return read.ok && read.data ? fromWordPress(read.data, prices) : builtIn(slug, prices);
+  return read.ok && read.data ? fromWordPress(read.data, prices, await getArticleSlugs()) : builtIn(slug, prices);
 }
 
 /** The addresses of every published concern (empty when WordPress cannot be reached). */

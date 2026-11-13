@@ -3,20 +3,20 @@
 import Image from "next/image";
 import { useRef } from "react";
 import takeaway from "@/assets/images/testimonials/t-1.jpg";
+import { BlogImg } from "@/components/blog/blog-img";
 import { BlurTitle } from "@/components/blog/blur-title";
 import { StoryCard, StoryMeta } from "@/components/blog/story";
 import { useRevealLive } from "@/components/blog/use-reveal-live";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { SiteLink } from "@/components/ui/site-link";
-import type { Article } from "@/config/article-rosacea";
-import type { BlogPost } from "@/config/blog";
 import { ACTIONS } from "@/config/routes";
 import { useOnScroll } from "@/hooks/use-on-scroll";
 import { useReveal } from "@/hooks/use-reveal";
 import { clamp01 } from "@/lib/math";
 import { pageLink } from "@/lib/routes";
 import { byId } from "@/lib/dom";
+import type { ArticleBlock, ArticleView, Story } from "@/types/blog";
 
 /** A thin reading-progress line under the header bar. */
 export function ReadProgress() {
@@ -37,7 +37,8 @@ export function ReadProgress() {
 }
 
 /** The article's head: topic and reading time, the title, the byline and the wide photo (a slow parallax). */
-export function ArticleHead({ post: p, article: a }: { post: BlogPost; article: Article }) {
+export function ArticleHead({ view }: { view: ArticleView }) {
+  const p = view.story;
   const box = useRef<HTMLDivElement>(null);
   const photo = useRef<HTMLImageElement>(null);
   useReveal(box);
@@ -53,63 +54,50 @@ export function ArticleHead({ post: p, article: a }: { post: BlogPost; article: 
         <div className="rv flex justify-center">
           <StoryMeta p={p} />
         </div>
-        <BlurTitle as="h1" id="article-title" size="text-[clamp(42px,5.6vw,88px)]" className="mt-6" lead={a.lead[0]} strong={a.lead[1]} />
+        <BlurTitle as="h1" id="article-title" size="text-[clamp(42px,5.6vw,88px)]" className="mt-6" lead={view.lead} strong={view.strong} />
         <p className="rv mt-6 font-inter text-[14px] text-ndm-muted" style={{ transitionDelay: ".3s" }}>
           By the NewDermaMed team<span className="mx-2">·</span>
-          <time dateTime={a.published}>{p.date}</time>
+          <time dateTime={p.published.slice(0, 10) || undefined}>{p.date}</time>
         </p>
       </div>
-      <div className="rv rv-clip relative mx-auto mt-[clamp(40px,5vw,72px)] aspect-[16/10] max-w-[1320px] overflow-hidden rounded-[20px] bg-ndm-line sm:aspect-[21/9]">
-        {/* eslint-disable-next-line @next/next/no-img-element -- post photo, served by the clinic's blog as in the prototype */}
-        <img ref={photo} src={a.hero} alt="" fetchPriority="high" className="absolute inset-x-0 -top-[12%] h-[124%] w-full object-cover will-change-transform" />
-      </div>
+      {p.hero.src && (
+        <div className="rv rv-clip relative mx-auto mt-[clamp(40px,5vw,72px)] aspect-[16/10] max-w-[1320px] overflow-hidden rounded-[20px] bg-ndm-line sm:aspect-[21/9]">
+          {/* the first thing a visitor sees: fetched first, in the size that fits the screen */}
+          <BlogImg ref={photo} photo={p.hero} sizes="(min-width: 1400px) 1320px, 100vw" fetchPriority="high" className="absolute inset-x-0 -top-[12%] h-[124%] w-full object-cover will-change-transform" />
+        </div>
+      )}
     </div>
   );
 }
 
+/** One piece of the article's text, in the article's own look. The HTML is the editors' inline formatting, scrubbed on the server. */
+function Block({ b }: { b: ArticleBlock }) {
+  if (b.tag === "hr") return <hr className="my-[clamp(36px,4vw,56px)] border-ndm-ink/10" />;
+  if (b.tag === "img")
+    return (
+      <figure className="rv rv-clip">
+        <BlogImg photo={b.photo} sizes="(min-width: 800px) 720px, 100vw" loading="lazy" className="aspect-[16/10] w-full rounded-[10px] object-cover" />
+        {b.caption && <figcaption className="font-inter">{b.caption}</figcaption>}
+      </figure>
+    );
+  const html = { __html: b.html };
+  if (b.tag === "h2" || b.tag === "h3" || b.tag === "h4") return <b.tag className="rv font-aeonik" dangerouslySetInnerHTML={html} />;
+  if (b.tag === "ul") return <ul className="rv font-inter" role="list" dangerouslySetInnerHTML={html} />;
+  return <b.tag className="rv font-inter" dangerouslySetInnerHTML={html} />;
+}
+
 /** The article's text column, then the key takeaway card. */
-export function ArticleBody({ article: a }: { article: Article }) {
+export function ArticleBody({ view: a }: { view: ArticleView }) {
   const section = useRef<HTMLElement>(null);
   useReveal(section);
   return (
     <section ref={section} id="article-body" aria-labelledby="article-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(48px,6vw,88px)] pb-[clamp(72px,8vw,120px)]">
       <div className="article-prose mx-auto max-w-[720px]">
-        <p className="rv font-aeonik text-[clamp(21px,1.8vw,26px)] leading-[1.45] tracking-[-0.01em] text-ndm-ink">{a.intro}</p>
+        <p className="rv font-aeonik text-[clamp(21px,1.8vw,26px)] leading-[1.45] tracking-[-0.01em] text-ndm-ink" dangerouslySetInnerHTML={{ __html: a.intro }} />
         <hr className="my-[clamp(36px,4vw,56px)] border-ndm-ink/10" />
-        {a.body.map((b, i) => {
-          if (b.type === "h2")
-            return (
-              <h2 key={i} className="rv font-aeonik">
-                {b.text}
-              </h2>
-            );
-          if (b.type === "h3")
-            return (
-              <h3 key={i} className="rv font-aeonik">
-                {b.text}
-              </h3>
-            );
-          if (b.type === "ul")
-            return (
-              <ul key={i} className="rv font-inter" role="list">
-                {b.items.map((li) => (
-                  <li key={li}>{li}</li>
-                ))}
-              </ul>
-            );
-          if (b.type === "img")
-            return (
-              <figure key={i} className="rv rv-clip">
-                {/* eslint-disable-next-line @next/next/no-img-element -- post photo, served by the clinic's blog as in the prototype */}
-                <img src={b.src} alt={b.alt} loading="lazy" decoding="async" className="aspect-[16/10] w-full rounded-[10px] object-cover" />
-              </figure>
-            );
-          return (
-            <p key={i} className="rv font-inter">
-              {b.text}
-            </p>
-          );
-        })}
+        {a.blocks.map((b, i) => (
+          <Block key={i} b={b} />
+        ))}
         <aside aria-labelledby="takeaway" className="take-card mt-[clamp(48px,5vw,72px)] grid overflow-hidden rounded-[22px] md:grid-cols-[minmax(0,.85fr)_minmax(0,1.15fr)] lg:-mx-[clamp(0px,9vw,140px)]">
           <div className="rv rv-clip take-pic relative min-h-[300px] overflow-hidden bg-ndm-mist md:min-h-full">
             <Image src={takeaway} alt="" sizes="(min-width: 768px) 420px, 100vw" className="absolute inset-0 h-full w-full object-cover object-[50%_20%]" />
@@ -136,7 +124,7 @@ export function ArticleBody({ article: a }: { article: Article }) {
 }
 
 /** Related articles: three cards (a sideways row on phones). */
-export function RelatedStories({ items }: { items: BlogPost[] }) {
+export function RelatedStories({ items }: { items: Story[] }) {
   const section = useRef<HTMLElement>(null);
   const grid = useRef<HTMLUListElement>(null);
   useReveal(section);
