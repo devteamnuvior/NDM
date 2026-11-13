@@ -664,9 +664,13 @@ function ndm_headless_concern_field( $field, $name, $value ) {
 				ndm_headless_concern_row( $field, $name . '[' . $i . ']', $row );
 			}
 			echo '</div>';
-			// A blank row, copied by the "Add" button; __i__ becomes the new row's number.
-			echo '<template>';
-			ndm_headless_concern_row( $field, $name . '[__i__]', array() );
+			// A blank row, copied by the "Add" button; its placeholder becomes the new row's number. A list
+			// inside a blank row (a list of lists) gets a placeholder of its own (__i1__, __i2__...), so
+			// adding the outer row leaves the inner list's blank row intact.
+			$depth       = preg_match_all( '/__i\d*__/', $name );
+			$placeholder = $depth ? '__i' . $depth . '__' : '__i__';
+			echo '<template data-ph="' . esc_attr( $placeholder ) . '">';
+			ndm_headless_concern_row( $field, $name . '[' . $placeholder . ']', array() );
 			echo '</template>';
 			echo '<p><button type="button" class="button ndm-cn-add">' . esc_html( isset( $field['add'] ) ? $field['add'] : 'Add a row' ) . '</button></p>';
 			break;
@@ -764,6 +768,7 @@ function ndm_headless_concern_assets( $hook ) {
 .ndm-cn-help{display:block;margin-top:3px;color:#646970;font-size:12px}
 .ndm-cn-image-row{display:flex;align-items:center;gap:10px}
 .ndm-cn-row-body>.ndm-cn-product{grid-column:1/-1}
+.ndm-cn-row-body>.ndm-cn-repeater{grid-column:1/-1}
 .ndm-cn-source-now{margin:0 0 6px}
 .ndm-cn-source-name:empty::before{content:"No product picked";font-weight:400;color:#646970}
 .ndm-cn-source-note{color:#646970}
@@ -805,7 +810,8 @@ function ndm_headless_concern_assets( $hook ) {
       var field = t.closest('.ndm-cn-repeater');
       var tpl = field.querySelector(':scope > template');
       var holder = document.createElement('div');
-      holder.innerHTML = tpl.innerHTML.replace(/__i__/g, 'n' + (seq++));
+      /* only this list's placeholder: a list inside the new row keeps its own for its "Add" button */
+      holder.innerHTML = tpl.innerHTML.split(tpl.getAttribute('data-ph') || '__i__').join('n' + (seq++));
       var row = holder.firstElementChild;
       field.querySelector(':scope > .ndm-cn-rows').appendChild(row);
       row.open = true;
