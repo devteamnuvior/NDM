@@ -1,6 +1,6 @@
 import { pageParity } from "./page";
 
-/* Botox page (a post of the WordPress post type "Procedures"; needs WordPress running): every block in page order; the About tabs switched; the second price group opened. */
+/* Botox page (a post of the WordPress post type "Procedures"; needs WordPress running): every block in page order except About (see `differs`); the second price group opened. */
 const sec = (id: string) => `main > section#${id}`;
 const by = (id: string) => `main > section[aria-labelledby="${id}"]`;
 
@@ -8,6 +8,8 @@ pageParity({
   name: "botox",
   paths: { legacy: "/botox.html", next: "/botox" },
   sectionCount: 16,
+  /* About: the prototype has a fifth tab, Pricing, removed here on the user's request (2026-11-13) */
+  differs: ["overview"],
   sections: [
     { name: "breadcrumb", selector: "nav.crumbs" },
     { name: "hero", selector: by("proc-title"), pixelRatio: 0.004 },
@@ -16,15 +18,6 @@ pageParity({
     { name: "section-bar", selector: "nav.tx-nav" },
     { name: "benefits", selector: sec("benefits"), pixelRatio: 0.01 },
     { name: "film", selector: sec("film"), pixelRatio: 0.01 },
-    { name: "overview", selector: sec("overview") },
-    {
-      name: "overview-tab-4",
-      selector: sec("overview"),
-      prepare: async (p) => {
-        await p.locator("#ov-t-3").click();
-        await p.waitForTimeout(300);
-      },
-    },
     { name: "why-choose", selector: sec("why-choose"), pixelRatio: 0.01 },
     { name: "watch", selector: sec("watch"), pixelRatio: 0.01 },
     {

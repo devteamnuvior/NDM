@@ -182,20 +182,6 @@ export const BOTOX: ProcedurePage = {
         "text": [
           "Although longevity can vary depending on lifestyle, metabolism, and treatment area, Botox® results typically last three to four months. Patients are advised to arrange maintenance procedures three to four times a year in order to preserve a young, refreshed appearance. Over time, results might last longer with regular treatments."
         ]
-      },
-      {
-        "label": "Pricing",
-        "stat": [
-          "{{price}}",
-          "per unit"
-        ],
-        "text": [
-          "Treatment plans are completely customized because each face is different. We invite you to schedule a free consultation with one of our experts so that you can go over your options, talk about your objectives, and create a plan that is specifically for you."
-        ],
-        "link": [
-          "#prices",
-          "See the price list"
-        ]
       }
     ]
   },

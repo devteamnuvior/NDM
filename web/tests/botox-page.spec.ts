@@ -36,8 +36,8 @@ test("About tabs: one panel at a time, arrow keys move between them, every panel
   const about = page.locator("#overview");
   await about.scrollIntoViewIfNeeded();
   const tabs = about.getByRole("tab");
-  await expect(tabs).toHaveCount(5);
-  await expect(about.locator('[role="tabpanel"]')).toHaveCount(5);
+  await expect(tabs).toHaveCount(4);
+  await expect(about.locator('[role="tabpanel"]')).toHaveCount(4);
   await expect(about.getByRole("tabpanel")).toHaveCount(1);
   await expect(about.getByRole("tabpanel")).toContainText("20+");
   await tabs.nth(0).focus();
@@ -47,8 +47,10 @@ test("About tabs: one panel at a time, arrow keys move between them, every panel
   await expect(about.getByRole("tabpanel")).toContainText("minutes per treatment");
   await page.keyboard.press("ArrowLeft");
   await page.keyboard.press("ArrowLeft");
-  await expect(tabs.nth(4)).toHaveAttribute("aria-selected", "true");
-  await expect(about.getByRole("tabpanel").getByRole("link", { name: "See the price list" })).toHaveAttribute("href", "#prices");
+  /* from the first tab, left wraps to the last one; there is no Pricing tab (removed on the user's request, 2026-11-13) */
+  await expect(tabs.nth(3)).toHaveAttribute("aria-selected", "true");
+  await expect(about.getByRole("tabpanel")).toContainText("typical duration");
+  await expect(about.getByRole("tab", { name: /Pricing/ })).toHaveCount(0);
 });
 
 test("prices come from the price list, per unit; groups fold on their own; a package goes into the cart", async ({ page }) => {
