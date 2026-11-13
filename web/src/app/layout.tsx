@@ -32,7 +32,13 @@ export const viewport: Viewport = {
 /** Every page: fonts, smooth scroll and the Book Free Consultation pop-up. The site header and footer are in (site)/layout.tsx. */
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`font-change ${fraunces.variable} ${manrope.variable} ${inter.variable}`}>
+    /* The Black Friday sale page adds its `bfs` class to <html> with an inline script before React starts,
+       so the class list can differ from the server's: that difference is expected (this tag only). */
+    <html
+      lang="en"
+      className={`font-change ${fraunces.variable} ${manrope.variable} ${inter.variable}`}
+      suppressHydrationWarning
+    >
       <body>
         <SmoothScroll />
         {children}
