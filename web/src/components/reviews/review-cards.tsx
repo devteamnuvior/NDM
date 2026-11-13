@@ -3,6 +3,7 @@ import { AWARD_BADGES } from "@/components/reviews/award-badges";
 import { Star, Stars } from "@/components/ui/icons";
 import { AWARD_YEARS, type AwardCardContent, type AwardLook, type Review } from "@/config/reviews";
 import { clamp01 } from "@/lib/math";
+import { withBase } from "@/lib/base-path";
 
 const AWARD_LOOK: Record<AwardLook, string> = {
   ink: "bg-ndm-ink text-white",
@@ -17,7 +18,7 @@ export function AwardCard({ a }: { a: AwardCardContent }) {
     <li className="w-[min(82vw,400px)] shrink-0">
       <figure className={`relative m-0 flex h-full flex-col overflow-hidden rounded-[22px] p-6 shadow-[0_24px_50px_-40px_rgba(27,36,43,.45)] ${AWARD_LOOK[a.look]}`}>
         {/* eslint-disable-next-line @next/next/no-img-element -- SVG mark */}
-        {a.mark && <img src="/assets/icons/16-years-gold.svg" alt="NewDermaMed, 16 years" width="84" height="84" draggable={false} className="mark-16 mb-5" />}
+        {a.mark && <img src={withBase("/assets/icons/16-years-gold.svg")} alt="NewDermaMed, 16 years" width="84" height="84" draggable={false} className="mark-16 mb-5" />}
         <div className="flex items-center justify-between gap-4">
           <span className={`font-inter text-[12px] tracking-[.16em] uppercase ${dark ? "text-white/70" : "text-ndm-muted"}`}>{a.label}</span>
         </div>
@@ -27,12 +28,12 @@ export function AwardCard({ a }: { a: AwardCardContent }) {
           <ul role="list" className="mt-auto flex gap-1 pt-6" aria-label="Top Choice Award, 2019 to 2026">
             {AWARD_YEARS.map((y) => (
               <li key={y}>
-                <Image src={AWARD_BADGES[y]} alt="" sizes="38px" draggable={false} className="size-[clamp(30px,8vw,38px)] object-contain" />
+                <Image src={withBase(AWARD_BADGES[y])} alt="" sizes="38px" draggable={false} className="size-[clamp(30px,8vw,38px)] object-contain" />
               </li>
             ))}
           </ul>
         )}
-        {a.badge && <Image src={AWARD_BADGES[a.badge]} alt={`Top Choice Award ${a.badge}`} sizes="120px" draggable={false} className="pointer-events-none absolute -right-3 -bottom-3 size-[120px] rotate-[-8deg] object-contain opacity-95" />}
+        {a.badge && <Image src={withBase(AWARD_BADGES[a.badge])} alt={`Top Choice Award ${a.badge}`} sizes="120px" draggable={false} className="pointer-events-none absolute -right-3 -bottom-3 size-[120px] rotate-[-8deg] object-contain opacity-95" />}
         {a.mark && <p className="mt-auto pt-6 font-inter text-[13px] text-ndm-muted">Uptown and Downtown Toronto</p>}
       </figure>
     </li>
@@ -48,7 +49,7 @@ export function ReviewCard({ r }: { r: Review }) {
         <blockquote className="mt-4 font-inter text-[15.5px] leading-[1.6] text-ndm-ink">“{r.quote}”</blockquote>
         <figcaption className="mt-auto flex items-center gap-3 pt-6">
           {/* eslint-disable-next-line @next/next/no-img-element -- reviewer photo on the clinic's own site */}
-          <img src={r.photo} alt="" loading="lazy" className="size-11 shrink-0 rounded-full bg-ndm-mist object-cover" />
+          <img src={withBase(r.photo)} alt="" loading="lazy" className="size-11 shrink-0 rounded-full bg-ndm-mist object-cover" />
           <span>
             <span className="block font-inter text-[14.5px] font-medium text-ndm-ink">{r.name}</span>
             <span className="block font-inter text-[13px] text-ndm-muted">{r.tag}</span>

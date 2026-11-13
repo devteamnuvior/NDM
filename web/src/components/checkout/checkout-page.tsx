@@ -10,6 +10,7 @@ import { useCart } from "@/hooks/use-cart";
 import { checkCart, clearCart, type CartLine } from "@/lib/cart";
 import { pagePath } from "@/lib/routes";
 import { CO_CARD, CO_WRAP, CartPairs, CoAlert, CoHead, CoSelect, FIELD, IconLock, OrderSummary, RemovedNotice, money2, totalsOf, useInBrowser } from "./shared";
+import { withBase } from "@/lib/base-path";
 
 const STEP_HEAD: [lead: string, strong: string, text: string][] = [
   ["Your", "details", "Your details are used only to arrange your treatment."],
@@ -304,7 +305,7 @@ export function CheckoutPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
                             Edit
                           </button>
                         ) : (
-                          <a href={pagePath("cart")} className="font-medium text-ndm-deep hover:underline">
+                          <a href={withBase(pagePath("cart"))} className="font-medium text-ndm-deep hover:underline">
                             Edit
                           </a>
                         )}
@@ -328,15 +329,15 @@ export function CheckoutPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
                 <input type="checkbox" required name="agree" className="mt-0.5 size-4 shrink-0 accent-[#0F80C3]" />
                 <span>
                   I accept the{" "}
-                  <a href={pagePath("terms")} className="text-ndm-deep underline-offset-4 hover:underline">
+                  <a href={withBase(pagePath("terms"))} className="text-ndm-deep underline-offset-4 hover:underline">
                     Terms of Service
                   </a>
                   , the{" "}
-                  <a href={pagePath("privacy")} className="text-ndm-deep underline-offset-4 hover:underline">
+                  <a href={withBase(pagePath("privacy"))} className="text-ndm-deep underline-offset-4 hover:underline">
                     Privacy Policy
                   </a>{" "}
                   and the{" "}
-                  <a href={pagePath("refunds")} className="text-ndm-deep underline-offset-4 hover:underline">
+                  <a href={withBase(pagePath("refunds"))} className="text-ndm-deep underline-offset-4 hover:underline">
                     Refund Policy
                   </a>
                   .
@@ -372,7 +373,7 @@ export function CheckoutPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
                     Back
                   </button>
                 ) : (
-                  <a href={pagePath("cart")} className="btn btn-line sm:w-auto">
+                  <a href={withBase(pagePath("cart"))} className="btn btn-line sm:w-auto">
                     Back to cart
                   </a>
                 )}
@@ -393,7 +394,7 @@ export function CheckoutPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
             <div className={`${CO_CARD} hidden p-[clamp(20px,2.4vw,28px)] lg:block`}>
               <div className="flex items-baseline justify-between">
                 <h2 className="font-aeonik text-[24px] font-normal tracking-[-0.01em] text-ndm-ink">Order summary</h2>
-                <a href={pagePath("cart")} className="font-inter text-[13.5px] font-medium text-ndm-deep hover:underline">
+                <a href={withBase(pagePath("cart"))} className="font-inter text-[13.5px] font-medium text-ndm-deep hover:underline">
                   Edit cart
                 </a>
               </div>

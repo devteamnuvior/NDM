@@ -9,6 +9,7 @@ import { ACTIONS } from "@/config/routes";
 import { useReveal } from "@/hooks/use-reveal";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
+import { withBase } from "@/lib/base-path";
 
 /**
  * Pricing header: the clinic film (playing straight through, on a loop), the title, and three facts.
@@ -39,7 +40,7 @@ export function PricingHero({ total }: { total: number | null }) {
 
   return (
     <section ref={section} data-nav="dark" aria-labelledby="pricing-title" className="relative isolate flex min-h-[100svh] flex-col justify-end overflow-hidden bg-ndm-night pt-[150px] text-white md:h-[100svh] md:max-h-[1040px] md:min-h-[640px] md:pt-0">
-      <video ref={film} src={CLINIC_FILM.src} poster={CLINIC_FILM.poster} muted loop playsInline preload="auto" aria-hidden="true" className="absolute inset-0 -z-20 h-full w-full object-cover" />
+      <video ref={film} src={withBase(CLINIC_FILM.src)} poster={withBase(CLINIC_FILM.poster)} muted loop playsInline preload="auto" aria-hidden="true" className="absolute inset-0 -z-20 h-full w-full object-cover" />
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10"

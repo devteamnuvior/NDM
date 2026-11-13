@@ -3,6 +3,7 @@ import type { AnchorHTMLAttributes } from "react";
 import type { PageId } from "@/config/routes";
 import { isMigrated } from "@/lib/routes";
 import type { ResolvedLink } from "@/types/navigation";
+import { withBase } from "@/lib/base-path";
 
 interface SiteLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
   to: ResolvedLink;
@@ -24,7 +25,7 @@ export function SiteLink({ to, current, children, ...rest }: SiteLinkProps) {
     );
   }
   return (
-    <a href={to.href} {...here} {...rest}>
+    <a href={withBase(to.href)} {...here} {...rest}>
       {children}
     </a>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { withBase } from "@/lib/base-path";
 
 /* the midface thread vectors, drawn from one entry point */
 const FACE_PATHS = [
@@ -58,7 +59,7 @@ export function AptosFigure({ className = "h-full min-h-[480px] rounded-[22px] s
     <figure ref={box} className={`relative m-0 overflow-hidden bg-[#2A2050] ${className}`}>
       <div className={layer} style={{ opacity: body ? 0 : 1 }} aria-hidden={body}>
         {/* eslint-disable-next-line @next/next/no-img-element -- drawn over by an SVG with the same box; used at its own size */}
-        <img src="/assets/aptos/midface-vectors.jpg" alt="Aptos Visage Excellence midface thread vectors" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={withBase("/assets/aptos/midface-vectors.jpg")} alt="Aptos Visage Excellence midface thread vectors" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
         <svg key={`f${body}${run}`} className="absolute inset-0 h-full w-full" viewBox="0 0 880 1100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           {FACE_PATHS.map((d, i) => (
             <path key={i} className="ind-run" pathLength="1" d={d} style={{ animationDelay: `${i * 0.32}s` }} />
@@ -70,7 +71,7 @@ export function AptosFigure({ className = "h-full min-h-[480px] rounded-[22px] s
       {!faceOnly && (
         <div className={layer} style={{ opacity: body ? 1 : 0 }} aria-hidden={!body}>
           {/* eslint-disable-next-line @next/next/no-img-element -- served by the clinic's own site, as in the prototype */}
-          <img src={BODY_IMG} alt="Body areas where Aptos threads can be placed: décolleté, arms, abdomen, buttocks, inner thighs and knees" loading="lazy" className="absolute inset-0 h-full w-full object-cover object-right" />
+          <img src={withBase(BODY_IMG)} alt="Body areas where Aptos threads can be placed: décolleté, arms, abdomen, buttocks, inner thighs and knees" loading="lazy" className="absolute inset-0 h-full w-full object-cover object-right" />
           <svg key={`b${body}`} className="absolute inset-0 h-full w-full" viewBox="0 0 1406 1406" preserveAspectRatio="xMaxYMid slice" aria-hidden="true">
             {BODY_FANS.map(([[x, y], curves], f) => (
               <g key={f}>

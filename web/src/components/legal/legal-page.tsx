@@ -8,6 +8,7 @@ import { TwoTone } from "@/components/ui/two-tone";
 import { LEGAL, LEGAL_DOCS, LEGAL_UPDATED, type LegalDocId } from "@/config/legal";
 import { getLegalDocument, type LegalDocument } from "@/lib/legal";
 import { pageLink } from "@/lib/routes";
+import { withBaseHtml } from "@/lib/base-path";
 
 const MAIN = { id: "main", "data-shell": "inner", "data-page": "legal", className: "pt-[176px] xl:pt-[204px]" } as const;
 
@@ -73,7 +74,7 @@ async function LegalDocumentView({ doc, children }: { doc: LegalDocId; children:
       {d.toc.length ? <LegalToc toc={d.toc} /> : null}
       <section className="px-[var(--gx)] pt-2 pb-[clamp(72px,8vw,120px)]">
         {live ? (
-          <article className="lg-doc-body max-w-[820px]" dangerouslySetInnerHTML={{ __html: live.html }} />
+          <article className="lg-doc-body max-w-[820px]" dangerouslySetInnerHTML={{ __html: withBaseHtml(live.html) }} />
         ) : (
           <article className="lg-doc-body max-w-[820px]">{children}</article>
         )}

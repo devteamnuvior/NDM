@@ -9,6 +9,7 @@ import { BA_DISCLAIMER } from "@/config/before-after";
 import { pagePath } from "@/lib/routes";
 import { TxPhoto } from "@/components/treatment/tx-photo";
 import type { TxResultsContent } from "@/types/treatment";
+import { withBase } from "@/lib/base-path";
 
 /* the fanned stack of photos on the "more cases" tile: tilt, sideways shift and stacking order */
 const FAN = [
@@ -85,14 +86,14 @@ export function TxResults({ results: t, number }: { results: TxResultsContent; n
             ))}
             {cases.length < 4 && (
               <li className="rv" style={{ transitionDelay: `${0.06 * cases.length}s` }}>
-                <a href={gallery} target="_blank" rel="noopener" className="tx-more group relative flex aspect-[4/5] w-full flex-col overflow-hidden rounded-[22px] p-2.5 text-white sm:p-3.5">
+                <a href={withBase(gallery)} target="_blank" rel="noopener" className="tx-more group relative flex aspect-[4/5] w-full flex-col overflow-hidden rounded-[22px] p-2.5 text-white sm:p-3.5">
                   <span aria-hidden="true" className="tx-more-mesh absolute inset-0" />
                   <span aria-hidden="true" className="relative mx-auto mt-[6%] h-[50%] w-full">
                     {all.slice(0, 3).map((c, k) => (
                       /* eslint-disable-next-line @next/next/no-img-element -- case photo served by the clinic's site, as in the prototype */
                       <img
                         key={c.id}
-                        src={c.after}
+                        src={withBase(c.after)}
                         alt=""
                         loading="lazy"
                         decoding="async"

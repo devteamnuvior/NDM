@@ -11,16 +11,17 @@ import {
 import { ACTIONS } from "@/config/routes";
 import { CLINICS } from "@/config/site";
 import { tel } from "@/lib/routes";
+import { withBase } from "@/lib/base-path";
 
 function PhonesMessage() {
   const [a, b] = CLINICS;
   return (
     <span className="inline-flex items-center gap-1.5 text-[11.5px]">
-      <a href={tel(a.phone)} className="hover:underline">
+      <a href={withBase(tel(a.phone))} className="hover:underline">
         {a.name} {a.phone}
       </a>
       <span className="opacity-50">·</span>
-      <a href={tel(b.phone)} className="hover:underline">
+      <a href={withBase(tel(b.phone))} className="hover:underline">
         {b.name} {b.phone}
       </a>
     </span>
@@ -33,7 +34,7 @@ function Message({ m, wide }: { m: Announcement; wide: boolean }) {
     return (
       <>
         {m.text}
-        <a href={m.href} className="font-medium underline-offset-4 hover:underline">
+        <a href={withBase(m.href)} className="font-medium underline-offset-4 hover:underline">
           {m.cta}
         </a>
       </>
@@ -41,13 +42,13 @@ function Message({ m, wide }: { m: Announcement; wide: boolean }) {
   }
   if (m.external) {
     return (
-      <a href={m.href} target="_blank" rel="noopener" className="inline-flex items-center gap-1 hover:underline">
+      <a href={withBase(m.href)} target="_blank" rel="noopener" className="inline-flex items-center gap-1 hover:underline">
         {m.text} <IconExternal />
       </a>
     );
   }
   return (
-    <a href={m.href} className="hover:underline">
+    <a href={withBase(m.href)} className="hover:underline">
       {m.text}
       {m.cta && <span className="font-medium">{m.cta}</span>}
     </a>
@@ -116,7 +117,7 @@ export function AnnouncementBar() {
         <div className="hidden items-center gap-4 whitespace-nowrap lg:flex">
           <IconPhone className="opacity-80" />
           {CLINICS.map((c) => (
-            <a key={c.id} href={tel(c.phone)} className="underline-offset-4 hover:underline">
+            <a key={c.id} href={withBase(tel(c.phone))} className="underline-offset-4 hover:underline">
               <span className="opacity-75">{c.name}</span> <span className="font-medium">{c.phone}</span>
             </a>
           ))}
@@ -130,7 +131,7 @@ export function AnnouncementBar() {
           <Ticker messages={ANNOUNCEMENTS_DESKTOP} tick={tick} wide className="hidden lg:block" />
         </div>
         <div className="hidden items-center justify-end gap-4 lg:flex">
-          <a href={ACTIONS.shop} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 font-medium underline-offset-4 hover:underline">
+          <a href={withBase(ACTIONS.shop)} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 font-medium underline-offset-4 hover:underline">
             Shop skincare <IconExternal />
           </a>
         </div>

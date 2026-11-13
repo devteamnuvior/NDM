@@ -7,6 +7,7 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { offerPriceChoices } from "@/lib/offers";
 import { getPricingSession, isPricingAdminConfigured } from "@/lib/pricing-admin/session";
 import { WordPressError, getAdminPromotions, getPricingTree } from "@/lib/wordpress";
+import { withBase } from "@/lib/base-path";
 
 export const metadata: Metadata = { title: "Promotions manager, NewDermaMed" };
 
@@ -32,7 +33,7 @@ function Panel({ title, text, problem, signIn }: { title: string; text: string; 
         )}
         {signIn && (
           /* a plain link on purpose: it must be a full request, never prefetched */
-          <a href="/manage/pricing/auth/start?to=promotions" className="btn btn-ink mt-7">
+          <a href={withBase("/manage/pricing/auth/start?to=promotions")} className="btn btn-ink mt-7">
             <span>Sign in with WordPress</span>
           </a>
         )}

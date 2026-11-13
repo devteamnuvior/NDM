@@ -3,8 +3,9 @@ import { Suspense } from "react";
 import { ManagerFrame } from "@/components/pricing-admin/manager-frame";
 import { PricingManager } from "@/components/pricing-admin/pricing-manager";
 import { Eyebrow } from "@/components/ui/eyebrow";
-import { getPricingSession, isPricingAdminConfigured, wordpressOrigin } from "@/lib/pricing-admin/session";
+import { getPricingSession, isPricingAdminConfigured, wordpressBase } from "@/lib/pricing-admin/session";
 import { WordPressError, getPricingAdminTree } from "@/lib/wordpress";
+import { withBase } from "@/lib/base-path";
 
 const PROBLEMS: Record<string, string> = {
   setup: "The pricing manager is not set up on this server yet (PRICING_ADMIN_SECRET, SITE_URL or WORDPRESS_API_URL is missing).",
@@ -28,7 +29,7 @@ function Panel({ title, text, problem, signIn }: { title: string; text: string; 
         )}
         {signIn && (
           /* a plain link on purpose: it must be a full request, never prefetched */
-          <a href="/manage/pricing/auth/start" className="btn btn-ink mt-7">
+          <a href={withBase("/manage/pricing/auth/start")} className="btn btn-ink mt-7">
             <span>Sign in with WordPress</span>
           </a>
         )}
@@ -61,7 +62,7 @@ async function Screen({ searchParams }: { searchParams: Promise<{ problem?: stri
     return <Panel title="WooCommerce is not answering" text="The price list could not be loaded, so nothing can be changed right now. Please reload this page in a moment." />;
   }
 
-  return <PricingManager tree={tree} user={session.name} csrf={session.csrf} wpAdmin={wordpressOrigin()} />;
+  return <PricingManager tree={tree} user={session.name} csrf={session.csrf} wpAdmin={wordpressBase()} />;
 }
 
 export default function PricingManagePage({ searchParams }: PageProps<"/manage/pricing">) {

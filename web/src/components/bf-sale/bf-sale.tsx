@@ -22,6 +22,7 @@ import { byId } from "@/lib/dom";
 import { formatPrice as money } from "@/lib/prices";
 import { tel } from "@/lib/routes";
 import { scrollToY } from "@/lib/smooth-scroll";
+import { withBase } from "@/lib/base-path";
 
 const PLAN_KEY = "ndm-bf-plan";
 /* the current offers, read from WooCommerce by the page and handed to the two sections that show them */
@@ -58,18 +59,18 @@ function BfsHeader({ count }: { count: number }) {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0B0B0C]/95 text-white backdrop-blur-[14px]">
       <div className="mx-auto flex h-[68px] max-w-[1280px] items-center justify-between gap-4 px-[var(--gx)]">
-        <Link href="/" className="shrink-0" aria-label="NewDermaMed home"><img src="/assets/icons/logo-white.svg" alt="NewDermaMed" className="h-7 w-auto min-[400px]:h-8 sm:h-10" /></Link>
+        <Link href="/" className="shrink-0" aria-label="NewDermaMed home"><img src={withBase("/assets/icons/logo-white.svg")} alt="NewDermaMed" className="h-7 w-auto min-[400px]:h-8 sm:h-10" /></Link>
         <nav aria-label="Black Friday page" className="hidden items-center gap-5 whitespace-nowrap lg:flex xl:gap-7">
           <Link href="/" className="bfs-nav font-inter text-[14.5px]">Home</Link>
           {links.map(([id, l]) => (
-            <a key={id} href={`#${id}`} onClick={bfsGo(id)} aria-current={here === id ? 'location' : undefined} className={`bfs-nav inline-flex items-center gap-2 font-inter text-[14.5px] ${here === id ? 'is-on' : ''}`}>
+            <a key={id} href={withBase(`#${id}`)} onClick={bfsGo(id)} aria-current={here === id ? 'location' : undefined} className={`bfs-nav inline-flex items-center gap-2 font-inter text-[14.5px] ${here === id ? 'is-on' : ''}`}>
               {l}{id === 'plan' && count > 0 && <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#D3121F] px-1.5 text-[11px] font-semibold text-white tabular-nums">{count}</span>}
             </a>
           ))}
         </nav>
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <a href={tel(PHONES[0].num)} className="hidden items-center gap-2 font-inter text-[14px] text-white/85 hover:text-white md:inline-flex"><IconPhone />{PHONES[0].num}</a>
-          <a href={tel(PHONES[0].num)} aria-label={`Call Uptown, ${PHONES[0].num}`} className="grid size-10 place-items-center rounded-full border border-white/20 md:hidden"><IconPhone /></a>
+          <a href={withBase(tel(PHONES[0].num))} className="hidden items-center gap-2 font-inter text-[14px] text-white/85 hover:text-white md:inline-flex"><IconPhone />{PHONES[0].num}</a>
+          <a href={withBase(tel(PHONES[0].num))} aria-label={`Call Uptown, ${PHONES[0].num}`} className="grid size-10 place-items-center rounded-full border border-white/20 md:hidden"><IconPhone /></a>
           <Button href="#/book" v="book" hot sm className="hidden sm:inline-flex">Book Free Consultation</Button>
           <Button href="#/book" v="book" hot sm className="sm:hidden">Book</Button>
         </div>
@@ -136,7 +137,7 @@ function BfsFan() {
           <li key={x.n} className={`bfs-fan-card bfs-pos-${Math.min(pos, 3)}`} aria-hidden={pos > 2}>
             <a href="#specials" tabIndex={pos > 2 ? -1 : 0} onClick={(e) => { if (pos !== 1 && pos < 3) { e.preventDefault(); setK((v) => v + (pos === 2 ? 1 : -1)); } else bfsGo('specials')(e); }}
               className="block h-full w-full overflow-hidden rounded-[22px] bg-white text-[#0B0B0C] shadow-[0_40px_70px_-30px_rgba(0,0,0,.85)]">
-              <span className="relative block h-[62%] overflow-hidden"><img src={x.img || undefined} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: x.pos }} /><span className="bfs-off absolute left-2.5 top-2.5 rounded-full px-2.5 py-1 font-inter text-[11px] font-semibold">{x.deal}</span></span>
+              <span className="relative block h-[62%] overflow-hidden"><img src={withBase(x.img || undefined)} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: x.pos }} /><span className="bfs-off absolute left-2.5 top-2.5 rounded-full px-2.5 py-1 font-inter text-[11px] font-semibold">{x.deal}</span></span>
               <span className="block border-t-2 border-dashed border-black/10 px-3.5 pt-2.5">
                 <span className="block truncate font-aeonik text-[18px] leading-[1.15]">{x.n}</span>
                 <span className="mt-0.5 block font-inter text-[12.5px] text-ndm-muted">From <b className="font-semibold text-[#D3121F]">${x.p}</b></span>
@@ -156,7 +157,7 @@ function BfsHero() {
   return (
     <section aria-labelledby="bfs-title" className="bfs-hero relative isolate overflow-hidden text-white">
       {/* round 28: the clinic at night sits behind the tickets and the countdown, fading into the black on the left and at the bottom */}
-      <img src="/assets/hero/clinic-exterior.jpg" alt="" className="bfs-hero-pic absolute right-0 top-0 -z-10 h-[46%] w-full object-cover lg:h-full lg:w-[60%]" style={{ objectPosition: '58% 50%' }} />
+      <img src={withBase("/assets/hero/clinic-exterior.jpg")} alt="" className="bfs-hero-pic absolute right-0 top-0 -z-10 h-[46%] w-full object-cover lg:h-full lg:w-[60%]" style={{ objectPosition: '58% 50%' }} />
       <span aria-hidden="true" className="bfs-big font-aeonik">{BFS_MAX}%</span>
       <div className="mx-auto grid max-w-[1280px] gap-12 px-[var(--gx)] pb-[clamp(36px,4vw,56px)] pt-[clamp(48px,6vw,96px)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,.95fr)] lg:items-center">
         <div className="bfs-rise">
@@ -364,7 +365,7 @@ function BfsSpecials() {
                   <li key={s.n}>
                     <article className="bfs-ticket on-k flex h-full flex-col overflow-hidden rounded-[24px] text-[#0B0B0C]">
                       <div className="relative aspect-[16/10] overflow-hidden bg-[#F3F1EF]">
-                        <img src={s.img || undefined} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: s.pos }} />
+                        <img src={withBase(s.img || undefined)} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: s.pos }} />
                         {s.deal && <span className="bfs-off absolute left-3 top-3 rounded-full px-3 py-1.5 font-inter text-[12px] font-semibold">{s.deal}</span>}
                       </div>
                       <div className="flex flex-1 flex-col p-5">
@@ -444,7 +445,7 @@ function BfsPlan({ plan, toggle, clear }: { plan: PlanLine[]; toggle: (x: PlanLi
                 <a href="#deals" onClick={bfsGo('deals')} className="btn bfd-cta">Browse the deals</a>
                 <Button href="#concerns" v="glass" onClick={bfsGo('concerns')}>Start from a concern</Button>
               </div>
-              <ul className="mt-6 flex flex-wrap gap-2" role="list">{BFS_DEALS.filter((d) => d.pct >= 50).slice(0, 4).map((d) => <li key={d.id}><a href={`#bf-${d.id}`} onClick={bfsGo(`bf-${d.id}`)} className="inline-flex items-center gap-2 rounded-full bg-white/[.07] px-3.5 py-2 font-inter text-[13px] text-white/85 ring-1 ring-white/10 transition-colors hover:bg-white/15"><b className="font-semibold text-[#FF5A63]">{d.offer}</b>{d.c.name}</a></li>)}</ul>
+              <ul className="mt-6 flex flex-wrap gap-2" role="list">{BFS_DEALS.filter((d) => d.pct >= 50).slice(0, 4).map((d) => <li key={d.id}><a href={withBase(`#bf-${d.id}`)} onClick={bfsGo(`bf-${d.id}`)} className="inline-flex items-center gap-2 rounded-full bg-white/[.07] px-3.5 py-2 font-inter text-[13px] text-white/85 ring-1 ring-white/10 transition-colors hover:bg-white/15"><b className="font-semibold text-[#FF5A63]">{d.offer}</b>{d.c.name}</a></li>)}</ul>
             </div>
           )}
         </div>
@@ -475,7 +476,7 @@ function BfsClinics() {
         <ul role="list" className="mt-10 grid gap-5 md:grid-cols-2">
           {CLINICS.map((c) => (
             <li key={c.name} className="overflow-hidden rounded-[24px] bg-white ring-1 ring-black/[.06]">
-              <div className="relative aspect-[16/8] overflow-hidden"><img src={c.img} alt={`The NewDermaMed ${c.name} clinic`} loading="lazy" className="absolute inset-0 h-full w-full object-cover" /></div>
+              <div className="relative aspect-[16/8] overflow-hidden"><img src={withBase(c.img)} alt={`The NewDermaMed ${c.name} clinic`} loading="lazy" className="absolute inset-0 h-full w-full object-cover" /></div>
               <div className="p-6">
                 <h3 className="font-aeonik text-[26px] font-normal leading-none text-[#0B0B0C]">{c.name}</h3>
                 <p className="mt-3 font-inter text-[15px] leading-[1.5] text-[#0B0B0C]">{c.addr}</p>
@@ -506,16 +507,16 @@ function BfsFooter() {
           <div className="flex flex-wrap gap-2.5"><Button href="#/book" v="book" hot>Book Free Consultation</Button><Button href="#deals" v="glass" onClick={bfsGo('deals')}>See the deals</Button></div>
         </div>
         <div className="flex flex-col gap-6 pt-8 md:flex-row md:items-center md:justify-between">
-          <Link href="/"><img src="/assets/icons/logo-white.svg" alt="NewDermaMed" className="h-10 w-auto" /></Link>
+          <Link href="/"><img src={withBase("/assets/icons/logo-white.svg")} alt="NewDermaMed" className="h-10 w-auto" /></Link>
           <p className="font-inter text-[13.5px] text-white/60">{CLINICS.map((c) => `${c.name} ${c.phone}`).join(' · ')}</p>
           <p className="flex flex-wrap gap-x-5 gap-y-2 font-inter text-[13.5px] text-white/60">
-            <Link href="/" className="hover:text-white">Main site</Link><Link href="/pricing" className="hover:text-white">Full price list</Link><a href={SHOP_URL} target="_blank" rel="noopener" className="hover:text-white">Skincare shop ↗</a>
+            <Link href="/" className="hover:text-white">Main site</Link><Link href="/pricing" className="hover:text-white">Full price list</Link><a href={withBase(SHOP_URL)} target="_blank" rel="noopener" className="hover:text-white">Skincare shop ↗</a>
           </p>
         </div>
         <div className="mt-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-10">
           <p className="max-w-[90ch] font-inter text-[12px] leading-[1.6] text-white/45">© 2026 NewDermaMed. Offers apply {BFS.when}, at both clinics, to the packages shown, and may not be combined with other promotions. Treatments are given after a medical assessment. Individual results may vary.</p>
           <a href="https://nexthealthmarketing.com" target="_blank" rel="noopener" className="bfs-credit group flex shrink-0 items-center gap-2.5 font-inter text-[11px] uppercase tracking-[.16em] text-white/35 transition-colors hover:text-white/70">
-            Site by<img src="/assets/partners/next-health-white.svg" alt="Next Health" width="88" height="16" className="h-4 w-auto opacity-40 transition-opacity group-hover:opacity-80" />
+            Site by<img src={withBase("/assets/partners/next-health-white.svg")} alt="Next Health" width="88" height="16" className="h-4 w-auto opacity-40 transition-opacity group-hover:opacity-80" />
           </a>
         </div>
       </div>

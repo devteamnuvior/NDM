@@ -5,6 +5,7 @@ import { IconArrow } from "@/components/ui/icons";
 import { RevealSection } from "@/components/ui/reveal-section";
 import { ACTIONS } from "@/config/routes";
 import type { ConcernPage } from "@/types/concern";
+import { withBase, withBaseSrcSet } from "@/lib/base-path";
 
 /** Assessment: the free consultation and VISIA® skin analysis, and what we look at. */
 export function CnAssess({ assess: a, short, number }: { assess: ConcernPage["assess"]; short: string; number: string }) {
@@ -38,8 +39,8 @@ export function CnAssess({ assess: a, short, number }: { assess: ConcernPage["as
         <div className="rv peach relative min-h-[300px] overflow-hidden rounded-[24px] bg-ndm-line lg:min-h-[420px]" style={{ transitionDelay: ".1s" }}>
           {/* eslint-disable-next-line @next/next/no-img-element -- the home page's own photo files, in two widths */}
           <img
-            src="/assets/home/v3/visia-1440.webp"
-            srcSet="/assets/home/v3/visia-720.webp 720w, /assets/home/v3/visia-1440.webp 1440w"
+            src={withBase("/assets/home/v3/visia-1440.webp")}
+            srcSet={withBaseSrcSet("/assets/home/v3/visia-720.webp 720w, /assets/home/v3/visia-1440.webp 1440w")}
             sizes="(min-width: 1024px) 40vw, 100vw"
             alt="A NewDermaMed provider reviewing VISIA skin analysis results with a patient"
             loading="lazy"

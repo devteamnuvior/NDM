@@ -9,6 +9,7 @@ import { ABOUT_CLINIC_CHOICES, ABOUT_CLINICS, ABOUT_EMAIL } from "@/config/about
 import { useReveal } from "@/hooks/use-reveal";
 import { tel } from "@/lib/routes";
 import type { AboutCopy } from "@/types/about";
+import { withBase } from "@/lib/base-path";
 
 const FIELD = "block h-12 w-full rounded-[10px] border border-ndm-ink/15 bg-white px-3.5 font-inter text-[14.5px] text-ndm-ink placeholder:text-[#7D868D] outline-hidden transition focus:border-ndm-blue focus:ring-4 focus:ring-ndm-blue/15";
 
@@ -63,7 +64,7 @@ export function AboutContact({ copy }: { copy: AboutCopy["contact"] }) {
             ))}
           </ul>
           <p className="rv mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 font-inter text-[14.5px] text-ndm-ink" style={{ transitionDelay: ".16s" }}>
-            <a href={`mailto:${ABOUT_EMAIL}`} className="inline-flex items-center gap-2 underline-offset-4 hover:text-ndm-deep hover:underline">
+            <a href={withBase(`mailto:${ABOUT_EMAIL}`)} className="inline-flex items-center gap-2 underline-offset-4 hover:text-ndm-deep hover:underline">
               <IconMail size={15} />
               {ABOUT_EMAIL}
             </a>

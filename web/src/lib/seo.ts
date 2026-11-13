@@ -1,4 +1,5 @@
 import "server-only";
+import { BASE_PATH, withBase } from "@/lib/base-path";
 
 /**
  * This site's public address (SITE_URL, see .env.example), without a trailing slash; null while it is
@@ -15,15 +16,18 @@ export function siteOrigin(): string | null {
   }
 }
 
-/** A path of this site as a full address ("/blog" -> "https://host/blog"); the path itself while SITE_URL is not set. */
+/**
+ * A path of this site as a full address ("/blog" -> "https://host/blog", or "https://host/react/blog"
+ * when the site is served from a folder); the path itself, folder included, while SITE_URL is not set.
+ */
 export function absolute(path: string): string {
-  return /^https?:/.test(path) ? path : `${siteOrigin() ?? ""}${path}`;
+  return /^https?:/.test(path) ? path : `${siteOrigin() ?? ""}${withBase(path)}`;
 }
 
 /** The clinic as the publisher of its pages. Only what the site itself states: the name and the address of the site. */
 export function publisher(): Record<string, unknown> {
   const origin = siteOrigin();
-  return { "@type": "MedicalOrganization", name: "NewDermaMed", ...(origin ? { url: origin } : {}) };
+  return { "@type": "MedicalOrganization", name: "NewDermaMed", ...(origin ? { url: `${origin}${BASE_PATH}` } : {}) };
 }
 
 /** A breadcrumb trail for search engines: [name, path] pairs after Home. */

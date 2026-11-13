@@ -7,6 +7,7 @@ import { IconClose } from "@/components/ui/icons";
 import { ACTIONS } from "@/config/routes";
 import type { TeamMember } from "@/config/team";
 import { lockScroll } from "@/lib/scroll-lock";
+import { withBase } from "@/lib/base-path";
 
 const LABEL = "font-inter text-[11.5px] font-[550] uppercase tracking-[.14em] text-ndm-muted";
 const CRED = "font-inter text-[11.5px] font-[550] uppercase leading-[1.5] tracking-[.16em] text-ndm-deep";
@@ -134,7 +135,7 @@ export function TeamProfile({ member: m, onClose }: { member: TeamMember; onClos
               <div className="team-pop-aside">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[20px] bg-ndm-mist">
                   {/* eslint-disable-next-line @next/next/no-img-element -- already loaded by the portrait card */}
-                  <img src={m.img} alt={`Portrait of ${m.name}`} width="800" height="1000" className="absolute inset-0 h-full w-full object-cover object-[50%_15%]" />
+                  <img src={withBase(m.img)} alt={`Portrait of ${m.name}`} width="800" height="1000" className="absolute inset-0 h-full w-full object-cover object-[50%_15%]" />
                 </div>
                 <TeamFacts facts={facts} className="mt-6" />
               </div>
@@ -143,7 +144,7 @@ export function TeamProfile({ member: m, onClose }: { member: TeamMember; onClos
               <p className={`pr-12 ${CRED}`}>{m.cred}</p>
               <div className="mt-3 flex items-center gap-4">
                 {/* eslint-disable-next-line @next/next/no-img-element -- already loaded by the portrait card */}
-                <img src={m.img} alt="" width="800" height="1000" className="aspect-[4/5] w-[72px] shrink-0 rounded-[14px] bg-ndm-mist object-cover object-[50%_15%] sm:hidden" />
+                <img src={withBase(m.img)} alt="" width="800" height="1000" className="aspect-[4/5] w-[72px] shrink-0 rounded-[14px] bg-ndm-mist object-cover object-[50%_15%] sm:hidden" />
                 <div className="min-w-0">
                   <h2 id="team-profile-title" className="font-aeonik text-[clamp(28px,3.4vw,36px)] leading-[1.05] font-normal tracking-[-0.03em] text-ndm-ink">
                     {m.name}

@@ -11,6 +11,7 @@ import { pageFromPathname } from "@/lib/routes";
 import { menuHits, mergeHits, searchKey } from "@/lib/search-match";
 import type { ResolvedLink } from "@/types/navigation";
 import type { PopularAnswer, SearchAnswer, SearchHit } from "@/types/search";
+import { withBase, withoutBase } from "@/lib/base-path";
 
 /** How long after the last key the price list is asked. */
 const ASK_DELAY_MS = 160;
@@ -62,7 +63,7 @@ export function SearchOverlay({ open, onClose }: SearchOverlayProps) {
   useEffect(() => {
     if (!open) return;
     const stop = new AbortController();
-    fetch("/api/search/popular", { signal: stop.signal })
+    fetch(withBase("/api/search/popular"), { signal: stop.signal })
       .then((r) => (r.ok ? (r.json() as Promise<PopularAnswer>) : null))
       .then((a) => {
         if (a && Array.isArray(a.terms) && a.terms.length) setPopular(a.terms.filter((t) => typeof t === "string"));
@@ -78,7 +79,7 @@ export function SearchOverlay({ open, onClose }: SearchOverlayProps) {
     if (key.length < 2) return;
     const stop = new AbortController();
     const t = setTimeout(() => {
-      fetch(`/api/search?q=${encodeURIComponent(key)}`, { signal: stop.signal })
+      fetch(withBase(`/api/search?q=${encodeURIComponent(key)}`), { signal: stop.signal })
         .then((r) => (r.ok ? (r.json() as Promise<SearchAnswer>) : { hits: [] }))
         .then((a) => setRemote({ q: key, hits: Array.isArray(a.hits) ? a.hits : [] }))
         .catch(() => {
@@ -100,7 +101,7 @@ export function SearchOverlay({ open, onClose }: SearchOverlayProps) {
     const id = `${key}|${picked}`;
     if (key.length < 2 || counted.current.has(id)) return;
     counted.current.add(id);
-    fetch("/api/search/log", { method: "POST", keepalive: true, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ q: key, picked }) }).catch(() => {});
+    fetch(withBase("/api/search/log"), { method: "POST", keepalive: true, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ q: key, picked }) }).catch(() => {});
   };
   const countSettled = useEffectEvent(() => {
     if (!typed.current || !answered) return;
@@ -118,7 +119,7 @@ export function SearchOverlay({ open, onClose }: SearchOverlayProps) {
     onClose();
     /* a price category on the page that is already open: the link alone would not unfold it */
     const hash = hit.href.slice(hit.href.indexOf("#"));
-    if (hit.href.includes("#") && PRICE_GROUP_HASH.test(hash) && window.location.pathname === hit.href.split("#")[0]) {
+    if (hit.href.includes("#") && PRICE_GROUP_HASH.test(hash) && withoutBase(window.location.pathname) === hit.href.split("#")[0]) {
       setTimeout(() => jumpToPriceGroup(hash.slice(1)), 350);
     }
   };
@@ -184,7 +185,7 @@ export function SearchOverlay({ open, onClose }: SearchOverlayProps) {
               {hits.length === 0 && answered && (
                 <li className="py-4 text-[15px] text-ndm-muted">
                   No match yet,{" "}
-                  <a href={ACTIONS.book} className="text-ndm-blue underline underline-offset-4">
+                  <a href={withBase(ACTIONS.book)} className="text-ndm-blue underline underline-offset-4">
                     book a free consultation
                   </a>{" "}
                   and we’ll guide you.

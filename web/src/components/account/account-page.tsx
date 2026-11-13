@@ -13,6 +13,7 @@ import { money } from "@/lib/cart";
 import { byId } from "@/lib/dom";
 import { contentLink, pageLink } from "@/lib/routes";
 import { scrollToY } from "@/lib/smooth-scroll";
+import { withBase } from "@/lib/base-path";
 
 /**
  * My account, ported from the prototype's src/account-ui.jsx: a section bar and eight sections of a
@@ -420,13 +421,13 @@ export function AccountPage({ orders }: { orders: AccountOrderRow[] }) {
                         <div key={p.href} className="flex items-center gap-3 rounded-[18px] bg-white p-3 ring-1 ring-ndm-ink/[.06]">
                           <span className="grid size-[68px] shrink-0 place-items-center overflow-hidden rounded-[12px] bg-ndm-mist">
                             {/* eslint-disable-next-line @next/next/no-img-element -- a photo on the shop's own site, as in the prototype */}
-                            <img src={p.image} alt="" loading="lazy" className="h-[86%] w-[86%] object-contain" />
+                            <img src={withBase(p.image)} alt="" loading="lazy" className="h-[86%] w-[86%] object-contain" />
                           </span>
                           <span className="min-w-0 flex-1">
                             <span className="block truncate font-inter text-[14.5px] capitalize text-ndm-ink">{p.name}</span>
                             <span className="block font-inter text-[13px] text-ndm-muted">{p.size}</span>
                             <span className="mt-1.5 flex gap-3 font-inter text-[13px]">
-                              <a href={p.href} target="_blank" rel="noopener" className="font-medium text-ndm-deep hover:underline">
+                              <a href={withBase(p.href)} target="_blank" rel="noopener" className="font-medium text-ndm-deep hover:underline">
                                 Shop
                               </a>
                               <button type="button" onClick={() => setWish(wish.filter((x) => x.href !== p.href))} className="text-ndm-muted hover:text-ndm-ink">

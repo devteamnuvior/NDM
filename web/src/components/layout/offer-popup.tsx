@@ -7,6 +7,7 @@ import reception from "@/assets/images/hero/clinic-reception.jpg";
 import { Button } from "@/components/ui/button";
 import { NO_OFFER_PAGES } from "@/config/navigation";
 import { pageFromPathname, pagePath } from "@/lib/routes";
+import { withBase } from "@/lib/base-path";
 
 /** Records when the pop-up was last closed. */
 const CLOSED_KEY = "ndm-offer-closed";
@@ -111,7 +112,7 @@ export function OfferPopup() {
         className="offer-card relative grid w-full max-w-[760px] overflow-hidden rounded-t-[24px] bg-ndm-paper shadow-[0_40px_90px_-30px_rgba(11,15,19,.55)] sm:grid-cols-[.9fr_1.1fr] sm:rounded-[24px]"
       >
         <figure className="relative m-0 hidden min-h-[340px] sm:block">
-          <Image src={reception} alt="" fill sizes="340px" className="offer-pic object-cover" />
+          <Image src={withBase(reception)} alt="" fill sizes="340px" className="offer-pic object-cover" />
           <span className="absolute inset-0 bg-linear-to-t/srgb from-black/45 via-black/0 to-black/10" />
           <div className="absolute top-5 left-5 grid size-[112px] place-items-center">
             <svg viewBox="0 0 120 120" className="offer-badge absolute inset-0 h-full w-full" aria-hidden="true">

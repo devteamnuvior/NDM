@@ -7,7 +7,19 @@ import type { NextConfig } from "next";
  */
 const legacyOrigin = process.env.LEGACY_ORIGIN?.replace(/\/+$/, "");
 
+/**
+ * The folder the site is served from, at build time: empty at a domain's root (the default),
+ * "/react" when it shares https://newdermamedlaserclinic.com/react with WordPress. It becomes
+ * NEXT_PUBLIC_BASE_PATH for `withBase` (src/lib/base-path.ts) on the server and in the browser.
+ */
+const basePath = (process.env.NEXT_BASE_PATH ?? "").trim().replace(/\/+$/, "");
+if (basePath && !/^\/[a-z0-9-]+$/.test(basePath)) throw new Error(`NEXT_BASE_PATH must look like "/react", not "${basePath}"`);
+
 const nextConfig: NextConfig = {
+  /* a second build (for example the /react one) can go to its own folder, leaving .next as it is */
+  distDir: process.env.NEXT_DIST_DIR?.trim() || ".next",
+  basePath,
+  env: { NEXT_PUBLIC_BASE_PATH: basePath },
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {

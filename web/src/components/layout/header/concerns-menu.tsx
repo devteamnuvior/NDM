@@ -7,6 +7,7 @@ import { SiteLink } from "@/components/ui/site-link";
 import { CONCERNS } from "@/config/navigation";
 import { ACTIONS } from "@/config/routes";
 import { useMenuLink } from "@/components/layout/concern-paths";
+import { withBase } from "@/lib/base-path";
 
 /** Concerns: four groups of concerns, then the skin-analysis photo card. */
 export function ConcernsMenu({ open, current, onLink, eager }: MenuPanelProps) {
@@ -39,8 +40,8 @@ export function ConcernsMenu({ open, current, onLink, eager }: MenuPanelProps) {
             ))}
           </div>
         </div>
-        <a href={ACTIONS.book} onClick={onLink} className="group relative min-h-[360px] overflow-hidden rounded-[16px] text-white">
-          <Image src={clinicPhoto} alt="" fill loading={eager ? "eager" : "lazy"} sizes="340px" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+        <a href={withBase(ACTIONS.book)} onClick={onLink} className="group relative min-h-[360px] overflow-hidden rounded-[16px] text-white">
+          <Image src={withBase(clinicPhoto)} alt="" fill loading={eager ? "eager" : "lazy"} sizes="340px" className="object-cover transition-transform duration-700 group-hover:scale-105" />
           <span className="absolute inset-0 bg-linear-to-t/srgb from-[#0B0F13]/85 via-[#0B0F13]/25 to-transparent" />
           <span className="absolute inset-x-0 bottom-0 p-5">
             <span className="block font-mont text-[11px] tracking-[.14em] text-white/75 uppercase">Not sure what you need?</span>

@@ -12,6 +12,7 @@ import { useReveal } from "@/hooks/use-reveal";
 import { clamp01 } from "@/lib/math";
 import { pageLink, pagePath } from "@/lib/routes";
 import type { ProcedurePage } from "@/types/treatment";
+import { withBase } from "@/lib/base-path";
 
 function SoundIcon({ on }: { on: boolean }) {
   return (
@@ -53,7 +54,7 @@ export function TxFilm({ film: f, number }: { film: ProcedurePage["film"]; numbe
   });
   return (
     <section ref={section} id="film" data-nav="dark" aria-labelledby="film-title" className="tx-film relative z-10 scroll-mt-[120px] overflow-hidden px-[var(--gx)] py-[clamp(56px,9vw,140px)] text-white">
-      <video ref={video} muted loop playsInline preload="none" poster={f.poster} src={f.src} aria-label="A walk through the NewDermaMed clinic" />
+      <video ref={video} muted loop playsInline preload="none" poster={withBase(f.poster)} src={withBase(f.src)} aria-label="A walk through the NewDermaMed clinic" />
       <span aria-hidden="true" className="tx-film-shade absolute inset-0" />
       <svg aria-hidden="true" className="tx-film-ring hidden text-white/80 md:block" viewBox="0 0 100 100">
         <defs>

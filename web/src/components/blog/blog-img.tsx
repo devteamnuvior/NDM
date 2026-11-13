@@ -1,5 +1,6 @@
 import type { ImgHTMLAttributes, Ref } from "react";
 import type { BlogPhoto } from "@/types/blog";
+import { withBase, withBaseSrcSet } from "@/lib/base-path";
 
 interface BlogImgProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src" | "srcSet" | "alt" | "width" | "height"> {
   photo: BlogPhoto;
@@ -17,6 +18,6 @@ interface BlogImgProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src" |
 export function BlogImg({ photo, sizes, alt, ref, ...rest }: BlogImgProps) {
   return (
     // eslint-disable-next-line @next/next/no-img-element -- WordPress already makes the smaller copies; the photo is served from its media library
-    <img ref={ref} src={photo.src || undefined} srcSet={photo.srcSet} sizes={photo.srcSet ? sizes : undefined} width={photo.width} height={photo.height} alt={alt ?? photo.alt} decoding="async" {...rest} />
+    <img ref={ref} src={withBase(photo.src || undefined)} srcSet={withBaseSrcSet(photo.srcSet)} sizes={photo.srcSet ? sizes : undefined} width={photo.width} height={photo.height} alt={alt ?? photo.alt} decoding="async" {...rest} />
   );
 }

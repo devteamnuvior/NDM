@@ -5,6 +5,7 @@ import { RevealSection } from "@/components/ui/reveal-section";
 import { NAMICA_SPHERE_SRC } from "@/config/site";
 import { TxPhoto } from "@/components/treatment/tx-photo";
 import type { TxIntroContent } from "@/types/treatment";
+import { withBase } from "@/lib/base-path";
 
 /** What it is: a photo (with the turning NAMICA badge) beside the copy and the main points. */
 export function TxIntro({ intro: t, number }: { intro: TxIntroContent; number: string }) {
@@ -30,7 +31,7 @@ export function TxIntro({ intro: t, number }: { intro: TxIntroContent; number: s
                   </text>
                 </svg>
                 {/* eslint-disable-next-line @next/next/no-img-element -- the NAMICA badge, served by nuvior.com */}
-                <img src={NAMICA_SPHERE_SRC} alt="" className="absolute top-1/2 left-1/2 size-[46%] -translate-x-1/2 -translate-y-1/2" />
+                <img src={withBase(NAMICA_SPHERE_SRC)} alt="" className="absolute top-1/2 left-1/2 size-[46%] -translate-x-1/2 -translate-y-1/2" />
               </div>
             </div>
           )}

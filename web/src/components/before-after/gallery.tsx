@@ -8,6 +8,7 @@ import { TwoTone } from "@/components/ui/two-tone";
 import type { GalleryCase } from "@/lib/gallery";
 import { ACTIONS } from "@/config/routes";
 import { useReveal } from "@/hooks/use-reveal";
+import { withBase, withBaseSrcSet } from "@/lib/base-path";
 
 interface GalleryProps {
   eyebrow: string;
@@ -90,8 +91,8 @@ export function Gallery({ eyebrow, lead, strong, subs, labels, note, cases }: Ga
               <span className="peach relative block aspect-[4/3] overflow-hidden rounded-[12px] bg-ndm-mist">
                 {/* eslint-disable-next-line @next/next/no-img-element -- already sized by WordPress */}
                 <img
-                  src={c.photo.src}
-                  srcSet={c.photo.srcSet || undefined}
+                  src={withBase(c.photo.src)}
+                  srcSet={withBaseSrcSet(c.photo.srcSet || undefined)}
                   width={c.photo.width}
                   height={c.photo.height}
                   alt={altOf(c)}
@@ -122,7 +123,7 @@ export function Gallery({ eyebrow, lead, strong, subs, labels, note, cases }: Ga
         <div role="dialog" aria-modal="true" aria-label={open.label || "Before and after"} className="fixed inset-0 z-[95] flex items-center justify-center bg-[#0B0F13]/85 p-4" onClick={() => setOpen(null)}>
           <figure className="m-0 max-h-full max-w-[1100px]" onClick={(e) => e.stopPropagation()}>
             {/* eslint-disable-next-line @next/next/no-img-element -- the photo at its full size, as WordPress holds it */}
-            <img src={open.photo.src} width={open.photo.width} height={open.photo.height} alt={altOf(open)} decoding="async" className="max-h-[80vh] w-auto max-w-full rounded-[14px] object-contain" />
+            <img src={withBase(open.photo.src)} width={open.photo.width} height={open.photo.height} alt={altOf(open)} decoding="async" className="max-h-[80vh] w-auto max-w-full rounded-[14px] object-contain" />
             <figcaption className="mt-3 flex items-center justify-between font-inter text-[14px] text-white/85">
               <span>{open.label}</span>
               <span className="text-white/60">Individual results may vary</span>

@@ -10,6 +10,7 @@ import { TwoTone } from "@/components/ui/two-tone";
 import type { OfferPriceChoice } from "@/lib/offers";
 import type { WooAdminProduct } from "@/types/pricing";
 import { PROMO_AREAS, PROMO_ICONS, PROMO_MAX, type PromoArea, type PromoIcon, type PromoScope, type PromotionInput, type WooAdminPromotion } from "@/types/promotions";
+import { withBase } from "@/lib/base-path";
 
 /**
  * The offers' management screen: the Promotion page's own "All current offers" cards, each with a
@@ -204,7 +205,7 @@ export function PromotionsManager({ offers, prices, user, csrf }: PromotionsMana
     try {
       const body = new FormData();
       body.set("photo", file);
-      const response = await fetch("/manage/promotions/photo", { method: "POST", headers: { "x-ndm-csrf": csrf }, body });
+      const response = await fetch(withBase("/manage/promotions/photo"), { method: "POST", headers: { "x-ndm-csrf": csrf }, body });
       const answer = (await response.json()) as { ok: boolean; id?: number; src?: string; message?: string };
       if (response.status === 401) return signedOut();
       if (!answer.ok || !answer.id || !answer.src) setNotice({ kind: "error", text: answer.message ?? "That photo could not be uploaded." });
@@ -257,7 +258,7 @@ export function PromotionsManager({ offers, prices, user, csrf }: PromotionsMana
             {busy ? "Working" : dirty ? "Unsaved changes" : "All changes saved"}
           </p>
           <a
-            href="/manage/pricing"
+            href={withBase("/manage/pricing")}
             className={quiet}
             onClick={(e) => {
               if (dirty && !window.confirm("Open the price list and lose the unsaved changes?")) e.preventDefault();
@@ -265,7 +266,7 @@ export function PromotionsManager({ offers, prices, user, csrf }: PromotionsMana
           >
             Price list
           </a>
-          <a href="/promotion" target="_blank" rel="noreferrer" className={quiet}>
+          <a href={withBase("/promotion")} target="_blank" rel="noreferrer" className={quiet}>
             View page
           </a>
           <button

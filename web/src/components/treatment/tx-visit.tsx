@@ -7,6 +7,7 @@ import { RevealSection } from "@/components/ui/reveal-section";
 import { SiteLink } from "@/components/ui/site-link";
 import { CLINICS, type Clinic } from "@/config/site";
 import { pageLink, pagePath } from "@/lib/routes";
+import { withBase } from "@/lib/base-path";
 
 const PHOTOS: Record<Clinic["id"], StaticImageData> = { uptown, downtown };
 const OPEN = "Monday to Friday 9am to 7pm, Saturday 10am to 5pm";
@@ -24,7 +25,7 @@ export function TxVisit({ number }: { number: string }) {
             <li key={c.id} className="rv" style={{ transitionDelay: `${0.08 * i}s` }}>
               <SiteLink to={contact} className="tx-visit group block overflow-hidden rounded-[26px] bg-white ring-1 ring-ndm-ink/[.06] transition-shadow hover:shadow-[0_34px_60px_-34px_rgba(15,128,195,.45)]">
                 <span className="relative block aspect-[16/10] overflow-hidden bg-ndm-mist">
-                  <Image src={PHOTOS[c.id]} alt={`NewDermaMed ${c.name} clinic`} sizes="(min-width: 768px) 580px, 100vw" className="tx-visit-pic absolute inset-0 h-full w-full object-cover" />
+                  <Image src={withBase(PHOTOS[c.id])} alt={`NewDermaMed ${c.name} clinic`} sizes="(min-width: 768px) 580px, 100vw" className="tx-visit-pic absolute inset-0 h-full w-full object-cover" />
                   <span className="tx-pill absolute top-4 left-4 rounded-full px-3.5 py-1.5 font-inter text-[12.5px] font-semibold text-ndm-ink">{c.name}</span>
                 </span>
                 <span className="flex items-start justify-between gap-4 p-5 md:p-6">

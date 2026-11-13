@@ -2,6 +2,7 @@ import { IconInfoSmall, IconTick } from "@/components/treatment/icons";
 import { TX_WRAP, TxHead } from "@/components/treatment/tx-head";
 import { RevealSection } from "@/components/ui/reveal-section";
 import type { TreatmentPage } from "@/types/treatment";
+import { withBase } from "@/lib/base-path";
 
 function Row({ text, good }: { text: string; good: boolean }) {
   return (
@@ -46,7 +47,7 @@ export function TxFit({ fit: t, number }: { fit: TreatmentPage["fit"]; number: s
         </div>
         <div className="rv peach relative min-h-[320px] overflow-hidden rounded-[24px] bg-ndm-mist" style={{ transitionDelay: ".12s" }}>
           {/* eslint-disable-next-line @next/next/no-img-element -- photo served by nuvior.com, as in the prototype */}
-          <img src={t.img} alt={t.alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: t.position }} />
+          <img src={withBase(t.img)} alt={t.alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: t.position }} />
         </div>
       </div>
     </RevealSection>

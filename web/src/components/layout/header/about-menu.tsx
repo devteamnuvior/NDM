@@ -8,6 +8,7 @@ import { ABOUT_LINKS } from "@/config/navigation";
 import { CLINICS, HOURS, type Clinic } from "@/config/site";
 import { pageLink, resolveLabel } from "@/lib/routes";
 import type { ResolvedLink } from "@/types/navigation";
+import { withBase } from "@/lib/base-path";
 
 const CLINIC_PHOTO: Record<Clinic["id"], StaticImageData> = { uptown: uptownPhoto, downtown: downtownPhoto };
 
@@ -41,7 +42,7 @@ export function AboutMenu({ open, onLink, eager }: MenuPanelProps) {
             className="about-loc group flex flex-col overflow-hidden rounded-[18px] bg-ndm-mist/70 ring-1 ring-ndm-ink/[.05] transition-shadow hover:shadow-[0_24px_50px_-30px_rgba(27,36,43,.45)]"
           >
             <span className="relative block aspect-[16/10] overflow-hidden">
-              <Image src={CLINIC_PHOTO[c.id]} alt="" fill loading={eager ? "eager" : "lazy"} sizes="(min-width: 1280px) 34vw, 420px" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+              <Image src={withBase(CLINIC_PHOTO[c.id])} alt="" fill loading={eager ? "eager" : "lazy"} sizes="(min-width: 1280px) 34vw, 420px" className="object-cover transition-transform duration-700 group-hover:scale-105" />
               <span className="absolute inset-0 bg-linear-to-t/srgb from-[#0B0F13]/75 via-[#0B0F13]/10 to-transparent" />
               <span className="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 font-inter text-[11.5px] font-medium text-ndm-ink backdrop-blur-[6px]">{c.near}</span>
               <span className="absolute inset-x-4 bottom-3 font-aeonik text-[25px] leading-none text-white">{c.name} Clinic</span>

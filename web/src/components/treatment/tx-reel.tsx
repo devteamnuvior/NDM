@@ -10,6 +10,7 @@ import { ACTIONS } from "@/config/routes";
 import { SOCIAL } from "@/config/social";
 import { useReveal } from "@/hooks/use-reveal";
 import type { ProcedurePage } from "@/types/treatment";
+import { withBase } from "@/lib/base-path";
 
 /** Watch: a short reel from the clinic's Instagram in a phone frame, beside the page's quick facts. */
 export function TxReel({ reel: r, facts, number }: { reel: ProcedurePage["reel"]; facts: ProcedurePage["facts"]; number: string }) {
@@ -50,7 +51,7 @@ export function TxReel({ reel: r, facts, number }: { reel: ProcedurePage["reel"]
             <Button href={ACTIONS.book} v="book" hot>
               Book Free Consultation
             </Button>
-            <a href={SOCIAL.instagram} target="_blank" rel="noopener" className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-deep">
+            <a href={withBase(SOCIAL.instagram)} target="_blank" rel="noopener" className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-deep">
               <IconInstagram size={18} />
               @newdermamed
               <IconArrow className="transition-transform group-hover:translate-x-1" />
@@ -63,8 +64,8 @@ export function TxReel({ reel: r, facts, number }: { reel: ProcedurePage["reel"]
           <div className="tx-phone relative">
             <span aria-hidden="true" className="tx-phone-notch" />
             <div className="tx-phone-screen">
-              <video ref={video} muted loop playsInline preload="none" poster={r.poster} aria-label={`${r.tag} reel from the NewDermaMed Instagram`}>
-                <source src={r.src} type="video/mp4" />
+              <video ref={video} muted loop playsInline preload="none" poster={withBase(r.poster)} aria-label={`${r.tag} reel from the NewDermaMed Instagram`}>
+                <source src={withBase(r.src)} type="video/mp4" />
               </video>
             </div>
           </div>

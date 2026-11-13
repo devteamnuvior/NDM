@@ -3,6 +3,7 @@ import { TX_WRAP, TxHead } from "@/components/treatment/tx-head";
 import { RevealSection } from "@/components/ui/reveal-section";
 import { NAMICA_SPHERE_SRC } from "@/config/site";
 import type { TreatmentPage } from "@/types/treatment";
+import { withBase } from "@/lib/base-path";
 
 /** Is it safe: the honest answer and the safeguards, beside the licensed product on its purple card. */
 export function TxSafety({ safety: t, number }: { safety: TreatmentPage["safety"]; number: string }) {
@@ -31,9 +32,9 @@ export function TxSafety({ safety: t, number }: { safety: TreatmentPage["safety"
         <figure className="rv tx-product relative m-0 flex min-h-[320px] flex-col justify-end overflow-hidden rounded-[24px] p-6 text-white md:p-8" style={{ transitionDelay: ".08s" }}>
           {/* centred with a transform, not the translate utility: the float animation on this image moves `translate` */}
           {/* eslint-disable-next-line @next/next/no-img-element -- product photo served by nuvior.com, as in the prototype */}
-          <img src={t.product.img} alt={t.product.alt} loading="lazy" className="tx-product-img absolute top-[12%] left-1/2 w-[82%] max-w-[420px] [transform:translateX(-50%)]" />
+          <img src={withBase(t.product.img)} alt={t.product.alt} loading="lazy" className="tx-product-img absolute top-[12%] left-1/2 w-[82%] max-w-[420px] [transform:translateX(-50%)]" />
           {/* eslint-disable-next-line @next/next/no-img-element -- the NAMICA badge, served by nuvior.com */}
-          <img src={NAMICA_SPHERE_SRC} alt="" aria-hidden="true" className="namica-sphere pointer-events-none absolute -right-8 -bottom-8 w-[150px] opacity-90" />
+          <img src={withBase(NAMICA_SPHERE_SRC)} alt="" aria-hidden="true" className="namica-sphere pointer-events-none absolute -right-8 -bottom-8 w-[150px] opacity-90" />
           <figcaption className="relative">
             <span className="block font-inter text-[12px] tracking-[.14em] text-[#C9C2F4] uppercase">{t.product.tag}</span>
             <span className="mt-1.5 block font-aeonik text-[clamp(22px,2vw,28px)] leading-[1.15]">{t.product.name}</span>

@@ -17,6 +17,7 @@ import { ACTIONS } from "@/config/routes";
 import { CLINICS, HOURS, type Clinic } from "@/config/site";
 import { tel } from "@/lib/routes";
 import type { HomeCopy } from "@/types/home";
+import { withBase } from "@/lib/base-path";
 
 const PHOTOS: Record<Clinic["id"], StaticImageData[]> = {
   uptown: [uptown1, uptown2, uptown3, uptown4],
@@ -59,7 +60,7 @@ function VisitCard({ c, i }: { c: Clinic; i: number }) {
                   </Chip>
                   <span className="pt-[5px]">{c.address}</span>
                 </span>
-                <a href={tel(c.phone)} aria-label={`Call the ${c.name} clinic at ${c.phone}`} className="flex items-center gap-3 justify-self-start transition-colors hover:text-ndm-deep">
+                <a href={withBase(tel(c.phone))} aria-label={`Call the ${c.name} clinic at ${c.phone}`} className="flex items-center gap-3 justify-self-start transition-colors hover:text-ndm-deep">
                   <Chip>
                     <IconPhone />
                   </Chip>
@@ -88,7 +89,7 @@ function VisitCard({ c, i }: { c: Clinic; i: number }) {
               Book Free Consultation
             </Button>
             <a
-              href={maps}
+              href={withBase(maps)}
               target="_blank"
               rel="noopener"
               aria-label={`Get directions to the ${c.name} clinic (opens in a new tab)`}

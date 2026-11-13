@@ -13,6 +13,7 @@ import { useOnScroll } from "@/hooks/use-on-scroll";
 import { useReveal } from "@/hooks/use-reveal";
 import { clamp01, easeOut } from "@/lib/math";
 import { pageLink, resolveLabel, tel } from "@/lib/routes";
+import { withBase } from "@/lib/base-path";
 
 const GLASS = { background: "rgba(11,15,19,.35)", backdropFilter: "blur(22px) saturate(130%)", WebkitBackdropFilter: "blur(22px) saturate(130%)" };
 
@@ -50,7 +51,7 @@ export function SiteFooter() {
   return (
     <footer className="relative z-10 bg-ndm-paper px-[var(--gx)] pb-[clamp(12px,2vw,24px)]">
       <div ref={panel} data-nav="dark" className="relative overflow-hidden rounded-[26px] bg-ndm-slate">
-        <video ref={film} muted loop playsInline preload="metadata" aria-hidden="true" poster={FOOTER_FILM.poster} src={FOOTER_FILM.src} className="absolute inset-0 h-full w-full object-cover will-change-transform" style={{ transformOrigin: "50% 40%" }} />
+        <video ref={film} muted loop playsInline preload="metadata" aria-hidden="true" poster={withBase(FOOTER_FILM.poster)} src={withBase(FOOTER_FILM.src)} className="absolute inset-0 h-full w-full object-cover will-change-transform" style={{ transformOrigin: "50% 40%" }} />
         <div className="absolute inset-0" style={{ background: "linear-gradient(90deg,rgba(18,14,11,.55) 0%,rgba(18,14,11,.15) 50%,rgba(18,14,11,0) 75%)" }} />
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg,rgba(10,10,10,0) 40%,rgba(10,10,10,.35) 100%)" }} />
 
@@ -76,7 +77,7 @@ export function SiteFooter() {
             <div className="grid gap-10 sm:grid-cols-2 md:gap-8 lg:grid-cols-[1.35fr_.65fr_.75fr_1.25fr]">
               <div>
                 {/* eslint-disable-next-line @next/next/no-img-element -- SVG logo */}
-                <img src="/assets/icons/logo-white.svg" alt="NewDermaMed, Cosmetic Surgery and Laser Clinic" width={255} height={49} className="h-11 w-auto" />
+                <img src={withBase("/assets/icons/logo-white.svg")} alt="NewDermaMed, Cosmetic Surgery and Laser Clinic" width={255} height={49} className="h-11 w-auto" />
                 <p className="mt-5 max-w-[36ch] font-inter text-[14.5px] leading-[1.6] text-white/75">Toronto’s award-winning cosmetic &amp; laser clinic, medical-grade aesthetic and dermatology care, planned around you.</p>
                 <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 font-inter text-[13px] text-white/75">
                   <span className="inline-flex items-center gap-1.5">
@@ -114,7 +115,7 @@ export function SiteFooter() {
                       <span>
                         <span className="block text-white">{c.name}</span>
                         {c.address}
-                        <a href={tel(c.phone)} className="block text-white hover:underline">
+                        <a href={withBase(tel(c.phone))} className="block text-white hover:underline">
                           {c.phone}
                         </a>
                       </span>
@@ -136,7 +137,7 @@ export function SiteFooter() {
               <ul className="flex gap-2" role="list">
                 {SOCIAL_ICONS.map(([net, Icon, name]) => (
                   <li key={net}>
-                    <a href={SOCIAL[net]} target="_blank" rel="noopener" aria-label={`NewDermaMed on ${name}`} data-net={net} className="soc-ico grid size-9 place-items-center rounded-[10px] text-white">
+                    <a href={withBase(SOCIAL[net])} target="_blank" rel="noopener" aria-label={`NewDermaMed on ${name}`} data-net={net} className="soc-ico grid size-9 place-items-center rounded-[10px] text-white">
                       <Icon />
                     </a>
                   </li>

@@ -5,6 +5,7 @@ import { NavIcon, navIcon } from "@/components/treatment/icons";
 import { useOnScroll } from "@/hooks/use-on-scroll";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
+import { withBase } from "@/lib/base-path";
 
 /**
  * The section bar: a sticky row of links under the header that marks the section in view. Like the header,
@@ -81,7 +82,7 @@ export function TxNav({ nav }: { nav: [id: string, label: string][] }) {
           {nav.map(([id, label]) => (
             <li key={id} data-k={id} className="shrink-0">
               <a
-                href={`#${id}`}
+                href={withBase(`#${id}`)}
                 onClick={(e) => go(e, id)}
                 aria-current={on === id ? "true" : undefined}
                 className={`flex items-center gap-2 rounded-full px-3.5 py-2 font-inter text-[14px] whitespace-nowrap transition-colors ${on === id ? "bg-ndm-deep font-medium text-white" : dark ? "text-white/85 hover:bg-white/10 hover:text-white" : "text-ndm-ink/80 hover:bg-white hover:text-ndm-ink"}`}

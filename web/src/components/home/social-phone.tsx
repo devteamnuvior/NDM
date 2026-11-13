@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { HAND_PHONE_SRC, REELS, SOCIAL } from "@/config/social";
+import { withBase } from "@/lib/base-path";
 
 /** Time on each reel. */
 const REEL_MS = 5200;
@@ -49,9 +50,9 @@ export function SocialPhone() {
   return (
     <div ref={box} className="relative mx-auto w-[min(92vw,470px)] lg:mr-0 lg:ml-[-4vw] lg:w-[clamp(420px,40vw,660px)]" style={{ aspectRatio: "1288 / 1968" }}>
       {/* eslint-disable @next/next/no-img-element -- remote art and a small SVG mark, as in the prototype */}
-      <img src={HAND_PHONE_SRC} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full select-none" draggable={false} />
+      <img src={withBase(HAND_PHONE_SRC)} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full select-none" draggable={false} />
       <a
-        href={SOCIAL.instagram}
+        href={withBase(SOCIAL.instagram)}
         target="_blank"
         rel="noopener"
         aria-label={`${reel.tag} reel, watch @newdermamed on Instagram`}
@@ -77,7 +78,7 @@ export function SocialPhone() {
         <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-linear-to-t/srgb from-black/60 to-transparent p-3 pt-10">
           <span className="flex items-center gap-2 font-inter text-[12px] text-white">
             <span className="grid size-6 shrink-0 place-items-center rounded-full bg-white">
-              <img src="/assets/icons/logo-mark.svg" alt="" className="size-4" />
+              <img src={withBase("/assets/icons/logo-mark.svg")} alt="" className="size-4" />
             </span>
             newdermamed
             <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">

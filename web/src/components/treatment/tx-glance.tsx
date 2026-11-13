@@ -6,6 +6,7 @@ import { TX_WRAP } from "@/components/treatment/tx-head";
 import { IconPhone } from "@/components/ui/icons";
 import { CLINICS } from "@/config/site";
 import { tel } from "@/lib/routes";
+import { withBase } from "@/lib/base-path";
 
 /* Downtown first, as in the prototype */
 const CALLS = [...CLINICS].reverse();
@@ -57,7 +58,7 @@ export function TxGlance({ facts }: { facts: [label: string, value: string][] })
         </dl>
         <div className="grid grid-cols-2 gap-2 lg:w-[230px] lg:grid-cols-1">
           {CALLS.map((c) => (
-            <a key={c.id} href={tel(c.phone)} aria-label={`Call the ${c.name} clinic at ${c.phone}`} className="btn btn-buy h-11 gap-2 px-3 text-[13.5px]">
+            <a key={c.id} href={withBase(tel(c.phone))} aria-label={`Call the ${c.name} clinic at ${c.phone}`} className="btn btn-buy h-11 gap-2 px-3 text-[13.5px]">
               <IconPhone className="shrink-0" />
               <span className="truncate">
                 <span className="lg:hidden">{c.name}</span>

@@ -4,6 +4,7 @@ import { RevealSection } from "@/components/ui/reveal-section";
 import { SiteLink } from "@/components/ui/site-link";
 import { resolveLabel } from "@/lib/routes";
 import type { TreatmentPage } from "@/types/treatment";
+import { withBase } from "@/lib/base-path";
 
 /** Elevate your results: what may pair at the same visit beside what is usually planned later, then photo cards of those treatments. */
 export function TxPair({ pair: t, number }: { pair: TreatmentPage["pair"]; number: string }) {
@@ -40,7 +41,7 @@ export function TxPair({ pair: t, number }: { pair: TreatmentPage["pair"]; numbe
             <SiteLink to={resolveLabel(l.menu)} className="tx-pair-card group flex h-full flex-col rounded-[22px] bg-white p-2.5 ring-1 ring-ndm-ink/[.06]">
               <span className="peach relative block aspect-[16/11] overflow-hidden rounded-[16px] bg-ndm-mist">
                 {/* eslint-disable-next-line @next/next/no-img-element -- the home menu's own photo file */}
-                <img src={l.img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" style={{ transitionTimingFunction: "var(--e-out)" }} />
+                <img src={withBase(l.img)} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" style={{ transitionTimingFunction: "var(--e-out)" }} />
                 <span className="absolute top-3 left-3 z-[1] rounded-full bg-white/85 px-3 py-1.5 font-inter text-[12px] text-ndm-ink backdrop-blur-[8px]">{l.tag}</span>
               </span>
               <span className="flex flex-1 items-start justify-between gap-3 px-2 pt-4 pb-2">

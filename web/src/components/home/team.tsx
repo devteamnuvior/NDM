@@ -13,6 +13,7 @@ import { useOnScroll } from "@/hooks/use-on-scroll";
 import { useReveal } from "@/hooks/use-reveal";
 import { clamp01 } from "@/lib/math";
 import type { HomeCopy } from "@/types/home";
+import { withBase } from "@/lib/base-path";
 
 const PEOPLE = TEAM_ORDER.map((id) => TEAM.find((m) => m.id === id)).filter((m): m is TeamMember => !!m);
 
@@ -29,7 +30,7 @@ function TeamPortrait({ member: m, index, onOpen }: { member: TeamMember; index:
       >
         <span className="team-port-pic relative block aspect-[4/5] overflow-hidden rounded-[22px] bg-ndm-mist shadow-[0_30px_60px_-36px_rgba(27,36,43,.55)]">
           {/* eslint-disable-next-line @next/next/no-img-element -- the prototype's own portrait file and crop */}
-          <img src={m.img} alt="" width="800" height="1000" decoding="async" className="team-port-img absolute inset-0 h-full w-full object-cover object-[50%_15%]" />
+          <img src={withBase(m.img)} alt="" width="800" height="1000" decoding="async" className="team-port-img absolute inset-0 h-full w-full object-cover object-[50%_15%]" />
           <span aria-hidden="true" className="team-port-shade absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t/srgb from-ndm-ink/60 to-transparent" />
           {!m.sample && (
             <span aria-hidden="true" className="team-port-more absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1.5 font-inter text-[12px] text-ndm-ink backdrop-blur-[6px]">

@@ -9,6 +9,7 @@ import { RevealSection } from "@/components/ui/reveal-section";
 import { SiteLink } from "@/components/ui/site-link";
 import { contentLink } from "@/lib/routes";
 import type { ConcernOption } from "@/types/concern";
+import { withBase } from "@/lib/base-path";
 
 type Column = "visit" | "course" | "down" | "res";
 const COLUMNS: [key: Column | "from", label: string, icon: ReactNode][] = [
@@ -28,9 +29,9 @@ const Icon = ({ size, className, children }: { size: number; className?: string;
 /** A treatment's small photo: a file under /assets (optimised), or a photo of WordPress's media library, shown as it is. */
 function Thumb({ src, size, className }: { src: string; size: number; className: string }) {
   if (!src) return null;
-  if (src.startsWith("/")) return <Image src={src} alt="" width={size} height={size} className={className} />;
+  if (src.startsWith("/")) return <Image src={withBase(src)} alt="" width={size} height={size} className={className} />;
   /* eslint-disable-next-line @next/next/no-img-element -- served by WordPress */
-  return <img src={src} alt="" width={size} height={size} loading="lazy" decoding="async" className={className} />;
+  return <img src={withBase(src)} alt="" width={size} height={size} loading="lazy" decoding="async" className={className} />;
 }
 
 /** The price pill: "From" as a small label when the price starts with it. */

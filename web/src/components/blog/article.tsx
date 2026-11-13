@@ -17,6 +17,8 @@ import { clamp01 } from "@/lib/math";
 import { pageLink } from "@/lib/routes";
 import { byId } from "@/lib/dom";
 import type { ArticleBlock, ArticleView, Story } from "@/types/blog";
+import { withBase } from "@/lib/base-path";
+import { withBaseHtml } from "@/lib/base-path";
 
 /** A thin reading-progress line under the header bar. */
 export function ReadProgress() {
@@ -80,7 +82,7 @@ function Block({ b }: { b: ArticleBlock }) {
         {b.caption && <figcaption className="font-inter">{b.caption}</figcaption>}
       </figure>
     );
-  const html = { __html: b.html };
+  const html = { __html: withBaseHtml(b.html) };
   if (b.tag === "h2" || b.tag === "h3" || b.tag === "h4") return <b.tag className="rv font-aeonik" dangerouslySetInnerHTML={html} />;
   if (b.tag === "ul") return <ul className="rv font-inter" role="list" dangerouslySetInnerHTML={html} />;
   return <b.tag className="rv font-inter" dangerouslySetInnerHTML={html} />;
@@ -93,14 +95,14 @@ export function ArticleBody({ view: a }: { view: ArticleView }) {
   return (
     <section ref={section} id="article-body" aria-labelledby="article-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(48px,6vw,88px)] pb-[clamp(72px,8vw,120px)]">
       <div className="article-prose mx-auto max-w-[720px]">
-        <p className="rv font-aeonik text-[clamp(21px,1.8vw,26px)] leading-[1.45] tracking-[-0.01em] text-ndm-ink" dangerouslySetInnerHTML={{ __html: a.intro }} />
+        <p className="rv font-aeonik text-[clamp(21px,1.8vw,26px)] leading-[1.45] tracking-[-0.01em] text-ndm-ink" dangerouslySetInnerHTML={{ __html: withBaseHtml(a.intro) }} />
         <hr className="my-[clamp(36px,4vw,56px)] border-ndm-ink/10" />
         {a.blocks.map((b, i) => (
           <Block key={i} b={b} />
         ))}
         <aside aria-labelledby="takeaway" className="take-card mt-[clamp(48px,5vw,72px)] grid overflow-hidden rounded-[22px] md:grid-cols-[minmax(0,.85fr)_minmax(0,1.15fr)] lg:-mx-[clamp(0px,9vw,140px)]">
           <div className="rv rv-clip take-pic relative min-h-[300px] overflow-hidden bg-ndm-mist md:min-h-full">
-            <Image src={takeaway} alt="" sizes="(min-width: 768px) 420px, 100vw" className="absolute inset-0 h-full w-full object-cover object-[50%_20%]" />
+            <Image src={withBase(takeaway)} alt="" sizes="(min-width: 768px) 420px, 100vw" className="absolute inset-0 h-full w-full object-cover object-[50%_20%]" />
           </div>
           <div className="rv p-[clamp(24px,3vw,44px)]" style={{ transitionDelay: ".15s" }}>
             <Eyebrow>Key takeaway</Eyebrow>

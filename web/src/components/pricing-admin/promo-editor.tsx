@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { SpecialIcon } from "@/components/specials/special-icon";
 import type { WooAdminProduct, WooProductPromo } from "@/types/pricing";
 import { PROMO_AREAS, PROMO_ICONS, PROMO_MAX } from "@/types/promotions";
+import { withBase, withBaseSrcSet } from "@/lib/base-path";
 
 /**
  * "Show in Promotions" for one treatment, inside its editor on the price list's management screen:
@@ -50,7 +51,7 @@ export function PromoEditor({ product: p, count, csrf, onChange, onSignedOut }: 
     try {
       const body = new FormData();
       body.set("photo", photo);
-      const response = await fetch("/manage/promotions/photo", { method: "POST", headers: { "x-ndm-csrf": csrf }, body });
+      const response = await fetch(withBase("/manage/promotions/photo"), { method: "POST", headers: { "x-ndm-csrf": csrf }, body });
       const answer = (await response.json()) as { ok: boolean; id?: number; src?: string; message?: string };
       if (response.status === 401) return onSignedOut();
       const { id, src } = answer;
@@ -158,7 +159,7 @@ export function PromoEditor({ product: p, count, csrf, onChange, onSignedOut }: 
               <span className="relative block h-[90px] w-[144px] shrink-0 overflow-hidden rounded-[12px] bg-ndm-mist">
                 {p.image ? (
                   /* eslint-disable-next-line @next/next/no-img-element -- served and sized by WordPress */
-                  <img src={p.image.src} srcSet={p.image.srcSet || undefined} sizes="144px" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: promo.focus }} />
+                  <img src={withBase(p.image.src)} srcSet={withBaseSrcSet(p.image.srcSet || undefined)} sizes="144px" alt="" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: promo.focus }} />
                 ) : (
                   <span className="absolute inset-0 grid place-items-center px-2 text-center font-inter text-[12px] text-ndm-muted">No photo yet</span>
                 )}
