@@ -6,6 +6,7 @@ import { TwoTone } from "@/components/ui/two-tone";
 import { useOnScroll } from "@/hooks/use-on-scroll";
 import { useReveal } from "@/hooks/use-reveal";
 import { clamp01 } from "@/lib/math";
+import type { HomeCopy } from "@/types/home";
 
 /** The one clinic film (also used by the Botox and pricing pages). */
 export const CLINIC_FILM = { src: "/assets/clinic/ndm-clinic.mp4", poster: "/assets/clinic/ndm-clinic-poster.jpg" };
@@ -34,7 +35,7 @@ export function IconSound({ on, size = 18 }: { on: boolean; size?: number }) {
  * view. The film is fetched only when the section is about two screens away, plays muted while on
  * screen, and the sound button turns the voice on.
  */
-export function Space() {
+export function Space({ copy }: { copy: HomeCopy["space"] }) {
   const section = useRef<HTMLElement>(null);
   const frame = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -89,7 +90,7 @@ export function Space() {
         <div className="absolute inset-x-0 bottom-0 z-[2] flex flex-wrap items-end justify-between gap-6 px-[var(--gx)] pb-[clamp(28px,4.5vw,60px)]">
           <div>
             <Eyebrow dark className="rv">
-              Inside our clinics
+              {copy.tag}
             </Eyebrow>
             <TwoTone
               dark
@@ -98,11 +99,11 @@ export function Space() {
               size="text-[clamp(34px,4.2vw,62px)]"
               lead={
                 <>
-                  Step inside
+                  {copy.lead}
                   <br />
                 </>
               }
-              strong="NewDermaMed"
+              strong={copy.strong}
               style={{ transitionDelay: ".05s" }}
             />
             <p className="rv mt-4 inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-full border border-white/20 bg-white/10 px-4 py-2 font-inter text-[14px] text-white backdrop-blur-[12px]" style={{ transitionDelay: ".1s" }}>

@@ -6,6 +6,7 @@ import { RevealSection } from "@/components/ui/reveal-section";
 import { TwoTone } from "@/components/ui/two-tone";
 import { START_PANELS, type StartPanel } from "@/config/home-start";
 import { getSitePrices } from "@/lib/site-prices";
+import type { HomeCopy } from "@/types/home";
 
 /** What a concern's option shows when WooCommerce has no price for it. */
 const NO_PRICE = "At consultation";
@@ -21,13 +22,13 @@ async function pricedPanels(): Promise<StartPanel[]> {
 }
 
 /** "Where would you like to start?": the heading, a search field, and the expanding photo panels. */
-export async function Start() {
+export async function Start({ copy }: { copy: HomeCopy["start"] }) {
   const panels = await pricedPanels();
   return (
     <RevealSection id="start" aria-labelledby="start-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(32px,3.5vw,56px)] pb-[clamp(24px,3vw,48px)]">
       <div className="mb-[clamp(32px,3.6vw,52px)] flex flex-wrap items-end justify-between gap-x-12 gap-y-6">
         <div>
-          <Eyebrow className="rv">Two ways in, one clinic</Eyebrow>
+          <Eyebrow className="rv">{copy.tag}</Eyebrow>
           <TwoTone
             as="h2"
             id="start-title"
@@ -35,11 +36,11 @@ export async function Start() {
             size="text-[clamp(31px,4.2vw,62px)]"
             lead={
               <>
-                Where would you like
+                {copy.lead}
                 <br />
               </>
             }
-            strong="to start?"
+            strong={copy.strong}
             style={{ transitionDelay: ".05s" }}
           />
         </div>

@@ -465,6 +465,68 @@ docker compose run --rm -T cli wp ndm about-migrate
 docker compose run --rm -T cli wp ndm about-migrate --delete-old
 ```
 
+## Home page
+
+`/` is an ordinary WordPress **page**: the one chosen under **Settings > Reading > "Your homepage
+displays" > A static page > Homepage**. No page ID is written anywhere: choosing another page there
+moves the home page (and its boxes) to it. In Pages it carries WordPress's "Front Page" label; its title
+is only its name in the admin.
+
+On that page only, the block editor and the page's own text box are switched off and the home page's
+boxes appear under the title (every other page keeps its normal editor). The words are stored as one
+post meta, `_ndm_home`; the list of fields is `ndm_headless_home_schema()` in `includes/home.php`. The
+fields work like those of a concern. One box per section, in page order:
+
+| Box | Fields |
+|---|---|
+| Header | line above the heading, heading in two lines, text, second button's words, the points beside the heading (icon and words), the brands in the moving band (one per line) |
+| Search Engines | page title and description (empty description: none written) |
+| About NewDermaMed | tag, heading, text (lights up word by word), the word in blue, the numbers ("16+" and the line under it) |
+| Where To Start, Treatments, Inside Our Clinics, Journal | tag and heading (Treatments also its text) |
+| Our Signature | tag, heading, text, the chip on the figure (words, number, words), the dials (number, unit, line, screen-reader sentence, ring fill in percent), the points (icon and words), then Treatment areas: tag, heading, text and the **photos** (photo from the media library and the line under it; the description is the photo's alternative text) |
+| Our Team, Before And After, Testimonials, Our Clinics, Booking, Skincare Shop, Social | tag (not Booking), heading, text; Testimonials and Social also their small line (keep "individual results may vary"), Shop and Social their button |
+| How It Works | tag, heading, the three steps (title, text, button) |
+| FAQ | tag, heading, text, the questions. No question: no section |
+
+Filled in by the site, not typed: the films, the concern panels and treatment cards (prices from
+WooCommerce), the team members, the before and after cases, the photos and links of How it works, the
+monthly specials (WooCommerce), the reviews and awards, the two clinics, the booking form, the shop's
+products, the journal posts and the reels. Sections other pages also show (Our Team, Before And After,
+How It Works, Testimonials, Booking, Social) take these words on the home page only; the other pages
+keep the built-in copy.
+
+**Revisions.** `_ndm_home` is revisioned post meta: every Update that changes the words saves a
+revision with a copy of them, Revisions on the edit screen compares them field by field ("Header:
+Heading, first line"), and restoring a revision restores the words (and tells the site).
+
+**When something is wrong.** If no page is chosen under Reading, the chosen page is missing or not
+published, or it holds no home page words yet, the route answers 404 with the reason
+(`ndm_home_not_set`, `ndm_home_missing`, `ndm_home_unpublished`, `ndm_home_empty`), the site shows its
+built-in copy (`web/src/config/home-copy.json`) and logs the reason, and WordPress shows a warning on
+the Dashboard, Pages, Settings > Reading and the page itself. A newly chosen page that holds no words
+yet opens with its boxes filled from the page that held them last; Update saves them to it.
+
+| Route (`ndm/v1`) | Who | What |
+|---|---|---|
+| `GET /home-page` | public | the home page's words with their photos (404 with the reason when there are none to show) |
+
+When the home page, its words, a photo's alternative text or the Reading setting change, WordPress
+tells the site to drop its cached copy (tag `home` through `/api/revalidate`).
+
+Fresh install, one-time import of the original page (the words go to the page chosen under Reading,
+or to a page "home" that is created and chosen when none is; left alone when the home page already
+holds its words; the four Aptos marking photos the original showed from nuvior.com are fetched into the
+media library):
+
+```
+node ../web/scripts/export-home.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm home-import --images=/tmp/site
+```
+
+Until 2026-11-13 the home page was a post of its own post type ("Home Page", `ndm_home`). `wp ndm
+home-migrate` copies its words exactly (same media library photos) to the home page as above and
+checks them; `--dry-run` reports only, `--remove-old` then deletes the old post. It never overwrites a
+page that already holds different words.
+
 ## Blog (the list and the articles)
 
 The blog of the site (`/blog`) and its articles are WordPress's ordinary **posts**. A post that has

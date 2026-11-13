@@ -6,11 +6,13 @@ import { TeamProfile } from "@/components/team/team-profile";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { TwoTone } from "@/components/ui/two-tone";
+import { HOME_COPY } from "@/config/home";
 import { ACTIONS } from "@/config/routes";
 import { TEAM, TEAM_DRIFT, TEAM_ORDER, type TeamMember } from "@/config/team";
 import { useOnScroll } from "@/hooks/use-on-scroll";
 import { useReveal } from "@/hooks/use-reveal";
 import { clamp01 } from "@/lib/math";
+import type { HomeCopy } from "@/types/home";
 
 const PEOPLE = TEAM_ORDER.map((id) => TEAM.find((m) => m.id === id)).filter((m): m is TeamMember => !!m);
 
@@ -50,9 +52,11 @@ function TeamPortrait({ member: m, index, onOpen }: { member: TeamMember; index:
 interface TeamProps {
   /** Inner pages: the tag reads "Our team" and the section has more room below it. */
   inner?: boolean;
+  /** The home page's own words (edited in WordPress); other pages show the built-in ones. */
+  copy?: HomeCopy["team"];
 }
 
-export function Team({ inner = false }: TeamProps) {
+export function Team({ inner = false, copy = HOME_COPY.team }: TeamProps) {
   const section = useRef<HTMLElement>(null);
   const row = useRef<HTMLUListElement>(null);
   const opener = useRef<HTMLButtonElement | null>(null);
@@ -112,21 +116,21 @@ export function Team({ inner = false }: TeamProps) {
       </svg>
       <div className="relative grid items-center gap-12 lg:grid-cols-[minmax(0,.9fr)_minmax(0,1.1fr)] lg:gap-[clamp(40px,5vw,96px)]">
         <div>
-          <Eyebrow className="rv">{inner ? "Our team" : "Our medical team"}</Eyebrow>
+          <Eyebrow className="rv">{inner ? "Our team" : copy.tag}</Eyebrow>
           <TwoTone
             id="team"
             lead={
               <>
-                The people
+                {copy.lead}
                 <br className="hidden sm:block" />
               </>
             }
-            strong="behind your care."
+            strong={copy.strong}
             className="rv mt-5"
             style={{ transitionDelay: ".06s" }}
           />
           <p className="rv mt-5 max-w-[46ch] font-inter text-[16px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: ".1s" }}>
-            Medically directed cosmetic and laser care in Toronto, from a team trained across family medicine, vascular surgery and medical aesthetics.
+            {copy.text}
           </p>
           <div className="rv mt-8" style={{ transitionDelay: ".14s" }}>
             <Button href={ACTIONS.book} v="book">

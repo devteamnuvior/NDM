@@ -4,6 +4,7 @@ import { RevealSection } from "@/components/ui/reveal-section";
 import { TwoTone } from "@/components/ui/two-tone";
 import { POSTS, type Post } from "@/config/social";
 import { pagePath } from "@/lib/routes";
+import type { HomeCopy } from "@/types/home";
 
 /* post photos come from their own CDN, already sized, as in the prototype */
 /* eslint-disable @next/next/no-img-element */
@@ -19,23 +20,23 @@ function PostMeta({ p }: { p: Post }) {
 }
 
 /** Journal: one large post on the left, three smaller ones on the right, and the link to all articles. */
-export function Journal() {
+export function Journal({ copy }: { copy: HomeCopy["journal"] }) {
   const [lead, ...rest] = POSTS;
   return (
     <RevealSection aria-labelledby="journal" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(64px,7vw,104px)] pb-[clamp(24px,3vw,48px)]">
       <div className="mx-auto max-w-[1320px]">
         <div className="text-center">
-          <Eyebrow className="rv">Skin insights journal</Eyebrow>
+          <Eyebrow className="rv">{copy.tag}</Eyebrow>
           <TwoTone
             id="journal"
             className="rv mx-auto mt-5 max-w-[16ch]"
             lead={
               <>
-                Helpful tips and
+                {copy.lead}
                 <br />
               </>
             }
-            strong="expert advice"
+            strong={copy.strong}
             style={{ transitionDelay: ".06s" }}
           />
         </div>

@@ -16,6 +16,7 @@ export { getConcern, getConcernList } from "./concerns";
 export { isWordPressConfigured } from "./config";
 export { settle, WordPressError, type Settled, type WordPressErrorKind } from "./errors";
 export { getWordPressHealth } from "./health";
+export { getHomePage } from "./home";
 export { getPageBySlug, getPages, type PagesQuery, type WPPageSummary } from "./pages";
 export { getPricingAdminTree, getPricingAdminUser, getPricingTree, savePricing, searchPricingProducts } from "./pricing";
 export { getProcedure, getProcedureList } from "./procedures";

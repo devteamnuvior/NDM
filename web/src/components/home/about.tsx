@@ -8,7 +8,7 @@ import { AboutStage } from "@/components/home/about-stage";
 import { CountUp } from "@/components/ui/count-up";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { TwoTone } from "@/components/ui/two-tone";
-import { ABOUT } from "@/config/home";
+import type { HomeCopy } from "@/types/home";
 
 type Pair = [back: StaticImageData, front: StaticImageData];
 const PHOTOS: { left: Pair; right: Pair } = { left: [clinicFront, treatmentRoom], right: [clinicLounge, reception] };
@@ -32,32 +32,40 @@ function PhotoPair({ pics, side }: { pics: Pair; side: "l" | "r" }) {
 }
 
 /** About NewDermaMed: centred copy that lights up word by word, floating photo pairs, and a stats row. */
-export function About() {
-  const { eyebrow, heading, statement, highlight, stats } = ABOUT;
-  const words = statement.split(" ");
+/* a number of the row: a whole number counts up, its sign ("+") stays after it; anything else is shown as typed */
+function Figure({ figure }: { figure: string }) {
+  const look = "block font-aeonik text-[clamp(42px,4.4vw,66px)] leading-none tracking-[-0.03em] text-ndm-deep tabular-nums";
+  const [, number, suffix] = /^(\d+)(.*)$/.exec(figure) ?? [];
+  if (!number) return <span className={look}>{figure}</span>;
+  return <CountUp to={Number(number)} suffix={suffix} threshold={0.4} within="[data-about-stats]" className={look} />;
+}
+
+export function About({ copy }: { copy: HomeCopy["about"] }) {
+  const { tag, lead, strong, text, highlight, stats } = copy;
+  const words = text.split(" ");
 
   return (
     <AboutStage labelledBy="approach" className="relative z-10 overflow-hidden bg-ndm-paper px-[var(--gx)] pt-[clamp(112px,12vw,190px)] pb-[clamp(40px,4.5vw,72px)]">
       <PhotoPair pics={PHOTOS.left} side="l" />
       <PhotoPair pics={PHOTOS.right} side="r" />
       <div className="relative mx-auto max-w-[760px] text-center">
-        <Eyebrow className="rv">{eyebrow}</Eyebrow>
+        <Eyebrow className="rv">{tag}</Eyebrow>
         <TwoTone
           id="approach"
           className="rv mx-auto mt-5"
           style={{ transitionDelay: ".06s" }}
           lead={
             <>
-              {heading[0]}
+              {lead}
               <br />
             </>
           }
-          strong={heading[1]}
+          strong={strong}
         />
         <p data-about-copy className="mx-auto mt-5 max-w-[58ch] font-inter text-[clamp(15px,1.2vw,18px)] leading-[1.6] text-ndm-ink">
           {words.map((w, i) => (
             <Fragment key={i}>
-              <span data-w="" style={{ opacity: 0.22, transition: "opacity .25s linear" }} className={w.includes(highlight) ? "text-ndm-deep" : ""}>
+              <span data-w="" style={{ opacity: 0.22, transition: "opacity .25s linear" }} className={highlight && w.includes(highlight) ? "text-ndm-deep" : ""}>
                 {w}
               </span>
               {i < words.length - 1 ? " " : ""}
@@ -67,8 +75,8 @@ export function About() {
       </div>
       <ul data-about-stats className="relative mx-auto mt-[clamp(56px,7vw,104px)] grid max-w-[1240px] grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-4" role="list">
         {stats.map((s, i) => (
-          <li key={s.label} className="rv px-2 text-center md:border-l md:border-ndm-ink/10 md:px-6 md:py-2 md:first:border-0" style={{ transitionDelay: `${0.08 * i}s` }}>
-            <CountUp to={s.value} suffix={s.suffix} threshold={0.4} within="[data-about-stats]" className="block font-aeonik text-[clamp(42px,4.4vw,66px)] leading-none tracking-[-0.03em] text-ndm-deep tabular-nums" />
+          <li key={i} className="rv px-2 text-center md:border-l md:border-ndm-ink/10 md:px-6 md:py-2 md:first:border-0" style={{ transitionDelay: `${0.08 * i}s` }}>
+            <Figure figure={s.figure} />
             <span aria-hidden="true" className="mx-auto mt-4 block h-[3px] w-8 rounded-full bg-linear-to-r/srgb from-ndm-deep to-ndm-sky" />
             <span className="mx-auto mt-3 block max-w-[18ch] font-aeonik text-[clamp(18px,1.55vw,24px)] leading-[1.22] tracking-[-0.015em] text-ndm-ink">{s.label}</span>
           </li>

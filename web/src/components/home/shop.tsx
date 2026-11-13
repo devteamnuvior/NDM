@@ -3,6 +3,7 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { RevealSection } from "@/components/ui/reveal-section";
 import { TwoTone } from "@/components/ui/two-tone";
 import { PRODUCTS, SHOP_ORBIT_TILES, SHOP_URL } from "@/config/shop";
+import type { HomeCopy } from "@/types/home";
 
 /* product photos come from the shop's own site, already at 300 px, as in the prototype */
 /* eslint-disable @next/next/no-img-element */
@@ -25,32 +26,33 @@ function ShopOrbit() {
 }
 
 /** Skincare shop: the turning circle of products, the heading and link to the shop, then twelve products. */
-export function Shop() {
+export function Shop({ copy }: { copy: HomeCopy["shop"] }) {
   const items = PRODUCTS.slice(0, 12);
   return (
     <RevealSection aria-labelledby="shop" className="relative z-10 bg-ndm-paper pb-[clamp(8px,1.5vw,20px)]">
       <div className="shop-stage relative">
         <ShopOrbit />
         <div className="relative px-[var(--gx)] pt-[var(--head-top)] text-center">
-          <Eyebrow className="rv">Medical-grade skincare</Eyebrow>
+          <Eyebrow className="rv">{copy.tag}</Eyebrow>
           <TwoTone
             id="shop"
             className="rv mx-auto mt-4"
             lead={
               <>
-                Clinic skincare,
+                {copy.lead}
                 <br />
               </>
             }
-            strong="now online"
+            strong={copy.strong}
             style={{ transitionDelay: ".06s" }}
           />
           <p className="rv mx-auto mt-4 max-w-[48ch] font-inter text-[16px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: ".1s" }}>
-            The medical-grade skincare we carry at our Toronto clinics, available to order from our online shop.
+            {copy.text}
           </p>
           <div className="rv mt-6 flex justify-center" style={{ transitionDelay: ".14s" }}>
             <Button href={SHOP_URL} target="_blank" rel="noopener" v="ink">
-              Visit Skincare shop<span className="sr-only"> (opens in a new tab)</span>
+              {copy.button}
+              <span className="sr-only"> (opens in a new tab)</span>
             </Button>
           </div>
         </div>

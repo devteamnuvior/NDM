@@ -7,8 +7,10 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { IconArrow, IconInfo } from "@/components/ui/icons";
 import { TwoTone } from "@/components/ui/two-tone";
 import { BA_DISCLAIMER, BA_MODELS } from "@/config/before-after";
+import { HOME_COPY } from "@/config/home";
 import { useReveal } from "@/hooks/use-reveal";
 import { pagePath } from "@/lib/routes";
+import type { HomeCopy } from "@/types/home";
 
 const CASES = BA_MODELS.slice(0, 7);
 
@@ -16,7 +18,7 @@ const CASES = BA_MODELS.slice(0, 7);
  * Before & after on the home page: the heading row with the button to the full gallery, then a row of
  * compare cards (four in view on wide screens) with arrows on both sides.
  */
-export function BeforeAfter() {
+export function BeforeAfter({ copy = HOME_COPY.results }: { copy?: HomeCopy["results"] }) {
   const section = useRef<HTMLElement>(null);
   const rail = useRef<HTMLUListElement>(null);
   useReveal(section);
@@ -43,21 +45,21 @@ export function BeforeAfter() {
     <section ref={section} aria-labelledby="results" className="relative z-10 bg-ndm-paper pt-[clamp(80px,9vw,140px)] pb-[clamp(40px,4vw,64px)]">
       <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6 px-[var(--gx)]">
         <div>
-          <Eyebrow className="rv">Before &amp; after</Eyebrow>
+          <Eyebrow className="rv">{copy.tag}</Eyebrow>
           <TwoTone
             id="results"
             className="rv mt-4"
             lead={
               <>
-                Real results,
+                {copy.lead}
                 <br />
               </>
             }
-            strong="case by case"
+            strong={copy.strong}
             style={{ transitionDelay: ".05s" }}
           />
           <p className="rv mt-4 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: ".1s" }}>
-            Treatment cases photographed before and after. Drag any photo to compare.
+            {copy.text}
           </p>
         </div>
         <div className="rv" style={{ transitionDelay: ".12s" }}>

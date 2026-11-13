@@ -4,29 +4,31 @@ import { ReviewRow } from "@/components/reviews/review-row";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { RevealSection } from "@/components/ui/reveal-section";
 import { TwoTone } from "@/components/ui/two-tone";
+import { HOME_COPY } from "@/config/home";
 import { AWARD_CARDS, GOOGLE_RATING, REVIEW_COPIES, REVIEWS as R } from "@/config/reviews";
+import type { HomeCopy } from "@/types/home";
 
 const [A1, A2, A3] = AWARD_CARDS;
 /* one looping row: reviews with the three award cards in between */
 const ROW = [R[0], A1, R[1], R[2], A3, R[3], R[4], A2, R[5], R[6]];
 
 /** Testimonials: the heading with the Google rating, then one drifting row of review and award cards. */
-export function Saying() {
+export function Saying({ copy = HOME_COPY.reviews }: { copy?: HomeCopy["reviews"] }) {
   return (
     <RevealSection aria-labelledby="testimonials" className="relative z-10 overflow-hidden bg-ndm-paper py-[clamp(72px,8vw,128px)]">
       <div className="grid gap-6 px-[var(--gx)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
         <div>
-          <Eyebrow className="rv">Testimonials</Eyebrow>
+          <Eyebrow className="rv">{copy.tag}</Eyebrow>
           <TwoTone
             id="testimonials"
             className="rv mt-5"
             lead={
               <>
-                What our patients say
+                {copy.lead}
                 <br className="hidden sm:block" />
               </>
             }
-            strong="about their experience"
+            strong={copy.strong}
             style={{ transitionDelay: ".06s" }}
           />
         </div>
@@ -51,7 +53,7 @@ export function Saying() {
           ))}
         </ReviewRow>
       </div>
-      <p className="mt-6 px-[var(--gx)] font-inter text-[12px] text-ndm-muted/70">Patient reviews shared from Google · names shortened for privacy · individual results may vary.</p>
+      <p className="mt-6 px-[var(--gx)] font-inter text-[12px] text-ndm-muted/70">{copy.note}</p>
     </RevealSection>
   );
 }

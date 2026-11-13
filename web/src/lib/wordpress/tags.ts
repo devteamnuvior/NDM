@@ -23,6 +23,8 @@ export const WP_TAGS = {
   aptos: "aptos",
   /** The About page (the WordPress page with the template "About page"). */
   about: "about",
+  /** The home page (the page chosen as the homepage under Settings > Reading). */
+  home: "home",
   /** The blog: its posts, their photos and categories. */
   blog: "blog",
   /** The popular searches counted by WordPress. */

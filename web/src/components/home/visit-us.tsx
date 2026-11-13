@@ -16,6 +16,7 @@ import { SectionHead } from "@/components/ui/section-head";
 import { ACTIONS } from "@/config/routes";
 import { CLINICS, HOURS, type Clinic } from "@/config/site";
 import { tel } from "@/lib/routes";
+import type { HomeCopy } from "@/types/home";
 
 const PHOTOS: Record<Clinic["id"], StaticImageData[]> = {
   uptown: [uptown1, uptown2, uptown3, uptown4],
@@ -106,20 +107,20 @@ function VisitCard({ c, i }: { c: Clinic; i: number }) {
 }
 
 /** Visit us: the two Toronto clinics, each a card with its photos, address, hours and directions. */
-export function VisitUs() {
+export function VisitUs({ copy }: { copy: HomeCopy["visit"] }) {
   return (
     <RevealSection aria-labelledby="visit" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <SectionHead
         id="visit"
-        eyebrow="Our Toronto clinics"
+        eyebrow={copy.tag}
         lead={
           <>
-            Two clinics in Toronto,
+            {copy.lead}
             <br />
           </>
         }
-        strong="one team that cares for you"
-        intro="Uptown near Sheppard-Yonge and Downtown near College Station, both offer free consultations and easy parking nearby."
+        strong={copy.strong}
+        intro={copy.text}
       />
       <div className="mt-10 grid gap-4 md:mt-14 lg:grid-cols-2">
         {CLINICS.map((c, i) => (

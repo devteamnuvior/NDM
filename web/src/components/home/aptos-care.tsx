@@ -5,17 +5,29 @@ import { CountUp } from "@/components/ui/count-up";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { RevealSection } from "@/components/ui/reveal-section";
 import { TwoTone } from "@/components/ui/two-tone";
-import { APTOS_CARE } from "@/config/home";
+import { APTOS_EXPLORE } from "@/config/home";
 import { ACTIONS } from "@/config/routes";
 import { NAMICA_SPHERE_SRC } from "@/config/site";
 import { pagePath } from "@/lib/routes";
+import type { HomeCopy, PointIcon } from "@/types/home";
+
+/* the chips' icons, as SVG paths */
+const POINT_ICONS: Record<PointIcon, string> = {
+  check: "M5 12l4 4 10-10",
+  thread: "M4 18c4-10 12-2 16-12",
+  shield: "M12 3l7 4v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V7l7-4Z",
+};
 
 /**
  * Aptos, our signature: the thread figure with the turning NAMICA badge, the facts as three dials, the
  * points as chips and both buttons, then the four clinical marking photos.
  */
-export function AptosCare() {
-  const { eyebrow, heading, intro, figure, dials, points, explore, areas } = APTOS_CARE;
+export function AptosCare({ copy }: { copy: HomeCopy["aptos"] }) {
+  const { tag, lead, strong, intro, chip, dials, points, areas } = copy;
+  const explore = APTOS_EXPLORE;
+  /* the chip's number counts up when it is a whole number; anything else is shown as typed */
+  const chipNumber = /^\d+$/.test(chip.number) ? Number(chip.number) : null;
+  const chipBefore = chip.before ? `${chip.before} ` : "";
   return (
     <RevealSection aria-labelledby="aptos" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(80px,9vw,140px)]">
       <div className="mx-auto grid max-w-[1340px] items-center gap-[clamp(40px,6vw,96px)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
@@ -39,25 +51,27 @@ export function AptosCare() {
             {/* eslint-disable-next-line @next/next/no-img-element -- remote badge art, as in the prototype */}
             <img src={NAMICA_SPHERE_SRC} alt="" className="apx-sphere nm-spin" />
           </div>
-          <span className="apx-chip apx-c1">
-            <CountUp as="b" className="tabular-nums" prefix={figure.prefix} to={figure.value} within=".apx" />
-            {figure.label}
-          </span>
+          {(chip.number || chip.after) && (
+            <span className="apx-chip apx-c1">
+              {chipNumber === null ? <b className="tabular-nums">{chipBefore + chip.number}</b> : <CountUp as="b" className="tabular-nums" prefix={chipBefore} to={chipNumber} within=".apx" />}
+              {chip.after}
+            </span>
+          )}
         </div>
 
         <div>
-          <Eyebrow className="rv">{eyebrow}</Eyebrow>
+          <Eyebrow className="rv">{tag}</Eyebrow>
           <TwoTone
             id="aptos"
             className="rv mt-4"
             size="text-[clamp(34px,3.8vw,58px)]"
             lead={
               <>
-                {heading[0]}
+                {lead}
                 <br />
               </>
             }
-            strong={heading[1]}
+            strong={strong}
             style={{ transitionDelay: ".05s" }}
           />
           <p className="rv mt-5 max-w-[48ch] font-inter text-[16px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: ".1s" }}>
@@ -65,7 +79,7 @@ export function AptosCare() {
           </p>
           <ul className="rv sig-dials mt-8 grid grid-cols-3 gap-3 sm:gap-4" role="list" style={{ transitionDelay: ".14s" }}>
             {dials.map((d, i) => (
-              <li key={d.label} className="sig-dial relative grid place-items-center rounded-[22px] bg-white px-2 py-5 ring-1 ring-ndm-ink/[.06]" style={{ "--k": d.share, "--d": `${0.15 * i}s` } as CSSProperties}>
+              <li key={i} className="sig-dial relative grid place-items-center rounded-[22px] bg-white px-2 py-5 ring-1 ring-ndm-ink/[.06]" style={{ "--k": Math.min(1, Math.max(0, (Number(d.fill) || 0) / 100)), "--d": `${0.15 * i}s` } as CSSProperties}>
                 <svg viewBox="0 0 100 100" aria-hidden="true" className="sig-ring absolute top-[18px] left-1/2 size-[clamp(78px,7vw,96px)] -translate-x-1/2">
                   <circle cx="50" cy="50" r="44" className="sig-track" />
                   <circle cx="50" cy="50" r="44" className="sig-arc" pathLength="100" />
@@ -84,11 +98,11 @@ export function AptosCare() {
             ))}
           </ul>
           <ul className="rv mt-5 flex flex-wrap gap-2" role="list" style={{ transitionDelay: ".18s" }}>
-            {points.map((p) => (
-              <li key={p.label} className="sig-chip inline-flex items-center gap-2.5 rounded-full bg-white py-1.5 pr-4 pl-1.5 font-inter text-[13.5px] text-ndm-ink ring-1 ring-ndm-ink/[.07]">
+            {points.map((p, i) => (
+              <li key={i} className="sig-chip inline-flex items-center gap-2.5 rounded-full bg-white py-1.5 pr-4 pl-1.5 font-inter text-[13.5px] text-ndm-ink ring-1 ring-ndm-ink/[.07]">
                 <span aria-hidden="true" className="grid size-7 place-items-center rounded-full bg-ndm-deep/10 text-ndm-deep">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-                    <path d={p.icon} />
+                    <path d={POINT_ICONS[p.icon]} />
                   </svg>
                 </span>
                 {p.label}
@@ -110,11 +124,11 @@ export function AptosCare() {
       <div className="mx-auto mt-[clamp(64px,7vw,104px)] max-w-[1340px]">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="rv font-inter text-[12px] tracking-[.14em] text-ndm-deep uppercase">{areas.eyebrow}</p>
+            <p className="rv font-inter text-[12px] tracking-[.14em] text-ndm-deep uppercase">{areas.tag}</p>
             <h3 className="rv mt-2 font-aeonik text-[clamp(26px,2.4vw,36px)] leading-[1.1] font-normal tracking-[-0.025em] text-ndm-ink">
-              {areas.heading[0]}
+              {areas.lead}
               <br />
-              <span className="tt-strong text-ndm-deep">{areas.heading[1]}</span>
+              <span className="tt-strong text-ndm-deep">{areas.strong}</span>
             </h3>
           </div>
           <p className="rv max-w-[44ch] font-inter text-[14.5px] leading-[1.55] text-ndm-muted">{areas.text}</p>

@@ -5,12 +5,14 @@ import { useRef } from "react";
 import treatmentRoom from "@/assets/images/hero/treatment-room.jpg";
 import { BookForm } from "@/components/booking/book-form";
 import { TwoTone } from "@/components/ui/two-tone";
+import { HOME_COPY } from "@/config/home";
 import { useOnScroll } from "@/hooks/use-on-scroll";
 import { useReveal } from "@/hooks/use-reveal";
 import { clamp01 } from "@/lib/math";
+import type { HomeCopy } from "@/types/home";
 
 /** Booking: the consultation form in one glass card over the treatment-room photo, which drifts a little behind it. */
-export function Appointment() {
+export function Appointment({ copy = HOME_COPY.booking }: { copy?: HomeCopy["booking"] }) {
   const section = useRef<HTMLElement>(null);
   const photo = useRef<HTMLImageElement>(null);
   useReveal(section);
@@ -36,13 +38,13 @@ export function Appointment() {
             size="text-[clamp(26px,2.6vw,38px)]"
             lead={
               <>
-                Book a free consultation
+                {copy.lead}
                 <br />
               </>
             }
-            strong="in a few short steps"
+            strong={copy.strong}
           />
-          <p className="max-w-[36ch] font-inter text-[13.5px] leading-[1.5] text-ndm-muted">Uptown or Downtown. Your consultation and VISIA® skin analysis are free.</p>
+          <p className="max-w-[36ch] font-inter text-[13.5px] leading-[1.5] text-ndm-muted">{copy.text}</p>
         </div>
         <div className="mt-5 flex">
           <BookForm summary />

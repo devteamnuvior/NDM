@@ -5,7 +5,9 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { IconFacebook, IconInstagram, IconLinkedIn, IconX, IconYouTube } from "@/components/ui/icons";
 import { RevealSection } from "@/components/ui/reveal-section";
 import { TwoTone } from "@/components/ui/two-tone";
+import { HOME_COPY } from "@/config/home";
 import { SOCIAL, type SocialNetwork } from "@/config/social";
+import type { HomeCopy } from "@/types/home";
 
 export const SOCIAL_ICONS: [network: SocialNetwork, Icon: ComponentType, name: string][] = [
   ["instagram", IconInstagram, "Instagram"],
@@ -16,30 +18,30 @@ export const SOCIAL_ICONS: [network: SocialNetwork, Icon: ComponentType, name: s
 ];
 
 /** @newdermamed: the invitation to follow along, beside a phone playing the clinic's reels. */
-export function Social() {
+export function Social({ copy = HOME_COPY.social }: { copy?: HomeCopy["social"] }) {
   return (
     <RevealSection aria-labelledby="social" className="relative z-10 overflow-hidden bg-ndm-paper px-[var(--gx)] pt-[clamp(40px,4.5vw,72px)]">
       <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div className="pb-[clamp(8px,4vw,96px)]">
-          <Eyebrow className="rv">@newdermamed</Eyebrow>
+          <Eyebrow className="rv">{copy.tag}</Eyebrow>
           <TwoTone
             id="social"
             className="rv mt-5"
             lead={
               <>
-                Our journey continues
+                {copy.lead}
                 <br className="hidden sm:block" />
               </>
             }
-            strong="on social."
+            strong={copy.strong}
             style={{ transitionDelay: ".06s" }}
           />
           <p className="rv mt-5 max-w-[44ch] font-inter text-[16px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: ".1s" }}>
-            Treatment moments, skin tips and a look behind the scenes at our two Toronto clinics.
+            {copy.text}
           </p>
           <div className="rv mt-8 flex flex-wrap items-center gap-4" style={{ transitionDelay: ".14s" }}>
             <Button href={SOCIAL.instagram} target="_blank" rel="noopener" v="ink">
-              Follow along
+              {copy.button}
             </Button>
             <ul className="flex gap-2" role="list">
               {SOCIAL_ICONS.map(([net, Icon, name]) => (
@@ -52,7 +54,7 @@ export function Social() {
             </ul>
           </div>
           <p className="rv mt-6 font-inter text-[12px] text-ndm-muted" style={{ transitionDelay: ".18s" }}>
-            Reels from @newdermamed on Instagram. Individual results may vary.
+            {copy.note}
           </p>
         </div>
         <div className="rv -mb-[clamp(24px,5vw,90px)]" style={{ transitionDelay: ".12s" }}>

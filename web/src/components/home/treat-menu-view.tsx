@@ -8,12 +8,13 @@ import { TwoTone } from "@/components/ui/two-tone";
 import { ACTIONS } from "@/config/routes";
 import type { TreatmentTab } from "@/config/home-treatments";
 import { useReveal } from "@/hooks/use-reveal";
+import type { HomeCopy } from "@/types/home";
 
 /**
  * The treatments carousel: category tabs on the right of the heading, a rail of cards that scrolls
  * sideways (swipe, trackpad, or the arrows on both sides), and a link to the whole category.
  */
-export function TreatMenuView({ tabs }: { tabs: TreatmentTab[] }) {
+export function TreatMenuView({ tabs, copy }: { tabs: TreatmentTab[]; copy: HomeCopy["treatments"] }) {
   const section = useRef<HTMLElement>(null);
   const rail = useRef<HTMLDivElement>(null);
   const tabButtons = useRef<(HTMLButtonElement | null)[]>([]);
@@ -57,21 +58,21 @@ export function TreatMenuView({ tabs }: { tabs: TreatmentTab[] }) {
     <section ref={section} id="treatments" aria-labelledby="menu-title" className="relative z-10 bg-ndm-paper pt-[clamp(32px,3.5vw,56px)] pb-[clamp(64px,7vw,110px)]">
       <div className="grid gap-5 px-[var(--gx)] lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
         <div>
-          <Eyebrow className="rv">Browse the menu</Eyebrow>
+          <Eyebrow className="rv">{copy.tag}</Eyebrow>
           <TwoTone
             id="menu-title"
             className="rv mt-4"
             lead={
               <>
-                Treatments,
+                {copy.lead}
                 <br />
               </>
             }
-            strong="by what they do"
+            strong={copy.strong}
             style={{ transitionDelay: ".06s" }}
           />
           <p className="rv mt-4 font-inter text-[15.5px] leading-[1.6] text-ndm-muted lg:whitespace-nowrap" style={{ transitionDelay: ".1s" }}>
-            Every treatment shows a starting price. Pick a category to narrow the list.
+            {copy.text}
           </p>
         </div>
         <div className="rv min-w-0 lg:justify-self-end" style={{ transitionDelay: ".14s" }}>
