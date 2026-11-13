@@ -107,7 +107,11 @@ function fromWordPress(wp: WPConcern, prices: SitePrices | null): ConcernView {
     /* a post opens its page on this site when it has one; until the blog reads WordPress, the others
        keep the "#/slug" placeholder of a page that is not built yet */
     articles: c.journal.map((a) => ({ title: a.title, href: pageFromPathname(`/${a.slug}`) ? `/${a.slug}` : `#/${a.slug}`, date: a.date, topic: a.topic, img: a.image?.src ?? "", excerpt: a.excerpt })),
-    related: c.related.map((r) => ({ name: r.name, menu: r.name, img: r.image?.src ?? "", kind: r.kind })),
+    /* a card takes from its WooCommerce product whatever the editor left empty: title, tag (the product's category), image */
+    related: c.related
+      .map((r) => ({ name: r.name || r.product?.name || "", kind: r.kind || r.product?.category || "", img: (r.image ?? r.product?.image)?.src ?? "", link: r.link }))
+      .filter((r) => r.name)
+      .map((r) => ({ name: r.name, menu: r.name, img: r.img, kind: r.kind, href: r.link || undefined })),
     why: CONCERN_SHARED.why,
     faqs: c.faqs.map((f) => [f.q, f.a]),
   };

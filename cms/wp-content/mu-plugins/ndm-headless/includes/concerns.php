@@ -91,7 +91,7 @@ add_action( 'after_setup_theme', 'ndm_headless_concern_thumbnails', 100 );
  * Every field of a concern, grouped as the boxes of the edit screen, in page order.
  *
  * Field types: text, textarea, lines (one item per line), image (media library), checkbox, select,
- * product (a WooCommerce product or product category, searched and picked), posts (entries of one post type, searched and
+ * product (a WooCommerce product or product category, searched and picked; `only` => 'product' leaves categories out), posts (entries of one post type, searched and
  * picked: blog posts by default, `post_type` and `rest` name another), repeater (rows of sub-fields).
  *
  * There is no price field, on purpose: every price the site shows is a WooCommerce price.
@@ -255,6 +255,7 @@ function ndm_headless_concern_schema() {
 		array(
 			'id'     => 'related',
 			'title'  => 'Related Treatments',
+			'help'   => 'One row per card, in the order shown: add a row, then search for its WooCommerce product. The card takes the product\'s name, its category (the tag) and its image; the fields below replace them only when filled in. No price is shown here.',
 			'fields' => array(
 				array(
 					'key'    => 'related',
@@ -263,9 +264,11 @@ function ndm_headless_concern_schema() {
 					'add'    => 'Add a treatment',
 					'title'  => 'name',
 					'fields' => array(
-						array( 'key' => 'name', 'label' => 'Treatment', 'type' => 'text', 'help' => 'As in the site\'s menu: the card links to that page.' ),
-						array( 'key' => 'kind', 'label' => 'Tag', 'type' => 'text', 'help' => 'For example "Laser" or "Injectable".' ),
-						array( 'key' => 'image', 'label' => 'Photo', 'type' => 'image' ),
+						array( 'key' => 'price_source', 'label' => 'Product (WooCommerce)', 'type' => 'product', 'only' => 'product', 'help' => 'Search the price list and pick the product. The fields below replace what the card would take from it; leave one empty to use the product\'s own.' ),
+						array( 'key' => 'name', 'label' => 'Title', 'type' => 'text', 'help' => 'Empty: the product\'s name.' ),
+						array( 'key' => 'kind', 'label' => 'Tag', 'type' => 'text', 'help' => 'For example "Laser" or "Injectable". Empty: the product\'s category.' ),
+						array( 'key' => 'image', 'label' => 'Image', 'type' => 'image', 'help' => 'Empty: the product\'s image.' ),
+						array( 'key' => 'link', 'label' => 'Treatment page', 'type' => 'text', 'help' => $link_help . ' Empty: the page with this title, once it exists.' ),
 					),
 				),
 			),
@@ -322,7 +325,11 @@ function ndm_headless_concern_clean( $field, $value ) {
 
 		case 'product':
 			$value = is_string( $value ) ? $value : '';
-			return preg_match( '/^(?:category:[a-z0-9-]+|product:[1-9][0-9]*)$/', $value ) ? $value : '';
+			if ( ! preg_match( '/^(?:category:[a-z0-9-]+|product:[1-9][0-9]*)$/', $value ) ) {
+				return '';
+			}
+			// A field for products only never keeps a category.
+			return isset( $field['only'] ) && 0 !== strpos( $value, $field['only'] . ':' ) ? '' : $value;
 
 		case 'lines':
 			if ( is_string( $value ) ) {
@@ -475,7 +482,7 @@ add_action( 'edit_form_after_title', 'ndm_headless_concern_intro' );
  * gone from WooCommerce.
  *
  * @param string $value Stored value.
- * @return array|null value, label, note (its category, or "Whole category"), and for a product: id, name, description, image.
+ * @return array|null value, label, note (its category, or "Whole category"), and for a product: id, name, description, category, image.
  */
 function ndm_headless_concern_source( $value ) {
 	if ( ! function_exists( 'wc_get_product' ) || ! preg_match( '/^(category|product):(.+)$/', $value, $m ) ) {
@@ -506,13 +513,14 @@ function ndm_headless_concern_source( $value ) {
 		'id'          => $product->get_id(),
 		'name'        => html_entity_decode( $product->get_name(), ENT_QUOTES, 'UTF-8' ),
 		'description' => html_entity_decode( wp_strip_all_tags( $product->get_short_description() ), ENT_QUOTES, 'UTF-8' ),
+		'category'    => is_array( $terms ) && $terms ? html_entity_decode( $terms[0]->name, ENT_QUOTES, 'UTF-8' ) : '',
 		'image'       => (int) $product->get_image_id(),
 	);
 }
 
 /**
- * GET ndm/v1/concern-products?search=: products (and whole categories) of the price list for the
- * edit screen's product search. For signed-in editors only.
+ * GET ndm/v1/concern-products?search=: products (and whole categories, unless only=product) of the
+ * price list for the edit screen's product search. For signed-in editors only.
  *
  * @param WP_REST_Request $request Request.
  * @return WP_REST_Response
@@ -525,7 +533,7 @@ function ndm_headless_concern_rest_products( $request ) {
 		return rest_ensure_response( $found );
 	}
 
-	if ( '' !== $search ) {
+	if ( '' !== $search && 'product' !== $request['only'] ) {
 		$terms = get_terms(
 			array(
 				'taxonomy'   => 'product_cat',
@@ -634,7 +642,7 @@ function ndm_headless_concern_field( $field, $name, $value ) {
 			echo '</p>';
 			echo '<div class="ndm-cn-search">';
 			echo '<label class="screen-reader-text" for="' . esc_attr( $id ) . '">Search products</label>';
-			echo '<input type="search" id="' . esc_attr( $id ) . '" class="regular-text ndm-cn-search-box ndm-cn-source-box" placeholder="Search products" autocomplete="off">';
+			echo '<input type="search" id="' . esc_attr( $id ) . '" class="regular-text ndm-cn-search-box ndm-cn-source-box" placeholder="Search products" autocomplete="off"' . ( isset( $field['only'] ) ? ' data-only="' . esc_attr( $field['only'] ) . '"' : '' ) . '>';
 			echo '<span class="spinner"></span>';
 			echo '<ul class="ndm-cn-found" aria-live="polite"></ul>';
 			echo '</div>' . $help; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above.
@@ -904,7 +912,7 @@ function ndm_headless_concern_assets( $hook ) {
     var spinner = field.querySelector('.spinner');
     var term = box.value.trim();
     spinner.classList.add('is-active');
-    wp.apiFetch({ path: '/ndm/v1/concern-products?search=' + encodeURIComponent(term) })
+    wp.apiFetch({ path: '/ndm/v1/concern-products?search=' + encodeURIComponent(term) + (box.getAttribute('data-only') ? '&only=' + box.getAttribute('data-only') : '') })
       .then(function (items) {
         if (box.value.trim() !== term) return;
         list.textContent = '';
@@ -1223,6 +1231,7 @@ function ndm_headless_concern_expand( $fields, $values ) {
 				'id'          => $source['id'],
 				'name'        => $source['name'],
 				'description' => $source['description'],
+				'category'    => $source['category'],
 				'image'       => ndm_headless_concern_image( $source['image'] ),
 			) : null;
 		} elseif ( 'posts' === $field['type'] ) {

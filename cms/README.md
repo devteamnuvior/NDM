@@ -247,7 +247,7 @@ fields is `ndm_headless_concern_schema()` in `includes/concerns.php`):
 | Before and after photos | cases of the "Before & After" post type, searched and picked, in any number and order. Each takes the case's photo and first category: nothing is typed |
 | Home care | cards, each with an optional product of the skincare shop |
 | From the journal | WordPress posts, searched and picked, in any number and order (left out when empty). Each card takes the post's title, date, first category, featured image and excerpt: nothing is typed |
-| Related treatments | name, tag, photo |
+| Related treatments | one row per card: the WooCommerce product (searched and picked), then an optional title, tag and image that replace the product's name, category and image, and an optional link. A row without a product shows what is typed |
 | FAQ | questions and answers |
 
 **No price is ever typed.** Every "From" price on the option cards and in the table is read from

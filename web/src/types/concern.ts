@@ -44,7 +44,8 @@ export interface ConcernPage extends TxHeroContent {
   results: TxResultsContent;
   home: { title: string; category: string; text: string; product?: { name: string; size: string; img: string; href: string } }[];
   articles: { title: string; href: string; date: string; topic: string; img: string; excerpt: string }[];
-  related: { name: string; menu: string; img: string; kind: string }[];
+  /** Related treatments: `menu` is the menu label whose page the card opens, unless `href` names the page. */
+  related: { name: string; menu: string; img: string; kind: string; href?: string }[];
   why: TxWhyContent;
   faqs: [question: string, answer: string][];
 }
@@ -56,6 +57,15 @@ export interface WPConcernImage {
   width: number;
   height: number;
   alt: string;
+}
+
+/** A WooCommerce product picked in a row: its own name, short description, first category and image. */
+export interface WPConcernProduct {
+  id: number;
+  name: string;
+  description: string;
+  category: string;
+  image: WPConcernImage | null;
 }
 
 /** A concern in the list of concerns (`ndm/v1/concerns`). */
@@ -102,7 +112,7 @@ export interface WPConcern extends WPConcernSummary {
       /** The WooCommerce product or category picked for it: "product:<id>", "category:<slug>", or empty (priced by its title). */
       price_source: string;
       /** The picked product's own name, short description and image: used for the title, summary and image left empty. Null for a category or no pick. */
-      product: { id: number; name: string; description: string; image: WPConcernImage | null } | null;
+      product: WPConcernProduct | null;
       visit: string;
       course: string;
       down: string;
@@ -116,7 +126,12 @@ export interface WPConcern extends WPConcernSummary {
     home: { title: string; category: string; text: string; product_name: string; product_size: string; product_image: string; product_link: string }[];
     /** From the journal: the WordPress posts chosen for this concern, in order (published ones only). */
     journal: { id: number; slug: string; title: string; /** "November 7, 2025" */ date: string; /** First category; empty when it has none. */ topic: string; image: WPConcernImage | null; excerpt: string }[];
-    related: { name: string; kind: string; image: WPConcernImage | null }[];
+    /**
+     * Related treatments: each row is a WooCommerce product searched and picked ("product:<id>"), with an
+     * optional title, tag and image that replace the product's name, category and image. A row without
+     * a pick shows what was typed.
+     */
+    related: { price_source: string; name: string; kind: string; image: WPConcernImage | null; link: string; product: WPConcernProduct | null }[];
     faqs: { q: string; a: string }[];
   };
 }
