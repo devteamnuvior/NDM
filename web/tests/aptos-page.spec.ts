@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { NEXT_URL } from "../playwright.config";
 
-/** Behaviour of the migrated Aptos Thread Lift page on the Next.js build. */
+/** Behaviour of the Aptos Thread Lift page on the Next.js build. Its content is a WordPress post (post type "Aptos Pages"): WordPress must be running. */
 
 test.use({ viewport: { width: 1440, height: 900 } });
 
@@ -38,7 +38,7 @@ test("the quick facts sit half over the header photo, with both clinics' numbers
 test("the section bar scrolls to a section and marks the one in view", async ({ page }) => {
   await page.goto(`${NEXT_URL}/aptos-thread-lift`);
   const bar = page.getByRole("navigation", { name: "On this page" });
-  await expect(bar.getByRole("link")).toHaveCount(11);
+  await expect(bar.getByRole("link")).toHaveCount(10);
   await bar.getByRole("link", { name: "Good candidates" }).click();
   await expect(page.locator("#candidate")).toBeInViewport();
   await expect(bar.getByRole("link", { name: "Good candidates" })).toHaveAttribute("aria-current", "true");
@@ -59,25 +59,21 @@ test("the price comes from the price list; the group folds; Add to cart puts the
   await expect(row).toHaveCount(1);
   await expect(row).toContainText("Mid face");
   await expect(row).toContainText("$2500");
-  await row.getByRole("button", { name: "Add Aptos Excellence Visage Method EV, Mid face to cart" }).click();
-  await expect(row.getByRole("group", { name: "Quantity, Aptos Excellence Visage Method EV, Mid face" })).toBeVisible();
+  await row.getByRole("button", { name: "Add Aptos Excellence Visage Method EV PLA/PCL (up to 24 months), Mid face to cart" }).click();
+  await expect(row.getByRole("group", { name: "Quantity, Aptos Excellence Visage Method EV PLA/PCL (up to 24 months), Mid face" })).toBeVisible();
   const cart = await page.evaluate(() => JSON.parse(localStorage.getItem("ndm-cart") ?? "[]"));
   expect(cart).toHaveLength(1);
-  expect(cart[0]).toMatchObject({ name: "Aptos Excellence Visage Method EV", label: "Mid face", price: 2500, qty: 1 });
+  expect(cart[0]).toMatchObject({ name: "Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", label: "Mid face", price: 2500, qty: 1 });
   await head.click();
   await expect(head).toHaveAttribute("aria-expanded", "false");
   await expect(prices.locator("#tx-pr")).toHaveAttribute("inert", "");
   await expect(prices.getByRole("link", { name: "All treatment prices" })).toHaveAttribute("href", "/pricing#prices");
 });
 
-test("results: three compare cards and the gallery tile; the results line is shown", async ({ page }) => {
+test("before and after: left out, with its link in the section bar, while no case of the gallery is picked in WordPress", async ({ page }) => {
   await page.goto(`${NEXT_URL}/aptos-thread-lift`);
-  const results = page.locator("#results");
-  await results.scrollIntoViewIfNeeded();
-  await expect(results.locator("figure")).toHaveCount(3);
-  await expect(results.getByRole("link", { name: /More cases/ })).toHaveAttribute("href", "/before-after");
-  await expect(results.getByRole("link", { name: "See all before & after" })).toHaveAttribute("href", "/before-after");
-  await expect(results).toContainText("Individual results may vary.");
+  await expect(page.locator("#results")).toHaveCount(0);
+  await expect(page.getByRole("navigation", { name: "On this page" }).getByRole("link", { name: "Results", exact: true })).toHaveCount(0);
 });
 
 test("what to expect lights up each step as it passes", async ({ page }) => {

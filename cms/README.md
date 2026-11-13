@@ -331,7 +331,7 @@ us, Start your journey).
 
 When a procedure changes (or a product, or a Before & After case it may show), WordPress tells the
 site to drop its cached copy (tag `procedures` through `/api/revalidate`). The post type has no pages
-of its own in WordPress. The Aptos Thread Lift page has its own design and is not a procedure post.
+of its own in WordPress. The Aptos Thread Lift page has its own design and its own post type (see "Aptos pages").
 
 One-time import of the original Botox page (created only when its slug is free; photos go into the
 media library; the price list's rows pick the existing products "Botox Cosmetic" and "Dysport"):
@@ -343,6 +343,59 @@ node ../web/scripts/export-procedures.mjs | docker compose run --rm -T -v "$PWD/
 Before anything is published: the Botox copy is the live site's wording and names Botox® beside its
 effects, which Health Canada (C.01.044) does not allow in consumer advertising of a prescription
 drug; it also names the Medical Director. Raymond Valadkhani's written approval is needed first.
+
+## Aptos pages (the Aptos Thread Lift design)
+
+`/aptos-thread-lift` is a post of the post type **Aptos Pages** (`ndm_aptos`, in the admin menu): a
+template of its own, separate from Procedures (the Botox design). The post's **slug is the page's
+address**, so another published post is another page in the same design, without a new build. The
+fields work like those of a concern or a procedure (same boxes, rows, photo and search fields).
+
+Typed into the post (boxes under the title, stored as one post meta, `_ndm_aptos`; the list of
+fields is `ndm_headless_aptos_schema()` in `includes/aptos.php`):
+
+| Box | Fields |
+|---|---|
+| Title, Slug, Header photo | the treatment's name, the address, the wide header photo (featured image) |
+| Header | heading in two lines, text under it, the tall photo for phones, photo focus, the quick facts |
+| Search Engines | page title and description |
+| What It Is | tag, heading, paragraphs, note, photo and its focus, the words on the turning badge, the points |
+| How It Works | tag, heading, text, the steps |
+| Is It Safe | tag, heading, paragraphs, the safeguards, the product card (photo, tag, name, text) |
+| How Long It Lasts | heading, text, the large figure with its unit, label and note |
+| Good Candidates | tag, heading, text, "may suit" and "when to wait" lists, photo and its focus |
+| What To Expect | heading, the steps (when, title, text) |
+| Before And After Photos | heading, text, and the **cases**: searched and picked from the "Before & After" post type (each shows the case's photo and first category). No case: no section |
+| Pre And Post Care | heading, text, the before and after lists |
+| Elevate Your Results | tag, heading, text, the groups of treatments, the treatment cards (title, menu name it links to, tag, photo, text) |
+| Price List | heading, text; one row per **WooCommerce product** (searched and picked, or a whole category), with an optional title, text and "Options shown" (the names of the options this page shows; empty: all); then "How many you need" |
+| Why NewDermaMed | heading, the figures |
+| FAQ | heading, text, the questions |
+
+A section's tag is also its name in the section bar. A section whose box is empty is left out of the
+page and of the section bar. No price is typed: the options, prices and offers of the picked products
+are read from WooCommerce, and an amount in the copy is the token `{{price}}` (the lowest price shown
+for the first product; `{{price2}}` for the second). Filled in by the site: the booking form, the
+Aptos logo, the team photo, Our team, Testimonials, Visit us and Start your journey.
+
+| Route (`ndm/v1`) | Who | What |
+|---|---|---|
+| `GET /aptos-pages` | public | the name and slug of every published page |
+| `GET /aptos-pages/<slug>` | public | one published page with its photos, picked cases and picked products (no prices) |
+
+When a page changes (or a product, or a Before & After case), WordPress tells the site to drop its
+cached copy (tag `aptos` through `/api/revalidate`).
+
+One-time import of the original page (created only when its slug is free). Photos go into the media
+library: files from `web/public`, and the five photos the original page showed straight from
+newdermamedlaserclinic.com and nuvior.com are fetched from those addresses. The price list picks the
+existing product "Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)" and shows its
+"Mid face" option only (Visage Excellence is licensed for the midface in Canada). No case is picked:
+the gallery has no Aptos case yet, so the Before & after section stays out until one is picked.
+
+```
+node ../web/scripts/export-aptos.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm aptos-import --images=/tmp/site
+```
 
 ## Blog (the list and the articles)
 

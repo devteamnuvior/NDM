@@ -19,6 +19,8 @@ export const WP_TAGS = {
   concerns: "concerns",
   /** The procedure pages (the post type "Procedures"). */
   procedures: "procedures",
+  /** The pages of the Aptos design (the post type "Aptos Pages"). */
+  aptos: "aptos",
   /** The blog: its posts, their photos and categories. */
   blog: "blog",
   /** The popular searches counted by WordPress. */

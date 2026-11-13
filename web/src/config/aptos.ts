@@ -353,10 +353,21 @@ export const APTOS: TreatmentPage = {
     ],
     [
       "How much does it cost?",
-      "Aptos for the mid face is {{aptos}}. Your plan and final price are confirmed at your free consultation."
+      "Aptos for the mid face is {{price}}. Your plan and final price are confirmed at your free consultation."
     ]
   ]
 };
 
 /** The price-list entry this page sells: category id, treatment, and the one area the page covers. */
 export const APTOS_PRICE = { category: "aptos-thread-method", item: "Aptos", area: /^mid face$/i };
+
+/** Pages of the Aptos design with a built-in copy, shown when WordPress cannot be reached. */
+export const BUILT_IN_APTOS: Record<string, { page: TreatmentPage; title: string; description: string; faq: { lead: string; strong: string; intro: string } }> = {
+  "aptos-thread-lift": {
+    page: APTOS,
+    title: "Aptos Thread Lift in Toronto, a Lift Without Surgery, NewDermaMed",
+    description:
+      "Aptos Thread Lift at NewDermaMed, Uptown and Downtown Toronto: bioabsorbable threads for the midface, about an hour in clinic, results that may last up to 24 months. Free consultation.",
+    faq: { lead: "Your top questions,", strong: "answered", intro: "What to know about the Aptos Thread Lift, from our medical team." },
+  },
+};

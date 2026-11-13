@@ -1,13 +1,26 @@
 import { pageParity } from "./page";
 
-/* Aptos Thread Lift page: every block in page order, then the price group folded. */
+/* Aptos Thread Lift page: every block in page order, then the price group folded. The page's content is
+   the WordPress post "Aptos Thread Lift" (post type "Aptos Pages"): WordPress must be running. */
 const sec = (id: string) => `main > section#${id}`;
 const by = (id: string) => `main > section[aria-labelledby="${id}"]`;
 
 pageParity({
   name: "aptos",
-  paths: { legacy: "/aptos-thread-lift.html", next: "/aptos-thread-lift" },
-  sectionCount: 18,
+  paths: {
+    legacy: "/aptos-thread-lift.html",
+    next: "/aptos-thread-lift",
+    /* Before & after now shows cases of the "Before & After" post type picked in WordPress. The gallery has
+       no Aptos case, so none is picked and the section is left out (of the section bar too); the prototype's
+       compare cards were not gallery cases. And a cart line is named after its WooCommerce product, where the
+       prototype used a shorter name. The prototype is given the same here, so the rest is still compared. */
+    legacyHtml: (html) =>
+      html
+        .replace("['expect', 'What to expect'], ['results', 'Results'], ", "['expect', 'What to expect'], ")
+        .replace("<TxResults p={APT} />", "")
+        .replace("name: 'Aptos Excellence Visage Method EV', cat:", "name: 'Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)', cat:"),
+  },
+  sectionCount: 17,
   sections: [
     { name: "breadcrumb", selector: "nav.crumbs" },
     { name: "hero", selector: by("proc-title"), pixelRatio: 0.004 },
@@ -20,7 +33,6 @@ pageParity({
     { name: "duration", selector: by("duration-title") },
     { name: "candidate", selector: sec("candidate"), pixelRatio: 0.004 },
     { name: "expect", selector: sec("expect") },
-    { name: "results", selector: sec("results"), pixelRatio: 0.004 },
     { name: "care", selector: sec("care") },
     { name: "combinations", selector: sec("combinations"), pixelRatio: 0.004 },
     { name: "prices", selector: sec("prices") },

@@ -34,7 +34,7 @@ const same = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLow
  * What an editor picked in WordPress ("product:<id>", or "category:<slug>" for every product of a
  * category) as products of the WooCommerce price list. Nothing when it is no longer on the list.
  */
-function picked(prices: SitePrices, source: string): { category: Category; item: Item }[] {
+export function picked(prices: SitePrices, source: string): { category: Category; item: Item }[] {
   const [kind, value] = source.split(":");
   if (kind === "category") {
     const category = prices.categories.find((c) => c.id === value);
@@ -71,7 +71,7 @@ function offers(g: TxPriceGroup | undefined): [low: number, high: number] | unde
  * the first, `{{off}}` the offers on the first ("10% to 30%"), `{{maxoff}}` the largest ("30%").
  * A token with no price behind it gets no value: its sentence is then left out.
  */
-function priceValues(groups: TxPriceGroup[], texts: unknown): Record<string, string | undefined> {
+export function priceValues(groups: TxPriceGroup[], texts: unknown): Record<string, string | undefined> {
   const values: Record<string, string | undefined> = {};
   for (const [, key] of JSON.stringify(texts).matchAll(/\{\{([\w-]+)\}\}/g)) {
     const price = /^price(\d*)(?:x(\d+))?$/.exec(key);
