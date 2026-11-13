@@ -55,6 +55,8 @@ services:
       - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
       # our own plugin only; WooCommerce itself is installed into the wp_data volume by bin/setup.sh
       - ./wp-content/plugins/ndm-pricing:/var/www/html/wp-content/plugins/ndm-pricing:ro
+      # the one theme: it never renders, it only names the site and carries its screenshot
+      - ./wp-content/themes/ndm-headless:/var/www/html/wp-content/themes/ndm-headless:ro
 
   # wp-cli, only started on demand: docker compose run --rm cli <command>
   cli:
@@ -73,6 +75,8 @@ services:
       - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
       # our own plugin only; WooCommerce itself is installed into the wp_data volume by bin/setup.sh
       - ./wp-content/plugins/ndm-pricing:/var/www/html/wp-content/plugins/ndm-pricing:ro
+      # the one theme: it never renders, it only names the site and carries its screenshot
+      - ./wp-content/themes/ndm-headless:/var/www/html/wp-content/themes/ndm-headless:ro
 
 volumes:
   db_data:

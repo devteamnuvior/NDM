@@ -9,5 +9,8 @@
 !/wp-content/plugins/
 /wp-content/plugins/*
 !/wp-content/plugins/ndm-pricing/
+!/wp-content/themes/
+/wp-content/themes/*
+!/wp-content/themes/ndm-headless/
 *.sql
 *.sql.gz

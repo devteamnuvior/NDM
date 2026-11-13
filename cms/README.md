@@ -25,6 +25,7 @@ wp-content/mu-plugins/
 ```
 
 wp-content/plugins/ndm-pricing/    the Pricing page's link to WooCommerce (see "Pricing page" below)
+wp-content/themes/ndm-headless/    the one theme: name and screenshot only, never renders (no templates)
 ```
 
 WordPress core, WooCommerce, uploads and the database are not in git (they live in Docker volumes).

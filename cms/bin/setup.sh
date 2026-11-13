@@ -52,7 +52,8 @@ wp option update default_pingback_flag 0 >/dev/null
 wp option update users_can_register 0 >/dev/null
 # plugins that ship with WordPress and are not needed
 wp plugin delete hello akismet >/dev/null 2>&1 || true
-# keep the one active default theme (WordPress requires one; it never renders, see the ndm-headless plugin)
+# the site's own theme (WordPress requires one; it never renders, see the ndm-headless plugin); the rest go
+wp theme activate ndm-headless >/dev/null
 wp theme delete --all >/dev/null 2>&1 || true
 
 echo "Setting up WooCommerce for the Pricing page..."
