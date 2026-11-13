@@ -482,14 +482,25 @@ fields work like those of a concern. One box per section, in page order:
 | Header | line above the heading, heading in two lines, text, second button's words, the points beside the heading (icon and words), the brands in the moving band (one per line) |
 | Search Engines | page title and description (empty description: none written) |
 | About NewDermaMed | tag, heading, text (lights up word by word), the word in blue, the numbers ("16+" and the line under it) |
-| Where To Start, Treatments, Inside Our Clinics, Journal | tag and heading (Treatments also its text) |
+| Where To Start | tag, heading, and the **panels** (title, line under it, heading and text when open, photo with its focus closed and open, link for a panel without concerns); in each panel its **concerns** (button, card title, card text, the **treatments**, facts, small print, link at the bottom); a treatment picks a WooCommerce product or category (optional), with a name, a line and a link |
+| Treatments, Inside Our Clinics, Journal | tag and heading (Treatments also its text) |
 | Our Signature | tag, heading, text, the chip on the figure (words, number, words), the dials (number, unit, line, screen-reader sentence, ring fill in percent), the points (icon and words), then Treatment areas: tag, heading, text and the **photos** (photo from the media library and the line under it; the description is the photo's alternative text) |
 | Our Team, Before And After, Testimonials, Our Clinics, Booking, Skincare Shop, Social | tag (not Booking), heading, text; Testimonials and Social also their small line (keep "individual results may vary"), Shop and Social their button |
 | How It Works | tag, heading, the three steps (title, text, button) |
 | FAQ | tag, heading, text, the questions. No question: no section |
 
-Filled in by the site, not typed: the films, the concern panels and treatment cards (prices from
-WooCommerce), the team members, the before and after cases, the photos and links of How it works, the
+**Prices of the Start panels** come from WooCommerce only: the product or category a treatment picks,
+else the treatment found by its name on the price list, else "At consultation". A panel without a photo,
+a concern without its button words and a treatment without a name are left out; no panel at all: the
+site shows its built-in panels (`START_PANELS` in `web/src/config/home-start.ts`). The panels' photos
+are served with WordPress's own sizes.
+
+Lists inside lists (panel > concern > treatment) are fine in the edit screen: each level has its own
+placeholder for its "Add" button. PHP accepts at most `max_input_vars` fields per save (1000 here; the
+home page sends about 530): a save that reaches it keeps the words as they were and says so, instead of
+losing rows.
+
+Filled in by the site, not typed: the films, the treatment cards (prices from WooCommerce), the team members, the before and after cases, the photos and links of How it works, the
 monthly specials (WooCommerce), the reviews and awards, the two clinics, the booking form, the shop's
 products, the journal posts and the reels. Sections other pages also show (Our Team, Before And After,
 How It Works, Testimonials, Booking, Social) take these words on the home page only; the other pages
@@ -515,11 +526,13 @@ tells the site to drop its cached copy (tag `home` through `/api/revalidate`).
 
 Fresh install, one-time import of the original page (the words go to the page chosen under Reading,
 or to a page "home" that is created and chosen when none is; left alone when the home page already
-holds its words; the four Aptos marking photos the original showed from nuvior.com are fetched into the
-media library):
+holds its words; the four Aptos marking photos the original showed from nuvior.com and the four panel
+photos from `web/public` go into the media library). A box added after that import is filled in with
+`--fill-empty=<field keys>` (only those fields, only where empty; the Start panels were added this way):
 
 ```
 node ../web/scripts/export-home.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm home-import --images=/tmp/site
+node ../web/scripts/export-home.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm home-import --images=/tmp/site --fill-empty=start_panels
 ```
 
 Until 2026-11-13 the home page was a post of its own post type ("Home Page", `ndm_home`). `wp ndm

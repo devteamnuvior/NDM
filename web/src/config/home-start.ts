@@ -9,6 +9,8 @@ export interface StartOption {
   /** Filled in from WooCommerce when the page is built ("From $200"); here only a plain note for a treatment that is not sold by price ("At consultation"). */
   price: string;
   href: string;
+  /** What the editor picked in WordPress to price it ("product:<id>" or "category:<slug>"); empty: priced by its name. */
+  source?: string;
 }
 
 export interface StartConcern {
@@ -34,6 +36,8 @@ export interface StartPanel {
   concerns: StartConcern[];
   /** Only on the "Not sure?" panel, which has no concerns: the skin analysis page. */
   analysisHref?: string;
+  /** The words of that link; empty: "About the skin analysis". */
+  analysisLabel?: string;
 }
 
 export const START_PANELS: StartPanel[] = [

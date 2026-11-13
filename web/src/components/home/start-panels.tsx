@@ -76,9 +76,11 @@ function ConcernSheet({ concern, panelTitle, onBack, sheetRef }: { concern: Star
         <Button href={ACTIONS.book} v="book" hot>
           Book Free Consultation
         </Button>
-        <a href={concern.more.href} className="inline-flex items-center gap-2 font-inter text-[14px] font-semibold text-ndm-deep hover:underline">
-          {concern.more.label} <IconArrow />
-        </a>
+        {concern.more.label && (
+          <a href={concern.more.href} className="inline-flex items-center gap-2 font-inter text-[14px] font-semibold text-ndm-deep hover:underline">
+            {concern.more.label} <IconArrow />
+          </a>
+        )}
       </div>
     </div>
   );
@@ -213,7 +215,7 @@ export function StartPanels({ panels }: { panels: StartPanel[] }) {
                     Book Free Consultation
                   </Button>
                   <a href={p.analysisHref} className="inline-flex items-center gap-2 font-inter text-[14.5px] font-medium text-white hover:underline">
-                    About the skin analysis <IconArrow />
+                    {p.analysisLabel || "About the skin analysis"} <IconArrow />
                   </a>
                 </div>
               )}
