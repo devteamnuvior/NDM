@@ -30,14 +30,33 @@ function ndm_headless_block_frontend() {
 		exit;
 	}
 
-	$path   = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
-	$path   = '/' . ltrim( (string) wp_parse_url( $path, PHP_URL_PATH ), '/' );
-	$status = 'production' === wp_get_environment_type() ? 301 : 302;
+	$request = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
+	$status  = 'production' === wp_get_environment_type() ? 301 : 302;
 
 	// The target host is the configured frontend only, so this is not an open redirect.
 	// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
-	wp_redirect( $frontend . $path, $status, 'NDM Headless' );
+	wp_redirect( $frontend . ndm_headless_frontend_path( $request ), $status, 'NDM Headless' );
 	exit;
+}
+
+/**
+ * The path on the Next.js site for a request made to WordPress. WordPress may be installed in a
+ * folder (https://example.com/react, see Settings > General): that folder is WordPress's own and is
+ * not part of the site's addresses, so /react/botox becomes /botox and /react becomes /. A path that
+ * only starts with the same letters (/reactor) is kept as it is.
+ *
+ * @param string $request The requested address (path and query), as in REQUEST_URI.
+ * @return string A path starting with "/", without the query.
+ */
+function ndm_headless_frontend_path( $request ) {
+	$path   = '/' . ltrim( (string) wp_parse_url( (string) $request, PHP_URL_PATH ), '/' );
+	$folder = untrailingslashit( (string) wp_parse_url( home_url( '/' ), PHP_URL_PATH ) );
+
+	if ( '' !== $folder && ( $path === $folder || 0 === strpos( $path, $folder . '/' ) ) ) {
+		$path = '/' . ltrim( substr( $path, strlen( $folder ) ), '/' );
+	}
+
+	return $path;
 }
 add_action( 'template_redirect', 'ndm_headless_block_frontend', 0 );
 
