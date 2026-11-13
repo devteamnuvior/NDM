@@ -148,7 +148,7 @@ test.describe("desktop", () => {
     );
     expect(hrefs.length).toBeGreaterThan(20);
     const pages = hrefs.filter((h) => h.startsWith("/"));
-    expect(pages).toEqual(expect.arrayContaining(["/", "/pricing", "/promotion", "/about", "/blog", "/account.html", "/aptos-thread-lift", "/wrinkles-fine-lines", "/privacy"]));
+    expect(pages).toEqual(expect.arrayContaining(["/", "/pricing", "/promotion", "/about", "/blog", "/account", "/aptos-thread-lift", "/wrinkles-fine-lines", "/privacy"]));
     for (const h of pages) expect((await request.get(NEXT_URL + h)).status(), h).toBe(200);
     /* everything else is a phone number or one of the prototype's placeholders */
     for (const h of hrefs.filter((x) => !x.startsWith("/"))) expect(h).toMatch(/^(tel:\+1\d{10}|#\/[a-z0-9-]+)$/);
