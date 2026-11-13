@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { NEXT_URL } from "../playwright.config";
 
-/** Behaviour of the Aptos Thread Lift page on the Next.js build. Its content is a WordPress post (post type "Aptos Pages"): WordPress must be running. */
+/** Behaviour of the Aptos Thread Lift page on the Next.js build. Its content is a WordPress page (template "Aptos Thread Lift page"): WordPress must be running. */
 
 test.use({ viewport: { width: 1440, height: 900 } });
 

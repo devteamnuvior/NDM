@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-/* Prints the site's original Aptos Thread Lift page (src/config/aptos.ts) for WordPress: one post of the
-   type "Aptos Pages" with the fields of its edit screen. A photo is a file path under web/public, or the
+/* Prints the site's original Aptos Thread Lift page (src/config/aptos.ts) for WordPress: the standard
+   page with the template "Aptos Thread Lift page" and the fields of its edit screen. A photo is a file path under web/public, or the
    https address the original page showed it from (the clinic's own sites); the import puts both into the
    media library.
 
@@ -14,7 +14,7 @@
    Left out on purpose, because the site fills them in: the section bar's order, the Aptos logo, the
    team photo of Why NewDermaMed, Our team, Testimonials, Visit us and Start your journey.
 
-   One-time import (a page is created only when its slug is free):
+   One-time import (the page is created only when there is no Aptos page yet):
      node scripts/export-aptos.mjs | (cd ../cms && docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm aptos-import --images=/tmp/site) */
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -116,4 +116,4 @@ const content = {
   faqs: p.faqs.map(([q, a]) => ({ q, a })),
 };
 
-process.stdout.write(JSON.stringify([{ slug: "aptos-thread-lift", title: p.crumbs[1], hero: file(p.hero.desktop), heroAlt: "", content }], null, 1));
+process.stdout.write(JSON.stringify({ title: p.crumbs[1], hero: file(p.hero.desktop), heroAlt: "", content }, null, 1));

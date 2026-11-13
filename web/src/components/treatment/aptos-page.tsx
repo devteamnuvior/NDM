@@ -24,9 +24,9 @@ import type { AptosView } from "@/lib/aptos";
 
 /**
  * A page of the Aptos Thread Lift design: header with the booking form, quick facts, the section bar,
- * then the treatment sections. Its content is a post of the WordPress post type "Aptos Pages"; the
- * price rows are WooCommerce's and the before and after photos are cases of the gallery. A section the
- * post has no content for is left out. `data-page="aptos"` ties the page-only CSS to it.
+ * then the treatment sections. Its content is the WordPress page with the template "Aptos Thread Lift
+ * page"; the price rows are WooCommerce's and the before and after photos are cases of the gallery. A
+ * section the page has no content for is left out. `data-page="aptos"` ties the page-only CSS to it.
  */
 export function AptosPage({ view }: { view: AptosView }) {
   const { page: p, groups, has, faq } = view;

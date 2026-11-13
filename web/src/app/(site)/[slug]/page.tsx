@@ -16,11 +16,11 @@ import type { ArticleView } from "@/types/blog";
 
 /**
  * The pages whose address is the slug of a WordPress post: a procedure (the post type "Procedures",
- * for example /botox, in the Botox page's design), a page of the Aptos design (the post type "Aptos
- * Pages", for example /aptos-thread-lift) or a concern (the post type "Concerns", for example
+ * for example /botox, in the Botox page's design), the Aptos Thread Lift page (/aptos-thread-lift, a
+ * standard WordPress page with the template "Aptos Thread Lift page") or a concern (the post type "Concerns", for example
  * /wrinkles-fine-lines), or an article of the blog (an ordinary post that has text, for example
  * /what-causes-rosacea-redness). A post published later is shown without a new build; WordPress tells
- * the site when one changes. When two have the same slug a procedure comes first, then a page of the Aptos design, then a concern.
+ * the site when one changes. When two have the same slug a procedure comes first, then the Aptos page, then a concern.
  */
 /*
  * The address decides which page is shown, and an address with no post behind it must answer "not
