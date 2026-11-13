@@ -21,6 +21,8 @@ export interface TxPriceRow {
 export interface TxPriceGroup {
   /** Cart line name. */
   name: string;
+  /** Price-list category name of this group (cart lines), when the groups of one table come from several categories. */
+  category?: string;
   title: string;
   blurb: string;
   rows: TxPriceRow[];

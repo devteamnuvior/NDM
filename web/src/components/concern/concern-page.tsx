@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { CnArticles } from "@/components/concern/cn-articles";
 import { CnAssess } from "@/components/concern/cn-assess";
 import { CnCompare } from "@/components/concern/cn-compare";
@@ -22,35 +20,10 @@ import { TxVisit } from "@/components/treatment/tx-visit";
 import { TxWhy } from "@/components/treatment/tx-why";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Faq } from "@/components/ui/faq";
-import { BUILT_IN_CONCERNS } from "@/config/concern";
-import { getConcernSlugs, getConcernView } from "@/lib/concern";
+import type { ConcernView } from "@/lib/concern";
 
-/**
- * A concern page (for example /wrinkles-fine-lines): one design for every post of the WordPress post
- * type "Concerns". The post's slug is the address. A concern published later is shown without a new
- * build; WordPress tells the site when one changes.
- */
-/*
- * The address decides which concern is shown, and an address with no concern must answer "not found":
- * the page waits for WordPress before it sends anything, instead of sending an empty shell first.
- * (Without this, Next.js reports "URL data during prerendering" for reading `params` outside Suspense.)
- */
-export const instant = false;
-
-export async function generateStaticParams() {
-  const slugs = new Set([...Object.keys(BUILT_IN_CONCERNS), ...(await getConcernSlugs())]);
-  return Array.from(slugs, (concern) => ({ concern }));
-}
-
-/* SEO (structured data, canonical and social tags) is out of scope for now: only the title and description are kept. */
-export async function generateMetadata({ params }: PageProps<"/[concern]">): Promise<Metadata> {
-  const view = await getConcernView((await params).concern);
-  return view ? { title: view.title, description: view.description } : {};
-}
-
-export default async function ConcernPage({ params }: PageProps<"/[concern]">) {
-  const view = await getConcernView((await params).concern);
-  if (!view) notFound();
+/** A concern page (for example /wrinkles-fine-lines): one design for every post of the WordPress post type "Concerns". */
+export function ConcernPage({ view }: { view: ConcernView }) {
   const p = view.page;
   const n = (id: string) => txNumber(p.nav, id);
   return (

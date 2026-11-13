@@ -42,7 +42,7 @@ src/
     layout/               the site header, footer, smooth scroll, pop-ups
     booking/ cart/ chat/ black-friday/ reviews/ team/ specials/   site-wide features
     pricing/ promotion/ before-after/ about/ blog/ legal/ bf-sale/   page sections
-    treatment/            treatment page sections (Aptos, Botox; also the header and several sections of concern pages)
+    treatment/            treatment page sections (Aptos; procedure pages such as Botox, from the WordPress post type "Procedures"; also the header and several sections of concern pages)
     concern/              concern page sections (Wrinkles & fine lines)
     ui/                   shared building blocks: Button, icons, SiteLink, Eyebrow, TwoTone, Faq, Breadcrumb, SubNav
   config/                 content and settings: navigation, routes, clinics, prices, page content

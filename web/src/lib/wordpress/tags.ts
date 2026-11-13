@@ -17,6 +17,8 @@ export const WP_TAGS = {
   beforeAfter: "before-after",
   /** The concern pages (the post type "Concerns"). */
   concerns: "concerns",
+  /** The procedure pages (the post type "Procedures"). */
+  procedures: "procedures",
   /** The popular searches counted by WordPress. */
   search: "search-popular",
   /** One entry: "wp:posts:what-causes-rosacea-redness". */

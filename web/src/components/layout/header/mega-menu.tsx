@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import clinicPhoto from "@/assets/images/clinic/clinic-2.jpg";
+import { useMenuLink } from "@/components/layout/concern-paths";
 import { Button } from "@/components/ui/button";
 import { IconArrow, IconCheckBadge } from "@/components/ui/icons";
 import { SiteLink } from "@/components/ui/site-link";
@@ -79,6 +80,8 @@ export function MegaMenu({ open, current, onLink, eager }: MenuPanelProps) {
   const hereCat = categoryOf(current);
   const [act, setAct] = useState(hereCat ?? "aptos");
   const cat = PROCEDURES.find((c) => c.id === act) ?? PROCEDURES[0];
+  /* a procedure that has a page in WordPress (the post type "Procedures") links to it */
+  const menuLink = useMenuLink();
   const catLink = resolveLabel(cat.label);
   const isAptos = act === "aptos";
 
@@ -140,7 +143,7 @@ export function MegaMenu({ open, current, onLink, eager }: MenuPanelProps) {
                       .filter((it) => it !== cat.label)
                       .map((it) => (
                         <li key={it} className="break-inside-avoid">
-                          <SiteLink to={resolveLabel(it)} current={current} onClick={onLink} className="menu-item group font-mont">
+                          <SiteLink to={menuLink(it)} current={current} onClick={onLink} className="menu-item group font-mont">
                             <span className="min-w-0">{it}</span>
                             <IconArrow size={11} className="menu-arrow" />
                           </SiteLink>

@@ -5,7 +5,12 @@ import type { ProcedurePage } from "@/types/treatment";
  * PUBLISH GATE: this is the live site's wording. It names Botox® beside the treatment's effects, which
  * Health Canada (C.01.044) does not allow in consumer advertising of a prescription drug, and it names
  * the Medical Director. Raymond Valadkhani's written approval is needed before this page goes live.
- * The price rows come from the price list (see the page), not from here.
+ * No price is written here: the price rows are WooCommerce's, and an amount inside the copy is a token
+ * ({{price}}: one unit of the first product of `prices.groups`, {{price2}}: of the second, {{pricex20}}:
+ * 20 units, {{off}} / {{maxoff}}: the offers on the first), filled in by lib/procedure.ts.
+ *
+ * Since the post type "Procedures" this is only the copy shown when WordPress cannot be reached, and
+ * the source of the one-time import (scripts/export-procedures.mjs): edit the page in WordPress.
  */
 export const BOTOX: ProcedurePage = {
   "crumbs": [
@@ -76,7 +81,7 @@ export const BOTOX: ProcedurePage = {
     "title": "Botox® Cosmetic packages",
     "big": [
       "Up to",
-      "{{botoxMax}}",
+      "{{maxoff}}",
       "off"
     ],
     "href": "#prices",
@@ -181,7 +186,7 @@ export const BOTOX: ProcedurePage = {
       {
         "label": "Pricing",
         "stat": [
-          "{{botox}}",
+          "{{price}}",
           "per unit"
         ],
         "text": [
@@ -315,7 +320,7 @@ export const BOTOX: ProcedurePage = {
       {
         "q": "How much does Botox® cost per area?",
         "a": [
-          "Botox® Cosmetic is {{botox}} per unit at NewDermaMed, and packages of 60 to 220 units are currently {{botoxOff}} off. At the regular price, 20 units are {{botox20}} and 24 units are {{botox24}}. Your final price is confirmed after your assessment."
+          "Botox® Cosmetic is {{price}} per unit at NewDermaMed, and packages of 60 to 220 units are currently {{off}} off. At the regular price, 20 units are {{pricex20}} and 24 units are {{pricex24}}. Your final price is confirmed after your assessment."
         ]
       },
       {
@@ -339,7 +344,7 @@ export const BOTOX: ProcedurePage = {
       {
         "q": "Botox® or Dysport®: which is right for me?",
         "a": [
-          "Both are Health Canada approved prescription neuromodulators that work in a similar way. Their formulations differ and their units are not interchangeable, so each is dosed on its own. At NewDermaMed, Botox® Cosmetic is {{botox}} per unit and Dysport® is {{dysport}} per unit. Your provider recommends the one that suits your goals."
+          "Both are Health Canada approved prescription neuromodulators that work in a similar way. Their formulations differ and their units are not interchangeable, so each is dosed on its own. At NewDermaMed, Botox® Cosmetic is {{price}} per unit and Dysport® is {{price2}} per unit. Your provider recommends the one that suits your goals."
         ]
       }
     ],
@@ -448,6 +453,3 @@ export const BOTOX: ProcedurePage = {
     ]
   ]
 };
-
-/** Price-list category the page's groups come from. */
-export const BOTOX_PRICE_CATEGORY = "botox-dysport";

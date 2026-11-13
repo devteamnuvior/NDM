@@ -1,6 +1,6 @@
 import { pageParity } from "./page";
 
-/* Botox page: every block in page order; the About tabs switched; the second price group opened. */
+/* Botox page (a post of the WordPress post type "Procedures"; needs WordPress running): every block in page order; the About tabs switched; the second price group opened. */
 const sec = (id: string) => `main > section#${id}`;
 const by = (id: string) => `main > section[aria-labelledby="${id}"]`;
 
@@ -27,7 +27,16 @@ pageParity({
     },
     { name: "why-choose", selector: sec("why-choose"), pixelRatio: 0.01 },
     { name: "watch", selector: sec("watch"), pixelRatio: 0.01 },
-    { name: "results", selector: sec("results"), pixelRatio: 0.01 },
+    {
+      name: "results",
+      selector: sec("results"),
+      pixelRatio: 0.01,
+      /* the photos are the gallery's cases now, named by their category ("Botox"); the prototype typed "Botox®" */
+      prepare: (p) =>
+        p.evaluate(() => {
+          for (const el of document.querySelectorAll("#results figcaption span:first-child")) el.textContent = (el.textContent ?? "").replace("®", "");
+        }),
+    },
     { name: "prices", selector: sec("prices") },
     {
       name: "prices-second-open",

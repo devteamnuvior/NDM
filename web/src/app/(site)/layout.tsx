@@ -5,13 +5,14 @@ import { SiteHeader } from "@/components/layout/header/site-header";
 import { OfferPopup } from "@/components/layout/offer-popup";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { getConcernSlugs } from "@/lib/concern";
+import { getProcedureSlugs } from "@/lib/procedure";
 
 /** Pages inside the site's header and footer (every page except the Black Friday sale page, which has its own). */
 export default async function SiteLayout({ children }: { children: ReactNode }) {
-  /* the concern pages published in WordPress: the header links them and starts dark on them */
-  const concerns = await getConcernSlugs();
+  /* the concern and procedure pages published in WordPress: the header links them and starts dark on them */
+  const [concerns, procedures] = await Promise.all([getConcernSlugs(), getProcedureSlugs()]);
   return (
-    <ConcernPathsProvider slugs={concerns}>
+    <ConcernPathsProvider slugs={concerns} procedures={procedures}>
       <div className="site-root">
         <a
           href="#main"

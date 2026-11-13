@@ -42,8 +42,8 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return {
       beforeFiles: [],
-      /* a file of the prototype ("/account.html", "/black-friday.html") is asked for before the concern
-         route "/[concern]" gets to answer for every one-part address */
+      /* a file of the prototype ("/account.html", "/black-friday.html") is asked for before the
+         route "/[slug]" (procedure and concern pages) gets to answer for every one-part address */
       afterFiles: legacyOrigin ? [{ source: "/:file([^/]+\\.[^/]+)", destination: `${legacyOrigin}/:file` }] : [],
       fallback: legacyOrigin ? [{ source: "/:path*", destination: `${legacyOrigin}/:path*` }] : [],
     };

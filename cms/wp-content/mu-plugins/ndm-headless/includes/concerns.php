@@ -738,7 +738,10 @@ function ndm_headless_concern_row( $field, $name, $row ) {
 function ndm_headless_concern_assets( $hook ) {
 	$screen = get_current_screen();
 
-	if ( ! $screen || NDM_CONCERN_POST_TYPE !== $screen->post_type || ! in_array( $hook, array( 'post.php', 'post-new.php' ), true ) ) {
+	// Other post types built from the same fields (Procedures) add themselves to this list.
+	$types = apply_filters( 'ndm_headless_field_post_types', array( NDM_CONCERN_POST_TYPE ) );
+
+	if ( ! $screen || ! in_array( $screen->post_type, $types, true ) || ! in_array( $hook, array( 'post.php', 'post-new.php' ), true ) ) {
 		return;
 	}
 
@@ -779,7 +782,7 @@ function ndm_headless_concern_assets( $hook ) {
 .ndm-cn-row-tools{display:flex;gap:12px;align-items:center;font-weight:400}
 .ndm-cn-row-tools .button-link{text-decoration:none}
 .ndm-cn-row-body{padding:12px 12px 2px;background:#fff;border-top:1px solid #dcdcde;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
-.ndm-cn-row-body>.ndm-cn-textarea,.ndm-cn-row-body>.ndm-cn-image{grid-column:1/-1}
+.ndm-cn-row-body>.ndm-cn-textarea,.ndm-cn-row-body>.ndm-cn-lines,.ndm-cn-row-body>.ndm-cn-image{grid-column:1/-1}
 @media (max-width:782px){.ndm-cn-row-body{grid-template-columns:1fr}}
 ';
 

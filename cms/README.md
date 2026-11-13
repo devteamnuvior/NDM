@@ -280,6 +280,70 @@ Before anything is published: copy must follow Health Canada's qualified languag
 is never named beside a benefit, and before/after photos of prescription treatments need Raymond
 Valadkhani's review.
 
+## Procedure pages
+
+A procedure page of the site (for example `/botox`) is a post of the **post type "Procedures"**
+(`ndm_procedure`, in the admin menu). Every procedure has the same design, the Botox page's; a post
+carries only its own content. The post's **slug is the page's address** on the site, so a new
+published procedure is a new page, without a new build. The fields work like those of a concern
+(same boxes, rows, photo and search fields).
+
+Typed into the post (boxes under the title, stored as one post meta, `_ndm_procedure`; the list of
+fields is `ndm_headless_procedure_schema()` in `includes/procedures.php`):
+
+| Box | Fields |
+|---|---|
+| Title, Slug, Header photo | the procedure's name, the address, the wide header photo (featured image) |
+| Header | heading in two lines, text under it, the tall photo for phones, photo focus, the menu group (breadcrumb), the quick facts, the title of the offer card |
+| Search Engines | page title and description |
+| Benefits | heading, paragraphs, short labels, the safety note, the picture (and whether it is a diagram) |
+| About (Tabs) | heading; one row per tab: name, large figure, words under it, paragraphs, an optional link |
+| Why Choose | heading, photo, cards |
+| Watch | the video's address, the picture shown before it plays, text |
+| Before And After Photos | cases of the "Before & After" post type, searched and picked. Nothing is typed |
+| Price List | heading; **one row per WooCommerce product, searched and picked** (or a whole category: every product of it), with an optional title and text that replace the product's name and short description |
+| Good To Know | heading, intro, questions (answer paragraphs and an optional list of points), related treatments |
+| FAQ | questions and answers |
+
+**No price is ever typed.** The Price list box only says which products the section shows; their
+options, prices, regular prices and offer labels are read from WooCommerce by the site and are changed
+in the price manager only. In a category priced per unit, the option called "Regular" is the price of
+one unit. An amount inside the copy is written as a token, filled in from those same products:
+
+| Token | Becomes |
+|---|---|
+| `{{price}}`, `{{price2}}` | the price of one unit of the first (second...) product of the price list; its lowest price when it is not priced per unit |
+| `{{pricex20}}`, `{{price2x20}}` | that price times 20 (any number) |
+| `{{off}}`, `{{maxoff}}` | the percentage offers on the first product ("10% to 30%"), and the largest ("30%"); `{{off2}}`, `{{maxoff2}}` for the second |
+
+A sentence whose amount is not in WooCommerce is left out of the page, so no stale amount can show.
+
+Also filled in by the site: the section bar and its numbering (a section whose box is empty is left
+out of both), the clinics line, the booking form, the offer card's figure (only while WooCommerce has
+an offer on the first product), the "Page updated" date (the day the post was last saved), and the
+sections every procedure page shares (the clinic film, Why NewDermaMed, Our team, Testimonials, Visit
+us, Start your journey).
+
+| Route (`ndm/v1`) | Who | What |
+|---|---|---|
+| `GET /procedures` | public | the name and slug of every published procedure |
+| `GET /procedures/<slug>` | public | one published procedure with its photos and the products picked for its price list (no prices) |
+
+When a procedure changes (or a product, or a Before & After case it may show), WordPress tells the
+site to drop its cached copy (tag `procedures` through `/api/revalidate`). The post type has no pages
+of its own in WordPress. The Aptos Thread Lift page has its own design and is not a procedure post.
+
+One-time import of the original Botox page (created only when its slug is free; photos go into the
+media library; the price list's rows pick the existing products "Botox Cosmetic" and "Dysport"):
+
+```
+node ../web/scripts/export-procedures.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm procedures-import --images=/tmp/site
+```
+
+Before anything is published: the Botox copy is the live site's wording and names Botox® beside its
+effects, which Health Canada (C.01.044) does not allow in consumer advertising of a prescription
+drug; it also names the Medical Director. Raymond Valadkhani's written approval is needed first.
+
 ## Order requests (cart and checkout)
 
 The Next.js site's cart remembers only what was chosen (WooCommerce product and variation IDs and

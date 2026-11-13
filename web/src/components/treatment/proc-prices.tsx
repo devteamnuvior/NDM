@@ -10,7 +10,7 @@ import { pageLink, pagePath } from "@/lib/routes";
 interface ProcPricesProps {
   lead: string;
   strong: string;
-  /** Price-list category name (cart lines). */
+  /** Price-list category name (cart lines), for groups that do not carry their own. */
   category: string;
   number: string;
   groups: TxPriceGroup[];
@@ -41,7 +41,7 @@ export function ProcPrices({ lead, strong, category, number, groups }: ProcPrice
         </div>
         <ul className="pr-groups rv mt-[clamp(40px,4.5vw,64px)]" role="list" style={{ transitionDelay: ".14s" }}>
           {groups.map((g, i) => (
-            <PriceGroup key={g.name} group={g} headId={`proc-pr-h${i}`} bodyId={`proc-pr${i}`} category={category} startOpen={i === 0} />
+            <PriceGroup key={g.name} group={g} headId={`proc-pr-h${i}`} bodyId={`proc-pr${i}`} category={g.category ?? category} startOpen={i === 0} />
           ))}
         </ul>
         <div className="rv mt-10 flex flex-wrap justify-center gap-3" style={{ transitionDelay: ".18s" }}>

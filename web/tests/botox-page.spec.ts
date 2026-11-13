@@ -1,7 +1,10 @@
 import { expect, test } from "@playwright/test";
 import { NEXT_URL } from "../playwright.config";
 
-/** Behaviour of the migrated Botox page on the Next.js build. */
+/**
+ * Behaviour of the Botox page on the Next.js build. The page is a post of the WordPress post type
+ * "Procedures" and its prices are WooCommerce's: these tests need WordPress running.
+ */
 
 test.use({ viewport: { width: 1440, height: 900 } });
 
@@ -85,7 +88,8 @@ test("the clinic film has a sound button; the reel is not downloaded before it i
   expect(await film.locator("video").evaluate((v: HTMLVideoElement) => v.muted)).toBe(false);
   const reel = page.locator("#watch video");
   await expect(reel).toHaveAttribute("preload", "none");
-  await expect(reel).toHaveAttribute("poster", "/assets/botox/reel.webp");
+  /* the picture is the procedure's, from WordPress's media library */
+  await expect(reel).toHaveAttribute("poster", /\/wp-content\/uploads\/.*reel.*\.webp$/);
 });
 
 test("results show the photos with the results line; Good to know links to related treatments", async ({ page }) => {
@@ -119,4 +123,19 @@ test.describe("phone", () => {
     await page.waitForTimeout(400);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
   });
+});
+
+test("the content is the WordPress procedure's; the price list shows the products picked there", async ({ page, request }) => {
+  const api = process.env.WORDPRESS_API_URL || "http://localhost:8080/wp-json";
+  const wp = await (await request.get(`${api}/ndm/v1/procedures/botox`)).json();
+  /* a row of the price list is a pick of a WooCommerce product: it carries no price */
+  expect(wp.content.price_list.map((r: { price_source: string }) => r.price_source)).toEqual([expect.stringMatching(/^product:\d+$/), expect.stringMatching(/^product:\d+$/)]);
+  for (const row of wp.content.price_list) expect(Object.keys(row).sort()).toEqual(["blurb", "name", "price_source", "product"]);
+  expect(JSON.stringify(wp.content.price_list)).not.toMatch(/\$\d|price"/);
+  await page.goto(`${NEXT_URL}/botox`);
+  await expect(page.locator("#proc-title, h1").first()).toContainText(wp.content.heading_1);
+  await expect(page.locator("#prices .pr-group")).toHaveCount(wp.content.price_list.length);
+  await expect(page.locator("#prices .pr-group h3").first()).toContainText(wp.content.price_list[0].name);
+  await expect(page.locator("#guide")).toContainText(`Page updated ${wp.updated[1]}`);
+  await expect(page.locator("main")).toHaveAttribute("data-page", "botox");
 });
