@@ -127,6 +127,7 @@ about = (SRC / "build_about.py").read_text()
 build("about", "About page", [py_block(about, "css")], [])
 
 build("cart", "Cart, checkout and order confirmation pages", [py_block((SRC / "build_cart.py").read_text(), "CSS")], [])
+build("account", "My account page", [py_block((SRC / "build_account.py").read_text(), "css")], [])
 build("blog", "Blog page", [py_block((SRC / "build_blog.py").read_text(), "css")], [])
 build("article", "Blog article page", [py_block((SRC / "build_article.py").read_text(), "css")], [])
 

@@ -15,7 +15,7 @@ export const PAGES = {
   botox: { path: "/botox", migrated: true },
   aptos: { path: "/aptos-thread-lift", migrated: true },
   wrinkles: { path: "/wrinkles-fine-lines", migrated: true },
-  account: { path: "/account.html", migrated: false },
+  account: { path: "/account", migrated: true },
   cart: { path: "/cart", migrated: true },
   checkout: { path: "/checkout", migrated: true },
   orderConfirmed: { path: "/order-confirmed", migrated: true },
