@@ -85,7 +85,8 @@ function fromWordPress(wp: WPConcern, prices: SitePrices | null): ConcernView {
     hero: { desktop, mobile: c.hero_mobile?.src ?? desktop, position: c.hero_position || "50% 50%", alt: wp.hero?.alt ?? "" },
     where: CONCERN_SHARED.where,
     facts: facts(all.length, starting(lows)),
-    nav: CONCERN_SHARED.nav,
+    /* a concern without steps has no What to expect section: it is left out of the section bar too */
+    nav: CONCERN_SHARED.nav.filter(([id]) => id !== "expect" || c.expect.length > 0),
     lede: c.lede,
     pages: c.pages.map((x) => ({ name: x.name, href: linkOr(x.link, x.name) })),
     gallery: c.gallery,

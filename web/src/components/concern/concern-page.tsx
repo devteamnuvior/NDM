@@ -40,7 +40,7 @@ export function ConcernPage({ view }: { view: ConcernView }) {
       <CnAssess assess={p.assess} short={p.short} number={n("assess")} />
       <CnOptions short={p.short} options={p.options} bio={p.bio} rx={p.rx} number={n("options")} />
       <CnCompare rows={p.compare} number={n("compare")} />
-      <TxExpect expect={p.expect} number={n("expect")} />
+      {p.expect.items.length > 0 && <TxExpect expect={p.expect} number={n("expect")} />}
       <TxResults results={p.results} number={n("results")} />
       <CnHome home={p.home} number={n("home-care")} />
       {/* the same on every concern page */}
