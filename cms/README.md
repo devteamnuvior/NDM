@@ -400,12 +400,17 @@ node ../web/scripts/export-aptos.mjs | docker compose run --rm -T -v "$PWD/../we
 
 ## About page
 
-`/about` is the one post of the post type **About Page** (`ndm_about`, in the admin menu): a template
-of its own. The site has one About page, so once the post exists "Add page" is no longer offered. The
-address is always `/about`; the post's title is only its name in the admin. The fields work like
-those of a concern (same boxes, rows and photo field).
+`/about` is an ordinary WordPress **page** (Pages in the admin, marked "About page of the site" in the
+list). It is recognised by its **template "About page"** (`ndm-about`, under Page Attributes > Template),
+so its title and slug can change without losing it; a top-level page with the slug `about` and no such
+template is recognised too, and gets the template the next time it is saved. The address on the site
+is always `/about`; the title is only its name in the admin. No page ID is written anywhere.
 
-Typed into the post (boxes under the title, stored as one post meta, `_ndm_about`; the list of fields
+On that page only, the block editor and the text box are switched off and the About boxes appear
+under the title; every other page keeps its normal editor. The fields work like those of a concern
+(same boxes, rows and photo field).
+
+Typed into the page (boxes under the title, stored as one post meta, `_ndm_about`; the list of fields
 is `ndm_headless_about_schema()` in `includes/about.php`):
 
 | Box | Fields |
@@ -426,18 +431,38 @@ parking: the same on every page), the Top Choice Award badges, How it works, the
 
 | Route (`ndm/v1`) | Who | What |
 |---|---|---|
-| `GET /about-page` | public | the published page with its photos (404 when it is not published) |
+| `GET /about-page` | public | the published About page with its photos; 404 when there is none (`ndm_about_missing`) or it is not published or behind a password (`ndm_about_unpublished`) |
 
-When the page changes (or a photo's alternative text), WordPress tells the site to drop its cached
-copy (tag `about` through `/api/revalidate`). When WordPress cannot be reached, or the page is not
-published, the site shows its built-in copy (`ABOUT_COPY` in `web/src/config/about.ts`).
+**Revisions.** The fields are part of the page's revisions: a save that changes them makes a revision,
+Revisions compares them (as "About page fields", one line per field) and restoring a revision puts
+them back.
 
-One-time import of the original page (created only when it does not exist yet, the trash included).
-The fourteen gallery photos go into the media library: four files from `web/public`, and the ten the
-original page showed straight from newdermamedlaserclinic.com are fetched from that address.
+**When something is wrong** the Pages screens say so in a yellow notice: no About page, the page not
+published, more than one page with the "About page" template (the site shows the published one, else
+the oldest), the page recognised by its slug only, or the page with no content. In each case the site
+keeps working: it shows its built-in copy (`ABOUT_COPY` in `web/src/config/about.ts`), as it does when
+WordPress cannot be reached.
+
+When a page changes (or its template, or a photo's alternative text), WordPress tells the site to drop
+its cached copy (tag `about` through `/api/revalidate`).
+
+One-time import of the original page on a new WordPress (created only when there is no About page and
+no page with the slug `about`, the trash included). The fourteen gallery photos go into the media
+library: four files from `web/public`, and the ten the original page showed straight from
+newdermamedlaserclinic.com are fetched from that address.
 
 ```
 node ../web/scripts/export-about.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm about-import --images=/tmp/site
+```
+
+Until 2026-11-13 the About page was a post of its own post type ("About Page", `ndm_about`). A
+WordPress that still has that post moves it onto a page once (same title, state, fields and photos;
+nothing is uploaded again; a page that already holds other fields is never overwritten), checks that
+the page holds exactly the same fields, and only then, with `--delete-old`, deletes the old post:
+
+```
+docker compose run --rm -T cli wp ndm about-migrate
+docker compose run --rm -T cli wp ndm about-migrate --delete-old
 ```
 
 ## Blog (the list and the articles)

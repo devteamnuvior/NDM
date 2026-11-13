@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * About: the clinic film as the header, the team, the two clinics with their maps, the gallery and awards,
- * contact. Its words and gallery photos are the WordPress post of the type "About Page"; the film, the
+ * contact. Its words and gallery photos are the WordPress page with the template "About page"; the film, the
  * team, the clinics, How it works and the form are the site's.
  */
 export default async function AboutPage() {

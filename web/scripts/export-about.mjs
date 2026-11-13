@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-/* Prints the site's original About page (ABOUT_COPY in src/config/about.ts) for WordPress: the one post
-   of the type "About Page" with the fields of its edit screen. A gallery photo is a file path under
+/* Prints the site's original About page (ABOUT_COPY in src/config/about.ts) for WordPress: a standard page
+   with the template "About page" and the fields of its edit screen. A gallery photo is a file path under
    web/public, or the https address the original page showed it from (the clinic's own site); the import
    puts both into the media library, with the photo's description as its alternative text.
 

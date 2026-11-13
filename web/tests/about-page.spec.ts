@@ -59,7 +59,7 @@ test("each clinic has a map with its pin and three parking pins, its details and
 test("the gallery opens a viewer; arrows change the photo; Escape closes it and focus returns", async ({ page }) => {
   await page.goto(`${NEXT_URL}/about`);
   const tile = page.locator("#gallery").getByRole("button", { name: "View photo: Front desk" });
-  /* the photos are the ones picked in WordPress (the post type "About Page"), served from its media library */
+  /* the photos are the ones picked in WordPress (the page with the template "About page"), served from its media library */
   await expect(tile.locator("img")).toHaveAttribute("src", /\/wp-content\/uploads\/.*About-us-gallery-05/);
   await tile.scrollIntoViewIfNeeded();
   await tile.click();

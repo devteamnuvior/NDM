@@ -90,8 +90,8 @@ export const ABOUT_CLINIC_CHOICES: [name: string, street: string][] = [
 
 /**
  * The page's own words and gallery photos as the original prototype had them. The page is edited in
- * WordPress (the post type "About Page"): this copy is shown only when WordPress cannot be reached or
- * the page is not published, and it is what `scripts/export-about.mjs` imports once. Plain JSON on
+ * WordPress (the page with the template "About page"): this copy is shown only when WordPress cannot be reached, has no
+ * About page or the page is not published, and it is what `scripts/export-about.mjs` imports once. Plain JSON on
  * purpose: the export reads it as it is.
  */
 export const ABOUT_COPY: AboutCopy = {

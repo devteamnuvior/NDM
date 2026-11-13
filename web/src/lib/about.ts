@@ -32,8 +32,9 @@ function fromWordPress(wp: WPAboutPage): AboutCopy {
 }
 
 /**
- * The About page's words and gallery photos: the published WordPress post of the type "About Page".
- * When WordPress cannot be reached, or the page is not published, the built-in copy is shown.
+ * The About page's words and gallery photos: the published WordPress page with the template "About page"
+ * (or the slug "about"). When WordPress cannot be reached, or it has no such page, or the page is not
+ * published, the built-in copy is shown.
  */
 export async function getAboutCopy(): Promise<AboutCopy> {
   const read = await settle(getAboutPage);

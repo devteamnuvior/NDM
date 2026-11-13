@@ -30,12 +30,14 @@ export interface AboutCopy {
 
 /**
  * The About page as WordPress serves it (`ndm/v1/about-page`, see
- * cms/wp-content/mu-plugins/ndm-headless/includes/about.php): the one post of the type "About Page"
- * with the fields of its edit screen.
+ * cms/wp-content/mu-plugins/ndm-headless/includes/about.php): the standard WordPress page with the
+ * template "About page" (or the slug "about"), with the fields of its edit screen.
  */
 export interface WPAboutPage {
   id: number;
-  /** The post's name in the admin only. */
+  /** The page's slug in WordPress; the address on the site is always /about. */
+  slug: string;
+  /** The page's name in the admin only. */
   title: string;
   modified: string;
   content: {

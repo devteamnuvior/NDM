@@ -6,11 +6,11 @@ import { WordPressError } from "./errors";
 import { WP_TAGS } from "./tags";
 
 /**
- * The About page (the one post of the post type "About Page"), through the ndm-headless plugin's
+ * The About page (the standard WordPress page with the template "About page"), through the ndm-headless plugin's
  * route. Cached; WordPress clears it the moment the page changes.
  */
 
-/** The published About page, or null when it is not published. */
+/** The published About page, or null when WordPress has no About page or it is not published. */
 export async function getAboutPage(): Promise<WPAboutPage | null> {
   "use cache";
   cacheLife("hours");
