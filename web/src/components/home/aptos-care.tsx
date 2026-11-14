@@ -10,6 +10,7 @@ import { ACTIONS } from "@/config/routes";
 import { NAMICA_SPHERE_SRC } from "@/config/site";
 import { pagePath } from "@/lib/routes";
 import type { HomeCopy, PointIcon } from "@/types/home";
+import { withBase } from "@/lib/base-path";
 
 /* the chips' icons, as SVG paths */
 const POINT_ICONS: Record<PointIcon, string> = {
@@ -49,7 +50,7 @@ export function AptosCare({ copy }: { copy: HomeCopy["aptos"] }) {
               </text>
             </svg>
             {/* eslint-disable-next-line @next/next/no-img-element -- remote badge art, as in the prototype */}
-            <img src={NAMICA_SPHERE_SRC} alt="" className="apx-sphere nm-spin" />
+            <img src={withBase(NAMICA_SPHERE_SRC)} alt="" className="apx-sphere nm-spin" />
           </div>
           {(chip.number || chip.after) && (
             <span className="apx-chip apx-c1">
@@ -139,7 +140,7 @@ export function AptosCare({ copy }: { copy: HomeCopy["aptos"] }) {
               <figure className="group m-0 overflow-hidden rounded-[18px] border border-ndm-line bg-ndm-paper p-1.5">
                 <div className="aspect-[4/5] overflow-hidden rounded-[13px] bg-ndm-mist">
                   {/* eslint-disable-next-line @next/next/no-img-element -- remote clinical photo, as in the prototype */}
-                  <img src={ph.src} alt={ph.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.04]" />
+                  <img src={withBase(ph.src)} alt={ph.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.04]" />
                 </div>
                 <figcaption className="px-2.5 pt-2.5 pb-1.5 font-inter text-[11.5px] font-medium tracking-[.14em] text-ndm-muted uppercase">{ph.label}</figcaption>
               </figure>

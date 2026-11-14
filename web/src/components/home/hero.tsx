@@ -4,6 +4,7 @@ import { HeroFilm, HeroFilmToggle, HeroStage } from "@/components/home/hero-stag
 import { Button } from "@/components/ui/button";
 import { HERO } from "@/config/home";
 import type { HomeCopy, ProofIcon } from "@/types/home";
+import { withBase } from "@/lib/base-path";
 
 const PROOF_ICONS: Record<ProofIcon, ReactNode> = {
   physician: (
@@ -32,7 +33,7 @@ export function Hero({ copy }: { copy: HomeCopy["hero"] }) {
   const { film, primaryCta, secondaryHref } = HERO;
   const { tagline, lead, strong, intro, button, proof, brands } = copy;
   /* the poster is the first thing painted on the home page */
-  preload(film.poster, { as: "image", fetchPriority: "high" });
+  preload(withBase(film.poster), { as: "image", fetchPriority: "high" });
 
   return (
     <HeroStage>

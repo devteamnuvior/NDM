@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type CSSProperties, type KeyboardEvent, type PointerEvent } from "react";
 import type { BeforeAfterCase } from "@/config/before-after";
 import { clamp01, easeInOut } from "@/lib/math";
+import { withBase } from "@/lib/base-path";
 
 /* one-time "you can drag this" hint: 50 -> 34 -> 66 -> 50 over 1.6s, each leg eased */
 const HINT_MS = 1600;
@@ -193,13 +194,13 @@ export function BaCompare({ c, i, nudge = true }: BaCompareProps) {
     >
       {/* eslint-disable @next/next/no-img-element -- clinical photos served by the clinic's own site, cropped with a transform */}
       <div className="ba-before absolute inset-0 z-[2]" style={{ clipPath: clip, WebkitClipPath: clip }}>
-        <img src={c.before} alt={alt("Before")} width={750} height={690} loading="lazy" decoding="async" draggable={false} className={img} style={crop} />
+        <img src={withBase(c.before)} alt={alt("Before")} width={750} height={690} loading="lazy" decoding="async" draggable={false} className={img} style={crop} />
         <span aria-hidden="true" className={`${pill} left-3 bg-ndm-ink/55 text-white`} style={{ opacity: pos < 12 ? 0 : 1 }}>
           Before
         </span>
       </div>
       <div className="absolute inset-0 z-[1]">
-        <img src={c.after} alt={alt("After")} width={750} height={690} loading="lazy" decoding="async" draggable={false} className={img} style={crop} />
+        <img src={withBase(c.after)} alt={alt("After")} width={750} height={690} loading="lazy" decoding="async" draggable={false} className={img} style={crop} />
         <span aria-hidden="true" className={`${pill} right-3 bg-white/85 text-ndm-ink`} style={{ opacity: pos > 88 ? 0 : 1 }}>
           After
         </span>

@@ -9,6 +9,7 @@ import { ACTIONS } from "@/config/routes";
 import type { TreatmentTab } from "@/config/home-treatments";
 import { useReveal } from "@/hooks/use-reveal";
 import type { HomeCopy } from "@/types/home";
+import { withBase, withBaseSrcSet } from "@/lib/base-path";
 
 /**
  * The treatments carousel: category tabs on the right of the heading, a rail of cards that scrolls
@@ -111,11 +112,11 @@ export function TreatMenuView({ tabs, copy }: { tabs: TreatmentTab[]; copy: Home
         >
           {tab.cards.map((c, i) => (
             <article key={`${tab.id}-${c.name}`} className="tm-card2 tm-in group flex shrink-0 snap-start flex-col rounded-[22px] bg-white p-3 ring-1 ring-ndm-ink/[.06]" style={{ animationDelay: `${Math.min(i, 5) * 0.05}s` }}>
-              <a href={c.href} className="peach relative block aspect-[4/3.2] overflow-hidden rounded-[16px] bg-ndm-mist">
+              <a href={withBase(c.href)} className="peach relative block aspect-[4/3.2] overflow-hidden rounded-[16px] bg-ndm-mist">
                 {/* eslint-disable-next-line @next/next/no-img-element -- hand-made WebP sizes, used as they are */}
                 <img
-                  src={c.image.src}
-                  srcSet={c.image.srcSet}
+                  src={withBase(c.image.src)}
+                  srcSet={withBaseSrcSet(c.image.srcSet)}
                   sizes="(max-width: 640px) 78vw, 320px"
                   alt=""
                   loading="lazy"
@@ -127,7 +128,7 @@ export function TreatMenuView({ tabs, copy }: { tabs: TreatmentTab[]; copy: Home
               </a>
               <div className="flex flex-1 flex-col px-2 pt-4 pb-1.5">
                 <h3 className="font-aeonik text-[clamp(21px,1.6vw,25px)] leading-[1.15] font-normal tracking-[-0.02em] text-ndm-ink">
-                  <a href={c.href} className="hover:text-ndm-deep">
+                  <a href={withBase(c.href)} className="hover:text-ndm-deep">
                     {c.name}
                   </a>
                 </h3>

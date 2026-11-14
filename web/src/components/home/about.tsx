@@ -9,6 +9,7 @@ import { CountUp } from "@/components/ui/count-up";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { TwoTone } from "@/components/ui/two-tone";
 import type { HomeCopy } from "@/types/home";
+import { withBase } from "@/lib/base-path";
 
 type Pair = [back: StaticImageData, front: StaticImageData];
 const PHOTOS: { left: Pair; right: Pair } = { left: [clinicFront, treatmentRoom], right: [clinicLounge, reception] };
@@ -19,13 +20,13 @@ function PhotoPair({ pics, side }: { pics: Pair; side: "l" | "r" }) {
   return (
     <div aria-hidden="true" data-drift={side === "l" ? 60 : -60} className={`absolute top-[clamp(40px,5vw,84px)] hidden xl:block ${side === "l" ? "left-[clamp(0px,2.4vw,56px)]" : "right-[clamp(0px,2.4vw,56px)]"}`}>
       <div className={`${frame} size-[clamp(176px,14.5vw,236px)]`} style={{ transitionDelay: ".1s" }}>
-        <Image src={pics[0]} alt="" sizes="236px" className="h-full w-full object-cover" />
+        <Image src={withBase(pics[0])} alt="" sizes="236px" className="h-full w-full object-cover" />
       </div>
       <div
         className={`${frame} about-bob-2 -mt-[clamp(28px,2.6vw,44px)] size-[clamp(184px,15vw,248px)] border-4 border-ndm-paper ${side === "l" ? "ml-[clamp(72px,6vw,104px)]" : "-ml-[clamp(72px,6vw,104px)]"}`}
         style={{ transitionDelay: ".25s" }}
       >
-        <Image src={pics[1]} alt="" sizes="248px" className="h-full w-full object-cover" />
+        <Image src={withBase(pics[1])} alt="" sizes="248px" className="h-full w-full object-cover" />
       </div>
     </div>
   );

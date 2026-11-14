@@ -1,20 +1,16 @@
 import type { WPConcernImage } from "@/types/concern";
 
-/** A page of the Aptos design in the list of such pages (`ndm/v1/aptos-pages`). */
-export interface WPAptosSummary {
-  /** Its address on the site: "/<slug>". */
-  slug: string;
-  title: string;
-}
-
 /**
- * A page of the Aptos design as WordPress serves it (`ndm/v1/aptos-pages/<slug>`, see
- * cms/wp-content/mu-plugins/ndm-headless/includes/aptos.php): a post of the type "Aptos Pages" with the
- * fields of its edit screen. It holds no price: a row of `price_list` only says which WooCommerce
+ * The Aptos Thread Lift page as WordPress serves it (`ndm/v1/aptos-page`, see
+ * cms/wp-content/mu-plugins/ndm-headless/includes/aptos.php): a standard page with the template
+ * "Aptos Thread Lift page" and the fields of its edit screen. It holds no price: a row of `price_list` only says which WooCommerce
  * product the price list shows, and `cases` are entries of the "Before & After" post type.
  */
-export interface WPAptosPage extends WPAptosSummary {
+export interface WPAptosPage {
   id: number;
+  /** Its address on the site, always "aptos-thread-lift" (whatever the page's slug in the admin). */
+  slug: string;
+  title: string;
   modified: string;
   /** The wide header photo (the featured image). */
   hero: WPConcernImage | null;

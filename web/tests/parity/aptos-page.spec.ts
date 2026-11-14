@@ -1,7 +1,7 @@
 import { pageParity } from "./page";
 
 /* Aptos Thread Lift page: every block in page order, then the price group folded. The page's content is
-   the WordPress post "Aptos Thread Lift" (post type "Aptos Pages"): WordPress must be running. */
+   the WordPress page "Aptos Thread Lift" (template "Aptos Thread Lift page"): WordPress must be running. */
 const sec = (id: string) => `main > section#${id}`;
 const by = (id: string) => `main > section[aria-labelledby="${id}"]`;
 

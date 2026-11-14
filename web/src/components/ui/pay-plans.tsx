@@ -1,4 +1,5 @@
 import { AFFIRM_PREQUAL_URL, PAYMENT_LOGOS } from "@/config/specials";
+import { withBase } from "@/lib/base-path";
 
 const IconCard = () => (
   <svg width={20} height={20} viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -26,7 +27,7 @@ export function PayPlans({ className = "" }: { className?: string }) {
             <p className="mt-0.5 font-inter text-[13.5px] text-ndm-muted">Start today, pay later.</p>
           </div>
         </div>
-        <a href={AFFIRM_PREQUAL_URL} target="_blank" rel="noopener" className="btn btn-ink btn-sm hidden shrink-0 sm:inline-flex">
+        <a href={withBase(AFFIRM_PREQUAL_URL)} target="_blank" rel="noopener" className="btn btn-ink btn-sm hidden shrink-0 sm:inline-flex">
           {start}
         </a>
       </div>
@@ -35,13 +36,13 @@ export function PayPlans({ className = "" }: { className?: string }) {
           {PAYMENT_LOGOS.map((l) => (
             <li key={l.name} className="grid h-10 min-w-[84px] place-items-center rounded-[12px] bg-ndm-paper px-3.5 ring-1 ring-ndm-ink/[.06]">
               {/* eslint-disable-next-line @next/next/no-img-element -- the provider's own logo, from its CDN */}
-              <img src={l.src} alt={l.name} loading="lazy" className={`${l.height} w-auto`} />
+              <img src={withBase(l.src)} alt={l.name} loading="lazy" className={`${l.height} w-auto`} />
             </li>
           ))}
         </ul>
         <p className="font-inter text-[11.5px] leading-[1.45] text-ndm-muted sm:max-w-[32ch] sm:text-right">Subject to approval. Affirm: Canadian residents 19+, minimum $500 purchase.</p>
       </div>
-      <a href={AFFIRM_PREQUAL_URL} target="_blank" rel="noopener" className="btn btn-ink btn-sm btn-block mt-4 sm:hidden">
+      <a href={withBase(AFFIRM_PREQUAL_URL)} target="_blank" rel="noopener" className="btn btn-ink btn-sm btn-block mt-4 sm:hidden">
         {start}
       </a>
     </div>

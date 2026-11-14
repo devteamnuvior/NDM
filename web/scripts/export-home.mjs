@@ -9,12 +9,20 @@
    links of How it works, the monthly specials, the reviews and awards, the two clinics, the booking
    form, the shop's products, the journal posts and the reels.
 
-   One-time import (left alone when the home page already holds its words):
+   One-time import (left alone when the home page already holds its words; --fill-empty=start_panels adds
+   only the panels to a home page imported before they existed):
      node scripts/export-home.mjs | (cd ../cms && docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm home-import --images=/tmp/site) */
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const p = JSON.parse(readFileSync(fileURLToPath(new URL("../src/config/home-copy.json", import.meta.url)), "utf8"));
+
+/* the built-in panels of "Where would you like to start?" (START_PANELS in src/config/home-start.ts, plain JSON) */
+const startSource = readFileSync(fileURLToPath(new URL("../src/config/home-start.ts", import.meta.url)), "utf8");
+const startAt = startSource.indexOf("= [", startSource.indexOf("export const START_PANELS")) + 2;
+const panels = JSON.parse(startSource.slice(startAt, startSource.indexOf("\n];", startAt) + 2));
+/* the largest file of a panel's photo set, as a path under web/public: WordPress makes the smaller sizes */
+const largest = (image) => image.srcSet.split(",").map((s) => s.trim().split(/\s+/)).sort((a, b) => parseInt(b[1]) - parseInt(a[1]))[0][0].replace(/^\//, "");
 
 /* the edit screen lists an icon by its name with a capital: "Award" */
 const icon = (name) => name[0].toUpperCase() + name.slice(1);
@@ -36,6 +44,28 @@ const content = {
   about_highlight: p.about.highlight,
   about_stats: p.about.stats,
   ...head("start", p.start),
+  /* no product is picked: each treatment keeps being priced by its name, exactly as before */
+  start_panels: panels.map((x) => ({
+    title: x.title,
+    sub: x.sub,
+    heading: x.heading,
+    text: x.text,
+    image: { file: largest(x.image), alt: "" },
+    position: x.image.position,
+    position_open: x.image.positionOpen,
+    concerns: x.concerns.map((c) => ({
+      label: c.label,
+      title: c.title,
+      lede: c.lede,
+      options: c.options.map((o) => ({ price_source: "", name: o.name, what: o.what, link: o.href })),
+      facts: c.facts,
+      note: c.note ?? "",
+      more_label: c.more.label,
+      more_link: c.more.href,
+    })),
+    link_label: x.analysisHref ? "About the skin analysis" : "",
+    link: x.analysisHref ?? "",
+  })),
   ...head("treat", p.treatments),
   treat_text: p.treatments.text,
   ...head("aptos", p.aptos),

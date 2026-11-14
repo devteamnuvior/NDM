@@ -1,4 +1,5 @@
 import { CART_STORAGE_KEY } from "@/config/site";
+import { withBase } from "@/lib/base-path";
 
 /**
  * The cart. It is kept in this browser (localStorage), and it only remembers what was chosen: every
@@ -92,7 +93,7 @@ export async function checkCart(): Promise<void> {
   if (!asked.length) return;
   let answer: (Checked | null)[];
   try {
-    const response = await fetch("/api/cart/check", {
+    const response = await fetch(withBase("/api/cart/check"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ lines: asked.map(({ productId, variationId, name, label }) => ({ productId, variationId, name, label })) }),

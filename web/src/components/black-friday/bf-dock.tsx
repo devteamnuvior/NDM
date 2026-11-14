@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { BfTimer, useBfClock } from "@/components/black-friday/bf-timer";
 import { BF_SALE } from "@/config/black-friday";
 import { pageFromPathname, pagePath } from "@/lib/routes";
+import { withBase } from "@/lib/base-path";
 
 /**
  * The Black Friday tab at the bottom centre of every page; it opens a full-width panel with the countdown
@@ -71,7 +72,7 @@ export function BfDock() {
               <b className="font-semibold text-white">{BF_SALE.badge} selected treatments</b> at both Toronto clinics. Build your plan, then book a free consultation to claim it.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
-              <a href={pagePath("blackFridaySale")} className="btn bfd-cta">
+              <a href={withBase(pagePath("blackFridaySale"))} className="btn bfd-cta">
                 See the Black Friday deals
               </a>
             </div>

@@ -8,6 +8,7 @@ import { RevealSection } from "@/components/ui/reveal-section";
 import { TwoTone } from "@/components/ui/two-tone";
 import { HOME_COPY, PROCESS_LINKS } from "@/config/home";
 import type { HomeCopy } from "@/types/home";
+import { withBase } from "@/lib/base-path";
 
 const PHOTOS: StaticImageData[] = [visiaConsult, visiaScreen, mirrorCheck];
 
@@ -23,12 +24,12 @@ export function Process({ copy = HOME_COPY.process }: { copy?: HomeCopy["process
         {steps.map((s, i) => (
           <li key={i} className="rv proc-card flex flex-col rounded-[22px] bg-white p-3 ring-1 ring-ndm-ink/[.06]" style={{ transitionDelay: `${0.08 * i}s` }}>
             <div className="aspect-[4/3.2]">
-              <a href={s.href} aria-label={s.title} className="group relative block h-full w-full overflow-hidden rounded-[22px] bg-ndm-mist shadow-[0_18px_36px_-24px_rgba(11,15,19,.22)]">
-                <Image src={PHOTOS[i]} alt={s.photoAlt} fill sizes="(min-width: 768px) 34vw, 100vw" className="object-cover transition-transform duration-[1200ms] group-hover:scale-[1.04]" style={{ transitionTimingFunction: "var(--e-out)" }} />
+              <a href={withBase(s.href)} aria-label={s.title} className="group relative block h-full w-full overflow-hidden rounded-[22px] bg-ndm-mist shadow-[0_18px_36px_-24px_rgba(11,15,19,.22)]">
+                <Image src={withBase(PHOTOS[i])} alt={s.photoAlt} fill sizes="(min-width: 768px) 34vw, 100vw" className="object-cover transition-transform duration-[1200ms] group-hover:scale-[1.04]" style={{ transitionTimingFunction: "var(--e-out)" }} />
               </a>
             </div>
             <div className="px-2 pt-5">
-              <a href={s.href} className="group block">
+              <a href={withBase(s.href)} className="group block">
                 <span className="block font-inter text-[13px] tracking-[.14em] text-ndm-deep uppercase">
                   Step 0{i + 1} <span className="text-ndm-muted">/ 0{steps.length}</span>
                 </span>

@@ -11,6 +11,7 @@ import { PROCEDURES } from "@/config/navigation";
 import { ACTIONS, type PageId } from "@/config/routes";
 import { NAMICA_SPHERE_SRC } from "@/config/site";
 import { pageLink, resolveLabel } from "@/lib/routes";
+import { withBase } from "@/lib/base-path";
 
 export interface MenuPanelProps {
   open: boolean;
@@ -61,8 +62,8 @@ function AptosCard({ onLink, eager }: { onLink: () => void; eager?: boolean }) {
   return (
     <SiteLink to={pageLink("aptos")} onClick={onLink} className="namica group relative flex min-h-[380px] flex-col justify-end overflow-hidden rounded-[16px] p-5 text-white">
       {/* eslint-disable @next/next/no-img-element -- remote badge art, shown at a fixed small size */}
-      <img src={NAMICA_SPHERE_SRC} alt="" aria-hidden="true" loading={eager ? "eager" : "lazy"} width={240} height={240} className="namica-sphere pointer-events-none absolute -top-10 -right-8 w-[190px] opacity-90 transition-transform duration-700 group-hover:scale-105" />
-      <img src={NAMICA_SPHERE_SRC} alt="" aria-hidden="true" loading={eager ? "eager" : "lazy"} width={240} height={240} className="namica-sphere namica-sphere-2 pointer-events-none absolute top-[18%] left-[16%] w-[30px] opacity-70 blur-[1px]" />
+      <img src={withBase(NAMICA_SPHERE_SRC)} alt="" aria-hidden="true" loading={eager ? "eager" : "lazy"} width={240} height={240} className="namica-sphere pointer-events-none absolute -top-10 -right-8 w-[190px] opacity-90 transition-transform duration-700 group-hover:scale-105" />
+      <img src={withBase(NAMICA_SPHERE_SRC)} alt="" aria-hidden="true" loading={eager ? "eager" : "lazy"} width={240} height={240} className="namica-sphere namica-sphere-2 pointer-events-none absolute top-[18%] left-[16%] w-[30px] opacity-70 blur-[1px]" />
       {/* eslint-enable @next/next/no-img-element */}
       <span className="relative block font-mont text-[11px] tracking-[.14em] text-[#C9C2F4] uppercase">NAMICA technology</span>
       <span className="relative mt-2 block font-aeonik text-[22px] leading-[1.2]">Biostimulation threads</span>
@@ -156,8 +157,8 @@ export function MegaMenu({ open, current, onLink, eager }: MenuPanelProps) {
           )}
         </div>
         {isAptos && <AptosCard onLink={onLink} eager={eager} />}
-        <a href={ACTIONS.book} onClick={onLink} className="group relative min-h-[380px] overflow-hidden rounded-[16px] text-white">
-          <Image src={clinicPhoto} alt="" fill loading={eager ? "eager" : "lazy"} sizes="(min-width: 1536px) 420px, 340px" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+        <a href={withBase(ACTIONS.book)} onClick={onLink} className="group relative min-h-[380px] overflow-hidden rounded-[16px] text-white">
+          <Image src={withBase(clinicPhoto)} alt="" fill loading={eager ? "eager" : "lazy"} sizes="(min-width: 1536px) 420px, 340px" className="object-cover transition-transform duration-700 group-hover:scale-105" />
           <span className="absolute inset-0 bg-linear-to-t/srgb from-[#0B0F13]/85 via-[#0B0F13]/25 to-transparent" />
           <span className="absolute inset-x-0 bottom-0 p-5">
             <span className="block font-mont text-[11px] tracking-[.14em] text-white/75 uppercase">Not sure where to start?</span>

@@ -7,6 +7,7 @@ import { useReveal } from "@/hooks/use-reveal";
 import type { PriceSpecialView } from "@/lib/pricing-view";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
+import { withBase } from "@/lib/base-path";
 
 interface PriceSpecialsProps {
   specials: PriceSpecialView[];
@@ -66,7 +67,7 @@ export function PriceSpecials({ specials, sub, note }: PriceSpecialsProps) {
             </span>
             <span className="mt-2 block font-inter text-[15px] leading-[1.3] font-medium text-ndm-ink">{s.name}</span>
             <span className="mt-auto flex flex-wrap items-baseline gap-x-2 gap-y-1 pt-4">
-              <a href={`#${s.target}`} onClick={(e) => go(e, s.target)} className="btn btn-buy h-9 px-4 text-[13px]">
+              <a href={withBase(`#${s.target}`)} onClick={(e) => go(e, s.target)} className="btn btn-buy h-9 px-4 text-[13px]">
                 Buy
               </a>
               <span className="font-inter text-[12.5px] text-ndm-muted">{note}</span>

@@ -359,6 +359,9 @@ export const APTOS: TreatmentPage = {
 };
 
 /** The price-list entry this page sells: category id, treatment, and the one area the page covers. */
+/** The Aptos page's address on the site, always (WordPress serves one Aptos page). */
+export const APTOS_SLUG = "aptos-thread-lift";
+
 export const APTOS_PRICE = { category: "aptos-thread-method", item: "Aptos", area: /^mid face$/i };
 
 /** Pages of the Aptos design with a built-in copy, shown when WordPress cannot be reached. */

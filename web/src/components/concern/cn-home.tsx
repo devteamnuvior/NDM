@@ -5,6 +5,7 @@ import { RevealSection } from "@/components/ui/reveal-section";
 import { TwoTone } from "@/components/ui/two-tone";
 import { SHOP_URL } from "@/config/shop";
 import type { ConcernPage } from "@/types/concern";
+import { withBase } from "@/lib/base-path";
 
 const TINTS = ["cn-hc-blue", "cn-hc-peach", "cn-hc-mist"];
 /** Product photos, served by the shop as in the prototype. */
@@ -48,7 +49,7 @@ export function CnHome({ home, number }: { home: ConcernPage["home"]; number: st
                 <span aria-hidden="true" className="cn-hc-orb" />
                 {h.product ? (
                   /* eslint-disable-next-line @next/next/no-img-element -- product photo served by the shop */
-                  <img src={/^https?:/.test(h.product.img) ? h.product.img : SHOP_PHOTOS + h.product.img} alt={`${h.product.name}, ${h.product.size}`} loading="lazy" decoding="async" className="cn-hc-img relative h-[78%] w-auto object-contain" />
+                  <img src={withBase(/^https?:/.test(h.product.img) ? h.product.img : SHOP_PHOTOS + h.product.img)} alt={`${h.product.name}, ${h.product.size}`} loading="lazy" decoding="async" className="cn-hc-img relative h-[78%] w-auto object-contain" />
                 ) : (
                   <span aria-hidden="true" className="cn-hc-sun relative grid size-[44%] place-items-center rounded-full">
                     <svg viewBox="0 0 24 24" className="size-[46%]" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -65,7 +66,7 @@ export function CnHome({ home, number }: { home: ConcernPage["home"]; number: st
                 <h3 className="font-aeonik text-[clamp(22px,1.9vw,26px)] leading-[1.15] font-normal tracking-[-0.015em] text-ndm-ink">{h.title}</h3>
                 <p className="mt-2 flex-1 font-inter text-[14.5px] leading-[1.6] text-ndm-ink/75">{h.text}</p>
                 {h.product ? (
-                  <a href={h.product.href} target="_blank" rel="noopener" className="mt-5 flex items-center justify-between gap-3 rounded-[14px] bg-ndm-paper px-4 py-3 transition-colors hover:bg-ndm-mist">
+                  <a href={withBase(h.product.href)} target="_blank" rel="noopener" className="mt-5 flex items-center justify-between gap-3 rounded-[14px] bg-ndm-paper px-4 py-3 transition-colors hover:bg-ndm-mist">
                     <span className="min-w-0">
                       <span className="block font-inter text-[11.5px] tracking-[.14em] text-ndm-muted uppercase">In our shop</span>
                       <span className="mt-0.5 block truncate font-inter text-[14.5px] font-medium text-ndm-ink capitalize">

@@ -18,6 +18,7 @@ import {
 } from "@/config/booking";
 import { CLINICS } from "@/config/site";
 import { tel } from "@/lib/routes";
+import { withBase } from "@/lib/base-path";
 
 /* Note on borders: the prototype writes "border-ndm-ink/12" and "border-white/12" on a few elements, an
    opacity step its Tailwind 3 does not have, so those classes did nothing there and the borders took the
@@ -365,7 +366,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
     setBusy(true);
     let problem = `Your request could not be sent right now. Please try again in a moment, or call ${clinicPhone}.`;
     try {
-      const answer = await fetch("/api/booking", {
+      const answer = await fetch(withBase("/api/booking"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -440,7 +441,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
             </p>
             <p className="font-inter text-[13px] leading-[1.5] text-ndm-muted">
               Need to change it? Call{" "}
-              <a href={tel(clinicPhone)} className="font-semibold text-ndm-ink hover:underline">
+              <a href={withBase(tel(clinicPhone))} className="font-semibold text-ndm-ink hover:underline">
                 {clinicPhone}
               </a>{" "}
               at least {BOOK_NOTICE} before.
@@ -675,7 +676,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
         <p className="mt-auto pt-5 font-inter text-[12.5px] leading-[1.5] text-white/65">
           Prefer to talk? Call{" "}
           {CLINICS.map((c) => (
-            <a key={c.id} href={tel(c.phone)} className="block font-semibold text-white hover:underline">
+            <a key={c.id} href={withBase(tel(c.phone))} className="block font-semibold text-white hover:underline">
               {c.name} {c.phone}
             </a>
           ))}

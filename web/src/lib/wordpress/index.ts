@@ -8,7 +8,7 @@ import "server-only";
  * (REST path, fields, cached readers built on `content.ts`), and export it below.
  */
 export { getAboutPage } from "./about";
-export { getAptosList, getAptosPage } from "./aptos";
+export { getAptosPage } from "./aptos";
 export { getBeforeAfter } from "./before-after";
 export { getBlogList, getBlogPost } from "./blog";
 export { saveBookingRequest, type BookingRequestInput } from "./bookings";

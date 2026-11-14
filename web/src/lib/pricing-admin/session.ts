@@ -150,6 +150,17 @@ export function wordpressOrigin(): string {
   return new URL(explicit || getWordPressConfig().apiUrl).origin;
 }
 
+/**
+ * WordPress's own address, folder included, without a trailing slash: "https://example.com/react" when
+ * it is installed in a folder (its admin is then /react/wp-admin). From WORDPRESS_PUBLIC_URL, else the
+ * REST API address without its "/wp-json" ending.
+ */
+export function wordpressBase(): string {
+  const explicit = process.env.WORDPRESS_PUBLIC_URL?.trim();
+  const url = new URL(explicit || getWordPressConfig().apiUrl.replace(/\/wp-json\/?$/, ""));
+  return `${url.origin}${url.pathname.replace(/\/+$/, "")}`;
+}
+
 /** This site's own address: SITE_URL, or in development the address of the request. Null when unknown. */
 export function siteOrigin(request: Request): string | null {
   const explicit = process.env.SITE_URL?.trim();

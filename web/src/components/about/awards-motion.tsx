@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { AWARD_BADGES } from "@/components/reviews/award-badges";
+import { withBase } from "@/lib/base-path";
 
 const YEARS = [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026];
 const LAST = YEARS.length + 3;
@@ -60,7 +61,7 @@ export function AwardsMotion({ className = "" }: { className?: string }) {
       <ul className="aw-row" role="list" aria-label="Top Choice Award, every year from 2019 to 2026">
         {YEARS.map((y, i) => (
           <li key={y} className={`aw-b ${step > i ? "on" : ""}`}>
-            <Image src={AWARD_BADGES[y]} alt={`Top Choice Award ${y}`} sizes="80px" draggable={false} />
+            <Image src={withBase(AWARD_BADGES[y])} alt={`Top Choice Award ${y}`} sizes="80px" draggable={false} />
             <span>{y}</span>
           </li>
         ))}

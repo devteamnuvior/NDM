@@ -6,6 +6,7 @@ import { IconArrow } from "@/components/ui/icons";
 import { ACTIONS } from "@/config/routes";
 import type { StartConcern, StartPanel } from "@/config/home-start";
 import { useMedia } from "@/hooks/use-media";
+import { withBase, withBaseSrcSet } from "@/lib/base-path";
 
 const IconPlus = () => (
   <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
@@ -46,7 +47,7 @@ function ConcernSheet({ concern, panelTitle, onBack, sheetRef }: { concern: Star
           const [label, value] = priceParts(o.price);
           return (
             <li key={o.name}>
-              <a href={o.href} className="flex items-center gap-4 py-[11px] pr-0.5 pl-0.5 text-ndm-ink">
+              <a href={withBase(o.href)} className="flex items-center gap-4 py-[11px] pr-0.5 pl-0.5 text-ndm-ink">
                 <span className="grid min-w-0 flex-1 gap-[3px]">
                   <b className="font-inter text-[15px] leading-[1.3] font-semibold transition-colors">{o.name}</b>
                   <small className="font-inter text-[13px] leading-[1.4] text-ndm-muted">{o.what}</small>
@@ -76,9 +77,11 @@ function ConcernSheet({ concern, panelTitle, onBack, sheetRef }: { concern: Star
         <Button href={ACTIONS.book} v="book" hot>
           Book Free Consultation
         </Button>
-        <a href={concern.more.href} className="inline-flex items-center gap-2 font-inter text-[14px] font-semibold text-ndm-deep hover:underline">
-          {concern.more.label} <IconArrow />
-        </a>
+        {concern.more.label && (
+          <a href={withBase(concern.more.href)} className="inline-flex items-center gap-2 font-inter text-[14px] font-semibold text-ndm-deep hover:underline">
+            {concern.more.label} <IconArrow />
+          </a>
+        )}
       </div>
     </div>
   );
@@ -181,7 +184,7 @@ export function StartPanels({ panels }: { panels: StartPanel[] }) {
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- hand-made WebP sizes, used as they are */}
-            <img src={p.image.src} srcSet={p.image.srcSet} sizes="(max-width: 899px) 100vw, 52vw" alt="" loading="lazy" decoding="async" />
+            <img src={withBase(p.image.src)} srcSet={withBaseSrcSet(p.image.srcSet)} sizes="(max-width: 899px) 100vw, 52vw" alt="" loading="lazy" decoding="async" />
             <button type="button" className="st-h" aria-expanded={on} aria-controls={`stc-${p.id}`} onClick={() => openPanel(i)} tabIndex={on ? -1 : 0}>
               <span className="st-plus" aria-hidden="true">
                 <IconPlus />
@@ -198,7 +201,7 @@ export function StartPanels({ panels }: { panels: StartPanel[] }) {
                 <ul className="st-chips mt-[18px] flex flex-wrap gap-2 font-inter" role="list">
                   {p.concerns.map((c) => (
                     <li key={c.id}>
-                      <a href={c.more.href} onClick={(e) => pickConcern(e, c)} aria-controls={c.id} aria-expanded={sheet === c.id}>
+                      <a href={withBase(c.more.href)} onClick={(e) => pickConcern(e, c)} aria-controls={c.id} aria-expanded={sheet === c.id}>
                         {c.label}
                         <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                           <path d="M3 8h10M9 4l4 4-4 4" />
@@ -212,8 +215,8 @@ export function StartPanels({ panels }: { panels: StartPanel[] }) {
                   <Button href={ACTIONS.book} v="book" hot>
                     Book Free Consultation
                   </Button>
-                  <a href={p.analysisHref} className="inline-flex items-center gap-2 font-inter text-[14.5px] font-medium text-white hover:underline">
-                    About the skin analysis <IconArrow />
+                  <a href={withBase(p.analysisHref)} className="inline-flex items-center gap-2 font-inter text-[14.5px] font-medium text-white hover:underline">
+                    {p.analysisLabel || "About the skin analysis"} <IconArrow />
                   </a>
                 </div>
               )}

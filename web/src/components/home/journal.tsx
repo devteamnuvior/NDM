@@ -5,6 +5,7 @@ import { TwoTone } from "@/components/ui/two-tone";
 import { POSTS, type Post } from "@/config/social";
 import { pagePath } from "@/lib/routes";
 import type { HomeCopy } from "@/types/home";
+import { withBase } from "@/lib/base-path";
 
 /* post photos come from their own CDN, already sized, as in the prototype */
 /* eslint-disable @next/next/no-img-element */
@@ -41,9 +42,9 @@ export function Journal({ copy }: { copy: HomeCopy["journal"] }) {
           />
         </div>
         <div className="mt-12 grid gap-10 md:mt-14 lg:grid-cols-2 lg:gap-[60px]">
-          <a href={lead.href} className="rv group block rounded-[20px] bg-ndm-mist p-4 md:p-5" style={{ transitionDelay: ".1s" }}>
+          <a href={withBase(lead.href)} className="rv group block rounded-[20px] bg-ndm-mist p-4 md:p-5" style={{ transitionDelay: ".1s" }}>
             <span className="block aspect-[590/385] overflow-hidden rounded-[10px]">
-              <img src={lead.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" style={{ objectPosition: lead.position, transitionTimingFunction: "var(--e-out)" }} />
+              <img src={withBase(lead.image)} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" style={{ objectPosition: lead.position, transitionTimingFunction: "var(--e-out)" }} />
             </span>
             <span className="mt-5 block">
               <PostMeta p={lead} />
@@ -53,9 +54,9 @@ export function Journal({ copy }: { copy: HomeCopy["journal"] }) {
           </a>
           <div className="flex flex-col gap-5">
             {rest.map((p, i) => (
-              <a key={p.href} href={p.href} className="rv group grid grid-cols-[120px_1fr] items-center gap-4 sm:grid-cols-[203px_1fr] sm:gap-6" style={{ transitionDelay: `${0.14 + i * 0.08}s` }}>
+              <a key={p.href} href={withBase(p.href)} className="rv group grid grid-cols-[120px_1fr] items-center gap-4 sm:grid-cols-[203px_1fr] sm:gap-6" style={{ transitionDelay: `${0.14 + i * 0.08}s` }}>
                 <span className="block h-[110px] overflow-hidden rounded-[10px] sm:h-[164px]">
-                  <img src={p.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.06]" style={{ objectPosition: p.position, transitionTimingFunction: "var(--e-out)" }} />
+                  <img src={withBase(p.image)} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.06]" style={{ objectPosition: p.position, transitionTimingFunction: "var(--e-out)" }} />
                 </span>
                 <span>
                   <PostMeta p={p} />
@@ -64,7 +65,7 @@ export function Journal({ copy }: { copy: HomeCopy["journal"] }) {
                 </span>
               </a>
             ))}
-            <a href={pagePath("blog")} className="rv group mt-auto inline-flex items-center gap-2 self-start font-inter text-[15px] text-ndm-ink hover:text-ndm-deep" style={{ transitionDelay: ".4s" }}>
+            <a href={withBase(pagePath("blog"))} className="rv group mt-auto inline-flex items-center gap-2 self-start font-inter text-[15px] text-ndm-ink hover:text-ndm-deep" style={{ transitionDelay: ".4s" }}>
               View all articles <IconArrow className="transition-transform group-hover:translate-x-1" />
             </a>
           </div>

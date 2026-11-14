@@ -3,6 +3,7 @@
 import { createContext, use, useRef, type ReactNode } from "react";
 import { useFilm, type Film } from "@/hooks/use-film";
 import { useOnScroll } from "@/hooks/use-on-scroll";
+import { withBase } from "@/lib/base-path";
 
 const HeroFilmContext = createContext<Film | null>(null);
 
@@ -46,9 +47,9 @@ export function HeroFilm({ poster, mobile, desktop }: { poster: string; mobile: 
   const { video } = useHeroFilm();
   return (
     <div data-hero-media className="hf-media" aria-hidden="true">
-      <video ref={video} muted loop playsInline preload="metadata" poster={poster}>
-        <source src={mobile} type="video/mp4" media="(max-width: 760px)" />
-        <source src={desktop} type="video/mp4" />
+      <video ref={video} muted loop playsInline preload="metadata" poster={withBase(poster)}>
+        <source src={withBase(mobile)} type="video/mp4" media="(max-width: 760px)" />
+        <source src={withBase(desktop)} type="video/mp4" />
       </video>
     </div>
   );

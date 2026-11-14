@@ -2,6 +2,7 @@
 
 import Image, { type StaticImageData } from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { withBase } from "@/lib/base-path";
 
 interface VisitSlidesProps {
   images: StaticImageData[];
@@ -46,7 +47,7 @@ export function VisitSlides({ images, alt, index }: VisitSlidesProps) {
   return (
     <div ref={box} className="absolute inset-0">
       {images.map((src, j) => (
-        <Image key={src.src} src={src} alt={j === k ? alt : ""} fill sizes="(min-width: 1024px) 50vw, 100vw" className={`visit-slide object-cover ${j === k ? "is-on" : ""}`} />
+        <Image key={src.src} src={withBase(src)} alt={j === k ? alt : ""} fill sizes="(min-width: 1024px) 50vw, 100vw" className={`visit-slide object-cover ${j === k ? "is-on" : ""}`} />
       ))}
       <span aria-hidden="true" className="absolute right-3 bottom-3 flex gap-1 rounded-full bg-black/25 px-2 py-1.5 backdrop-blur-[6px]">
         {images.map((src, j) => (

@@ -9,6 +9,7 @@ import { TwoTone } from "@/components/ui/two-tone";
 import { CLINICS } from "@/config/site";
 import { useReveal } from "@/hooks/use-reveal";
 import { tel } from "@/lib/routes";
+import { withBase } from "@/lib/base-path";
 
 interface FaqProps {
   items: [question: string, answer: string][];
@@ -40,7 +41,7 @@ export function Faq({ items, lead = "Questions,", strong = "answered honestly", 
           </p>
           <div className="rv mt-8 rounded-[20px] border border-ndm-ink/[.08] bg-white p-6 shadow-[0_24px_50px_-38px_rgba(27,36,43,.35)]" style={{ transitionDelay: ".14s" }}>
             <div className="flex items-center gap-3">
-              <Image src={careTeam} alt="" sizes="44px" className="size-11 shrink-0 rounded-full object-cover object-top" />
+              <Image src={withBase(careTeam)} alt="" sizes="44px" className="size-11 shrink-0 rounded-full object-cover object-top" />
               <span>
                 <span className="block font-inter text-[19px] font-medium tracking-[-0.02em] text-ndm-ink">Still unsure?</span>
                 <span className="block font-inter text-[13px] text-ndm-muted">Talk to our care team</span>

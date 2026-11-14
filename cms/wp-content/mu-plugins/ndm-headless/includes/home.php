@@ -199,8 +199,71 @@ function ndm_headless_home_schema() {
 		array(
 			'id'     => 'start',
 			'title'  => 'Where To Start',
-			'help'   => 'The heading above the two photo panels. The panels, their concerns and treatments are the site\'s; every price in them comes from WooCommerce.',
-			'fields' => $head( 'start' ),
+			'help'   => 'The heading and the photo panels below it. Each panel opens to show its concerns; each concern opens a card with the treatments that may help. Every price in a card comes from WooCommerce.',
+			'fields' => array_merge(
+				$head( 'start' ),
+				array(
+					array(
+						'key'    => 'start_panels',
+						'label'  => 'Panels',
+						'type'   => 'repeater',
+						'add'    => 'Add a panel',
+						'title'  => 'title',
+						'help'   => 'Four fit the row, in this order. No panel: the site shows its built-in panels.',
+						'fields' => array(
+							array( 'key' => 'title', 'label' => 'Title', 'type' => 'text', 'help' => 'On the panel, for example "Skin".' ),
+							array( 'key' => 'sub', 'label' => 'Line under the title', 'type' => 'text', 'help' => 'For example "6 concerns" or "Free skin analysis".' ),
+							array( 'key' => 'heading', 'label' => 'Heading when open', 'type' => 'text', 'help' => 'Empty: the title.' ),
+							array( 'key' => 'text', 'label' => 'Text when open', 'type' => 'textarea' ),
+							array( 'key' => 'image', 'label' => 'Photo', 'type' => 'image', 'help' => 'A tall photo works best. A panel without a photo is left out.' ),
+							array( 'key' => 'position', 'label' => 'Photo focus, closed', 'type' => 'text', 'help' => 'Which part of the photo stays in view while the panel is narrow, for example "center 18%". Empty: the middle.' ),
+							array( 'key' => 'position_open', 'label' => 'Photo focus, open', 'type' => 'text', 'help' => 'The same while the panel is open. Empty: as closed.' ),
+							array(
+								'key'    => 'concerns',
+								'label'  => 'Concerns',
+								'type'   => 'repeater',
+								'add'    => 'Add a concern',
+								'title'  => 'label',
+								'help'   => 'The buttons of the open panel; each opens a card. A panel without concerns shows Book Free Consultation and the link below instead.',
+								'fields' => array(
+									array( 'key' => 'label', 'label' => 'Button', 'type' => 'text', 'help' => 'For example "Acne scars".' ),
+									array( 'key' => 'title', 'label' => 'Card title', 'type' => 'text', 'help' => 'Empty: the button\'s words.' ),
+									array( 'key' => 'lede', 'label' => 'Card text', 'type' => 'textarea' ),
+									array(
+										'key'    => 'options',
+										'label'  => 'Treatments',
+										'type'   => 'repeater',
+										'add'    => 'Add a treatment',
+										'title'  => 'name',
+										'fields' => array(
+											array( 'key' => 'price_source', 'label' => 'Product (WooCommerce)', 'type' => 'product', 'help' => 'Search the price list and pick the product (or a whole category): its lowest price shows as "From" and can only be changed in the price manager. Empty: priced by the name below when the price list has it, else "At consultation".' ),
+											array( 'key' => 'name', 'label' => 'Name', 'type' => 'text', 'help' => 'Empty: the product\'s name.' ),
+											array( 'key' => 'what', 'label' => 'Line under it', 'type' => 'text', 'help' => 'For example "Can restore volume right away". Use qualified language ("may", "can").' ),
+											array( 'key' => 'link', 'label' => 'Link', 'type' => 'text', 'help' => 'For example "/aptos-thread-lift". Empty: the page with this name, once it exists.' ),
+										),
+									),
+									array(
+										'key'    => 'facts',
+										'label'  => 'Facts',
+										'type'   => 'repeater',
+										'add'    => 'Add a fact',
+										'title'  => 'term',
+										'fields' => array(
+											array( 'key' => 'term', 'label' => 'Label', 'type' => 'text', 'help' => 'For example "Downtime".' ),
+											array( 'key' => 'text', 'label' => 'Text', 'type' => 'text' ),
+										),
+									),
+									array( 'key' => 'note', 'label' => 'Small print', 'type' => 'textarea', 'help' => 'For example about prescription treatments. Never name a prescription drug beside a benefit.' ),
+									array( 'key' => 'more_label', 'label' => 'Link at the bottom: words', 'type' => 'text', 'help' => 'For example "Compare these options".' ),
+									array( 'key' => 'more_link', 'label' => 'Link at the bottom: address', 'type' => 'text', 'help' => 'For example "/wrinkles-fine-lines".' ),
+								),
+							),
+							array( 'key' => 'link_label', 'label' => 'Link under the text (a panel without concerns): words', 'type' => 'text', 'help' => 'For example "About the skin analysis".' ),
+							array( 'key' => 'link', 'label' => 'Link under the text (a panel without concerns): address', 'type' => 'text' ),
+						),
+					),
+				)
+			),
 		),
 		array(
 			'id'     => 'treatments',
@@ -414,35 +477,6 @@ function ndm_headless_home_content( $post_id ) {
 
 /*
  * ---------------------------------------------------------------------------------------------
- * The former post type, registered until the migration is checked (then removed)
- * ---------------------------------------------------------------------------------------------
- */
-
-/**
- * Keeps the former "Home Page" post type visible in the admin (read only in practice) until its
- * post was moved with `wp ndm home-migrate` and the site was checked.
- */
-function ndm_headless_home_register_legacy() {
-	register_post_type(
-		NDM_HOME_LEGACY_TYPE,
-		array(
-			'labels'       => array(
-				'name'          => 'Home Page (before migration)',
-				'singular_name' => 'Home Page (before migration)',
-			),
-			'public'       => false,
-			'show_ui'      => true,
-			'show_in_menu' => true,
-			'capabilities' => array( 'create_posts' => 'do_not_allow' ),
-			'map_meta_cap' => true,
-			'supports'     => array( 'title' ),
-		)
-	);
-}
-add_action( 'init', 'ndm_headless_home_register_legacy' );
-
-/*
- * ---------------------------------------------------------------------------------------------
  * The edit screen (the home page only)
  * ---------------------------------------------------------------------------------------------
  */
@@ -586,12 +620,54 @@ function ndm_headless_home_save( $post_id ) {
 		return;
 	}
 
+	// PHP keeps only the first max_input_vars fields of a form and drops the rest without a word. A form
+	// that reached the limit may have lost some of its rows: keep the saved words rather than lose them.
+	$limit = (int) ini_get( 'max_input_vars' );
+	if ( $limit > 0 && ndm_headless_home_count_inputs( $_POST ) >= $limit ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified above.
+		add_filter(
+			'redirect_post_location',
+			function ( $location ) {
+				return add_query_arg( 'ndm_home_cut', 1, $location );
+			}
+		);
+		return;
+	}
+
 	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- every field is cleaned by its type in ndm_headless_home_clean_all().
 	$input = isset( $_POST['ndm_home'] ) ? wp_unslash( $_POST['ndm_home'] ) : array();
 
 	update_post_meta( $post_id, NDM_HOME_META, wp_slash( ndm_headless_home_clean_all( $input ) ) );
 }
 add_action( 'save_post_page', 'ndm_headless_home_save' );
+
+/**
+ * How many fields a form sent, counted as PHP counts them for max_input_vars: one per name=value pair
+ * (`a[b][c]=x` is one), so only the values are counted, not the lists that hold them.
+ *
+ * @param array $values Form values.
+ * @return int
+ */
+function ndm_headless_home_count_inputs( $values ) {
+	$count = 0;
+	foreach ( $values as $value ) {
+		$count += is_array( $value ) ? ndm_headless_home_count_inputs( $value ) : 1;
+	}
+
+	return $count;
+}
+
+/**
+ * After a save whose words were kept because the form was too long: say so, and how to fix it.
+ */
+function ndm_headless_home_cut_notice() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- only shows a message.
+	if ( empty( $_GET['ndm_home_cut'] ) || ! ndm_headless_home_is_front( get_post() ) ) {
+		return;
+	}
+
+	echo '<div class="notice notice-error"><p><strong>The home page\'s words were not saved.</strong> The page has more fields than this server accepts in one save (PHP\'s max_input_vars is ' . esc_html( (string) ini_get( 'max_input_vars' ) ) . '), so some could have been lost; the words as they were before are kept. Remove a few rows, or ask for max_input_vars to be raised, and save again.</p></div>';
+}
+add_action( 'admin_notices', 'ndm_headless_home_cut_notice' );
 
 /**
  * A warning wherever the home page is set up (Dashboard, Pages, Settings > Reading and the page itself)
@@ -732,6 +808,13 @@ function ndm_headless_home_answer( $post ) {
 
 	foreach ( ndm_headless_home_schema() as $group ) {
 		$content = ndm_headless_concern_expand( $group['fields'], $content );
+	}
+
+	// The panels' photos fill a tall panel at many widths: the site picks a size from WordPress's own.
+	foreach ( $content['start_panels'] as $i => $panel ) {
+		if ( ! empty( $panel['image']['id'] ) ) {
+			$content['start_panels'][ $i ]['image']['srcset'] = (string) wp_get_attachment_image_srcset( $panel['image']['id'], 'full' );
+		}
 	}
 
 	return array(
@@ -958,9 +1041,16 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	 * --images=<dir>
 	 * : Folder the photo paths are relative to.
 	 *
+	 * [--fill-empty=<fields>]
+	 * : When the home page already holds its words, fill in only these fields (comma separated keys of
+	 *   ndm_headless_home_schema(), for example "start_panels"), and only where they are empty: for a box
+	 *   added after the first import. Nothing typed is ever replaced; a field an editor emptied on purpose
+	 *   is left alone unless it is named here.
+	 *
 	 * ## EXAMPLES
 	 *
 	 *     node ../web/scripts/export-home.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm home-import --images=/tmp/site
+	 *     node ../web/scripts/export-home.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm home-import --images=/tmp/site --fill-empty=start_panels
 	 */
 	WP_CLI::add_command(
 		'ndm home-import',
@@ -976,7 +1066,12 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			}
 
 			$current = ndm_headless_home_page_id();
-			if ( $current && metadata_exists( 'post', $current, NDM_HOME_META ) ) {
+			$fill    = isset( $assoc_args['fill-empty'] ) ? array_filter( array_map( 'trim', explode( ',', (string) $assoc_args['fill-empty'] ) ) ) : array();
+			$unknown = array_diff( $fill, array_keys( ndm_headless_home_clean_all( array() ) ) );
+			if ( $unknown ) {
+				WP_CLI::error( 'Unknown fields for --fill-empty: ' . implode( ', ', $unknown ) . '.' );
+			}
+			if ( $current && metadata_exists( 'post', $current, NDM_HOME_META ) && ! $fill ) {
 				WP_CLI::log( "Kept: the home page ({$current}) already holds its words." );
 				return;
 			}
@@ -991,9 +1086,29 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 				$content = ndm_headless_aptos_import_images( $group['fields'], $content, $dir );
 			}
 
+			$incoming = ndm_headless_home_clean_all( $content );
+
+			if ( $fill && $current && metadata_exists( 'post', $current, NDM_HOME_META ) ) {
+				$stored = ndm_headless_home_content( $current );
+				$filled = array();
+				foreach ( $fill as $key ) {
+					if ( empty( $stored[ $key ] ) && ! empty( $incoming[ $key ] ) ) {
+						$stored[ $key ] = $incoming[ $key ];
+						$filled[]       = $key;
+					}
+				}
+				if ( ! $filled ) {
+					WP_CLI::success( "Nothing to fill: those fields of the home page ({$current}) already have words." );
+					return;
+				}
+				ndm_headless_home_cli_store( $current, $stored );
+				WP_CLI::success( "Filled the empty fields of the home page ({$current}): " . implode( ', ', $filled ) . '.' );
+				return;
+			}
+
 			$title = isset( $page['title'] ) && '' !== trim( (string) $page['title'] ) ? trim( (string) $page['title'] ) : 'Home';
 			$id    = ndm_headless_home_cli_target( $title, false );
-			ndm_headless_home_cli_store( $id, ndm_headless_home_clean_all( $content ) );
+			ndm_headless_home_cli_store( $id, $incoming );
 
 			WP_CLI::success( "Set up: the home page ({$id})." );
 		}

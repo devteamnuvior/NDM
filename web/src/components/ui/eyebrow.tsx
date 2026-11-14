@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import { withBase } from "@/lib/base-path";
 
 interface EyebrowProps {
   children: ReactNode;
@@ -16,7 +17,7 @@ export function Eyebrow({ children, dark, amber, className = "", style }: Eyebro
     <p className={`eyebrow ${amber ? "is-amber" : ""} font-mont ${dark ? "is-dark" : ""} ${className}`} style={style}>
       <span className="eyebrow-mark" aria-hidden="true">
         {/* eslint-disable-next-line @next/next/no-img-element -- small SVG mark */}
-        <img src="/assets/icons/logo-mark.svg" alt="" width={20} height={20} />
+        <img src={withBase("/assets/icons/logo-mark.svg")} alt="" width={20} height={20} />
       </span>
       {children}
     </p>

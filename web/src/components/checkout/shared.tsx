@@ -8,6 +8,7 @@ import { CHECKOUT_STEPS, HST } from "@/config/checkout";
 import { useCart } from "@/hooks/use-cart";
 import { money, type CartLine } from "@/lib/cart";
 import { pagePath } from "@/lib/routes";
+import { withBase } from "@/lib/base-path";
 
 /** The pieces the cart, checkout and confirmation pages share. Ported from the prototype's src/cart-ui.jsx. */
 
@@ -72,7 +73,7 @@ export function CheckoutSteps({ at, onStep }: { at: number; onStep?: (step: numb
           <Fragment key={t}>
             <li aria-current={now ? "step" : undefined}>
               {done && i === 0 ? (
-                <a href={pagePath("cart")} className="flex items-center gap-2 underline-offset-4 hover:underline">
+                <a href={withBase(pagePath("cart"))} className="flex items-center gap-2 underline-offset-4 hover:underline">
                   {dot}
                   {label}
                 </a>

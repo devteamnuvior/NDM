@@ -9,6 +9,7 @@ import { ACTIONS } from "@/config/routes";
 import { CLINICS } from "@/config/site";
 import { resolveLabel, tel } from "@/lib/routes";
 import type { ProcedurePage } from "@/types/treatment";
+import { withBase } from "@/lib/base-path";
 
 const BOOK_POINTS = ["Free consultation and VISIA® skin analysis", "Uptown or Downtown Toronto", "No pressure, just a clear plan"];
 
@@ -62,7 +63,7 @@ export function ProcGuide({ guide: g, number }: { guide: ProcedurePage["guide"];
               <Button href={ACTIONS.book} v="book" hot>
                 Book Free Consultation
               </Button>
-              <a href={tel(uptown)} className="font-inter text-[14px] text-white/80 underline-offset-4 hover:text-white hover:underline">
+              <a href={withBase(tel(uptown))} className="font-inter text-[14px] text-white/80 underline-offset-4 hover:text-white hover:underline">
                 or call {uptown}
               </a>
             </div>

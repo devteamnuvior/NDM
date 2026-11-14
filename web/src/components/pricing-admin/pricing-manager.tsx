@@ -12,6 +12,7 @@ import { lockScroll } from "@/lib/scroll-lock";
 import type { WooAdminProduct, WooAdminTree, WooAdminVariation, WooPromoLabel } from "@/types/pricing";
 import { PromoEditor } from "./promo-editor";
 import { changesOf, moved, newVariation, priceProblem, relocated, toDraft, toPublicTree, withPrices, type Changes, type Draft, type DraftCategory } from "./model";
+import { withBase } from "@/lib/base-path";
 
 /**
  * The price list's management screen: the Pricing page's own price list, with an edit button on every
@@ -557,7 +558,7 @@ export function PricingManager({ tree, user, csrf, wpAdmin }: PricingManagerProp
             {busy ? "Working" : dirty ? `${changes.count} unsaved ${changes.count === 1 ? "change" : "changes"}` : "All changes saved"}
           </p>
           <a
-            href="/manage/promotions"
+            href={withBase("/manage/promotions")}
             className={quiet}
             onClick={(e) => {
               if (dirty && !window.confirm("Open the offers and lose the unsaved changes?")) e.preventDefault();
@@ -816,7 +817,7 @@ export function PricingManager({ tree, user, csrf, wpAdmin }: PricingManagerProp
                                           )}
                                           <div className="mt-4 flex flex-wrap items-center justify-end gap-x-6 gap-y-3">
                                             <span className="flex flex-wrap items-center gap-3">
-                                              <a href={`${wpAdmin}/wp-admin/post.php?post=${id}&action=edit`} target="_blank" rel="noopener noreferrer" className="font-inter text-[13.5px] text-ndm-deep underline-offset-4 hover:underline">
+                                              <a href={withBase(`${wpAdmin}/wp-admin/post.php?post=${id}&action=edit`)} target="_blank" rel="noopener noreferrer" className="font-inter text-[13.5px] text-ndm-deep underline-offset-4 hover:underline">
                                                 Open in WooCommerce
                                               </a>
                                               <button

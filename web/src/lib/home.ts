@@ -1,7 +1,9 @@
 import "server-only";
 import { HOME_COPY } from "@/config/home";
 import { getHomePage, settle } from "@/lib/wordpress";
-import type { HomeCopy, PointIcon, ProofIcon, WPHomePage } from "@/types/home";
+import type { StartConcern, StartPanel } from "@/config/home-start";
+import { resolveLabel, toSlug } from "@/lib/routes";
+import type { HomeCopy, PointIcon, ProofIcon, WPHomePage, WPStartPanel } from "@/types/home";
 
 const PROOF_ICONS: ProofIcon[] = ["physician", "award", "clinics", "analysis"];
 const POINT_ICONS: PointIcon[] = ["check", "thread", "shield"];
@@ -10,6 +12,60 @@ const POINT_ICONS: PointIcon[] = ["check", "thread", "shield"];
 function icon<T extends string>(known: T[], picked: string): T {
   const name = picked.toLowerCase() as T;
   return known.includes(name) ? name : known[0];
+}
+
+/**
+ * The panels of "Where would you like to start?": a panel without a photo, a concern without its button
+ * words and a treatment without a name (typed or its product's) are left out. Prices are not here: the
+ * section reads them from WooCommerce. No panel left: null (the built-in panels are shown).
+ */
+function panelsFrom(rows: WPStartPanel[]): StartPanel[] | null {
+  const ids = new Set<string>();
+  /* ids are worked out from the words, so they stay readable; a repeated one gets a number */
+  const unique = (base: string) => {
+    let id = base || "item";
+    for (let n = 2; ids.has(id); n++) id = `${base}-${n}`;
+    ids.add(id);
+    return id;
+  };
+  const panels = rows.flatMap((p): StartPanel[] => {
+    if (!p.image) return [];
+    const concerns = p.concerns.flatMap((c): StartConcern[] => {
+      if (!c.label) return [];
+      const options = c.options.flatMap((o) => {
+        const name = o.name || o.product?.name || "";
+        return name ? [{ name, what: o.what, price: "", href: o.link || resolveLabel(name).href, source: o.price_source }] : [];
+      });
+      return [
+        {
+          id: unique(`xo-${toSlug(c.label)}`),
+          label: c.label,
+          title: c.title || c.label,
+          lede: c.lede,
+          options,
+          facts: c.facts.filter((f) => f.term || f.text),
+          ...(c.note && { note: c.note }),
+          /* the button's own link too (without script): an empty one stays on the section */
+          more: { href: c.more_link || "#start", label: c.more_label },
+        },
+      ];
+    });
+    const position = p.position || "center";
+    return [
+      {
+        id: unique(toSlug(p.title)),
+        title: p.title,
+        sub: p.sub,
+        heading: p.heading || p.title,
+        text: p.text,
+        image: { src: p.image.src, srcSet: p.image.srcset ?? "", position, positionOpen: p.position_open || position },
+        concerns,
+        ...(!concerns.length && p.link && { analysisHref: p.link }),
+        ...(!concerns.length && p.link_label && { analysisLabel: p.link_label }),
+      },
+    ];
+  });
+  return panels.length ? panels : null;
 }
 
 /** The WordPress page as the sections read it. A row without its words, or a photo row without a photo, is left out. */
@@ -35,7 +91,7 @@ function fromWordPress(wp: WPHomePage): HomeCopy {
       highlight: c.about_highlight,
       stats: c.about_stats.filter((s) => s.figure || s.label),
     },
-    start: { tag: c.start_tag, lead: c.start_lead, strong: c.start_strong },
+    start: { tag: c.start_tag, lead: c.start_lead, strong: c.start_strong, panels: panelsFrom(c.start_panels ?? []) ?? HOME_COPY.start.panels },
     treatments: {
       tag: c.treat_tag,
       lead: c.treat_lead,

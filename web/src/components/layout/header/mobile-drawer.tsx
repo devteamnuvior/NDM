@@ -12,6 +12,7 @@ import { CLINICS } from "@/config/site";
 import { useDeferredOpen } from "@/hooks/use-deferred-open";
 import { pageLink, tel } from "@/lib/routes";
 import type { NavSectionId, ResolvedLink } from "@/types/navigation";
+import { withBase } from "@/lib/base-path";
 
 export interface MobileDrawerProps {
   open: boolean;
@@ -92,7 +93,7 @@ export function MobileDrawer({ open, current, onClose }: MobileDrawerProps) {
       >
         <div className="flex items-center justify-between border-b border-ndm-line px-5 py-4">
           {/* eslint-disable-next-line @next/next/no-img-element -- SVG logo */}
-          <img src="/assets/icons/logo-color.svg" alt="NewDermaMed" width={317} height={62} className="h-9 w-auto" />
+          <img src={withBase("/assets/icons/logo-color.svg")} alt="NewDermaMed" width={317} height={62} className="h-9 w-auto" />
           <button type="button" onClick={onClose} aria-label="Close menu" className="grid size-11 place-items-center rounded-full hover:bg-ndm-mist">
             <IconClose />
           </button>
@@ -171,14 +172,14 @@ export function MobileDrawer({ open, current, onClose }: MobileDrawerProps) {
               </ul>
             )}
           </div>
-          <a href={ACTIONS.shop} target="_blank" rel="noopener" className={`flex items-center gap-2 py-4 ${TOP_CLASS}`}>
+          <a href={withBase(ACTIONS.shop)} target="_blank" rel="noopener" className={`flex items-center gap-2 py-4 ${TOP_CLASS}`}>
             Skincare shop <IconExternal size={16} />
           </a>
         </nav>
         <div className="space-y-3 border-t border-ndm-line p-5">
           <div className="grid grid-cols-2 gap-2">
             {CLINICS.map((c) => (
-              <a key={c.id} href={tel(c.phone)} className="rounded-[14px] bg-ndm-mist px-4 py-3">
+              <a key={c.id} href={withBase(tel(c.phone))} className="rounded-[14px] bg-ndm-mist px-4 py-3">
                 <span className="block font-mont text-[11px] tracking-[.12em] text-ndm-muted uppercase">{c.name}</span>
                 <span className="block font-mont text-[14px] font-medium">{c.phone}</span>
               </a>

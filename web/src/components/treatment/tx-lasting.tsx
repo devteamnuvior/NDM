@@ -5,6 +5,7 @@ import { TX_WRAP } from "@/components/treatment/tx-head";
 import { useInView } from "@/hooks/use-in-view";
 import { useReveal } from "@/hooks/use-reveal";
 import type { TreatmentPage } from "@/types/treatment";
+import { withBase } from "@/lib/base-path";
 
 /* the capsules along the thread: where each one sits and how large it is */
 const TOPS = [28, 62, 40, 70, 22, 55, 35, 66, 30, 48, 72, 26, 58, 38, 64, 44, 30, 56];
@@ -21,7 +22,7 @@ export function TxLasting({ duration: d, number }: { duration: TreatmentPage["du
       <div ref={box} className={TX_WRAP}>
         <article id="duration" className="rv tx-lasts relative grid scroll-mt-[170px] gap-8 overflow-hidden rounded-[26px] p-6 text-white md:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-14">
           {/* eslint-disable-next-line @next/next/no-img-element -- small SVG logo */}
-          <img src={d.logo} alt={d.logoAlt} width="106" height="23" className="absolute top-7 right-6 h-[18px] w-auto opacity-95 md:top-11 md:right-10 md:h-[24px]" />
+          <img src={withBase(d.logo)} alt={d.logoAlt} width="106" height="23" className="absolute top-7 right-6 h-[18px] w-auto opacity-95 md:top-11 md:right-10 md:h-[24px]" />
           <div>
             <p className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 font-inter text-[13px] font-medium">
               <span className="text-[#C9C2F4] tabular-nums">{number}</span>How long it lasts

@@ -12,6 +12,7 @@ import { NAV, PAGE_SECTION } from "@/config/navigation";
 import { ACTIONS, type PageId } from "@/config/routes";
 import { pageLink, resolveLabel } from "@/lib/routes";
 import type { NavItem, NavMenuId } from "@/types/navigation";
+import { withBase } from "@/lib/base-path";
 
 export interface HeaderBarProps {
   /** Dark glass with white text: the header is sitting over a dark section. */
@@ -138,8 +139,8 @@ export function HeaderBar({ dark, current, top = 36, visible = true, cartCount =
         <div className="mx-auto grid h-[64px] max-w-[1920px] grid-cols-[auto_1fr_auto] items-center gap-4 px-[var(--gx)] xl:h-[84px] xl:grid-cols-[1fr_auto_1fr] xl:gap-3 2xl:gap-4">
           <SiteLink to={pageLink("home")} aria-label="NewDermaMed home" className="relative block h-[30px] justify-self-start sm:h-[34px] xl:h-[34px] 2xl:h-[42px]">
             {/* eslint-disable @next/next/no-img-element -- SVG logos: nothing for the image optimizer to do */}
-            <img src="/assets/icons/logo-color.svg" alt="" width={317} height={62} fetchPriority="high" className="h-full w-auto object-contain object-left transition-opacity duration-500" style={{ opacity: tone ? 0 : 1 }} />
-            <img src="/assets/icons/logo-white.svg" alt="" width={255} height={49} fetchPriority="high" className="absolute top-0 left-0 h-full w-auto object-contain object-left transition-opacity duration-500" style={{ opacity: tone ? 1 : 0 }} />
+            <img src={withBase("/assets/icons/logo-color.svg")} alt="" width={317} height={62} fetchPriority="high" className="h-full w-auto object-contain object-left transition-opacity duration-500" style={{ opacity: tone ? 0 : 1 }} />
+            <img src={withBase("/assets/icons/logo-white.svg")} alt="" width={255} height={49} fetchPriority="high" className="absolute top-0 left-0 h-full w-auto object-contain object-left transition-opacity duration-500" style={{ opacity: tone ? 1 : 0 }} />
             {/* eslint-enable @next/next/no-img-element */}
           </SiteLink>
 
@@ -223,7 +224,7 @@ export function HeaderBar({ dark, current, top = 36, visible = true, cartCount =
               Book Free Consultation
             </Button>
             <a
-              href={ACTIONS.book}
+              href={withBase(ACTIONS.book)}
               className="ml-1 inline-flex h-9 items-center rounded-full bg-ndm-amber px-4 font-inter text-[14px] font-medium text-white shadow-[0_10px_22px_-12px_rgba(255,166,23,.9)] transition-colors hover:bg-[#F29A0A] sm:hidden"
             >
               Book<span className="sr-only"> a free consultation</span>

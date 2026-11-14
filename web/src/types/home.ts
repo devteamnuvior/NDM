@@ -1,4 +1,5 @@
-import type { WPConcernImage } from "@/types/concern";
+import type { StartPanel } from "@/config/home-start";
+import type { WPConcernImage, WPConcernProduct } from "@/types/concern";
 
 /** Icons of the hero's proof points and of the Aptos section's chips: the drawings are the site's. */
 export type ProofIcon = "physician" | "award" | "clinics" | "analysis";
@@ -35,7 +36,8 @@ export interface HomeCopy {
     /** `figure` is a whole number with an optional sign after it: "16+". */
     stats: { figure: string; label: string }[];
   };
-  start: Head;
+  /** The panels come from WordPress, else they are the built-in ones (`START_PANELS`). */
+  start: Head & { panels: StartPanel[] };
   treatments: Head & { text: string };
   aptos: Head & {
     intro: string;
@@ -57,6 +59,31 @@ export interface HomeCopy {
   shop: Head & { text: string; button: string };
   journal: Head;
   social: Head & { text: string; button: string; note: string };
+}
+
+/** A panel of "Where would you like to start?" as WordPress serves it. */
+export interface WPStartPanel {
+  title: string;
+  sub: string;
+  heading: string;
+  text: string;
+  /** With WordPress's own sizes of the photo. */
+  image: (WPConcernImage & { srcset?: string }) | null;
+  position: string;
+  position_open: string;
+  concerns: {
+    label: string;
+    title: string;
+    lede: string;
+    /** `product` is the picked WooCommerce product (null for a category or nothing picked). */
+    options: { price_source: string; product: WPConcernProduct | null; name: string; what: string; link: string }[];
+    facts: { term: string; text: string }[];
+    note: string;
+    more_label: string;
+    more_link: string;
+  }[];
+  link_label: string;
+  link: string;
 }
 
 /**
@@ -88,6 +115,7 @@ export interface WPHomePage {
     start_tag: string;
     start_lead: string;
     start_strong: string;
+    start_panels: WPStartPanel[];
     treat_tag: string;
     treat_lead: string;
     treat_strong: string;

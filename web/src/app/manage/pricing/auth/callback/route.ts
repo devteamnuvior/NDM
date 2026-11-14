@@ -1,5 +1,6 @@
 import { WordPressError, getPricingAdminUser } from "@/lib/wordpress";
 import { MANAGE_PATH, PROMOTIONS_PATH, basicAuth, isPricingAdminConfigured, revokeApplicationPassword, safeEqual, siteOrigin, startPricingSession, takeSignInState, wordpressOrigin } from "@/lib/pricing-admin/session";
+import { withBase } from "@/lib/base-path";
 
 /**
  * WordPress returns here after the person approved the sign-in, with their login and a new application
@@ -14,7 +15,7 @@ export async function GET(request: Request) {
   const back = (problem?: string) =>
     new Response(null, {
       status: 303,
-      headers: { Location: `${site}${home}${problem ? `?problem=${problem}` : ""}`, "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" },
+      headers: { Location: `${site}${withBase(home)}${problem ? `?problem=${problem}` : ""}`, "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" },
     });
 
   if (!isPricingAdminConfigured()) return back("setup");

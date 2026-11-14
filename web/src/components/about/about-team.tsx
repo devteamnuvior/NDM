@@ -9,6 +9,7 @@ import { SectionHead } from "@/components/ui/section-head";
 import { TEAM, TEAM_ORDER, type TeamMember } from "@/config/team";
 import { useReveal } from "@/hooks/use-reveal";
 import type { AboutCopy } from "@/types/about";
+import { withBase } from "@/lib/base-path";
 
 const CRED = "font-inter text-[11.5px] font-[550] uppercase leading-[1.5] tracking-[.16em] text-ndm-deep";
 const PEOPLE = TEAM_ORDER.map((id) => TEAM.find((m) => m.id === id)).filter((m): m is TeamMember => !!m);
@@ -48,7 +49,7 @@ export function AboutTeam({ copy }: { copy: AboutCopy["team"] }) {
           <li key={m.id} id={m.id} className="rv scroll-mt-[110px]" style={{ transitionDelay: `${0.06 * i}s` }}>
             <article aria-labelledby={`${m.id}-name`} className={`team-card group relative flex h-full flex-col overflow-hidden rounded-[24px] bg-white ring-1 ring-ndm-ink/[.06] transition-shadow ${m.sample ? "" : "hover:shadow-[0_30px_60px_-36px_rgba(27,36,43,.45)]"}`}>
               <div className="relative aspect-[4/3] overflow-hidden bg-ndm-mist xl:aspect-square">
-                <Image src={m.img} alt={`Portrait of ${m.name}, ${m.role}`} fill sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw" className="absolute inset-0 h-full w-full object-cover object-[50%_18%] transition-transform duration-[1200ms] hover:scale-[1.04]" />
+                <Image src={withBase(m.img)} alt={`Portrait of ${m.name}, ${m.role}`} fill sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw" className="absolute inset-0 h-full w-full object-cover object-[50%_18%] transition-transform duration-[1200ms] hover:scale-[1.04]" />
                 <span className="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 font-inter text-[12px] font-medium text-ndm-ink backdrop-blur-[6px]">{m.tag}</span>
               </div>
               <div className="flex flex-1 flex-col p-5">

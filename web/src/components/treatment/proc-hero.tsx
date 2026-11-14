@@ -7,6 +7,7 @@ import { TwoTone } from "@/components/ui/two-tone";
 import { useOnScroll } from "@/hooks/use-on-scroll";
 import { useReveal } from "@/hooks/use-reveal";
 import type { TxHeroContent } from "@/types/treatment";
+import { withBase, withBaseSrcSet } from "@/lib/base-path";
 
 /** Treatment page header: the photo with a slow parallax, the title, and the booking form on the right (desktop). */
 export function ProcHero({ title, sub, hero, where, offer: o }: TxHeroContent) {
@@ -25,9 +26,9 @@ export function ProcHero({ title, sub, hero, where, offer: o }: TxHeroContent) {
       <div aria-hidden="true" className="absolute inset-0 -z-20 overflow-hidden">
         {/* a wide photo, and a tall one for phones */}
         <picture>
-          <source media="(max-width: 767px)" srcSet={hero.mobile} />
+          <source media="(max-width: 767px)" srcSet={withBaseSrcSet(hero.mobile)} />
           { }
-          <img ref={photo} src={hero.desktop} alt={hero.alt ?? ""} fetchPriority="high" className="absolute inset-x-0 -top-[10%] h-[120%] w-full object-cover will-change-transform" style={{ objectPosition: hero.position }} />
+          <img ref={photo} src={withBase(hero.desktop)} alt={hero.alt ?? ""} fetchPriority="high" className="absolute inset-x-0 -top-[10%] h-[120%] w-full object-cover will-change-transform" style={{ objectPosition: hero.position }} />
         </picture>
       </div>
       <div
@@ -64,7 +65,7 @@ export function ProcHero({ title, sub, hero, where, offer: o }: TxHeroContent) {
           {/* the offer, at a glance: frosted glass with a light that sweeps across it now and then */}
           {o && (
             <a
-              href={o.href}
+              href={withBase(o.href)}
               aria-label={`${o.tag}: ${o.title}, ${o.big.join(" ")}. ${o.cta}`}
               className="rv offer-glass offer-shine group mt-7 mb-5 inline-flex max-w-full items-center gap-4 overflow-hidden rounded-[18px] py-3 pr-3 pl-4 lg:mb-0"
               style={{ transitionDelay: ".16s" }}

@@ -1,4 +1,5 @@
 import { ACTIONS } from "@/config/routes";
+import { START_PANELS } from "@/config/home-start";
 import type { HomeCopy } from "@/types/home";
 import copy from "./home-copy.json";
 
@@ -10,7 +11,9 @@ import copy from "./home-copy.json";
  * page is not published, what other pages show for the sections they share with the home page, and the
  * source of the one-time import (scripts/export-home.mjs).
  */
-export const HOME_COPY = copy as HomeCopy;
+/* the JSON file holds the words; the panels' built-in list lives in home-start.ts */
+const words = copy as unknown as Omit<HomeCopy, "start"> & { start: Omit<HomeCopy["start"], "panels"> };
+export const HOME_COPY: HomeCopy = { ...words, start: { ...words.start, panels: START_PANELS } };
 
 /** The hero's film, and where its two buttons lead. */
 export const HERO = {

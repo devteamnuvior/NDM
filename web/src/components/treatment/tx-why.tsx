@@ -8,6 +8,7 @@ import { SiteLink } from "@/components/ui/site-link";
 import { ACTIONS } from "@/config/routes";
 import { pageLink } from "@/lib/routes";
 import type { TxWhyContent } from "@/types/treatment";
+import { withBase } from "@/lib/base-path";
 
 /** Why NewDermaMed: the team photo with the award badge in its corner, beside four proof points. */
 export function TxWhy({ why: t, number }: { why: TxWhyContent; number: string }) {
@@ -16,9 +17,9 @@ export function TxWhy({ why: t, number }: { why: TxWhyContent; number: string })
       <TxHead number={number} tag="Why NewDermaMed" headingId="why-title" lead={t.lead} strong={t.strong} />
       <div className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,.9fr)] lg:gap-[clamp(40px,5vw,72px)]`}>
         <div className="rv relative aspect-[3/2] overflow-hidden rounded-[24px] bg-ndm-mist">
-          <Image src={teamAward} alt={t.alt} sizes="(min-width: 1024px) 620px, 100vw" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: t.position }} />
+          <Image src={withBase(teamAward)} alt={t.alt} sizes="(min-width: 1024px) 620px, 100vw" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: t.position }} />
           <span className="absolute bottom-3 left-3 flex items-center gap-3 rounded-[16px] bg-white/95 py-2 pr-4 pl-2 shadow-[0_18px_40px_-20px_rgba(27,36,43,.55)] backdrop-blur-[8px] sm:bottom-4 sm:left-4">
-            <Image src={award} alt="" sizes="44px" className="size-11 object-contain" />
+            <Image src={withBase(award)} alt="" sizes="44px" className="size-11 object-contain" />
             <span>
               <span className="block font-inter text-[13.5px] font-semibold text-ndm-ink">Top Choice Award</span>
               <span className="block font-inter text-[12px] text-ndm-muted">8 consecutive years</span>

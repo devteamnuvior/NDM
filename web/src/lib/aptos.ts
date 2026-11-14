@@ -1,10 +1,10 @@
 import "server-only";
 import type { TxPriceGroup } from "@/components/treatment/price-group";
-import { APTOS, APTOS_PRICE, BUILT_IN_APTOS } from "@/config/aptos";
+import { APTOS, APTOS_PRICE, APTOS_SLUG, BUILT_IN_APTOS } from "@/config/aptos";
 import { picked, priceValues } from "@/lib/procedure";
 import { fillPrices, fillPricesDeep, getSitePrices, type SitePrices } from "@/lib/site-prices";
 import { priceGroup } from "@/lib/treatment-prices";
-import { getAptosList, getAptosPage, settle } from "@/lib/wordpress";
+import { getAptosPage, settle } from "@/lib/wordpress";
 import type { WPAptosPage } from "@/types/aptos";
 import type { TreatmentPage } from "@/types/treatment";
 
@@ -280,19 +280,20 @@ function builtIn(slug: string, prices: SitePrices | null): AptosView | null {
 }
 
 /**
- * The page of the Aptos design at this address: the published WordPress post (type "Aptos Pages") with
- * this slug. Null when there is none. When WordPress cannot be reached, a page with a built-in copy shows that copy.
+ * The Aptos page, at its one address (/aptos-thread-lift): the published WordPress page with the
+ * template "Aptos Thread Lift page". Null for any other address, or when WordPress has no published
+ * Aptos page. When WordPress cannot be reached, the built-in copy shows.
  */
 export async function getAptosView(slug: string): Promise<AptosView | null> {
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return null;
-  const read = await settle(() => getAptosPage(slug));
+  if (slug !== APTOS_SLUG) return null;
+  const read = await settle(getAptosPage);
   if (read.ok && !read.data) return null;
   const prices = await getSitePrices();
   return read.ok && read.data ? fromWordPress(read.data, prices) : builtIn(slug, prices);
 }
 
-/** The addresses of every published page of the Aptos design (empty when WordPress cannot be reached). */
+/** The Aptos page's address when WordPress has it published (empty when it has not, or cannot be reached). */
 export async function getAptosSlugs(): Promise<string[]> {
-  const read = await settle(getAptosList);
-  return read.ok ? read.data.map((p) => p.slug) : [];
+  const read = await settle(getAptosPage);
+  return read.ok && read.data ? [APTOS_SLUG] : [];
 }

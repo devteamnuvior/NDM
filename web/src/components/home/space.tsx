@@ -7,6 +7,7 @@ import { useOnScroll } from "@/hooks/use-on-scroll";
 import { useReveal } from "@/hooks/use-reveal";
 import { clamp01 } from "@/lib/math";
 import type { HomeCopy } from "@/types/home";
+import { withBase } from "@/lib/base-path";
 
 /** The one clinic film (also used by the Botox and pricing pages). */
 export const CLINIC_FILM = { src: "/assets/clinic/ndm-clinic.mp4", poster: "/assets/clinic/ndm-clinic-poster.jpg" };
@@ -86,7 +87,7 @@ export function Space({ copy }: { copy: HomeCopy["space"] }) {
   return (
     <section ref={section} aria-labelledby="space" className="relative z-10 bg-ndm-paper py-[clamp(24px,3vw,44px)]">
       <div ref={frame} data-nav="dark" className="cl-frame" role="region" aria-label="Inside our clinics, film">
-        <video ref={video} className="cl-vid" muted loop playsInline preload="none" poster={CLINIC_FILM.poster} src={near ? CLINIC_FILM.src : undefined} aria-label="A walk through the NewDermaMed clinic" />
+        <video ref={video} className="cl-vid" muted loop playsInline preload="none" poster={withBase(CLINIC_FILM.poster)} src={withBase(near ? CLINIC_FILM.src : undefined)} aria-label="A walk through the NewDermaMed clinic" />
         <div className="absolute inset-x-0 bottom-0 z-[2] flex flex-wrap items-end justify-between gap-6 px-[var(--gx)] pb-[clamp(28px,4.5vw,60px)]">
           <div>
             <Eyebrow dark className="rv">

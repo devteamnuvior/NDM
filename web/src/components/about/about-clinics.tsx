@@ -10,6 +10,7 @@ import { ACTIONS } from "@/config/routes";
 import { HOURS } from "@/config/site";
 import { tel } from "@/lib/routes";
 import type { AboutCopy } from "@/types/about";
+import { withBase } from "@/lib/base-path";
 
 const LABEL = "font-inter text-[11px] uppercase tracking-[.14em] text-ndm-muted";
 const LINK = "underline-offset-4 transition-colors hover:text-ndm-deep hover:underline";
@@ -38,7 +39,7 @@ function ClinicCard({ c, i }: { c: AboutClinic; i: number }) {
         <div>
           <p className={LABEL}>Address</p>
           <p className="mt-1.5 font-inter text-[14px] leading-[1.45] text-ndm-ink">
-            <a href={c.map} target="_blank" rel="noopener" className={LINK}>
+            <a href={withBase(c.map)} target="_blank" rel="noopener" className={LINK}>
               {c.address[0]}
               <br />
               {c.address[1]}
@@ -49,15 +50,15 @@ function ClinicCard({ c, i }: { c: AboutClinic; i: number }) {
         <div>
           <p className={LABEL}>Contact</p>
           <p className="mt-1.5 font-inter text-[14px] leading-[1.45] text-ndm-ink">
-            <a href={tel(c.phone)} className={LINK}>
+            <a href={withBase(tel(c.phone))} className={LINK}>
               {c.phone}
             </a>{" "}
             ·{" "}
-            <a href={`sms:${number}`} className={`${LINK} text-ndm-muted`}>
+            <a href={withBase(`sms:${number}`)} className={`${LINK} text-ndm-muted`}>
               Text
             </a>
             <br />
-            <a href={`mailto:${ABOUT_EMAIL}`} className={`${LINK} break-all`}>
+            <a href={withBase(`mailto:${ABOUT_EMAIL}`)} className={`${LINK} break-all`}>
               {ABOUT_EMAIL}
             </a>
           </p>

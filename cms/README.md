@@ -115,6 +115,20 @@ category changes, wherever the change was made. WordPress then calls `NDM_REVALI
 `wp ndm-pricing import` (reads it from standard input) creates the categories, variable products and
 variations once. It never touches anything that already exists.
 
+**A price list copied in another way** (for example with WooCommerce's own product importer) lacks
+this plugin's settings: its categories are hidden, so the Pricing page is empty, and its products have
+no import key, so `import` would duplicate them and the offers import finds none. `wp ndm-pricing
+repair` (same JSON on standard input) matches each category by slug and each product by its exact
+name and sets, only where missing, the category settings (visible, order, per unit, product order),
+the import keys and the offer labels. It creates, deletes and reprices nothing (a price that differs
+from the original list is only reported). Without `--apply` it is a dry run:
+
+```
+node --experimental-strip-types ../web/scripts/export-price-list.mjs > /tmp/price-list.json
+wp ndm-pricing repair < /tmp/price-list.json
+wp ndm-pricing repair --apply < /tmp/price-list.json
+```
+
 ## Current offers (Promotion page, offers wheel)
 
 An offer is a WooCommerce product with one piece of post meta, `_ndm_promo`: `order`, `name` (card
@@ -332,7 +346,7 @@ us, Start your journey).
 
 When a procedure changes (or a product, or a Before & After case it may show), WordPress tells the
 site to drop its cached copy (tag `procedures` through `/api/revalidate`). The post type has no pages
-of its own in WordPress. The Aptos Thread Lift page has its own design and its own post type (see "Aptos pages").
+of its own in WordPress. The Aptos Thread Lift page has its own design and is a standard page (see "Aptos Thread Lift page").
 
 One-time import of the original Botox page (created only when its slug is free; photos go into the
 media library; the price list's rows pick the existing products "Botox Cosmetic" and "Dysport"):
@@ -345,19 +359,24 @@ Before anything is published: the Botox copy is the live site's wording and name
 effects, which Health Canada (C.01.044) does not allow in consumer advertising of a prescription
 drug; it also names the Medical Director. Raymond Valadkhani's written approval is needed first.
 
-## Aptos pages (the Aptos Thread Lift design)
+## Aptos Thread Lift page
 
-`/aptos-thread-lift` is a post of the post type **Aptos Pages** (`ndm_aptos`, in the admin menu): a
-template of its own, separate from Procedures (the Botox design). The post's **slug is the page's
-address**, so another published post is another page in the same design, without a new build. The
-fields work like those of a concern or a procedure (same boxes, rows, photo and search fields).
+`/aptos-thread-lift` is an ordinary WordPress **page** (Pages in the admin), like the home page and
+the About page: one page, so no post type of its own. It is recognised by its page template **"Aptos
+Thread Lift page"** (`ndm-aptos`, under Page Attributes), or failing that by the top-level slug
+`aptos-thread-lift` (it gets the template on its next save). No page ID is stored: the address on the
+site is always `/aptos-thread-lift`, and the title and slug are only its name in the admin. In Pages it
+carries the label "Aptos Thread Lift page of the site". It keeps its own design, separate from
+Procedures (the Botox design).
 
-Typed into the post (boxes under the title, stored as one post meta, `_ndm_aptos`; the list of
-fields is `ndm_headless_aptos_schema()` in `includes/aptos.php`):
+On that page only, the block editor and the page's own text box are switched off and the boxes
+appear under the title (every other page keeps its editor). The fields work like those of a concern
+or a procedure (same boxes, rows, photo and search fields), stored as one post meta, `_ndm_aptos`;
+the list of fields is `ndm_headless_aptos_schema()` in `includes/aptos.php`:
 
 | Box | Fields |
 |---|---|
-| Title, Slug, Header photo | the treatment's name, the address, the wide header photo (featured image) |
+| Title, Featured image | the treatment's name, the wide header photo |
 | Header | heading in two lines, text under it, the tall photo for phones, photo focus, the quick facts |
 | Search Engines | page title and description |
 | What It Is | tag, heading, paragraphs, note, photo and its focus, the words on the turning badge, the points |
@@ -379,15 +398,22 @@ are read from WooCommerce, and an amount in the copy is the token `{{price}}` (t
 for the first product; `{{price2}}` for the second). Filled in by the site: the booking form, the
 Aptos logo, the team photo, Our team, Testimonials, Visit us and Start your journey.
 
+**Revisions.** `_ndm_aptos` is revisioned post meta: every Update that changes the fields saves a
+revision with a copy of them, Revisions compares them as "Aptos Thread Lift page fields", and
+restoring a revision restores them.
+
+**When something is wrong.** No Aptos page, or not published: the route answers 404
+(`ndm_aptos_missing`, `ndm_aptos_unpublished`), the site shows its built-in copy, and the Pages screens
+warn (also when two pages have the template, the page is found by its slug only, or it is empty).
+
 | Route (`ndm/v1`) | Who | What |
 |---|---|---|
-| `GET /aptos-pages` | public | the name and slug of every published page |
-| `GET /aptos-pages/<slug>` | public | one published page with its photos, picked cases and picked products (no prices) |
+| `GET /aptos-page` | public | the published page with its photos, picked cases and picked products (no prices; 404 with the reason when there is none) |
 
-When a page changes (or a product, or a Before & After case), WordPress tells the site to drop its
+When the page changes (or a product, or a Before & After case), WordPress tells the site to drop its
 cached copy (tag `aptos` through `/api/revalidate`).
 
-One-time import of the original page (created only when its slug is free). Photos go into the media
+One-time import of the original page (created only when there is no Aptos page yet). Photos go into the media
 library: files from `web/public`, and the five photos the original page showed straight from
 newdermamedlaserclinic.com and nuvior.com are fetched from those addresses. The price list picks the
 existing product "Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)" and shows its
@@ -397,6 +423,11 @@ the gallery has no Aptos case yet, so the Before & after section stays out until
 ```
 node ../web/scripts/export-aptos.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm aptos-import --images=/tmp/site
 ```
+
+Until 2026-11-13 the page was a post of its own post type ("Aptos Pages", `ndm_aptos`, no longer
+registered). `wp ndm aptos-migrate` copies its title, state, fields and header photo exactly (same
+media library photos) onto a page as above and checks them; `--delete-old` then deletes the old post.
+It never overwrites a page that already holds different fields. Local site: page 908.
 
 ## About page
 
@@ -482,14 +513,25 @@ fields work like those of a concern. One box per section, in page order:
 | Header | line above the heading, heading in two lines, text, second button's words, the points beside the heading (icon and words), the brands in the moving band (one per line) |
 | Search Engines | page title and description (empty description: none written) |
 | About NewDermaMed | tag, heading, text (lights up word by word), the word in blue, the numbers ("16+" and the line under it) |
-| Where To Start, Treatments, Inside Our Clinics, Journal | tag and heading (Treatments also its text) |
+| Where To Start | tag, heading, and the **panels** (title, line under it, heading and text when open, photo with its focus closed and open, link for a panel without concerns); in each panel its **concerns** (button, card title, card text, the **treatments**, facts, small print, link at the bottom); a treatment picks a WooCommerce product or category (optional), with a name, a line and a link |
+| Treatments, Inside Our Clinics, Journal | tag and heading (Treatments also its text) |
 | Our Signature | tag, heading, text, the chip on the figure (words, number, words), the dials (number, unit, line, screen-reader sentence, ring fill in percent), the points (icon and words), then Treatment areas: tag, heading, text and the **photos** (photo from the media library and the line under it; the description is the photo's alternative text) |
 | Our Team, Before And After, Testimonials, Our Clinics, Booking, Skincare Shop, Social | tag (not Booking), heading, text; Testimonials and Social also their small line (keep "individual results may vary"), Shop and Social their button |
 | How It Works | tag, heading, the three steps (title, text, button) |
 | FAQ | tag, heading, text, the questions. No question: no section |
 
-Filled in by the site, not typed: the films, the concern panels and treatment cards (prices from
-WooCommerce), the team members, the before and after cases, the photos and links of How it works, the
+**Prices of the Start panels** come from WooCommerce only: the product or category a treatment picks,
+else the treatment found by its name on the price list, else "At consultation". A panel without a photo,
+a concern without its button words and a treatment without a name are left out; no panel at all: the
+site shows its built-in panels (`START_PANELS` in `web/src/config/home-start.ts`). The panels' photos
+are served with WordPress's own sizes.
+
+Lists inside lists (panel > concern > treatment) are fine in the edit screen: each level has its own
+placeholder for its "Add" button. PHP accepts at most `max_input_vars` fields per save (1000 here; the
+home page sends about 530): a save that reaches it keeps the words as they were and says so, instead of
+losing rows.
+
+Filled in by the site, not typed: the films, the treatment cards (prices from WooCommerce), the team members, the before and after cases, the photos and links of How it works, the
 monthly specials (WooCommerce), the reviews and awards, the two clinics, the booking form, the shop's
 products, the journal posts and the reels. Sections other pages also show (Our Team, Before And After,
 How It Works, Testimonials, Booking, Social) take these words on the home page only; the other pages
@@ -515,11 +557,13 @@ tells the site to drop its cached copy (tag `home` through `/api/revalidate`).
 
 Fresh install, one-time import of the original page (the words go to the page chosen under Reading,
 or to a page "home" that is created and chosen when none is; left alone when the home page already
-holds its words; the four Aptos marking photos the original showed from nuvior.com are fetched into the
-media library):
+holds its words; the four Aptos marking photos the original showed from nuvior.com and the four panel
+photos from `web/public` go into the media library). A box added after that import is filled in with
+`--fill-empty=<field keys>` (only those fields, only where empty; the Start panels were added this way):
 
 ```
 node ../web/scripts/export-home.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm home-import --images=/tmp/site
+node ../web/scripts/export-home.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm home-import --images=/tmp/site --fill-empty=start_panels
 ```
 
 Until 2026-11-13 the home page was a post of its own post type ("Home Page", `ndm_home`). `wp ndm

@@ -144,6 +144,174 @@ function ndm_pricing_cli_import() {
 WP_CLI::add_command( 'ndm-pricing import', 'ndm_pricing_cli_import' );
 
 /**
+ * Repairs a price list that was copied into WooCommerce some other way (for example with WooCommerce's
+ * own product importer) and so lacks this plugin's settings: its categories are not marked visible, so
+ * the public price list is empty, and its products have no import key, so `wp ndm-pricing import`
+ * would make a second copy of each and `wp ndm-pricing promotions` finds none of them.
+ *
+ * For every category and treatment of the original list (the same JSON as `import`) it sets, only
+ * where missing: the category's visible, order and per-unit settings and its product order, the
+ * product's import key, and the options' promotional labels. A product is matched by its category's
+ * slug and its exact name; anything that does not match exactly is reported and left alone. Nothing is
+ * created or deleted, and no price is changed: a price that differs from the original list is only
+ * reported, because WooCommerce is where prices are kept.
+ *
+ * ## OPTIONS
+ *
+ * [--apply]
+ * : Make the changes. Without it, only report what would change.
+ *
+ * ## EXAMPLES
+ *
+ *     wp ndm-pricing repair < price-list.json
+ *     wp ndm-pricing repair --apply < price-list.json
+ *
+ * @when after_wp_load
+ *
+ * @param array $args       Positional arguments (none).
+ * @param array $assoc_args Options.
+ */
+function ndm_pricing_cli_repair( $args, $assoc_args ) {
+	$categories = json_decode( (string) file_get_contents( 'php://stdin' ), true );
+
+	if ( ! is_array( $categories ) || ! $categories ) {
+		WP_CLI::error( 'No price list on standard input.' );
+	}
+
+	$apply = ! empty( $assoc_args['apply'] );
+	$made  = array(
+		'category settings' => 0,
+		'product orders'    => 0,
+		'import keys'       => 0,
+		'labels'            => 0,
+		'missing'           => 0,
+		'price differences' => 0,
+	);
+	$notes = array();
+
+	foreach ( array_values( $categories ) as $position => $category ) {
+		$term = get_term_by( 'slug', $category['id'], 'product_cat' );
+
+		if ( ! $term ) {
+			++$made['missing'];
+			$notes[] = "Category not found: {$category['id']}";
+			continue;
+		}
+
+		$term_id  = (int) $term->term_id;
+		$settings = array(
+			NDM_PRICING_TERM_VISIBLE  => '1',
+			NDM_PRICING_TERM_ORDER    => $position,
+			NDM_PRICING_TERM_PER_UNIT => empty( $category['perUnit'] ) ? '0' : '1',
+		);
+
+		foreach ( $settings as $meta_key => $value ) {
+			if ( ! metadata_exists( 'term', $term_id, $meta_key ) ) {
+				if ( $apply ) {
+					update_term_meta( $term_id, $meta_key, $value );
+				}
+				++$made['category settings'];
+			}
+		}
+
+		$in_category = get_posts(
+			array(
+				'post_type'      => 'product',
+				'post_status'    => 'any',
+				'posts_per_page' => -1,
+				'tax_query'      => array( array( 'taxonomy' => 'product_cat', 'field' => 'term_id', 'terms' => $term_id ) ), // phpcs:ignore WordPress.DB.SlowDBQuery
+			)
+		);
+		$order       = array();
+
+		foreach ( $category['items'] as $item ) {
+			$key     = $category['id'] . '|' . $item['name'];
+			$matches = array_values(
+				array_filter(
+					$in_category,
+					function ( $post ) use ( $item ) {
+						return html_entity_decode( $post->post_title, ENT_QUOTES, 'UTF-8' ) === $item['name'];
+					}
+				)
+			);
+
+			if ( 1 !== count( $matches ) ) {
+				++$made['missing'];
+				$notes[] = sprintf( 'Product not matched (%d found): %s', count( $matches ), $key );
+				continue;
+			}
+
+			$product_id = (int) $matches[0]->ID;
+			$order[]    = $product_id;
+			$has_key    = (string) get_post_meta( $product_id, NDM_PRICING_IMPORT_KEY, true );
+
+			if ( '' === $has_key ) {
+				if ( $apply ) {
+					update_post_meta( $product_id, NDM_PRICING_IMPORT_KEY, wp_slash( $key ) );
+				}
+				++$made['import keys'];
+			} elseif ( $has_key !== $key ) {
+				$notes[] = "Product $product_id already has another import key: $has_key";
+			}
+
+			$product  = wc_get_product( $product_id );
+			$by_label = array();
+			foreach ( $product ? $product->get_children() : array() as $variation_id ) {
+				$variation = wc_get_product( $variation_id );
+				if ( $variation ) {
+					$by_label[ (string) $variation->get_attribute( 'option' ) ] = $variation;
+				}
+			}
+
+			foreach ( $item['options'] as $option ) {
+				$variation = $by_label[ $option['label'] ] ?? null;
+
+				if ( ! $variation ) {
+					$notes[] = "Option not found: $key / {$option['label']}";
+					continue;
+				}
+
+				$on_sale = ! empty( $option['regular'] ) && $option['regular'] > $option['price'];
+				$regular = $on_sale ? $option['regular'] : $option['price'];
+				$sale    = $on_sale ? $option['price'] : 0;
+				if ( (float) $variation->get_regular_price() !== (float) $regular || (float) $variation->get_sale_price() !== (float) $sale ) {
+					++$made['price differences'];
+					$notes[] = sprintf( 'Price differs, left as it is: %s / %s is %s (sale %s), the original list has %s (sale %s)', $key, $option['label'], $variation->get_regular_price(), $variation->get_sale_price() ?: 'none', $regular, $sale ? $sale : 'none' );
+				}
+
+				if ( ! empty( $option['tag'] ) && '' === (string) $variation->get_meta( NDM_PRICING_LABEL ) ) {
+					if ( $apply ) {
+						$variation->update_meta_data( NDM_PRICING_LABEL, sanitize_text_field( $option['tag'] ) );
+						$variation->update_meta_data( NDM_PRICING_LABEL_ON, '1' );
+						$variation->save_meta_data();
+					}
+					++$made['labels'];
+				}
+			}
+		}
+
+		if ( $order && ! metadata_exists( 'term', $term_id, NDM_PRICING_TERM_PRODUCT_ORDER ) ) {
+			if ( $apply ) {
+				update_term_meta( $term_id, NDM_PRICING_TERM_PRODUCT_ORDER, $order );
+			}
+			++$made['product orders'];
+		}
+	}
+
+	if ( $apply ) {
+		ndm_pricing_flush();
+	}
+
+	foreach ( $notes as $note ) {
+		WP_CLI::log( $note );
+	}
+
+	$summary = implode( ', ', array_map( fn( $name, $count ) => "$count $name", array_keys( $made ), $made ) );
+	WP_CLI::success( ( $apply ? 'Repaired: ' : 'Dry run, nothing changed. Would set: ' ) . $summary . '.' );
+}
+WP_CLI::add_command( 'ndm-pricing repair', 'ndm_pricing_cli_repair' );
+
+/**
  * Imports the site's original offers (the cards of the Promotion page and the offers wheel), once.
  *
  * It reads JSON from standard input (made by web/scripts/export-promotions.mjs):

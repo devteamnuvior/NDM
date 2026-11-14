@@ -1,5 +1,6 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ElementType, HTMLAttributes, ReactNode, Ref } from "react";
 import { IconArrow } from "@/components/ui/icons";
+import { withBase } from "@/lib/base-path";
 
 export type ButtonVariant = "ink" | "line" | "light" | "glass" | "book";
 
@@ -52,6 +53,8 @@ export function Button({ v = "ink", sm, block, hot, onDark, className = "", chil
 
   const { as, ...p } = rest;
   const Tag = (as ?? (p.href !== undefined ? "a" : "button")) as ElementType;
+  /* an address of this site gets the folder the site is served from ("/react") */
+  if (typeof p.href === "string") p.href = withBase(p.href);
   return (
     <Tag className={cls} {...p}>
       {inner}

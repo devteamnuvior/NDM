@@ -4,6 +4,7 @@ import { RevealSection } from "@/components/ui/reveal-section";
 import { TwoTone } from "@/components/ui/two-tone";
 import { PRODUCTS, SHOP_ORBIT_TILES, SHOP_URL } from "@/config/shop";
 import type { HomeCopy } from "@/types/home";
+import { withBase } from "@/lib/base-path";
 
 /* product photos come from the shop's own site, already at 300 px, as in the prototype */
 /* eslint-disable @next/next/no-img-element */
@@ -17,7 +18,7 @@ function ShopOrbit() {
       <div className="shop-ring absolute top-[var(--orbit-top)] left-1/2 size-[calc(var(--r)*2)]">
         {tiles.map((p, i) => (
           <span key={i} className="shop-tile absolute top-1/2 left-1/2" style={{ transform: `rotate(${(i / SHOP_ORBIT_TILES) * 360}deg) translateY(calc(var(--r) * -1)) rotate(${i % 2 ? 9 : -7}deg)` }}>
-            <img src={p.image} alt="" decoding="async" className="h-full w-full object-contain" />
+            <img src={withBase(p.image)} alt="" decoding="async" className="h-full w-full object-contain" />
           </span>
         ))}
       </div>
@@ -61,9 +62,9 @@ export function Shop({ copy }: { copy: HomeCopy["shop"] }) {
         <ul role="list" className="shop-list mx-auto grid max-w-[1280px] grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-3">
           {items.map((p, i) => (
             <li key={p.href} className={`rv ${i >= 6 ? "hidden lg:block" : ""}`} style={{ transitionDelay: `${0.04 * (i % 6)}s` }}>
-              <a href={p.href} target="_blank" rel="noopener" className="group flex h-full items-center gap-3 rounded-[16px] bg-ndm-mist/70 p-2 transition-colors hover:bg-ndm-mist sm:gap-4 sm:p-2.5">
+              <a href={withBase(p.href)} target="_blank" rel="noopener" className="group flex h-full items-center gap-3 rounded-[16px] bg-ndm-mist/70 p-2 transition-colors hover:bg-ndm-mist sm:gap-4 sm:p-2.5">
                 <span className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-[10px] bg-white sm:size-[68px]">
-                  <img src={p.image} alt="" loading="lazy" className="h-[86%] w-[86%] object-contain transition-transform duration-500 group-hover:scale-105" />
+                  <img src={withBase(p.image)} alt="" loading="lazy" className="h-[86%] w-[86%] object-contain transition-transform duration-500 group-hover:scale-105" />
                 </span>
                 <span className="min-w-0">
                   <span className="block font-inter text-[14px] leading-[1.3] text-ndm-ink capitalize sm:text-[16px]">{p.name}</span>

@@ -19,7 +19,7 @@ export const WP_TAGS = {
   concerns: "concerns",
   /** The procedure pages (the post type "Procedures"). */
   procedures: "procedures",
-  /** The pages of the Aptos design (the post type "Aptos Pages"). */
+  /** The Aptos Thread Lift page (a standard page with the template "Aptos Thread Lift page"). */
   aptos: "aptos",
   /** The About page (the WordPress page with the template "About page"). */
   about: "about",

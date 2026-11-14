@@ -11,6 +11,7 @@ import { useReveal } from "@/hooks/use-reveal";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
 import type { AboutCopy } from "@/types/about";
+import { withBase } from "@/lib/base-path";
 
 /** A number of the header: a whole number counts up, its sign ("+") stays after it; anything else is shown as typed. */
 function Figure({ figure }: { figure: string }) {
@@ -49,8 +50,8 @@ export function AboutFilm({ copy }: { copy: AboutCopy["header"] }) {
   return (
     <section ref={section} id="top" aria-labelledby="about-ndm-title" data-nav="dark" className="relative z-10 bg-ndm-night">
       <div className="cf-frame is-hero" style={{ "--p": 1 } as React.CSSProperties}>
-        <video ref={video} muted loop playsInline preload="auto" poster={ABOUT_FILM.poster} aria-hidden="true">
-          <source src={ABOUT_FILM.src} type="video/mp4" />
+        <video ref={video} muted loop playsInline preload="auto" poster={withBase(ABOUT_FILM.poster)} aria-hidden="true">
+          <source src={withBase(ABOUT_FILM.src)} type="video/mp4" />
         </video>
         <div className="absolute inset-x-0 bottom-0 z-[2] grid gap-8 px-[var(--gx)] pb-[clamp(28px,4.5vw,64px)] lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div>

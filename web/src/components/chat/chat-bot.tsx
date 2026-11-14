@@ -9,6 +9,7 @@ import { useMedia } from "@/hooks/use-media";
 import { useOnScroll } from "@/hooks/use-on-scroll";
 import { armChime, playChime } from "@/lib/chime";
 import { tel } from "@/lib/routes";
+import { withBase } from "@/lib/base-path";
 
 /* the agent's photo is a small local file, shown at its own size */
 /* eslint-disable @next/next/no-img-element */
@@ -189,7 +190,7 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
           style={small ? { right: 16, bottom: `calc(${bottom + 64}px + env(safe-area-inset-bottom))` } : { right: 24 + 58 + 12, bottom: bottom + 8 }}
         >
           <span className="relative size-9 shrink-0">
-            <img src={CHAT_AGENT.img} alt="" className="size-9 rounded-full object-cover" />
+            <img src={withBase(CHAT_AGENT.img)} alt="" className="size-9 rounded-full object-cover" />
             <i className="absolute right-0 bottom-0 size-2.5 rounded-full bg-[#3DDC84] ring-2 ring-white" />
           </span>
           {noteTyping ? (
@@ -221,7 +222,7 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
           <IconClose />
         ) : (
           <>
-            <img src={CHAT_AGENT.img} alt="" className="chat-launch-img" />
+            <img src={withBase(CHAT_AGENT.img)} alt="" className="chat-launch-img" />
             <span aria-hidden="true" className="chat-launch-badge">
               <IconChat size={13} />
             </span>
@@ -246,7 +247,7 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
         <header className={`chat-head relative px-5 pt-4 text-white ${msgs.length ? "pb-4" : "pb-14"}`}>
           <div className="flex items-center gap-3">
             <span className="relative size-11 shrink-0">
-              <img src={CHAT_AGENT.img} alt="" className="size-11 rounded-full object-cover ring-2 ring-white/40" />
+              <img src={withBase(CHAT_AGENT.img)} alt="" className="size-11 rounded-full object-cover ring-2 ring-white/40" />
               <i className="absolute right-0 bottom-0 size-3 rounded-full bg-[#3DDC84] ring-2 ring-[#0F80C3]" />
             </span>
             <span className="min-w-0 flex-1">
@@ -269,7 +270,7 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
         </header>
         {!msgs.length && (
           <div className="chat-quick relative z-[1] -mt-9 grid grid-cols-3 gap-2 px-4">
-            <a href={ACTIONS.book} onClick={() => setOpen(false)}>
+            <a href={withBase(ACTIONS.book)} onClick={() => setOpen(false)}>
               <i aria-hidden="true">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                   <rect x="3.5" y="5" width="17" height="15" rx="3" />
@@ -279,7 +280,7 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
               Book a free consultation
             </a>
             {CLINICS.map((c) => (
-              <a key={c.id} href={tel(c.phone)}>
+              <a key={c.id} href={withBase(tel(c.phone))}>
                 <i aria-hidden="true">
                   <IconPhone />
                 </i>
@@ -299,7 +300,7 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
                 {m.text}
                 {m.link && (
                   <a
-                    href={m.link[1]}
+                    href={withBase(m.link[1])}
                     {...(/^http/.test(m.link[1]) ? { target: "_blank", rel: "noopener" } : {})}
                     onClick={() => {
                       if (m.link && m.link[1].startsWith("#") && m.link[1] !== ACTIONS.book) setOpen(false);

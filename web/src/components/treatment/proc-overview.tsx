@@ -8,6 +8,7 @@ import { TwoTone } from "@/components/ui/two-tone";
 import { ACTIONS } from "@/config/routes";
 import { useReveal } from "@/hooks/use-reveal";
 import type { ProcedurePage } from "@/types/treatment";
+import { withBase } from "@/lib/base-path";
 
 interface ProcOverviewProps {
   overview: ProcedurePage["overview"];
@@ -105,7 +106,7 @@ export function ProcOverview({ overview: o, facts, number }: ProcOverviewProps) 
                     Book Free Consultation
                   </Button>
                   {t.link && (
-                    <a href={t.link[0]} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-sky">
+                    <a href={withBase(t.link[0])} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-sky">
                       {t.link[1]}
                       <IconArrow className="transition-transform group-hover:translate-x-1" />
                     </a>

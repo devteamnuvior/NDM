@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, type TouchEvent } from "react
 import { createPortal } from "react-dom";
 import { GalleryPhoto } from "@/components/about/gallery-photo";
 import type { GalleryPhoto as Photo } from "@/types/about";
+import { withBase } from "@/lib/base-path";
 
 interface LightboxProps {
   items: Photo[];
@@ -89,7 +90,7 @@ export function Lightbox({ items, index, onClose, onStep, onPick }: LightboxProp
         {/* eslint-disable-next-line @next/next/no-img-element -- shown at its own size, whatever its shape */}
         <img
           key={it.src}
-          src={it.src}
+          src={withBase(it.src)}
           alt={it.alt}
           onTouchStart={start}
           onTouchEnd={end}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type MouseEvent, type ReactNode } from "react";
+import { withBase } from "@/lib/base-path";
 
 interface SubNavProps {
   /** Accessible name of the bar. */
@@ -29,7 +30,7 @@ export function SubNav({ label, items, on, onPick }: SubNavProps) {
           {items.map((it) => (
             <li key={it.key} data-k={it.key} className="shrink-0">
               <a
-                href={`#${it.key}`}
+                href={withBase(`#${it.key}`)}
                 onClick={(e) => onPick(it.key, e)}
                 aria-current={on === it.key ? "true" : undefined}
                 className={`flex items-center gap-2 rounded-full px-3.5 py-2 font-inter text-[14px] whitespace-nowrap transition-colors ${on === it.key ? "bg-ndm-deep font-medium text-white" : "text-ndm-ink/80 hover:bg-white hover:text-ndm-ink"}`}

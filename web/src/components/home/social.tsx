@@ -8,6 +8,7 @@ import { TwoTone } from "@/components/ui/two-tone";
 import { HOME_COPY } from "@/config/home";
 import { SOCIAL, type SocialNetwork } from "@/config/social";
 import type { HomeCopy } from "@/types/home";
+import { withBase } from "@/lib/base-path";
 
 export const SOCIAL_ICONS: [network: SocialNetwork, Icon: ComponentType, name: string][] = [
   ["instagram", IconInstagram, "Instagram"],
@@ -46,7 +47,7 @@ export function Social({ copy = HOME_COPY.social }: { copy?: HomeCopy["social"] 
             <ul className="flex gap-2" role="list">
               {SOCIAL_ICONS.map(([net, Icon, name]) => (
                 <li key={net}>
-                  <a href={SOCIAL[net]} target="_blank" rel="noopener" aria-label={`NewDermaMed on ${name}`} data-net={net} className="soc-ico soc-ico-line grid size-11 place-items-center rounded-full border border-ndm-ink/15 text-ndm-ink">
+                  <a href={withBase(SOCIAL[net])} target="_blank" rel="noopener" aria-label={`NewDermaMed on ${name}`} data-net={net} className="soc-ico soc-ico-line grid size-11 place-items-center rounded-full border border-ndm-ink/15 text-ndm-ink">
                     <Icon />
                   </a>
                 </li>
