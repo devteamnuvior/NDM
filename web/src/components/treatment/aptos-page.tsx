@@ -1,3 +1,4 @@
+import { crumbLink } from "@/lib/post-links";
 import { Saying } from "@/components/home/saying";
 import { Team } from "@/components/home/team";
 import { ProcAnalysis } from "@/components/treatment/proc-analysis";
@@ -33,7 +34,7 @@ export function AptosPage({ view }: { view: AptosView }) {
   const n = (id: string) => txNumber(p.nav, id);
   return (
     <main id="main" data-shell="inner" data-page="aptos">
-      <Breadcrumb items={[[p.crumbs[0]], p.crumbs[1]]} dark />
+      <Breadcrumb items={[[p.crumbs[0], crumbLink(p.crumbs[0])], p.crumbs[1]]} dark />
       <ProcHero title={p.title} sub={p.sub} hero={p.hero} />
       {p.facts.length > 0 && <TxGlance facts={p.facts} />}
       <section aria-label="Book a free consultation" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-6 lg:hidden">

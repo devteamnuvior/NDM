@@ -1,3 +1,5 @@
+import { crumbLink } from "@/lib/post-links";
+import type { ResolvedLink } from "@/types/navigation";
 import { Saying } from "@/components/home/saying";
 import { Team } from "@/components/home/team";
 import { ProcAnalysis } from "@/components/treatment/proc-analysis";
@@ -35,7 +37,7 @@ export function ProcedurePage({ view }: { view: ProcedureView }) {
   return (
     /* data-page="botox": the page-only styles of this design are tied to that name (styles/page-botox.css) */
     <main id="main" data-shell="inner" data-page="botox">
-      <Breadcrumb items={[...p.crumbs.slice(0, -1).map((x): [string] => [x]), p.crumbs[p.crumbs.length - 1]]} dark />
+      <Breadcrumb items={[...p.crumbs.slice(0, -1).map((x): [string, ResolvedLink] => [x, crumbLink(x)]), p.crumbs[p.crumbs.length - 1]]} dark />
       <ProcHero title={p.title} sub={p.sub} hero={p.hero} where={p.where} offer={p.offer} />
       {p.facts.length > 0 && <TxGlance facts={p.facts} />}
       <section aria-label="Book a free consultation" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-6 lg:hidden">

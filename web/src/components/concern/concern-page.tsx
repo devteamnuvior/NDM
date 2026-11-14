@@ -1,3 +1,4 @@
+import { crumbLink } from "@/lib/post-links";
 import { CnArticles } from "@/components/concern/cn-articles";
 import { CnAssess } from "@/components/concern/cn-assess";
 import { CnCompare } from "@/components/concern/cn-compare";
@@ -28,7 +29,7 @@ export function ConcernPage({ view }: { view: ConcernView }) {
   const n = (id: string) => txNumber(p.nav, id);
   return (
     <main id="main" data-shell="inner" data-page="concern">
-      <Breadcrumb items={[[p.crumbs[0]], p.crumbs[1]]} dark />
+      <Breadcrumb items={[[p.crumbs[0], crumbLink(p.crumbs[0])], p.crumbs[1]]} dark />
       <ProcHero title={p.title} sub={p.sub} hero={p.hero} where={p.where} />
       <TxGlance facts={p.facts} />
       <section aria-label="Book a free consultation" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-6 lg:hidden">
