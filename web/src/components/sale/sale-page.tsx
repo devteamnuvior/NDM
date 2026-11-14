@@ -357,7 +357,7 @@ function DealCard({ d, plan, toggle, badge }: PlanProps & { d: Deal; badge: stri
   return (
     /* the one column may shrink below its content (minmax(0,1fr)), so a long name is cut short instead of widening the card;
        header, text, treatment, packages and price are five rows the cards of one grid row share (subgrid), so each lines up across the row */
-    <li id={`bf-${d.id}`} className="row-span-5 grid scroll-mt-[96px] grid-cols-[minmax(0,1fr)] grid-rows-subgrid gap-y-0">
+    <li id={`bf-${d.id}`} className="row-span-5 grid scroll-mt-[150px] grid-cols-[minmax(0,1fr)] grid-rows-subgrid gap-y-0">
       <article className={`${T.p}-card row-span-5 grid grid-cols-[minmax(0,1fr)] grid-rows-subgrid gap-y-0 overflow-hidden rounded-[24px] bg-white p-5 ring-1 ring-black/[.06] sm:p-6 ${inPlan ? 'is-in' : ''}`}>
         <div className={`${T.p}-head relative -mx-5 -mt-5 mb-5 flex min-h-[180px] flex-col gap-5 overflow-hidden p-5 text-white *:last:mt-auto sm:-mx-6 sm:-mt-6 sm:p-6`}>
           <span aria-hidden="true" className={`${T.p}-head-mark font-aeonik`}>%</span>
@@ -438,7 +438,8 @@ function Deals({ pick, setPick, plan, toggle, badge }: PickProps & PlanProps & {
           </div>
           <p className="rv font-inter text-[14px] text-ndm-muted" style={{ transitionDelay: '.1s' }}><b className={`font-semibold ${T.ink}`}>{list.length}</b> {list.length === 1 ? 'treatment' : 'treatments'}{pick && <> for <b className={`font-semibold ${T.ink}`}>{pick.toLowerCase()}</b> · <button type="button" onClick={() => setPick(null)} className={`${T.accent} underline underline-offset-4`}>show all</button></>}</p>
         </div>
-        <div className="no-scrollbar -mx-[var(--gx)] mt-8 overflow-x-auto px-[var(--gx)]">
+        {/* the tabs stay under the page header for as long as the deals are on screen; the strip is the page's own colour, so it only shows once cards pass under it */}
+        <div className={`${T.p}-tabs no-scrollbar sticky top-[69px] z-40 -mx-[var(--gx)] mt-5 overflow-x-auto bg-[color-mix(in_srgb,var(--pp)_92%,transparent)] px-[var(--gx)] py-3 backdrop-blur-[10px]`}>
           <div className="inline-flex gap-1 rounded-full bg-black/[.05] p-1" role="tablist" aria-label="Deal categories">
             {tabs.map((x) => (
               <button key={x} type="button" role="tab" aria-selected={tab === x} onClick={() => setTab(x)}
@@ -447,10 +448,10 @@ function Deals({ pick, setPick, plan, toggle, badge }: PickProps & PlanProps & {
           </div>
         </div>
         {list.length ? (
-          <ul role="list" className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <ul role="list" className="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {list.map((d) => <DealCard key={d.id} d={d} plan={plan} toggle={toggle} badge={badge} />)}
           </ul>
-        ) : <p className="mt-8 font-inter text-[15px] text-ndm-muted">No deals in this group for that concern. <button type="button" onClick={() => setTab('All deals')} className={`${T.accent} underline underline-offset-4`}>See all deals</button></p>}
+        ) : <p className="mt-5 font-inter text-[15px] text-ndm-muted">No deals in this group for that concern. <button type="button" onClick={() => setTab('All deals')} className={`${T.accent} underline underline-offset-4`}>See all deals</button></p>}
         <p className="mt-6 font-inter text-[12.5px] leading-[1.55] text-ndm-muted">Prices in CAD from the current NewDermaMed price list, before tax.{code ? ` Code ${code} applies to eligible packages.` : ''} Your provider confirms which treatment suits you at your free consultation. Individual results may vary.</p>
       </div>
     </section>

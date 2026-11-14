@@ -192,6 +192,28 @@ for (const width of [1440, 375]) {
   });
 }
 
+for (const width of [1440, 375]) {
+  test(`the deal tabs stay under the header while the deals scroll past, and leave with them (${width}px)`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await at(page, "2026-11-15T12:00:00-05:00");
+    await page.goto(`${NEXT_URL}/vip-sale`);
+    const tabs = page.getByRole("tablist", { name: "Deal categories" });
+    const header = page.locator("header").first();
+    const top = async () => Math.round((await tabs.boundingBox())!.y);
+    const headerBottom = async () => Math.round((await header.boundingBox())!.height);
+    /* halfway down the deals: the tabs sit right under the header, and a tab still works there */
+    await page.locator("#deals article").nth(8).evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY));
+    await expect.poll(top).toBeGreaterThanOrEqual(await headerBottom());
+    await expect.poll(top).toBeLessThan((await headerBottom()) + 20);
+    await tabs.getByRole("tab", { name: "Skin" }).click();
+    await expect(tabs.getByRole("tab", { name: "Skin" })).toHaveAttribute("aria-selected", "true");
+    /* past the deals they are gone with the section */
+    await page.locator("#plan").evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY));
+    await expect.poll(top).toBeLessThan(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+  });
+}
+
 test.describe("phone", () => {
   test.use({ viewport: { width: 375, height: 812 } });
   for (const path of ["/vip-sale", "/black-friday"]) {
