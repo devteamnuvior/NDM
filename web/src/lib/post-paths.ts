@@ -47,3 +47,21 @@ export function isProcedureFolder(folder: string): folder is ProcedureFolder {
 export const procedurePath = (type: string | undefined, slug: string): string => `/${procedureFolder(type)}/${slug}`;
 export const concernPath = (slug: string): string => `/${CONCERN_FOLDER}/${slug}`;
 export const articlePath = (slug: string): string => `/${BLOG_FOLDER}/${slug}`;
+
+/** A page published in WordPress: the post's slug and its address on the site ("/injectables/botox"). */
+export interface PostPath {
+  slug: string;
+  path: string;
+}
+
+/**
+ * The WordPress page a menu entry links to, by the slug of its label. The Concerns menu (`prefer`
+ * "concerns") looks for a concern first, also under the slug with "-concern" added, because a concern may
+ * share its name with a procedure ("Melasma": /skin/melasma and /concerns/melasma-concern). Every other
+ * menu looks for a procedure first.
+ */
+export function menuPost(slug: string, concerns: readonly PostPath[], procedures: readonly PostPath[], prefer: "concerns" | "procedures" = "procedures"): PostPath | undefined {
+  const concern = () => concerns.find((p) => p.slug === slug) ?? concerns.find((p) => p.slug === `${slug}-concern`);
+  const procedure = () => procedures.find((p) => p.slug === slug);
+  return prefer === "concerns" ? (concern() ?? procedure()) : (procedure() ?? concern());
+}

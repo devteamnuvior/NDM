@@ -13,7 +13,7 @@ import { withBase } from "@/lib/base-path";
 
 /** Concerns: four groups of concerns, then the skin-analysis photo card. */
 export function ConcernsMenu({ open, current, onLink, eager }: MenuPanelProps) {
-  const menuLink = useMenuLink();
+  const menuLink = useMenuLink("concerns");
   const { menu, header } = useSiteSettings();
   const panel = menu.concerns;
   return (

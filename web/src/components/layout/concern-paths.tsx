@@ -2,14 +2,11 @@
 
 import { usePathname } from "next/navigation";
 import { createContext, useContext, type ReactNode } from "react";
+import { menuPost, type PostPath } from "@/lib/post-paths";
 import { resolveLabel, toSlug } from "@/lib/routes";
 import type { NavSectionId, ResolvedLink } from "@/types/navigation";
 
-/** A page published in WordPress: the post's slug and its address on the site ("/injectables/botox"). */
-export interface PostPath {
-  slug: string;
-  path: string;
-}
+export type { PostPath };
 
 /** The pages published in WordPress: concerns, procedures (every procedure post type, and the Aptos page) and the blog's articles. */
 const PostPaths = createContext<{ concerns: readonly PostPath[]; procedures: readonly PostPath[]; articles: readonly PostPath[] }>({ concerns: [], procedures: [], articles: [] });
@@ -39,13 +36,12 @@ export function useArticleSection(): Extract<NavSectionId, "about"> | undefined 
   return at(articles, here(usePathname())) ? "about" : undefined;
 }
 
-/** A menu label -> its link; a concern or a procedure that has a page in WordPress links to its address there. */
-export function useMenuLink(): (label: string) => ResolvedLink {
+/** A menu label -> its link; a concern or a procedure that has a page in WordPress links to its address there (`menuPost`: the Concerns menu prefers concerns). */
+export function useMenuLink(prefer: "concerns" | "procedures" = "procedures"): (label: string) => ResolvedLink {
   const { concerns, procedures } = useContext(PostPaths);
   return (label) => {
     const link = resolveLabel(label);
-    const slug = toSlug(label);
-    const post = procedures.find((p) => p.slug === slug) ?? concerns.find((p) => p.slug === slug);
+    const post = menuPost(toSlug(label), concerns, procedures, prefer);
     return post ? { ...link, href: post.path, internal: true } : link;
   };
 }

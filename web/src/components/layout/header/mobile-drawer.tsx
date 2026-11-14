@@ -49,8 +49,8 @@ function TopLink({ to, here, onClick, children }: { to: ResolvedLink; here: bool
   );
 }
 
-function SubLink({ entry, current, onClick, nowrap }: { entry: MenuLink; current?: PageId; onClick: () => void; nowrap?: boolean }) {
-  const menuLink = useMenuLink();
+function SubLink({ entry, current, onClick, nowrap, prefer }: { entry: MenuLink; current?: PageId; onClick: () => void; nowrap?: boolean; prefer?: "concerns" }) {
+  const menuLink = useMenuLink(prefer);
   return (
     <SiteLink to={menuEntryLink(entry, menuLink)} current={current} onClick={onClick} className="menu-item-m font-mont">
       <span className={`min-w-0 ${nowrap ? "whitespace-nowrap" : ""}`}>{entry.label}</span>
@@ -150,7 +150,7 @@ export function MobileDrawer({ open, current, onClose }: MobileDrawerProps) {
                         <div key={`${gi}-${g.title}`}>
                           {g.title && <p className="mb-1 font-mont text-[11px] tracking-[.14em] text-ndm-muted uppercase">{g.title}</p>}
                           {g.items.map((it) => (
-                            <SubLink key={it.label} entry={it} current={current} onClick={onClose} />
+                            <SubLink key={it.label} entry={it} current={current} onClick={onClose} prefer="concerns" />
                           ))}
                         </div>
                       ))}
