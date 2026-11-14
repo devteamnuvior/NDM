@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { QtyControl } from "@/components/cart/qty-control";
+import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { IconSearch } from "@/components/ui/icons";
 import { TwoTone } from "@/components/ui/two-tone";
@@ -20,7 +21,19 @@ const Stroke = ({ d }: { d: string }) => (
 
 type Hit = [item: PriceItemView, index: number];
 
+/**
+ * The sale that is running, as the price list shows it: the checkout code and its percentage (the line under
+ * every package the code applies to), and the banner above the list while the sale has one.
+ */
+export interface PriceListSale {
+  code: string;
+  percent: number;
+  banner?: { name: string; text: string; cta: string; href: string };
+}
+const SaleContext = createContext<PriceListSale | null>(null);
+
 function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView; it: PriceItemView; uid: string; open: boolean; onToggle: () => void }) {
+  const sale = useContext(SaleContext);
   return (
     <li className={`pr-item ${open ? "is-open" : ""}`}>
       <h4 className="m-0">
@@ -59,6 +72,12 @@ function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView
                   <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
                     <span className="font-inter text-[15px] text-ndm-ink">{o.label}</span>
                     {o.tag && <span className="pr-tag">{o.tag}</span>}
+                    {/* the price with the checkout code, on the packages the code applies to */}
+                    {sale && o.code ? (
+                      <span className="pr-code basis-full font-inter text-[13px] leading-[1.4] font-semibold text-ndm-deep">
+                        Extra {sale.percent}%{"\u00a0"}off with code {sale.code}: {money(o.code)}
+                      </span>
+                    ) : null}
                   </span>
                   <span className="col-start-1 row-start-2 flex items-baseline gap-2.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
                     {o.was ? (
@@ -171,7 +190,7 @@ function flipped(set: Set<string>, k: string): Set<string> {
  * The price list: every category folds, and every treatment inside it folds to show its sessions,
  * packages and offers, each with Add to cart. The search narrows it to matching treatments.
  */
-export function PriceList({ categories, total }: { categories: PriceCategoryView[]; total: number }) {
+export function PriceList({ categories, total, sale = null }: { categories: PriceCategoryView[]; total: number; sale?: PriceListSale | null }) {
   const section = useRef<HTMLElement>(null);
   useReveal(section);
   const [query, setQuery] = useState("");
@@ -219,8 +238,21 @@ export function PriceList({ categories, total }: { categories: PriceCategoryView
   }, []);
 
   return (
-    <section ref={section} id="prices" aria-labelledby="prices-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(64px,7vw,110px)] pb-[clamp(64px,7vw,110px)]">
+    <SaleContext value={sale}>
+      <section ref={section} id="prices" aria-labelledby="prices-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(64px,7vw,110px)] pb-[clamp(64px,7vw,110px)]">
       <div className="mx-auto max-w-[1040px]">
+        {sale?.banner && (
+          <aside aria-label={sale.banner.name} data-nav="dark" className="pr-sale rv mb-[clamp(36px,4vw,56px)] flex flex-col gap-4 rounded-[22px] bg-ndm-night px-5 py-5 text-white sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-7">
+            <p className="font-inter text-[15px] leading-[1.55] text-white/85">
+              <strong className="font-semibold text-white">{sale.banner.name}:</strong> {sale.banner.text}
+            </p>
+            <span className="shrink-0">
+              <Button href={sale.banner.href} v="light">
+                {sale.banner.cta}
+              </Button>
+            </span>
+          </aside>
+        )}
         <div className="text-center">
           <Eyebrow className="rv">Price list</Eyebrow>
           <TwoTone id="prices-title" className="rv mt-5" lead="Prices and" strong="current offers" style={{ transitionDelay: ".06s" }} />
@@ -276,6 +308,7 @@ export function PriceList({ categories, total }: { categories: PriceCategoryView
           <p className="mt-10 text-center font-inter text-[12.5px] leading-[1.6] text-ndm-muted">Prices in CAD from the current NewDermaMed price list and subject to change. Your final price is confirmed at your free consultation. Individual results may vary.</p>
         </div>
       </div>
-    </section>
+      </section>
+    </SaleContext>
   );
 }

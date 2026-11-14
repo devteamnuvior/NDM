@@ -5,14 +5,17 @@ import { Process } from "@/components/home/process";
 import { Saying } from "@/components/home/saying";
 import { Social } from "@/components/home/social";
 import { Team } from "@/components/home/team";
-import { PriceList } from "@/components/pricing/price-list";
+import { PriceList, type PriceListSale } from "@/components/pricing/price-list";
 import { PriceSpecials } from "@/components/pricing/price-specials";
 import { PricingHero } from "@/components/pricing/pricing-hero";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Faq } from "@/components/ui/faq";
 import { PRICE_FAQS, PRICE_SPECIALS } from "@/config/pricing";
 import { PRICE_NAMES } from "@/config/price-names";
+import { SALE_HEADLINE } from "@/config/sale";
 import { getOffers, specialsWithOfferPrices } from "@/lib/offers";
+import { pagePath } from "@/lib/routes";
+import type { WooCampaign } from "@/types/pricing";
 import { buildPricingView } from "@/lib/pricing-view";
 import { getPricingTree } from "@/lib/wordpress";
 import { PriceListNotice } from "@/components/pricing/price-list-notice";
@@ -26,14 +29,36 @@ export const metadata: Metadata = {
 };
 
 /**
+ * What the price list says about the sale while one runs: the checkout code's line under every package it
+ * applies to, and, in the VIP Sale's days, the banner above the list (the Black Friday phases bring their own).
+ */
+function saleOnPriceList(campaign: WooCampaign | null | undefined): PriceListSale | null {
+  if (!campaign || campaign.over || !campaign.phase) return null;
+  const phase = campaign.phases.find((p) => p.id === campaign.phase);
+  const banner =
+    campaign.phase === "vip" && phase
+      ? {
+          name: phase.label,
+          text: `up to ${SALE_HEADLINE}%\u00a0off selected packages. Eligible packages take an extra ${campaign.percent}%\u00a0off with code ${campaign.code} at checkout.`,
+          cta: `See the ${phase.label}`,
+          href: pagePath("vipSale"),
+        }
+      : undefined;
+  return { code: campaign.code, percent: campaign.percent, banner };
+}
+
+/**
  * The parts of the page that show the price list, read from WooCommerce (cached, refreshed the moment
  * something changes there). When WooCommerce cannot be reached the page says so and tries again on the
  * next visit, instead of showing prices it cannot vouch for.
  */
 async function PriceSections() {
   let view;
+  let sale: PriceListSale | null = null;
   try {
-    view = buildPricingView(await getPricingTree(), PRICE_NAMES);
+    const tree = await getPricingTree();
+    view = buildPricingView(tree, PRICE_NAMES);
+    sale = saleOnPriceList(tree.campaign);
   } catch (error) {
     unstable_rethrow(error);
     console.error("[pricing] the price list could not be read from WooCommerce:", error instanceof Error ? error.message : error);
@@ -68,7 +93,7 @@ async function PriceSections() {
     <>
       <PricingHero total={view.total} />
       {specials.length > 0 && <PriceSpecials specials={specials}sub={PRICE_SPECIALS.sub} note={PRICE_SPECIALS.note} />}
-      <PriceList categories={view.categories} total={view.total} />
+      <PriceList categories={view.categories} total={view.total} sale={sale} />
     </>
   );
 }
