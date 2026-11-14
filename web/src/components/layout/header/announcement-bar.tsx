@@ -2,13 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { IconExternal, IconPhone } from "@/components/ui/icons";
-import {
-  ANNOUNCEMENT_INTERVAL_MS,
-  ANNOUNCEMENTS_DESKTOP,
-  ANNOUNCEMENTS_MOBILE,
-  type Announcement,
-} from "@/config/announcements";
-import { ACTIONS } from "@/config/routes";
+import { useSiteSettings } from "@/components/layout/site-settings";
+import type { Announcement } from "@/types/site-settings";
 import { CLINICS } from "@/config/site";
 import { tel } from "@/lib/routes";
 import { withBase } from "@/lib/base-path";
@@ -93,14 +88,17 @@ function Ticker({ messages, tick, wide, className }: { messages: Announcement[];
  * screen width, so the server HTML and the first client render always match.
  */
 export function AnnouncementBar() {
+  const settings = useSiteSettings().header;
+  const { announcement: bar } = settings;
+  const intervalMs = bar.seconds * 1000;
   const [tick, setTick] = useState(0);
   const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = setInterval(() => setTick((v) => v + 1), ANNOUNCEMENT_INTERVAL_MS);
+    const t = setInterval(() => setTick((v) => v + 1), intervalMs);
     return () => clearInterval(t);
-  }, [paused]);
+  }, [paused, intervalMs]);
 
   return (
     <div
@@ -123,17 +121,21 @@ export function AnnouncementBar() {
           ))}
         </div>
         <div className="col-span-3 flex min-w-0 items-center justify-center gap-1 lg:col-span-1">
+          {bar.badge && (
           <span className="promo-new relative hidden shrink-0 items-center gap-1.5 rounded-full bg-white px-2 py-[3px] font-mont text-[10px] font-semibold tracking-[.12em] text-ndm-deep uppercase sm:inline-flex">
             <i className="promo-ping relative size-1.5 rounded-full bg-ndm-amber" />
-            New
+            {bar.badge}
           </span>
-          <Ticker messages={ANNOUNCEMENTS_MOBILE} tick={tick} wide={false} className="lg:hidden" />
-          <Ticker messages={ANNOUNCEMENTS_DESKTOP} tick={tick} wide className="hidden lg:block" />
+          )}
+          <Ticker messages={bar.mobile} tick={tick} wide={false} className="lg:hidden" />
+          <Ticker messages={bar.desktop} tick={tick} wide className="hidden lg:block" />
         </div>
         <div className="hidden items-center justify-end gap-4 lg:flex">
-          <a href={withBase(ACTIONS.shop)} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 font-medium underline-offset-4 hover:underline">
-            Shop skincare <IconExternal />
-          </a>
+          {bar.shopLabel && (
+            <a href={withBase(settings.shopLink)} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 font-medium underline-offset-4 hover:underline">
+              {bar.shopLabel} <IconExternal />
+            </a>
+          )}
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { IconBag, IconChevron, IconExternal, IconMenu, IconSearch, IconUser } from "@/components/ui/icons";
 import { SiteLink } from "@/components/ui/site-link";
 import { useArticleSection, usePostSection } from "@/components/layout/concern-paths";
+import { useSiteSettings } from "@/components/layout/site-settings";
 import { NAV, PAGE_SECTION } from "@/config/navigation";
 import { ACTIONS, type PageId } from "@/config/routes";
 import { pageLink, resolveLabel } from "@/lib/routes";
@@ -40,8 +41,10 @@ const GLASS = "blur(14px) saturate(160%)";
 const ITEM_CLASS =
   "relative flex items-center gap-1.5 rounded-full px-2 py-2.5 font-inter text-[15px] tracking-[-0.02em] whitespace-nowrap transition-colors 2xl:px-4 2xl:text-[16px]";
 
-function navLink(n: NavItem) {
+function navLink(n: NavItem, shopLink: string) {
   if (n.href === "/") return pageLink("home");
+  /* the skincare shop's address is a Site Setting */
+  if (n.id === "shop") return { href: shopLink };
   return n.href ? { href: n.href } : resolveLabel(n.label);
 }
 
@@ -50,6 +53,7 @@ export function HeaderBar({ dark, current, top = 36, visible = true, cartCount =
   const [open, setOpen] = useState<NavMenuId | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const wrapRef = useRef<HTMLElement>(null);
+  const settings = useSiteSettings().header;
   const postSection = usePostSection();
   const articleSection = useArticleSection();
   const section = current ? PAGE_SECTION[current] : (postSection ?? articleSection);
@@ -170,7 +174,7 @@ export function HeaderBar({ dark, current, top = 36, visible = true, cartCount =
                       </button>
                     ) : (
                       <SiteLink
-                        to={navLink(n)}
+                        to={navLink(n, settings.shopLink)}
                         {...(n.external ? { target: "_blank", rel: "noopener" } : {})}
                         {...(here ? { "aria-current": "page" as const } : {})}
                         className={`${ITEM_CLASS} ${hover} ${here ? hereClass : ""}`}
@@ -221,13 +225,14 @@ export function HeaderBar({ dark, current, top = 36, visible = true, cartCount =
               </button>
             )}
             <Button href={ACTIONS.book} v="book" hot className="ml-1.5 hidden! sm:flex!">
-              Book Free Consultation
+              {settings.bookLabel}
             </Button>
             <a
               href={withBase(ACTIONS.book)}
               className="ml-1 inline-flex h-9 items-center rounded-full bg-ndm-amber px-4 font-inter text-[14px] font-medium text-white shadow-[0_10px_22px_-12px_rgba(255,166,23,.9)] transition-colors hover:bg-[#F29A0A] sm:hidden"
             >
-              Book<span className="sr-only"> a free consultation</span>
+              {settings.bookShort}
+              {settings.bookShort === "Book" && <span className="sr-only"> a free consultation</span>}
             </a>
             <button type="button" onClick={onDrawer} aria-label="Open menu" className={`xl:hidden ${icon}`}>
               <IconMenu />

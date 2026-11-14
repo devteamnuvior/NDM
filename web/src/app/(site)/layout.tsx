@@ -4,16 +4,20 @@ import { DragScroll } from "@/components/layout/drag-scroll";
 import { SiteHeader } from "@/components/layout/header/site-header";
 import { OfferPopup } from "@/components/layout/offer-popup";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteSettingsProvider } from "@/components/layout/site-settings";
 import { getAptosSlugs } from "@/lib/aptos";
 import { getArticleSlugs } from "@/lib/blog";
 import { getConcernSlugs } from "@/lib/concern";
 import { getProcedureSlugs } from "@/lib/procedure";
+import { getSiteSettings } from "@/lib/site-settings";
 
 /** Pages inside the site's header and footer (every page except the Black Friday sale page, which has its own). */
 export default async function SiteLayout({ children }: { children: ReactNode }) {
   /* the concern and procedure pages published in WordPress (the pages of the Aptos design are procedures too): the header links them and starts dark on them; on an article it marks About */
-  const [concerns, procedures, aptos, articles] = await Promise.all([getConcernSlugs(), getProcedureSlugs(), getAptosSlugs(), getArticleSlugs()]);
+  /* the header and footer settings (WordPress: Site Settings) */
+  const [concerns, procedures, aptos, articles, settings] = await Promise.all([getConcernSlugs(), getProcedureSlugs(), getAptosSlugs(), getArticleSlugs(), getSiteSettings()]);
   return (
+    <SiteSettingsProvider value={settings}>
     <ConcernPathsProvider slugs={concerns} procedures={[...procedures, ...aptos]} articles={articles}>
       <div className="site-root">
         <a
@@ -29,5 +33,6 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
       </div>
       <OfferPopup />
     </ConcernPathsProvider>
+    </SiteSettingsProvider>
   );
 }

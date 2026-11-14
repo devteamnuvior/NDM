@@ -25,6 +25,8 @@ export const WP_TAGS = {
   about: "about",
   /** The home page (the page chosen as the homepage under Settings > Reading). */
   home: "home",
+  /** Site Settings: the header and footer (WordPress's "Site Settings" screen). */
+  siteSettings: "site-settings",
   /** The blog: its posts, their photos and categories. */
   blog: "blog",
   /** The popular searches counted by WordPress. */

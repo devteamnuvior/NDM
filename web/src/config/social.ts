@@ -1,14 +1,12 @@
 /** The clinic's social accounts, the reels on the home page's phone, and the journal posts. */
 
-export const SOCIAL = {
-  instagram: "https://www.instagram.com/newdermamed/",
-  facebook: "https://www.facebook.com/NewDermaMed-171490486329211/",
-  youtube: "https://www.youtube.com/channel/UCEu0ghSIa-ZPqNh087WAY3w",
-  x: "https://twitter.com/NewDermaMed",
-  linkedin: "https://www.linkedin.com/company/3636680",
-} as const;
+import { SITE_SETTINGS } from "@/config/site-settings";
+import type { SocialNetwork } from "@/types/site-settings";
 
-export type SocialNetwork = keyof typeof SOCIAL;
+/** The clinic's social accounts as built into the site (the footer reads WordPress's Site Settings instead). */
+export const SOCIAL: Record<SocialNetwork, string> = SITE_SETTINGS.footer.social;
+
+export type { SocialNetwork };
 
 const REEL_BASE = "https://newdermamedlaserclinic.com/wp-content/uploads/";
 

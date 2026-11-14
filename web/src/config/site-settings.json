@@ -1,0 +1,73 @@
+{
+  "header": {
+    "announcement": {
+      "hidden": false,
+      "badge": "New",
+      "seconds": 4.8,
+      "desktop": [
+        { "id": "offers", "kind": "message", "text": "New-patient offers this month, ", "cta": "see current offers →", "href": "/promotion" },
+        { "id": "visia", "kind": "message", "text": "Complimentary VISIA® skin analysis with your consultation, ", "cta": "book yours →", "href": "#/book" },
+        { "id": "plans", "kind": "message", "text": "Flexible payment plans. Start today, pay later, ", "cta": "learn more →", "href": "#/financing" }
+      ],
+      "mobile": [
+        { "id": "offers", "kind": "message", "text": "New-patient offers this month ", "cta": "→", "href": "/promotion" },
+        { "id": "visia", "kind": "message", "text": "Free VISIA® skin analysis, ", "cta": "book →", "href": "#/book" },
+        { "id": "phones", "kind": "phones" },
+        { "id": "plans", "kind": "message", "text": "Payment plans: start today, pay later →", "href": "#/financing" },
+        { "id": "shop", "kind": "message", "text": "Shop skincare online", "href": "#/shop", "external": true }
+      ],
+      "shopLabel": "Shop skincare"
+    },
+    "bookLabel": "Book Free Consultation",
+    "bookShort": "Book",
+    "shopLink": "#/shop"
+  },
+  "footer": {
+    "film": {
+      "src": "https://public.biograph.com/images/membership-footer-video.mp4",
+      "poster": "https://framerusercontent.com/images/HufrBRKF68pdIZICx50VDBCtHw.png?width=1920&height=1080"
+    },
+    "cta": {
+      "lead": "Confidence is your true beauty.",
+      "strong": "It’s time to reveal it.",
+      "text": "Book a free consultation with our medical team and take the first step toward a treatment plan designed around you.",
+      "book": "Book Free Consultation",
+      "second": { "label": "Explore Procedures", "link": "#/procedures" }
+    },
+    "about": "Toronto’s award-winning cosmetic & laser clinic, medical-grade aesthetic and dermatology care, planned around you.",
+    "badges": { "award": "Top Choice Award", "years": "16+ years of care" },
+    "columns": [
+      {
+        "title": "Quick links",
+        "links": [
+          { "label": "Procedures", "link": "" },
+          { "label": "Concerns", "link": "" },
+          { "label": "Pricing", "link": "" },
+          { "label": "Promotion", "link": "" },
+          { "label": "Skincare Shop", "link": "" },
+          { "label": "Blog", "link": "" }
+        ]
+      },
+      {
+        "title": "About",
+        "links": [
+          { "label": "Our Clinics", "link": "" },
+          { "label": "Doctors & Team", "link": "" },
+          { "label": "Awards & Recognition", "link": "" },
+          { "label": "Contact Us", "link": "" },
+          { "label": "Book Online", "link": "" }
+        ]
+      }
+    ],
+    "contactTitle": "Get in touch",
+    "email": "info@newdermamed.com",
+    "copyright": "© 2026 NewDermaMed. Medical treatments by licensed providers.",
+    "social": {
+      "instagram": "https://www.instagram.com/newdermamed/",
+      "facebook": "https://www.facebook.com/NewDermaMed-171490486329211/",
+      "youtube": "https://www.youtube.com/channel/UCEu0ghSIa-ZPqNh087WAY3w",
+      "x": "https://twitter.com/NewDermaMed",
+      "linkedin": "https://www.linkedin.com/company/3636680"
+    }
+  }
+}

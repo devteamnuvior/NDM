@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { IconArrow, IconChevron, IconClose, IconExternal } from "@/components/ui/icons";
 import { SiteLink } from "@/components/ui/site-link";
 import { useArticleSection, useMenuLink, usePostSection } from "@/components/layout/concern-paths";
+import { useSiteSettings } from "@/components/layout/site-settings";
 import { ABOUT_LINKS, CONCERNS, PAGE_SECTION, PROCEDURES } from "@/config/navigation";
 import { ACTIONS, type PageId } from "@/config/routes";
 import { CLINICS } from "@/config/site";
@@ -62,6 +63,7 @@ export function MobileDrawer({ open, current, onClose }: MobileDrawerProps) {
   const shown = useDeferredOpen(open);
   const [sec, setSec] = useState<Section | null>(null);
   const [cat, setCat] = useState<string | null>(() => categoryOf(current) ?? null);
+  const settings = useSiteSettings().header;
   const postSection = usePostSection();
   const articleSection = useArticleSection();
   const section: NavSectionId | undefined = current ? PAGE_SECTION[current] : (postSection ?? articleSection);
@@ -172,7 +174,7 @@ export function MobileDrawer({ open, current, onClose }: MobileDrawerProps) {
               </ul>
             )}
           </div>
-          <a href={withBase(ACTIONS.shop)} target="_blank" rel="noopener" className={`flex items-center gap-2 py-4 ${TOP_CLASS}`}>
+          <a href={withBase(settings.shopLink)} target="_blank" rel="noopener" className={`flex items-center gap-2 py-4 ${TOP_CLASS}`}>
             Skincare shop <IconExternal size={16} />
           </a>
         </nav>
@@ -186,7 +188,7 @@ export function MobileDrawer({ open, current, onClose }: MobileDrawerProps) {
             ))}
           </div>
           <Button href={ACTIONS.book} onClick={onClose} v="book" hot block>
-            Book Free Consultation
+            {settings.bookLabel}
           </Button>
         </div>
       </aside>

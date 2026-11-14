@@ -8,6 +8,7 @@ import { FloatSearch } from "@/components/layout/header/float-search";
 import { usePostSection } from "@/components/layout/concern-paths";
 import { HeaderBar } from "@/components/layout/header/header-bar";
 import { CartPill } from "@/components/cart/cart-pill";
+import { useSiteSettings } from "@/components/layout/site-settings";
 import { DARK_START_PAGES } from "@/config/navigation";
 import { useCart } from "@/hooks/use-cart";
 import { useNavTone } from "@/hooks/use-nav-tone";
@@ -38,6 +39,8 @@ export function SiteHeader() {
   const onPost = !!usePostSection();
   const dark = useNavTone((!!current && DARK_START_PAGES.includes(current)) || onPost, pathname);
   const cart = useCart();
+  /* the announcement bar can be hidden in Site Settings: the header then sits at the top */
+  const barHidden = useSiteSettings().header.announcement.hidden;
   const [search, setSearch] = useState(false);
   const [drawer, setDrawer] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -70,11 +73,11 @@ export function SiteHeader() {
 
   return (
     <>
-      <AnnouncementBar />
+      {!barHidden && <AnnouncementBar />}
       <HeaderBar
         dark={dark}
         current={current}
-        top={ANNOUNCEMENT_HEIGHT}
+        top={barHidden ? 0 : ANNOUNCEMENT_HEIGHT}
         cartCount={cart.count}
         onSearch={openSearch}
         onDrawer={openDrawer}

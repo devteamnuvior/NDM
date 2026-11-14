@@ -198,21 +198,6 @@ export const POPULAR_SEARCHES: string[] = [
   "Acne Scar",
 ];
 
-/** Footer link columns. Labels are resolved through the route table, like the menu's. */
-export const FOOTER_LINKS: Record<string, string[]> = {
-  "Quick links": ["Procedures", "Concerns", "Pricing", "Promotion", "Skincare Shop", "Blog"],
-  About: ["Our Clinics", "Doctors & Team", "Awards & Recognition", "Contact Us", "Book Online"],
-};
-
-/**
- * Footer film and its poster. Both are third-party placeholder files the prototype links to directly;
- * they must be replaced with the clinic's own footage before launch.
- */
-export const FOOTER_FILM = {
-  poster: "https://framerusercontent.com/images/HufrBRKF68pdIZICx50VDBCtHw.png?width=1920&height=1080",
-  src: "https://public.biograph.com/images/membership-footer-video.mp4",
-};
-
 /** Pages that open on a dark hero: their header starts in the dark tone, so it never flashes light first. */
 export const DARK_START_PAGES: PageId[] = ["home", "pricing", "aptos", "botox", "wrinkles", "about"];
 

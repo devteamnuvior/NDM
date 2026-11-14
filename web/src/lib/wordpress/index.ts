@@ -23,5 +23,6 @@ export { getProcedure, getProcedureList } from "./procedures";
 export { getAdminPromotions, getPromotions, savePromotions, uploadPromotionPhoto } from "./promotions";
 export { placeOrderRequest, type OrderRequestInput, type PlacedOrder } from "./orders";
 export { getPostBySlug, getPosts, type PostsQuery, type WPPostSummary } from "./posts";
+export { getSiteSettingsRaw } from "./site-settings";
 export { getPopularSearchTerms, logSearchTerm } from "./search";
 export { WP_TAGS } from "./tags";
