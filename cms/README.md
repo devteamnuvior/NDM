@@ -132,7 +132,7 @@ wp ndm-pricing repair --apply < /tmp/price-list.json
 ## Current offers (Promotion page, offers wheel)
 
 An offer is a WooCommerce product with one piece of post meta, `_ndm_promo`: `order`, `name` (card
-title, empty shows the product's name), `text`, `area` (`Face` or `Body`), `icon`, `focus` (photo focus
+title, empty shows the product's name), `text`, `area` (`Face`, `Body` or `Hair`), `icon`, `focus` (photo focus
 point, `50% 40%`) and `scope` (`product`: the card shows this treatment's lowest price and offer;
 `category`: the lowest of its whole category). It holds no price: the site works the price and the
 offer line out from the price list. The photo is the product's own image.

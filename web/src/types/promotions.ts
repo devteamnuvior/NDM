@@ -4,8 +4,8 @@
  * with a few display settings; it holds no price: prices come from the price list.
  */
 
-export const PROMO_AREAS = ["Face", "Body"] as const;
-export const PROMO_ICONS = ["pen", "lips", "syringe", "hand", "drop", "face"] as const;
+export const PROMO_AREAS = ["Face", "Body", "Hair"] as const;
+export const PROMO_ICONS = ["pen", "lips", "syringe", "hand", "drop", "face", "body", "hair"] as const;
 export const PROMO_SCOPES = ["product", "category"] as const;
 /** The most offers the page shows (the plugin refuses more). */
 export const PROMO_MAX = 30;

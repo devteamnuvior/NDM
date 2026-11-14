@@ -7,8 +7,8 @@
  *   _ndm_promo   array  order  position on the page, 0 first
  *                       name   card title ("Lip Filler"); empty shows the product's own name
  *                       text   one line under the title
- *                       area   "Face" or "Body" (the page's filter)
- *                       icon   line icon of the card: pen, lips, syringe, hand, drop, face
+ *                       area   "Face", "Body" or "Hair" (the page filters by Face and Body; Hair shows under All)
+ *                       icon   line icon of the card: pen, lips, syringe, hand, drop, face, body, hair
  *                       focus  focus point of the photo, as "50% 40%"
  *                       scope  "product"  the card shows this treatment's lowest price and offer
  *                              "category" the card shows the lowest price and offer of its whole category
@@ -30,8 +30,8 @@ defined( 'ABSPATH' ) || exit;
 const NDM_PROMO_META      = '_ndm_promo';
 const NDM_PROMO_TRANSIENT = 'ndm_promotions_public';
 const NDM_PROMO_MAX       = 30;
-const NDM_PROMO_AREAS     = array( 'Face', 'Body' );
-const NDM_PROMO_ICONS     = array( 'pen', 'lips', 'syringe', 'hand', 'drop', 'face' );
+const NDM_PROMO_AREAS     = array( 'Face', 'Body', 'Hair' );
+const NDM_PROMO_ICONS     = array( 'pen', 'lips', 'syringe', 'hand', 'drop', 'face', 'body', 'hair' );
 const NDM_PROMO_SCOPES    = array( 'product', 'category' );
 
 /**

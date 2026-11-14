@@ -45,6 +45,19 @@ const PATHS: Record<SpecialIconName, ReactNode> = {
       <path d="M12 7.5v3M10.5 9h3" />
     </>
   ),
+  body: (
+    <>
+      <path d="M8 2.5c0 4.5 2.2 5.5 2.2 9.5S7 17.5 7 21.5" />
+      <path d="M16 2.5c0 4.5-2.2 5.5-2.2 9.5s3.2 5.5 3.2 9.5" />
+    </>
+  ),
+  hair: (
+    <>
+      <path d="M6 21c0-6 3-7 3-12 0-2.5-1-4-1-6" />
+      <path d="M11 21c0-6 3-7 3-12 0-2.5-1-4-1-6" />
+      <path d="M16 21c0-6 3-7 3-12 0-2.5-1-4-1-6" />
+    </>
+  ),
 };
 
 /** Line icon of an offer (the prototype's SW_ICONS paths). */

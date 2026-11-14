@@ -42,13 +42,14 @@ test("View all offers scrolls to the list on this page", async ({ page }) => {
   await expect(page).toHaveURL(/\/promotion(#offers)?$/);
 });
 
-test("ten offer cards with prices from the price list; Face and Body filter them", async ({ page }) => {
+test("twelve offer cards with prices from the price list; Face and Body filter them", async ({ page }) => {
   await page.goto(`${NEXT_URL}/promotion`);
   const grid = page.locator(OFFERS);
   const cards = grid.locator("article.promo-card");
-  await expect(cards).toHaveCount(10);
-  const first = cards.first();
-  await expect(first.locator("h3")).toHaveText("Lip Filler");
+  await expect(cards).toHaveCount(12);
+  await expect(cards.first().locator("h3")).toHaveText("Botox");
+  const first = cards.filter({ has: page.locator("h3", { hasText: /^Lip Filler$/ }) });
+  await expect(first).toHaveCount(1);
   const lip = await lipCard();
   await expect(first).toContainText(lip.price);
   await expect(first).toContainText("per syringe");
@@ -62,17 +63,18 @@ test("ten offer cards with prices from the price list; Face and Body filter them
   await body.click();
   await expect(body).toHaveAttribute("aria-pressed", "true");
   await expect(all).toHaveAttribute("aria-pressed", "false");
-  await expect(cards).toHaveCount(3);
-  await expect(cards.first().locator("h3")).toHaveText("Hand Rejuvenation with Radiesse®");
+  await expect(cards).toHaveCount(2);
+  await expect(cards.first().locator("h3")).toHaveText("Laser Hair Removal");
   await grid.getByRole("button", { name: "Face" }).click();
-  await expect(cards).toHaveCount(7);
+  await expect(cards).toHaveCount(9);
+  /* PRP Hair Restoration is neither Face nor Body: it shows under All only, as in the prototype */
   await all.click();
-  await expect(cards).toHaveCount(10);
+  await expect(cards).toHaveCount(12);
 });
 
 test("Buy now opens that category on the pricing page", async ({ page }) => {
   await page.goto(`${NEXT_URL}/promotion`);
-  await page.locator(OFFERS).locator("article.promo-card").nth(1).getByRole("link", { name: "Buy now" }).click();
+  await page.locator(OFFERS).locator("article.promo-card").nth(4).getByRole("link", { name: "Buy now" }).click();
   await expect(page).toHaveURL(`${NEXT_URL}/pricing#pg-microneedling-h`);
 });
 
