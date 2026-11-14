@@ -40,7 +40,13 @@ const LOOKS: Record<SaleView["look"], SaleLook> = {
 
 const PHONES = SITE_CLINICS.map((c) => ({ num: c.phone }));
 const CLINIC_PHOTOS = { uptown: "/assets/clinic/clinic-4.jpg", downtown: "/assets/clinic/clinic-1.jpg" };
-const CLINICS = SITE_CLINICS.map((c) => ({ name: c.name, addr: c.address, phone: c.phone, note: c.directions, img: CLINIC_PHOTOS[c.id] }));
+/* the Uptown clinic is in North York and its parking is the Hullmark Centre (pre-launch corrections, 2026-11-14) */
+const CLINICS = SITE_CLINICS.map((c) => ({ name: c.name, addr: c.address.replace("4763 Yonge Street, Toronto,", "4763 Yonge Street, North York,"), phone: c.phone, note: c.directions.replace("Hallmark Centre", "Hullmark Centre"), img: CLINIC_PHOTOS[c.id] }));
+const EMAIL = "info@newdermamed.com";
+/** "See packages" on a sale price card: its deal card opens on that product. */
+const PICK_EVENT = "ndm-sale-pick";
+/** Kept beside the saved plan once it went to the cart, until something new is added. */
+const sentKey = (planKey: string) => `${planKey}-sent`;
 type PickProps = { pick: string | null; setPick: (name: string | null) => void };
 type PlanProps = { plan: PlanLine[]; toggle: (x: PlanLine) => void };
 
@@ -343,6 +349,17 @@ function Concerns({ pick, setPick }: PickProps) {
 function DealCard({ d, plan, toggle, badge }: PlanProps & { d: Deal; badge: string }) {
   const { code, T } = useSale();
   const [ii, setIi] = useState(0);
+  /* "See packages" on a sale price card names its product: this card opens on it */
+  useEffect(() => {
+    const pick = (e: Event) => {
+      const want = (e as CustomEvent<{ cat: string; item: string }>).detail;
+      if (want.cat !== d.id) return;
+      const i = d.items.findIndex((x) => x[0] === want.item);
+      if (i >= 0) setIi(i);
+    };
+    window.addEventListener(PICK_EVENT, pick);
+    return () => window.removeEventListener(PICK_EVENT, pick);
+  }, [d]);
   const it = d.items[ii];
   const opts = it[2].map((o, k): [Opt, number] => [o, k]).filter(([o]) => o[5] !== undefined || o[2] > 0 || o[3]);
   const [pickOi, setOi] = useState(opts[0][1]);
@@ -486,7 +503,7 @@ function Specials() {
                       <p className="mt-1.5 font-inter text-[14px] leading-[1.5] text-ndm-muted">{s.qty}</p>
                       <div className={`${T.p}-tear mt-auto flex items-end justify-between gap-3 pt-5`}>
                         <p><b className={`font-aeonik text-[30px] font-normal leading-none tracking-[-0.03em] ${T.ink}`}>{money(s.price)}</b>{s.regular > s.price && <s className="ml-2 font-inter text-[14px] text-ndm-muted">{money(s.regular)}</s>}</p>
-                        {s.cat ? <Button href={`#bf-${s.cat}`} v="ink" sm onClick={go(`bf-${s.cat}`)}>See packages</Button> : <Button href="#/book" v="ink" sm>Book</Button>}
+                        {s.cat ? <Button href={`#bf-${s.cat}`} v="ink" sm onClick={(e: MouseEvent) => { window.dispatchEvent(new CustomEvent(PICK_EVENT, { detail: { cat: s.cat, item: s.item } })); go(`bf-${s.cat}`)(e); }}>See packages</Button> : <Button href="#/book" v="ink" sm>Book</Button>}
                       </div>
                     </div>
                   </article>
@@ -500,7 +517,7 @@ function Specials() {
   );
 }
 
-function Plan({ plan, toggle, clear }: PlanProps & { clear: () => void }) {
+function Plan({ plan, toggle, clear, sent, onSent }: PlanProps & { clear: () => void; sent: boolean; onSent: () => void }) {
   const { copy, deals, code, T } = useSale();
   const router = useRouter();
   const { website, withCode, saved } = planTotals(plan);
@@ -512,6 +529,8 @@ function Plan({ plan, toggle, clear }: PlanProps & { clear: () => void }) {
       setCartQty({ key: cartKey(p.pid, p.vid), cat: p.cat, name: p.name ?? p.item, label: p.opt, price: p.price, was: p.reg || undefined, productId: p.pid, variationId: p.vid }, 1);
     });
     if (code) setTypedCode(code);
+    /* the plan is in the cart now: it empties here, so coming back cannot add it a second time */
+    onSent();
     /* WooCommerce confirms the lines and the code before the checkout opens (a cart that cannot be checked opens as it is) */
     void checkCart().finally(() => router.push("/checkout"));
   };
@@ -541,10 +560,11 @@ function Plan({ plan, toggle, clear }: PlanProps & { clear: () => void }) {
           ) : (
             <div className={`${T.p}-empty mt-8 rounded-[26px] p-6 sm:p-8`}>
               <span aria-hidden="true" className={`${T.p}-empty-icon grid size-14 place-items-center rounded-full`}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 7h14l-1.5 11a2 2 0 0 1-2 1.7h-7a2 2 0 0 1-2-1.7L5 7Z" /><path d="M9 7V5.5a3 3 0 0 1 6 0V7" /><path d="M12 11v5M9.5 13.5h5" /></svg></span>
-              <p className="mt-5 font-aeonik text-[clamp(26px,2.4vw,34px)] leading-[1.1] tracking-[-0.02em] text-white">Nothing in your plan yet</p>
-              <p className="mt-2 max-w-[46ch] font-inter text-[15px] leading-[1.6] text-white/70">Pick a concern or browse the deals, choose a package and tap Add to my plan. Your total and savings add up here.</p>
+              <p className="mt-5 font-aeonik text-[clamp(26px,2.4vw,34px)] leading-[1.1] tracking-[-0.02em] text-white">{sent ? 'Your plan is in your cart' : 'Nothing in your plan yet'}</p>
+              <p className="mt-2 max-w-[46ch] font-inter text-[15px] leading-[1.6] text-white/70">{sent ? 'Everything you picked is waiting in your cart. Add more packages here whenever you like.' : 'Pick a concern or browse the deals, choose a package and tap Add to my plan. Your total and savings add up here.'}</p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <a href="#deals" onClick={go('deals')} className="btn bfd-cta">Browse the deals</a>
+                {sent && <Link href="/cart" className="btn bfd-cta">View my cart</Link>}
+                <a href="#deals" onClick={go('deals')} className={sent ? 'btn btn-glass' : 'btn bfd-cta'}>{sent ? <span>Browse the deals</span> : 'Browse the deals'}</a>
                 <Button href="#concerns" v="glass" onClick={go('concerns')}>Start from a concern</Button>
               </div>
               <ul className="mt-6 flex flex-wrap gap-2" role="list">{deals.filter((d) => d.pct >= 50).slice(0, 4).map((d) => <li key={d.id}><a href={`#bf-${d.id}`} onClick={go(`bf-${d.id}`)} className="inline-flex items-center gap-2 rounded-full bg-white/[.07] px-3.5 py-2 font-inter text-[13px] text-white/85 ring-1 ring-white/10 transition-colors hover:bg-white/15"><b className={`font-semibold ${T.pale}`}>{d.offer}</b>{d.c.name}</a></li>)}</ul>
@@ -595,6 +615,7 @@ function Clinics() {
             </li>
           ))}
         </ul>
+        <p className="mt-6 font-inter text-[15px] text-ndm-muted">Questions about the sale? Email <a href={`mailto:${EMAIL}`} className={`font-semibold underline underline-offset-4 ${T.ink}`}>{EMAIL}</a></p>
       </div>
     </section>
   );
@@ -616,7 +637,7 @@ function Footer({ t }: { t: SaleClock }) {
         </div>
         <div className="flex flex-col gap-6 pt-8 md:flex-row md:items-center md:justify-between">
           <Link href="/"><img src={withBase("/assets/icons/logo-white.svg")} alt="NewDermaMed" className="h-10 w-auto" /></Link>
-          <p className="font-inter text-[13.5px] text-white/60">{CLINICS.map((c) => `${c.name} ${c.phone}`).join(' · ')}</p>
+          <p className="font-inter text-[13.5px] text-white/60">{CLINICS.map((c) => `${c.name} ${c.phone}`).join(' · ')} · <a href={`mailto:${EMAIL}`} className="hover:text-white">{EMAIL}</a></p>
           <p className="flex flex-wrap gap-x-5 gap-y-2 font-inter text-[13.5px] text-white/60">
             <Link href="/" className="hover:text-white">Main site</Link><Link href="/pricing" className="hover:text-white">Full price list</Link><a href={SHOP_URL} target="_blank" rel="noopener" className="hover:text-white">Skincare shop ↗</a>
           </p>
@@ -633,19 +654,20 @@ function Footer({ t }: { t: SaleClock }) {
 }
 
 function PlanBar({ plan }: { plan: PlanLine[] }) {
-  const { T } = useSale();
-  const { withCode } = planTotals(plan);
+  const { code, T } = useSale();
+  const { website, withCode } = planTotals(plan);
+  const coded = !!code && plan.some((p) => p.code);
   if (!plan.length) return null;
   return (
-    <div className={`${T.p}-bar fixed inset-x-3 bottom-[calc(12px+env(safe-area-inset-bottom))] z-50 flex items-center justify-between gap-3 rounded-full py-2 pl-5 pr-2 text-white shadow-[0_24px_50px_-20px_rgba(0,0,0,.7)] lg:hidden`}>
-      <span className="font-inter text-[14px]"><b className="font-semibold">My plan</b> · {plan.length} · <span className="tabular-nums">{money(withCode)}</span></span>
+    <div className={`${T.p}-bar fixed inset-x-3 bottom-[calc(12px+env(safe-area-inset-bottom))] z-50 flex items-center justify-between gap-3 rounded-[26px] py-2 pl-5 pr-2 text-white shadow-[0_24px_50px_-20px_rgba(0,0,0,.7)] lg:hidden`}>
+      <span className="min-w-0 font-inter text-[12.5px] leading-[1.35]"><b className="font-semibold">My plan</b> · {plan.length}<span className="block tabular-nums text-white/85">Website total {money(website)}{coded && <> · With {code} <b className="font-semibold text-white">{money(withCode)}</b></>}</span></span>
       <a href="#plan" onClick={go('plan')} className={`btn btn-sm h-10 rounded-full ${T.accentBg} px-5 text-white`}>Review</a>
     </div>
   );
 }
 
 /** The sections that follow the sale's clock (labels, the last day, the card badge). */
-function Body({ plan, setPlan }: { plan: PlanLine[]; setPlan: (update: (p: PlanLine[]) => PlanLine[]) => void }) {
+function Body({ plan, setPlan, sent, onSent }: { plan: PlanLine[]; setPlan: (update: (p: PlanLine[]) => PlanLine[]) => void; sent: boolean; onSent: () => void }) {
   const { after, T } = useSale();
   const t = useSaleClock(1000);
   const router = useRouter();
@@ -670,7 +692,7 @@ function Body({ plan, setPlan }: { plan: PlanLine[]; setPlan: (update: (p: PlanL
         <Concerns pick={pick} setPick={setPick} />
         <Deals pick={pick} setPick={setPick} plan={plan} toggle={toggle} badge={badge} />
         <Specials />
-        <Plan plan={plan} toggle={toggle} clear={() => setPlan(() => [])} />
+        <Plan plan={plan} toggle={toggle} clear={() => setPlan(() => [])} sent={sent} onSent={onSent} />
         <Clinics />
       </main>
       <Footer t={t} />
@@ -683,6 +705,8 @@ function Body({ plan, setPlan }: { plan: PlanLine[]; setPlan: (update: (p: PlanL
 export function SalePage({ view }: { view: SaleView }) {
   const [plan, setPlan] = useState<PlanLine[]>([]);
   const [loaded, setLoaded] = useState(false);
+  /* the plan went to the cart: said in the empty plan until something new is added */
+  const [sent, setSent] = useState(false);
   const { planKey, deals } = view;
   /* the saved plan is read after the first paint, so the server and the browser render the same page first; a line
      saved before the sale's prices changed is dropped rather than shown at an old price */
@@ -692,6 +716,7 @@ export function SalePage({ view }: { view: SaleView }) {
         const saved: PlanLine[] = JSON.parse(localStorage.getItem(planKey) || "[]");
         const current = new Map(deals.flatMap((d) => d.items.flatMap((it) => it[2].map((o): [string, Opt] => [`${d.id}|${it[0]}|${o[0]}`, o]))));
         setPlan(saved.filter((p) => { const o = current.get(p.key); return !!o && o[1] === p.price && (o[4] || 0) === (p.code || 0); }));
+        setSent(localStorage.getItem(sentKey(planKey)) === "1");
       } catch {
         /* nothing saved, or storage blocked */
       }
@@ -703,13 +728,19 @@ export function SalePage({ view }: { view: SaleView }) {
     if (!loaded) return;
     try {
       localStorage.setItem(planKey, JSON.stringify(plan));
+      if (sent && !plan.length) localStorage.setItem(sentKey(planKey), "1");
+      else localStorage.removeItem(sentKey(planKey));
     } catch {
       /* private mode: the plan lives for this visit */
     }
-  }, [plan, loaded, planKey]);
+  }, [plan, loaded, planKey, sent]);
+  const onSent = () => {
+    setSent(true);
+    setPlan([]);
+  };
   return (
     <Sale value={{ ...view, T: LOOKS[view.look] }}>
-      <Body plan={plan} setPlan={setPlan} />
+      <Body plan={plan} setPlan={setPlan} sent={sent && !plan.length} onSent={onSent} />
     </Sale>
   );
 }

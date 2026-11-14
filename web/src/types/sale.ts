@@ -57,6 +57,8 @@ export interface SalePriceCard {
   pos: string;
   /** Its deal card on this page (the price-list category), when it has one. */
   cat: string | null;
+  /** The product's name on the price list: "See packages" opens the deal card on this product. */
+  item: string;
 }
 
 /** The colours and class prefix of a sale page's look. */

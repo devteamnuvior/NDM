@@ -61,6 +61,8 @@ export interface WooProduct extends WooPriceFields {
   /** The product's short description. */
   note: string;
   label: WooPromoLabel | null;
+  /** The product's own photo in WooCommerce, when it has one (public list). */
+  image?: WooPromoImage | null;
   /** Empty for a simple product, whose own price fields apply. */
   variations: WooVariation[];
 }

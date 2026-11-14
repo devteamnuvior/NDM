@@ -5,6 +5,7 @@ import { SALE_BADGES, SALE_HEADLINE, SALE_PRICE_CARDS, SALE_TIMERS } from "@/con
 import { dateWords, dayWords, getCampaign, type CampaignPhase } from "@/lib/campaign";
 import { getOffers } from "@/lib/offers";
 import { fillPrices, getSitePrices } from "@/lib/site-prices";
+import { getPricingTree, settle } from "@/lib/wordpress";
 import { saleWords, torontoTime } from "@/lib/sale-dates";
 import type { SaleCopy, SalePhase, SalePriceCard, SaleView } from "@/types/sale";
 
@@ -70,11 +71,16 @@ export async function buildSale({ look, planKey, copy: raw, mine, after }: SaleO
 
   /* the sale prices: each card's line on the price list, with the product's photo when WooCommerce has one */
   let photos = new Map<number, { src: string; set?: string; pos: string }>();
+  /* a product's own photo, whether or not it is one of the offers; an offer adds the point its photo is cropped around */
+  const tree = await settle(getPricingTree);
+  if (tree.ok) {
+    for (const c of tree.data.categories) for (const product of c.products) if (product.image?.src && !photos.has(product.id)) photos.set(product.id, { src: product.image.src, set: product.image.srcSet || undefined, pos: "50% 40%" });
+  }
   try {
-    photos = new Map((await getOffers()).flatMap((o) => (o.photo ? [[o.id, { src: o.photo.src, set: o.photo.srcSet || undefined, pos: o.position }] as const] : [])));
+    for (const o of await getOffers()) if (o.photo) photos.set(o.id, { src: o.photo.src, set: o.photo.srcSet || undefined, pos: o.position });
   } catch (error) {
     unstable_rethrow(error);
-    /* no photos: the cards show their quantity instead */
+    /* no offers: the products' own photos stand */
   }
   const cards = !running
     ? []
@@ -84,7 +90,7 @@ export async function buildSale({ look, planKey, copy: raw, mine, after }: SaleO
           const option = item?.options.find((o) => same(o.label, card.option) && o.sale);
           if (!item || !option) continue;
           const photo = photos.get(item.id);
-          return [{ title: card.title, qty: card.qty, price: option.price, regular: option.regular, drug: !!card.drug, img: card.drug ? "" : (photo?.src ?? ""), set: card.drug ? undefined : photo?.set, pos: photo?.pos ?? "50% 40%", cat: deals.some((d) => d.id === c.id) ? c.id : null }];
+          return [{ title: card.title, qty: card.qty, price: option.price, regular: option.regular, drug: !!card.drug, img: card.drug ? "" : (photo?.src ?? ""), set: card.drug ? undefined : photo?.set, pos: photo?.pos ?? "50% 40%", item: item.name, cat: deals.some((d) => d.id === c.id) ? c.id : null }];
         }
         return [];
       }).slice(0, raw.specials.count);

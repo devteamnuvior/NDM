@@ -74,6 +74,12 @@ function ndm_pricing_product_data( $product, $admin ) {
 		'variations' => array(),
 	) + ndm_pricing_price_fields( $product );
 
+	// The product's own photo, for the cards that show a treatment by name (the sale pages' price cards).
+	$photo = $admin ? null : ndm_promo_image( $product );
+	if ( $photo ) {
+		$data['image'] = $photo;
+	}
+
 	if ( $admin ) {
 		$data['hidden']      = ndm_pricing_is_hidden( $product );
 		$data['status']      = $product->get_status();
