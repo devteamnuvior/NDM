@@ -21,19 +21,29 @@ const FAN = [
 /**
  * Results: compare cards side by side (two per row on phones). With fewer than four real cases the last
  * place is a "more cases" tile that opens the gallery, rather than a repeated photo.
+ * `dark` (procedure and concern pages): a deep navy band with two slow light orbs and dark glass cards.
  */
-export function TxResults({ results: t, number }: { results: TxResultsContent; number: string }) {
+export function TxResults({ results: t, number, dark = false }: { results: TxResultsContent; number: string; dark?: boolean }) {
   const gallery = pagePath("beforeAfter");
   const all = t.cases ?? [];
   const cases = all.slice(0, 4);
   return (
-    <RevealSection id="results" aria-labelledby="results-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
-      <div className={TX_WRAP}>
+    <RevealSection id="results" aria-labelledby="results-title" {...(dark ? { "data-nav": "dark" } : {})} className={`relative z-10 scroll-mt-[170px] px-[var(--gx)] py-[clamp(64px,7vw,104px)] ${dark ? "rs-dark overflow-hidden text-white" : "bg-ndm-paper"}`}>
+      {dark && (
+        <>
+          <span aria-hidden="true" className="rs-orb rs-orb-a" />
+          <span aria-hidden="true" className="rs-orb rs-orb-b" />
+        </>
+      )}
+      <div className={`${TX_WRAP} relative`}>
         <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
           <div>
-            <TxTag number={number}>Before &amp; after</TxTag>
+            <TxTag number={number} dark={dark}>
+              Before &amp; after
+            </TxTag>
             <TwoTone
               id="results-title"
+              dark={dark}
               className="rv mt-4"
               size="text-[clamp(32px,3.4vw,50px)]"
               lead={
@@ -45,12 +55,13 @@ export function TxResults({ results: t, number }: { results: TxResultsContent; n
               strong={t.strong}
               style={{ transitionDelay: ".05s" }}
             />
-            <p className="rv mt-4 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: ".1s" }}>
+            <p className={`rv mt-4 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] ${dark ? "text-white/75" : "text-ndm-muted"}`} style={{ transitionDelay: ".1s" }}>
               {t.text}
+              {/results may vary/i.test(t.text) ? "" : " Individual results may vary."}
             </p>
           </div>
           <div className="rv" style={{ transitionDelay: ".12s" }}>
-            <Button href={gallery} target="_blank" rel="noopener" v="line">
+            <Button href={gallery} target="_blank" rel="noopener" v={dark ? "light" : "line"}>
               See all before &amp; after
             </Button>
           </div>
@@ -59,13 +70,13 @@ export function TxResults({ results: t, number }: { results: TxResultsContent; n
           <ul role="list" className="mt-[clamp(32px,4vw,52px)] grid gap-4 sm:grid-cols-3">
             {t.pics.map((c, i) => (
               <li key={c.src} className="rv" style={{ transitionDelay: `${0.06 * i}s` }}>
-                <figure className="m-0 overflow-hidden rounded-[22px] bg-white p-2.5 shadow-[0_22px_44px_-36px_rgba(27,36,43,.35)] ring-1 ring-ndm-ink/[.06]">
+                <figure className={`m-0 overflow-hidden rounded-[22px] p-2.5 ${dark ? "rs-card" : "bg-white shadow-[0_22px_44px_-36px_rgba(27,36,43,.35)] ring-1 ring-ndm-ink/[.06]"}`}>
                   <span className="relative block aspect-[431/310] overflow-hidden rounded-[16px] bg-ndm-mist">
                     <TxPhoto src={c.src} alt={`${c.label}, before and after`} sizes="(min-width: 640px) 380px, 100vw" className="absolute inset-0 h-full w-full object-cover" />
                   </span>
                   <figcaption className="flex items-baseline justify-between gap-3 px-1.5 pt-3 pb-1">
-                    <span className="font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">{c.label}</span>
-                    <span className="font-inter text-[12.5px] text-ndm-muted">Before · After</span>
+                    <span className={`font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] ${dark ? "text-white" : "text-ndm-ink"}`}>{c.label}</span>
+                    <span className={`font-inter text-[12.5px] ${dark ? "text-white/60" : "text-ndm-muted"}`}>Before · After</span>
                   </figcaption>
                 </figure>
               </li>
@@ -78,8 +89,8 @@ export function TxResults({ results: t, number }: { results: TxResultsContent; n
                 <figure className="m-0">
                   <BaCompare c={c} i={i} nudge={i < 2} />
                   <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
-                    <span className="font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">Case {c.id}</span>
-                    <span className="font-inter text-[13px] text-ndm-muted">{c.view}</span>
+                    <span className={`font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] ${dark ? "text-white" : "text-ndm-ink"}`}>Case {c.id}</span>
+                    <span className={`font-inter text-[13px] ${dark ? "text-white/60" : "text-ndm-muted"}`}>{c.view}</span>
                   </figcaption>
                 </figure>
               </li>

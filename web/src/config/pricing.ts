@@ -9,19 +9,23 @@ export const PRICE_FAQS: [question: string, answer: string][] = [
 ];
 
 /**
- * Exclusive monthly specials shown above the price list. Their prices are read from WooCommerce; `category` is the price-list category the Buy button opens.
+ * Exclusive monthly specials shown above the price list: the twelve treatments the designer picked. Their prices are read from WooCommerce; `category` is the price-list category the Buy button opens.
  */
 export const PRICE_SPECIALS = {
   sub: "Save on cosmetic treatment, apply for financing now",
   note: "for selected packages",
   items: [
-    { name: "Microneedling", category: "microneedling" },
-    { name: "Radiesse for Hand", category: "skin-booster-and-bio-stimulators" },
-    { name: "PRP Hair Rejuvenation", category: "hair-loss" },
-    { name: "Non-Surgical BBL", category: "non-surgical-butt-lift" },
+    { name: "Botox", category: "botox-dysport" },
+    { name: "Lip Augmentation", category: "dermal-fillers" },
+    { name: "Laser Hair Removal", category: "laser-hair-removal" },
     { name: "Lip Filler", category: "dermal-fillers" },
-    { name: "Sculptra Face Lift", category: "skin-booster-and-bio-stimulators" },
+    { name: "Microneedling", category: "microneedling" },
+    { name: "Chemical Peel", category: "chemical-peel" },
+    { name: "CoolSculpting", category: "coolsculpting-tight-sculpting" },
     { name: "Sculptra", category: "skin-booster-and-bio-stimulators" },
-    { name: "Radiesse", category: "skin-booster-and-bio-stimulators" },
+    { name: "Laser Skin Resurfacing", category: "laser-skin-resurfacing" },
+    { name: "Photo Rejuvenation", category: "photo-rejuvenation" },
+    { name: "PRP Hair Restoration", category: "hair-loss" },
+    { name: "PRP Face", category: "microneedling" },
   ],
 };

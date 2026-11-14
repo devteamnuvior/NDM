@@ -43,11 +43,11 @@ export function ProcedurePage({ view }: { view: ProcedureView }) {
       </section>
       <TxNav nav={p.nav} />
       {has("benefits") && <TxIntro intro={p.intro} number={n("benefits")} />}
-      <TxFilm film={p.film} number={n("film")} />
       {has("overview") && <ProcOverview overview={p.overview} facts={p.facts} number={n("overview")} />}
       {has("why-choose") && <ProcChoose choose={p.choose} number={n("why-choose")} />}
       {has("watch") && <TxReel reel={p.reel} facts={p.facts} number={n("watch")} />}
-      {has("results") && <TxResults results={p.results} number={n("results")} />}
+      {has("results") && <TxResults results={p.results} number={n("results")} dark />}
+      <TxFilm film={p.film} number={n("film")} />
       {has("prices") && <ProcPrices lead={p.prices.lead} strong={p.prices.strong} category={p.prices.category} number={n("prices")} groups={groups} />}
       {has("guide") && <ProcGuide guide={p.guide} number={n("guide")} />}
       {/* the same on every procedure page */}

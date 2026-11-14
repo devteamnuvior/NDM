@@ -3,6 +3,7 @@ import { BlogHero } from "@/components/blog/blog-hero";
 import { BlogNewsletter } from "@/components/blog/blog-newsletter";
 import { FeaturedStory } from "@/components/blog/featured-story";
 import { LatestStories } from "@/components/blog/latest-stories";
+import { ProcAnalysis } from "@/components/treatment/proc-analysis";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Faq } from "@/components/ui/faq";
 import { JsonLd } from "@/components/ui/json-ld";
@@ -28,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-/** The journal: the latest article, every other story with topic filters, the newsletter and the FAQ. The stories are WordPress's posts. */
+/** The journal: the latest article, every other story with topic filters, the newsletter, Start your journey and the FAQ. The stories are WordPress's posts. */
 export default async function BlogPage() {
   const { stories, topics } = await getBlog();
   const [featured, ...rest] = stories;
@@ -66,6 +67,7 @@ export default async function BlogPage() {
       {featured && <FeaturedStory post={featured} />}
       <LatestStories posts={rest} topics={topics} />
       <BlogNewsletter />
+      <ProcAnalysis />
       <Faq items={FAQS} eyebrow="FAQ" />
     </main>
   );

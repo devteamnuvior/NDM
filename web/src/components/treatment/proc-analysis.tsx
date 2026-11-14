@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import journey from "@/assets/images/treatments/journey-skin.webp";
+import journey from "@/assets/images/home/visia-consult.jpg";
 import { TX_WRAP } from "@/components/treatment/tx-head";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
@@ -16,7 +16,8 @@ import { withBase } from "@/lib/base-path";
 const delay = (k: number) => ({ transitionDelay: `${0.75 + k * 0.12}s` });
 
 /**
- * Start your journey: a rounded photo card that opens from the middle while its words sharpen from a blur.
+ * Start your journey (treatment, concern, blog and article pages): a rounded photo card of the VISIA consultation
+ * room that opens from the middle while its words sharpen from a blur.
  * The card is clipped to nothing until it opens, so its section is what is watched.
  */
 export function ProcAnalysis() {
@@ -49,7 +50,7 @@ export function ProcAnalysis() {
         ref={card}
         className={`jr-card ${TX_WRAP} relative isolate flex min-h-[600px] flex-col justify-end overflow-hidden rounded-[24px] p-6 text-white md:min-h-[clamp(460px,40vw,520px)] md:justify-center md:rounded-[32px] md:p-[56px] ${on ? "is-on" : ""}`}
       >
-        <Image src={withBase(journey)} alt="" sizes="(min-width: 768px) 780px, 100vw" className="jr-pic absolute inset-0 -z-20 h-full w-full object-cover object-[47%_28%] md:left-auto md:w-[66%] md:object-[50%_30%]" />
+        <Image src={withBase(journey)} alt="" sizes="(min-width: 768px) 780px, 100vw" className="jr-pic absolute inset-0 -z-20 h-full w-full object-cover object-[80%_30%] md:left-auto md:w-[66%] md:object-[62%_45%]" />
         <span aria-hidden="true" className="jr-shade absolute inset-0 -z-10" />
         <div className="max-w-[620px]">
           <div className="jr-t" style={delay(0)}>

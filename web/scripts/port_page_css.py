@@ -108,28 +108,29 @@ def build(page, title, head, body):
 treatment = (SRC / "treatment-ui.jsx").read_text()
 procedure = (SRC / "procedure-ui.jsx").read_text()
 media = (SRC / "media-ui.jsx").read_text()
-JOURNEY = ("start your journey", js_block(procedure, "JR_CSS"))
+JOURNEY = ("start your journey", js_block((SRC / "journey-ui.jsx").read_text(), "JR_CSS"))
 VISIT = ("visit us", js_block(treatment, "TX_VISIT_CSS"))
 MORE = ('results: the "more cases" tile', js_block(treatment, "TX_MORE_CSS"))
+DARK = ("results on the dark band", js_block(treatment, "RS_DARK_CSS"))
 
 aptos = (SRC / "build_aptos.py").read_text()
 build("aptos", "Aptos Thread Lift page", [py_block(aptos, "css"), py_block(aptos, "SPACING")], [MORE, VISIT, JOURNEY])
 
 botox = (SRC / "build_procedure.py").read_text()
-build("botox", "Botox page", [py_block(botox, "css"), js_block(media, "MEDIA_CSS"), py_block(botox, "SPACING")], [VISIT, JOURNEY])
+build("botox", "Botox page", [py_block(botox, "css"), js_block(media, "MEDIA_CSS"), py_block(botox, "SPACING")], [DARK, VISIT, JOURNEY])
 
 concern = (SRC / "build_concern.py").read_text()
 concern_ui = (SRC / "concern-ui.jsx").read_text()
 extra = re.search(r"css = CSS_PROC \+ SPACING \+ CN_CSS \+ '''\n(.*?)\n'''", concern, re.S).group(1)
-build("concern", "Concern pages (Wrinkles & fine lines)", [py_block(botox, "css"), py_block(botox, "SPACING"), js_block(concern_ui, "CN_CSS"), extra], [VISIT, JOURNEY])
+build("concern", "Concern pages (Wrinkles & fine lines)", [py_block(botox, "css"), py_block(botox, "SPACING"), js_block(concern_ui, "CN_CSS"), extra], [DARK, VISIT, JOURNEY])
 
 about = (SRC / "build_about.py").read_text()
 build("about", "About page", [py_block(about, "css")], [])
 
 build("cart", "Cart, checkout and order confirmation pages", [py_block((SRC / "build_cart.py").read_text(), "CSS")], [])
 build("account", "My account page", [py_block((SRC / "build_account.py").read_text(), "css")], [])
-build("blog", "Blog page", [py_block((SRC / "build_blog.py").read_text(), "css")], [])
-build("article", "Blog article page", [py_block((SRC / "build_article.py").read_text(), "css")], [])
+build("blog", "Blog page", [py_block((SRC / "build_blog.py").read_text(), "css")], [JOURNEY])
+build("article", "Blog article page", [py_block((SRC / "build_article.py").read_text(), "css")], [JOURNEY])
 
 legal = (SRC / "build_legal.py").read_text()
 build("legal", "Legal pages (Privacy, Terms, Refunds)", [py_block(legal, "css")], [])

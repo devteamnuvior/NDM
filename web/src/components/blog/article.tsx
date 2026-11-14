@@ -1,23 +1,18 @@
 "use client";
 
-import Image from "next/image";
 import { useRef } from "react";
-import takeaway from "@/assets/images/testimonials/t-1.jpg";
 import { BlogImg } from "@/components/blog/blog-img";
 import { BlurTitle } from "@/components/blog/blur-title";
 import { StoryCard, StoryMeta } from "@/components/blog/story";
 import { useRevealLive } from "@/components/blog/use-reveal-live";
-import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { SiteLink } from "@/components/ui/site-link";
-import { ACTIONS } from "@/config/routes";
 import { useOnScroll } from "@/hooks/use-on-scroll";
 import { useReveal } from "@/hooks/use-reveal";
 import { clamp01 } from "@/lib/math";
 import { pageLink } from "@/lib/routes";
 import { byId } from "@/lib/dom";
 import type { ArticleBlock, ArticleView, Story } from "@/types/blog";
-import { withBase } from "@/lib/base-path";
 import { withBaseHtml } from "@/lib/base-path";
 
 /** A thin reading-progress line under the header bar. */
@@ -88,7 +83,7 @@ function Block({ b }: { b: ArticleBlock }) {
   return <b.tag className="rv font-inter" dangerouslySetInnerHTML={html} />;
 }
 
-/** The article's text column, then the key takeaway card. */
+/** The article's text column. */
 export function ArticleBody({ view: a }: { view: ArticleView }) {
   const section = useRef<HTMLElement>(null);
   useReveal(section);
@@ -100,26 +95,6 @@ export function ArticleBody({ view: a }: { view: ArticleView }) {
         {a.blocks.map((b, i) => (
           <Block key={i} b={b} />
         ))}
-        <aside aria-labelledby="takeaway" className="take-card mt-[clamp(48px,5vw,72px)] grid overflow-hidden rounded-[22px] md:grid-cols-[minmax(0,.85fr)_minmax(0,1.15fr)] lg:-mx-[clamp(0px,9vw,140px)]">
-          <div className="rv rv-clip take-pic relative min-h-[300px] overflow-hidden bg-ndm-mist md:min-h-full">
-            <Image src={withBase(takeaway)} alt="" sizes="(min-width: 768px) 420px, 100vw" className="absolute inset-0 h-full w-full object-cover object-[50%_20%]" />
-          </div>
-          <div className="rv p-[clamp(24px,3vw,44px)]" style={{ transitionDelay: ".15s" }}>
-            <Eyebrow>Key takeaway</Eyebrow>
-            <p id="takeaway" className="mt-5 font-aeonik text-[clamp(21px,1.8vw,26px)] leading-[1.4] tracking-[-0.01em] text-ndm-ink">
-              {a.takeaway}
-            </p>
-            <p className="mt-4 font-inter text-[14px] leading-[1.6] text-ndm-muted">Every plan starts with a free consultation at our Uptown or Downtown clinic. Individual results may vary.</p>
-            <div className="mt-6 flex flex-wrap gap-2.5">
-              <Button href={ACTIONS.book} v="book" hot>
-                Book Free Consultation
-              </Button>
-              <SiteLink to={pageLink("blog")} className="btn btn-line">
-                <span>More articles</span>
-              </SiteLink>
-            </div>
-          </div>
-        </aside>
       </div>
     </section>
   );

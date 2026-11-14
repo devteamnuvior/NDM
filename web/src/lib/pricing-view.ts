@@ -54,9 +54,9 @@ export interface PriceSpecialView {
   name: string;
   /** "$245", ready to show. */
   price: string;
-  /** "/ unit", or "". */
+  /** " / unit", " / syringe", " / zone", " / session", or "". */
   unit: string;
-  /** The offer for the red tag; empty shows the plain "Special" tag. */
+  /** The offer for the red tag; empty leaves the tag's place blank. */
   offer: string;
   /** id of the category's heading button in the price list. */
   target: string;
@@ -154,7 +154,7 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
   const specials = PRICE_SPECIALS.items.flatMap((s): PriceSpecialView[] => {
     const info = book.priceInfo(s.name) ?? book.lowestPrice(s.category);
     if (!info) return [];
-    return [{ name: s.name, price: formatPrice(info.value), unit: info.unit ? info.unit.replace(" / ", "/ ") : "", offer: info.offer ?? "", target: `pg-${s.category}` }];
+    return [{ name: s.name, price: formatPrice(info.value), unit: info.unit || (info.per ? ` / ${info.per.replace(/^per /, "")}` : ""), offer: info.offer ?? "", target: `pg-${s.category}` }];
   });
 
   return { categories, total: list.reduce((n, c) => n + c.items.length, 0), specials };

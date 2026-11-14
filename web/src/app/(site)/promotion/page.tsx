@@ -55,7 +55,7 @@ export default function PromotionPage() {
       </Suspense>
       <Team inner />
       <Process />
-      <BeforeAfter />
+      <BeforeAfter tight />
       <Saying />
       <Faq items={PROMO_FAQS} eyebrow="FAQ" lead="Your top questions," strong="answered" intro="Everything you need to know before starting your journey with us." />
       <Appointment />

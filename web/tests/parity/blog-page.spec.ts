@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { pageParity } from "./page";
 
-/* Blog: header, the latest article, the stories (filtered by a topic, and with more loaded), newsletter, FAQ. */
+/* Blog: header, the latest article, the stories (filtered by a topic, and with more loaded), newsletter, Start your journey, FAQ. */
 const by = (id: string) => `section[aria-labelledby="${id}"]`;
 
 /*
@@ -30,7 +30,7 @@ const sameSummaries = (html: string): string => {
 pageParity({
   name: "blog",
   paths: { legacy: "/blog.html", next: "/blog", legacyHtml: sameSummaries },
-  sectionCount: 4,
+  sectionCount: 5,
   sections: [
     { name: "breadcrumb", selector: "nav.crumbs" },
     { name: "hero", selector: by("blog-title") },
@@ -64,6 +64,7 @@ pageParity({
         await p.locator(by("news-title")).getByRole("button", { name: "Subscribe" }).click();
       },
     },
+    { name: "analysis", selector: by("analysis-title"), pixelRatio: 0.01 },
     { name: "faq", selector: by("faq") },
     { name: "footer", selector: "footer", pixelRatio: 0.004 },
   ],

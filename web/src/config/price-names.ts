@@ -170,6 +170,10 @@ export const PRICE_NAMES: Record<string, [categoryId: string, item?: string]> = 
     "hair-loss",
     "PRP Scalp"
   ],
+  "prp face": [
+    "microneedling",
+    "Microneedling with PRP"
+  ],
   "hair loss treatments": [
     "hair-loss"
   ],

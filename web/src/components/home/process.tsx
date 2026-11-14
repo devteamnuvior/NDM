@@ -30,8 +30,10 @@ export function Process({ copy = HOME_COPY.process }: { copy?: HomeCopy["process
             </div>
             <div className="px-2 pt-5">
               <a href={withBase(s.href)} className="group block">
-                <span className="block font-inter text-[13px] tracking-[.14em] text-ndm-deep uppercase">
-                  Step 0{i + 1} <span className="text-ndm-muted">/ 0{steps.length}</span>
+                <span className="flex items-baseline gap-2.5 font-inter text-[14px] font-semibold tracking-[.16em] text-ndm-deep uppercase">
+                  Step
+                  <span className="font-aeonik text-[clamp(34px,3vw,44px)] leading-none font-normal tracking-[-0.03em] normal-case">0{i + 1}</span>
+                  <span className="font-medium text-ndm-muted">/ 0{steps.length}</span>
                 </span>
                 {/* a non-breaking hyphen keeps "follow-up" on one line */}
                 <h3 className="mt-3 font-aeonik text-[clamp(24px,2.1vw,31px)] leading-[1.08] font-normal tracking-[-0.03em] text-ndm-ink transition-colors [hyphens:manual] group-hover:text-ndm-deep">{s.title.replace("follow-up", "follow‑up")}</h3>

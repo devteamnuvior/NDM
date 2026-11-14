@@ -80,7 +80,7 @@ test("article: redirect, title, breadcrumb back to the blog, reading progress, r
   await expect(page.locator("#article-body")).toContainText("Individual results may vary.");
   const bar = page.locator("div.fixed.h-\\[2px\\] > div");
   expect(await bar.evaluate((el: HTMLElement) => el.style.transform)).toBe("scaleX(0)");
-  await page.locator("#takeaway").scrollIntoViewIfNeeded();
+  await page.locator("#analysis-title").scrollIntoViewIfNeeded();
   await expect.poll(() => bar.evaluate((el: HTMLElement) => Number(/scaleX\((.+)\)/.exec(el.style.transform)?.[1]))).toBeGreaterThan(0.8);
   const related = page.locator('section[aria-labelledby="related-title"]');
   await expect(related.locator("li.story-card")).toHaveCount(3);

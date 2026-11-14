@@ -24,10 +24,6 @@ export const BOTOX: ProcedurePage = {
       "Benefits"
     ],
     [
-      "film",
-      "The clinic"
-    ],
-    [
       "overview",
       "About"
     ],
@@ -42,6 +38,10 @@ export const BOTOX: ProcedurePage = {
     [
       "results",
       "Results"
+    ],
+    [
+      "film",
+      "The clinic"
     ],
     [
       "prices",

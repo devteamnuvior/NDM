@@ -17,7 +17,7 @@ interface ProcOverviewProps {
 }
 
 /**
- * About the treatment: five tabs on a dark glass panel, one panel shown at a time with its key number beside it.
+ * About the treatment: its tabs on a light panel, one panel shown at a time with its key number beside it.
  * Every panel stays in the page (the hidden ones `hidden`), so all the text is there for search engines.
  */
 export function ProcOverview({ overview: o, facts, number }: ProcOverviewProps) {
@@ -34,7 +34,7 @@ export function ProcOverview({ overview: o, facts, number }: ProcOverviewProps) 
     tabs.current[m]?.focus();
   };
   return (
-    <section ref={section} id="overview" aria-labelledby="overview-title" data-nav="dark" className="ov2 relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)] text-white">
+    <section ref={section} id="overview" aria-labelledby="overview-title" className="ov2 relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)] text-ndm-ink">
       <span aria-hidden="true" className="ov2-orb ov2-orb-a" />
       <span aria-hidden="true" className="ov2-orb ov2-orb-b" />
       <span aria-hidden="true" className="ov2-orb ov2-orb-c" />
@@ -44,12 +44,11 @@ export function ProcOverview({ overview: o, facts, number }: ProcOverviewProps) 
       </svg>
       <div className={`${TX_WRAP} relative`}>
         <div className="text-center">
-          <TxTag number={number} dark>
+          <TxTag number={number}>
             {o.tag}
           </TxTag>
           <TwoTone
             id="overview-title"
-            dark
             className="rv mx-auto mt-3"
             size="text-[clamp(26px,min(2.8vw,4.6vh),40px)]"
             lead={
@@ -95,9 +94,9 @@ export function ProcOverview({ overview: o, facts, number }: ProcOverviewProps) 
               className={`${i === act ? "ov-in grid" : "hidden"} gap-6 px-[clamp(20px,2.8vw,40px)] pt-[clamp(14px,2.4vh,24px)] pb-[clamp(18px,2.8vh,30px)] md:grid-cols-[minmax(0,1fr)_230px] md:items-center md:gap-[clamp(28px,4vw,56px)]`}
             >
               <div>
-                <h3 className="font-aeonik text-[clamp(22px,2vw,28px)] leading-[1.1] font-normal tracking-[-0.025em] text-white">{t.label}</h3>
+                <h3 className="font-aeonik text-[clamp(22px,2vw,28px)] leading-[1.1] font-normal tracking-[-0.025em] text-ndm-ink">{t.label}</h3>
                 {t.text.map((x) => (
-                  <p key={x} className="mt-2.5 max-w-[72ch] font-inter text-[14.5px] leading-[1.6] text-white/80">
+                  <p key={x} className="mt-2.5 max-w-[72ch] font-inter text-[14.5px] leading-[1.6] text-ndm-muted">
                     {x}
                   </p>
                 ))}
@@ -106,7 +105,7 @@ export function ProcOverview({ overview: o, facts, number }: ProcOverviewProps) 
                     Book Free Consultation
                   </Button>
                   {t.link && (
-                    <a href={withBase(t.link[0])} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-sky">
+                    <a href={withBase(t.link[0])} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-deep">
                       {t.link[1]}
                       <IconArrow className="transition-transform group-hover:translate-x-1" />
                     </a>
@@ -119,15 +118,15 @@ export function ProcOverview({ overview: o, facts, number }: ProcOverviewProps) 
                     <circle cx="50" cy="50" r="46" />
                   </svg>
                   <span className="relative px-4 text-center">
-                    <span className="block font-aeonik text-[32px] leading-none tracking-[-0.03em] text-white tabular-nums">{t.stat[0]}</span>
-                    <span className="mt-1 block font-inter text-[11px] leading-[1.3] text-white/70">{t.stat[1]}</span>
+                    <span className="block font-aeonik text-[32px] leading-none tracking-[-0.03em] text-ndm-ink tabular-nums">{t.stat[0]}</span>
+                    <span className="mt-1 block font-inter text-[11px] leading-[1.3] text-ndm-muted">{t.stat[1]}</span>
                   </span>
                 </div>
-                <dl className="mt-3 grid gap-1 border-t border-white/10 pt-2.5">
+                <dl className="mt-3 grid gap-1 border-t border-ndm-ink/10 pt-2.5">
                   {facts.map(([k, v]) => (
                     <div key={k} className="flex items-baseline justify-between gap-3 font-inter text-[12.5px]">
-                      <dt className="text-white/55">{k}</dt>
-                      <dd className="text-right font-medium text-white">{v}</dd>
+                      <dt className="text-ndm-muted">{k}</dt>
+                      <dd className="text-right font-medium text-ndm-ink">{v}</dd>
                     </div>
                   ))}
                 </dl>

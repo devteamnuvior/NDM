@@ -1,4 +1,5 @@
 import { ArticleBody, ArticleHead, ReadProgress, RelatedStories } from "@/components/blog/article";
+import { ProcAnalysis } from "@/components/treatment/proc-analysis";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { JsonLd } from "@/components/ui/json-ld";
 import { articlePath } from "@/lib/post-paths";
@@ -6,7 +7,7 @@ import { pageLink, pagePath } from "@/lib/routes";
 import { absolute, breadcrumbList, publisher } from "@/lib/seo";
 import type { ArticleView } from "@/types/blog";
 
-/** A blog article: head with the photo, the text column with the takeaway card, then related articles. */
+/** A blog article: head with the photo, the text column, Start your journey, then related articles. */
 export function ArticlePage({ view }: { view: ArticleView }) {
   const p = view.story;
   const url = absolute(articlePath(p.slug));
@@ -44,6 +45,7 @@ export function ArticlePage({ view }: { view: ArticleView }) {
         <article>
           <ArticleHead view={view} />
           <ArticleBody view={view} />
+          <ProcAnalysis />
         </article>
         {view.related.length > 0 && <RelatedStories items={view.related} />}
       </main>

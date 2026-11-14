@@ -15,10 +15,10 @@ import type { HomeCopy } from "@/types/home";
 const CASES = BA_MODELS.slice(0, 7);
 
 /**
- * Before & after on the home page: the heading row with the button to the full gallery, then a row of
+ * Before & after on the home page (`tight`: close under the section before it, as on Promotion): the heading row with the button to the full gallery, then a row of
  * compare cards (four in view on wide screens) with arrows on both sides.
  */
-export function BeforeAfter({ copy = HOME_COPY.results }: { copy?: HomeCopy["results"] }) {
+export function BeforeAfter({ copy = HOME_COPY.results, tight = false }: { copy?: HomeCopy["results"]; tight?: boolean }) {
   const section = useRef<HTMLElement>(null);
   const rail = useRef<HTMLUListElement>(null);
   useReveal(section);
@@ -42,7 +42,7 @@ export function BeforeAfter({ copy = HOME_COPY.results }: { copy?: HomeCopy["res
   };
 
   return (
-    <section ref={section} aria-labelledby="results" className="relative z-10 bg-ndm-paper pt-[clamp(80px,9vw,140px)] pb-[clamp(40px,4vw,64px)]">
+    <section ref={section} aria-labelledby="results" className={`relative z-10 bg-ndm-paper pb-[clamp(40px,4vw,64px)] ${tight ? "pt-[clamp(8px,1.5vw,24px)]" : "pt-[clamp(80px,9vw,140px)]"}`}>
       <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6 px-[var(--gx)]">
         <div>
           <Eyebrow className="rv">{copy.tag}</Eyebrow>

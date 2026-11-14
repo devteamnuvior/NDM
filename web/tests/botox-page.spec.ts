@@ -112,12 +112,14 @@ test("results show the photos with the results line; Good to know links to relat
   await expect(related.getByRole("link", { name: /Dermal Fillers/ })).toHaveAttribute("href", "#/dermal-fillers");
 });
 
-test("the section bar turns dark over the dark About section", async ({ page }) => {
+test("the section bar turns dark over the dark Before and after band", async ({ page }) => {
   await page.goto(`${NEXT_URL}/injectables/botox`);
   const bar = page.getByRole("navigation", { name: "On this page" });
   await expect(bar.getByRole("link")).toHaveCount(12);
-  await bar.getByRole("link", { name: "About" }).click();
-  await expect(bar.getByRole("link", { name: "About" })).toHaveAttribute("aria-current", "true");
+  await bar.getByRole("link", { name: "Results" }).click();
+  await expect(bar.getByRole("link", { name: "Results" })).toHaveAttribute("aria-current", "true");
+  /* the link lands with the band's top edge just under the bar: a little further and the bar is over it */
+  await page.mouse.wheel(0, 240);
   await expect(bar).toHaveClass(/bg-\[rgba\(10,13,16,\.42\)\]/);
 });
 

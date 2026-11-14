@@ -15,7 +15,7 @@ interface PriceSpecialsProps {
   note: string;
 }
 
-/** Exclusive monthly specials: eight cards; Buy opens that category in the price list below and scrolls to it. */
+/** Exclusive monthly specials: twelve centred cards; Buy opens that category in the price list below and scrolls to it. */
 export function PriceSpecials({ specials, sub, note }: PriceSpecialsProps) {
   const section = useRef<HTMLElement>(null);
   useReveal(section);
@@ -49,28 +49,32 @@ export function PriceSpecials({ specials, sub, note }: PriceSpecialsProps) {
           {sub}
         </p>
       </div>
-      <ul role="list" className="mx-auto mt-[clamp(28px,3.4vw,44px)] grid w-full max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-4">
+      {/* centred cards: the red offer tag, a From chip, the price with its unit, the name, Buy and the note */}
+      <ul role="list" className="mx-auto mt-[clamp(28px,3.4vw,44px)] grid w-full max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
         {specials.map((s, i) => (
-          <li key={s.name} className="rv flex flex-col rounded-[20px] bg-white p-4 ring-1 ring-ndm-ink/[.06] md:p-5" style={{ transitionDelay: `${0.04 * i}s` }}>
+          <li key={s.name} className="rv ps-card flex flex-col items-center rounded-[22px] bg-white px-3 pt-4 pb-5 text-center ring-1 ring-ndm-ink/[.06] md:px-5 md:pt-5 md:pb-6" style={{ transitionDelay: `${0.04 * i}s` }}>
             {s.offer ? (
-              <span className="deal-badge self-start">
+              <span className="deal-badge">
                 <i aria-hidden="true">%</i>
                 {s.offer}
               </span>
             ) : (
-              <span className="self-start rounded-full bg-ndm-blue/10 px-2.5 py-1 font-inter text-[11px] font-semibold tracking-[.12em] text-ndm-deep uppercase">Special</span>
+              /* keeps the tag's place, so every card's price sits on one line */
+              <span className="deal-badge invisible" aria-hidden="true">
+                <i>%</i>Offer
+              </span>
             )}
-            <span className="mt-3 block font-inter text-[11px] tracking-[.16em] text-ndm-muted uppercase">From</span>
-            <span className="mt-1 block font-aeonik text-[clamp(26px,2.4vw,34px)] leading-none tracking-[-0.03em] text-ndm-ink">
-              {s.price}
-              {s.unit ? <span className="ml-1 font-inter text-[13px] tracking-normal text-ndm-muted">{s.unit}</span> : null}
+            <span className="mt-4 rounded-full bg-ndm-blue/10 px-3 py-1 font-inter text-[11px] font-semibold tracking-[.16em] text-ndm-deep uppercase">From</span>
+            <span className="mt-3 flex flex-wrap items-baseline justify-center gap-x-1">
+              <span className="font-aeonik text-[clamp(30px,3vw,44px)] leading-none tracking-[-0.03em] text-ndm-ink">{s.price}</span>
+              {s.unit && <span className="font-inter text-[13px] whitespace-nowrap text-ndm-muted md:text-[14px]">{s.unit}</span>}
             </span>
-            <span className="mt-2 block font-inter text-[15px] leading-[1.3] font-medium text-ndm-ink">{s.name}</span>
-            <span className="mt-auto flex flex-wrap items-baseline gap-x-2 gap-y-1 pt-4">
-              <a href={withBase(`#${s.target}`)} onClick={(e) => go(e, s.target)} className="btn btn-buy h-9 px-4 text-[13px]">
+            <span className="mt-2.5 block font-inter text-[15px] leading-[1.3] font-medium text-ndm-ink md:text-[16.5px]">{s.name}</span>
+            <span className="mt-auto flex flex-col items-center pt-4">
+              <a href={withBase(`#${s.target}`)} onClick={(e) => go(e, s.target)} className="btn btn-buy h-10 px-6 text-[14px]">
                 Buy
               </a>
-              <span className="font-inter text-[12.5px] text-ndm-muted">{note}</span>
+              <span className="mt-2 font-inter text-[12.5px] text-ndm-muted">{note}</span>
             </span>
           </li>
         ))}

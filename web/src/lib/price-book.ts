@@ -14,7 +14,7 @@ export function formatPrice(n: number): string {
 
 /** How many units, syringes or sessions an option's label covers ("Package of 3" -> 3). */
 function countIn(label: string): number {
-  const m = /(\d+)\s*(units?|syringes?|sessions?|vials?|treatments?)\b/i.exec(label) ?? /package of (\d+)/i.exec(label);
+  const m = /(\d+)\s*(units?|syringes?|sessions?|vials?|treatments?|zones?)\b/i.exec(label) ?? /package of (\d+)/i.exec(label);
   return m ? Number(m[1]) : 1;
 }
 
@@ -35,11 +35,11 @@ const normalise = (s: string | undefined): string =>
 type Option = PriceOption & { item: string };
 
 export interface LowestPrice {
-  /** Lowest price after the offer, counted per unit, per syringe or per session. */
+  /** Lowest price after the offer, counted per unit, per syringe, per zone or per session. */
   value: number;
   /** " / unit" for categories priced per unit, else "". */
   unit: string;
-  per: "per unit" | "per syringe" | "per session" | "";
+  per: "per unit" | "per syringe" | "per zone" | "per session" | "";
   /** Largest percentage offer in the category, 0 when there is none. */
   percent: number;
   /** The offer in sentence case, e.g. "Up to 30% off", "Buy 1 get 1 free". */
@@ -86,7 +86,7 @@ export function createPriceBook(categories: PriceCategory[], names: PriceNames =
             .replace(/\bFREE\b/, "free")
             .replace(/^Save \$(\d+)\sOff$/i, "Save $$$1")
         : "";
-    const per = c.perUnit ? "per unit" : /syringe/i.test(best.option.label) ? "per syringe" : best.count > 1 || /session/i.test(best.option.label) ? "per session" : "";
+    const per = c.perUnit ? "per unit" : /syringe/i.test(best.option.label) ? "per syringe" : /zone/i.test(best.option.label) ? "per zone" : best.count > 1 || /session/i.test(best.option.label) ? "per session" : "";
     return { value: Math.round(best.value * 100) / 100, unit: c.perUnit ? " / unit" : "", per, percent, offer };
   }
 
