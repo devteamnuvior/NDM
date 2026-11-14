@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 import { NEXT_URL } from "../playwright.config";
 
 /** Behaviour of the migrated header on the Next.js build: interactions, links, errors, stability. */
@@ -297,5 +297,30 @@ test.describe("phone", () => {
     await float.click();
     await expect(page.getByRole("dialog", { name: "Search treatments" })).toBeVisible();
     await expect(float).toHaveClass(/is-off/);
+  });
+
+  test("floating search button fades out while it lies over a button of the page, and comes back after", async ({ page }) => {
+    await page.goto(NEXT_URL);
+    const float = page.locator("button.float-search");
+    await expect(float).toBeVisible();
+    /* scrolls so the middle of `target` sits at the middle of the search button */
+    const under = async (target: Locator) => {
+      const middle = await float.evaluate((el) => {
+        const r = el.getBoundingClientRect();
+        return r.top + r.height / 2;
+      });
+      await target.evaluate((el, y) => {
+        const r = el.getBoundingClientRect();
+        window.scrollBy(0, r.top + r.height / 2 - y);
+      }, middle);
+    };
+    /* the offers wheel's right arrow under it: it fades out and the arrow can be tapped */
+    const next = page.getByRole("button", { name: "Next offer" });
+    await under(next);
+    await expect(float).toHaveClass(/is-off/);
+    await next.click({ trial: true });
+    /* over a heading it is back */
+    await under(page.getByRole("heading", { name: /Exclusive monthly/ }));
+    await expect(float).not.toHaveClass(/is-off/);
   });
 });

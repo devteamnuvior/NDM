@@ -10,6 +10,7 @@ import { useOnScroll } from "@/hooks/use-on-scroll";
 import { armChime, playChime } from "@/lib/chime";
 import { tel } from "@/lib/routes";
 import { withBase } from "@/lib/base-path";
+import { overControl } from "@/lib/over-control";
 
 /* the agent's photo is a small local file, shown at its own size */
 /* eslint-disable @next/next/no-img-element */
@@ -47,25 +48,6 @@ interface Message {
  * settles (once per visit), and a panel offering common questions or a free-text box. Client only.
  * @param hidden another overlay is open: the launcher steps out of the way
  */
-/**
- * Whether a floating piece of the chat lies over a control of the page: a button or a short link counts, a whole
- * card that is one link does not. Nine points of its box are looked at, `dx` and `dy` in from its edges.
- */
-function overControl(el: HTMLElement | null, dx: number, dy: number): boolean {
-  if (!el) return false;
-  const box = el.getBoundingClientRect();
-  if (!box.width) return false;
-  return [box.left + dx, box.left + box.width / 2, box.right - dx].some((x) =>
-    [box.top + dy, box.top + box.height / 2, box.bottom - dy].some((y) =>
-      document.elementsFromPoint(x, y).some((under) => {
-        if (under.closest(".chat-pop, .chat-launch, .chat-panel")) return false;
-        const control = under.closest('a[href], button, input, select, textarea, [role="button"], [role="tab"]');
-        return !!control && control.getBoundingClientRect().height <= 72;
-      }),
-    ),
-  );
-}
-
 export function ChatBot({ hidden }: { hidden: boolean }) {
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState(false);
