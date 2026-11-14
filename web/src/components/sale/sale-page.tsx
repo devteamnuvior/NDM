@@ -125,19 +125,20 @@ function Header({ count }: { count: number }) {
   useOnScroll(() => { let cur = ''; links.forEach(([id]) => { const e = byId(id); if (e && e.getBoundingClientRect().top < 140) cur = id; }); setHere(cur); });
   return (
     <header className={`sticky top-0 z-50 border-b border-white/10 ${T.bar} text-white backdrop-blur-[14px]`}>
-      <div className="mx-auto flex h-[68px] max-w-[1280px] items-center justify-between gap-4 px-[var(--gx)]">
+      <div className="mx-auto flex h-[68px] max-w-[1280px] items-center justify-between gap-2 sm:gap-4 px-[var(--gx)] min-[1480px]:max-w-[1400px]">
         <Link href="/" className="shrink-0" aria-label="NewDermaMed home"><img src={withBase("/assets/icons/logo-white.svg")} alt="NewDermaMed" className="h-7 w-auto min-[400px]:h-8 sm:h-10" /></Link>
-        <nav aria-label={`${copy.name} page`} className="hidden items-center gap-5 whitespace-nowrap lg:flex xl:gap-7">
-          <Link href="/" className={`${T.p}-nav font-inter text-[14.5px]`}>Home</Link>
+        {/* narrow desktops (1024 to 1279px): tighter links, no Home link (the logo opens it) and the phone as an icon, so the booking button stays whole */}
+        <nav aria-label={`${copy.name} page`} className="hidden items-center gap-2 whitespace-nowrap lg:flex min-[1100px]:gap-3 xl:gap-6">
+          <Link href="/" className={`${T.p}-nav hidden font-inter text-[14.5px] xl:inline`}>Home</Link>
           {links.map(([id, l]) => (
-            <a key={id} href={`#${id}`} onClick={go(id)} aria-current={here === id ? 'location' : undefined} className={`${T.p}-nav inline-flex items-center gap-2 font-inter text-[14.5px] ${here === id ? 'is-on' : ''}`}>
+            <a key={id} href={`#${id}`} onClick={go(id)} aria-current={here === id ? 'location' : undefined} className={`${T.p}-nav inline-flex items-center gap-2 font-inter text-[13.5px] xl:text-[14.5px] ${here === id ? 'is-on' : ''}`}>
               {l}{id === 'plan' && count > 0 && <span className={`grid h-5 min-w-5 place-items-center rounded-full ${T.accentBg} px-1.5 text-[11px] font-semibold text-white tabular-nums`}>{count}</span>}
             </a>
           ))}
         </nav>
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <a href={tel(PHONES[0].num)} className="hidden items-center gap-2 font-inter text-[14px] text-white/85 hover:text-white md:inline-flex"><IconPhone />{PHONES[0].num}</a>
-          <a href={tel(PHONES[0].num)} aria-label={`Call Uptown, ${PHONES[0].num}`} className="grid size-10 place-items-center rounded-full border border-white/20 md:hidden"><IconPhone /></a>
+          <a href={tel(PHONES[0].num)} className="hidden items-center gap-2 font-inter text-[14px] text-white/85 hover:text-white md:inline-flex lg:hidden xl:inline-flex"><IconPhone />{PHONES[0].num}</a>
+          <a href={tel(PHONES[0].num)} aria-label={`Call Uptown, ${PHONES[0].num}`} className="grid size-10 place-items-center rounded-full border border-white/20 max-[349px]:hidden md:hidden lg:grid xl:hidden"><IconPhone /></a>
           <Button href="#/book" v="book" hot sm className="hidden sm:inline-flex">Book Free Consultation</Button>
           <Button href="#/book" v="book" hot sm className="sm:hidden">Book</Button>
         </div>
