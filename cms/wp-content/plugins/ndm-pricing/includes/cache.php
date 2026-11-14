@@ -21,7 +21,9 @@ function ndm_pricing_public_tree() {
 
 	if ( ! is_array( $tree ) ) {
 		$tree = ndm_pricing_tree( false );
-		set_transient( NDM_PRICING_TRANSIENT, $tree, HOUR_IN_SECONDS );
+		// A sale campaign changes prices and labels at fixed moments: the copy never outlives the next one.
+		$next = function_exists( 'ndm_campaign_next_change' ) ? ndm_campaign_next_change() : 0;
+		set_transient( NDM_PRICING_TRANSIENT, $tree, $next ? max( 1, min( HOUR_IN_SECONDS, $next - time() ) ) : HOUR_IN_SECONDS );
 	}
 
 	return $tree;

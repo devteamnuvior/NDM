@@ -264,6 +264,21 @@ function ndm_pricing_rest_order( $request ) {
 		);
 	}
 
+	// The checkout code of a running sale: WooCommerce's own coupon takes it off the eligible lines only.
+	$code     = is_string( $body['code'] ?? null ) ? strtoupper( trim( $body['code'] ) ) : '';
+	$discount = 0.0;
+
+	if ( '' !== $code ) {
+		$applied = function_exists( 'ndm_campaign_apply_code' ) ? ndm_campaign_apply_code( $order, $code ) : new WP_Error( 'ndm_code_unknown', 'This code is not valid.', array( 'status' => 422 ) );
+
+		if ( is_wp_error( $applied ) ) {
+			$order->delete( true );
+			return $applied;
+		}
+
+		$discount = round( (float) $order->get_discount_total(), 2 );
+	}
+
 	$order->set_address(
 		array(
 			'first_name' => $customer['first'],
@@ -294,6 +309,8 @@ function ndm_pricing_rest_order( $request ) {
 			'lines'      => $rows,
 			'sub'        => round( $sub, 2 ),
 			'saved'      => round( $save, 2 ),
+			'code'       => $discount > 0 ? $code : '',
+			'discount'   => $discount,
 			'taxEnabled' => wc_tax_enabled(),
 			'tax'        => round( (float) $order->get_total_tax(), 2 ),
 			'total'      => round( (float) $order->get_total(), 2 ),

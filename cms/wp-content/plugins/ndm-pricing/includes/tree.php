@@ -115,6 +115,9 @@ function ndm_pricing_product_data( $product, $admin ) {
 			if ( $admin ) {
 				$row['hidden']  = $hidden;
 				$row['enabled'] = $enabled;
+			} else {
+				// A running sale campaign adds what it knows about the line (campaign.php).
+				$row = apply_filters( 'ndm_pricing_variation_row', $row, $variation );
 			}
 
 			$variations[] = $row;
@@ -257,8 +260,15 @@ function ndm_pricing_tree( $admin = false ) {
 		$categories[] = $category;
 	}
 
-	return array(
+	$tree = array(
 		'currency'   => get_woocommerce_currency(),
 		'categories' => $categories,
 	);
+
+	if ( ! $admin && function_exists( 'ndm_campaign_public' ) ) {
+		// The sale campaign, if one is stored: its code, its phase now, its dates.
+		$tree['campaign'] = ndm_campaign_public();
+	}
+
+	return $tree;
 }

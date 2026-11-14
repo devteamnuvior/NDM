@@ -53,10 +53,16 @@ function ndm_pricing_plain( $text ) {
  * @return array{text:string,enabled:bool}
  */
 function ndm_pricing_label_of( $product ) {
-	return array(
+	$label = array(
 		'text'    => ndm_pricing_plain( $product->get_meta( NDM_PRICING_LABEL ) ),
 		'enabled' => '1' === (string) $product->get_meta( NDM_PRICING_LABEL_ON ),
 	);
+
+	/**
+	 * The label as shown. A running sale campaign puts its own label on its lines (campaign.php);
+	 * the management side always gets the stored one.
+	 */
+	return apply_filters( 'ndm_pricing_label', $label, $product );
 }
 
 /**
