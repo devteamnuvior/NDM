@@ -10,6 +10,7 @@
  *                       area   "Face", "Body" or "Hair" (the page filters by Face and Body; Hair shows under All)
  *                       icon   line icon of the card: pen, lips, syringe, hand, drop, face, body, hair
  *                       focus  focus point of the photo, as "50% 40%"
+ *                       option optional: the one option the card's price is read from ("2 zones")
  *                       scope  "product"  the card shows this treatment's lowest price and offer
  *                              "category" the card shows the lowest price and offer of its whole category
  *
@@ -55,7 +56,27 @@ function ndm_promo_settings( $raw ) {
 		'icon'  => in_array( $raw['icon'] ?? '', NDM_PROMO_ICONS, true ) ? $raw['icon'] : 'drop',
 		'focus' => preg_match( '/^\d{1,3}% \d{1,3}%$/', $focus ) ? $focus : '50% 50%',
 		'scope' => in_array( $raw['scope'] ?? '', NDM_PROMO_SCOPES, true ) ? $raw['scope'] : 'product',
+		// Optional: the one option of the product the card's price is read from ("2 zones"); empty: the lowest.
+		'option' => ndm_pricing_plain( $raw['option'] ?? '' ),
 	);
+}
+
+/**
+ * Stores an offer's settings. The option the price is read from is not on the management screens:
+ * a save from there, which does not name it, keeps the one already stored.
+ *
+ * @param int   $id       Product ID.
+ * @param array $settings Settings to store.
+ */
+function ndm_promo_store( $id, $settings ) {
+	if ( ! array_key_exists( 'option', $settings ) ) {
+		$old = get_post_meta( $id, NDM_PROMO_META, true );
+		if ( is_array( $old ) && ! empty( $old['option'] ) ) {
+			$settings['option'] = ndm_pricing_plain( $old['option'] );
+		}
+	}
+
+	update_post_meta( $id, NDM_PROMO_META, wp_slash( $settings ) );
 }
 
 /**
@@ -319,7 +340,7 @@ function ndm_promo_apply_product_changes( $changes ) {
 			continue;
 		}
 
-		update_post_meta( $id, NDM_PROMO_META, wp_slash( array( 'order' => (int) array_search( $id, $ids, true ) ) + $change['settings'] ) );
+		ndm_promo_store( $id, array( 'order' => (int) array_search( $id, $ids, true ) ) + $change['settings'] );
 
 		$product = wc_get_product( $id );
 
@@ -409,7 +430,7 @@ function ndm_promo_apply( $plan ) {
 		$product = $entry['product'];
 		$keep[]  = $product->get_id();
 
-		update_post_meta( $product->get_id(), NDM_PROMO_META, wp_slash( $entry['settings'] ) );
+		ndm_promo_store( $product->get_id(), $entry['settings'] );
 
 		if ( null !== $entry['imageId'] && (int) $product->get_image_id() !== $entry['imageId'] ) {
 			$product->set_image_id( $entry['imageId'] );

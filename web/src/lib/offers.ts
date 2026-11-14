@@ -60,6 +60,23 @@ export function specialsWithOfferPrices(specials: PriceSpecialView[], offers: Of
   });
 }
 
+/**
+ * The card of an offer that names one option of its product ("2 zones"): that option's price, counted per
+ * unit, per syringe, per zone or per session like every other, with that option's own offer line.
+ * Null when the product or the option is not on the public price list.
+ */
+export function offerOptionPrice(tree: WooPricingTree, productId: number, option: string): OfferPrice | null {
+  const same = (label: string) => label.trim().toLowerCase() === option.trim().toLowerCase();
+  for (const category of toCategories(tree)) {
+    const item = category.items.find((it) => it.id === productId);
+    const one = item?.options.find((o) => same(o.label));
+    if (!item || !one) continue;
+    const low = createPriceBook([{ ...category, items: [{ ...item, options: [one] }] }]).lowestPrice(category.id);
+    return low ? { price: low.value % 1 ? low.value.toFixed(2) : String(low.value), unit: low.per, deal: low.offer } : null;
+  }
+  return null;
+}
+
 export const offerPrice = (choice: OfferPriceChoice | undefined, scope: PromoScope): OfferPrice | null => (choice ? (scope === "product" ? choice.product : choice.category) : null);
 
 /**
@@ -77,7 +94,8 @@ export async function getOffers(): Promise<Offer[]> {
 
   return promotions.flatMap((p): Offer[] => {
     const choice = choices.get(p.productId);
-    const shown = offerPrice(choice, p.scope);
+    /* an offer may name the one option its price is read from; an option that has left the list falls back to the lowest */
+    const shown = (p.option ? offerOptionPrice(tree, p.productId, p.option) : null) ?? offerPrice(choice, p.scope);
     if (!choice || !shown) return [];
     return [
       {

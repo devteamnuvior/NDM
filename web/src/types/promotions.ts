@@ -41,6 +41,8 @@ export interface WooPromotion {
   /** Focus point of the photo, "50% 40%". */
   focus: string;
   scope: PromoScope;
+  /** Optional: the one option of the product the card's price is read from ("2 zones"); empty or absent: the lowest price. */
+  option?: string;
 }
 
 export interface WooAdminPromotion extends WooPromotion {
