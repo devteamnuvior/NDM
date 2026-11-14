@@ -6,8 +6,8 @@ export const BOOK_INTEREST_GROUPS: [category: string, options: string[]][] = [
   ["Skin", ["Acne", "Acne scars", "Rosacea & redness", "Melasma", "Pigmentation & sun spots", "Texture & pores", "Moles & skin lesions"]],
   ["Body", ["Stubborn fat", "Cellulite", "Stretch marks", "Loose skin", "Excessive sweating", "Spider & varicose veins", "Unwanted hair"]],
   ["Hair", ["Thinning hair", "Hair loss"]],
-  ["Injectables", ["Botox®", "Dermal Fillers", "Lip fillers", "Under-eye filler", "Skin boosters", "Aptos Thread Lift", "Bio-stimulator · Sculptra®", "Bio-stimulator · Radiesse®"]],
-  ["Bio-stimulators", ["Bio-stimulator · Aptos Thread Lift", "Bio-stimulator · Sculptra®", "Bio-stimulator · Radiesse®"]],
+  ["Injectables", ["Botox®", "Dermal Fillers", "Lip fillers", "Under-eye filler", "Skin boosters", "Bio-stimulator · Sculptra®", "Bio-stimulator · Radiesse®"]],
+  ["Bio-stimulators", ["Bio-stimulator · Sculptra®", "Bio-stimulator · Radiesse®"]],
   ["Thread lift", ["Aptos Thread Lift", "Non-surgical facelift", "Neck lift", "Jawline lift", "Eyebrow lift", "Nose lift"]],
   ["Treatments", ["Laser Hair Removal", "Microneedling", "Laser skin resurfacing", "Laser skin tightening", "Photo-rejuvenation (IPL)", "Chemical peels", "CoolSculpting®", "VISIA® skin analysis"]],
 ];
