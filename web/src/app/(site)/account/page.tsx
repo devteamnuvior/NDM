@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { unstable_rethrow } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { AccountPage } from "@/components/account/account-page";
 import { AccountSignIn } from "@/components/account/account-sign-in";
@@ -19,6 +20,9 @@ export const metadata: Metadata = {
  * sign-in again; the stale cookie opens nothing and is replaced by the next sign-in.
  */
 async function Content() {
+  /* always decided at request time: without this, a build made before the server had its WordPress
+     credentials bakes "accounts are not available" into the page for good */
+  await connection();
   const ready = isAccountConfigured();
   const session = ready ? await getAccountSession() : null;
   if (!session) return <AccountSignIn ready={ready} />;
