@@ -354,8 +354,10 @@ function ndm_headless_concern_clean( $field, $value ) {
 				$empty = true;
 				foreach ( $field['fields'] as $sub ) {
 					$row[ $sub['key'] ] = ndm_headless_concern_clean( $sub, isset( $raw[ $sub['key'] ] ) ? $raw[ $sub['key'] ] : null );
-					// A select always has a value: it alone does not make a row.
-					if ( 'select' !== $sub['type'] && ! empty( $row[ $sub['key'] ] ) ) {
+					// A select always has a value: it alone does not make a row, unless the field says a choice
+					// other than its first one is a row of its own (`keeps_row`, Site Settings' message kind).
+					$chosen = 'select' === $sub['type'] && ! empty( $sub['keeps_row'] ) && $row[ $sub['key'] ] !== $sub['options'][0];
+					if ( $chosen || ( 'select' !== $sub['type'] && ! empty( $row[ $sub['key'] ] ) ) ) {
 						$empty = false;
 					}
 				}
@@ -764,7 +766,11 @@ function ndm_headless_concern_assets( $hook ) {
 	// Other post types built from the same fields (Procedures) add themselves to this list.
 	$types = apply_filters( 'ndm_headless_field_post_types', array( NDM_CONCERN_POST_TYPE ) );
 
-	if ( ! $screen || ! in_array( $screen->post_type, $types, true ) || ! in_array( $hook, array( 'post.php', 'post-new.php' ), true ) ) {
+	// Admin screens that are not edit screens (Site Settings) add their page hook to this list.
+	$screens   = apply_filters( 'ndm_headless_field_screens', array() );
+	$on_screen = in_array( $hook, $screens, true );
+
+	if ( ! $on_screen && ( ! $screen || ! in_array( $screen->post_type, $types, true ) || ! in_array( $hook, array( 'post.php', 'post-new.php' ), true ) ) ) {
 		return;
 	}
 

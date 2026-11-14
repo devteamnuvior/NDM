@@ -667,6 +667,41 @@ WordPress. The team reads them in wp-admin under **Consultation**.
   the database in Canada, before production.
 - Test: `web/tests/admin/booking.spec.ts` (`npm run test:admin`; makes two records and deletes them).
 
+## Site Settings (header and footer)
+
+General settings of the Next.js site, the same on every page, on one screen: wp-admin > **Site
+Settings** (administrators only, capability `manage_options`). One tab per area; each tab is saved on
+its own and leaves the other tabs as they are.
+
+| Route | Who | What |
+|---|---|---|
+| `GET /site-settings` | public | the saved settings (photos as `{ id, src, width, height, alt }`); 404 `ndm_settings_empty` before the first save |
+
+- Mu-plugin `includes/settings.php`: the fields are listed once in `ndm_headless_settings_schema()`
+  (each box has a `tab`), stored in one option, `ndm_site_settings` (`{ content, modified }`, not
+  autoloaded). The fields are the Concerns ones (`includes/concerns.php`); the screen asks for their
+  styles and script through the filter `ndm_headless_field_screens`.
+- **Header** tab: the announcement bar (hide it, the badge, seconds per message, the wide-screen and
+  phone messages, a phone message can be "Clinic phone numbers", the shop link at the right) and the
+  header bar (booking button words, the short phone word, the skincare shop's address, which the
+  menu, the phone menu and the bar open).
+- **Footer** tab: the closing call (heading, text, booking button, optional second button), the film
+  (MP4 address, poster from the media library), the text and two badges under the logo, the link
+  columns (a list of columns, each with its links), the contact column's title and email, the
+  copyright line and the five social addresses (empty: no icon).
+- Kept in the site's code because other parts share them: the menu and its panels, the logo, the two
+  clinics (names, addresses, phone numbers), the Privacy, Terms and Refunds links. The home page's
+  @newdermamed section keeps the built-in social addresses.
+- Empty fields: a label (booking button, heading, column title) falls back to the site's built-in
+  words; an optional piece (badge, text, second button, email, copyright, social icon) is left out.
+  No column: the built-in columns. No message in one ticker: the other ticker's messages; none in
+  either: the bar is hidden.
+- A save tells the site to drop its cached copy (tag `site-settings`). Nothing saved, or WordPress
+  unreachable: the site shows its built-in header and footer (`web/src/config/site-settings.json`).
+- One-time import of the built-in settings (kept when settings exist; `--fill-empty` fills only
+  their empty fields):
+  `node ../web/scripts/export-site-settings.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm settings-import --images=/tmp/site`
+
 ## Production (not set up yet)
 
 Open decisions: where WordPress is hosted and the public address of the Next.js site. When they are

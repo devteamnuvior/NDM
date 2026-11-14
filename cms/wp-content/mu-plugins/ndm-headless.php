@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: NewDermaMed Headless
- * Description: Makes this WordPress a backend only: the REST API and the admin stay, the public site is the Next.js app. No settings, no admin pages.
+ * Description: Makes this WordPress a backend only: the REST API and the admin stay, the public site is the Next.js app. Its one admin screen is Site Settings (header and footer of the site).
  * Version:     0.1.0
  * Author:      NewDermaMed
  * License:     GPL-2.0-or-later
@@ -36,3 +36,4 @@ require_once NDM_HEADLESS_DIR . '/includes/about.php';
 require_once NDM_HEADLESS_DIR . '/includes/home.php';
 require_once NDM_HEADLESS_DIR . '/includes/blog.php';
 require_once NDM_HEADLESS_DIR . '/includes/bookings.php';
+require_once NDM_HEADLESS_DIR . '/includes/settings.php';
