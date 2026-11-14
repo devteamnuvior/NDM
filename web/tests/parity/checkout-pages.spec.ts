@@ -15,7 +15,7 @@ const LINES = [
   { key: "wc:42:44", cat: "Dermal Fillers", name: "Lip Enhancement", label: "2 Syringes", price: 1125, unit: "", was: 1500, productId: 42, variationId: 44, qty: 1 },
   { key: "wc:18:20", cat: "Botox / Dysport", name: "Botox Cosmetic", label: "60 units", price: 648, unit: "", was: 720, productId: 18, variationId: 20, qty: 2 },
 ];
-const ORDER = { no: "1042", date: "2026-11-12T15:00:00.000Z", lines: LINES, sub: 2421, saved: 519, tax: 314.73, total: 2735.73, first: "Sam", clinic: "Uptown", pay: "Pay at your appointment" };
+const ORDER = { no: "1042", date: "2026-11-12T15:00:00.000Z", lines: LINES, sub: 2421, saved: 519, tax: 314.73, taxLabel: "HST (13%)", total: 2735.73, first: "Sam", clinic: "Uptown", pay: "Pay at your appointment" };
 const SECTION = 'main > section[aria-labelledby="co-title"]';
 
 const PAGES = [

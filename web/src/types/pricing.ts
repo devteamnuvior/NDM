@@ -81,6 +81,18 @@ export interface WooPricingTree<C = WooCategory> {
   categories: C[];
   /** The sale campaign, when one is stored in WooCommerce (public list only). */
   campaign?: WooCampaign | null;
+  /** WooCommerce's tax for the cart's totals (public list only): the standard rate at the shop's base location. */
+  tax?: WooTax;
+}
+
+/** Tax as WooCommerce has it (see cms/wp-content/plugins/ndm-pricing/includes/tax.php). */
+export interface WooTax {
+  /** Whether WooCommerce charges tax on top of the listed prices. */
+  enabled: boolean;
+  /** Percent: 13 for 13%. 0 when no rate is set. */
+  rate: number;
+  /** "HST". */
+  label: string;
 }
 
 /* ---- the management screen: everything, with the display settings ---- */

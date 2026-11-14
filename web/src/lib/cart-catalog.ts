@@ -31,6 +31,8 @@ export const nameKey = (name: string, label: string): string => `${norm(name)}|$
 export interface CartCatalog {
   /** The sale WooCommerce holds: its checkout code, and whether it runs now. Null when there is none. */
   sale: { code: string; live: boolean } | null;
+  /** The tax WooCommerce adds to the listed prices: its rate in percent and its name. Null when it adds none. */
+  tax: { rate: number; label: string } | null;
   byId: Map<number, CatalogEntry>;
   /** For lines saved before carts carried WooCommerce IDs: treatment name and option. */
   byName: Map<string, CatalogEntry>;
@@ -41,6 +43,7 @@ export async function getCartCatalog(): Promise<CartCatalog> {
   const tree = await getPricingTree();
   const view = buildPricingView(tree);
   const sale = tree.campaign ? { code: tree.campaign.code, live: tree.campaign.phase !== null } : null;
+  const tax = tree.tax?.enabled && tree.tax.rate > 0 ? { rate: tree.tax.rate, label: tree.tax.label || "Tax" } : null;
   const byId = new Map<number, CatalogEntry>();
   const byName = new Map<string, CatalogEntry>();
   for (const c of view.categories) {
@@ -53,7 +56,7 @@ export async function getCartCatalog(): Promise<CartCatalog> {
       }
     }
   }
-  return { sale, byId, byName };
+  return { sale, tax, byId, byName };
 }
 
 /** The entry a cart line stands for: by its WooCommerce ID, else (older lines) by its name and option. */

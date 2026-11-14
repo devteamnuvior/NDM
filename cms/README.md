@@ -765,6 +765,22 @@ price list when it loads, and "Place order request" creates a real WooCommerce o
 - Tax: WooCommerce tax is off, so the order total has no tax; the site shows 13% HST as an estimate.
   When taxes are switched on in WooCommerce, the site shows WooCommerce's tax instead.
 
+### Tax
+
+The site types no tax rate. WooCommerce needs tax switched on (WooCommerce > Settings > General >
+"Enable tax rates and calculations") and one standard rate (Settings > Tax > Standard rates): country
+`CA`, every province, 13%, name `HST`, as the main site has. The public price list then carries
+`tax: { enabled, rate, label }` (the standard rate at the shop's base location, `includes/tax.php`), the
+cart and checkout show it as "Estimated HST (13%)", and every order request is taxed by WooCommerce
+when it is created (the answer of `ndm/v1/orders` has `tax`, `taxLabel` and `total`). Changing a rate
+or the tax switch clears the stored price list. With tax on but no rate, orders get no tax and the
+summary shows no tax row. Local setup:
+
+```
+docker compose run --rm cli wp option update woocommerce_calc_taxes yes
+docker compose run --rm cli wp eval 'WC_Tax::_insert_tax_rate( array( "tax_rate_country" => "CA", "tax_rate_state" => "", "tax_rate" => "13.0000", "tax_rate_name" => "HST", "tax_rate_priority" => 1, "tax_rate_compound" => 0, "tax_rate_shipping" => 1, "tax_rate_order" => 0, "tax_rate_class" => "" ) );'
+```
+
 ## Customer accounts ("My account")
 
 `/account` on the site is a WooCommerce customer: a WordPress user with the role "customer". The

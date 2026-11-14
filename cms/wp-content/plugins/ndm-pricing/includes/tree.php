@@ -270,5 +270,10 @@ function ndm_pricing_tree( $admin = false ) {
 		$tree['campaign'] = ndm_campaign_public();
 	}
 
+	if ( ! $admin && function_exists( 'ndm_pricing_tax_public' ) ) {
+		// WooCommerce's own tax rate, for the cart's totals (tax.php).
+		$tree['tax'] = ndm_pricing_tax_public();
+	}
+
 	return $tree;
 }

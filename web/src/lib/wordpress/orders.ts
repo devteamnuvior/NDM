@@ -33,8 +33,10 @@ export interface PlacedOrder {
   /** The checkout code WooCommerce applied ("" without one) and what it took off the subtotal. */
   code?: string;
   discount?: number;
-  /** Whether WooCommerce works out tax itself; when it does not, `tax` is 0 and the site shows its estimate. */
+  /** Whether WooCommerce charges tax; `tax` and `total` are always WooCommerce's own figures. */
   taxEnabled: boolean;
+  /** "HST (13%)", from the order's own tax line; "" when the order has no tax. */
+  taxLabel?: string;
   tax: number;
   total: number;
 }

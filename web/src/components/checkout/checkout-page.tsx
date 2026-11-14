@@ -9,7 +9,7 @@ import { CLINICS } from "@/config/site";
 import { useCart } from "@/hooks/use-cart";
 import { checkCart, clearCart, type CartLine } from "@/lib/cart";
 import { pagePath } from "@/lib/routes";
-import { CO_CARD, CO_WRAP, CartPairs, CoAlert, CoHead, CoSelect, CodeField, FIELD, IconLock, OrderSummary, RemovedNotice, money2, totalsOf, useInBrowser, useSaleCode } from "./shared";
+import { CO_CARD, CO_WRAP, CartPairs, CoAlert, CoHead, CoSelect, CodeField, FIELD, IconLock, OrderSummary, RemovedNotice, money2, totalsOf, useCartTax, useInBrowser, useSaleCode } from "./shared";
 import { withBase } from "@/lib/base-path";
 
 const STEP_HEAD: [lead: string, strong: string, text: string][] = [
@@ -34,7 +34,7 @@ export function CheckoutPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
   const router = useRouter();
   const ready = useInBrowser();
   const code = useSaleCode(cart.lines);
-  const t = totalsOf(cart.lines, code.applied);
+  const t = totalsOf(cart.lines, code.applied, useCartTax());
   const [apt, setApt] = useState(false);
   const [province, setProvince] = useState("Ontario");
   const [clinic, setClinic] = useState("Uptown");

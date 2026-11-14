@@ -125,6 +125,42 @@ export function setTypedCode(code: string): void {
 export const getSaleCode = (): SaleCode | null | undefined => sale;
 export const getServerSaleCode = (): SaleCode | null | undefined => undefined;
 
+/* ---- tax: WooCommerce's own rate, as the last cart check said ---- */
+
+/** The tax WooCommerce adds to the listed prices: its rate in percent (13) and its name ("HST"). */
+export interface CartTax {
+  rate: number;
+  label: string;
+}
+const TAX_KEY = "ndm-cart-tax";
+let tax: CartTax | null | undefined; /* undefined: not known yet; null: WooCommerce adds none */
+
+/** The last answer is kept in this browser, so the totals do not jump while the next check is on its way. */
+export function getCartTax(): CartTax | null | undefined {
+  if (tax === undefined) {
+    try {
+      const saved: unknown = JSON.parse(window.localStorage.getItem(TAX_KEY) ?? '"?"');
+      if (saved === null) tax = null;
+      else if (typeof saved === "object" && typeof (saved as CartTax).rate === "number" && typeof (saved as CartTax).label === "string") tax = { rate: (saved as CartTax).rate, label: (saved as CartTax).label };
+    } catch {
+      /* storage blocked or not ours: asked again below */
+    }
+  }
+  return tax;
+}
+export const getServerCartTax = (): CartTax | null | undefined => undefined;
+
+function setCartTax(next: CartTax | null): void {
+  if (JSON.stringify(tax) === JSON.stringify(next)) return;
+  tax = next;
+  try {
+    window.localStorage.setItem(TAX_KEY, JSON.stringify(next));
+  } catch {
+    /* storage blocked: known for this visit */
+  }
+  emit();
+}
+
 /**
  * Asks the server what WooCommerce says about the cart's lines and brings the cart in line with it:
  * current names and prices, WooCommerce IDs on every line, and nothing that left the price list.
@@ -141,8 +177,9 @@ export async function checkCart(): Promise<void> {
       body: JSON.stringify({ lines: asked.map(({ productId, variationId, name, label }) => ({ productId, variationId, name, label })) }),
     });
     if (!response.ok) return;
-    const body = (await response.json()) as { lines: (Checked | null)[]; sale?: SaleCode | null };
+    const body = (await response.json()) as { lines: (Checked | null)[]; sale?: SaleCode | null; tax?: CartTax | null };
     answer = body.lines;
+    if (body.tax !== undefined) setCartTax(body.tax && body.tax.rate > 0 ? { rate: body.tax.rate, label: body.tax.label } : null);
     if (JSON.stringify(sale) !== JSON.stringify(body.sale ?? null)) {
       sale = body.sale ?? null;
       emit();

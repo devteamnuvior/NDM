@@ -312,6 +312,7 @@ function ndm_pricing_rest_order( $request ) {
 			'code'       => $discount > 0 ? $code : '',
 			'discount'   => $discount,
 			'taxEnabled' => wc_tax_enabled(),
+			'taxLabel'   => ndm_pricing_order_tax_label( $order ),
 			'tax'        => round( (float) $order->get_total_tax(), 2 ),
 			'total'      => round( (float) $order->get_total(), 2 ),
 		)

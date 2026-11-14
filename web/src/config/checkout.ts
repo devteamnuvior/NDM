@@ -1,7 +1,5 @@
 /** Cart, checkout and order confirmation: fixed wording and lists. Prices are never kept here. */
 
-/** Ontario HST, shown as an estimate until WooCommerce works out tax itself. */
-export const HST = 0.13;
 
 /** localStorage key of the last order request: order number, lines, totals, first name and clinic only. */
 export const ORDER_STORAGE_KEY = "ndm-last-order";

@@ -4,9 +4,9 @@ import { Fragment, useState, useSyncExternalStore, type ReactNode } from "react"
 import { QtyControl } from "@/components/cart/qty-control";
 import { IconChevron } from "@/components/ui/icons";
 import { TwoTone } from "@/components/ui/two-tone";
-import { CHECKOUT_STEPS, HST } from "@/config/checkout";
+import { CHECKOUT_STEPS } from "@/config/checkout";
 import { useCart } from "@/hooks/use-cart";
-import { getSaleCode, getServerSaleCode, getServerTypedCode, getTypedCode, money, setTypedCode, subscribeCart, type CartLine } from "@/lib/cart";
+import { getCartTax, getSaleCode, getServerCartTax, getServerSaleCode, getServerTypedCode, getTypedCode, money, setTypedCode, subscribeCart, type CartLine, type CartTax } from "@/lib/cart";
 import { pagePath } from "@/lib/routes";
 import { withBase } from "@/lib/base-path";
 
@@ -18,6 +18,8 @@ export interface Totals {
   sub: number;
   saved: number;
   tax: number;
+  /** "HST (13%)", WooCommerce's own tax; null when it adds none; left out while it is not known yet. */
+  taxLabel?: string | null;
   total: number;
   /** The checkout code that was counted in, and what it takes off; left out without one. */
   code?: string;
@@ -26,16 +28,22 @@ export interface Totals {
 
 /**
  * Totals of the lines on screen; with a checkout code, the eligible lines count at their price with the
- * code. HST is an estimate; the order itself is priced by WooCommerce, which applies the code itself.
+ * code. Tax is WooCommerce's own rate (never typed here): `rate` is what the last cart check said, null
+ * when WooCommerce adds none, undefined while it is not known. The order itself is priced and taxed by
+ * WooCommerce, which applies the code itself.
  */
-export function totalsOf(lines: CartLine[], code = ""): Totals {
+export function totalsOf(lines: CartLine[], code = "", rate?: CartTax | null): Totals {
   const listed = lines.reduce((n, l) => n + l.qty * l.price, 0);
   const discount = code ? lines.reduce((n, l) => n + (l.code ? l.qty * (l.price - l.code) : 0), 0) : 0;
   const sub = listed - discount;
   const saved = lines.reduce((n, l) => n + (l.was ? l.qty * (l.was - l.price) : 0), 0);
-  const tax = round2(sub * HST);
-  return { sub: round2(listed), saved: round2(saved), tax, total: round2(sub + tax), ...(discount > 0 ? { code, discount: round2(discount) } : {}) };
+  const tax = rate ? round2((sub * rate.rate) / 100) : 0;
+  const taxLabel = rate ? `${rate.label} (${Number(rate.rate.toFixed(4))}%)` : rate;
+  return { sub: round2(listed), saved: round2(saved), tax, ...(taxLabel === undefined ? {} : { taxLabel }), total: round2(sub + tax), ...(discount > 0 ? { code, discount: round2(discount) } : {}) };
 }
+
+/** WooCommerce's tax as the last cart check said: a rate and its name, null for none, undefined while unknown. */
+export const useCartTax = (): CartTax | null | undefined => useSyncExternalStore(subscribeCart, getCartTax, getServerCartTax);
 
 /**
  * The checkout code as it stands: what was entered, whether the sale WooCommerce runs accepts it, and
@@ -232,10 +240,13 @@ export function SumRows({ t }: { t: Totals }) {
           <dd className="text-ndm-ink tabular-nums">-{money2(t.discount)}</dd>
         </div>
       ) : null}
-      <div className={row}>
-        <dt className="text-ndm-muted">Estimated HST (13%)</dt>
-        <dd className="text-ndm-ink tabular-nums">{money2(t.tax)}</dd>
-      </div>
+      {/* WooCommerce's tax: named when it is known, left out when WooCommerce adds none */}
+      {(t.taxLabel !== null || t.tax > 0) && (
+        <div className={row}>
+          <dt className="text-ndm-muted">{t.taxLabel ? `Estimated ${t.taxLabel}` : t.tax > 0 ? "Estimated tax" : "Tax"}</dt>
+          <dd className="text-ndm-ink tabular-nums">{t.taxLabel || t.tax > 0 ? money2(t.tax) : "To be confirmed"}</dd>
+        </div>
+      )}
       <div className="mt-2 flex items-baseline justify-between gap-4 border-t border-ndm-ink/10 pt-4">
         <dt className="font-inter text-[15px] font-semibold text-ndm-ink">Estimated total</dt>
         <dd className="font-aeonik text-[28px] leading-none tracking-[-0.02em] text-ndm-ink tabular-nums">{money2(t.total)}</dd>

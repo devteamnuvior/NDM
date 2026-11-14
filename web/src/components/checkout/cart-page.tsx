@@ -7,7 +7,7 @@ import { ACTIONS } from "@/config/routes";
 import { useCart } from "@/hooks/use-cart";
 import { money, type CartLine } from "@/lib/cart";
 import { pagePath } from "@/lib/routes";
-import { CO_CARD, CO_WRAP, CartPairs, CoAlert, CoHead, CodeField, IconLock, RemovedNotice, SumRows, money2, totalsOf, useInBrowser, useSaleCode } from "./shared";
+import { CO_CARD, CO_WRAP, CartPairs, CoAlert, CoHead, CodeField, IconLock, RemovedNotice, SumRows, money2, totalsOf, useCartTax, useInBrowser, useSaleCode } from "./shared";
 
 /** A cart line on the cart page: what it is, the quantity, the line price. */
 function Line({ l }: { l: CartLine }) {
@@ -48,7 +48,7 @@ export function CartPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
   const cart = useCart();
   const ready = useInBrowser();
   /* the checkout code of a running sale replaces the prototype's promo code box, which only left a note */
-  const t = totalsOf(cart.lines, useSaleCode(cart.lines).applied);
+  const t = totalsOf(cart.lines, useSaleCode(cart.lines).applied, useCartTax());
   const empty = cart.lines.length === 0;
   return (
     <section aria-labelledby="co-title" className={`co-band ${CO_WRAP}`}>

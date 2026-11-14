@@ -39,6 +39,7 @@ function ndm_pricing_boot() {
 	require_once NDM_PRICING_DIR . '/includes/meta.php';
 	require_once NDM_PRICING_DIR . '/includes/tree.php';
 	require_once NDM_PRICING_DIR . '/includes/cache.php';
+	require_once NDM_PRICING_DIR . '/includes/tax.php';
 	require_once NDM_PRICING_DIR . '/includes/variations.php';
 	require_once NDM_PRICING_DIR . '/includes/save.php';
 	require_once NDM_PRICING_DIR . '/includes/rest.php';

@@ -1,7 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { CHECKOUT_STEPS, HST, PROVINCES, TIMES_OF_DAY } from "@/config/checkout";
+import { CHECKOUT_STEPS, PROVINCES, TIMES_OF_DAY } from "@/config/checkout";
 import { CLINICS } from "@/config/site";
 import { getAccountSession } from "@/lib/account/session";
 import { CART_MAX, cartKey, type CartLine } from "@/lib/cart";
@@ -47,6 +47,8 @@ export interface OrderReceipt {
   sub: number;
   saved: number;
   tax: number;
+  /** "HST (13%)", as WooCommerce names the order's tax; null when the order has none. */
+  taxLabel?: string | null;
   total: number;
   /** The checkout code WooCommerce applied, and what it took off; left out without one. */
   code?: string;
@@ -58,7 +60,6 @@ export interface OrderReceipt {
 
 export type OrderResult = { ok: true; order: OrderReceipt } | { ok: false; reason: "invalid" | "unavailable" | "busy" | "unreachable"; message: string };
 
-const round2 = (n: number): number => Math.round(n * 100) / 100;
 const text = (value: unknown, max: number): string | null => (typeof value === "string" && value.trim().length <= max ? value.trim() : null);
 
 /* a small brake on repeated requests from one address; a real limiter belongs in front of the site */
@@ -125,9 +126,8 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
       preferred: form.call === true ? "Call me to find a time" : `${form.day || "Any day"}, ${form.time.toLowerCase()}`,
       note,
     });
-    /* until WooCommerce works out tax itself, HST is the site's estimate, as on the cart page */
+    /* tax and total are WooCommerce's own: it taxed the order when it created it */
     const discount = placed.discount ?? 0;
-    const tax = placed.taxEnabled ? placed.tax : round2((placed.sub - discount) * HST);
     return {
       ok: true,
       order: {
@@ -136,8 +136,9 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
         lines: placed.lines.map((l) => ({ key: cartKey(l.productId, l.variationId), cat: l.cat, name: l.name, label: l.label, price: l.price, was: l.was || undefined, unit: "", productId: l.productId, variationId: l.variationId, qty: l.qty })),
         sub: placed.sub,
         saved: placed.saved,
-        tax,
-        total: placed.taxEnabled ? placed.total : round2(placed.sub - discount + tax),
+        tax: placed.tax,
+        taxLabel: placed.taxLabel || null,
+        total: placed.total,
         ...(placed.code && discount > 0 ? { code: placed.code, discount } : {}),
         first,
         clinic: clinic.name,
