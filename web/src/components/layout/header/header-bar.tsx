@@ -9,10 +9,11 @@ import { IconBag, IconChevron, IconExternal, IconMenu, IconSearch, IconUser } fr
 import { SiteLink } from "@/components/ui/site-link";
 import { useArticleSection, usePostSection } from "@/components/layout/concern-paths";
 import { useSiteSettings } from "@/components/layout/site-settings";
-import { NAV, PAGE_SECTION } from "@/config/navigation";
+import { itemExternal, itemLink, itemPanel, itemSection } from "@/components/layout/header/menu-items";
+import { PAGE_SECTION } from "@/config/navigation";
 import { ACTIONS, type PageId } from "@/config/routes";
-import { pageLink, resolveLabel } from "@/lib/routes";
-import type { NavItem, NavMenuId } from "@/types/navigation";
+import { pageLink } from "@/lib/routes";
+import type { NavMenuId } from "@/types/navigation";
 import { withBase } from "@/lib/base-path";
 
 export interface HeaderBarProps {
@@ -41,19 +42,13 @@ const GLASS = "blur(14px) saturate(160%)";
 const ITEM_CLASS =
   "relative flex items-center gap-1.5 rounded-full px-2 py-2.5 font-inter text-[15px] tracking-[-0.02em] whitespace-nowrap transition-colors 2xl:px-4 2xl:text-[16px]";
 
-function navLink(n: NavItem, shopLink: string) {
-  if (n.href === "/") return pageLink("home");
-  /* the skincare shop's address is a Site Setting */
-  if (n.id === "shop") return { href: shopLink };
-  return n.href ? { href: n.href } : resolveLabel(n.label);
-}
-
 /** The fixed site header: logo, primary navigation with its three dropdown panels, and the actions. */
 export function HeaderBar({ dark, current, top = 36, visible = true, cartCount = 0, onSearch, onDrawer, onCart }: HeaderBarProps) {
   const [open, setOpen] = useState<NavMenuId | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const wrapRef = useRef<HTMLElement>(null);
-  const settings = useSiteSettings().header;
+  const site = useSiteSettings();
+  const settings = site.header;
   const postSection = usePostSection();
   const articleSection = useArticleSection();
   const section = current ? PAGE_SECTION[current] : (postSection ?? articleSection);
@@ -150,11 +145,12 @@ export function HeaderBar({ dark, current, top = 36, visible = true, cartCount =
 
           <nav aria-label="Primary" className="hidden xl:block" onMouseEnter={() => setPrimed(true)} onMouseLeave={leave}>
             <ul className="flex items-center gap-0 2xl:gap-2" role="list">
-              {NAV.map((n) => {
-                const here = section === n.id;
-                const menu = n.menu;
+              {site.menu.items.map((n, i) => {
+                const here = !!section && section === itemSection(n, settings.shopLink);
+                const menu = itemPanel(n);
+                const external = itemExternal(n);
                 return (
-                  <li key={n.id} className="relative" onMouseEnter={() => (menu ? enter(menu) : leave())}>
+                  <li key={`${i}-${n.label}`} className="relative" onMouseEnter={() => (menu ? enter(menu) : leave())}>
                     {menu ? (
                       <button
                         type="button"
@@ -174,13 +170,13 @@ export function HeaderBar({ dark, current, top = 36, visible = true, cartCount =
                       </button>
                     ) : (
                       <SiteLink
-                        to={navLink(n, settings.shopLink)}
-                        {...(n.external ? { target: "_blank", rel: "noopener" } : {})}
+                        to={itemLink(n, settings.shopLink)}
+                        {...(external ? { target: "_blank", rel: "noopener" } : {})}
                         {...(here ? { "aria-current": "page" as const } : {})}
                         className={`${ITEM_CLASS} ${hover} ${here ? hereClass : ""}`}
                       >
                         {n.label}
-                        {n.external && <IconExternal className="opacity-60" />}
+                        {external && <IconExternal className="opacity-60" />}
                         {here && <i aria-hidden="true" className={`nav-here ${tone ? "is-dark" : ""}`} />}
                       </SiteLink>
                     )}

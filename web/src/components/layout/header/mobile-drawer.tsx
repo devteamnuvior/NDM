@@ -1,18 +1,19 @@
 "use client";
 
 import { useEffect, useEffectEvent, useState, type ReactNode } from "react";
-import { categoryOf } from "@/components/layout/header/mega-menu";
+import { categoryOf, itemExternal, itemLink, itemSection, menuEntryLink } from "@/components/layout/header/menu-items";
 import { Button } from "@/components/ui/button";
 import { IconArrow, IconChevron, IconClose, IconExternal } from "@/components/ui/icons";
 import { SiteLink } from "@/components/ui/site-link";
 import { useArticleSection, useMenuLink, usePostSection } from "@/components/layout/concern-paths";
 import { useSiteSettings } from "@/components/layout/site-settings";
-import { ABOUT_LINKS, CONCERNS, PAGE_SECTION, PROCEDURES } from "@/config/navigation";
+import { PAGE_SECTION } from "@/config/navigation";
 import { ACTIONS, type PageId } from "@/config/routes";
 import { CLINICS } from "@/config/site";
 import { useDeferredOpen } from "@/hooks/use-deferred-open";
 import { pageLink, tel } from "@/lib/routes";
 import type { NavSectionId, ResolvedLink } from "@/types/navigation";
+import type { MenuLink } from "@/types/site-settings";
 import { withBase } from "@/lib/base-path";
 
 export interface MobileDrawerProps {
@@ -48,11 +49,11 @@ function TopLink({ to, here, onClick, children }: { to: ResolvedLink; here: bool
   );
 }
 
-function SubLink({ label, current, onClick, nowrap }: { label: string; current?: PageId; onClick: () => void; nowrap?: boolean }) {
+function SubLink({ entry, current, onClick, nowrap }: { entry: MenuLink; current?: PageId; onClick: () => void; nowrap?: boolean }) {
   const menuLink = useMenuLink();
   return (
-    <SiteLink to={menuLink(label)} current={current} onClick={onClick} className="menu-item-m font-mont">
-      <span className={`min-w-0 ${nowrap ? "whitespace-nowrap" : ""}`}>{label}</span>
+    <SiteLink to={menuEntryLink(entry, menuLink)} current={current} onClick={onClick} className="menu-item-m font-mont">
+      <span className={`min-w-0 ${nowrap ? "whitespace-nowrap" : ""}`}>{entry.label}</span>
       <IconArrow size={11} className="shrink-0 text-ndm-blue" />
     </SiteLink>
   );
@@ -62,8 +63,10 @@ function SubLink({ label, current, onClick, nowrap }: { label: string; current?:
 export function MobileDrawer({ open, current, onClose }: MobileDrawerProps) {
   const shown = useDeferredOpen(open);
   const [sec, setSec] = useState<Section | null>(null);
-  const [cat, setCat] = useState<string | null>(() => categoryOf(current) ?? null);
-  const settings = useSiteSettings().header;
+  const site = useSiteSettings();
+  const settings = site.header;
+  const categories = site.menu.procedures.categories;
+  const [cat, setCat] = useState<string | null>(() => categoryOf(categories, current) ?? null);
   const postSection = usePostSection();
   const articleSection = useArticleSection();
   const section: NavSectionId | undefined = current ? PAGE_SECTION[current] : (postSection ?? articleSection);
@@ -101,82 +104,99 @@ export function MobileDrawer({ open, current, onClose }: MobileDrawerProps) {
           </button>
         </div>
         <nav aria-label="Mobile" className="flex-1 divide-y divide-ndm-line overflow-y-auto px-5">
-          <TopLink to={pageLink("home")} here={section === "home"} onClick={onClose}>
-            Home
-          </TopLink>
-          <div>
-            <SectionRow onClick={() => toggle("procedures")} expanded={sec === "procedures"} here={section === "procedures"}>
-              Procedures
-            </SectionRow>
-            {sec === "procedures" && (
-              <ul className="pb-4" role="list">
-                {PROCEDURES.map((c) => (
-                  <li key={c.id} className="border-t border-ndm-line/70">
-                    <button type="button" onClick={() => setCat(cat === c.id ? null : c.id)} aria-expanded={cat === c.id} className="flex w-full items-center justify-between py-3 font-mont text-[15px]">
-                      {c.label}
-                      <span className="text-[18px] leading-none text-ndm-muted">{cat === c.id ? "–" : "+"}</span>
-                    </button>
-                    {cat === c.id &&
-                      c.groups.map((g) => (
-                        <div key={g.title ?? "g"} className="pb-3 pl-3">
-                          {g.title && <p className="mt-1 mb-1 font-mont text-[11px] tracking-[.14em] text-ndm-muted uppercase">{g.title}</p>}
+          {site.menu.items.map((item, i) => {
+            const key = `${i}-${item.label}`;
+            const itemHere = !!section && section === itemSection(item, settings.shopLink);
+            if (item.kind === "procedures") {
+              return (
+                <div key={key}>
+                  <SectionRow onClick={() => toggle("procedures")} expanded={sec === "procedures"} here={itemHere}>
+                    {item.label}
+                  </SectionRow>
+                  {sec === "procedures" && (
+                    <ul className="pb-4" role="list">
+                      {categories.map((c) => (
+                        <li key={c.id} className="border-t border-ndm-line/70">
+                          <button type="button" onClick={() => setCat(cat === c.id ? null : c.id)} aria-expanded={cat === c.id} className="flex w-full items-center justify-between py-3 font-mont text-[15px]">
+                            {c.label}
+                            <span className="text-[18px] leading-none text-ndm-muted">{cat === c.id ? "–" : "+"}</span>
+                          </button>
+                          {cat === c.id &&
+                            c.groups.map((g, gi) => (
+                              <div key={`${gi}-${g.title}`} className="pb-3 pl-3">
+                                {g.title && <p className="mt-1 mb-1 font-mont text-[11px] tracking-[.14em] text-ndm-muted uppercase">{g.title}</p>}
+                                {g.items.map((it) => (
+                                  <SubLink key={it.label} entry={it} current={current} onClick={onClose} />
+                                ))}
+                              </div>
+                            ))}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            }
+            if (item.kind === "concerns") {
+              /* as in the prototype, the Concerns row is never marked */
+              return (
+                <div key={key}>
+                  <SectionRow onClick={() => toggle("concerns")} expanded={sec === "concerns"}>
+                    {item.label}
+                  </SectionRow>
+                  {sec === "concerns" && (
+                    <div className="space-y-3 pb-4">
+                      {site.menu.concerns.groups.map((g, gi) => (
+                        <div key={`${gi}-${g.title}`}>
+                          {g.title && <p className="mb-1 font-mont text-[11px] tracking-[.14em] text-ndm-muted uppercase">{g.title}</p>}
                           {g.items.map((it) => (
-                            <SubLink key={it} label={it} current={current} onClick={onClose} />
+                            <SubLink key={it.label} entry={it} current={current} onClick={onClose} />
                           ))}
                         </div>
                       ))}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-          <div>
-            <SectionRow onClick={() => toggle("concerns")} expanded={sec === "concerns"}>
-              Concerns
-            </SectionRow>
-            {sec === "concerns" && (
-              <div className="space-y-3 pb-4">
-                {CONCERNS.map((g) => (
-                  <div key={g.title}>
-                    <p className="mb-1 font-mont text-[11px] tracking-[.14em] text-ndm-muted uppercase">{g.title}</p>
-                    {g.items.map((it) => (
-                      <SubLink key={it} label={it} current={current} onClick={onClose} />
-                    ))}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <TopLink to={pageLink("pricing")} here={section === "pricing"} onClick={onClose}>
-            Pricing
-          </TopLink>
-          <TopLink to={pageLink("promotion")} here={section === "promotion"} onClick={onClose}>
-            Promotion
-          </TopLink>
-          <div>
-            <SectionRow onClick={() => toggle("about")} expanded={sec === "about"} here={section === "about"}>
-              About
-            </SectionRow>
-            {sec === "about" && (
-              <ul className="space-y-1 pb-4" role="list">
-                {CLINICS.map((c) => (
-                  <li key={c.id}>
-                    <SiteLink to={pageLink("about")} onClick={onClose} className="block py-1.5 font-mont text-[15px]">
-                      {c.name} Clinic <span className="text-[13px] text-ndm-muted">· {c.note}</span>
-                    </SiteLink>
-                  </li>
-                ))}
-                {ABOUT_LINKS.map((l) => (
-                  <li key={l}>
-                    <SubLink label={l} current={current} onClick={onClose} nowrap />
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-          <a href={withBase(settings.shopLink)} target="_blank" rel="noopener" className={`flex items-center gap-2 py-4 ${TOP_CLASS}`}>
-            Skincare shop <IconExternal size={16} />
-          </a>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+            if (item.kind === "about") {
+              return (
+                <div key={key}>
+                  <SectionRow onClick={() => toggle("about")} expanded={sec === "about"} here={itemHere}>
+                    {item.label}
+                  </SectionRow>
+                  {sec === "about" && (
+                    <ul className="space-y-1 pb-4" role="list">
+                      {CLINICS.map((c) => (
+                        <li key={c.id}>
+                          <SiteLink to={pageLink("about")} onClick={onClose} className="block py-1.5 font-mont text-[15px]">
+                            {c.name} Clinic <span className="text-[13px] text-ndm-muted">· {c.note}</span>
+                          </SiteLink>
+                        </li>
+                      ))}
+                      {site.menu.about.links.map((l) => (
+                        <li key={l.label}>
+                          <SubLink entry={l} current={current} onClick={onClose} nowrap />
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            }
+            if (itemExternal(item)) {
+              return (
+                <a key={key} href={withBase(itemLink(item, settings.shopLink).href)} target="_blank" rel="noopener" className={`flex items-center gap-2 py-4 ${TOP_CLASS}`}>
+                  {item.label} <IconExternal size={16} />
+                </a>
+              );
+            }
+            return (
+              <TopLink key={key} to={itemLink(item, settings.shopLink)} here={itemHere} onClick={onClose}>
+                {item.label}
+              </TopLink>
+            );
+          })}
         </nav>
         <div className="space-y-3 border-t border-ndm-line p-5">
           <div className="grid grid-cols-2 gap-2">

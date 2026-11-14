@@ -2,15 +2,16 @@
 /**
  * Site Settings: the general configuration of the Next.js site, one screen in the admin menu.
  *
- * - "Site Settings" (top-level admin menu, administrators only) has one tab per area of the site. For
- *   now: Header (the announcement bar and the header bar) and Footer (the closing call, the film, the
- *   link columns, the contact line and the social links).
+ * - "Site Settings" (top-level admin menu, administrators only) has one tab per area of the site:
+ *   Header (the announcement bar and the header bar), Menu (the header's menu items, the Procedures,
+ *   Concerns and About panels, also shown in the phone menu) and Footer (the closing call, the film,
+ *   the link columns, the contact line and the social links).
  * - Everything is one option, `ndm_site_settings` ({ content, modified }). The fields are listed once,
  *   in ndm_headless_settings_schema(); the screen, the saving, the REST answer and the import read that
  *   list. The fields themselves (their look, cleaning and photo picker) are the ones of the Concerns
  *   post type (includes/concerns.php).
- * - What stays in the site's code because other parts of the site share it: the menu and its panels,
- *   the two clinics (names, addresses, phone numbers), the logo, the legal links.
+ * - What stays in the site's code because other parts of the site share it: the two clinics (names,
+ *   addresses, hours, phone numbers), the logo, the legal links, the site search's list.
  * - `GET ndm/v1/site-settings` gives the saved settings. Before anything is saved it answers 404
  *   (`ndm_settings_empty`) and the site uses its built-in header and footer.
  * - A save tells the Next.js site to drop its cached copy (tag `site-settings`).
@@ -39,6 +40,7 @@ define( 'NDM_SETTINGS_TAG', 'site-settings' );
 function ndm_headless_settings_tabs() {
 	return array(
 		'header' => 'Header',
+		'menu'   => 'Menu',
 		'footer' => 'Footer',
 	);
 }
@@ -110,6 +112,157 @@ function ndm_headless_settings_schema() {
 				array( 'key' => 'book_label', 'label' => 'Booking button', 'type' => 'text', 'help' => 'Empty: "Book Free Consultation". Also the button of the phone menu.' ),
 				array( 'key' => 'book_short', 'label' => 'Booking button on phones', 'type' => 'text', 'help' => 'Empty: "Book".' ),
 				array( 'key' => 'shop_link', 'label' => 'Skincare shop address', 'type' => 'text', 'help' => 'Opened by the menu\'s "Skincare shop", the phone menu and the announcement bar, in a new tab. Empty: the placeholder "#/shop" until the shop exists.' ),
+			),
+		),
+		array(
+			'id'     => 'menu_items',
+			'tab'    => 'menu',
+			'title'  => 'Main Menu',
+			'help'   => 'The items across the header on computers, in this order, and the same items in the phone menu. No item: the built-in menu.',
+			'fields' => array(
+				array(
+					'key'    => 'menu_items',
+					'label'  => 'Items',
+					'type'   => 'repeater',
+					'add'    => 'Add an item',
+					'title'  => 'label',
+					'fields' => array(
+						array( 'key' => 'label', 'label' => 'Words', 'type' => 'text' ),
+						array(
+							'key'       => 'kind',
+							'label'     => 'Opens',
+							'type'      => 'select',
+							'options'   => array( 'Link', 'Procedures panel', 'Concerns panel', 'About panel', 'Skincare shop' ),
+							'keeps_row' => true,
+							'help'      => 'A panel opens under the header (on phones, a list that folds open). "Skincare shop" opens the address in Header > Header Bar in a new tab.',
+						),
+						array( 'key' => 'link', 'label' => 'Link ("Link" only)', 'type' => 'text', 'help' => $link_help . ' Empty: the page with this name.' ),
+						array( 'key' => 'new_tab', 'label' => 'Opens in a new tab ("Link" only)', 'type' => 'checkbox' ),
+					),
+				),
+			),
+		),
+		array(
+			'id'     => 'menu_procedures',
+			'tab'    => 'menu',
+			'title'  => 'Procedures Panel',
+			'help'   => 'Categories on the left; pointing at one shows its treatments. On computers a treatment with the same name as its category is left out of the list (the category\'s title links to it). No category: the built-in categories.',
+			'fields' => array(
+				array(
+					'key'    => 'proc_categories',
+					'label'  => 'Categories',
+					'type'   => 'repeater',
+					'add'    => 'Add a category',
+					'title'  => 'label',
+					'fields' => array(
+						array( 'key' => 'label', 'label' => 'Name', 'type' => 'text' ),
+						array( 'key' => 'link', 'label' => 'Title link', 'type' => 'text', 'help' => 'Where the big title links. Empty: the page with this name, if there is one (else the title is not a link).' ),
+						array( 'key' => 'blurb', 'label' => 'Line under the title', 'type' => 'textarea' ),
+						array(
+							'key'       => 'layout',
+							'label'     => 'Layout',
+							'type'      => 'select',
+							'options'   => array( 'Treatment list', 'Aptos (NAMICA card)' ),
+							'keeps_row' => true,
+							'help'      => '"Aptos": the first group\'s links under a "Treatment" title, ending with this category\'s own page, beside the NAMICA card (Aptos Card box).',
+						),
+						array(
+							'key'    => 'groups',
+							'label'  => 'Groups',
+							'type'   => 'repeater',
+							'add'    => 'Add a group',
+							'title'  => 'title',
+							'help'   => 'One group: one list. Two groups: two columns (for example Aesthetic and Medical Dermatology).',
+							'fields' => array(
+								array( 'key' => 'title', 'label' => 'Group title', 'type' => 'text', 'help' => 'Empty: no title.' ),
+								array(
+									'key'    => 'items',
+									'label'  => 'Treatments',
+									'type'   => 'repeater',
+									'add'    => 'Add a treatment',
+									'title'  => 'label',
+									'fields' => array(
+										array( 'key' => 'label', 'label' => 'Name', 'type' => 'text' ),
+										array( 'key' => 'link', 'label' => 'Link', 'type' => 'text', 'help' => 'Empty: the page with this name (a published post with that slug, else a page of the site).' ),
+									),
+								),
+							),
+						),
+					),
+				),
+				array( 'key' => 'proc_card_tag', 'label' => 'Photo card, small line', 'type' => 'text', 'help' => 'The card at the right, which opens the booking form. Empty: "Not sure where to start?"' ),
+				array( 'key' => 'proc_card_title', 'label' => 'Photo card, title', 'type' => 'text', 'help' => 'Empty: "Free consultation & VISIA® skin analysis".' ),
+				array( 'key' => 'proc_card_photo', 'label' => 'Photo card, photo', 'type' => 'image', 'help' => 'A tall photo. Empty: the built-in clinic photo.' ),
+			),
+		),
+		array(
+			'id'     => 'menu_aptos',
+			'tab'    => 'menu',
+			'title'  => 'Aptos Card',
+			'help'   => 'The purple NAMICA card beside a category with the Aptos layout. Its spheres are the site\'s.',
+			'fields' => array(
+				array( 'key' => 'aptos_tag', 'label' => 'Small line', 'type' => 'text', 'help' => 'Empty: "NAMICA technology".' ),
+				array( 'key' => 'aptos_title', 'label' => 'Title', 'type' => 'text', 'help' => 'Empty: "Biostimulation threads".' ),
+				array( 'key' => 'aptos_subtitle', 'label' => 'Line under the title', 'type' => 'text', 'help' => 'Empty: no line.' ),
+				array( 'key' => 'aptos_badge', 'label' => 'Badge', 'type' => 'text', 'help' => 'Empty: no badge.' ),
+				array( 'key' => 'aptos_link', 'label' => 'Link', 'type' => 'text', 'help' => 'Empty: "/aptos-thread-lift".' ),
+			),
+		),
+		array(
+			'id'     => 'menu_concerns',
+			'tab'    => 'menu',
+			'title'  => 'Concerns Panel',
+			'help'   => 'Up to four groups fit side by side. No group: the built-in groups.',
+			'fields' => array(
+				array( 'key' => 'concerns_title', 'label' => 'Title', 'type' => 'text', 'help' => 'Empty: "Concerns".' ),
+				array( 'key' => 'concerns_text', 'label' => 'Line under the title', 'type' => 'textarea', 'help' => 'Empty: no line.' ),
+				array(
+					'key'    => 'concerns_groups',
+					'label'  => 'Groups',
+					'type'   => 'repeater',
+					'add'    => 'Add a group',
+					'title'  => 'title',
+					'fields' => array(
+						array( 'key' => 'title', 'label' => 'Group title', 'type' => 'text' ),
+						array(
+							'key'    => 'items',
+							'label'  => 'Concerns',
+							'type'   => 'repeater',
+							'add'    => 'Add a concern',
+							'title'  => 'label',
+							'fields' => array(
+								array( 'key' => 'label', 'label' => 'Name', 'type' => 'text' ),
+								array( 'key' => 'link', 'label' => 'Link', 'type' => 'text', 'help' => 'Empty: the page with this name (a published post with that slug, else a page of the site).' ),
+							),
+						),
+					),
+				),
+				array( 'key' => 'concerns_card_tag', 'label' => 'Photo card, small line', 'type' => 'text', 'help' => 'Empty: "Not sure what you need?"' ),
+				array( 'key' => 'concerns_card_title', 'label' => 'Photo card, title', 'type' => 'text', 'help' => 'Empty: "Start with a VISIA® skin analysis".' ),
+				array( 'key' => 'concerns_card_photo', 'label' => 'Photo card, photo', 'type' => 'image', 'help' => 'Empty: the built-in clinic photo.' ),
+			),
+		),
+		array(
+			'id'     => 'menu_about',
+			'tab'    => 'menu',
+			'title'  => 'About Panel',
+			'help'   => 'The links on the left and the two clinic cards. The clinics\' names, addresses, hours and phone numbers are the site\'s, the same on every page.',
+			'fields' => array(
+				array(
+					'key'    => 'about_links',
+					'label'  => 'Links',
+					'type'   => 'repeater',
+					'add'    => 'Add a link',
+					'title'  => 'label',
+					'help'   => 'No link: the built-in links.',
+					'fields' => array(
+						array( 'key' => 'label', 'label' => 'Words', 'type' => 'text' ),
+						array( 'key' => 'link', 'label' => 'Link', 'type' => 'text', 'help' => 'Empty: the About page ("Blog" opens the blog, a name starting with "Policies" the privacy policy).' ),
+					),
+				),
+				array( 'key' => 'about_photo_uptown', 'label' => 'Uptown clinic photo', 'type' => 'image', 'help' => 'A wide photo. Empty: the built-in photo.' ),
+				array( 'key' => 'about_photo_downtown', 'label' => 'Downtown clinic photo', 'type' => 'image', 'help' => 'Empty: the built-in photo.' ),
+				array( 'key' => 'about_card_link', 'label' => 'Clinic card link words', 'type' => 'text', 'help' => 'Empty: "About the clinic".' ),
 			),
 		),
 		array(
@@ -498,7 +651,7 @@ function ndm_headless_settings_changed() {
 }
 
 /**
- * The poster's description (alternative text) changed in the media library.
+ * The description (alternative text) of a photo the settings use changed in the media library.
  *
  * @param int|string[] $meta_id  Meta ID (or IDs on delete).
  * @param int          $post_id  Post ID.
@@ -509,7 +662,8 @@ function ndm_headless_settings_meta_changed( $meta_id, $post_id, $meta_key ) {
 		return;
 	}
 	$content = ndm_headless_settings_stored() ? ndm_headless_settings_content() : null;
-	if ( $content && (int) $content['film_poster'] === (int) $post_id ) {
+	$photos  = array( 'film_poster', 'proc_card_photo', 'concerns_card_photo', 'about_photo_uptown', 'about_photo_downtown' );
+	if ( $content && in_array( (int) $post_id, array_map( 'intval', array_intersect_key( $content, array_flip( $photos ) ) ), true ) ) {
 		ndm_headless_settings_changed();
 	}
 }

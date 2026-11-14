@@ -708,16 +708,24 @@ its own and leaves the other tabs as they are.
   phone messages, a phone message can be "Clinic phone numbers", the shop link at the right) and the
   header bar (booking button words, the short phone word, the skincare shop's address, which the
   menu, the phone menu and the bar open).
+- **Menu** tab: the main menu (each item's words and what it opens: a link, the Procedures, Concerns
+  or About panel, or the skincare shop), the Procedures panel (categories > groups > treatments, each
+  with an optional link; a category's title link, line and layout, "Aptos (NAMICA card)" for the Aptos
+  one; the photo card's words and photo), the Aptos card's words and link, the Concerns panel (title,
+  line, groups > concerns, photo card) and the About panel (links, the two clinic photos, the cards'
+  link words). The phone menu shows the same items. A link left empty goes to the page with that name
+  (a published post with that slug, else a page of the site), as before. Photos left empty keep the
+  site's built-in photos. The site search still lists the built-in treatments and concerns.
 - **Footer** tab: the closing call (heading, text, booking button, optional second button), the film
   (MP4 address, poster from the media library), the text and two badges under the logo, the link
   columns (a list of columns, each with its links), the contact column's title and email, the
   copyright line and the five social addresses (empty: no icon).
-- Kept in the site's code because other parts share them: the menu and its panels, the logo, the two
-  clinics (names, addresses, phone numbers), the Privacy, Terms and Refunds links. The home page's
+- Kept in the site's code because other parts share them: the logo, the two clinics (names,
+  addresses, hours, phone numbers), the Privacy, Terms and Refunds links, the search list. The home page's
   @newdermamed section keeps the built-in social addresses.
 - Empty fields: a label (booking button, heading, column title) falls back to the site's built-in
   words; an optional piece (badge, text, second button, email, copyright, social icon) is left out.
-  No column: the built-in columns. No message in one ticker: the other ticker's messages; none in
+  No column, menu item, category, concern group or About link: the built-in list. No message in one ticker: the other ticker's messages; none in
   either: the bar is hidden.
 - A save tells the site to drop its cached copy (tag `site-settings`). Nothing saved, or WordPress
   unreachable: the site shows its built-in header and footer (`web/src/config/site-settings.json`).

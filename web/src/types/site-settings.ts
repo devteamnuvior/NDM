@@ -7,6 +7,55 @@ export type Announcement =
 
 export type SocialNetwork = "instagram" | "facebook" | "youtube" | "x" | "linkedin";
 
+/** A link of a menu panel. `link` empty: the page with this name (a WordPress post with that slug, else the route table). */
+export interface MenuLink {
+  label: string;
+  link: string;
+}
+
+/** A column of a panel; `title` empty: no small title above it. */
+export interface MenuGroup {
+  title: string;
+  items: MenuLink[];
+}
+
+/** A category of the Procedures panel. */
+export interface MenuCategory {
+  id: string;
+  label: string;
+  /** Where the category's title links; empty: the page with its name, if one exists. */
+  link: string;
+  blurb: string;
+  /** The Aptos layout: the first group's links beside the NAMICA card. */
+  aptos: boolean;
+  groups: MenuGroup[];
+}
+
+/** The photo card at the right of a panel. `photo` empty: the built-in photo. */
+export interface MenuCard {
+  tag: string;
+  title: string;
+  photo: string;
+}
+
+/** A top-level menu item: a link, one of the three panels, or the skincare shop (Header Bar's address, new tab). */
+export interface MenuItem {
+  label: string;
+  kind: "link" | "procedures" | "concerns" | "about" | "shop";
+  /** `link` kind only; empty: the page with this name. */
+  link: string;
+  newTab: boolean;
+}
+
+export interface SiteMenu {
+  items: MenuItem[];
+  procedures: { categories: MenuCategory[]; card: MenuCard };
+  aptos: { tag: string; title: string; subtitle: string; badge: string; link: string };
+  concerns: { title: string; text: string; groups: MenuGroup[]; card: MenuCard };
+  /** `photos` empty: the built-in clinic photos. */
+  about: { links: MenuLink[]; photos: { uptown: string; downtown: string }; cardLink: string };
+}
+
 /** The general settings of the site (WordPress: Site Settings), as the header and footer read them. */
 export interface SiteSettings {
   header: {
@@ -41,6 +90,8 @@ export interface SiteSettings {
     /** Empty address: no icon. */
     social: Record<SocialNetwork, string>;
   };
+  /** The header's menu: the top items, the three panels and the phone menu. */
+  menu: SiteMenu;
 }
 
 /** GET ndm/v1/site-settings. */
@@ -76,5 +127,30 @@ export interface WPSiteSettings {
     social_youtube: string;
     social_x: string;
     social_linkedin: string;
+    menu_items: { label: string; kind: "Link" | "Procedures panel" | "Concerns panel" | "About panel" | "Skincare shop"; link: string; new_tab: boolean }[];
+    proc_categories: { label: string; link: string; blurb: string; layout: "Treatment list" | "Aptos (NAMICA card)"; groups: WPMenuGroup[] }[];
+    proc_card_tag: string;
+    proc_card_title: string;
+    proc_card_photo: WPConcernImage | null;
+    aptos_tag: string;
+    aptos_title: string;
+    aptos_subtitle: string;
+    aptos_badge: string;
+    aptos_link: string;
+    concerns_title: string;
+    concerns_text: string;
+    concerns_groups: WPMenuGroup[];
+    concerns_card_tag: string;
+    concerns_card_title: string;
+    concerns_card_photo: WPConcernImage | null;
+    about_links: MenuLink[];
+    about_photo_uptown: WPConcernImage | null;
+    about_photo_downtown: WPConcernImage | null;
+    about_card_link: string;
   };
+}
+
+interface WPMenuGroup {
+  title: string;
+  items: MenuLink[];
 }
