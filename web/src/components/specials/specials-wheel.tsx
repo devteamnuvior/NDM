@@ -187,6 +187,8 @@ export function SpecialsWheel({ offers, level: Heading, offersHref, children }: 
               const [x, y, r] = arcAt(d);
               const on = d === 0;
               const far = Math.abs(d) > 3;
+              /* an offer tag on a scaled-down card: the lines around it close up to make room */
+              const tight = !!s.deal && k < 0.95;
               /* a card that crosses from one end of the wheel to the other jumps there, it does not fly across */
               const wrap = turn.prev !== act && Math.abs(d - stepFrom(i, turn.prev)) > 2;
               /* before the stage is in view, cards wait outside the screen on their own side, then sweep onto the arc, centre card last */
@@ -222,20 +224,21 @@ export function SpecialsWheel({ offers, level: Heading, offersHref, children }: 
                       </span>
                       <span className={`sw-tag truncate rounded-full px-3 py-1.5 font-mont text-[10.5px] tracking-[.12em] uppercase ${i === 0 ? "is-feature" : ""}`}>{i === 0 ? "Featured" : s.tag}</span>
                     </span>
-                    <h3 className="sw-title flex items-center justify-center text-center font-aeonik leading-[1.04] font-normal tracking-[-0.03em]" style={{ fontSize: 34 * k, minHeight: 34 * k * 2.15, marginTop: `max(12px, min(1.5vw, ${(20 * k).toFixed(1)}px))` }}>
+                    <h3 className="sw-title flex items-center justify-center text-center font-aeonik leading-[1.04] font-normal tracking-[-0.03em]" style={{ fontSize: 34 * k, minHeight: 34 * k * 2.15, marginTop: tight ? 8 : `max(12px, min(1.5vw, ${(20 * k).toFixed(1)}px))` }}>
                       {s.name}
                     </h3>
                     {/* a card with an offer tag holds one more line in the same height: on a scaled-down wheel the tag and
-                        the gaps shrink with it, and the button keeps its height (it used to be squeezed flat) */}
+                        the gaps shrink with it (`tight`), which leaves clear space between a two-line title and the tag, and
+                        the button keeps its height (it used to be squeezed flat) */}
                     <span className="flex min-h-0 flex-1 flex-col items-center justify-center text-center">
                       {s.deal && (
-                        <span className={`deal-badge shrink-0 ${k < 0.95 ? "deal-badge-sm" : ""}`} style={{ marginBottom: k < 0.95 ? 6 * k : 12 }}>
+                        <span className={`deal-badge shrink-0 ${tight ? "deal-badge-sm" : ""}`} style={{ marginTop: tight ? 10 : 0, marginBottom: tight ? 6 * k : 12 }}>
                           <i aria-hidden="true">%</i>
                           {s.deal}
                         </span>
                       )}
-                      <span className="sw-muted font-inter text-[11px] tracking-[.18em] uppercase">From</span>
-                      <span className="sw-price mt-1 font-aeonik leading-none tracking-[-0.035em] whitespace-nowrap" style={{ fontSize: 40 * k }}>
+                      <span className={`sw-muted font-inter text-[11px] tracking-[.18em] uppercase ${tight ? "leading-none" : ""}`}>From</span>
+                      <span className={`sw-price font-aeonik leading-none ${tight ? "" : "mt-1"} tracking-[-0.035em] whitespace-nowrap`} style={{ fontSize: 40 * k }}>
                         <span className="sw-cur">$</span>
                         {s.price}
                       </span>
