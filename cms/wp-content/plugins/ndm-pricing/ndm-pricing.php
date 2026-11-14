@@ -49,6 +49,7 @@ function ndm_pricing_boot() {
 
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		require_once NDM_PRICING_DIR . '/includes/cli.php';
+		require_once NDM_PRICING_DIR . '/includes/align.php';
 	}
 }
 add_action( 'plugins_loaded', 'ndm_pricing_boot' );
