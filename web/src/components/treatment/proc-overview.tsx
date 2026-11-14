@@ -16,6 +16,9 @@ interface ProcOverviewProps {
   number: string;
 }
 
+/** A tab's own link that only repeats the booking button beside it (same words or same address) is left out. */
+const repeatsBooking = ([href, label]: [string, string]) => href.trim() === ACTIONS.book || label.trim().toLowerCase() === "book free consultation";
+
 /**
  * About the treatment: its tabs on a light panel, one panel shown at a time with its key number beside it.
  * Every panel stays in the page (the hidden ones `hidden`), so all the text is there for search engines.
@@ -104,7 +107,7 @@ export function ProcOverview({ overview: o, facts, number }: ProcOverviewProps) 
                   <Button href={ACTIONS.book} v="book" hot>
                     Book Free Consultation
                   </Button>
-                  {t.link && (
+                  {t.link && !repeatsBooking(t.link) && (
                     <a href={withBase(t.link[0])} className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-deep">
                       {t.link[1]}
                       <IconArrow className="transition-transform group-hover:translate-x-1" />
@@ -113,16 +116,19 @@ export function ProcOverview({ overview: o, facts, number }: ProcOverviewProps) 
                 </div>
               </div>
               <aside className="hidden md:block">
-                <div className="ov2-stat relative mx-auto grid aspect-square w-[128px] place-items-center">
-                  <svg aria-hidden="true" viewBox="0 0 100 100" className="ov2-stat-ring absolute inset-0">
-                    <circle cx="50" cy="50" r="46" />
-                  </svg>
-                  <span className="relative px-4 text-center">
-                    <span className="block font-aeonik text-[32px] leading-none tracking-[-0.03em] text-ndm-ink tabular-nums">{t.stat[0]}</span>
-                    <span className="mt-1 block font-inter text-[11px] leading-[1.3] text-ndm-muted">{t.stat[1]}</span>
-                  </span>
-                </div>
-                <dl className="mt-3 grid gap-1 border-t border-ndm-ink/10 pt-2.5">
+                {/* a tab without a figure shows the facts only, not an empty ring */}
+                {t.stat[0] && (
+                  <div className="ov2-stat relative mx-auto grid aspect-square w-[128px] place-items-center">
+                    <svg aria-hidden="true" viewBox="0 0 100 100" className="ov2-stat-ring absolute inset-0">
+                      <circle cx="50" cy="50" r="46" />
+                    </svg>
+                    <span className="relative px-4 text-center">
+                      <span className="block font-aeonik text-[32px] leading-none tracking-[-0.03em] text-ndm-ink tabular-nums">{t.stat[0]}</span>
+                      <span className="mt-1 block font-inter text-[11px] leading-[1.3] text-ndm-muted">{t.stat[1]}</span>
+                    </span>
+                  </div>
+                )}
+                <dl className={`grid gap-1 ${t.stat[0] ? "mt-3 border-t border-ndm-ink/10 pt-2.5" : ""}`}>
                   {facts.map(([k, v]) => (
                     <div key={k} className="flex items-baseline justify-between gap-3 font-inter text-[12.5px]">
                       <dt className="text-ndm-muted">{k}</dt>
