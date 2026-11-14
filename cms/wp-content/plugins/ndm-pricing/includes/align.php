@@ -49,6 +49,7 @@ function ndm_pricing_cli_align( $args, $assoc_args ) {
 	}
 
 	$changes = 0;
+	$renamed = array(); // Shared attribute terms already given their name: term ID => name.
 	$say     = static function ( $line ) use ( &$changes ) {
 		++$changes;
 		WP_CLI::log( $line );
@@ -138,7 +139,7 @@ function ndm_pricing_cli_align( $args, $assoc_args ) {
 			foreach ( $wanted as $position => $option ) {
 				$hit = null;
 				foreach ( $variations as $variation_id => $variation ) {
-					$label = implode( ', ', array_filter( array_map( 'ndm_pricing_plain', $variation->get_attributes() ) ) );
+					$label = implode( ', ', wp_list_pluck( ndm_pricing_variation_attributes( $variation, $found ), 'value' ) );
 					if ( ! isset( $used[ $variation_id ] ) && ndm_pricing_align_key( $label ) === ndm_pricing_align_key( $option['label'] ) ) {
 						$hit = array( $variation, $label );
 						break;
@@ -156,7 +157,22 @@ function ndm_pricing_cli_align( $args, $assoc_args ) {
 				$touched                      = false;
 
 				if ( $label !== $option['label'] ) {
-					if ( ! $attribute || 1 !== count( $variation->get_attributes() ) ) {
+					$raw      = $variation->get_attributes();
+					$taxonomy = 1 === count( $raw ) ? (string) key( $raw ) : '';
+					$term     = '' !== $taxonomy && taxonomy_exists( $taxonomy ) ? get_term_by( 'slug', (string) current( $raw ), $taxonomy ) : null;
+
+					if ( $term ) {
+						// A shared attribute: the name is the term's, the same for every product that uses it.
+						if ( ! isset( $renamed[ $term->term_id ] ) ) {
+							$renamed[ $term->term_id ] = $option['label'];
+							$say( sprintf( 'Shared option name "%s" -> "%s" (every product that uses it)', $term->name, $option['label'] ) );
+							if ( $apply ) {
+								wp_update_term( $term->term_id, $taxonomy, array( 'name' => wp_slash( $option['label'] ) ) );
+							}
+						} elseif ( $renamed[ $term->term_id ] !== $option['label'] ) {
+							WP_CLI::log( sprintf( '   %s: the reference writes this option "%s"; the shared name stays "%s"', $title, $option['label'], $renamed[ $term->term_id ] ) );
+						}
+					} elseif ( ! $attribute || 1 !== count( $raw ) ) {
 						WP_CLI::warning( sprintf( '%s: option "%s" cannot be renamed here (set up in WooCommerce).', $title, $label ) );
 					} else {
 						$say( sprintf( '%s: option "%s" -> "%s"', $title, $label, $option['label'] ) );
@@ -196,7 +212,7 @@ function ndm_pricing_cli_align( $args, $assoc_args ) {
 				if ( isset( $used[ $variation_id ] ) ) {
 					continue;
 				}
-				$label    = implode( ', ', array_filter( array_map( 'ndm_pricing_plain', $variation->get_attributes() ) ) );
+				$label    = implode( ', ', wp_list_pluck( ndm_pricing_variation_attributes( $variation, $found ), 'value' ) );
 				$labels[] = $label;
 				if ( ! ndm_pricing_is_hidden( $variation ) || (int) $variation->get_menu_order() !== $position ) {
 					$say( sprintf( '%s: option "%s" is not in the reference: hidden', $title, $label ) );
