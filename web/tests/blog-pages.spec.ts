@@ -26,14 +26,14 @@ test("blog: the latest article opens its page here; other posts open the clinic'
   const featured = page.locator('section[aria-labelledby="featured-title"]');
   await expect(featured.locator("h2")).toHaveText("What Causes Rosacea Redness");
   const read = featured.getByRole("link", { name: "Read article" });
-  await expect(read).toHaveAttribute("href", "/what-causes-rosacea-redness");
+  await expect(read).toHaveAttribute("href", "/blog/what-causes-rosacea-redness");
   await expect(read).not.toHaveAttribute("target", "_blank");
   const first = page.locator("#stories li").first();
   const link = first.getByRole("link", { name: /Read article/ });
   await expect(link).toHaveAttribute("href", "https://newdermamedlaserclinic.com/your-complete-guide-to-laser-hair-removal/");
   await expect(link).toHaveAttribute("target", "_blank");
   await read.click();
-  await expect(page).toHaveURL(`${NEXT_URL}/what-causes-rosacea-redness`);
+  await expect(page).toHaveURL(`${NEXT_URL}/blog/what-causes-rosacea-redness`);
 });
 
 test("blog: topic filters show their counts and narrow the list; Load more adds nine", async ({ page }) => {
@@ -72,7 +72,7 @@ test("article: redirect, title, breadcrumb back to the blog, reading progress, r
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(String(e)));
   await page.goto(`${NEXT_URL}/what-causes-rosacea-redness.html`);
-  await expect(page).toHaveURL(`${NEXT_URL}/what-causes-rosacea-redness`);
+  await expect(page).toHaveURL(`${NEXT_URL}/blog/what-causes-rosacea-redness`);
   await expect(page).toHaveTitle("What Causes Rosacea Redness, NewDermaMed Blog");
   await expect(page.locator("h1")).toHaveCount(1);
   await expect(page.getByRole("navigation", { name: "Breadcrumb" }).getByRole("link", { name: "Blog" })).toHaveAttribute("href", "/blog");
@@ -91,7 +91,7 @@ test("article: redirect, title, breadcrumb back to the blog, reading progress, r
 test.describe("phone", () => {
   test.use({ viewport: { width: 375, height: 812 } });
   test("blog and article: no sideways scroll", async ({ page }) => {
-    for (const path of ["/blog", "/what-causes-rosacea-redness"]) {
+    for (const path of ["/blog", "/blog/what-causes-rosacea-redness"]) {
       await page.goto(`${NEXT_URL}${path}`);
       await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
       await page.waitForTimeout(400);
@@ -118,13 +118,13 @@ test.describe("search engines", () => {
     const posts = graph[1].blogPost as { headline: string; url: string; datePublished: string }[];
     expect(posts).toHaveLength(34);
     expect(posts[0]).toMatchObject({ headline: "What Causes Rosacea Redness", datePublished: "2025-11-26T09:00:00+00:00" });
-    expect(posts[0].url).toMatch(/\/what-causes-rosacea-redness$/);
+    expect(posts[0].url).toMatch(/\/blog\/what-causes-rosacea-redness$/);
     expect((graph[2].mainEntity as unknown[]).length).toBe(await page.locator("#faq").locator("xpath=ancestor::section").locator("dt, summary, button[aria-expanded]").count());
   });
 
   test("article: canonical, article tags, BlogPosting; photos come in sizes; it is in the sitemap", async ({ page, request }) => {
-    await page.goto(`${NEXT_URL}/what-causes-rosacea-redness`);
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/what-causes-rosacea-redness$/);
+    await page.goto(`${NEXT_URL}/blog/what-causes-rosacea-redness`);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/blog\/what-causes-rosacea-redness$/);
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", "The everyday triggers that can make rosacea flare, and why they affect some skin more than others.");
     await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "article");
     await expect(page.locator('meta[property="article:published_time"]')).toHaveAttribute("content", "2025-11-26T09:00:00+00:00");
@@ -144,7 +144,7 @@ test.describe("search engines", () => {
     await expect(inText).toHaveAttribute("srcset", /300w/);
 
     const sitemap = await (await request.get(`${NEXT_URL}/sitemap.xml`)).text();
-    expect(sitemap).toContain("/what-causes-rosacea-redness</loc>");
+    expect(sitemap).toContain("/blog/what-causes-rosacea-redness</loc>");
     expect(sitemap).toContain("/blog</loc>");
     /* a post without text has no page here, so it is not listed */
     expect(sitemap).not.toContain("best-way-to-treat-rosacea");

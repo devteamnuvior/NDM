@@ -2,9 +2,11 @@ import type { WPConcernImage } from "@/types/concern";
 
 /** A procedure in the list of procedures (`ndm/v1/procedures`). */
 export interface WPProcedureSummary {
-  /** Its address on the site: "/<slug>". */
+  /** The post's slug; its address on the site is the post type's folder and the slug ("/injectables/botox", `procedurePath`). */
   slug: string;
   title: string;
+  /** The post type's name in WordPress: "Procedures", "Injectables", "Laser", "Body", "Veins" or "Hair". Missing on a WordPress without the procedure lists. */
+  type?: string;
 }
 
 /**

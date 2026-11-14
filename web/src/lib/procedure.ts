@@ -1,6 +1,7 @@
 import "server-only";
 import type { TxPriceGroup } from "@/components/treatment/price-group";
 import { BUILT_IN_PROCEDURES, PROCEDURE_SHARED } from "@/config/procedure";
+import { procedurePath } from "@/lib/post-paths";
 import { formatPrice } from "@/lib/price-book";
 import { fillPrices, fillPricesDeep, getSitePrices, type SitePrices } from "@/lib/site-prices";
 import { priceGroup } from "@/lib/treatment-prices";
@@ -15,6 +16,8 @@ export interface ProcedureView {
   groups: TxPriceGroup[];
   title: string;
   description: string;
+  /** The page's address: its post type's folder and its slug ("/injectables/botox"). */
+  path: string;
 }
 
 type Category = SitePrices["categories"][number];
@@ -102,7 +105,7 @@ function sections(p: ProcedurePage, groups: TxPriceGroup[]): Record<string, bool
 }
 
 /** The page with WooCommerce's amounts written into its copy, and only the sections it has content for. */
-function build(raw: ProcedurePage, sources: Source[], seo: { title: string; description: string; fallback: string }): ProcedureView {
+function build(raw: ProcedurePage, sources: Source[], seo: { title: string; description: string; fallback: string }, path: string): ProcedureView {
   /* one group per product, whatever was picked twice */
   const groups = sources.filter((s, i) => sources.findIndex((x) => x.item.id === s.item.id) === i).map(toGroup);
   const values = priceValues(groups, [raw, seo]);
@@ -114,7 +117,7 @@ function build(raw: ProcedurePage, sources: Source[], seo: { title: string; desc
     /* the offer card only while WooCommerce has an offer on the first product */
     offer: values.maxoff ? filled.offer : undefined,
   };
-  return { page, groups, title: fillPrices(seo.title, values) || seo.fallback, description: fillPrices(seo.description, values) || filled.sub };
+  return { page, groups, title: fillPrices(seo.title, values) || seo.fallback, description: fillPrices(seo.description, values) || filled.sub, path };
 }
 
 /** The page title when none is written, or when its price is not known. */
@@ -189,7 +192,7 @@ function fromWordPress(wp: WPProcedure, prices: SitePrices | null): ProcedureVie
     faqs: c.faqs.map((f) => [f.q, f.a]),
   };
 
-  return build(page, sources, { title: c.seo_title, description: c.seo_description, fallback: plainTitle(name) });
+  return build(page, sources, { title: c.seo_title, description: c.seo_description, fallback: plainTitle(name) }, procedurePath(wp.type, wp.slug));
 }
 
 /** The built-in copy of a procedure (shown when WordPress cannot be reached), with WooCommerce's prices when those can be read. */
@@ -202,7 +205,7 @@ function builtIn(slug: string, prices: SitePrices | null): ProcedureView | null 
     const item = category?.items.find((it) => same(it.name, g.name));
     return category && item ? [{ category, item, title: g.title, blurb: g.blurb }] : [];
   });
-  return build(own.page, sources, { title: own.title, description: own.description, fallback: plainTitle(own.page.crumbs[own.page.crumbs.length - 1]) });
+  return build(own.page, sources, { title: own.title, description: own.description, fallback: plainTitle(own.page.crumbs[own.page.crumbs.length - 1]) }, procedurePath(own.type, slug));
 }
 
 /**
@@ -217,8 +220,13 @@ export async function getProcedureView(slug: string): Promise<ProcedureView | nu
   return read.ok && read.data ? fromWordPress(read.data, prices) : builtIn(slug, prices);
 }
 
-/** The addresses of every published procedure (empty when WordPress cannot be reached). */
+/** The slugs of every published procedure (empty when WordPress cannot be reached). */
 export async function getProcedureSlugs(): Promise<string[]> {
+  return (await getProcedurePaths()).map((p) => p.slug);
+}
+
+/** Every published procedure with its address ("/injectables/botox"); empty when WordPress cannot be reached. */
+export async function getProcedurePaths(): Promise<{ slug: string; path: string }[]> {
   const read = await settle(getProcedureList);
-  return read.ok ? read.data.map((p) => p.slug) : [];
+  return read.ok ? read.data.map((p) => ({ slug: p.slug, path: procedurePath(p.type, p.slug) })) : [];
 }

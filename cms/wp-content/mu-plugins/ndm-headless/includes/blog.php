@@ -102,7 +102,7 @@ function ndm_headless_blog_meta_box() {
 
 			echo '<p class="ndm-cn-note">On the site: the title, the date, the first category (the topic), the excerpt (the summary on the card and for search engines), the featured image (the wide photo at the top) and the text above are this post\'s own. A post with text has its own page';
 			if ( '' !== $site && '' !== $post->post_name ) {
-				$url = $site . '/' . $post->post_name;
+				$url = $site . ndm_headless_site_path( $post );
 				echo ', <a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html( $url ) . '</a>';
 			}
 			echo '; a post without text shows on the blog list only.</p>';

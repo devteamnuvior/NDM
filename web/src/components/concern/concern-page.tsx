@@ -22,7 +22,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Faq } from "@/components/ui/faq";
 import type { ConcernView } from "@/lib/concern";
 
-/** A concern page (for example /wrinkles-fine-lines): one design for every post of the WordPress post type "Concerns". */
+/** A concern page (for example /concerns/wrinkles-fine-lines): one design for every post of the WordPress post type "Concerns". */
 export function ConcernPage({ view }: { view: ConcernView }) {
   const p = view.page;
   const n = (id: string) => txNumber(p.nav, id);

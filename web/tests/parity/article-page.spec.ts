@@ -3,7 +3,7 @@ import { pageParity } from "./page";
 /* Blog article: the head with its photo, the text, the takeaway card, related articles. */
 pageParity({
   name: "article",
-  paths: { legacy: "/what-causes-rosacea-redness.html", next: "/what-causes-rosacea-redness" },
+  paths: { legacy: "/what-causes-rosacea-redness.html", next: "/blog/what-causes-rosacea-redness" },
   sectionCount: 1,
   sections: [
     { name: "breadcrumb", selector: "nav.crumbs" },

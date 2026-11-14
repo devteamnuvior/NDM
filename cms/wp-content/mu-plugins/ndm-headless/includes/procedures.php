@@ -462,12 +462,12 @@ function ndm_headless_procedure_intro( $post ) {
 
 	echo '<div class="ndm-cn-intro">';
 	if ( '' !== $slug && '' !== $site ) {
-		$url = $site . '/' . $slug;
+		$url = $site . ndm_headless_site_path( $post );
 		echo '<p><strong>Page on the site:</strong> <a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html( $url ) . '</a>' . ( 'publish' === $post->post_status ? '' : ' (shown once published)' ) . '</p>';
 	} else {
 		echo '<p><strong>Page on the site:</strong> its address is the "Slug" below, made from the title when the procedure is first saved.</p>';
 	}
-	echo '<p>Every page of Procedures, Injectables, Laser, Body, Veins and Hair has the same design and the same boxes; the address is the slug alone, so it must be unique across all of them.</p>';
+	echo '<p>Every page of Procedures, Injectables, Laser, Body, Veins and Hair has the same design and the same boxes; the address is the folder of its list and the slug (/injectables/botox, /laser/..., /body/..., /veins/..., /hair/..., /procedures/...), and the slug must be unique across all of them.</p>';
 	echo '<p>Filled in by the site on every procedure page, not typed here: every price and offer (from the products picked in the Price List box), the section bar, the booking form, the clinic film, Why NewDermaMed, Our team, Testimonials, Visit us and Start your journey. A section whose box is left empty is left out of the page.</p>';
 	echo '</div>';
 }
@@ -569,7 +569,7 @@ function ndm_headless_procedure_columns( $columns ) {
  */
 function ndm_headless_procedure_column( $column, $post_id ) {
 	if ( 'ndm_address' === $column ) {
-		echo esc_html( '/' . get_post_field( 'post_name', $post_id ) );
+		echo esc_html( ndm_headless_site_path( get_post( $post_id ) ) );
 	}
 }
 

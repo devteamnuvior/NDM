@@ -21,7 +21,7 @@ import { Faq } from "@/components/ui/faq";
 import type { ProcedureView } from "@/lib/procedure";
 
 /**
- * A procedure page (for example /botox): one design, the Botox page's, for every post of the WordPress
+ * A procedure page (for example /injectables/botox): one design, the Botox page's, for every post of the WordPress
  * post type "Procedures". Header with the booking form, quick facts, the section bar, then the sections
  * the procedure has content for (the section bar lists exactly those).
  *

@@ -2,7 +2,8 @@ import "server-only";
 import { BUILT_IN_CONCERNS, CONCERN_SHARED } from "@/config/concern";
 import { getArticleSlugs } from "@/lib/blog";
 import type { LowestPrice } from "@/lib/price-book";
-import { pageFromPathname, resolveLabel, toSlug } from "@/lib/routes";
+import { articlePath, concernPath } from "@/lib/post-paths";
+import { resolveLabel, toSlug } from "@/lib/routes";
 import { fromText, fromTextLong, getSitePrices, lowestOfSource, type SitePrices } from "@/lib/site-prices";
 import { getConcern, getConcernList, settle } from "@/lib/wordpress";
 import type { ConcernOption, ConcernPage, WPConcern } from "@/types/concern";
@@ -107,7 +108,7 @@ function fromWordPress(wp: WPConcern, prices: SitePrices | null, articles: strin
       product: h.product_name ? { name: h.product_name, size: h.product_size, img: h.product_image, href: h.product_link } : undefined,
     })),
     /* a post that has text opens its article page on this site; one without text keeps the "#/slug" placeholder */
-    articles: c.journal.map((a) => ({ title: a.title, href: articles.includes(a.slug) || pageFromPathname(`/${a.slug}`) ? `/${a.slug}` : `#/${a.slug}`, date: a.date, topic: a.topic, img: a.image?.src ?? "", excerpt: a.excerpt })),
+    articles: c.journal.map((a) => ({ title: a.title, href: articles.includes(a.slug) ? articlePath(a.slug) : `#/${a.slug}`, date: a.date, topic: a.topic, img: a.image?.src ?? "", excerpt: a.excerpt })),
     /* a card takes from its WooCommerce product whatever the editor left empty: title, tag (the product's category), image */
     related: c.related
       .map((r) => ({ name: r.name || r.product?.name || "", kind: r.kind || r.product?.category || "", img: (r.image ?? r.product?.image)?.src ?? "", link: r.link }))
@@ -152,8 +153,13 @@ export async function getConcernView(slug: string): Promise<ConcernView | null> 
   return read.ok && read.data ? fromWordPress(read.data, prices, await getArticleSlugs()) : builtIn(slug, prices);
 }
 
-/** The addresses of every published concern (empty when WordPress cannot be reached). */
+/** The slugs of every published concern (empty when WordPress cannot be reached). */
 export async function getConcernSlugs(): Promise<string[]> {
   const read = await settle(getConcernList);
   return read.ok ? read.data.map((c) => c.slug) : [];
+}
+
+/** Every published concern with its address ("/concerns/wrinkles-fine-lines"); empty when WordPress cannot be reached. */
+export async function getConcernPaths(): Promise<{ slug: string; path: string }[]> {
+  return (await getConcernSlugs()).map((slug) => ({ slug, path: concernPath(slug) }));
 }

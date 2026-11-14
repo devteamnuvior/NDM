@@ -37,15 +37,20 @@ const nextConfig: NextConfig = {
       { source: "/promotion.html", destination: "/promotion", permanent: false },
       { source: "/before-after.html", destination: "/before-after", permanent: false },
       { source: "/aptos-thread-lift.html", destination: "/aptos-thread-lift", permanent: false },
-      { source: "/botox.html", destination: "/botox", permanent: false },
+      { source: "/botox.html", destination: "/injectables/botox", permanent: false },
       { source: "/about.html", destination: "/about", permanent: false },
       { source: "/blog.html", destination: "/blog", permanent: false },
       { source: "/black-friday-sale.html", destination: "/black-friday-sale", permanent: false },
       { source: "/privacy.html", destination: "/privacy", permanent: false },
       { source: "/terms.html", destination: "/terms", permanent: false },
       { source: "/refunds.html", destination: "/refunds", permanent: false },
-      { source: "/what-causes-rosacea-redness.html", destination: "/what-causes-rosacea-redness", permanent: false },
-      { source: "/wrinkles-fine-lines.html", destination: "/wrinkles-fine-lines", permanent: false },
+      { source: "/what-causes-rosacea-redness.html", destination: "/blog/what-causes-rosacea-redness", permanent: false },
+      { source: "/wrinkles-fine-lines.html", destination: "/concerns/wrinkles-fine-lines", permanent: false },
+      /* pages made from a WordPress post moved into their post type's folder (src/lib/post-paths.ts); a post
+         added later is sent on by the page "/[slug]" itself */
+      { source: "/botox", destination: "/injectables/botox", permanent: false },
+      { source: "/wrinkles-fine-lines", destination: "/concerns/wrinkles-fine-lines", permanent: false },
+      { source: "/what-causes-rosacea-redness", destination: "/blog/what-causes-rosacea-redness", permanent: false },
       { source: "/account.html", destination: "/account", permanent: false },
       { source: "/cart.html", destination: "/cart", permanent: false },
       { source: "/checkout.html", destination: "/checkout", permanent: false },
@@ -56,7 +61,7 @@ const nextConfig: NextConfig = {
     return {
       beforeFiles: [],
       /* a file of the prototype ("/account.html", "/black-friday.html") is asked for before the
-         route "/[slug]" (procedure and concern pages) gets to answer for every one-part address */
+         route "/[slug]" (the Aptos page and the old addresses of post pages) gets to answer for every one-part address */
       afterFiles: legacyOrigin ? [{ source: "/:file([^/]+\\.[^/]+)", destination: `${legacyOrigin}/:file` }] : [],
       fallback: legacyOrigin ? [{ source: "/:path*", destination: `${legacyOrigin}/:path*` }] : [],
     };

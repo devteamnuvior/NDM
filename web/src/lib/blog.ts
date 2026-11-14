@@ -2,6 +2,7 @@ import "server-only";
 import { ROSACEA_ARTICLE } from "@/config/article-rosacea";
 import { BLOG_POSTS, BLOG_TOPICS, type BlogPost } from "@/config/blog";
 import { articleBlocks, wordCount } from "@/lib/article-html";
+import { articlePath } from "@/lib/post-paths";
 import { getBlogList, getBlogPost, settle } from "@/lib/wordpress";
 import type { ArticleBlock, ArticleView, BlogPhoto, Story, WPBlogCard, WPBlogImage } from "@/types/blog";
 
@@ -25,7 +26,7 @@ function fromWordPress(p: WPBlogCard): Story {
   return {
     slug: p.slug,
     title: p.title,
-    href: p.page ? `/${p.slug}` : p.external || `#/${p.slug}`,
+    href: p.page ? articlePath(p.slug) : p.external || `#/${p.slug}`,
     external: !p.page && !!p.external,
     date: p.date,
     published: p.published,
@@ -54,7 +55,7 @@ function fromBuiltIn(p: BlogPost): Story {
   return {
     slug,
     title: p.title,
-    href: own ? `/${slug}` : p.url,
+    href: own ? articlePath(slug) : p.url,
     external: !own,
     date: p.date,
     published: isoOf(p.date),

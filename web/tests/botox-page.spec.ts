@@ -15,7 +15,7 @@ test("the old address redirects; no errors; the header starts dark; one h1", asy
   });
   page.on("pageerror", (e) => errors.push(String(e)));
   await page.goto(`${NEXT_URL}/botox.html`);
-  await expect(page).toHaveURL(`${NEXT_URL}/botox`);
+  await expect(page).toHaveURL(`${NEXT_URL}/injectables/botox`);
   await expect(page).toHaveTitle("Botox Toronto from $12/Unit, Free Consultation | NewDermaMed");
   await expect(page.locator("h1")).toHaveCount(1);
   await expect(page.locator("h1")).toHaveText("Botox® in Toronto");
@@ -26,13 +26,13 @@ test("the old address redirects; no errors; the header starts dark; one h1", asy
 });
 
 test("the offer card in the header jumps to the prices", async ({ page }) => {
-  await page.goto(`${NEXT_URL}/botox`);
+  await page.goto(`${NEXT_URL}/injectables/botox`);
   const offer = page.getByRole("link", { name: /Current offer: Botox® Cosmetic packages, Up to 30% off/ });
   await expect(offer).toHaveAttribute("href", "#prices");
 });
 
 test("About tabs: one panel at a time, arrow keys move between them, every panel stays in the page", async ({ page }) => {
-  await page.goto(`${NEXT_URL}/botox`);
+  await page.goto(`${NEXT_URL}/injectables/botox`);
   const about = page.locator("#overview");
   await about.scrollIntoViewIfNeeded();
   const tabs = about.getByRole("tab");
@@ -54,7 +54,7 @@ test("About tabs: one panel at a time, arrow keys move between them, every panel
 });
 
 test("prices come from the price list, per unit; groups fold on their own; a package goes into the cart", async ({ page }) => {
-  await page.goto(`${NEXT_URL}/botox`);
+  await page.goto(`${NEXT_URL}/injectables/botox`);
   const prices = page.locator("#prices");
   await prices.scrollIntoViewIfNeeded();
   const [botox, dysport] = [prices.locator("#proc-pr-h0"), prices.locator("#proc-pr-h1")];
@@ -80,7 +80,7 @@ test("prices come from the price list, per unit; groups fold on their own; a pac
 });
 
 test("the clinic film has a sound button; the reel is not downloaded before it is on screen", async ({ page }) => {
-  await page.goto(`${NEXT_URL}/botox`);
+  await page.goto(`${NEXT_URL}/injectables/botox`);
   const film = page.locator("#film");
   await film.scrollIntoViewIfNeeded();
   const sound = film.getByRole("button", { name: "Turn the sound on" });
@@ -95,7 +95,7 @@ test("the clinic film has a sound button; the reel is not downloaded before it i
 });
 
 test("results show the photos with the results line; Good to know links to related treatments", async ({ page }) => {
-  await page.goto(`${NEXT_URL}/botox`);
+  await page.goto(`${NEXT_URL}/injectables/botox`);
   const results = page.locator("#results");
   await expect(results.locator("figure")).toHaveCount(3);
   await expect(results).toContainText("Individual results may vary.");
@@ -108,7 +108,7 @@ test("results show the photos with the results line; Good to know links to relat
 });
 
 test("the section bar turns dark over the dark About section", async ({ page }) => {
-  await page.goto(`${NEXT_URL}/botox`);
+  await page.goto(`${NEXT_URL}/injectables/botox`);
   const bar = page.getByRole("navigation", { name: "On this page" });
   await expect(bar.getByRole("link")).toHaveCount(12);
   await bar.getByRole("link", { name: "About" }).click();
@@ -119,7 +119,7 @@ test("the section bar turns dark over the dark About section", async ({ page }) 
 test.describe("phone", () => {
   test.use({ viewport: { width: 375, height: 812 } });
   test("no sideways scroll down the whole page", async ({ page }) => {
-    await page.goto(`${NEXT_URL}/botox`);
+    await page.goto(`${NEXT_URL}/injectables/botox`);
     await expect(page.locator("#mobile-form-title")).toBeVisible();
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await page.waitForTimeout(400);
@@ -134,7 +134,7 @@ test("the content is the WordPress procedure's; the price list shows the product
   expect(wp.content.price_list.map((r: { price_source: string }) => r.price_source)).toEqual([expect.stringMatching(/^product:\d+$/), expect.stringMatching(/^product:\d+$/)]);
   for (const row of wp.content.price_list) expect(Object.keys(row).sort()).toEqual(["blurb", "name", "price_source", "product"]);
   expect(JSON.stringify(wp.content.price_list)).not.toMatch(/\$\d|price"/);
-  await page.goto(`${NEXT_URL}/botox`);
+  await page.goto(`${NEXT_URL}/injectables/botox`);
   await expect(page.locator("#proc-title, h1").first()).toContainText(wp.content.heading_1);
   await expect(page.locator("#prices .pr-group")).toHaveCount(wp.content.price_list.length);
   await expect(page.locator("#prices .pr-group h3").first()).toContainText(wp.content.price_list[0].name);

@@ -480,7 +480,7 @@ function ndm_headless_concern_intro( $post ) {
 
 	echo '<div class="ndm-cn-intro">';
 	if ( '' !== $slug && '' !== $site ) {
-		$url = $site . '/' . $slug;
+		$url = $site . ndm_headless_site_path( $post );
 		echo '<p><strong>Page on the site:</strong> <a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html( $url ) . '</a>' . ( 'publish' === $post->post_status ? '' : ' (shown once published)' ) . '</p>';
 	} else {
 		echo '<p><strong>Page on the site:</strong> its address is the "Slug" below, made from the title when the concern is first saved.</p>';
@@ -1137,7 +1137,7 @@ add_filter( 'manage_' . NDM_CONCERN_POST_TYPE . '_posts_columns', 'ndm_headless_
  */
 function ndm_headless_concern_column( $column, $post_id ) {
 	if ( 'ndm_address' === $column ) {
-		echo esc_html( '/' . get_post_field( 'post_name', $post_id ) );
+		echo esc_html( ndm_headless_site_path( get_post( $post_id ) ) );
 	}
 }
 add_action( 'manage_' . NDM_CONCERN_POST_TYPE . '_posts_custom_column', 'ndm_headless_concern_column', 10, 2 );

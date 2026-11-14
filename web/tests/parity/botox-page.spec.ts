@@ -6,7 +6,7 @@ const by = (id: string) => `main > section[aria-labelledby="${id}"]`;
 
 pageParity({
   name: "botox",
-  paths: { legacy: "/botox.html", next: "/botox" },
+  paths: { legacy: "/botox.html", next: "/injectables/botox" },
   sectionCount: 16,
   /* About: the prototype has a fifth tab, Pricing, removed here on the user's request (2026-11-13) */
   differs: ["overview"],

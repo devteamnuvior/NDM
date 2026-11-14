@@ -142,7 +142,7 @@ test("a request that could not be saved is not confirmed: the form stays, with t
 });
 
 /* every page with a Book Free Consultation button: the button opens the pop-up, on a desktop and on a phone */
-const PAGES = ["/", "/pricing", "/promotion", "/before-after", "/aptos-thread-lift", "/botox", "/wrinkles-fine-lines", "/about", "/blog", "/what-causes-rosacea-redness", "/privacy", "/cart", "/black-friday-sale"];
+const PAGES = ["/", "/pricing", "/promotion", "/before-after", "/aptos-thread-lift", "/injectables/botox", "/concerns/wrinkles-fine-lines", "/about", "/blog", "/blog/what-causes-rosacea-redness", "/privacy", "/cart", "/black-friday-sale"];
 for (const size of [
   { name: "desktop", width: 1440, height: 900 },
   { name: "phone", width: 375, height: 812 },

@@ -1,6 +1,7 @@
 import { ArticleBody, ArticleHead, ReadProgress, RelatedStories } from "@/components/blog/article";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { JsonLd } from "@/components/ui/json-ld";
+import { articlePath } from "@/lib/post-paths";
 import { pageLink, pagePath } from "@/lib/routes";
 import { absolute, breadcrumbList, publisher } from "@/lib/seo";
 import type { ArticleView } from "@/types/blog";
@@ -8,14 +9,14 @@ import type { ArticleView } from "@/types/blog";
 /** A blog article: head with the photo, the text column with the takeaway card, then related articles. */
 export function ArticlePage({ view }: { view: ArticleView }) {
   const p = view.story;
-  const url = absolute(`/${p.slug}`);
+  const url = absolute(articlePath(p.slug));
   return (
     <>
       <JsonLd
         graph={[
           breadcrumbList([
             ["Blog", pagePath("blog")],
-            [p.title, `/${p.slug}`],
+            [p.title, articlePath(p.slug)],
           ]),
           {
             "@type": "BlogPosting",

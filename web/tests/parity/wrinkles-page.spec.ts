@@ -6,7 +6,7 @@ const by = (id: string) => `main > section[aria-labelledby="${id}"]`;
 
 pageParity({
   name: "wrinkles",
-  paths: { legacy: "/wrinkles-fine-lines.html", next: "/wrinkles-fine-lines" },
+  paths: { legacy: "/wrinkles-fine-lines.html", next: "/concerns/wrinkles-fine-lines" },
   sectionCount: 18,
   /* Side by side is not compared: the prototype's table carries hand-typed prices ("From $245"), while every
      price here is read from WooCommerce and written by one rule ("From $245 per session"). Its behaviour is

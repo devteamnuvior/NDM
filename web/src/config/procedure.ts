@@ -29,9 +29,11 @@ export const PROCEDURE_SHARED = {
 } satisfies Record<string, unknown>;
 
 /** Procedures with a built-in copy, shown when WordPress cannot be reached. Its price list names WooCommerce products (`page.prices`). */
-export const BUILT_IN_PROCEDURES: Record<string, { page: ProcedurePage; title: string; description: string }> = {
+export const BUILT_IN_PROCEDURES: Record<string, { page: ProcedurePage; title: string; description: string; type: string }> = {
   botox: {
     page: BOTOX,
+    /* its post type in WordPress, which gives its address: /injectables/botox */
+    type: "Injectables",
     title: "Botox Toronto from {{price}}/Unit, Free Consultation | NewDermaMed",
     description:
       "Botox® Cosmetic in Toronto from {{price}} per unit, packages up to {{maxoff}} off. Free consultation and VISIA® skin analysis at our Uptown (Yonge & Sheppard) and Downtown (Bay & College) clinics.",

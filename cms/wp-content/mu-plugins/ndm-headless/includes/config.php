@@ -68,6 +68,33 @@ function ndm_headless_frontend_url() {
 }
 
 /**
+ * The address of a post's page on the site: its post type's folder, then its slug. Written the same
+ * way in the site's `web/src/lib/post-paths.ts`: concerns /concerns/<slug>, the procedure lists
+ * /procedures/, /injectables/, /laser/, /body/, /veins/, /hair/<slug>, blog posts /blog/<slug>.
+ *
+ * @param WP_Post $post A post.
+ * @return string A path starting with "/", or an empty string for a post without a slug or a page.
+ */
+function ndm_headless_site_path( $post ) {
+	if ( ! $post instanceof WP_Post || '' === $post->post_name ) {
+		return '';
+	}
+
+	$folders = array(
+		'ndm_concern'    => 'concerns',
+		'ndm_procedure'  => 'procedures',
+		'ndm_injectable' => 'injectables',
+		'ndm_laser'      => 'laser',
+		'ndm_body'       => 'body',
+		'ndm_vein'       => 'veins',
+		'ndm_hair'       => 'hair',
+		'post'           => 'blog',
+	);
+
+	return isset( $folders[ $post->post_type ] ) ? '/' . $folders[ $post->post_type ] . '/' . $post->post_name : '';
+}
+
+/**
  * The browser origins allowed to call the REST API.
  *
  * @return string[] Exact origins. Empty means no browser on another origin may read the API.

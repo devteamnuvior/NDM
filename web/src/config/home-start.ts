@@ -82,7 +82,7 @@ export const START_PANELS: StartPanel[] = [
         "facts": [],
         "note": "Prescription treatments for expression lines are available after an in-person medical assessment. Your provider discusses them privately at your consultation.",
         "more": {
-          "href": "/wrinkles-fine-lines",
+          "href": "/concerns/wrinkles-fine-lines",
           "label": "Compare all 6 options"
         }
       },
