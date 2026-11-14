@@ -12,6 +12,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Faq } from "@/components/ui/faq";
 import { PRICE_FAQS, PRICE_SPECIALS } from "@/config/pricing";
 import { PRICE_NAMES } from "@/config/price-names";
+import { getOffers, specialsWithOfferPrices } from "@/lib/offers";
 import { buildPricingView } from "@/lib/pricing-view";
 import { getPricingTree } from "@/lib/wordpress";
 import { PriceListNotice } from "@/components/pricing/price-list-notice";
@@ -45,6 +46,15 @@ async function PriceSections() {
     );
   }
 
+  /* a special that is also an offer shows the offer's own figures, so the wheel and this page agree */
+  let specials = view.specials;
+  try {
+    specials = specialsWithOfferPrices(specials, await getOffers());
+  } catch (error) {
+    unstable_rethrow(error);
+    console.error("[pricing] the offers could not be read from WooCommerce:", error instanceof Error ? error.message : error);
+  }
+
   if (!view.categories.length) {
     return (
       <>
@@ -57,7 +67,7 @@ async function PriceSections() {
   return (
     <>
       <PricingHero total={view.total} />
-      {view.specials.length > 0 && <PriceSpecials specials={view.specials} sub={PRICE_SPECIALS.sub} note={PRICE_SPECIALS.note} />}
+      {specials.length > 0 && <PriceSpecials specials={specials}sub={PRICE_SPECIALS.sub} note={PRICE_SPECIALS.note} />}
       <PriceList categories={view.categories} total={view.total} />
     </>
   );

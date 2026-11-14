@@ -1,7 +1,7 @@
 import "server-only";
 import type { Offer } from "@/components/specials/offers";
 import { createPriceBook } from "@/lib/price-book";
-import { toCategories } from "@/lib/pricing-view";
+import { toCategories, type PriceSpecialView } from "@/lib/pricing-view";
 import { pagePath } from "@/lib/routes";
 import { getPricingTree, getPromotions } from "@/lib/wordpress";
 import type { WooPricingTree } from "@/types/pricing";
@@ -43,6 +43,21 @@ export function offerPriceChoices(tree: WooPricingTree): Map<number, OfferPriceC
     }
   }
   return choices;
+}
+
+/**
+ * The Pricing page's monthly specials with the figures of the offers of the same name: a treatment that is
+ * also an offer (the wheel, the Promotion page) shows one price, unit and offer line everywhere, the one
+ * its offer is set to in WooCommerce. A special without an offer of its name keeps its own figures.
+ */
+export function specialsWithOfferPrices(specials: PriceSpecialView[], offers: Offer[]): PriceSpecialView[] {
+  const byName = new Map(offers.map((o) => [o.name.trim().toLowerCase(), o]));
+  return specials.map((s) => {
+    const offer = byName.get(s.name.trim().toLowerCase());
+    if (!offer) return s;
+    const category = /#(pg-[a-z0-9-]+)-h$/.exec(offer.href)?.[1];
+    return { ...s, price: "$" + offer.price, unit: offer.unit ? " / " + offer.unit.replace(/^per /, "") : "", offer: offer.deal, target: category ?? s.target };
+  });
 }
 
 export const offerPrice = (choice: OfferPriceChoice | undefined, scope: PromoScope): OfferPrice | null => (choice ? (scope === "product" ? choice.product : choice.category) : null);
