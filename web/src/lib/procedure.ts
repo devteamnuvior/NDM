@@ -1,5 +1,6 @@
 import "server-only";
 import type { TxPriceGroup } from "@/components/treatment/price-group";
+import { withRealLinks } from "@/lib/site-links";
 import { BUILT_IN_PROCEDURES, PROCEDURE_SHARED } from "@/config/procedure";
 import { procedurePath } from "@/lib/post-paths";
 import { formatPrice } from "@/lib/price-book";
@@ -217,7 +218,9 @@ export async function getProcedureView(slug: string): Promise<ProcedureView | nu
   const read = await settle(() => getProcedure(slug));
   if (read.ok && !read.data) return null;
   const prices = await getSitePrices();
-  return read.ok && read.data ? fromWordPress(read.data, prices) : builtIn(slug, prices);
+  const view = read.ok && read.data ? fromWordPress(read.data, prices) : builtIn(slug, prices);
+  /* every "#/slug" link of the page opens its page (lib/post-links.ts) */
+  return view && withRealLinks(view);
 }
 
 /** The slugs of every published procedure (empty when WordPress cannot be reached). */

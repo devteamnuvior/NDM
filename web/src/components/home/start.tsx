@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { CONCERNS_INDEX } from "@/lib/post-links";
 import { StartPanels } from "@/components/home/start-panels";
 import { StartSearch } from "@/components/home/start-search";
 import { Eyebrow } from "@/components/ui/eyebrow";
@@ -49,9 +51,9 @@ export async function Start({ copy }: { copy: HomeCopy["start"] }) {
       </div>
       <StartPanels panels={panels} />
       <p className="mt-5 text-right">
-        <a href="#/concerns" className="inline-flex items-center gap-2 font-inter text-[14.5px] font-semibold text-ndm-deep hover:underline">
+        <Link href={CONCERNS_INDEX} className="inline-flex items-center gap-2 font-inter text-[14.5px] font-semibold text-ndm-deep hover:underline">
           See all concerns <IconArrow />
-        </a>
+        </Link>
       </p>
     </RevealSection>
   );

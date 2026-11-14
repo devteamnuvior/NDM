@@ -1,5 +1,6 @@
 import "server-only";
 import { ROSACEA_ARTICLE } from "@/config/article-rosacea";
+import { pagePath } from "@/lib/routes";
 import { BLOG_POSTS, BLOG_TOPICS, type BlogPost } from "@/config/blog";
 import { articleBlocks, wordCount } from "@/lib/article-html";
 import { articlePath } from "@/lib/post-paths";
@@ -26,7 +27,7 @@ function fromWordPress(p: WPBlogCard): Story {
   return {
     slug: p.slug,
     title: p.title,
-    href: p.page ? articlePath(p.slug) : p.external || `#/${p.slug}`,
+    href: p.page ? articlePath(p.slug) : p.external || pagePath("blog") /* no page and no address of its own: the card stays on the blog */,
     external: !p.page && !!p.external,
     date: p.date,
     published: p.published,

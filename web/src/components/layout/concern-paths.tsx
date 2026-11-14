@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { createContext, useContext, type ReactNode } from "react";
+import { realLink } from "@/lib/post-links";
 import { menuPost, type PostPath } from "@/lib/post-paths";
 import { resolveLabel, toSlug } from "@/lib/routes";
 import type { NavSectionId, ResolvedLink } from "@/types/navigation";
@@ -42,6 +43,16 @@ export function useMenuLink(prefer: "concerns" | "procedures" = "procedures"): (
   return (label) => {
     const link = resolveLabel(label);
     const post = menuPost(toSlug(label), concerns, procedures, prefer);
-    return post ? { ...link, href: post.path, internal: true } : link;
+    if (post) return { ...link, href: post.path, internal: true };
+    /* a label with no page of its own slug: the page the placeholder table names for it, else the list of procedures or concerns */
+    if (!link.href.startsWith("#/")) return link;
+    const href = realLink(link.href, { concerns, procedures }, prefer);
+    return { ...link, href, internal: href.startsWith("/") };
   };
+}
+
+/** A "#/slug" placeholder -> the address of its page (lib/post-links.ts), for links a component writes itself. */
+export function usePlaceholderLink(prefer: "concerns" | "procedures" = "procedures"): (href: string) => string {
+  const { concerns, procedures } = useContext(PostPaths);
+  return (href) => realLink(href, { concerns, procedures }, prefer);
 }

@@ -39,7 +39,7 @@ export function CnIntro({ page: p, number }: { page: ConcernPage; number: string
           <p className="mt-5 font-inter text-[11.5px] font-semibold tracking-[.14em] text-ndm-muted uppercase">On our site</p>
           <ul className="mt-3 grid gap-1.5" role="list">
             {p.pages.map((x) => (
-              <li key={x.href}>
+              <li key={x.name}>
                 <SiteLink to={contentLink(x.href)} className={ROW}>
                   <span>{x.name}</span>
                   <Arrow />

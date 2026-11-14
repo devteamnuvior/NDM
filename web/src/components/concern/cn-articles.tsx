@@ -37,7 +37,7 @@ export function CnArticles({ articles, short }: { articles: ConcernPage["article
       </div>
       <ul role="list" className={`${TX_WRAP} mt-[clamp(28px,3.4vw,44px)] grid gap-4 sm:grid-cols-2 lg:grid-cols-3`}>
         {articles.map((a, i) => (
-          <li key={a.href} className="rv" style={{ transitionDelay: `${0.05 * i}s` }}>
+          <li key={`${i}-${a.href}`} className="rv" style={{ transitionDelay: `${0.05 * i}s` }}>
             <SiteLink to={contentLink(a.href)} className="cn-card group flex h-full flex-col rounded-[22px] bg-white p-2.5 ring-1 ring-ndm-ink/[.06]">
               <span className="peach relative block aspect-[16/10] overflow-hidden rounded-[16px] bg-ndm-mist">
                 <TxPhoto src={a.img} alt="" sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" />

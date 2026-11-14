@@ -1,5 +1,6 @@
 import "server-only";
 import { SALE_HEADLINE } from "@/config/sale";
+import { withRealLinks } from "@/lib/site-links";
 import { SITE_SETTINGS } from "@/config/site-settings";
 import { getCampaign } from "@/lib/campaign";
 import { getSiteSettingsRaw, settle } from "@/lib/wordpress";
@@ -136,7 +137,8 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   const [read, campaign] = await Promise.all([settle(getSiteSettingsRaw), getCampaign()]);
   const settings = read.ok && read.data ? fromWordPress(read.data) : SITE_SETTINGS;
   /* the VIP Sale's days (the campaign's phase "vip"): every link to the offers opens the sale */
-  return campaign && !campaign.over && campaign.phase === "vip" ? withVipSaleLinks(settings) : settings;
+  /* every "#/slug" link of the settings opens its page (lib/post-links.ts): the shop, the lists, a treatment */
+  return withRealLinks(campaign && !campaign.over && campaign.phase === "vip" ? withVipSaleLinks(settings) : settings);
 }
 
 /** Whether an address is the Promotion page's (with or without the site's folder, a trailing slash or a #part). */
@@ -156,5 +158,7 @@ function withVipSaleLinks(settings: SiteSettings): SiteSettings {
     ...settings,
     header: { ...settings.header, announcement: { ...a, desktop: a.desktop.map(message(true)), mobile: a.mobile.map(message(false)) } },
     menu: { ...settings.menu, items: settings.menu.items.map((item) => (item.kind === "link" && isPromotion(item.link) ? { ...item, link: sale } : item)) },
+    /* the footer's Promotion link too: one with its own address, or one named after the page */
+    footer: { ...settings.footer, columns: settings.footer.columns.map((c) => ({ ...c, links: c.links.map((l) => ((l.link ? isPromotion(l.link) : toSlug(l.label) === "promotion") ? { ...l, link: sale } : l)) })) },
   };
 }

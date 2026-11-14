@@ -1,5 +1,6 @@
 import "server-only";
 import { HOME_COPY, TREAT_ALL_TAB } from "@/config/home";
+import { withRealLinks } from "@/lib/site-links";
 import type { TreatmentCard, TreatmentTab } from "@/config/home-treatments";
 import { getHomePage, settle } from "@/lib/wordpress";
 import type { StartConcern, StartPanel } from "@/config/home-start";
@@ -239,5 +240,6 @@ function fromWordPress(wp: WPHomePage): HomeCopy {
  */
 export async function getHomeCopy(): Promise<HomeCopy> {
   const read = await settle(getHomePage);
-  return read.ok && read.data ? fromWordPress(read.data) : HOME_COPY;
+  /* every "#/slug" link of the copy opens its page (lib/post-links.ts) */
+  return withRealLinks(read.ok && read.data ? fromWordPress(read.data) : HOME_COPY);
 }

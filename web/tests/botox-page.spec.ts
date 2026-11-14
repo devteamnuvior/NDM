@@ -128,7 +128,7 @@ test("results show the photos with the results line; Good to know links to relat
   const related = guide.getByRole("navigation", { name: "Related treatments" });
   await expect(related.getByRole("link")).toHaveCount(6);
   await expect(related.getByRole("link", { name: /Aptos Thread Lift/ })).toHaveAttribute("href", "/aptos-thread-lift");
-  await expect(related.getByRole("link", { name: /Dermal Fillers/ })).toHaveAttribute("href", "#/dermal-fillers");
+  await expect(related.getByRole("link", { name: /Dermal Fillers/ })).toHaveAttribute("href", /^\/(injectables\/dermal-fillers|procedures)$/); /* its page when WordPress has one, else the list of procedures */
 });
 
 test("the section bar turns dark over the dark Before and after band", async ({ page }) => {

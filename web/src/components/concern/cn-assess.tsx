@@ -2,6 +2,7 @@ import { IconTick } from "@/components/treatment/icons";
 import { TX_WRAP, TxHead } from "@/components/treatment/tx-head";
 import { Button } from "@/components/ui/button";
 import { IconArrow } from "@/components/ui/icons";
+import { PostLink } from "@/components/ui/post-link";
 import { RevealSection } from "@/components/ui/reveal-section";
 import { ACTIONS } from "@/config/routes";
 import type { ConcernPage } from "@/types/concern";
@@ -30,10 +31,10 @@ export function CnAssess({ assess: a, short, number }: { assess: ConcernPage["as
             <Button href={ACTIONS.book} v="book" hot>
               Book Free Consultation
             </Button>
-            <a href="#/visia-skin-analysis" className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-deep">
+            <PostLink href="#/visia-skin-analysis" className="group inline-flex items-center gap-2 font-inter text-[15px] font-semibold text-ndm-deep">
               About the VISIA® skin analysis
               <IconArrow className="transition-transform group-hover:translate-x-1" />
-            </a>
+            </PostLink>
           </div>
         </div>
         <div className="rv peach relative min-h-[300px] overflow-hidden rounded-[24px] bg-ndm-line lg:min-h-[420px]" style={{ transitionDelay: ".1s" }}>

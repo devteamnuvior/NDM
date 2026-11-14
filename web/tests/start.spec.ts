@@ -38,7 +38,7 @@ test.describe("desktop", () => {
     await page.keyboard.press("Enter");
     await expect(panel(page, 3)).toHaveClass(/is-open/);
     await expect(panel(page, 3).getByRole("link", { name: "Book Free Consultation" })).toBeVisible();
-    await expect(panel(page, 3).getByRole("link", { name: "About the skin analysis" })).toHaveAttribute("href", "#/visia-skin-analysis");
+    await expect(panel(page, 3).getByRole("link", { name: "About the skin analysis" })).toHaveAttribute("href", /^\/(skin\/visia-skin-analysis|procedures)$/);
   });
 
   test("a concern opens its options card; prices come from the price list", async ({ page }) => {
@@ -52,7 +52,7 @@ test.describe("desktop", () => {
     await expect(rows).toHaveCount(3);
     await expect(rows.nth(0)).toContainText("Laser Acne Treatment");
     await expect(rows.nth(0)).toContainText("From$262.50"); /* the lowest price after the offer, not the stored "From $375" */
-    await expect(card(page).getByRole("link", { name: "Compare these options" })).toHaveAttribute("href", "#/acne");
+    await expect(card(page).getByRole("link", { name: "Compare these options" })).toHaveAttribute("href", /^\/concerns(\/acne-breakouts)?$/);
     /* while a card is open, hovering another panel does not steal it */
     await panel(page, 2).hover();
     await expect(panel(page, 1)).toHaveClass(/is-open/);

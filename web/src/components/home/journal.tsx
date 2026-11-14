@@ -54,7 +54,7 @@ export function Journal({ copy }: { copy: HomeCopy["journal"] }) {
           </a>
           <div className="flex flex-col gap-5">
             {rest.map((p, i) => (
-              <a key={p.href} href={withBase(p.href)} className="rv group grid grid-cols-[120px_1fr] items-center gap-4 sm:grid-cols-[203px_1fr] sm:gap-6" style={{ transitionDelay: `${0.14 + i * 0.08}s` }}>
+              <a key={`${i}-${p.href}`} href={withBase(p.href)} className="rv group grid grid-cols-[120px_1fr] items-center gap-4 sm:grid-cols-[203px_1fr] sm:gap-6" style={{ transitionDelay: `${0.14 + i * 0.08}s` }}>
                 <span className="block h-[110px] overflow-hidden rounded-[10px] sm:h-[164px]">
                   <img src={withBase(p.image)} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.06]" style={{ objectPosition: p.position, transitionTimingFunction: "var(--e-out)" }} />
                 </span>

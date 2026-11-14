@@ -1,9 +1,10 @@
 import "server-only";
 import { BUILT_IN_CONCERNS, CONCERN_SHARED } from "@/config/concern";
+import { withRealLinks } from "@/lib/site-links";
 import { getArticleSlugs } from "@/lib/blog";
 import type { LowestPrice } from "@/lib/price-book";
 import { articlePath, concernPath } from "@/lib/post-paths";
-import { resolveLabel, toSlug } from "@/lib/routes";
+import { pagePath, resolveLabel, toSlug } from "@/lib/routes";
 import { fromText, fromTextLong, getSitePrices, lowestOfSource, type SitePrices } from "@/lib/site-prices";
 import { getConcern, getConcernList, settle } from "@/lib/wordpress";
 import type { ConcernOption, ConcernPage, WPConcern } from "@/types/concern";
@@ -108,7 +109,7 @@ function fromWordPress(wp: WPConcern, prices: SitePrices | null, articles: strin
       product: h.product_name ? { name: h.product_name, size: h.product_size, img: h.product_image, href: h.product_link } : undefined,
     })),
     /* a post that has text opens its article page on this site; one without text keeps the "#/slug" placeholder */
-    articles: c.journal.map((a) => ({ title: a.title, href: articles.includes(a.slug) ? articlePath(a.slug) : `#/${a.slug}`, date: a.date, topic: a.topic, img: a.image?.src ?? "", excerpt: a.excerpt })),
+    articles: c.journal.map((a) => ({ title: a.title, href: articles.includes(a.slug) ? articlePath(a.slug) : pagePath("blog") /* a post without text has no page: its card opens the blog */, date: a.date, topic: a.topic, img: a.image?.src ?? "", excerpt: a.excerpt })),
     /* a card takes from its WooCommerce product whatever the editor left empty: title, tag (the product's category), image */
     related: c.related
       .map((r) => ({ name: r.name || r.product?.name || "", kind: r.kind || r.product?.category || "", img: (r.image ?? r.product?.image)?.src ?? "", link: r.link }))
@@ -150,7 +151,9 @@ export async function getConcernView(slug: string): Promise<ConcernView | null> 
   const read = await settle(() => getConcern(slug));
   if (read.ok && !read.data) return null;
   const prices = await getSitePrices();
-  return read.ok && read.data ? fromWordPress(read.data, prices, await getArticleSlugs()) : builtIn(slug, prices);
+  const view = read.ok && read.data ? fromWordPress(read.data, prices, await getArticleSlugs()) : builtIn(slug, prices);
+  /* every "#/slug" link of the page opens its page (lib/post-links.ts) */
+  return view && withRealLinks(view);
 }
 
 /** The slugs of every published concern (empty when WordPress cannot be reached). */

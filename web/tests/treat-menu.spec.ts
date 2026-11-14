@@ -24,7 +24,7 @@ test.describe("desktop", () => {
     await expect(cards(page)).toHaveCount(25);
     await expect(cards(page).first()).toContainText("Dermal Fillers");
     await expect(cards(page).first()).toContainText(/From \$\d+(\.\d\d)?/); /* lowest price per syringe after the offer, worked out by the site from the price list */
-    await expect(section(page).getByRole("link", { name: "All treatments" })).toHaveAttribute("href", "#/treatments");
+    await expect(section(page).getByRole("link", { name: "All treatments" })).toHaveAttribute("href", "/procedures");
   });
 
   test("tabs switch the cards, by click and by arrow keys", async ({ page }) => {
@@ -32,7 +32,7 @@ test.describe("desktop", () => {
     await section(page).getByRole("tab", { name: "Veins" }).click();
     await expect(cards(page)).toHaveCount(3);
     await expect(page.locator("#tm-panel")).toHaveAttribute("aria-labelledby", "tm-t-veins");
-    await expect(section(page).getByRole("link", { name: "All veins" })).toHaveAttribute("href", "#/veins");
+    await expect(section(page).getByRole("link", { name: "All veins" })).toHaveAttribute("href", "/procedures#veins");
     await page.keyboard.press("ArrowRight");
     await expect(section(page).getByRole("tab", { name: "Hair" })).toBeFocused();
     await expect(cards(page)).toHaveCount(2);

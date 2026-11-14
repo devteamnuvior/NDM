@@ -146,14 +146,23 @@ test.describe("desktop", () => {
     const hrefs = await page.evaluate(() =>
       Array.from(new Set(Array.from(document.querySelectorAll<HTMLAnchorElement>('header a, [aria-label="Clinic announcements"] a')).map((a) => a.getAttribute("href") ?? ""))),
     );
-    expect(hrefs.length).toBeGreaterThan(20);
+    /* distinct addresses: a treatment with no page in this WordPress opens the list of procedures, so several share one */
+    expect(hrefs.length).toBeGreaterThan(12);
     const pages = hrefs.filter((h) => h.startsWith("/"));
-    expect(pages).toEqual(expect.arrayContaining(["/", "/pricing", "/about", "/blog", "/account", "/aptos-thread-lift", "/concerns/wrinkles-fine-lines", "/privacy"]));
+    expect(pages).toEqual(expect.arrayContaining(["/", "/pricing", "/blog", "/account", "/aptos-thread-lift", "/concerns/wrinkles-fine-lines", "/privacy"]));
+    /* the About menu has no link to the top of the About page: each of its links opens its own section there */
+    expect(pages).toEqual(expect.arrayContaining(["/about#team", "/about#clinics", "/about#gallery", "/about#contact"]));
     /* the offers: the Promotion page, or the sale's own page during the VIP Sale */
     expect(pages.some((h) => h === "/promotion" || h === "/vip-sale")).toBe(true);
-    for (const h of pages) expect((await request.get(NEXT_URL + h)).status(), h).toBe(200);
-    /* everything else is a phone number or one of the prototype's placeholders */
-    for (const h of hrefs.filter((x) => !x.startsWith("/"))) expect(h).toMatch(/^(tel:\+1\d{10}|#\/[a-z0-9-]+)$/);
+    for (const h of pages) {
+      const [path, section] = h.split("#");
+      const response = await request.get(NEXT_URL + path);
+      expect(response.status(), h).toBe(200);
+      /* a link to a section: the page has an element with that id */
+      if (section) expect(await response.text(), h).toMatch(new RegExp(`\\bid="${section}"`));
+    }
+    /* everything else is a phone number, the booking form or the skincare shop: no "#/slug" placeholder is left */
+    for (const h of hrefs.filter((x) => !x.startsWith("/"))) expect(h).toMatch(/^(tel:\+1\d{10}|#\/book|https:\/\/shop\.newdermamedlaserclinic\.com\/shop\/|https:\/\/newdermamedlaserclinic\.com\/fees-financing\/)$/);
   });
 
   test("search: opens from the header, focuses the field, filters, and closes with Escape", async ({ page }) => {
@@ -172,7 +181,7 @@ test.describe("desktop", () => {
     await expect(page.locator("#site-search")).toHaveValue("Microneedling");
     await expect(dialog.getByRole("listitem")).toHaveCount(1);
     await page.locator("#site-search").fill("zzzz");
-    await expect(dialog.getByText("No match yet")).toBeVisible();
+    await expect(dialog.getByText("No treatments found.")).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
     expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("");

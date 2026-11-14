@@ -168,8 +168,9 @@ export function CnOptions({ short, options, bio, rx, number }: CnOptionsProps) {
             <span>{rx.text}</span>
           </p>
           <ul className="flex shrink-0 flex-wrap gap-2" role="list">
-            {rx.links.map((l) => (
-              <li key={l.href}>
+            {rx.links.map((l, i) => (
+              /* two links may open the same page (the list of procedures): the address alone is no key */
+              <li key={`${i}-${l.href}`}>
                 <SiteLink
                   to={contentLink(l.href)}
                   className="inline-flex rounded-full bg-white px-3.5 py-2 font-inter text-[14px] text-ndm-ink ring-1 ring-ndm-ink/10 hover:ring-ndm-deep"
