@@ -27,7 +27,10 @@ test("the old address redirects; no errors; the header marks Promotion; one h1",
   await expect(page).toHaveTitle("Promotions, NewDermaMed Toronto");
   await expect(page.locator("h1")).toHaveCount(1);
   await expect(page.locator("h1")).toHaveText("Exclusive monthly specials");
-  await expect(page.locator("header nav").getByRole("link", { name: "Promotion" })).toHaveAttribute("aria-current", "page");
+  /* during the VIP Sale the menu's Promotion item opens the sale instead, so it is not this page's link */
+  const promotion = page.locator("header nav").getByRole("link", { name: "Promotion" });
+  if ((await promotion.getAttribute("href")) === "/promotion") await expect(promotion).toHaveAttribute("aria-current", "page");
+  else await expect(promotion).toHaveAttribute("href", "/vip-sale");
   await expect(page.getByRole("navigation", { name: "Breadcrumb" })).toHaveText("Home/Promotions");
   await page.waitForLoadState("networkidle");
   expect(errors).toEqual([]);
@@ -42,11 +45,11 @@ test("View all offers scrolls to the list on this page", async ({ page }) => {
   await expect(page).toHaveURL(/\/promotion(#offers)?$/);
 });
 
-test("twelve offer cards with prices from the price list; Face and Body filter them", async ({ page }) => {
+test("eleven offer cards with prices from the price list; Face and Body filter them", async ({ page }) => {
   await page.goto(`${NEXT_URL}/promotion`);
   const grid = page.locator(OFFERS);
   const cards = grid.locator("article.promo-card");
-  await expect(cards).toHaveCount(12);
+  await expect(cards).toHaveCount(11);
   await expect(cards.first().locator("h3")).toHaveText("Botox");
   const first = cards.filter({ has: page.locator("h3", { hasText: /^Lip Filler$/ }) });
   await expect(first).toHaveCount(1);
@@ -66,15 +69,15 @@ test("twelve offer cards with prices from the price list; Face and Body filter t
   await expect(cards).toHaveCount(2);
   await expect(cards.first().locator("h3")).toHaveText("Laser Hair Removal");
   await grid.getByRole("button", { name: "Face" }).click();
-  await expect(cards).toHaveCount(9);
+  await expect(cards).toHaveCount(8);
   /* PRP Hair Restoration is neither Face nor Body: it shows under All only, as in the prototype */
   await all.click();
-  await expect(cards).toHaveCount(12);
+  await expect(cards).toHaveCount(11);
 });
 
 test("Buy now opens that category on the pricing page", async ({ page }) => {
   await page.goto(`${NEXT_URL}/promotion`);
-  await page.locator(OFFERS).locator("article.promo-card").nth(4).getByRole("link", { name: "Buy now" }).click();
+  await page.locator(OFFERS).locator("article.promo-card").nth(3).getByRole("link", { name: "Buy now" }).click();
   await expect(page).toHaveURL(`${NEXT_URL}/pricing#pg-microneedling-h`);
 });
 

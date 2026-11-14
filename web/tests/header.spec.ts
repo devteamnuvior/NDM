@@ -148,7 +148,9 @@ test.describe("desktop", () => {
     );
     expect(hrefs.length).toBeGreaterThan(20);
     const pages = hrefs.filter((h) => h.startsWith("/"));
-    expect(pages).toEqual(expect.arrayContaining(["/", "/pricing", "/promotion", "/about", "/blog", "/account", "/aptos-thread-lift", "/concerns/wrinkles-fine-lines", "/privacy"]));
+    expect(pages).toEqual(expect.arrayContaining(["/", "/pricing", "/about", "/blog", "/account", "/aptos-thread-lift", "/concerns/wrinkles-fine-lines", "/privacy"]));
+    /* the offers: the Promotion page, or the sale's own page during the VIP Sale */
+    expect(pages.some((h) => h === "/promotion" || h === "/vip-sale")).toBe(true);
     for (const h of pages) expect((await request.get(NEXT_URL + h)).status(), h).toBe(200);
     /* everything else is a phone number or one of the prototype's placeholders */
     for (const h of hrefs.filter((x) => !x.startsWith("/"))) expect(h).toMatch(/^(tel:\+1\d{10}|#\/[a-z0-9-]+)$/);
@@ -230,7 +232,8 @@ test.describe("desktop", () => {
     const bar = page.getByRole("region", { name: "Clinic announcements" });
     const current = () => bar.locator("div[aria-hidden='false']:visible").innerText();
     const first = await current();
-    expect(["New-patient offers this month", "Complimentary VISIA® skin analysis", "Flexible payment plans"].some((m) => first.includes(m))).toBe(true);
+    /* during the VIP Sale the offers message names the sale */
+    expect(["New-patient offers this month", "VIP Sale: up to", "Complimentary VISIA® skin analysis", "Flexible payment plans"].some((m) => first.includes(m))).toBe(true);
     await expect.poll(current, { timeout: 8000 }).not.toBe(first);
     await bar.hover();
     const held = await current();

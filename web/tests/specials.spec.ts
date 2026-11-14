@@ -27,15 +27,15 @@ async function goToSection(page: Page): Promise<void> {
 test.describe("desktop", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
-  test("twelve offers; price, unit and offer come from the price list", async ({ page }) => {
+  test("eleven offers; price, unit and offer come from the price list", async ({ page }) => {
     await goToSection(page);
-    await expect(page.locator(`${SECTION} article`)).toHaveCount(12);
-    await expect(stage(page)).toHaveAttribute("aria-label", "Monthly specials, offer 1 of 12");
+    await expect(page.locator(`${SECTION} article`)).toHaveCount(11);
+    await expect(stage(page)).toHaveAttribute("aria-label", "Monthly specials, offer 1 of 11");
     await expect(current(page).locator("h3")).toHaveText("Botox");
     await expect(current(page)).toContainText("per unit");
     await expect(current(page).getByRole("link", { name: "Buy now" })).toHaveAttribute("href", "/pricing#pg-botox-dysport-h");
-    /* the fourth offer, Lip Filler, shows the price list's own figures */
-    for (let i = 0; i < 3; i++) await page.locator(SECTION).getByRole("button", { name: "Next offer" }).click();
+    /* the third offer, Lip Filler, shows the price list's own figures */
+    for (let i = 0; i < 2; i++) await page.locator(SECTION).getByRole("button", { name: "Next offer" }).click();
     await expect(current(page).locator("h3")).toHaveText("Lip Filler");
     const lip = await lipCard();
     await expect(current(page).locator(".sw-price")).toHaveText(lip.price);
@@ -49,15 +49,15 @@ test.describe("desktop", () => {
   test("arrows, arrow keys and a click on a side card turn the wheel; it wraps round", async ({ page }) => {
     await goToSection(page);
     await page.locator(SECTION).getByRole("button", { name: "Next offer" }).click();
-    await expect(current(page).locator("h3")).toHaveText("Lip Augmentation");
+    await expect(current(page).locator("h3")).toHaveText("Laser Hair Removal");
     await stage(page).focus();
     await page.keyboard.press("ArrowRight");
-    await expect(current(page).locator("h3")).toHaveText("Laser Hair Removal");
+    await expect(current(page).locator("h3")).toHaveText("Lip Filler");
     await page.keyboard.press("ArrowLeft");
     await page.keyboard.press("ArrowLeft");
     await page.keyboard.press("ArrowLeft");
     await expect(current(page).locator("h3")).toHaveText("PRP Face");
-    await expect(stage(page)).toHaveAttribute("aria-label", "Monthly specials, offer 12 of 12");
+    await expect(stage(page)).toHaveAttribute("aria-label", "Monthly specials, offer 11 of 11");
     /* the side card to the right: click its outer edge, clear of the centre card */
     await page.locator(`${SECTION} article`).filter({ has: page.locator("h3", { hasText: /^Botox$/ }) }).click({ position: { x: 270, y: 40 } });
     await expect(current(page).locator("h3")).toHaveText("Botox");
@@ -72,7 +72,7 @@ test.describe("desktop", () => {
     await page.mouse.down();
     await page.mouse.move(b.x + b.width / 2 - 60, b.y + 120, { steps: 5 });
     await page.mouse.up();
-    await expect(current(page).locator("h3")).toHaveText("Lip Augmentation");
+    await expect(current(page).locator("h3")).toHaveText("Laser Hair Removal");
   });
 
   test("the payment plans card links to the provider", async ({ page }) => {

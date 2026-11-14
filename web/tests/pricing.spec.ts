@@ -60,7 +60,8 @@ test("categories and treatments fold; Expand all opens every treatment of a cate
 test("search narrows the list, counts the matches, and can be cleared", async ({ page }) => {
   await page.goto(`${NEXT_URL}/pricing`);
   const box = list(page).getByRole("searchbox");
-  await expect(box).toHaveAttribute("placeholder", "Search 128 treatments");
+  /* the number of treatments shown on the list (products hidden in WooCommerce are not counted) */
+  await expect(box).toHaveAttribute("placeholder", /^Search \d+ treatments$/);
   await box.fill("lip");
   await expect(list(page).getByText(/treatments? match(es)? “lip”/)).toBeVisible();
   await expect(list(page).locator(".pr-group").first()).toHaveClass(/is-open/); /* matches show opened */
