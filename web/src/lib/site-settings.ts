@@ -1,7 +1,9 @@
 import "server-only";
+import { SALE_HEADLINE } from "@/config/sale";
 import { SITE_SETTINGS } from "@/config/site-settings";
+import { getCampaign } from "@/lib/campaign";
 import { getSiteSettingsRaw, settle } from "@/lib/wordpress";
-import { toSlug } from "@/lib/routes";
+import { pagePath, toSlug } from "@/lib/routes";
 import type { Announcement, MenuGroup, MenuItem, SiteMenu, SiteSettings, SocialNetwork, WPSiteSettings } from "@/types/site-settings";
 
 const NETWORKS: SocialNetwork[] = ["instagram", "facebook", "youtube", "x", "linkedin"];
@@ -131,6 +133,28 @@ function fromWordPress(wp: WPSiteSettings): SiteSettings {
  * be reached or the settings were never saved.
  */
 export async function getSiteSettings(): Promise<SiteSettings> {
-  const read = await settle(getSiteSettingsRaw);
-  return read.ok && read.data ? fromWordPress(read.data) : SITE_SETTINGS;
+  const [read, campaign] = await Promise.all([settle(getSiteSettingsRaw), getCampaign()]);
+  const settings = read.ok && read.data ? fromWordPress(read.data) : SITE_SETTINGS;
+  /* the VIP Sale's days (the campaign's phase "vip"): every link to the offers opens the sale */
+  return campaign && !campaign.over && campaign.phase === "vip" ? withVipSaleLinks(settings) : settings;
+}
+
+/** Whether an address is the Promotion page's (with or without the site's folder, a trailing slash or a #part). */
+const isPromotion = (href: string) => /(^|\/)promotion\/?(#.*)?$/.test(href.trim().replace(/^https?:\/\/[^/]+/, ""));
+
+/**
+ * The settings during the VIP Sale: the announcement that points to the offers names the sale and opens its
+ * page, and so does the menu's Promotion item. Nothing is saved: when the phase ends the settings read as
+ * they are written in WordPress again (the Black Friday phases set their own links).
+ */
+function withVipSaleLinks(settings: SiteSettings): SiteSettings {
+  const sale = pagePath("vipSale");
+  const message = (wide: boolean) => (m: Announcement): Announcement =>
+    m.kind === "message" && isPromotion(m.href) ? { ...m, text: wide ? `VIP Sale: up to ${SALE_HEADLINE}%\u00a0off selected packages ` : `VIP Sale: up to ${SALE_HEADLINE}%\u00a0off `, cta: "\u2192", href: sale } : m;
+  const a = settings.header.announcement;
+  return {
+    ...settings,
+    header: { ...settings.header, announcement: { ...a, desktop: a.desktop.map(message(true)), mobile: a.mobile.map(message(false)) } },
+    menu: { ...settings.menu, items: settings.menu.items.map((item) => (item.kind === "link" && isPromotion(item.link) ? { ...item, link: sale } : item)) },
+  };
 }
