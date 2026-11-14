@@ -50,21 +50,24 @@ export interface LowestPrice {
  * The price helpers over one price list. The site's built-in list gets its own set below; the Pricing
  * page builds a set over the list it reads from WooCommerce, so both are worked out the same way.
  */
+/** A treatment of a category by its name or a part of it; several when a name on the site covers several lines of the list. */
+export type PriceItemName = string | string[];
 /** A name used somewhere on the site, and where it sits on the price list. */
-export type PriceNames = Record<string, [categoryId: string, item?: string]>;
+export type PriceNames = Record<string, [categoryId: string, item?: PriceItemName]>;
 
 export function createPriceBook(categories: PriceCategory[], names: PriceNames = {}) {
   const BY_ID = new Map<string, PriceCategory>(categories.map((c) => [c.id, c]));
 
   /** Every option of a category, or only those of the treatment named `item` when it matches one. */
-  function optionsOf(categoryId: string, item?: string): Option[] {
+  function optionsOf(categoryId: string, item?: PriceItemName): Option[] {
     const c = BY_ID.get(categoryId);
     if (!c) return [];
-    const wanted = item ? c.items.filter((it) => normalise(it.name) === normalise(item) || normalise(it.name).includes(normalise(item))) : c.items;
+    const parts = (Array.isArray(item) ? item : item ? [item] : []).map(normalise);
+    const wanted = parts.length ? c.items.filter((it) => parts.some((part) => normalise(it.name).includes(part))) : c.items;
     return (wanted.length ? wanted : c.items).flatMap((it) => it.options.map((o) => ({ ...o, item: it.name })));
   }
 
-  function lowestPrice(categoryId: string, item?: string): LowestPrice | null {
+  function lowestPrice(categoryId: string, item?: PriceItemName): LowestPrice | null {
     const c = BY_ID.get(categoryId);
     const options = optionsOf(categoryId, item);
     if (!c || !options.length) return null;
@@ -93,7 +96,7 @@ export function createPriceBook(categories: PriceCategory[], names: PriceNames =
   }
 
   /** [category id, treatment] for a name used anywhere on the site, or null when it is not on the price list. */
-  function locate(name: string): [categoryId: string, item?: string] | null {
+  function locate(name: string): [categoryId: string, item?: PriceItemName] | null {
     const key = normalise(name).replace(/\s*·\s*/g, " ");
     if (names[key]) return names[key];
     const asId = key.replace(/[^a-z0-9]+/g, "-");
@@ -121,10 +124,10 @@ export function createPriceBook(categories: PriceCategory[], names: PriceNames =
    * Where a treatment sits on the price list, with its lowest price, unit and offer. Null when it is not on
    * the list. (Looks names up a little more strictly than `priceFor`, as the prototype's `priceInfo` does.)
    */
-  function priceInfo(name: string): ({ id: string; item?: string } & LowestPrice) | null {
+  function priceInfo(name: string): ({ id: string; item?: PriceItemName } & LowestPrice) | null {
     const key = normalise(name);
     const byName = categories.find((c) => normalise(c.name) === key);
-    const hit = names[key] ?? (byName ? ([byName.id] as [string, string?]) : null);
+    const hit = names[key] ?? (byName ? ([byName.id] as [string, PriceItemName?]) : null);
     if (!hit) return null;
     const lowest = lowestPrice(hit[0], hit[1]);
     return lowest ? { id: hit[0], item: hit[1], ...lowest } : null;

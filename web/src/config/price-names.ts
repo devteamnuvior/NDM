@@ -2,7 +2,7 @@
  * Names used on the site's cards and menus, mapped to the price list: [category id, treatment].
  * Keys are normalised names (lower case, no ® or ™).
  */
-export const PRICE_NAMES: Record<string, [categoryId: string, item?: string]> = {
+export const PRICE_NAMES: Record<string, [categoryId: string, item?: string | string[]]> = {
   "exosome skin therapy": [
     "microneedling",
     "Microneedling with Exosomes - Face"
@@ -152,9 +152,10 @@ export const PRICE_NAMES: Record<string, [categoryId: string, item?: string]> = 
   "spider vein removal": [
     "laser-vein"
   ],
+  /* every CoolSculpting line: the standard applicator is listed as "Regular Treatment Zone", without the brand name */
   "coolsculpting": [
     "coolsculpting-tight-sculpting",
-    "Coolsculpting"
+    ["Coolsculpting", "Regular Treatment Zone"]
   ],
   "tightsculpting": [
     "coolsculpting-tight-sculpting",
