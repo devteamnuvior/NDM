@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/layout/header/site-header";
 import { OfferPopup } from "@/components/layout/offer-popup";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteSettingsProvider } from "@/components/layout/site-settings";
+import { FEATURES } from "@/config/features";
 import { getAptosSlugs } from "@/lib/aptos";
 import { getArticleSlugs } from "@/lib/blog";
 import { getConcernSlugs } from "@/lib/concern";
@@ -31,7 +32,8 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
         {children}
         <SiteFooter />
       </div>
-      <OfferPopup />
+      {/* switched off for now (config/features.ts) */}
+      {FEATURES.offerPopup && <OfferPopup />}
     </ConcernPathsProvider>
     </SiteSettingsProvider>
   );

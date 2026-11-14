@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter, Manrope } from "next/font/google";
 import { BookPopup } from "@/components/booking/book-popup";
+import { EarlyReveal } from "@/components/layout/early-reveal";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import "./globals.css";
 
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SmoothScroll />
         {children}
         <BookPopup />
+        <EarlyReveal />
       </body>
     </html>
   );
