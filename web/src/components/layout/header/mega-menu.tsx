@@ -88,6 +88,10 @@ export function MegaMenu({ open, current, onLink, eager }: MenuPanelProps) {
   const isAptos = cat.aptos;
   /* the treatment named like its category: the category's title links to it, so the list leaves it out */
   const own = cat.groups.flatMap((g) => g.items).find((it) => it.label === cat.label);
+  /* where the title goes: the category's own link, else that treatment's page (a WordPress post or a built-in page) */
+  const ownLink = own ? menuEntryLink(own, menuLink) : undefined;
+  const titleLink = !cat.link && ownLink && !ownLink.href.startsWith("#") ? ownLink : catLink;
+  const titleLinks = Boolean(cat.link || titleLink.page || titleLink.internal);
 
   return (
     <div className={PANEL_CLASS} data-open={open}>
@@ -124,8 +128,8 @@ export function MegaMenu({ open, current, onLink, eager }: MenuPanelProps) {
         <div className="h-[516px] px-5 py-4 2xl:h-[456px]">
           <div className="flex items-baseline justify-between gap-4 border-b border-ndm-line pb-4">
             <div>
-              {(cat.link || catLink.page) && !isAptos ? (
-                <SiteLink to={catLink} onClick={onLink} className="group inline-flex items-center gap-2 font-aeonik text-[26px] leading-tight hover:text-ndm-deep">
+              {titleLinks && !isAptos ? (
+                <SiteLink to={titleLink} onClick={onLink} className="group inline-flex items-center gap-2 font-aeonik text-[26px] leading-tight hover:text-ndm-deep">
                   {cat.label}
                   <IconArrow size={14} className="text-ndm-deep transition-transform group-hover:translate-x-0.5" />
                 </SiteLink>
