@@ -47,7 +47,7 @@ const GROUPS: SaleCopy["deals"]["groups"] = [
   { category: "botox-dysport", tab: "Injectables" },
   { category: "dermal-fillers", tab: "Injectables" },
   { category: "skin-booster-and-bio-stimulators", tab: "Injectables" },
-  { category: "aptos-thread-method", tab: "Injectables" },
+  { category: "aptos-thread-method", tab: "Thread lift" },
   { category: "coolsculpting-tight-sculpting", tab: "Body" },
   { category: "hair-loss", tab: "Hair" },
   { category: "laser-vaginal-tightening", tab: "Wellness" },
@@ -68,7 +68,7 @@ const CONCERNS: SaleCopy["concerns"]["items"] = [
 
 const GIFT = "+$200 gift with your purchase · first 20 purchases · given in clinic";
 const FINE_PRINT =
-  "Selected packages only; single sessions at regular price. Code {{code}} applies to eligible packages. Injectables and Aptos at fixed sale prices. Not included: laser vein, facials, depigmenting, non-surgical butt lift, snoring, toenail, Latisse. Consultation required. Individual results may vary.";
+  "Selected packages only; single sessions at regular price. Code {{code}} applies to eligible packages. Injectables and Aptos at fixed sale prices. Not included: laser vein, facials, depigmenting, non-surgical butt lift, hip dip, snoring, toenail, Latisse, Dysport, hyperhidrosis, laser hair rejuvenation, filler single syringes, filler 3 and 4 syringes, filler combination packages, Belkyra. Consultation required. Individual results may vary.";
 const HOW: SaleCopy["how"] = [
   { title: "Choose", text: "your treatment" },
   { title: "Pick", text: "your package and add it to your plan" },

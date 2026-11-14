@@ -24,7 +24,15 @@
     { "product": "Bio-Stimulator – Radiesse", "option": "2 Syringes", "regular": 1800, "sale": null },
     { "product": "Bio-Stimulator – Hand Rejuvenation with Radiesse", "option": "1 Syringe", "regular": 900, "sale": null },
     { "product": "Skin Booster – HA (Hyaluronic Acid)", "option": "1 syringe", "regular": 750, "sale": null },
-    { "product": "Skin Booster – HA (Hyaluronic Acid)", "option": "2 syringe", "regular": 1500, "sale": null }
+    { "product": "Bio-Stimulator – Hand Rejuvenation with Radiesse", "option": "2 Syringes", "regular": 1800, "sale": null },
+    { "product": "Skin Booster – HA (Hyaluronic Acid)", "option": "2 Syringes", "regular": 1500, "sale": null },
+    { "product": "Laser Acne Upper Back", "option": "Single session", "regular": 750, "sale": null, "label": "" },
+    { "product": "Profile Balance Package", "hidden": true },
+    { "product": "Refreshed Eye Package", "hidden": true },
+    { "product": "Lower Face Contour Package", "hidden": true },
+    { "product": "Midface Lift Package", "hidden": true },
+    { "product": "Full Midface Rejuvenation", "hidden": true },
+    { "product": "Upper Face Support Package", "hidden": true }
   ],
   "rules": [
     { "category": "laser-hair-removal", "options": ["Package of 3", "Package of 5", "Package of 8"], "off": 30 },
@@ -57,7 +65,7 @@
     { "product": "Bio-Stimulator – Hand Rejuvenation with Radiesse", "option": "1 Syringe", "regular": 900, "price": 599 },
     { "product": "Bio-Stimulator – Hand Rejuvenation with Radiesse", "option": "2 Syringes", "regular": 1800, "price": 1198 },
     { "product": "Skin Booster – HA (Hyaluronic Acid)", "option": "1 syringe", "regular": 750, "price": 399 },
-    { "product": "Skin Booster – HA (Hyaluronic Acid)", "option": "2 syringe", "regular": 1500, "price": 798 },
+    { "product": "Skin Booster – HA (Hyaluronic Acid)", "option": "2 Syringes", "regular": 1500, "price": 798 },
     { "product": ["Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", "Aptos Excellence Visage Thread Method"], "option": "Face – Mid & Lower", "regular": 4400, "price": 3400, "label": "Save $1000 Off" },
     { "product": ["Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", "Aptos Excellence Visage Thread Method"], "option": "Neck", "regular": 3900, "price": 2900, "label": "Save $1000 Off" },
     { "product": ["Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", "Aptos Excellence Visage Thread Method"], "option": "Face + neck", "regular": 6900, "price": 5900, "label": "Save $1000 Off" }

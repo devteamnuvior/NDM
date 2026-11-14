@@ -178,7 +178,7 @@
       },
       {
         "category": "aptos-thread-method",
-        "tab": "Injectables"
+        "tab": "Thread lift"
       },
       {
         "category": "coolsculpting-tight-sculpting",
@@ -213,6 +213,6 @@
   "footer": {
     "lead": "The VIP Sale ends",
     "text": "Book your free consultation and VISIA® skin analysis, or check out with code {{code}}.",
-    "terms": "Selected packages only; single sessions at regular price. Code {{code}} applies to eligible packages. Injectables and Aptos at fixed sale prices. Not included: laser vein, facials, depigmenting, non-surgical butt lift, snoring, toenail, Latisse. Consultation required. Individual results may vary."
+    "terms": "Selected packages only; single sessions at regular price. Code {{code}} applies to eligible packages. Injectables and Aptos at fixed sale prices. Not included: laser vein, facials, depigmenting, non-surgical butt lift, hip dip, snoring, toenail, Latisse, Dysport, hyperhidrosis, laser hair rejuvenation, filler single syringes, filler 3 and 4 syringes, filler combination packages, Belkyra. Consultation required. Individual results may vary."
   }
 }
