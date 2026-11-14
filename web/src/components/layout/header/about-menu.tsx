@@ -9,16 +9,16 @@ import { SiteLink } from "@/components/ui/site-link";
 import { MenuPhoto, menuEntryLink } from "@/components/layout/header/menu-items";
 import { useSiteSettings } from "@/components/layout/site-settings";
 import { CLINICS, HOURS, type Clinic } from "@/config/site";
-import { pageLink, resolveLabel } from "@/lib/routes";
+import { pageLink, resolveLabel, sectionLink } from "@/lib/routes";
 import type { ResolvedLink } from "@/types/navigation";
 
 const CLINIC_PHOTO: Record<Clinic["id"], StaticImageData> = { uptown: uptownPhoto, downtown: downtownPhoto };
 
-/* every About link opens the About page from the top, except the blog and the policies */
+/* every About link opens its section of the About page (resolveLabel), the blog and the policies their own pages; an unknown label the top of the About page */
 function aboutLink(label: string): ResolvedLink {
   if (label === "Blog") return pageLink("blog");
-  if (/^Policies/.test(label)) return resolveLabel(label);
-  return pageLink("about");
+  const link = resolveLabel(label);
+  return link.page ? link : pageLink("about");
 }
 
 /** About: the links on the left, then the two clinics as photo cards with address and opening hours. */
@@ -40,7 +40,7 @@ export function AboutMenu({ open, onLink, eager }: MenuPanelProps) {
         {CLINICS.map((c) => (
           <SiteLink
             key={c.id}
-            to={pageLink("about")}
+            to={sectionLink("about", "clinics")}
             onClick={onLink}
             className="about-loc group flex flex-col overflow-hidden rounded-[18px] bg-ndm-mist/70 ring-1 ring-ndm-ink/[.05] transition-shadow hover:shadow-[0_24px_50px_-30px_rgba(27,36,43,.45)]"
           >

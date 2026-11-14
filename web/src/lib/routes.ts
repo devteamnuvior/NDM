@@ -18,11 +18,28 @@ export function toSlug(label: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
-/** A menu label -> its link. Labels with no page yet keep the prototype's `#/slug` placeholder. */
+/** Labels that open a section of their page: the About menu's links jump to the matching About section. */
+const SLUG_TO_SECTION: Readonly<Record<string, string>> = {
+  "our-doctors-team": "team",
+  "doctors-team": "team",
+  "our-clinics": "clinics",
+  "uptown-clinic": "clinics",
+  "downtown-clinic": "clinics",
+  "awards-recognition": "gallery",
+  "contact-us": "contact",
+};
+
+/** A menu label -> its link (with the section it opens, when it has one). Labels with no page yet keep the prototype's `#/slug` placeholder. */
 export function resolveLabel(label: string): ResolvedLink {
   const slug = toSlug(label);
   const page = SLUG_TO_PAGE[slug];
-  return page ? { href: pagePath(page), page } : { href: `#/${slug}` };
+  const section = SLUG_TO_SECTION[slug];
+  return page ? { href: pagePath(page) + (section ? `#${section}` : ""), page } : { href: `#/${slug}` };
+}
+
+/** A page's section: "/about#clinics". */
+export function sectionLink(page: PageId, section: string): ResolvedLink {
+  return { href: `${pagePath(page)}#${section}`, page };
 }
 
 export function pageLink(page: PageId): ResolvedLink {

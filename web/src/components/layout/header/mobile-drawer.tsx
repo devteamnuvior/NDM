@@ -11,7 +11,7 @@ import { PAGE_SECTION } from "@/config/navigation";
 import { ACTIONS, type PageId } from "@/config/routes";
 import { CLINICS } from "@/config/site";
 import { useDeferredOpen } from "@/hooks/use-deferred-open";
-import { pageLink, tel } from "@/lib/routes";
+import { sectionLink, tel } from "@/lib/routes";
 import type { NavSectionId, ResolvedLink } from "@/types/navigation";
 import type { MenuLink } from "@/types/site-settings";
 import { withBase } from "@/lib/base-path";
@@ -169,7 +169,7 @@ export function MobileDrawer({ open, current, onClose }: MobileDrawerProps) {
                     <ul className="space-y-1 pb-4" role="list">
                       {CLINICS.map((c) => (
                         <li key={c.id}>
-                          <SiteLink to={pageLink("about")} onClick={onClose} className="block py-1.5 font-mont text-[15px]">
+                          <SiteLink to={sectionLink("about", "clinics")} onClick={onClose} className="block py-1.5 font-mont text-[15px]">
                             {c.name} Clinic <span className="text-[13px] text-ndm-muted">· {c.note}</span>
                           </SiteLink>
                         </li>
