@@ -9,7 +9,7 @@ import { CLINICS } from "@/config/site";
 import { useCart } from "@/hooks/use-cart";
 import { checkCart, clearCart, type CartLine } from "@/lib/cart";
 import { pagePath } from "@/lib/routes";
-import { CO_CARD, CO_WRAP, CartPairs, CoAlert, CoHead, CoSelect, FIELD, IconLock, OrderSummary, RemovedNotice, money2, totalsOf, useInBrowser } from "./shared";
+import { CO_CARD, CO_WRAP, CartPairs, CoAlert, CoHead, CoSelect, CodeField, FIELD, IconLock, OrderSummary, RemovedNotice, money2, totalsOf, useInBrowser, useSaleCode } from "./shared";
 import { withBase } from "@/lib/base-path";
 
 const STEP_HEAD: [lead: string, strong: string, text: string][] = [
@@ -33,7 +33,8 @@ export function CheckoutPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
   const cart = useCart();
   const router = useRouter();
   const ready = useInBrowser();
-  const t = totalsOf(cart.lines);
+  const code = useSaleCode(cart.lines);
+  const t = totalsOf(cart.lines, code.applied);
   const [apt, setApt] = useState(false);
   const [province, setProvince] = useState("Ontario");
   const [clinic, setClinic] = useState("Uptown");
@@ -69,6 +70,7 @@ export function CheckoutPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
       note: field("note"),
       agree: fd.get("agree") === "on",
       company: field("company"),
+      code: code.applied,
     };
     setBusy(true);
     setFailure("");
@@ -400,6 +402,7 @@ export function CheckoutPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
               </div>
               <div className="mt-3">
                 <OrderSummary t={t} lines={cart.lines} scroll />
+                <CodeField lines={cart.lines} />
               </div>
             </div>
             <div className={`${CO_CARD} p-[clamp(18px,2.2vw,24px)]`}>

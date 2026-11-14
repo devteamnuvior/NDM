@@ -80,7 +80,7 @@ export function BfDock() {
           <div>
             <p className="mb-3 flex items-center justify-between gap-3 font-inter text-[12px] font-semibold tracking-[.16em] text-white/65 uppercase">
               <span>{t.live ? "Offers end in" : "Black Friday starts in"}</span>
-              <span className="hidden text-white/45 sm:inline">{t.live ? "Nov 30, 11:59 pm" : "Nov 27, 12:00 am"}</span>
+              <span className="hidden text-white/45 sm:inline">{t.live ? "Dec 7, 11:59 pm" : "Nov 20, 12:00 am"}</span>
             </p>
             <BfTimer t={t} size="lg" />
             {t.live ? (
@@ -91,7 +91,7 @@ export function BfDock() {
                 <p className="mt-2 font-inter text-[12.5px] text-white/55">{Math.round(t.pct * 100)}% of Black Friday has passed</p>
               </div>
             ) : (
-              <p className="mt-5 font-inter text-[13px] text-white/55">Doors open Friday, November 27. Plan ahead now, the deals are live on the page.</p>
+              <p className="mt-5 font-inter text-[13px] text-white/55">Doors open Friday, November 20.</p>
             )}
           </div>
         </div>

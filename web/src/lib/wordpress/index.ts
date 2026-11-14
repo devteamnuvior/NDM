@@ -23,6 +23,7 @@ export {
   type AccountProfileInput,
   type AccountWho,
 } from "./account";
+export { getVipSalePage } from "./vip-sale";
 export { getAptosPage } from "./aptos";
 export { getBeforeAfter } from "./before-after";
 export { getBlogList, getBlogPost } from "./blog";

@@ -23,6 +23,8 @@ export const WP_TAGS = {
   aptos: "aptos",
   /** The About page (the WordPress page with the template "About page"). */
   about: "about",
+  /** The VIP Sale page (the WordPress page with the template "VIP Sale page"). */
+  vipSale: "vip-sale",
   /** The home page (the page chosen as the homepage under Settings > Reading). */
   home: "home",
   /** Site Settings: the header and footer (WordPress's "Site Settings" screen). */

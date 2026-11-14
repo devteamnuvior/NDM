@@ -35,6 +35,8 @@ export interface OrderRequestForm {
   agree: boolean;
   /** Left empty by people; filled in by form-filling robots. */
   company: string;
+  /** The checkout code of a running sale ("PLUS30"), or "". WooCommerce decides what it takes off. */
+  code?: string;
 }
 
 /** What the confirmation page shows and keeps: no email, phone or address. */
@@ -46,6 +48,9 @@ export interface OrderReceipt {
   saved: number;
   tax: number;
   total: number;
+  /** The checkout code WooCommerce applied, and what it took off; left out without one. */
+  code?: string;
+  discount?: number;
   first: string;
   clinic: string;
   pay: string;
@@ -101,6 +106,8 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
   if (!clinic) return invalid("Please choose a clinic.");
   if (!(TIMES_OF_DAY as readonly string[]).includes(form.time)) return invalid("Please choose a time of day.");
   if (typeof form.day !== "string" || (form.day !== "" && !/^\d{4}-\d{2}-\d{2}$/.test(form.day))) return invalid("Please choose a preferred day.");
+  const code = typeof form.code === "string" && /^[A-Za-z0-9]{0,40}$/.test(form.code.trim()) ? form.code.trim().toUpperCase() : null;
+  if (code === null) return invalid("The checkout code could not be read. Please remove it and try again.");
   if (form.agree !== true) return invalid(`Please accept the terms to place your request (step ${CHECKOUT_STEPS.indexOf("Review")}).`);
 
   if (!isWordPressConfigured()) return { ok: false, reason: "unreachable", message: "Order requests are not available right now. Please call the clinic." };
@@ -111,6 +118,7 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
   try {
     const placed = await placeOrderRequest({
       ...(customerId ? { customerId } : {}),
+      ...(code ? { code } : {}),
       lines,
       customer: { first, last, email, phone, address: street, apt, city, province: form.province, postal },
       clinic: `NewDermaMed ${clinic.name}`,
@@ -118,7 +126,8 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
       note,
     });
     /* until WooCommerce works out tax itself, HST is the site's estimate, as on the cart page */
-    const tax = placed.taxEnabled ? placed.tax : round2(placed.sub * HST);
+    const discount = placed.discount ?? 0;
+    const tax = placed.taxEnabled ? placed.tax : round2((placed.sub - discount) * HST);
     return {
       ok: true,
       order: {
@@ -128,7 +137,8 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
         sub: placed.sub,
         saved: placed.saved,
         tax,
-        total: placed.taxEnabled ? placed.total : round2(placed.sub + tax),
+        total: placed.taxEnabled ? placed.total : round2(placed.sub - discount + tax),
+        ...(placed.code && discount > 0 ? { code: placed.code, discount } : {}),
         first,
         clinic: clinic.name,
         pay: "Pay at your appointment",
@@ -138,6 +148,8 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
     if (!(error instanceof WordPressError)) throw error;
     if (error.kind === "http" && error.status === 409) return { ok: false, reason: "unavailable", message: "Something in your cart is no longer on the price list. Please review your cart." };
     if (error.kind === "http" && error.status === 400) return invalid(error.message);
+    /* the checkout code was refused: not valid, expired, or nothing in the order is an eligible package */
+    if (error.kind === "http" && error.status === 422) return invalid(`${error.message} Remove the code or review your cart, then try again.`);
     console.error("[checkout] the order request could not be placed:", error.kind, error.status ?? "", error.message);
     return { ok: false, reason: "unreachable", message: "Your request could not be sent right now. Nothing was placed; please try again in a moment, or call the clinic." };
   }

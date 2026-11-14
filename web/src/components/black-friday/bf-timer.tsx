@@ -16,15 +16,15 @@ export interface BfClock {
   s: number;
 }
 
-/** Time left until the sale starts, or, once it has, until it ends. Browser only: it reads the clock. */
-export function useBfClock(step = 1000): BfClock {
+/** Time left until the sale starts, or, once it has, until it ends (Black Friday unless another sale is given). Browser only: it reads the clock. */
+export function useBfClock(step = 1000, sale: { start: string | number; end: string | number } = BF_SALE): BfClock {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), step);
     return () => clearInterval(t);
   }, [step]);
-  const start = new Date(BF_SALE.start).getTime();
-  const end = new Date(BF_SALE.end).getTime();
+  const start = new Date(sale.start).getTime();
+  const end = new Date(sale.end).getTime();
   const live = now >= start;
   const ms = Math.max(0, (live ? end : start) - now);
   return {

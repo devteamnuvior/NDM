@@ -18,6 +18,8 @@ export interface OrderRequestInput {
   note: string;
   /** The signed-in customer the order belongs to; left out for a visitor without an account. */
   customerId?: number;
+  /** The checkout code of a running sale; WooCommerce applies its own coupon to the eligible lines. */
+  code?: string;
 }
 
 export interface PlacedOrder {
@@ -28,6 +30,9 @@ export interface PlacedOrder {
   lines: { productId: number; variationId: number; cat: string; name: string; label: string; qty: number; price: number; was: number }[];
   sub: number;
   saved: number;
+  /** The checkout code WooCommerce applied ("" without one) and what it took off the subtotal. */
+  code?: string;
+  discount?: number;
   /** Whether WooCommerce works out tax itself; when it does not, `tax` is 0 and the site shows its estimate. */
   taxEnabled: boolean;
   tax: number;

@@ -21,12 +21,16 @@ export interface CatalogEntry {
   was: number;
   /** " / unit" for a per-unit price, else "". */
   unit: string;
+  /** While a sale runs: the price with the checkout code, when the code applies; else 0. */
+  code: number;
 }
 
 const norm = (s: string): string => s.trim().toLowerCase().replace(/\s+/g, " ");
 export const nameKey = (name: string, label: string): string => `${norm(name)}|${norm(label)}`;
 
 export interface CartCatalog {
+  /** The sale WooCommerce holds: its checkout code, and whether it runs now. Null when there is none. */
+  sale: { code: string; live: boolean } | null;
   byId: Map<number, CatalogEntry>;
   /** For lines saved before carts carried WooCommerce IDs: treatment name and option. */
   byName: Map<string, CatalogEntry>;
@@ -34,20 +38,22 @@ export interface CartCatalog {
 
 /** Reads the (cached) price list. Throws a WordPressError when WooCommerce cannot be reached. */
 export async function getCartCatalog(): Promise<CartCatalog> {
-  const view = buildPricingView(await getPricingTree());
+  const tree = await getPricingTree();
+  const view = buildPricingView(tree);
+  const sale = tree.campaign ? { code: tree.campaign.code, live: tree.campaign.phase !== null } : null;
   const byId = new Map<number, CatalogEntry>();
   const byName = new Map<string, CatalogEntry>();
   for (const c of view.categories) {
     for (const it of c.items) {
       for (const o of it.options) {
-        const entry: CatalogEntry = { productId: o.productId, variationId: o.variationId, cat: c.name, name: it.name, label: o.label, price: o.price, was: o.was, unit: o.unit };
+        const entry: CatalogEntry = { productId: o.productId, variationId: o.variationId, cat: c.name, name: it.name, label: o.label, price: o.price, was: o.was, unit: o.unit, code: o.code ?? 0 };
         const id = o.variationId || o.productId;
         if (!byId.has(id)) byId.set(id, entry); /* a product in two categories: the first one names it */
         if (!byName.has(nameKey(it.name, o.label))) byName.set(nameKey(it.name, o.label), entry);
       }
     }
   }
-  return { byId, byName };
+  return { sale, byId, byName };
 }
 
 /** The entry a cart line stands for: by its WooCommerce ID, else (older lines) by its name and option. */

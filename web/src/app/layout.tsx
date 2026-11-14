@@ -33,7 +33,7 @@ export const viewport: Viewport = {
 /** Every page: fonts, smooth scroll and the Book Free Consultation pop-up. The site header and footer are in (site)/layout.tsx. */
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    /* The Black Friday sale page adds its `bfs` class to <html> with an inline script before React starts,
+    /* The Black Friday and VIP sale pages add their `bfs` / `vip` class to <html> with an inline script before React starts,
        so the class list can differ from the server's: that difference is expected (this tag only). */
     <html
       lang="en"

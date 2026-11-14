@@ -1,3 +1,4 @@
+import { SALE_CODE_KEY } from "@/components/sale/code";
 import { CART_STORAGE_KEY } from "@/config/site";
 import { withBase } from "@/lib/base-path";
 
@@ -22,6 +23,8 @@ export interface CartLine {
   unit?: string;
   /** Regular price before the offer, when there is one. */
   was?: number;
+  /** While a sale runs: the price with the checkout code, when the code applies to this line. */
+  code?: number;
   /** WooCommerce product ID of the treatment, when the line comes from the price list. */
   productId?: number;
   /** WooCommerce variation ID of the chosen option; 0 for a product without variations. */
@@ -81,7 +84,46 @@ function write(next: CartLine[]): void {
   emit();
 }
 
-type Checked = Pick<CartLine, "cat" | "name" | "label" | "price" | "unit" | "was"> & { productId: number; variationId: number };
+type Checked = Pick<CartLine, "cat" | "name" | "label" | "price" | "unit" | "was" | "code"> & { productId: number; variationId: number };
+
+/* ---- the checkout code of a sale (see components/sale/code.ts) ---- */
+
+/** The sale WooCommerce is running, as the last cart check said: its code, and whether it still runs. */
+export interface SaleCode {
+  code: string;
+  live: boolean;
+}
+let sale: SaleCode | null | undefined; /* undefined: not asked yet */
+let typed: string | undefined;
+
+/** The code the visitor entered (or a sale page sent along), in capitals; "" when none. */
+export function getTypedCode(): string {
+  if (typed === undefined) {
+    try {
+      typed = (window.localStorage.getItem(SALE_CODE_KEY) ?? "").trim().toUpperCase();
+    } catch {
+      typed = "";
+    }
+  }
+  return typed;
+}
+export const getServerTypedCode = (): string => "";
+
+export function setTypedCode(code: string): void {
+  typed = code.trim().toUpperCase().slice(0, 40);
+  try {
+    if (typed) window.localStorage.setItem(SALE_CODE_KEY, typed);
+    else window.localStorage.removeItem(SALE_CODE_KEY);
+  } catch {
+    /* storage blocked: the code lasts for this visit */
+  }
+  emit();
+  /* whether a sale accepts it is WooCommerce's answer: ask when it is not known yet */
+  if (typed && sale === undefined) void checkCart();
+}
+
+export const getSaleCode = (): SaleCode | null | undefined => sale;
+export const getServerSaleCode = (): SaleCode | null | undefined => undefined;
 
 /**
  * Asks the server what WooCommerce says about the cart's lines and brings the cart in line with it:
@@ -99,7 +141,12 @@ export async function checkCart(): Promise<void> {
       body: JSON.stringify({ lines: asked.map(({ productId, variationId, name, label }) => ({ productId, variationId, name, label })) }),
     });
     if (!response.ok) return;
-    answer = ((await response.json()) as { lines: (Checked | null)[] }).lines;
+    const body = (await response.json()) as { lines: (Checked | null)[]; sale?: SaleCode | null };
+    answer = body.lines;
+    if (JSON.stringify(sale) !== JSON.stringify(body.sale ?? null)) {
+      sale = body.sale ?? null;
+      emit();
+    }
   } catch {
     return;
   }
@@ -119,7 +166,7 @@ export async function checkCart(): Promise<void> {
     const key = cartKey(fresh.productId, fresh.variationId);
     const twin = next.find((l) => l.key === key);
     if (twin) twin.qty = Math.min(CART_MAX, twin.qty + current.qty);
-    else next.push({ key, cat: fresh.cat, name: fresh.name, label: fresh.label, price: fresh.price, unit: fresh.unit, was: fresh.was || undefined, productId: fresh.productId, variationId: fresh.variationId, qty: current.qty });
+    else next.push({ key, cat: fresh.cat, name: fresh.name, label: fresh.label, price: fresh.price, unit: fresh.unit, was: fresh.was || undefined, code: fresh.code || undefined, productId: fresh.productId, variationId: fresh.variationId, qty: current.qty });
   });
   for (const l of now) if (!asked.some((a) => a.key === l.key)) next.push(l); /* added meanwhile */
 

@@ -1,12 +1,12 @@
 "use client";
 
-import { Fragment, useSyncExternalStore, type ReactNode } from "react";
+import { Fragment, useState, useSyncExternalStore, type ReactNode } from "react";
 import { QtyControl } from "@/components/cart/qty-control";
 import { IconChevron } from "@/components/ui/icons";
 import { TwoTone } from "@/components/ui/two-tone";
 import { CHECKOUT_STEPS, HST } from "@/config/checkout";
 import { useCart } from "@/hooks/use-cart";
-import { money, type CartLine } from "@/lib/cart";
+import { getSaleCode, getServerSaleCode, getServerTypedCode, getTypedCode, money, setTypedCode, subscribeCart, type CartLine } from "@/lib/cart";
 import { pagePath } from "@/lib/routes";
 import { withBase } from "@/lib/base-path";
 
@@ -19,14 +19,77 @@ export interface Totals {
   saved: number;
   tax: number;
   total: number;
+  /** The checkout code that was counted in, and what it takes off; left out without one. */
+  code?: string;
+  discount?: number;
 }
 
-/** Totals of the lines on screen. HST is an estimate; the order itself is priced by WooCommerce. */
-export function totalsOf(lines: CartLine[]): Totals {
-  const sub = lines.reduce((n, l) => n + l.qty * l.price, 0);
+/**
+ * Totals of the lines on screen; with a checkout code, the eligible lines count at their price with the
+ * code. HST is an estimate; the order itself is priced by WooCommerce, which applies the code itself.
+ */
+export function totalsOf(lines: CartLine[], code = ""): Totals {
+  const listed = lines.reduce((n, l) => n + l.qty * l.price, 0);
+  const discount = code ? lines.reduce((n, l) => n + (l.code ? l.qty * (l.price - l.code) : 0), 0) : 0;
+  const sub = listed - discount;
   const saved = lines.reduce((n, l) => n + (l.was ? l.qty * (l.was - l.price) : 0), 0);
   const tax = round2(sub * HST);
-  return { sub: round2(sub), saved: round2(saved), tax, total: round2(sub + tax) };
+  return { sub: round2(listed), saved: round2(saved), tax, total: round2(sub + tax), ...(discount > 0 ? { code, discount: round2(discount) } : {}) };
+}
+
+/**
+ * The checkout code as it stands: what was entered, whether the sale WooCommerce runs accepts it, and
+ * whether anything in the cart is an eligible package. `applied` is the code to count in and to send
+ * with the order request, or "".
+ */
+export function useSaleCode(lines: CartLine[]): { typed: string; applied: string; message: string; tone: "ok" | "warn" | "bad" | ""; set: (code: string) => void } {
+  const typed = useSyncExternalStore(subscribeCart, getTypedCode, getServerTypedCode);
+  const sale = useSyncExternalStore(subscribeCart, getSaleCode, getServerSaleCode);
+  const set = setTypedCode;
+  if (!typed) return { typed, applied: "", message: "", tone: "", set };
+  if (sale === undefined) return { typed, applied: "", message: "", tone: "", set }; /* not checked yet */
+  if (!sale || typed !== sale.code) return { typed, applied: "", message: "This code is not valid.", tone: "bad", set };
+  if (!sale.live) return { typed, applied: "", message: "This code has expired.", tone: "bad", set };
+  if (!lines.some((l) => l.code)) return { typed, applied: "", message: `Code ${typed} applies to eligible packages. Nothing in your cart is one.`, tone: "warn", set };
+  return { typed, applied: typed, message: `Code ${typed} applied to the eligible packages in your cart.`, tone: "ok", set };
+}
+
+/** The checkout code field with its note. */
+export function CodeField({ lines }: { lines: CartLine[] }) {
+  const c = useSaleCode(lines);
+  const sale = useSyncExternalStore(subscribeCart, getSaleCode, getServerSaleCode);
+  const [draft, setDraft] = useState<string | null>(null);
+  const value = draft ?? c.typed;
+  const tone = c.tone === "ok" ? "text-[#1F7A4D]" : c.tone === "bad" ? "text-[#B3261E]" : "text-ndm-muted";
+  return (
+    <form
+      className="mt-5 border-t border-ndm-ink/10 pt-5"
+      onSubmit={(e) => {
+        e.preventDefault();
+        c.set(value);
+        setDraft(null);
+      }}
+    >
+      <label htmlFor="co-code" className="font-inter text-[12px] font-semibold tracking-[.14em] text-ndm-muted uppercase">
+        Checkout code
+      </label>
+      <div className="mt-2 flex gap-2">
+        <input id="co-code" name="code" value={value} onChange={(e) => setDraft(e.target.value.toUpperCase())} autoComplete="off" autoCapitalize="characters" spellCheck={false} maxLength={40} aria-describedby="co-code-note" className={`${FIELD} min-w-0 flex-1 uppercase`} />
+        {c.typed && draft === null ? (
+          <button type="button" onClick={() => c.set("")} className="btn btn-line btn-sm shrink-0">
+            Remove
+          </button>
+        ) : (
+          <button type="submit" className="btn btn-ink btn-sm shrink-0" disabled={!value.trim()}>
+            Apply
+          </button>
+        )}
+      </div>
+      <p id="co-code-note" role="status" className={`mt-2 font-inter text-[12.5px] leading-[1.5] ${tone}`}>
+        {c.message || (sale?.live ? `Code ${sale.code} applies to eligible packages. Consultation required before treatment.` : "Enter a code if you have one.")}
+      </p>
+    </form>
+  );
 }
 
 export const money2 = (n: number): string => `$${n.toLocaleString("en-CA", { useGrouping: false, minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -164,9 +227,15 @@ export function SumRows({ t }: { t: Totals }) {
       {t.saved > 0 && (
         <div className={`${row} text-ndm-deep`}>
           <dt>You save</dt>
-          <dd className="font-semibold tabular-nums">{money2(t.saved)}</dd>
+          <dd className="font-semibold tabular-nums">{money2(t.saved + (t.discount ?? 0))}</dd>
         </div>
       )}
+      {t.code && t.discount ? (
+        <div className={row}>
+          <dt className="text-ndm-muted">Code {t.code}</dt>
+          <dd className="text-ndm-ink tabular-nums">-{money2(t.discount)}</dd>
+        </div>
+      ) : null}
       <div className={row}>
         <dt className="text-ndm-muted">Estimated HST (13%)</dt>
         <dd className="text-ndm-ink tabular-nums">{money2(t.tax)}</dd>

@@ -21,6 +21,8 @@ export interface PriceOptionView {
   productId: number;
   /** WooCommerce variation ID; 0 for a product without variations. */
   variationId: number;
+  /** While a sale runs: the price with the checkout code, when the code applies to this option. */
+  code?: number;
 }
 
 export interface PriceItemView {
@@ -83,10 +85,11 @@ function bestOffer(options: PriceOption[]): string {
 }
 
 /** One WooCommerce price as the price list's option: the price to pay, and the regular price while a sale runs. */
-function option(fields: WooPriceFields, label: string, tag: string | undefined, productId: number, variationId: number): Option {
+function option(fields: WooPriceFields & { campaign?: { code: boolean; codePrice: string } }, label: string, tag: string | undefined, productId: number, variationId: number): Option {
   const price = Number(fields.price);
   const regular = Number(fields.regularPrice);
-  return { label, price, regular: fields.onSale && regular > price ? regular : 0, tag, productId, variationId };
+  const sale = fields.campaign ? { sale: true, ...(fields.campaign.code ? { code: Number(fields.campaign.codePrice) } : {}) } : {};
+  return { label, price, regular: fields.onSale && regular > price ? regular : 0, tag, productId, variationId, ...sale };
 }
 
 /** The WooCommerce list in the shape the price helpers read, leaving out anything without a usable price. */
@@ -141,7 +144,7 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
           offer: bestOffer(it.options),
           from: itemLow ? itemLow.value : min,
           fromUnit: itemLow ? itemLow.unit : perUnit(it.options.find((o) => o.price === min)?.label ?? ""),
-          options: it.options.map((o) => ({ label: o.label, price: o.price, was: o.regular || 0, tag: o.tag, unit: perUnit(o.label), productId: o.productId, variationId: o.variationId })),
+          options: it.options.map((o) => ({ label: o.label, price: o.price, was: o.regular || 0, tag: o.tag, unit: perUnit(o.label), productId: o.productId, variationId: o.variationId, ...(o.code ? { code: o.code } : {}) })),
         };
       }),
     };

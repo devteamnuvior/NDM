@@ -35,8 +35,12 @@ export const BFS_CONCERNS: [name: string, text: string, categoryIds: string[]][]
   ['Hair thinning', 'PRP scalp treatments.', ['hair-loss']],
 ];
 
-/** A package of a treatment: [label, price, regular price (0 when none), offer tag]. */
-export type Opt = [label: string, price: number, regular: number, tag?: string];
+/**
+ * A package of a treatment: [label, price, regular price (0 when none), offer tag], and, while a sale campaign
+ * runs: the price with the checkout code (0 when the code does not apply), then the WooCommerce product and
+ * variation IDs (to send the line to the cart).
+ */
+export type Opt = [label: string, price: number, regular: number, tag?: string, code?: number, productId?: number, variationId?: number];
 /** A treatment (or area) of a category, with its packages. */
 export type Item = [name: string, note: string, options: Opt[]];
 
@@ -64,6 +68,23 @@ export interface PlanLine {
   /** Regular price, 0 when there is none. */
   reg: number;
   tag: string;
+  /** Price with the checkout code; 0 when the code does not apply to the line. */
+  code?: number;
+  /** The treatment's full name on the price list, and its WooCommerce IDs. */
+  name?: string;
+  pid?: number;
+  vid?: number;
+}
+
+/** What a line of the plan costs with the checkout code where it applies. */
+export const planPrice = (p: PlanLine): number => p.code || p.price;
+
+/** The plan in three sums: at website prices, with the code, and the saving against the regular prices. */
+export function planTotals(plan: PlanLine[]): { website: number; withCode: number; saved: number } {
+  const website = plan.reduce((n, p) => n + p.price, 0);
+  const withCode = plan.reduce((n, p) => n + planPrice(p), 0);
+  const regular = plan.reduce((n, p) => n + (p.reg || p.price), 0);
+  return { website, withCode, saved: Math.max(0, regular - withCode) };
 }
 
 /* the price list ties "OFF" to its number with a no-break space, so any white space is accepted */
@@ -82,18 +103,35 @@ export const bfsTag = (t: string | undefined): string =>
         .replace(/^Save \$(\d+)\sOff$/i, "Save $$$1")
     : "";
 
-/** The deals of the sale, from the price list in WooCommerce. */
-export const bfsDeals = (categories: PriceCategory[]): Deal[] =>
-  categories.filter((c) => !BFS_SKIP.includes(c.id) && BFS_GROUP[c.id])
+type ListedOption = PriceCategory["items"][number]["options"][number] & { productId?: number; variationId?: number };
+
+/**
+ * The deals of a sale, from the price list in WooCommerce: one per category named in `groups` (category
+ * id -> its tab), in price-list order.
+ *
+ * While a sale campaign runs (`campaign`), a deal holds exactly the lines WooCommerce has in the campaign:
+ * single sessions and everything outside the sale are left out, and `pct` is the best saving against the
+ * struck-through price, with the checkout code where it applies. A prescription product is then listed by
+ * name, quantity and price only (Health Canada C.01.044): it carries no percentage.
+ * Without a campaign a deal holds the lines with an offer, and prescription drugs are left out.
+ */
+export const saleDeals = (categories: PriceCategory[], groups: Record<string, string>, campaign = false): Deal[] =>
+  categories.filter((c) => (campaign || !BFS_SKIP.includes(c.id)) && groups[c.id])
   .map((c) => {
-    const all: Item[] = c.items.map((it) => [it.name, it.note, it.options.map((o): Opt => [o.label, o.price, o.regular, o.tag])]);
-    const items = all.filter((it) => it[2].some((o) => o[2] > 0 || o[3]));
-    const tags = items.flatMap((it) => it[2].map((o) => o[3]).filter((t): t is string => !!t));
-    const pct = Math.max(0, ...tags.map(bfsPct));
-    const prices = items.flatMap((it) => it[2].filter((o) => o[2] > 0 || o[3]).map((o) => o[1]));
-    return { c: { name: c.name, blurb: c.blurb }, id: c.id, group: BFS_GROUP[c.id], items, pct, offer: pct ? `Up to ${pct}%\u00a0off` : bfsTag(tags[0]), from: Math.min(...prices) };
+    const inSale = (o: Opt | ListedOption): boolean => (Array.isArray(o) ? (campaign ? o[5] !== undefined : o[2] > 0 || !!o[3]) : campaign ? !!o.sale : o.regular > 0 || !!o.tag);
+    const all: Item[] = c.items.map((it) => [it.name, it.note, (it.options as ListedOption[]).filter((o) => !campaign || inSale(o)).map((o): Opt => (campaign ? [o.label, o.price, o.regular, o.tag, o.code ?? 0, o.productId ?? 0, o.variationId ?? 0] : [o.label, o.price, o.regular, o.tag]))]);
+    const items = all.filter((it) => it[2].some(inSale));
+    const offered = items.flatMap((it) => it[2].filter(inSale));
+    const tags = offered.map((o) => o[3]).filter((t): t is string => !!t);
+    const pct = campaign ? (c.perUnit ? 0 : Math.max(0, ...offered.map((o) => (o[2] > 0 ? Math.round((1 - (o[4] || o[1]) / o[2]) * 100) : 0)))) : Math.max(0, ...tags.map(bfsPct));
+    /* a per-unit category with one treatment in the sale goes by that treatment's name ("Botox Cosmetic") */
+    const name = campaign && c.perUnit && items.length === 1 ? items[0][0] : c.name;
+    return { c: { name, blurb: c.blurb }, id: c.id, group: groups[c.id], items, pct, offer: pct ? `Up to ${pct}%\u00a0off` : campaign ? "" : bfsTag(tags[0]), from: Math.min(...offered.map((o) => o[4] || o[1])) };
   })
   .filter((d) => d.items.length);
+
+/** The deals of the Black Friday sale. */
+export const bfsDeals = (categories: PriceCategory[]): Deal[] => saleDeals(categories, BFS_GROUP);
 
 /** The largest percentage offer among the deals, 0 when there is none. */
 export const bfsMax = (deals: Deal[]): number => Math.max(0, ...deals.map((d) => d.pct));
@@ -115,7 +153,9 @@ export interface SpecialCard {
   d: string;
   /** Its category on the pricing page. */
   h: string;
+  /** The photo's other sizes (WordPress's srcset), when it has any. */
+  set?: string;
 }
 
 /** The current offers (read from WooCommerce by the page) as this page's tickets. */
-export const bfsSpecials = (offers: Offer[]): SpecialCard[] => offers.map((o) => ({ n: o.name, img: o.photo?.src ?? "", pos: o.position, p: o.price, u: o.unit, deal: o.deal, d: o.text, h: o.href }));
+export const bfsSpecials = (offers: Offer[]): SpecialCard[] => offers.map((o) => ({ n: o.name, img: o.photo?.src ?? "", pos: o.position, p: o.price, u: o.unit, deal: o.deal, d: o.text, h: o.href, set: o.photo?.srcSet || undefined }));

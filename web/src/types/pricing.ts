@@ -32,6 +32,24 @@ export interface WooVariation extends WooPriceFields {
   /** Null on the public list when there is no label or it is switched off. */
   promo: WooPromoLabel | null;
   order: number;
+  /** Set while a sale campaign runs and this line is in it: whether the checkout code applies, and the price with it. */
+  campaign?: { code: boolean; codePrice: string };
+}
+
+/** A sale campaign over the price list (see cms/wp-content/plugins/ndm-pricing/includes/campaign.php). Dates are ISO 8601. */
+export interface WooCampaign {
+  id: string;
+  /** The checkout code, "PLUS30". */
+  code: string;
+  /** What the code takes off an eligible line's website price, in percent. */
+  percent: number;
+  start: string;
+  end: string;
+  /** The phase running now; null outside the campaign's window. */
+  phase: string | null;
+  /** The window has closed. */
+  over: boolean;
+  phases: { id: string; label: string; from: string; to: string }[];
 }
 
 export interface WooProduct extends WooPriceFields {
@@ -61,6 +79,8 @@ export interface WooCategory<P = WooProduct> {
 export interface WooPricingTree<C = WooCategory> {
   currency: string;
   categories: C[];
+  /** The sale campaign, when one is stored in WooCommerce (public list only). */
+  campaign?: WooCampaign | null;
 }
 
 /* ---- the management screen: everything, with the display settings ---- */

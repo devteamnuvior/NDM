@@ -15,6 +15,10 @@ export interface PriceOption {
   /** Regular price before the offer; 0 when there is none. */
   regular: number;
   tag?: string;
+  /** While a sale campaign runs: this line is in it. */
+  sale?: boolean;
+  /** While a sale campaign runs: the price with the checkout code, when the code applies to this line. */
+  code?: number;
 }
 
 export interface PriceItem {

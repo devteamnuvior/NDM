@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   try {
     const catalog = await getCartCatalog();
     const answer = lines.map((line) => (typeof line === "object" && line !== null ? findEntry(catalog, line as Record<string, unknown>) : null));
-    return Response.json({ lines: answer }, { headers });
+    return Response.json({ lines: answer, sale: catalog.sale }, { headers });
   } catch (error) {
     if (!(error instanceof WordPressError)) throw error;
     /* WooCommerce cannot be reached: the cart stays as it is, and the order step checks again */

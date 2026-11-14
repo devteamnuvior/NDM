@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { QtyControl } from "@/components/cart/qty-control";
 import { Button } from "@/components/ui/button";
 import { IconBag, IconCheckBadge } from "@/components/ui/icons";
@@ -8,7 +7,7 @@ import { ACTIONS } from "@/config/routes";
 import { useCart } from "@/hooks/use-cart";
 import { money, type CartLine } from "@/lib/cart";
 import { pagePath } from "@/lib/routes";
-import { CO_CARD, CO_WRAP, CartPairs, CoAlert, CoHead, FIELD, IconLock, RemovedNotice, SumRows, money2, totalsOf, useInBrowser } from "./shared";
+import { CO_CARD, CO_WRAP, CartPairs, CoAlert, CoHead, CodeField, IconLock, RemovedNotice, SumRows, money2, totalsOf, useInBrowser, useSaleCode } from "./shared";
 
 /** A cart line on the cart page: what it is, the quantity, the line price. */
 function Line({ l }: { l: CartLine }) {
@@ -48,9 +47,8 @@ function Line({ l }: { l: CartLine }) {
 export function CartPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
   const cart = useCart();
   const ready = useInBrowser();
-  const t = totalsOf(cart.lines);
-  const [code, setCode] = useState("");
-  const [codeMsg, setCodeMsg] = useState<["warn" | "err", string] | null>(null);
+  /* the checkout code of a running sale replaces the prototype's promo code box, which only left a note */
+  const t = totalsOf(cart.lines, useSaleCode(cart.lines).applied);
   const empty = cart.lines.length === 0;
   return (
     <section aria-labelledby="co-title" className={`co-band ${CO_WRAP}`}>
@@ -107,27 +105,8 @@ export function CartPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
               <h2 className="font-aeonik text-[22px] font-normal tracking-[-0.01em] text-ndm-ink">Summary</h2>
               <div className="mt-3">
                 <SumRows t={t} />
+                <CodeField lines={cart.lines} />
               </div>
-              <details className="co-code mt-4 rounded-[14px] bg-ndm-mist px-4 py-3">
-                <summary className="cursor-pointer font-inter text-[14px] font-medium text-ndm-ink">Have a promo code?</summary>
-                <form
-                  className="mt-3 flex gap-2"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setCodeMsg(code.trim() ? ["warn", "Thanks. Our team checks promo codes before you pay at the clinic."] : ["err", "Please enter a promo code first."]);
-                  }}
-                >
-                  <input value={code} onChange={(e) => setCode(e.target.value)} aria-label="Promo code" placeholder="Promo code" className={`${FIELD} h-11`} />
-                  <Button as="button" type="submit" v="line" sm>
-                    Apply
-                  </Button>
-                </form>
-                {codeMsg && (
-                  <CoAlert tone={codeMsg[0]} className="mt-3">
-                    {codeMsg[1]}
-                  </CoAlert>
-                )}
-              </details>
               <Button href={pagePath("checkout")} v="ink" block className="mt-5">
                 Proceed to checkout
               </Button>

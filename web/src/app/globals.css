@@ -54,5 +54,6 @@
 @import "../styles/article-extra.css";
 @import "../styles/page-legal.css";
 @import "../styles/page-bf-sale.css";
+@import "../styles/page-vip-sale.css";
 
 @import "tailwindcss/utilities.css";
