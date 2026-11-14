@@ -518,6 +518,108 @@ docker compose run --rm -T cli wp ndm about-migrate
 docker compose run --rm -T cli wp ndm about-migrate --delete-old
 ```
 
+## Sale campaign (the 2026 holiday sale)
+
+A campaign is a sale laid over the price list for a fixed window, in phases (VIP Sale, Black Friday,
+Cyber Monday, Black Friday Extended). It lives in the `ndm-pricing` plugin (`includes/campaign.php`):
+
+- the option `ndm_pricing_campaign`: its id, checkout code, the code's percentage, first and last
+  minute (Toronto time), and its phases (id, first minute, name, label word);
+- one post meta on each WooCommerce variation in the sale, `_ndm_campaign`: the struck-through price,
+  the campaign price, the percentage, whether the checkout code applies.
+
+WooCommerce's own regular and sale prices are **never changed by the campaign**. While it runs,
+WooCommerce answers with the campaign's price for those variations, so the price list, the offers,
+the cart check and the order requests all show and charge it. The moment the window closes, every
+line is back at its own price and label; nothing has to be undone. wp-admin, WP-CLI, the price
+manager and WooCommerce's own API always see and save WooCommerce's own prices.
+
+The checkout code is a real WooCommerce coupon (30% off, limited to the eligible variations). An
+order request sends `code`; the order route applies the coupon, or answers 422 with "This code is not
+valid.", "This code has expired." or that nothing in the order is an eligible package.
+
+The public price list (`GET ndm/v1/pricing`) adds `campaign` (code, percent, start, end, the phase
+now, the phases) and, on each variation in the sale, `campaign: { code, codePrice }`. Labels on those
+lines become "SALE 30% OFF" in the VIP phase and "BLACK FRIDAY 30% OFF" from Black Friday on.
+
+**Setting it up.** The definition is a JSON file (`cms/campaigns/holiday-sale-2026.json`):
+`corrections` are permanent changes of WooCommerce's own prices, labels and hidden products (they stay
+after the campaign), `rules` put packages in the sale at a percentage off their regular price with the
+code on top, `fixed` puts a line in the sale at a stated price without the code.
+
+```bash
+docker compose run --rm -T cli wp ndm-pricing campaign < campaigns/holiday-sale-2026.json            # dry run: prints every change
+docker compose run --rm -T cli wp ndm-pricing campaign --apply < campaigns/holiday-sale-2026.json    # makes them
+docker compose run --rm -T cli wp ndm-pricing campaign --clear --apply                                # removes the campaign (corrections stay)
+```
+
+Read the dry run before applying: it lists each correction (old and new price), each line with its
+struck-through price, website price and price with the code, and warns about anything it could not
+find. Product names and option labels in the file must match WooCommerce exactly. Run it again after
+changing a regular price in the price manager, so the campaign prices follow.
+
+## VIP Sale page
+
+`/vip-sale` is an ordinary WordPress **page** (marked "VIP Sale page of the site" in the list of
+pages). It is recognised by its **template "VIP Sale page"** (`ndm-vip-sale`, under Page Attributes >
+Template), so its title and slug can change without losing it; a top-level page with the slug
+`vip-sale` and no such template is recognised too and gets the template on its next save. Its address
+on the site is always `/vip-sale`. No page ID is written anywhere. A sale page is optional: with no
+such page the site shows its built-in copy and WordPress shows no warning.
+
+On that page only, the block editor and the text box are off and the page is the boxes under the title
+(one post meta, `_ndm_vip_sale`; the list of fields is `ndm_headless_vip_sale_schema()` in
+`includes/vip-sale.php`). A field left empty keeps the site's built-in words.
+
+| Box | What it holds |
+|---|---|
+| Sale Settings | the sale's name; its first and last minute (Toronto time), used only when WooCommerce holds no campaign |
+| Header | the two heading lines, the words after "Up to N% off", the text, the gift line under the header, the photo behind the countdown, the lines of the moving tapes |
+| Search Engines | page title, description, "keep this page out of search engines" |
+| How It Works | the numbered steps |
+| Step 1, Concerns | heading, text, and the concerns: each with the price-list categories it shortlists |
+| Step 2, Deals | heading, text, and the categories in the sale, each with the tab it sits under |
+| Sale Prices | tag, heading, how many cards show (0 to 12) |
+| Step 3, My Plan | heading, the note under the buttons |
+| Clinics | tag and heading |
+| Footer | closing line, text, the terms of the sale |
+
+**Never typed here**, because the site reads them from WooCommerce: every deal, package, price, saving
+and offer line, the checkout code, and the sale prices. While a sale campaign runs (see "Sale
+campaign"), the VIP Sale is its first phase: a deal card shows exactly the lines WooCommerce has in the
+campaign, the dates and the countdown are the campaign's, and once the phase is over the page sends
+visitors to `/black-friday`. A prescription product is shown by name, quantity and price only (Health
+Canada C.01.044). Without a campaign a card shows the lines that carry an offer, prescription products
+are left out, and the two dates of Sale Settings are used.
+
+Tokens the site fills in wherever a box says so: `{{code}}`, `{{max}}`, `{{dates}}` ("Nov 27 to 30"),
+`{{dates_long}}` ("November 27 to 30"), `{{dates_full}}` ("Friday, Nov 27 to Monday, Nov 30"),
+`{{end}}` ("November 30"). A sentence whose number is not known is left out. The site ends the terms
+with "Individual results may vary." when that sentence is missing.
+
+A category is searched and picked (the product picker of the Concerns fields with `only => 'category'`;
+`GET ndm/v1/concern-products?only=category` lists categories alone).
+
+| Route (`ndm/v1`) | Who | What |
+|---|---|---|
+| `GET /vip-sale-page` | public | the published VIP Sale page; 404 when there is none (`ndm_vip_sale_missing`) or it is not published or behind a password (`ndm_vip_sale_unpublished`) |
+
+The fields are part of the page's revisions ("VIP Sale page fields"). The Pages screens warn when the
+page is not published, when more than one page has the template, when it is recognised by its slug
+only, and when its dates cannot be read or end before they start (the site then shows its built-in
+dates). When the page changes, WordPress tells the site to drop its cached copy (tag `vip-sale`
+through `/api/revalidate`); a price or offer change in WooCommerce reaches the page through the
+price list's own tags.
+
+One-time import of the built-in copy on a new WordPress (created only when there is no VIP Sale page
+and no page with the slug `vip-sale`, the trash included). The page is created as a **draft** unless
+`--status=publish` is given: its dates, offers and terms need Raymond's written approval before the
+public sees them.
+
+```bash
+node ../web/scripts/export-vip-sale.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm vip-sale-import --images=/tmp/site
+```
+
 ## Home page
 
 `/` is an ordinary WordPress **page**: the one chosen under **Settings > Reading > "Your homepage
