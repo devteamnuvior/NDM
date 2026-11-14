@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* Prints the site's original procedure page (Botox, src/config/botox.ts) for WordPress: one post of the
-   type "Procedures" with the fields of its edit screen. Photos are file paths under web/public; the
+   type "Injectables" (a procedure post type) with the fields of its edit screen. Photos are file paths under web/public; the
    import puts them into the media library.
 
    No price is exported. The price list names its WooCommerce products ("Botox Cosmetic", "Dysport"),
@@ -67,4 +67,4 @@ const content = {
 };
 
 /* "date": the day the page was last updated; it becomes the procedure's "Page updated" day until it is saved again */
-process.stdout.write(JSON.stringify([{ slug: "botox", title: p.crumbs[2], date: p.guide.updated[0], hero: file(p.hero.desktop), heroAlt: p.hero.alt ?? "", content }], null, 1));
+process.stdout.write(JSON.stringify([{ slug: "botox", title: p.crumbs[2], type: "ndm_injectable", date: p.guide.updated[0], hero: file(p.hero.desktop), heroAlt: p.hero.alt ?? "", content }], null, 1));

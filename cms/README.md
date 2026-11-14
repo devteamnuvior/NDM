@@ -297,8 +297,15 @@ Valadkhani's review.
 
 ## Procedure pages
 
-A procedure page of the site (for example `/botox`) is a post of the **post type "Procedures"**
-(`ndm_procedure`, in the admin menu). Every procedure has the same design, the Botox page's; a post
+A procedure page of the site (for example `/botox`) is a post of one of the **six procedure post
+types**, listed together in the admin menu: "Procedures" (`ndm_procedure`), "Injectables"
+(`ndm_injectable`), "Laser" (`ndm_laser`), "Body" (`ndm_body`), "Veins" (`ndm_vein`) and "Hair"
+(`ndm_hair`). They are one post type in all but name (`ndm_headless_procedure_types()` in
+`includes/procedures.php`): the same boxes, the same post meta, the same routes (`ndm/v1/procedures`
+lists the pages of all six, each with its `type`), so the site needs no change for a new list. A slug
+must be unique across all six and the Concerns (WordPress adds a number otherwise). Botox is in
+Injectables. To move a page to another list without changing its address or content:
+`wp ndm procedure-move <slug> --to=ndm_injectable` (the import takes `"type"` per page). Every procedure has the same design, the Botox page's; a post
 carries only its own content. The post's **slug is the page's address** on the site, so a new
 published procedure is a new page, without a new build. The fields work like those of a concern
 (same boxes, rows, photo and search fields).

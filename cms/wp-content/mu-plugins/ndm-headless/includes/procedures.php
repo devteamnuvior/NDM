@@ -28,52 +28,117 @@ define( 'NDM_PROCEDURE_POST_TYPE', 'ndm_procedure' );
 define( 'NDM_PROCEDURE_META', '_ndm_procedure' );
 
 /**
- * Registers the post type.
+ * The post types that hold procedure pages, all in the Botox design, with the same boxes, the same
+ * post meta and the same routes: "Procedures" plus one per menu group. Post type => [ plural, singular,
+ * REST base, menu icon ].
+ *
+ * @return array[]
  */
-function ndm_headless_procedure_register() {
-	register_post_type(
-		NDM_PROCEDURE_POST_TYPE,
-		array(
-			'labels'              => array(
-				'name'                  => 'Procedures',
-				'singular_name'         => 'Procedure',
-				'menu_name'             => 'Procedures',
-				'all_items'             => 'All procedures',
-				'add_new'               => 'Add procedure',
-				'add_new_item'          => 'Add a procedure',
-				'edit_item'             => 'Edit procedure',
-				'new_item'              => 'New procedure',
-				'view_item'             => 'View procedure',
-				'search_items'          => 'Search procedures',
-				'not_found'             => 'No procedures found.',
-				'not_found_in_trash'    => 'No procedures in the trash.',
-				'featured_image'        => 'Header photo (wide)',
-				'set_featured_image'    => 'Set the header photo',
-				'remove_featured_image' => 'Remove the header photo',
-				'use_featured_image'    => 'Use as the header photo',
-			),
-			'description'         => 'Procedure pages of the site: one design, each post carries its own content.',
-			// The page itself is the Next.js site's: WordPress shows no page of its own.
-			'public'              => false,
-			'publicly_queryable'  => false,
-			'exclude_from_search' => true,
-			'show_ui'             => true,
-			'show_in_menu'        => true,
-			'show_in_nav_menus'   => false,
-			'show_in_rest'        => true,
-			'rest_base'           => 'procedure-posts',
-			'menu_position'       => 21,
-			'menu_icon'           => 'dashicons-star-filled',
-			'hierarchical'        => false,
-			'has_archive'         => false,
-			'rewrite'             => false,
-			'query_var'           => false,
-			// No block editor: the content is the fields below the title.
-			'supports'            => array( 'title', 'thumbnail' ),
-		)
+function ndm_headless_procedure_types() {
+	return array(
+		NDM_PROCEDURE_POST_TYPE => array( 'Procedures', 'Procedure', 'procedure-posts', 'dashicons-star-filled' ),
+		'ndm_injectable'        => array( 'Injectables', 'Injectable', 'injectable-posts', 'dashicons-plus-alt' ),
+		'ndm_laser'             => array( 'Laser', 'Laser treatment', 'laser-posts', 'dashicons-lightbulb' ),
+		'ndm_body'              => array( 'Body', 'Body treatment', 'body-posts', 'dashicons-universal-access' ),
+		'ndm_vein'              => array( 'Veins', 'Vein treatment', 'vein-posts', 'dashicons-chart-line' ),
+		'ndm_hair'              => array( 'Hair', 'Hair treatment', 'hair-posts', 'dashicons-admin-users' ),
 	);
 }
+
+/**
+ * Whether a post type holds procedure pages.
+ *
+ * @param string $type Post type.
+ * @return bool
+ */
+function ndm_headless_is_procedure_type( $type ) {
+	return is_string( $type ) && isset( ndm_headless_procedure_types()[ $type ] );
+}
+
+/**
+ * Registers the post types.
+ */
+function ndm_headless_procedure_register() {
+	foreach ( ndm_headless_procedure_types() as $type => list( $plural, $singular, $rest_base, $icon ) ) {
+		$one  = strtolower( $singular );
+		$many = strtolower( $plural );
+
+		register_post_type(
+			$type,
+			array(
+				'labels'              => array(
+					'name'                  => $plural,
+					'singular_name'         => $singular,
+					'menu_name'             => $plural,
+					'all_items'             => 'All ' . $many,
+					'add_new'               => 'Add ' . $one,
+					'add_new_item'          => 'Add new ' . $one,
+					'edit_item'             => 'Edit ' . $one,
+					'new_item'              => 'New ' . $one,
+					'view_item'             => 'View ' . $one,
+					'search_items'          => 'Search ' . $many,
+					'not_found'             => 'No ' . $many . ' found.',
+					'not_found_in_trash'    => 'No ' . $many . ' in the trash.',
+					'featured_image'        => 'Header photo (wide)',
+					'set_featured_image'    => 'Set the header photo',
+					'remove_featured_image' => 'Remove the header photo',
+					'use_featured_image'    => 'Use as the header photo',
+				),
+				'description'         => $plural . ' pages of the site, in the design of the procedure pages: one design, each post carries its own content.',
+				// The page itself is the Next.js site's: WordPress shows no page of its own.
+				'public'              => false,
+				'publicly_queryable'  => false,
+				'exclude_from_search' => true,
+				'show_ui'             => true,
+				'show_in_menu'        => true,
+				'show_in_nav_menus'   => false,
+				'show_in_rest'        => true,
+				'rest_base'           => $rest_base,
+				// Same position for all: WordPress places them one after the other, in this order.
+				'menu_position'       => 21,
+				'menu_icon'           => $icon,
+				'hierarchical'        => false,
+				'has_archive'         => false,
+				'rewrite'             => false,
+				'query_var'           => false,
+				// No block editor: the content is the fields below the title.
+				'supports'            => array( 'title', 'thumbnail' ),
+			)
+		);
+	}
+}
 add_action( 'init', 'ndm_headless_procedure_register' );
+
+/**
+ * Keeps the six lists together in the admin menu, in the order of ndm_headless_procedure_types()
+ * (WordPress would otherwise put Comments, at its fixed place, between them).
+ *
+ * @param string[] $order Menu items by file.
+ * @return string[]
+ */
+function ndm_headless_procedure_menu_order( $order ) {
+	if ( ! is_array( $order ) ) {
+		return $order;
+	}
+
+	$ours = array();
+	foreach ( array_keys( ndm_headless_procedure_types() ) as $type ) {
+		$ours[] = 'edit.php?post_type=' . $type;
+	}
+
+	$first = array_search( $ours[0], $order, true );
+	if ( false === $first ) {
+		return $order;
+	}
+
+	$rest = array_values( array_diff( $order, $ours ) );
+	$at   = array_search( $ours[0], $order, true ) - count( array_intersect( array_slice( $order, 0, $first ), $ours ) );
+	array_splice( $rest, $at, 0, array_values( array_intersect( $ours, $order ) ) );
+
+	return $rest;
+}
+add_filter( 'custom_menu_order', '__return_true' );
+add_filter( 'menu_order', 'ndm_headless_procedure_menu_order', 20 );
 
 /**
  * The header photo is the featured image: makes sure the active theme (which never renders) allows one.
@@ -86,7 +151,7 @@ function ndm_headless_procedure_thumbnails() {
 	}
 
 	$types = is_array( $support ) && isset( $support[0] ) && is_array( $support[0] ) ? $support[0] : array();
-	add_theme_support( 'post-thumbnails', array_values( array_unique( array_merge( $types, array( NDM_PROCEDURE_POST_TYPE ) ) ) ) );
+	add_theme_support( 'post-thumbnails', array_values( array_unique( array_merge( $types, array_keys( ndm_headless_procedure_types() ) ) ) ) );
 }
 add_action( 'after_setup_theme', 'ndm_headless_procedure_thumbnails', 101 );
 
@@ -97,9 +162,7 @@ add_action( 'after_setup_theme', 'ndm_headless_procedure_thumbnails', 101 );
  * @return string[]
  */
 function ndm_headless_procedure_field_types( $types ) {
-	$types[] = NDM_PROCEDURE_POST_TYPE;
-
-	return $types;
+	return array_merge( $types, array_keys( ndm_headless_procedure_types() ) );
 }
 add_filter( 'ndm_headless_field_post_types', 'ndm_headless_procedure_field_types' );
 
@@ -339,7 +402,11 @@ function ndm_headless_procedure_content( $post_id ) {
 /**
  * One box per group of fields, under the title.
  */
-function ndm_headless_procedure_meta_boxes() {
+function ndm_headless_procedure_meta_boxes( $post_type ) {
+	if ( ! ndm_headless_is_procedure_type( $post_type ) ) {
+		return;
+	}
+
 	$stored = null;
 
 	foreach ( ndm_headless_procedure_schema() as $group ) {
@@ -360,13 +427,13 @@ function ndm_headless_procedure_meta_boxes() {
 					ndm_headless_concern_field( $field, 'ndm_procedure[' . $field['key'] . ']', $stored[ $field['key'] ] );
 				}
 			},
-			NDM_PROCEDURE_POST_TYPE,
+			$post_type,
 			'normal',
 			'default'
 		);
 	}
 }
-add_action( 'add_meta_boxes_' . NDM_PROCEDURE_POST_TYPE, 'ndm_headless_procedure_meta_boxes' );
+add_action( 'add_meta_boxes', 'ndm_headless_procedure_meta_boxes' );
 
 /**
  * The "Slug" box (the page's address on the site) is shown without a visit to Screen Options.
@@ -376,7 +443,7 @@ add_action( 'add_meta_boxes_' . NDM_PROCEDURE_POST_TYPE, 'ndm_headless_procedure
  * @return string[]
  */
 function ndm_headless_procedure_show_slug( $hidden, $screen ) {
-	return NDM_PROCEDURE_POST_TYPE === $screen->post_type ? array_values( array_diff( $hidden, array( 'slugdiv' ) ) ) : $hidden;
+	return ndm_headless_is_procedure_type( $screen->post_type ) ? array_values( array_diff( $hidden, array( 'slugdiv' ) ) ) : $hidden;
 }
 add_filter( 'default_hidden_meta_boxes', 'ndm_headless_procedure_show_slug', 10, 2 );
 
@@ -386,7 +453,7 @@ add_filter( 'default_hidden_meta_boxes', 'ndm_headless_procedure_show_slug', 10,
  * @param WP_Post $post The procedure.
  */
 function ndm_headless_procedure_intro( $post ) {
-	if ( NDM_PROCEDURE_POST_TYPE !== $post->post_type ) {
+	if ( ! ndm_headless_is_procedure_type( $post->post_type ) ) {
 		return;
 	}
 
@@ -400,6 +467,7 @@ function ndm_headless_procedure_intro( $post ) {
 	} else {
 		echo '<p><strong>Page on the site:</strong> its address is the "Slug" below, made from the title when the procedure is first saved.</p>';
 	}
+	echo '<p>Every page of Procedures, Injectables, Laser, Body, Veins and Hair has the same design and the same boxes; the address is the slug alone, so it must be unique across all of them.</p>';
 	echo '<p>Filled in by the site on every procedure page, not typed here: every price and offer (from the products picked in the Price List box), the section bar, the booking form, the clinic film, Why NewDermaMed, Our team, Testimonials, Visit us and Start your journey. A section whose box is left empty is left out of the page.</p>';
 	echo '</div>';
 }
@@ -424,7 +492,55 @@ function ndm_headless_procedure_save( $post_id ) {
 
 	update_post_meta( $post_id, NDM_PROCEDURE_META, wp_slash( ndm_headless_procedure_clean_all( $input ) ) );
 }
-add_action( 'save_post_' . NDM_PROCEDURE_POST_TYPE, 'ndm_headless_procedure_save' );
+foreach ( array_keys( ndm_headless_procedure_types() ) as $ndm_procedure_type ) {
+	add_action( 'save_post_' . $ndm_procedure_type, 'ndm_headless_procedure_save' );
+	add_filter( 'manage_' . $ndm_procedure_type . '_posts_columns', 'ndm_headless_procedure_columns' );
+	add_action( 'manage_' . $ndm_procedure_type . '_posts_custom_column', 'ndm_headless_procedure_column', 10, 2 );
+}
+unset( $ndm_procedure_type );
+
+/**
+ * A procedure page's address is its slug alone, whatever its post type: a slug already taken by a page
+ * of another procedure type (or by a concern) gets a number, as WordPress does within one post type.
+ *
+ * @param string $slug        The slug WordPress chose.
+ * @param int    $post_id     Post ID.
+ * @param string $post_status Post status.
+ * @param string $post_type   Post type.
+ * @return string
+ */
+function ndm_headless_procedure_unique_slug( $slug, $post_id, $post_status, $post_type ) {
+	if ( ! ndm_headless_is_procedure_type( $post_type ) || '' === $slug ) {
+		return $slug;
+	}
+
+	$types = array_keys( ndm_headless_procedure_types() );
+	if ( defined( 'NDM_CONCERN_POST_TYPE' ) ) {
+		$types[] = NDM_CONCERN_POST_TYPE;
+	}
+
+	$taken = function ( $candidate ) use ( $types, $post_id ) {
+		return (bool) get_posts(
+			array(
+				'post_type'    => $types,
+				'name'         => $candidate,
+				'post_status'  => 'any',
+				'numberposts'  => 1,
+				'fields'       => 'ids',
+				'post__not_in' => array( (int) $post_id ),
+			)
+		);
+	};
+
+	$base   = $slug;
+	$suffix = 2;
+	while ( $taken( $slug ) ) {
+		$slug = $base . '-' . $suffix++;
+	}
+
+	return $slug;
+}
+add_filter( 'wp_unique_post_slug', 'ndm_headless_procedure_unique_slug', 10, 4 );
 
 /**
  * The list of procedures shows each page's address.
@@ -444,7 +560,6 @@ function ndm_headless_procedure_columns( $columns ) {
 
 	return $out;
 }
-add_filter( 'manage_' . NDM_PROCEDURE_POST_TYPE . '_posts_columns', 'ndm_headless_procedure_columns' );
 
 /**
  * Prints the address column.
@@ -457,7 +572,6 @@ function ndm_headless_procedure_column( $column, $post_id ) {
 		echo esc_html( '/' . get_post_field( 'post_name', $post_id ) );
 	}
 }
-add_action( 'manage_' . NDM_PROCEDURE_POST_TYPE . '_posts_custom_column', 'ndm_headless_procedure_column', 10, 2 );
 
 /*
  * ---------------------------------------------------------------------------------------------
@@ -484,6 +598,8 @@ function ndm_headless_procedure_answer( $post ) {
 		'id'       => $post->ID,
 		'slug'     => $post->post_name,
 		'title'    => html_entity_decode( get_the_title( $post ), ENT_QUOTES, 'UTF-8' ),
+		// Which list the page is in: "Procedures", "Injectables", "Laser"...
+		'type'     => ndm_headless_procedure_types()[ $post->post_type ][0],
 		'modified' => mysql_to_rfc3339( $post->post_modified_gmt ),
 		// The day of the last save, as the page shows it ("Page updated").
 		'updated'  => array( get_post_modified_time( 'Y-m-d', false, $post ), get_post_modified_time( 'F j, Y', false, $post ) ),
@@ -520,14 +636,14 @@ function ndm_headless_procedure_routes() {
 add_action( 'rest_api_init', 'ndm_headless_procedure_routes' );
 
 /**
- * GET ndm/v1/procedures: every published procedure's name and address, by name.
+ * GET ndm/v1/procedures: every published procedure page's name and address (all procedure post types), by name.
  *
  * @return WP_REST_Response
  */
 function ndm_headless_procedure_rest_list() {
 	$posts = get_posts(
 		array(
-			'post_type'   => NDM_PROCEDURE_POST_TYPE,
+			'post_type'   => array_keys( ndm_headless_procedure_types() ),
 			'post_status' => 'publish',
 			'numberposts' => 500,
 			'orderby'     => 'title',
@@ -540,6 +656,7 @@ function ndm_headless_procedure_rest_list() {
 		$list[] = array(
 			'slug'  => $post->post_name,
 			'title' => html_entity_decode( get_the_title( $post ), ENT_QUOTES, 'UTF-8' ),
+			'type'  => ndm_headless_procedure_types()[ $post->post_type ][0],
 		);
 	}
 
@@ -547,7 +664,7 @@ function ndm_headless_procedure_rest_list() {
 }
 
 /**
- * GET ndm/v1/procedures/<slug>: one published procedure.
+ * GET ndm/v1/procedures/<slug>: one published procedure page, of any procedure post type.
  *
  * @param WP_REST_Request $request Request.
  * @return WP_REST_Response|WP_Error
@@ -555,7 +672,7 @@ function ndm_headless_procedure_rest_list() {
 function ndm_headless_procedure_rest_one( $request ) {
 	$posts = get_posts(
 		array(
-			'post_type'   => NDM_PROCEDURE_POST_TYPE,
+			'post_type'   => array_keys( ndm_headless_procedure_types() ),
 			'post_status' => 'publish',
 			'name'        => (string) $request['slug'],
 			'numberposts' => 1,
@@ -600,7 +717,8 @@ function ndm_headless_procedure_post_changed( $post_id ) {
 	}
 
 	// A Before & After case may be a photo of a procedure page; a product gives its price list a title and a text.
-	if ( in_array( get_post_type( $post_id ), array( NDM_PROCEDURE_POST_TYPE, NDM_BA_POST_TYPE, 'product' ), true ) ) {
+	$type = get_post_type( $post_id );
+	if ( ndm_headless_is_procedure_type( $type ) || in_array( $type, array( NDM_BA_POST_TYPE, 'product' ), true ) ) {
 		ndm_headless_procedure_changed();
 	}
 }
@@ -622,7 +740,7 @@ function ndm_headless_procedure_meta_changed( $meta_id, $post_id, $meta_key ) {
 	}
 
 	$type = get_post_type( $post_id );
-	if ( NDM_PROCEDURE_POST_TYPE === $type || ( '_thumbnail_id' === $meta_key && NDM_BA_POST_TYPE === $type ) ) {
+	if ( ndm_headless_is_procedure_type( $type ) || ( '_thumbnail_id' === $meta_key && NDM_BA_POST_TYPE === $type ) ) {
 		ndm_headless_procedure_changed();
 	}
 }
@@ -709,13 +827,14 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	/**
 	 * Creates procedures from JSON on standard input:
 	 *
-	 *   [ { "slug": "botox", "title": "Botox®", "date": "2026-11-10",
+	 *   [ { "slug": "botox", "title": "Botox®", "type": "ndm_injectable", "date": "2026-11-10",
 	 *       "hero": "assets/botox/hero.jpg", "heroAlt": "...",
 	 *       "content": { ...the fields of the edit screen; a photo is a file path (or { "file", "alt" });
 	 *                    a row of "price_list" names its WooCommerce product ("product": "Botox Cosmetic"),
 	 *                    which must exist; "cases" is a list of titles of existing Before & After cases... } } ]
 	 *
-	 * A procedure whose slug already exists (in any state, the trash included) is left exactly as it
+	 * "type" is the post type the page goes into (one of ndm_headless_procedure_types(); empty: Procedures).
+	 * A procedure whose slug already exists in any procedure type (in any state, the trash included) is left exactly as it
 	 * is, so running this again never overwrites an edit.
 	 *
 	 * ## OPTIONS
@@ -753,12 +872,18 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 					continue;
 				}
 
+				$type = isset( $procedure['type'] ) && '' !== $procedure['type'] ? (string) $procedure['type'] : NDM_PROCEDURE_POST_TYPE;
+				if ( ! ndm_headless_is_procedure_type( $type ) ) {
+					WP_CLI::warning( "Skipped {$slug}: \"{$type}\" is not a procedure post type." );
+					continue;
+				}
+
 				$existing = array();
 				// A trashed post's slug is "<slug>__trashed".
 				foreach ( array( $slug, $slug . '__trashed' ) as $name ) {
 					$existing = $existing ? $existing : get_posts(
 						array(
-							'post_type'   => NDM_PROCEDURE_POST_TYPE,
+							'post_type'   => array_keys( ndm_headless_procedure_types() ),
 							'name'        => $name,
 							'post_status' => 'any, trash',
 							'numberposts' => 1,
@@ -824,7 +949,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 				$date = ! empty( $procedure['date'] ) ? gmdate( 'Y-m-d 09:00:00', (int) strtotime( (string) $procedure['date'] ) ) : '';
 				$id   = wp_insert_post(
 					array(
-						'post_type'     => NDM_PROCEDURE_POST_TYPE,
+						'post_type'     => $type,
 						'post_status'   => 'publish',
 						'post_name'     => $slug,
 						'post_title'    => wp_slash( $title ),
@@ -847,7 +972,67 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 					}
 				}
 
-				WP_CLI::success( "Created: procedure {$id} ({$slug})." );
+				WP_CLI::success( "Created: procedure {$id} ({$slug}) in {$type}." );
+			}
+		}
+	);
+
+	/**
+	 * Moves procedure pages to another procedure post type (for example from Procedures to Injectables).
+	 * The post keeps its ID, slug, title, fields, header photo, dates and status, so its address on the
+	 * site does not change; only the list it is managed in does.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <slug>...
+	 * : Slug (or ID) of each page to move.
+	 *
+	 * --to=<post-type>
+	 * : ndm_procedure, ndm_injectable, ndm_laser, ndm_body, ndm_vein or ndm_hair.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp ndm procedure-move botox --to=ndm_injectable
+	 */
+	WP_CLI::add_command(
+		'ndm procedure-move',
+		function ( $args, $assoc_args ) {
+			$to = isset( $assoc_args['to'] ) ? (string) $assoc_args['to'] : '';
+			if ( ! ndm_headless_is_procedure_type( $to ) ) {
+				WP_CLI::error( 'Give the post type to move to: --to=' . implode( '|', array_keys( ndm_headless_procedure_types() ) ) . '.' );
+			}
+
+			foreach ( $args as $arg ) {
+				$found = ctype_digit( $arg ) ? array( (int) $arg ) : get_posts(
+					array(
+						'post_type'   => array_keys( ndm_headless_procedure_types() ),
+						'name'        => sanitize_title( $arg ),
+						'post_status' => 'any',
+						'numberposts' => 2,
+						'fields'      => 'ids',
+					)
+				);
+				if ( 1 !== count( $found ) || ! ndm_headless_is_procedure_type( get_post_type( $found[0] ) ) ) {
+					WP_CLI::warning( "{$arg}: " . ( $found ? 'more than one procedure page has this slug, give its ID.' : 'no procedure page found.' ) );
+					continue;
+				}
+
+				$id   = (int) $found[0];
+				$from = get_post_type( $id );
+				if ( $from === $to ) {
+					WP_CLI::log( "Kept: {$arg} ({$id}) is already in {$to}." );
+					continue;
+				}
+
+				$slug = get_post_field( 'post_name', $id );
+				set_post_type( $id, $to );
+				clean_post_cache( $id );
+				ndm_headless_procedure_changed();
+
+				if ( get_post_type( $id ) !== $to || get_post_field( 'post_name', $id ) !== $slug ) {
+					WP_CLI::error( "{$arg} ({$id}): the move did not hold." );
+				}
+				WP_CLI::success( "Moved: {$arg} ({$id}) from {$from} to {$to}; address /{$slug} unchanged." );
 			}
 		}
 	);
