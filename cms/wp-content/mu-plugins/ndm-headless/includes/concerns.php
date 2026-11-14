@@ -91,7 +91,7 @@ add_action( 'after_setup_theme', 'ndm_headless_concern_thumbnails', 100 );
  * Every field of a concern, grouped as the boxes of the edit screen, in page order.
  *
  * Field types: text, textarea, lines (one item per line), image (media library), checkbox, select,
- * product (a WooCommerce product or product category, searched and picked; `only` => 'product' leaves categories out), posts (entries of one post type, searched and
+ * product (a WooCommerce product or product category, searched and picked; `only` => 'product' leaves categories out, `only` => 'category' leaves products out), posts (entries of one post type, searched and
  * picked: blog posts by default, `post_type` and `rest` name another), repeater (rows of sub-fields).
  *
  * There is no price field, on purpose: every price the site shows is a WooCommerce price.
@@ -532,7 +532,8 @@ function ndm_headless_concern_source( $value ) {
 }
 
 /**
- * GET ndm/v1/concern-products?search=: products (and whole categories, unless only=product) of the
+ * GET ndm/v1/concern-products?search=: products (and whole categories, unless only=product; categories
+ * alone with only=category) of the
  * price list for the edit screen's product search. For signed-in editors only.
  *
  * @param WP_REST_Request $request Request.
@@ -546,13 +547,16 @@ function ndm_headless_concern_rest_products( $request ) {
 		return rest_ensure_response( $found );
 	}
 
-	if ( '' !== $search && 'product' !== $request['only'] ) {
+	// A field for categories only lists them all before anything is typed.
+	$only_categories = 'category' === $request['only'];
+
+	if ( ( '' !== $search || $only_categories ) && 'product' !== $request['only'] ) {
 		$terms = get_terms(
 			array(
 				'taxonomy'   => 'product_cat',
 				'hide_empty' => true,
 				'search'     => $search,
-				'number'     => 5,
+				'number'     => $only_categories ? 40 : 5,
 			)
 		);
 		foreach ( is_array( $terms ) ? $terms : array() as $term ) {
@@ -561,6 +565,10 @@ function ndm_headless_concern_rest_products( $request ) {
 				$found[] = $source;
 			}
 		}
+	}
+
+	if ( $only_categories ) {
+		return rest_ensure_response( $found );
 	}
 
 	$args = array(
@@ -646,16 +654,17 @@ function ndm_headless_concern_field( $field, $name, $value ) {
 
 		case 'product':
 			$picked = ndm_headless_concern_source( (string) $value );
+			$things = isset( $field['only'] ) && 'category' === $field['only'] ? array( 'category', 'categories' ) : array( 'product', 'products' );
 			echo '<span class="ndm-cn-label">' . esc_html( $field['label'] ) . '</span>';
 			echo '<input type="hidden" name="' . esc_attr( $name ) . '" value="' . esc_attr( (string) $value ) . '" class="ndm-cn-source-value">';
 			echo '<p class="ndm-cn-source-now">';
 			echo '<strong class="ndm-cn-source-name">' . esc_html( $picked ? $picked['label'] : ( '' !== (string) $value ? 'No longer in WooCommerce' : '' ) ) . '</strong> ';
 			echo '<span class="ndm-cn-source-note">' . esc_html( $picked ? $picked['note'] : '' ) . '</span> ';
-			echo '<button type="button" class="button-link button-link-delete ndm-cn-source-clear"' . ( '' === (string) $value ? ' hidden' : '' ) . '>Remove product</button>';
+			echo '<button type="button" class="button-link button-link-delete ndm-cn-source-clear"' . ( '' === (string) $value ? ' hidden' : '' ) . '>Remove ' . esc_html( $things[0] ) . '</button>';
 			echo '</p>';
 			echo '<div class="ndm-cn-search">';
-			echo '<label class="screen-reader-text" for="' . esc_attr( $id ) . '">Search products</label>';
-			echo '<input type="search" id="' . esc_attr( $id ) . '" class="regular-text ndm-cn-search-box ndm-cn-source-box" placeholder="Search products" autocomplete="off"' . ( isset( $field['only'] ) ? ' data-only="' . esc_attr( $field['only'] ) . '"' : '' ) . '>';
+			echo '<label class="screen-reader-text" for="' . esc_attr( $id ) . '">Search ' . esc_html( $things[1] ) . '</label>';
+			echo '<input type="search" id="' . esc_attr( $id ) . '" class="regular-text ndm-cn-search-box ndm-cn-source-box" placeholder="Search ' . esc_attr( $things[1] ) . '" autocomplete="off"' . ( isset( $field['only'] ) ? ' data-only="' . esc_attr( $field['only'] ) . '"' : '' ) . '>';
 			echo '<span class="spinner"></span>';
 			echo '<ul class="ndm-cn-found" aria-live="polite"></ul>';
 			echo '</div>' . $help; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above.

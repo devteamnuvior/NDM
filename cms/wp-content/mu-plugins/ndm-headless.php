@@ -33,6 +33,7 @@ require_once NDM_HEADLESS_DIR . '/includes/concerns.php';
 require_once NDM_HEADLESS_DIR . '/includes/procedures.php';
 require_once NDM_HEADLESS_DIR . '/includes/aptos.php';
 require_once NDM_HEADLESS_DIR . '/includes/about.php';
+require_once NDM_HEADLESS_DIR . '/includes/vip-sale.php';
 require_once NDM_HEADLESS_DIR . '/includes/home.php';
 require_once NDM_HEADLESS_DIR . '/includes/blog.php';
 require_once NDM_HEADLESS_DIR . '/includes/bookings.php';
