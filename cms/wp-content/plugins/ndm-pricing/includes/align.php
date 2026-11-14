@@ -118,6 +118,13 @@ function ndm_pricing_cli_align( $args, $assoc_args ) {
 				$dirty = true;
 			}
 
+			// The reference lists it, so it shows.
+			if ( ndm_pricing_is_hidden( $found ) ) {
+				$say( sprintf( '%s: product "%s" shown again', $want_cat['name'], $title ) );
+				$found->update_meta_data( NDM_PRICING_HIDDEN, '' );
+				$dirty = true;
+			}
+
 			if ( $dirty && $apply ) {
 				$found->save();
 			}

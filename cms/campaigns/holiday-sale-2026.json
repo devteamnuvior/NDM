@@ -12,12 +12,6 @@
   ],
   "corrections": [
     { "product": ["Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", "Aptos Excellence Visage Thread Method"], "option": "Face – Mid & Lower", "regular": 4400, "sale": 3400, "label": "Save $1000 Off" },
-    { "product": ["Profile Balance Package", "Profile Balance"], "hidden": true },
-    { "product": ["Refreshed Eye Package", "Refreshed Eye"], "hidden": true },
-    { "product": ["Lower Face Contour Package", "Lower Face Contour"], "hidden": true },
-    { "product": ["Midface Lift Package", "Midface Lift"], "hidden": true },
-    { "product": "Full Midface Rejuvenation", "hidden": true },
-    { "product": "Upper Face Support Package", "hidden": true },
     { "product": "Microneedling-Face", "option": "Single session", "regular": 490, "sale": null, "label": "" },
     { "product": "Microneedling-Face", "option": "Package of 3", "regular": 1470, "sale": 1029, "label": "30% OFF" },
     { "product": "Microneedling-Face", "option": "Package of 6", "regular": 2940, "sale": 2058, "label": "30% OFF" },
