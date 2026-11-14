@@ -3,7 +3,7 @@ import { NEXT_URL } from "../playwright.config";
 
 /*
  * Pages made from a WordPress post live in their post type's folder (src/lib/post-paths.ts): concerns
- * in /concerns/, the procedure lists in /procedures/, /injectables/, /laser/, /body/, /veins/, /hair/,
+ * in /concerns/, the procedure lists in /procedures/, /injectables/, /skin/, /laser/, /body/, /veins/, /hair/,
  * blog posts in /blog/. The old one-part addresses, and a procedure asked for in another list's folder,
  * send the visitor on. Needs WordPress running (Botox is in Injectables).
  */

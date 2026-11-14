@@ -38,6 +38,7 @@ function ndm_headless_procedure_types() {
 	return array(
 		NDM_PROCEDURE_POST_TYPE => array( 'Procedures', 'Procedure', 'procedure-posts', 'dashicons-star-filled' ),
 		'ndm_injectable'        => array( 'Injectables', 'Injectable', 'injectable-posts', 'dashicons-plus-alt' ),
+		'ndm_skin'              => array( 'Skin', 'Skin treatment', 'skin-posts', 'dashicons-admin-appearance' ),
 		'ndm_laser'             => array( 'Laser', 'Laser treatment', 'laser-posts', 'dashicons-lightbulb' ),
 		'ndm_body'              => array( 'Body', 'Body treatment', 'body-posts', 'dashicons-universal-access' ),
 		'ndm_vein'              => array( 'Veins', 'Vein treatment', 'vein-posts', 'dashicons-chart-line' ),
@@ -467,7 +468,7 @@ function ndm_headless_procedure_intro( $post ) {
 	} else {
 		echo '<p><strong>Page on the site:</strong> its address is the "Slug" below, made from the title when the procedure is first saved.</p>';
 	}
-	echo '<p>Every page of Procedures, Injectables, Laser, Body, Veins and Hair has the same design and the same boxes; the address is the folder of its list and the slug (/injectables/botox, /laser/..., /body/..., /veins/..., /hair/..., /procedures/...), and the slug must be unique across all of them.</p>';
+	echo '<p>Every page of Procedures, Injectables, Skin, Laser, Body, Veins and Hair has the same design and the same boxes; the address is the folder of its list and the slug (/injectables/botox, /skin/..., /laser/..., /body/..., /veins/..., /hair/..., /procedures/...), and the slug must be unique across all of them.</p>';
 	echo '<p>Filled in by the site on every procedure page, not typed here: every price and offer (from the products picked in the Price List box), the section bar, the booking form, the clinic film, Why NewDermaMed, Our team, Testimonials, Visit us and Start your journey. A section whose box is left empty is left out of the page.</p>';
 	echo '</div>';
 }
@@ -988,7 +989,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	 * : Slug (or ID) of each page to move.
 	 *
 	 * --to=<post-type>
-	 * : ndm_procedure, ndm_injectable, ndm_laser, ndm_body, ndm_vein or ndm_hair.
+	 * : ndm_procedure, ndm_injectable, ndm_skin, ndm_laser, ndm_body, ndm_vein or ndm_hair.
 	 *
 	 * ## EXAMPLES
 	 *

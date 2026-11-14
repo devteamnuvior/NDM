@@ -298,17 +298,17 @@ Valadkhani's review.
 
 ## Procedure pages
 
-A procedure page of the site (for example `/injectables/botox`) is a post of one of the **six procedure post
+A procedure page of the site (for example `/injectables/botox`) is a post of one of the **seven procedure post
 types**, listed together in the admin menu: "Procedures" (`ndm_procedure`), "Injectables"
-(`ndm_injectable`), "Laser" (`ndm_laser`), "Body" (`ndm_body`), "Veins" (`ndm_vein`) and "Hair"
+(`ndm_injectable`), "Skin" (`ndm_skin`), "Laser" (`ndm_laser`), "Body" (`ndm_body`), "Veins" (`ndm_vein`) and "Hair"
 (`ndm_hair`). They are one post type in all but name (`ndm_headless_procedure_types()` in
 `includes/procedures.php`): the same boxes, the same post meta, the same routes (`ndm/v1/procedures`
-lists the pages of all six, each with its `type`), so the site needs no change for a new list. A slug
-must be unique across all six and the Concerns (WordPress adds a number otherwise). Botox is in
+lists the pages of all seven, each with its `type`), so the site needs no change for a new list. A slug
+must be unique across all seven and the Concerns (WordPress adds a number otherwise). Botox is in
 Injectables. To move a page to another list without changing its address or content:
 `wp ndm procedure-move <slug> --to=ndm_injectable` (the import takes `"type"` per page). Every procedure has the same design, the Botox page's; a post
 carries only its own content. The page's address is **its list's folder and the post's slug**:
-`/procedures/`, `/injectables/`, `/laser/`, `/body/`, `/veins/` or `/hair/<slug>` (the folders are
+`/procedures/`, `/injectables/`, `/skin/`, `/laser/`, `/body/`, `/veins/` or `/hair/<slug>` (the folders are
 written in `ndm_headless_site_path()`, `includes/config.php`, and in the site's
 `web/src/lib/post-paths.ts`; a new list needs a folder in both). A new published procedure is a new
 page, without a new build. Moving a page to another list changes its folder; the old address sends the

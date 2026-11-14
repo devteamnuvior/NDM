@@ -8,7 +8,7 @@ import { getProcedurePaths, getProcedureView } from "@/lib/procedure";
 /**
  * A procedure page, in the Botox page's design: a post of one of the procedure post types, at its type's
  * folder and its slug (/procedures/<slug>, /injectables/<slug>, /laser/<slug>, /body/<slug>,
- * /veins/<slug>, /hair/<slug>; for example /injectables/botox). `slug` here is the folder, `post` the
+ * /veins/<slug>, /hair/<slug>, /skin/<slug>; for example /injectables/botox). `slug` here is the folder, `post` the
  * post's slug. A procedure asked for under another type's folder (it was moved to another list in
  * WordPress) is sent to its own address.
  */

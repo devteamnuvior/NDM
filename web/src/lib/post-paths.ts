@@ -4,6 +4,7 @@
  *   Concerns             /concerns/<slug>
  *   Procedures           /procedures/<slug>
  *   Injectables          /injectables/<slug>     (Botox: /injectables/botox)
+ *   Skin                 /skin/<slug>
  *   Laser                /laser/<slug>
  *   Body                 /body/<slug>
  *   Veins                /veins/<slug>
@@ -19,6 +20,7 @@
 export const PROCEDURE_FOLDERS = {
   Procedures: "procedures",
   Injectables: "injectables",
+  Skin: "skin",
   Laser: "laser",
   Body: "body",
   Veins: "veins",

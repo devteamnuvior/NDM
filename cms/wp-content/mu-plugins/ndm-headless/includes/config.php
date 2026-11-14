@@ -70,7 +70,7 @@ function ndm_headless_frontend_url() {
 /**
  * The address of a post's page on the site: its post type's folder, then its slug. Written the same
  * way in the site's `web/src/lib/post-paths.ts`: concerns /concerns/<slug>, the procedure lists
- * /procedures/, /injectables/, /laser/, /body/, /veins/, /hair/<slug>, blog posts /blog/<slug>.
+ * /procedures/, /injectables/, /skin/, /laser/, /body/, /veins/, /hair/<slug>, blog posts /blog/<slug>.
  *
  * @param WP_Post $post A post.
  * @return string A path starting with "/", or an empty string for a post without a slug or a page.
@@ -84,6 +84,7 @@ function ndm_headless_site_path( $post ) {
 		'ndm_concern'    => 'concerns',
 		'ndm_procedure'  => 'procedures',
 		'ndm_injectable' => 'injectables',
+		'ndm_skin'       => 'skin',
 		'ndm_laser'      => 'laser',
 		'ndm_body'       => 'body',
 		'ndm_vein'       => 'veins',
