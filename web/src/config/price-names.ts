@@ -161,10 +161,12 @@ export const PRICE_NAMES: Record<string, [categoryId: string, item?: string]> = 
     "Tight Sculpting"
   ],
   "non surgical butt lift": [
-    "non-surgical-butt-lift"
+    "non-surgical-butt-lift",
+    "Non-Surgical Butt Lift"
   ],
   "non surgical bbl": [
-    "non-surgical-butt-lift"
+    "non-surgical-butt-lift",
+    "Non-Surgical Butt Lift"
   ],
   "prp hair restoration": [
     "hair-loss",
