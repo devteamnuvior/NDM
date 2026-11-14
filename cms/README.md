@@ -115,6 +115,20 @@ category changes, wherever the change was made. WordPress then calls `NDM_REVALI
 `wp ndm-pricing import` (reads it from standard input) creates the categories, variable products and
 variations once. It never touches anything that already exists.
 
+**A price list copied in another way** (for example with WooCommerce's own product importer) lacks
+this plugin's settings: its categories are hidden, so the Pricing page is empty, and its products have
+no import key, so `import` would duplicate them and the offers import finds none. `wp ndm-pricing
+repair` (same JSON on standard input) matches each category by slug and each product by its exact
+name and sets, only where missing, the category settings (visible, order, per unit, product order),
+the import keys and the offer labels. It creates, deletes and reprices nothing (a price that differs
+from the original list is only reported). Without `--apply` it is a dry run:
+
+```
+node --experimental-strip-types ../web/scripts/export-price-list.mjs > /tmp/price-list.json
+wp ndm-pricing repair < /tmp/price-list.json
+wp ndm-pricing repair --apply < /tmp/price-list.json
+```
+
 ## Current offers (Promotion page, offers wheel)
 
 An offer is a WooCommerce product with one piece of post meta, `_ndm_promo`: `order`, `name` (card
