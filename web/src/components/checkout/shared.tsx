@@ -282,7 +282,8 @@ export function OrderSummary({ t, lines, scroll }: { t: Totals; lines: CartLine[
 /** Pairs well with your treatment / add to your plan: suggestions with WooCommerce's current prices. */
 export function CartPairs({ pairs, title = "Pairs well with your treatment", kicker = "Complete your plan", max = 4, compact }: { pairs: Omit<CartLine, "qty">[]; title?: string; kicker?: string; max?: number; compact?: boolean }) {
   const cart = useCart();
-  const list = pairs.filter((x) => !cart.lines.some((l) => l.key === x.key)).slice(0, max);
+  /* nothing that is already in the cart, in any of its options */
+  const list = pairs.filter((x) => !cart.lines.some((l) => l.key === x.key || (!!x.productId && l.productId === x.productId))).slice(0, max);
   if (!list.length) return null;
   return (
     <div className={compact ? "" : "mt-12"}>

@@ -25,6 +25,18 @@ export interface CatalogEntry {
   code: number;
 }
 
+/**
+ * How a cart line names two kinds of treatment (the price list keeps its own titles): a CoolSculpting line
+ * says which CoolSculpting it is ("CoolSculpting Regular, 2 zones"), and Botox sits under its own name
+ * rather than under the category it shares with another product.
+ */
+function cartNames(category: string, name: string): { cat: string; name: string } {
+  if (/^botox(\s+cosmetic)?$/i.test(name.trim())) return { cat: "Botox", name: "Botox" };
+  if (/^regular treatment zone$/i.test(name.trim())) return { cat: category, name: "CoolSculpting Regular" };
+  const cool = /^coolsculpting\s+(.+)$/i.exec(name.trim());
+  return cool ? { cat: category, name: `CoolSculpting ${cool[1]}` } : { cat: category, name };
+}
+
 const norm = (s: string): string => s.trim().toLowerCase().replace(/\s+/g, " ");
 export const nameKey = (name: string, label: string): string => `${norm(name)}|${norm(label)}`;
 
@@ -49,10 +61,12 @@ export async function getCartCatalog(): Promise<CartCatalog> {
   for (const c of view.categories) {
     for (const it of c.items) {
       for (const o of it.options) {
-        const entry: CatalogEntry = { productId: o.productId, variationId: o.variationId, cat: c.name, name: it.name, label: o.label, price: o.price, was: o.was, unit: o.unit, code: o.code ?? 0 };
+        const entry: CatalogEntry = { productId: o.productId, variationId: o.variationId, ...cartNames(c.name, it.name), label: o.label, price: o.price, was: o.was, unit: o.unit, code: o.code ?? 0 };
         const id = o.variationId || o.productId;
         if (!byId.has(id)) byId.set(id, entry); /* a product in two categories: the first one names it */
         if (!byName.has(nameKey(it.name, o.label))) byName.set(nameKey(it.name, o.label), entry);
+        /* a line saved under the cart's own name for it */
+        if (!byName.has(nameKey(entry.name, o.label))) byName.set(nameKey(entry.name, o.label), entry);
       }
     }
   }
