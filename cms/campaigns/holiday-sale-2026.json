@@ -11,11 +11,11 @@
     { "id": "extended", "from": "2026-12-02 00:00", "label": "Black Friday Extended", "badge": "BLACK FRIDAY" }
   ],
   "corrections": [
-    { "product": "Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", "option": "Face – Mid & Lower", "regular": 4400, "sale": 3400, "label": "Save $1000 Off" },
-    { "product": "Profile Balance Package", "hidden": true },
-    { "product": "Refreshed Eye Package", "hidden": true },
-    { "product": "Lower Face Contour Package", "hidden": true },
-    { "product": "Midface Lift Package", "hidden": true },
+    { "product": ["Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", "Aptos Excellence Visage Thread Method"], "option": "Face – Mid & Lower", "regular": 4400, "sale": 3400, "label": "Save $1000 Off" },
+    { "product": ["Profile Balance Package", "Profile Balance"], "hidden": true },
+    { "product": ["Refreshed Eye Package", "Refreshed Eye"], "hidden": true },
+    { "product": ["Lower Face Contour Package", "Lower Face Contour"], "hidden": true },
+    { "product": ["Midface Lift Package", "Midface Lift"], "hidden": true },
     { "product": "Full Midface Rejuvenation", "hidden": true },
     { "product": "Upper Face Support Package", "hidden": true },
     { "product": "Microneedling-Face", "option": "Single session", "regular": 490, "sale": null, "label": "" },
@@ -50,12 +50,12 @@
     { "category": "hair-loss", "products": "^PRP Scalp", "options": ["Package of 6"], "off": 30 }
   ],
   "fixed": [
-    { "product": "Botox Cosmetic", "option": "60 units", "regular": null, "price": 504 },
-    { "product": "Botox Cosmetic", "option": "120 units", "regular": null, "price": 1008 },
-    { "product": "Botox Cosmetic", "option": "180 units", "regular": null, "price": 1512 },
+    { "product": ["Botox Cosmetic", "Botox"], "option": "60 units", "regular": null, "price": 504 },
+    { "product": ["Botox Cosmetic", "Botox"], "option": "120 units", "regular": null, "price": 1008 },
+    { "product": ["Botox Cosmetic", "Botox"], "option": "180 units", "regular": null, "price": 1512 },
     { "product": "Lip Enhancement", "option": "2 Syringes", "regular": 1500, "price": 900 },
     { "product": "Standard Contour Areas", "option": "2 Syringes", "regular": 1600, "price": 960 },
-    { "product": "Precision / Advanced Areas", "option": "2 Syringes", "regular": 1700, "price": 1100 },
+    { "product": ["Precision / Advanced Areas", "Premium Fillers"], "option": "2 Syringes", "regular": 1700, "price": 1100 },
     { "product": "Bio-Stimulator – Sculptra", "option": "1 Vial", "regular": 900, "price": 599 },
     { "product": "Bio-Stimulator – Sculptra", "option": "2 Vials", "regular": 1800, "price": 1198 },
     { "product": "Bio-Stimulator – Radiesse", "option": "1 Syringe", "regular": 900, "price": 599 },
@@ -64,8 +64,8 @@
     { "product": "Bio-Stimulator – Hand Rejuvenation with Radiesse", "option": "2 Syringes", "regular": 1800, "price": 1198 },
     { "product": "Skin Booster – HA (Hyaluronic Acid)", "option": "1 syringe", "regular": 750, "price": 399 },
     { "product": "Skin Booster – HA (Hyaluronic Acid)", "option": "2 syringe", "regular": 1500, "price": 798 },
-    { "product": "Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", "option": "Face – Mid & Lower", "regular": 4400, "price": 3400, "label": "Save $1000 Off" },
-    { "product": "Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", "option": "Neck", "regular": 3900, "price": 2900, "label": "Save $1000 Off" },
-    { "product": "Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", "option": "Face + neck", "regular": 6900, "price": 5900, "label": "Save $1000 Off" }
+    { "product": ["Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", "Aptos Excellence Visage Thread Method"], "option": "Face – Mid & Lower", "regular": 4400, "price": 3400, "label": "Save $1000 Off" },
+    { "product": ["Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", "Aptos Excellence Visage Thread Method"], "option": "Neck", "regular": 3900, "price": 2900, "label": "Save $1000 Off" },
+    { "product": ["Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", "Aptos Excellence Visage Thread Method"], "option": "Face + neck", "regular": 6900, "price": 5900, "label": "Save $1000 Off" }
   ]
 }

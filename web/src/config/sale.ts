@@ -20,17 +20,18 @@ export const SALE_TIMERS: Record<string, string> = { "black-friday": "Offers end
 
 /**
  * The cards of "Sale prices": a title and a quantity, and which line of the WooCommerce price list gives the
- * price (product name and option). No price is written here; a card whose line is not in the sale is left out.
+ * price (product name, as either copy of the price list calls it, and option; case and dashes do not matter).
+ * No price is written here; a card whose line is not in the sale is left out.
  * `drug`: a prescription product, shown by name, quantity and price only and kept out of the header's tickets.
  */
-export const SALE_PRICE_CARDS: { title: string; qty: string; product: string; option: string; drug?: boolean }[] = [
-  { title: "Botox®", qty: "60 units", product: "Botox Cosmetic", option: "60 units", drug: true },
-  { title: "Lip filler", qty: "2 syringes", product: "Lip Enhancement", option: "2 Syringes" },
-  { title: "Cheek and smile-line filler", qty: "2 syringes", product: "Standard Contour Areas", option: "2 Syringes" },
-  { title: "Sculptra®", qty: "1 vial", product: "Bio-Stimulator – Sculptra", option: "1 Vial" },
-  { title: "Radiesse®", qty: "1 syringe", product: "Bio-Stimulator – Radiesse", option: "1 Syringe" },
-  { title: "Skin booster", qty: "1 syringe", product: "Skin Booster – HA (Hyaluronic Acid)", option: "1 syringe" },
-  { title: "Aptos thread lift", qty: "Face, mid and lower", product: "Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", option: "Face – Mid & Lower" },
+export const SALE_PRICE_CARDS: { title: string; qty: string; product: string[]; option: string; drug?: boolean }[] = [
+  { title: "Botox®", qty: "60 units", product: ["Botox Cosmetic", "Botox"], option: "60 units", drug: true },
+  { title: "Lip filler", qty: "2 syringes", product: ["Lip Enhancement"], option: "2 Syringes" },
+  { title: "Cheek and smile-line filler", qty: "2 syringes", product: ["Standard Contour Areas"], option: "2 Syringes" },
+  { title: "Sculptra®", qty: "1 vial", product: ["Bio-Stimulator – Sculptra"], option: "1 Vial" },
+  { title: "Radiesse®", qty: "1 syringe", product: ["Bio-Stimulator – Radiesse"], option: "1 Syringe" },
+  { title: "Skin booster", qty: "1 syringe", product: ["Skin Booster – HA (Hyaluronic Acid)"], option: "1 syringe" },
+  { title: "Aptos thread lift", qty: "Face, mid and lower", product: ["Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)", "Aptos Excellence Visage Thread Method"], option: "Face – Mid & Lower" },
 ];
 
 const GROUPS: SaleCopy["deals"]["groups"] = [

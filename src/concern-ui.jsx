@@ -388,13 +388,14 @@ function CnRelated({ p }) {
         <ul className="no-scrollbar -mx-[var(--gx)] mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-[var(--gx)] pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 xl:grid-cols-6" role="list" style={{ scrollPaddingInline: 'var(--gx)' }}>
           {p.related_tx.map(([t, k, img, kind], i) => (
             <li key={t} className="rv w-[62%] shrink-0 snap-start sm:w-auto" style={{ transitionDelay: `${0.04 * i}s` }}>
-              <a href={slug(k)} className="guide-rel group relative block aspect-[4/5] overflow-hidden rounded-[20px] bg-ndm-mist text-white">
-                <img src={img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.06]" />
-                <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#0B0F13]/85 via-[#0B0F13]/20 to-transparent" />
-                <span className="absolute left-3 top-3 rounded-full bg-white/85 px-2.5 py-1 font-inter text-[11.5px] font-medium text-ndm-ink backdrop-blur-[6px]">{kind}</span>
-                <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3.5">
-                  <span className="font-aeonik text-[18px] leading-[1.15]">{t}</span>
-                  <span aria-hidden="true" className="grid size-8 shrink-0 place-items-center rounded-full bg-white text-ndm-deep transition-transform duration-500 group-hover:-rotate-45"><IconArrow size={12} /></span>
+              <a href={slug(k)} className="guide-rel group flex h-full flex-col rounded-[20px] bg-white p-2 ring-1 ring-ndm-ink/[.06] transition-shadow duration-500 hover:shadow-[0_24px_44px_-30px_rgba(11,15,19,.4)]">
+                <span className="relative block aspect-square overflow-hidden rounded-[14px] bg-ndm-mist">
+                  <img src={img} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.06]" />
+                  <span className="absolute left-2.5 top-2.5 rounded-full bg-white/90 px-2.5 py-1 font-inter text-[11.5px] font-medium text-ndm-ink backdrop-blur-[6px]">{kind}</span>
+                </span>
+                <span className="flex flex-1 items-center justify-between gap-2 px-1.5 pb-1 pt-3">
+                  <span className="font-aeonik text-[17px] leading-[1.2] text-ndm-ink">{t}</span>
+                  <span aria-hidden="true" className="grid size-8 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep transition-transform duration-500 group-hover:-rotate-45"><IconArrow size={12} /></span>
                 </span>
               </a>
             </li>

@@ -461,6 +461,29 @@ function ndm_campaign_save_coupon( $campaign, $eligible ) {
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	/**
+	 * A product name or option label as it is compared: case, spacing and the kind of dash do not
+	 * matter ("2 Zones" is "2 zones", "Face – Mid & Lower" is "Face - Mid & Lower").
+	 *
+	 * @param mixed $text Name or label.
+	 * @return string
+	 */
+	function ndm_campaign_cli_key( $text ) {
+		return strtolower( trim( preg_replace( '/\s+/u', ' ', str_replace( array( '–', '—' ), '-', ndm_pricing_plain( (string) $text ) ) ) ) );
+	}
+
+	/**
+	 * Whether a product name or option label is the one a definition names; a definition may give
+	 * several names for one line (the name differs between two copies of the price list).
+	 *
+	 * @param string          $have   The name in WooCommerce.
+	 * @param string|string[] $wanted The name, or names, in the definition.
+	 * @return bool
+	 */
+	function ndm_campaign_cli_is( $have, $wanted ) {
+		return in_array( ndm_campaign_cli_key( $have ), array_map( 'ndm_campaign_cli_key', (array) $wanted ), true );
+	}
+
+	/**
 	 * The variations of the products a rule or a fixed price names.
 	 *
 	 * @param array $where category (slug), product (exact name) or products (a regular expression on the name).
@@ -479,7 +502,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		$lines = array();
 		foreach ( wc_get_products( $args ) as $product ) {
 			$name = ndm_pricing_plain( $product->get_name() );
-			if ( isset( $where['product'] ) && $name !== $where['product'] ) {
+			if ( isset( $where['product'] ) && ! ndm_campaign_cli_is( $name, $where['product'] ) ) {
 				continue;
 			}
 			if ( isset( $where['products'] ) && ! preg_match( '/' . $where['products'] . '/i', $name ) ) {
@@ -564,15 +587,19 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			$lines = ndm_campaign_cli_lines( array( 'product' => $fix['product'] ?? '' ) );
 
 			if ( ! isset( $fix['option'] ) ) {
-				$found = wc_get_products(
-					array(
-						'status' => 'publish',
-						'limit'  => -1,
-						'name'   => $fix['product'] ?? '',
-					)
+				$found = array_filter(
+					wc_get_products(
+						array(
+							'status' => 'publish',
+							'limit'  => -1,
+						)
+					),
+					static function ( $product ) use ( $fix ) {
+						return ndm_campaign_cli_is( $product->get_name(), $fix['product'] ?? '' );
+					}
 				);
 				if ( ! $found ) {
-					$problems[] = 'Correction: no product named "' . ( $fix['product'] ?? '' ) . '".';
+					$problems[] = 'Correction: no product named "' . implode( '" or "', (array) ( $fix['product'] ?? '' ) ) . '".';
 					continue;
 				}
 				foreach ( $found as $product ) {
@@ -587,12 +614,12 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 
 			$hit = null;
 			foreach ( $lines as $line ) {
-				if ( $line['label'] === $fix['option'] ) {
+				if ( ndm_campaign_cli_is( $line['label'], $fix['option'] ) ) {
 					$hit = $line;
 				}
 			}
 			if ( ! $hit ) {
-				$problems[] = 'Correction: "' . ( $fix['product'] ?? '' ) . '" has no option "' . $fix['option'] . '".';
+				$problems[] = 'Correction: "' . implode( '" or "', (array) ( $fix['product'] ?? '' ) ) . '" has no option "' . $fix['option'] . '".';
 				continue;
 			}
 
@@ -639,12 +666,12 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		foreach ( is_array( $def['fixed'] ?? null ) ? $def['fixed'] : array() as $fixed ) {
 			$hit = null;
 			foreach ( ndm_campaign_cli_lines( array( 'product' => $fixed['product'] ?? '' ) ) as $id => $line ) {
-				if ( $line['label'] === ( $fixed['option'] ?? '' ) ) {
+				if ( ndm_campaign_cli_is( $line['label'], $fixed['option'] ?? '' ) ) {
 					$hit = array( $id, $line );
 				}
 			}
 			if ( ! $hit ) {
-				$problems[] = 'Fixed price: "' . ( $fixed['product'] ?? '' ) . '" has no option "' . ( $fixed['option'] ?? '' ) . '".';
+				$problems[] = 'Fixed price: "' . implode( '" or "', (array) ( $fixed['product'] ?? '' ) ) . '" has no option "' . ( $fixed['option'] ?? '' ) . '".';
 				continue;
 			}
 			$planned[ $hit[0] ] = array(
@@ -660,13 +687,13 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		foreach ( is_array( $def['rules'] ?? null ) ? $def['rules'] : array() as $rule ) {
 			$matched = 0;
 			foreach ( ndm_campaign_cli_lines( $rule ) as $id => $line ) {
-				if ( isset( $planned[ $id ] ) || ! in_array( $line['label'], (array) ( $rule['options'] ?? array() ), true ) ) {
+				if ( isset( $planned[ $id ] ) || ! ndm_campaign_cli_is( $line['label'], (array) ( $rule['options'] ?? array() ) ) ) {
 					continue;
 				}
 				// The corrections above may not be saved yet in a dry run: a corrected regular price counts.
 				$regular = (float) $line['variation']->get_regular_price( 'edit' );
 				foreach ( is_array( $def['corrections'] ?? null ) ? $def['corrections'] : array() as $fix ) {
-					if ( ( $fix['product'] ?? '' ) === ndm_pricing_plain( $line['product']->get_name() ) && ( $fix['option'] ?? null ) === $line['label'] && isset( $fix['regular'] ) ) {
+					if ( isset( $fix['option'], $fix['regular'] ) && ndm_campaign_cli_is( $line['product']->get_name(), $fix['product'] ?? '' ) && ndm_campaign_cli_is( $line['label'], $fix['option'] ) ) {
 						$regular = (float) $fix['regular'];
 					}
 				}

@@ -175,7 +175,7 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }) {
   );
 }
 
-/* monthly specials (round 22, Ray's cards): Up to tag, price, name, Buy opens that category in the price list below */
+/* monthly specials (round 22, Ray's cards; centred in round 34): deal tag, From, price, name, Buy opens that category in the price list below */
 function PriceSpecials() {
   const ref = useRef(null);
   useReveal(ref);
@@ -188,17 +188,18 @@ function PriceSpecials() {
         <TwoTone id="specials-title" className="rv mx-auto mt-5" size="text-[clamp(30px,3.2vw,46px)]" lead={<>Exclusive<br /></>} strong="monthly specials" style={{ transitionDelay: '.06s' }} />
         <p className="rv mx-auto mt-4 font-inter text-[15px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>{sp.sub}</p>
       </div>
-      <ul role="list" className="mx-auto mt-[clamp(28px,3.4vw,44px)] grid w-full max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-4">
-        {sp.items.map(([n, price, id], i) => {
-          /* round 30: the card's price and offer come from the price list; the offer shows as the red deal tag */
+      {/* round 34: centred cards after the designer's reference: From chip, large price with its unit, name, Buy and the note; the red deal tag on top */}
+      <ul role="list" className="mx-auto mt-[clamp(28px,3.4vw,44px)] grid w-full max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
+        {sp.items.map(([n, id], i) => {
           const info = priceInfo(n) || priceFrom(id.replace(/^pg-/, ''));
+          const unit = info ? (info.unit || (info.per ? ' / ' + info.per.replace(/^per /, '') : '')) : '';
           return (
-          <li key={n} className="rv flex flex-col rounded-[20px] bg-white p-4 ring-1 ring-ndm-ink/[.06] md:p-5" style={{ transitionDelay: `${0.04 * i}s` }}>
-            {info && info.offer ? <span className="deal-badge self-start"><i aria-hidden="true">%</i>{info.offer}</span> : <span className="self-start rounded-full bg-ndm-blue/10 px-2.5 py-1 font-inter text-[11px] font-semibold uppercase tracking-[.12em] text-ndm-deep">Special</span>}
-            <span className="mt-3 block font-inter text-[11px] uppercase tracking-[.16em] text-ndm-muted">From</span>
-            <span className="mt-1 block font-aeonik text-[clamp(26px,2.4vw,34px)] leading-none tracking-[-0.03em] text-ndm-ink">{info ? pfmt(info.value) : price}{info && info.unit ? <span className="ml-1 font-inter text-[13px] tracking-normal text-ndm-muted">{info.unit.replace(' / ', '/ ')}</span> : null}</span>
-            <span className="mt-2 block font-inter text-[15px] font-medium leading-[1.3] text-ndm-ink">{n}</span>
-            <span className="mt-auto flex flex-wrap items-baseline gap-x-2 gap-y-1 pt-4"><a href={`#${id}`} onClick={(e) => go(e, id)} className="btn btn-buy h-9 px-4 text-[13px]">Buy</a><span className="font-inter text-[12.5px] text-ndm-muted">{sp.note}</span></span>
+          <li key={n} className="rv ps-card flex flex-col items-center rounded-[22px] bg-white px-3 pb-5 pt-4 text-center ring-1 ring-ndm-ink/[.06] md:px-5 md:pb-6 md:pt-5" style={{ transitionDelay: `${0.04 * i}s` }}>
+            {info && info.offer ? <span className="deal-badge"><i aria-hidden="true">%</i>{info.offer}</span> : <span className="deal-badge invisible" aria-hidden="true"><i>%</i>Offer</span>}
+            <span className="mt-4 rounded-full bg-ndm-blue/10 px-3 py-1 font-inter text-[11px] font-semibold uppercase tracking-[.16em] text-ndm-deep">From</span>
+            <span className="mt-3 flex flex-wrap items-baseline justify-center gap-x-1"><span className="font-aeonik text-[clamp(30px,3vw,44px)] leading-none tracking-[-0.03em] text-ndm-ink">{info ? pfmt(info.value) : ''}</span>{unit && <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted md:text-[14px]">{unit}</span>}</span>
+            <span className="mt-2.5 block font-inter text-[15px] font-medium leading-[1.3] text-ndm-ink md:text-[16.5px]">{n}</span>
+            <span className="mt-auto flex flex-col items-center pt-4"><a href={`#${id}`} onClick={(e) => go(e, id)} className="btn btn-buy h-10 px-6 text-[14px]">Buy</a><span className="mt-2 font-inter text-[12.5px] text-ndm-muted">{sp.note}</span></span>
           </li>
           );
         })}

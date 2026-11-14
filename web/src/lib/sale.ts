@@ -14,6 +14,10 @@ import type { SaleCopy, SalePhase, SalePriceCard, SaleView } from "@/types/sale"
  * list, the phases, dates and the checkout code are the campaign's. No price or date is typed on this site.
  */
 
+/** Names compared without regard to case, spacing or the kind of dash. */
+const key = (text: string): string => text.replace(/[–—]/g, "-").replace(/\s+/g, " ").trim().toLowerCase();
+const same = (a: string, b: string): boolean => key(a) === key(b);
+
 interface SaleOptions {
   look: SaleView["look"];
   planKey: string;
@@ -76,8 +80,8 @@ export async function buildSale({ look, planKey, copy: raw, mine, after }: SaleO
     ? []
     : SALE_PRICE_CARDS.flatMap((card): SalePriceCard[] => {
         for (const c of categories) {
-          const item = c.items.find((it) => it.name === card.product);
-          const option = item?.options.find((o) => o.label === card.option && o.sale);
+          const item = c.items.find((it) => card.product.some((name) => same(it.name, name)));
+          const option = item?.options.find((o) => same(o.label, card.option) && o.sale);
           if (!item || !option) continue;
           const photo = photos.get(item.id);
           return [{ title: card.title, qty: card.qty, price: option.price, regular: option.regular, drug: !!card.drug, img: card.drug ? "" : (photo?.src ?? ""), set: card.drug ? undefined : photo?.set, pos: photo?.pos ?? "50% 40%", cat: deals.some((d) => d.id === c.id) ? c.id : null }];

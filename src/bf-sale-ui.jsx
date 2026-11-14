@@ -15,6 +15,16 @@ const BFS_GROUP = {
   'laser-vaginal-tightening': 'Wellness', 'snoring-treatment': 'Wellness', 'toenail-fungus-removal': 'Wellness',
 };
 /* treatment photos for the deal cards (only where the site has one) */
+/* the Black Friday page keeps its own six specials (the site's monthly specials changed in round 34); price, unit and offer from the price list */
+const BFS_SPECIALS = [
+  { n: 'Lip Filler', img: 'assets/treatments/lip-filler.jpg', pos: '50% 35%', p: '562.50', u: 'per syringe', deal: 'Buy 1 get 1 50% off', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
+  { n: 'Microneedling', img: 'assets/treatments/microneedling.jpg', pos: '50% 40%', p: '245', u: '', deal: 'Up to 50% off', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
+  { n: 'Chemical Peel', img: 'assets/treatments/chemical-peel.jpg', pos: '50% 40%', p: '104.30', u: 'per session', deal: 'Up to 30% off', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
+  { n: 'Laser Skin Resurfacing', img: 'assets/treatments/laser-resurfacing.jpg', pos: '50% 40%', p: '140', u: 'per session', deal: 'Up to 30% off', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
+  { n: 'Photo Rejuvenation', img: 'assets/treatments/photo-rejuvenation.jpg', pos: '50% 40%', p: '192.50', u: 'per session', deal: 'Up to 60% off', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
+  { n: 'Skin Booster', img: 'assets/treatments/skin-booster.jpg', pos: '50% 40%', p: '399', u: '', deal: 'Buy 1 get 1 50% off', tag: 'Skin Booster and Bio-stimulators', area: 'Face', icon: 'drop', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Deep hydration for a fresh, dewy glow.' }
+];
+BFS_SPECIALS.forEach((s) => { const m = /#pg-([a-z0-9-]+)-h/.exec(s.h || ''); const info = priceInfo(s.n) || (m && priceFrom(m[1]) ? priceFrom(m[1]) : null); if (!info || !info.value) return; s.p = info.value % 1 ? info.value.toFixed(2) : String(info.value); if (info.per) s.u = info.per; if (info.offer) s.deal = info.offer; });
 const BFS_TABS = ['All deals', 'Laser', 'Skin', 'Injectables', 'Body', 'Hair', 'Wellness'];
 const BFS_CONCERNS = [
   ['Unwanted hair', 'Choose your area and laser hair removal package.', ['laser-hair-removal']],
@@ -235,7 +245,7 @@ function BfsCountdown() {
 /* round 27: the offer tickets turn like a carousel. Every few seconds the front ticket moves left, the right one comes forward
    and the next one enters from behind; hovering pauses it, and clicking a side ticket brings it to the front */
 function BfsFan() {
-  const cards = SPECIALS.filter((x) => !/botox|dysport/i.test(x.n) && x.deal).slice(0, 5);
+  const cards = BFS_SPECIALS.filter((x) => x.deal).slice(0, 5);
   const n = cards.length;
   const [k, setK] = useState(0);
   const [hold, setHold] = useState(false);
@@ -364,15 +374,14 @@ function BfsDealCard({ d, plan, toggle }) {
   return (
     <li id={`bf-${d.id}`} className="scroll-mt-[96px]">
       <article className={`bfs-card flex h-full flex-col overflow-hidden rounded-[24px] bg-white p-5 ring-1 ring-black/[.06] sm:p-6 ${inPlan ? 'is-in' : ''}`}>
-        <div className="bfs-head relative -mx-5 -mt-5 mb-5 flex min-h-[150px] flex-col justify-between overflow-hidden p-5 text-white sm:-mx-6 sm:-mt-6 sm:p-6">
+        <div className="bfs-head relative -mx-5 -mt-5 mb-5 flex min-h-[180px] flex-col justify-between gap-5 overflow-hidden p-5 text-white sm:-mx-6 sm:-mt-6 sm:p-6">
           <span aria-hidden="true" className="bfs-head-mark font-aeonik">%</span>
-          <span className="relative font-inter text-[11.5px] font-semibold uppercase tracking-[.16em] text-white/65">{d.group}</span>
+          <h3 className="relative max-w-[16ch] font-aeonik text-[clamp(26px,2.3vw,32px)] font-normal leading-[1.05] tracking-[-0.02em] text-white">{cat}</h3>
           {d.pct
             ? <span className="relative flex items-baseline gap-2"><span className="font-inter text-[12px] font-semibold uppercase tracking-[.16em] text-white/70">Up to</span><b className="font-aeonik text-[60px] font-normal leading-[.9] tracking-[-0.04em] text-[#EE3A45]">{d.pct}%</b><span className="tt-strong font-aeonik text-[26px] leading-none">off</span></span>
             : <span className="relative max-w-[11ch] font-aeonik text-[32px] leading-[1.02] tracking-[-0.02em]">{d.offer.replace(/ (free|50% off)$/, '')} <span className="tt-strong whitespace-nowrap text-[#EE3A45]">{(/(free|50% off)$/.exec(d.offer) || [''])[0]}</span></span>}
         </div>
-        <h3 className="font-aeonik text-[clamp(23px,2vw,28px)] font-normal leading-[1.1] tracking-[-0.02em] text-[#0B0B0C]">{cat}</h3>
-        <p className="mt-2 font-inter text-[14px] leading-[1.55] text-ndm-muted">{d.c.blurb}</p>
+        <p className="font-inter text-[14px] leading-[1.55] text-ndm-muted">{d.c.blurb}</p>
         {d.items.length > 1 && (
           <label className="mt-5 block">
             <span className="font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-ndm-muted">Treatment or area</span>
@@ -453,7 +462,7 @@ function BfsDeals({ pick, setPick, plan, toggle }) {
 function BfsSpecials() {
   const ref = useRef(null);
   useReveal(ref);
-  const list = SPECIALS.filter((s) => !/botox|dysport/i.test(s.n)).slice(0, 6);
+  const list = BFS_SPECIALS;
   const catOf = (s) => { const m = /#pg-([a-z0-9-]+)-h/.exec(s.h || ''); return m && BFS_DEALS.some((d) => d.id === m[1]) ? m[1] : null; };
   return (
     <section ref={ref} id="specials" aria-labelledby="bfs-s-title" data-nav="dark" className="bfs-dark bfs-band relative mt-[clamp(64px,7vw,104px)] scroll-mt-[68px] overflow-hidden px-[var(--gx)] py-[clamp(72px,8vw,120px)] text-white">
@@ -623,7 +632,7 @@ function BfsFooter() {
         </div>
         <div className="mt-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-10">
           <p className="max-w-[90ch] font-inter text-[12px] leading-[1.6] text-white/45">© 2026 NewDermaMed. Offers apply {BFS.when}, at both clinics, to the packages shown, and may not be combined with other promotions. Treatments are given after a medical assessment. Individual results may vary.</p>
-          <a href="https://nexthealthmarketing.com" target="_blank" rel="noopener" className="bfs-credit group flex shrink-0 items-center gap-2.5 font-inter text-[11px] uppercase tracking-[.16em] text-white/35 transition-colors hover:text-white/70">
+          <a href="https://thenexthealth.ca/" target="_blank" rel="noopener" className="bfs-credit group flex shrink-0 items-center gap-2.5 font-inter text-[11px] uppercase tracking-[.16em] text-white/35 transition-colors hover:text-white/70">
             Site by<img src="assets/partners/next-health-white.svg" alt="Next Health" width="88" height="16" className="h-4 w-auto opacity-40 transition-opacity group-hover:opacity-80" />
           </a>
         </div>

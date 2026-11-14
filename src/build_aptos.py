@@ -10,7 +10,7 @@ from pathlib import Path
 root, scratch = Path(sys.argv[1]), Path(sys.argv[2])
 s = (root / 'promotion.html').read_text()
 s = re.sub(r'\n<script type="application/ld\+json" id="ld-crumbs">.*?</script>', '', s, count=1)
-ui = (scratch / 'procedure-ui.jsx').read_text() + '\n' + (scratch / 'treatment-ui.jsx').read_text() + '\n' + (scratch / 'aptos-ui.jsx').read_text()
+ui = (scratch / 'procedure-ui.jsx').read_text() + '\n' + (scratch / 'journey-ui.jsx').read_text() + '\n' + (scratch / 'treatment-ui.jsx').read_text() + '\n' + (scratch / 'aptos-ui.jsx').read_text()
 data = (scratch / 'aptos-ui.jsx').read_text()
 OUT = 'aptos-thread-lift.html'
 

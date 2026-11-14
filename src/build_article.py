@@ -9,7 +9,7 @@ from pathlib import Path
 root, scratch = Path(sys.argv[1]), Path(sys.argv[2])
 s = (root / 'promotion.html').read_text()
 s = re.sub(r'\n<script type="application/ld\+json" id="ld-crumbs">.*?</script>', '', s, count=1)
-blog = (scratch / 'blog-ui.jsx').read_text()
+blog = (scratch / 'blog-ui.jsx').read_text() + '\n' + (scratch / 'journey-ui.jsx').read_text()
 art = (scratch / 'article-ui.jsx').read_text()
 OUT = 'what-causes-rosacea-redness.html'
 NDM = 'https://newdermamedlaserclinic.com'
@@ -97,6 +97,7 @@ function App() {
         <article>
           <ArticleHead p={post} a={ARTICLE} />
           <ArticleBody a={ARTICLE} />
+          <ProcAnalysis />
         </article>
         <RelatedStories items={related} />
       </main>
