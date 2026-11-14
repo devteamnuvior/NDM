@@ -159,18 +159,18 @@ function ndm_pricing_cli_align( $args, $assoc_args ) {
 				if ( $label !== $option['label'] ) {
 					$raw      = $variation->get_attributes();
 					$taxonomy = 1 === count( $raw ) ? (string) key( $raw ) : '';
-					$term     = '' !== $taxonomy && taxonomy_exists( $taxonomy ) ? get_term_by( 'slug', (string) current( $raw ), $taxonomy ) : null;
+					$shared     = '' !== $taxonomy && taxonomy_exists( $taxonomy ) ? get_term_by( 'slug', (string) current( $raw ), $taxonomy ) : null;
 
-					if ( $term ) {
+					if ( $shared ) {
 						// A shared attribute: the name is the term's, the same for every product that uses it.
-						if ( ! isset( $renamed[ $term->term_id ] ) ) {
-							$renamed[ $term->term_id ] = $option['label'];
-							$say( sprintf( 'Shared option name "%s" -> "%s" (every product that uses it)', $term->name, $option['label'] ) );
+						if ( ! isset( $renamed[ $shared->term_id ] ) ) {
+							$renamed[ $shared->term_id ] = $option['label'];
+							$say( sprintf( 'Shared option name "%s" -> "%s" (every product that uses it)', $shared->name, $option['label'] ) );
 							if ( $apply ) {
-								wp_update_term( $term->term_id, $taxonomy, array( 'name' => wp_slash( $option['label'] ) ) );
+								wp_update_term( $shared->term_id, $taxonomy, array( 'name' => wp_slash( $option['label'] ) ) );
 							}
-						} elseif ( $renamed[ $term->term_id ] !== $option['label'] ) {
-							WP_CLI::log( sprintf( '   %s: the reference writes this option "%s"; the shared name stays "%s"', $title, $option['label'], $renamed[ $term->term_id ] ) );
+						} elseif ( $renamed[ $shared->term_id ] !== $option['label'] ) {
+							WP_CLI::log( sprintf( '   %s: the reference writes this option "%s"; the shared name stays "%s"', $title, $option['label'], $renamed[ $shared->term_id ] ) );
 						}
 					} elseif ( ! $attribute || 1 !== count( $raw ) ) {
 						WP_CLI::warning( sprintf( '%s: option "%s" cannot be renamed here (set up in WooCommerce).', $title, $label ) );
