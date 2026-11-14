@@ -40,8 +40,7 @@ const LOOKS: Record<SaleView["look"], SaleLook> = {
 
 const PHONES = SITE_CLINICS.map((c) => ({ num: c.phone }));
 const CLINIC_PHOTOS = { uptown: "/assets/clinic/clinic-4.jpg", downtown: "/assets/clinic/clinic-1.jpg" };
-/* the Uptown clinic is in North York and its parking is the Hullmark Centre (pre-launch corrections, 2026-11-14) */
-const CLINICS = SITE_CLINICS.map((c) => ({ name: c.name, addr: c.address.replace("4763 Yonge Street, Toronto,", "4763 Yonge Street, North York,"), phone: c.phone, note: c.directions.replace("Hallmark Centre", "Hullmark Centre"), img: CLINIC_PHOTOS[c.id] }));
+const CLINICS = SITE_CLINICS.map((c) => ({ name: c.name, addr: c.address, phone: c.phone, note: c.directions, img: CLINIC_PHOTOS[c.id] }));
 const EMAIL = "info@newdermamed.com";
 /** "See packages" on a sale price card: its deal card opens on that product. */
 const PICK_EVENT = "ndm-sale-pick";

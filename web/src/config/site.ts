@@ -19,8 +19,8 @@ export const CLINICS: Clinic[] = [
     name: "Uptown",
     near: "Yonge & Sheppard",
     note: "Near Sheppard-Yonge Station",
-    directions: "Near Sheppard-Yonge Station · parking at Hallmark Centre, 4800 Yonge or 25 Sheppard Ave W",
-    address: "4763 Yonge Street, Toronto, ON M2N 5M5",
+    directions: "Near Sheppard-Yonge Station · parking at Hullmark Centre, 4800 Yonge or 25 Sheppard Ave W",
+    address: "4763 Yonge Street, North York, ON M2N 5M5",
     phone: "416-224-8800",
   },
   {

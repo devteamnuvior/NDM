@@ -27,7 +27,7 @@ export const ABOUT_CLINICS: AboutClinic[] = [
     name: "Uptown",
     area: "Yonge Street, near Sheppard-Yonge Station",
     title: ["NewDermaMed", "Uptown"],
-    address: ["4763 Yonge Street", "Toronto, ON M2N 5M5"],
+    address: ["4763 Yonge Street", "North York, ON M2N 5M5"],
     phone: "416-224-8800",
     map: "https://maps.app.goo.gl/Gm8Wg4B1Q3yHGnkE7",
     position: [43.7606276, -79.4103338],
@@ -235,7 +235,7 @@ export const ABOUT_COPY: AboutCopy = {
       ],
       [
         "Where are your clinics?",
-        "Uptown: 4763 Yonge Street, Toronto, ON M2N 5M5, near Sheppard-Yonge Station. Downtown: 790 Bay Street, Suite 900, Toronto, ON M5G 1N8, near College Station."
+        "Uptown: 4763 Yonge Street, North York, ON M2N 5M5, near Sheppard-Yonge Station. Downtown: 790 Bay Street, Suite 900, Toronto, ON M5G 1N8, near College Station."
       ],
       [
         "Where can I park?",

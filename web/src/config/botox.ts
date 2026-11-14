@@ -435,7 +435,7 @@ export const BOTOX: ProcedurePage = {
     ],
     [
       "Where are your Toronto clinics?",
-      "Uptown: 4763 Yonge Street, near Sheppard-Yonge Station, with parking at Hallmark Centre, 4800 Yonge or 25 Sheppard Ave W. Downtown: 790 Bay Street, Suite 900, near College Station, with parking at 88 or 100 College Street."
+      "Uptown: 4763 Yonge Street, near Sheppard-Yonge Station, with parking at Hullmark Centre, 4800 Yonge or 25 Sheppard Ave W. Downtown: 790 Bay Street, Suite 900, near College Station, with parking at 88 or 100 College Street."
     ]
   ]
 };

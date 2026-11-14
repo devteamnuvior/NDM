@@ -20,7 +20,7 @@ export const CHAT_PRESETS: [question: string, answer: string, link?: ChatLink][]
   ],
   [
     "Where are your clinics?",
-    "Uptown: 4763 Yonge Street, near Sheppard-Yonge Station, with parking at Hallmark Centre, 4800 Yonge or 25 Sheppard Ave W. Downtown: 790 Bay Street, Suite 900, near College Station, with parking at 88 or 100 College Street.",
+    "Uptown: 4763 Yonge Street, near Sheppard-Yonge Station, with parking at Hullmark Centre, 4800 Yonge or 25 Sheppard Ave W. Downtown: 790 Bay Street, Suite 900, near College Station, with parking at 88 or 100 College Street.",
     ["See both clinics", "#visit"],
   ],
   ["What are your hours?", "Both clinics are open Monday to Friday, 9am to 7pm, and Saturday, 10am to 5pm."],
