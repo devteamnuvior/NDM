@@ -55,6 +55,8 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
   const [text, setText] = useState("");
   const [typing, setTyping] = useState(false);
   const [avoid, setAvoid] = useState(0);
+  const pop = useRef<HTMLDivElement>(null);
+  const [covers, setCovers] = useState(false); /* phones: true while the note lies over a button or link of the page, so it never blocks one */
   const [clear, setClear] = useState(false); /* phones: true once nothing marked data-pill-avoid sits mid-screen, so the note never covers it */
   const list = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
@@ -104,6 +106,21 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
       if (r.width && r.top < vh && r.bottom > vh - 120 && r.right > vw - 90) top = Math.min(top, r.top);
     });
     setAvoid(top < vh ? vh - top + 12 : 0);
+    /* phones: what lies under the note (it stays in place, unseen, while it steps aside). A button or a short link counts;
+       a whole card that is one link does not */
+    const box = vw < 768 ? pop.current?.getBoundingClientRect() : undefined;
+    setCovers(
+      !!box &&
+        [box.left + 8, box.left + box.width / 2, box.right - 8].some((x) =>
+          [box.top + 6, box.top + box.height / 2, box.bottom - 6].some((y) =>
+            document.elementsFromPoint(x, y).some((el) => {
+              if (el.closest(".chat-pop, .chat-launch")) return false;
+              const control = el.closest('a[href], button, input, select, textarea, [role="button"], [role="tab"]');
+              return !!control && control.getBoundingClientRect().height <= 72;
+            }),
+          ),
+        ),
+    );
     setClear(
       !Array.from(document.querySelectorAll("[data-pill-avoid]")).some((el) => {
         const r = el.getBoundingClientRect();
@@ -185,8 +202,9 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
     <>
       {note && !open && !off && (!small || clear) && (
         <div
+          ref={pop}
           role="status"
-          className="chat-pop fixed z-[61] flex max-w-[calc(100vw-88px)] items-center gap-2.5 rounded-[18px] rounded-br-[6px] bg-white py-2 pr-9 pl-2 shadow-[0_24px_50px_-22px_rgba(11,15,19,.5)] ring-1 ring-ndm-ink/[.06]"
+          className={`chat-pop fixed z-[61] ${small && covers ? "invisible" : ""} flex max-w-[calc(100vw-88px)] items-center gap-2.5 rounded-[18px] rounded-br-[6px] bg-white py-2 pr-9 pl-2 shadow-[0_24px_50px_-22px_rgba(11,15,19,.5)] ring-1 ring-ndm-ink/[.06]`}
           style={small ? { right: 16, bottom: `calc(${bottom + 64}px + env(safe-area-inset-bottom))` } : { right: 24 + 58 + 12, bottom: bottom + 8 }}
         >
           <span className="relative size-9 shrink-0">

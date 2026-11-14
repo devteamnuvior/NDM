@@ -63,3 +63,29 @@ test("the launcher steps aside while another overlay is open", async ({ page }) 
   await page.keyboard.press("Escape");
   await expect(launch).not.toHaveClass(/is-off/);
 });
+
+test.describe("phone", () => {
+  test.use({ viewport: { width: 375, height: 812 }, hasTouch: true });
+
+  test("the note steps aside while it lies over a button of the page, and comes back after", async ({ page }) => {
+    await page.goto(NEXT_URL);
+    const note = page.locator(".chat-pop");
+    await expect(note).toBeVisible({ timeout: 9000 });
+    /* bring "View all offers" under the note: the note hides, the button can be tapped */
+    const offers = page.getByRole("link", { name: "View all offers" });
+    const under = async (target: typeof offers) => {
+      const box = (await note.evaluate((el) => el.getBoundingClientRect().toJSON())) as { top: number; height: number };
+      await target.evaluate((el, middle) => {
+        const r = el.getBoundingClientRect();
+        window.scrollBy(0, r.top + r.height / 2 - middle);
+      }, box.top + box.height / 2);
+    };
+    await under(offers);
+    await expect(note).toBeHidden();
+    await offers.click({ trial: true });
+    /* over plain text it shows again */
+    await under(page.getByText("Save on cosmetic treatment"));
+    await expect(note).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
+  });
+});
