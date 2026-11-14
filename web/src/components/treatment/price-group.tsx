@@ -16,6 +16,8 @@ export interface TxPriceRow {
   regular: number;
   regularText: string;
   tag?: string;
+  /** While a sale runs, on a package its checkout code applies to: "Extra 30% off with code PLUS30: $720.30". */
+  codeText?: string;
 }
 
 export interface TxPriceGroup {
@@ -26,12 +28,14 @@ export interface TxPriceGroup {
   title: string;
   blurb: string;
   rows: TxPriceRow[];
-  /** Lowest price in the table, written out. */
+  /** Lowest price in the table (per unit, syringe, zone or session, as on the Pricing page), written out. */
   from: string;
   /** " / unit" after the lowest price, for tables priced per unit. */
   fromUnit?: string;
   /** Largest percentage offer in the table, 0 when there is none. */
   percent: number;
+  /** The offer badge of the group, as its row on the Pricing page shows it ("Up to 30% off", "Save $1000 Off"); "" when there is none. */
+  offer?: string;
 }
 
 interface PriceGroupProps {
@@ -67,7 +71,7 @@ export function PriceGroup({ group: g, headId, bodyId, category, startOpen, sing
             <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{g.title}</span>
           </span>
           <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            {g.percent > 0 && <span className="pr-badge">Up to {g.percent}%&nbsp;off</span>}
+            {g.offer ? <span className="pr-badge">{g.offer}</span> : g.percent > 0 && <span className="pr-badge">Up to {g.percent}%&nbsp;off</span>}
             <span className="font-inter text-[13px] whitespace-nowrap text-ndm-muted">
               From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{g.from}</span>
               {g.fromUnit}
@@ -88,6 +92,8 @@ export function PriceGroup({ group: g, headId, bodyId, category, startOpen, sing
                 <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
                   <span className="font-inter text-[15px] text-ndm-ink">{r.shown ?? r.label}</span>
                   {r.tag && <span className="pr-tag">{r.tag}</span>}
+                  {/* the price with the checkout code, on the packages the code applies to (as on the Pricing page) */}
+                  {r.codeText && <span className="pr-code basis-full font-inter text-[13px] leading-[1.4] font-semibold text-ndm-deep">{r.codeText}</span>}
                 </span>
                 <span className="col-start-1 row-start-2 flex items-baseline gap-2.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
                   {r.regular ? (

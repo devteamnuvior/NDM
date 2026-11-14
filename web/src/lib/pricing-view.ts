@@ -76,7 +76,7 @@ type Option = PriceOption & { productId: number; variationId: number };
 type Item = { id: number; name: string; note: string; options: Option[] };
 type Category = Omit<PriceCategory, "items"> & { termId: number; items: Item[] };
 
-function bestOffer(options: PriceOption[]): string {
+export function bestOffer(options: PriceOption[]): string {
   const tags = options.map((o) => o.tag).filter((t): t is string => !!t);
   if (!tags.length) return "";
   const pct = Math.max(0, ...tags.map((t) => Number(/^(\d+)%\s*OFF$/i.exec(t)?.[1] ?? 0)));
@@ -85,15 +85,17 @@ function bestOffer(options: PriceOption[]): string {
 }
 
 /** One WooCommerce price as the price list's option: the price to pay, and the regular price while a sale runs. */
-function option(fields: WooPriceFields & { campaign?: { code: boolean; codePrice: string } }, label: string, tag: string | undefined, productId: number, variationId: number): Option {
+function option(fields: WooPriceFields & { campaign?: { code: boolean; codePrice: string } }, label: string, tag: string | undefined, productId: number, variationId: number, by?: { code: string; percent: number } | null): Option {
   const price = Number(fields.price);
   const regular = Number(fields.regularPrice);
-  const sale = fields.campaign ? { sale: true, ...(fields.campaign.code ? { code: Number(fields.campaign.codePrice) } : {}) } : {};
+  /* a line the checkout code applies to also says which code and how much, so any page can write the code's line */
+  const sale = fields.campaign ? { sale: true, ...(fields.campaign.code ? { code: Number(fields.campaign.codePrice), ...(by ? { codeName: by.code, codePercent: by.percent } : {}) } : {}) } : {};
   return { label, price, regular: fields.onSale && regular > price ? regular : 0, tag, productId, variationId, ...sale };
 }
 
 /** The WooCommerce list in the shape the price helpers read, leaving out anything without a usable price. */
 export function toCategories(tree: WooPricingTree): Category[] {
+  const by = tree.campaign ? { code: tree.campaign.code, percent: tree.campaign.percent } : null;
   return tree.categories
     .map((c) => ({
       id: c.slug,
@@ -105,8 +107,8 @@ export function toCategories(tree: WooPricingTree): Category[] {
         .map((p) => {
           const tag = p.label?.enabled && p.label.text ? p.label.text : undefined;
           const options = p.variations.length
-            ? p.variations.map((v) => option(v, v.label, v.promo?.enabled && v.promo.text ? v.promo.text : tag, p.id, v.id))
-            : [option(p, SINGLE_LABEL, tag, p.id, 0)];
+            ? p.variations.map((v) => option(v, v.label, v.promo?.enabled && v.promo.text ? v.promo.text : tag, p.id, v.id, by))
+            : [option(p, SINGLE_LABEL, tag, p.id, 0, by)];
           return { id: p.id, name: p.name, note: p.note, options: options.filter((o) => Number.isFinite(o.price) && o.price >= 0) };
         })
         .filter((it) => it.options.length),

@@ -19,6 +19,9 @@ export interface PriceOption {
   sale?: boolean;
   /** While a sale campaign runs: the price with the checkout code, when the code applies to this line. */
   code?: number;
+  /** With `code`: the checkout code's name and its percentage ("PLUS30", 30), for the line that names it. */
+  codeName?: string;
+  codePercent?: number;
 }
 
 export interface PriceItem {

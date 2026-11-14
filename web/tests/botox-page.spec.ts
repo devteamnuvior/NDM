@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 import { NEXT_URL } from "../playwright.config";
 import { money, optionOf } from "./price-list";
 
@@ -82,6 +82,25 @@ test("prices come from the price list, per unit; groups fold on their own; a pac
   await expect(dysport).toHaveAttribute("aria-expanded", "true");
   await expect(botox).toHaveAttribute("aria-expanded", "true");
   await expect(prices.locator("#proc-pr1 .pr-opt")).toHaveCount(5);
+});
+
+test("each price group reads as its row on the Pricing page: the same From price, offer badge and checkout code lines", async ({ page }) => {
+  /* what a folding row shows when closed, and how many of its options carry the checkout code's line */
+  const read = (rows: Locator) =>
+    rows.evaluateAll((els) =>
+      els.map((el) => {
+        const head = el.querySelector("button")!;
+        const text = head.textContent!.replace(/\s+/g, " ");
+        return { from: /From\s*\$[\d.]+(\s*\/\s*unit)?/.exec(text)?.[0].replace(/\s+/g, " ") ?? "", badge: head.querySelector(".pr-badge")?.textContent?.replace(/\s+/g, " ").trim() ?? "", code: el.querySelectorAll(".pr-code").length };
+      }),
+    );
+  await page.goto(`${NEXT_URL}/injectables/botox`);
+  const groups = await read(page.locator("#prices .pr-group"));
+  expect(groups.length).toBeGreaterThan(0);
+  for (const g of groups) expect(g.from).toMatch(/^From \$/);
+  await page.goto(`${NEXT_URL}/pricing`);
+  const rows = await read(page.locator("#pg-botox-dysport .pr-item"));
+  for (const g of groups) expect(rows).toContainEqual(g);
 });
 
 test("the clinic film has a sound button; the reel is not downloaded before it is on screen", async ({ page }) => {
