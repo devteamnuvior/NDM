@@ -23,6 +23,19 @@ test("before the sale: the tab opens a panel counting down to the start; Escape 
   await expect(tab).toBeFocused();
 });
 
+test("during the VIP Sale the tab shows the VIP Sale, the time left in it and the link to its page", async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-11-16T09:30:00-05:00"));
+  await page.goto(NEXT_URL);
+  await page.getByRole("button", { name: /^VIP Sale/ }).click();
+  const panel = page.getByRole("dialog", { name: "VIP Sale" });
+  await expect(panel).toBeVisible();
+  await expect(panel.getByRole("heading", { name: "VIP Sale." })).toBeVisible();
+  await expect(panel.getByText("VIP Sale · Nov 14 to Nov 19")).toBeVisible();
+  await expect(panel.getByRole("timer")).toHaveAttribute("aria-label", "VIP Sale ends in 3 days, 14 hours and 29 minutes");
+  await expect(panel.getByRole("link", { name: "See the VIP Sale deals" })).toHaveAttribute("href", "/vip-sale");
+  await expect(page.getByRole("button", { name: /Black Friday Sale/ })).toHaveCount(0);
+});
+
 test("during the sale it counts down to the end and shows how much has passed", async ({ page }) => {
   await page.clock.setFixedTime(new Date("2026-11-28T23:59:30-05:00"));
   await page.goto(NEXT_URL);

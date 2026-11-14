@@ -54,8 +54,8 @@ function Digits({ v }: { v: number }) {
   );
 }
 
-/** The countdown: four dark tiles with rolling digits. */
-export function BfTimer({ t, size = "md" }: { t: BfClock; size?: "md" | "lg" }) {
+/** The countdown: four dark tiles with rolling digits. `lead` replaces the words read before the time. */
+export function BfTimer({ t, size = "md", lead }: { t: BfClock; size?: "md" | "lg"; lead?: string }) {
   const cells: [number, string][] = [
     [t.d, "Days"],
     [t.h, "Hours"],
@@ -63,7 +63,7 @@ export function BfTimer({ t, size = "md" }: { t: BfClock; size?: "md" | "lg" }) 
     [t.s, "Secs"],
   ];
   return (
-    <div className={`bft bft-${size}`} role="timer" aria-label={`${t.live ? "Offers end in" : "Black Friday starts in"} ${t.d} days, ${t.h} hours and ${t.m} minutes`}>
+    <div className={`bft bft-${size}`} role="timer" aria-label={`${lead ?? (t.live ? "Offers end in" : "Black Friday starts in")} ${t.d} days, ${t.h} hours and ${t.m} minutes`}>
       {cells.map(([n, label], k) => (
         <Fragment key={label}>
           {k > 0 && (
