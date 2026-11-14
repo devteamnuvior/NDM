@@ -166,6 +166,32 @@ test("a concern shortlists the deals; the prescription product sits under none",
   for (const name of await page.locator("#concerns button").allInnerTexts()) expect(name).not.toMatch(/botox/i);
 });
 
+for (const width of [1440, 375]) {
+  test(`a long treatment name is cut short and does not widen a deal card (${width}px)`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await at(page, "2026-11-15T12:00:00-05:00");
+    await page.goto(`${NEXT_URL}/vip-sale`);
+    await expect(page.locator("#deals article").first()).toBeVisible();
+    const wide = await page.evaluate(() => {
+      const long = "Aptos Excellence Visage Method EV PLA/PCL (up to 24 months) with a few more words to be sure";
+      const cards = [...document.querySelectorAll<HTMLElement>("#deals article")];
+      const width = cards[0].getBoundingClientRect().width;
+      /* the names WooCommerce can hold are longer than the local ones: write a long one into every card */
+      for (const card of cards) {
+        card.querySelectorAll(".truncate").forEach((el) => (el.textContent = long));
+        card.querySelectorAll("[role=group] button span:first-child").forEach((el) => (el.textContent = "Face, mid and lower, a long option"));
+      }
+      return cards.filter((card) => {
+        const box = card.getBoundingClientRect();
+        const inside = [...card.querySelectorAll<HTMLElement>("select, [role=group], button, p")].every((el) => el.getBoundingClientRect().right <= box.right + 0.5);
+        return Math.abs(box.width - width) > 0.5 || !inside;
+      }).length;
+    });
+    expect(wide).toBe(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+  });
+}
+
 test.describe("phone", () => {
   test.use({ viewport: { width: 375, height: 812 } });
   for (const path of ["/vip-sale", "/black-friday"]) {

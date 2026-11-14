@@ -355,9 +355,10 @@ function DealCard({ d, plan, toggle, badge }: PlanProps & { d: Deal; badge: stri
   const pay = o[4] || o[1];
   const save = o[2] > 0 ? o[2] - pay : 0;
   return (
-    /* header, text, treatment, packages and price are five rows the cards of one grid row share (subgrid), so each lines up across the row */
-    <li id={`bf-${d.id}`} className="row-span-5 grid scroll-mt-[96px] grid-rows-subgrid gap-y-0">
-      <article className={`${T.p}-card row-span-5 grid grid-rows-subgrid gap-y-0 overflow-hidden rounded-[24px] bg-white p-5 ring-1 ring-black/[.06] sm:p-6 ${inPlan ? 'is-in' : ''}`}>
+    /* the one column may shrink below its content (minmax(0,1fr)), so a long name is cut short instead of widening the card;
+       header, text, treatment, packages and price are five rows the cards of one grid row share (subgrid), so each lines up across the row */
+    <li id={`bf-${d.id}`} className="row-span-5 grid scroll-mt-[96px] grid-cols-[minmax(0,1fr)] grid-rows-subgrid gap-y-0">
+      <article className={`${T.p}-card row-span-5 grid grid-cols-[minmax(0,1fr)] grid-rows-subgrid gap-y-0 overflow-hidden rounded-[24px] bg-white p-5 ring-1 ring-black/[.06] sm:p-6 ${inPlan ? 'is-in' : ''}`}>
         <div className={`${T.p}-head relative -mx-5 -mt-5 mb-5 flex min-h-[180px] flex-col gap-5 overflow-hidden p-5 text-white *:last:mt-auto sm:-mx-6 sm:-mt-6 sm:p-6`}>
           <span aria-hidden="true" className={`${T.p}-head-mark font-aeonik`}>%</span>
           <span className="relative flex items-center justify-between gap-3">
