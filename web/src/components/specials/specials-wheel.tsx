@@ -215,19 +215,21 @@ export function SpecialsWheel({ offers, level: Heading, offersHref, children }: 
                 >
                   <span aria-hidden="true" className="sw-ring pointer-events-none absolute -right-20 -bottom-20 size-48 rounded-full" />
                   <span aria-hidden="true" className="sw-ring pointer-events-none absolute -right-9 -bottom-9 size-28 rounded-full" />
-                  <span className="relative flex h-full flex-col p-[clamp(14px,1.6vw,22px)]">
+                  <span className="relative flex h-full flex-col" style={{ padding: `clamp(14px, min(1.6vw, ${(22 * k).toFixed(1)}px), 22px)` }}>
                     <span className="flex items-center justify-between gap-2">
                       <span className="sw-photo block shrink-0 overflow-hidden rounded-full" style={{ width: 52 * k, height: 52 * k }}>
                         <OfferImg photo={s.photo} sizes="64px" className="h-full w-full object-cover" style={{ objectPosition: s.position }} />
                       </span>
                       <span className={`sw-tag truncate rounded-full px-3 py-1.5 font-mont text-[10.5px] tracking-[.12em] uppercase ${i === 0 ? "is-feature" : ""}`}>{i === 0 ? "Featured" : s.tag}</span>
                     </span>
-                    <h3 className="sw-title mt-[clamp(12px,1.5vw,20px)] flex items-center justify-center text-center font-aeonik leading-[1.04] font-normal tracking-[-0.03em]" style={{ fontSize: 34 * k, minHeight: 34 * k * 2.15 }}>
+                    <h3 className="sw-title flex items-center justify-center text-center font-aeonik leading-[1.04] font-normal tracking-[-0.03em]" style={{ fontSize: 34 * k, minHeight: 34 * k * 2.15, marginTop: `max(12px, min(1.5vw, ${(20 * k).toFixed(1)}px))` }}>
                       {s.name}
                     </h3>
-                    <span className="flex flex-1 flex-col items-center justify-center text-center">
+                    {/* a card with an offer tag holds one more line in the same height: on a scaled-down wheel the tag and
+                        the gaps shrink with it, and the button keeps its height (it used to be squeezed flat) */}
+                    <span className="flex min-h-0 flex-1 flex-col items-center justify-center text-center">
                       {s.deal && (
-                        <span className="deal-badge mb-3">
+                        <span className={`deal-badge shrink-0 ${k < 0.95 ? "deal-badge-sm" : ""}`} style={{ marginBottom: k < 0.95 ? 6 * k : 12 }}>
                           <i aria-hidden="true">%</i>
                           {s.deal}
                         </span>
@@ -237,7 +239,7 @@ export function SpecialsWheel({ offers, level: Heading, offersHref, children }: 
                         <span className="sw-cur">$</span>
                         {s.price}
                       </span>
-                      <span className="sw-muted mt-2 font-inter text-[12.5px]">{s.unit || "for selected packages"}</span>
+                      <span className="sw-muted font-inter text-[12.5px]" style={{ marginTop: k < 0.95 ? 6 * k : 8 }}>{s.unit || "for selected packages"}</span>
                     </span>
                     <Button
                       href={s.href}
@@ -249,7 +251,7 @@ export function SpecialsWheel({ offers, level: Heading, offersHref, children }: 
                       v={on ? "ink" : "line"}
                       sm
                       block
-                      className={on ? "btn-buy" : ""}
+                      className={`shrink-0 ${on ? "btn-buy" : ""}`}
                     >
                       Buy now
                     </Button>

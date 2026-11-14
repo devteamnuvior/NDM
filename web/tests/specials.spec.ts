@@ -98,4 +98,18 @@ test.describe("phone", () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
     expect(errors).toEqual([]);
   });
+
+  test("on the scaled-down wheel every card keeps a full Buy button and holds its content, offer tag or not", async ({ page }) => {
+    await goToSection(page);
+    await expect(current(page)).toBeVisible();
+    const cards = await page.evaluate(() =>
+      [...document.querySelectorAll<HTMLElement>(".sw-card")].map((card) => {
+        const button = card.querySelector<HTMLElement>("a.btn")!;
+        const middle = button.previousElementSibling as HTMLElement;
+        return { button: button.offsetHeight, spill: middle.scrollHeight - middle.clientHeight };
+      }),
+    );
+    expect(cards.length).toBeGreaterThan(0);
+    for (const card of cards) expect(card).toEqual({ button: 40, spill: 0 });
+  });
 });
