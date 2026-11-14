@@ -87,7 +87,8 @@ export function SiteHeader() {
       {used.drawer && <MobileDrawer open={drawer} current={current} onClose={() => setDrawer(false)} />}
       {used.cart && <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />}
       <CartPill onOpen={openCart} hidden={cartOpen || drawer || search} />
-      <FloatSearch onOpen={openSearch} hidden={search || drawer || cartOpen} />
+      {/* not on the checkout: there it would sit over the form's fields on a phone */}
+      <FloatSearch onOpen={openSearch} hidden={search || drawer || cartOpen || current === "checkout"} />
       <ChatBot hidden={cartOpen || drawer || search} />
       <BfDock />
     </>

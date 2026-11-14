@@ -43,7 +43,9 @@ export function BfDock() {
     requestAnimationFrame(() => tab.current?.focus({ preventScroll: true }));
   };
 
-  if (pageFromPathname(pathname) === "blackFridaySale" || bf.over) return null;
+  /* not on the checkout: there it would sit over the form's fields on a phone */
+  const page = pageFromPathname(pathname);
+  if (page === "blackFridaySale" || page === "checkout" || bf.over) return null;
   return (
     <>
       <div className={`bfd-scrim ${open ? "is-on" : ""}`} onClick={close} aria-hidden="true" />

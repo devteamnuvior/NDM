@@ -11,6 +11,7 @@ import { pageFromPathname } from "@/lib/routes";
 import { menuHits, mergeHits, searchKey } from "@/lib/search-match";
 import type { ResolvedLink } from "@/types/navigation";
 import type { PopularAnswer, SearchAnswer, SearchHit } from "@/types/search";
+import { Button } from "@/components/ui/button";
 import { withBase, withoutBase } from "@/lib/base-path";
 
 /** How long after the last key the price list is asked. */
@@ -45,10 +46,7 @@ export function SearchOverlay({ open, onClose }: SearchOverlayProps) {
 
   useEffect(() => {
     if (!open) return;
-    const t = setTimeout(() => {
-      setQ("");
-      input.current?.focus();
-    }, 60);
+    const t = setTimeout(() => setQ(""), 60);
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
     };
@@ -58,6 +56,21 @@ export function SearchOverlay({ open, onClose }: SearchOverlayProps) {
       window.removeEventListener("keydown", onKey);
     };
   }, [open]);
+
+  /* the cursor goes into the search box once the sheet is really on screen: a box that is still hidden cannot take
+     it, so it is tried again for a moment (the first opening also waits for the sheet's code to arrive) */
+  useEffect(() => {
+    if (!open || !shown) return;
+    let tries = 0;
+    let frame = 0;
+    const focus = () => {
+      const box = input.current;
+      box?.focus({ preventScroll: true });
+      if (document.activeElement !== box && tries++ < 30) frame = requestAnimationFrame(focus);
+    };
+    focus();
+    return () => cancelAnimationFrame(frame);
+  }, [open, shown]);
 
   /* the Popular chips, fresh each time the sheet opens; the built-in list stays when the server cannot answer */
   useEffect(() => {
@@ -183,12 +196,11 @@ export function SearchOverlay({ open, onClose }: SearchOverlayProps) {
           {v && (
             <ul className="mt-4 divide-y divide-ndm-line" role="list">
               {hits.length === 0 && answered && (
-                <li className="py-4 text-[15px] text-ndm-muted">
-                  No match yet,{" "}
-                  <a href={withBase(ACTIONS.book)} className="text-ndm-blue underline underline-offset-4">
-                    book a free consultation
-                  </a>{" "}
-                  and we’ll guide you.
+                <li className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5">
+                  <p className="font-inter text-[15px] text-ndm-muted">No treatments found. Book a free consultation and we’ll help you choose.</p>
+                  <Button href={ACTIONS.book} v="book" sm onClick={onClose}>
+                    Book Free Consultation
+                  </Button>
                 </li>
               )}
               {hits.map((h) => (
