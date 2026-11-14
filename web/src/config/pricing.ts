@@ -9,14 +9,13 @@ export const PRICE_FAQS: [question: string, answer: string][] = [
 ];
 
 /**
- * Exclusive monthly specials shown above the price list: the twelve treatments the designer picked. Their prices are read from WooCommerce; `category` is the price-list category the Buy button opens.
+ * Exclusive monthly specials shown above the price list: the designer's treatments (Lip Augmentation left out on 2026-11-14: it repeated Lip Filler). Their prices are read from WooCommerce; `category` is the price-list category the Buy button opens.
  */
 export const PRICE_SPECIALS = {
   sub: "Save on cosmetic treatment, apply for financing now",
   note: "for selected packages",
   items: [
     { name: "Botox", category: "botox-dysport" },
-    { name: "Lip Augmentation", category: "dermal-fillers" },
     { name: "Laser Hair Removal", category: "laser-hair-removal" },
     { name: "Lip Filler", category: "dermal-fillers" },
     { name: "Microneedling", category: "microneedling" },

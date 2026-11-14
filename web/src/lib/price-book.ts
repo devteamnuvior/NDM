@@ -77,10 +77,12 @@ export function createPriceBook(categories: PriceCategory[], names: PriceNames =
     if (!best) return null;
     const percent = Math.max(0, ...options.map((o) => percentOff(o.tag)));
     const tags = options.map((o) => o.tag).filter((t): t is string => !!t);
+    /* the offer of the option the price is taken from; when that option has none, the first offer of the list */
+    const shown = best.option.tag || tags[0];
     const offer = percent
       ? `Up to ${percent}%\u00a0off` /* no-break space: "off" never wraps away from its number */
-      : tags[0]
-        ? tags[0]
+      : shown
+        ? shown
             .replace(/\bOFF\b/g, "off")
             .replace(/^BUY 1 GET 1/i, "Buy 1 get 1")
             .replace(/\bFREE\b/, "free")
