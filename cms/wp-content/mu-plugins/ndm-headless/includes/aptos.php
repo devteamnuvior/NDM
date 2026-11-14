@@ -1105,6 +1105,12 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	 * --images=<dir>
 	 * : Folder the photo paths are relative to.
 	 *
+	 * [--fill-empty]
+	 * : When the Aptos page already exists (an empty page saved before the import, for example), fill
+	 *   in only its fields that are empty, give it the template "Aptos Thread Lift page" when it has
+	 *   none and the header photo when it has none. A field that holds anything is never replaced; the
+	 *   page's title and state (a draft stays a draft) are left as they are.
+	 *
 	 * ## EXAMPLES
 	 *
 	 *     node ../web/scripts/export-aptos.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm aptos-import --images=/tmp/site
@@ -1131,9 +1137,13 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 
 			$existing = ndm_headless_aptos_page_id();
 			$existing = $existing ? $existing : ndm_headless_aptos_trashed_page();
-			if ( $existing ) {
+			$fill     = ! empty( $assoc_args['fill-empty'] );
+			if ( $existing && ! $fill ) {
 				WP_CLI::log( "Kept: the Aptos page (page {$existing}) already exists." );
 				return;
+			}
+			if ( $existing && 'trash' === get_post_status( $existing ) ) {
+				WP_CLI::error( "The Aptos page (page {$existing}) is in the trash: restore it first." );
 			}
 
 			require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -1141,6 +1151,16 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			require_once ABSPATH . 'wp-admin/includes/image.php';
 
 			$content = $page['content'];
+			$stored  = $existing ? ndm_headless_aptos_content( $existing ) : null;
+			if ( null !== $stored ) {
+				// Only the fields that are empty on the page, and only from imported fields that hold something.
+				$content = array_filter(
+					array_intersect_key( $content, array_filter( $stored, 'ndm_headless_import_is_empty' ) ),
+					function ( $value ) {
+						return ! ndm_headless_import_is_empty( $value );
+					}
+				);
+			}
 
 			// "price_list": each row names a product of the price list; it is picked, never created, and no price is read here.
 			$rows = array();
@@ -1163,7 +1183,9 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 				$row['price_source'] = 'product:' . (int) $found[0];
 				$rows[]              = $row;
 			}
-			$content['price_list'] = $rows;
+			if ( array_key_exists( 'price_list', $content ) ) {
+				$content['price_list'] = $rows;
+			}
 
 			// "cases": titles of Before & After cases that already exist; each is chosen, none is created.
 			$cases = array();
@@ -1183,13 +1205,40 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 					WP_CLI::warning( "Before & After case \"{$case_title}\" not found: import the gallery first (wp ndm before-after-import)." );
 				}
 			}
-			$content['cases'] = $cases;
+			if ( array_key_exists( 'cases', $content ) ) {
+				$content['cases'] = $cases;
+			}
 
 			foreach ( ndm_headless_aptos_schema() as $group ) {
 				$content = ndm_headless_aptos_import_images( $group['fields'], $content, $dir );
 			}
 
-			$hero = empty( $page['hero'] ) ? 0 : ndm_headless_aptos_import_photo( $dir, (string) $page['hero'], isset( $page['heroAlt'] ) ? (string) $page['heroAlt'] : '' );
+			$needs_hero = ! $existing || ! has_post_thumbnail( $existing );
+			$hero       = empty( $page['hero'] ) || ! $needs_hero ? 0 : ndm_headless_aptos_import_photo( $dir, (string) $page['hero'], isset( $page['heroAlt'] ) ? (string) $page['heroAlt'] : '' );
+
+			if ( null !== $stored ) {
+				$changes = array();
+				if ( $content ) {
+					update_post_meta( $existing, NDM_APTOS_META, wp_slash( ndm_headless_aptos_clean_all( array_merge( $stored, $content ) ) ) );
+					$changes[] = count( $content ) . ' empty fields';
+				}
+				if ( NDM_APTOS_TEMPLATE !== get_post_meta( $existing, '_wp_page_template', true ) ) {
+					update_post_meta( $existing, '_wp_page_template', NDM_APTOS_TEMPLATE );
+					$changes[] = 'its template';
+				}
+				if ( $hero ) {
+					set_post_thumbnail( $existing, $hero );
+					$changes[] = 'its header photo';
+				}
+				if ( ! $changes ) {
+					WP_CLI::success( "Nothing to fill: the Aptos page (page {$existing}) already holds everything." );
+					return;
+				}
+				wp_save_post_revision( $existing );
+				WP_CLI::success( "Filled the Aptos page (page {$existing}, " . get_post_status( $existing ) . '): ' . implode( ', ', $changes ) . '.' );
+				return;
+			}
+
 			$id   = ndm_headless_aptos_create_page( isset( $page['title'] ) && '' !== trim( (string) $page['title'] ) ? trim( (string) $page['title'] ) : 'Aptos Thread Lift', 'publish', $content, $hero );
 			if ( is_wp_error( $id ) ) {
 				WP_CLI::error( 'Aptos page: ' . $id->get_error_message() );

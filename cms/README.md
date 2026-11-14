@@ -422,7 +422,12 @@ the gallery has no Aptos case yet, so the Before & after section stays out until
 
 ```
 node ../web/scripts/export-aptos.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm aptos-import --images=/tmp/site
+node ../web/scripts/export-aptos.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm aptos-import --images=/tmp/site --fill-empty
 ```
+
+With `--fill-empty` an Aptos page that already exists gets only its empty fields filled, the template
+"Aptos Thread Lift page" and the header photo if it has none; nothing that holds words is replaced,
+and the page's title and state stay as they are (a draft stays a draft).
 
 Until 2026-11-13 the page was a post of its own post type ("Aptos Pages", `ndm_aptos`, no longer
 registered). `wp ndm aptos-migrate` copies its title, state, fields and header photo exactly (same
@@ -484,7 +489,12 @@ newdermamedlaserclinic.com are fetched from that address.
 
 ```
 node ../web/scripts/export-about.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm about-import --images=/tmp/site
+node ../web/scripts/export-about.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm about-import --images=/tmp/site --fill-empty
 ```
+
+With `--fill-empty` an About page that already exists (an empty page saved before the import, for
+example) gets only its empty fields filled and the template "About page" if it has none; nothing
+that holds words is replaced, and the page's title and state stay as they are.
 
 Until 2026-11-13 the About page was a post of its own post type ("About Page", `ndm_about`). A
 WordPress that still has that post moves it onto a page once (same title, state, fields and photos;

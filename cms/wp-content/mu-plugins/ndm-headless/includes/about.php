@@ -809,6 +809,11 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	 * --images=<dir>
 	 * : Folder the photo paths are relative to.
 	 *
+	 * [--fill-empty]
+	 * : When the About page already exists (an empty page saved before the import, for example), fill
+	 *   in only its fields that are empty, and give it the template "About page" when it has none. A
+	 *   field that holds anything is never replaced; the page's title and state are left as they are.
+	 *
 	 * ## EXAMPLES
 	 *
 	 *     node ../web/scripts/export-about.mjs | docker compose run --rm -T -v "$PWD/../web/public:/tmp/site:ro" cli wp ndm about-import --images=/tmp/site
@@ -846,19 +851,50 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 					$existing = $found ? (int) $found[0] : $existing;
 				}
 			}
-			if ( $existing ) {
+			$fill = ! empty( $assoc_args['fill-empty'] );
+			if ( $existing && ! $fill ) {
 				WP_CLI::log( "Kept: the About page (page {$existing}) already exists." );
 				return;
+			}
+			if ( $existing && 'trash' === get_post_status( $existing ) ) {
+				WP_CLI::error( "The About page (page {$existing}) is in the trash: restore it first." );
+			}
+
+			$content = $page['content'];
+			$stored  = $existing ? ndm_headless_about_content( $existing ) : null;
+			if ( null !== $stored ) {
+				// Only the fields that are empty on the page, and only from imported fields that hold something.
+				$content = array_filter(
+					array_intersect_key( $content, array_filter( $stored, 'ndm_headless_import_is_empty' ) ),
+					function ( $value ) {
+						return ! ndm_headless_import_is_empty( $value );
+					}
+				);
 			}
 
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 			require_once ABSPATH . 'wp-admin/includes/media.php';
 			require_once ABSPATH . 'wp-admin/includes/image.php';
 
-			$content = $page['content'];
 			foreach ( ndm_headless_about_schema() as $group ) {
 				// The photo import of the Aptos pages: a file of the import folder, or an https address.
 				$content = ndm_headless_aptos_import_images( $group['fields'], $content, $dir );
+			}
+
+			if ( null !== $stored ) {
+				$filled = array_keys( $content );
+				if ( NDM_ABOUT_TEMPLATE !== get_post_meta( $existing, '_wp_page_template', true ) ) {
+					update_post_meta( $existing, '_wp_page_template', NDM_ABOUT_TEMPLATE );
+					$filled[] = 'template';
+				}
+				if ( ! $filled ) {
+					WP_CLI::success( "Nothing to fill: every field of the About page (page {$existing}) already holds something." );
+					return;
+				}
+				update_post_meta( $existing, NDM_ABOUT_META, wp_slash( ndm_headless_about_clean_all( array_merge( $stored, $content ) ) ) );
+				wp_save_post_revision( $existing );
+				WP_CLI::success( sprintf( 'Filled the About page (page %d): %d empty fields%s.', $existing, count( $content ), in_array( 'template', $filled, true ) ? ' and its template' : '' ) );
+				return;
 			}
 
 			$id = ndm_headless_about_create_page( isset( $page['title'] ) && '' !== trim( (string) $page['title'] ) ? trim( (string) $page['title'] ) : 'About us', 'publish', $content );

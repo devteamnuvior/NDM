@@ -374,6 +374,17 @@ function ndm_headless_concern_clean( $field, $value ) {
 }
 
 /**
+ * Whether a stored or imported field value is empty: no text, no rows, no photo. Used by the imports'
+ * --fill-empty option, which fills only such fields.
+ *
+ * @param mixed $value The value.
+ * @return bool
+ */
+function ndm_headless_import_is_empty( $value ) {
+	return null === $value || false === $value || '' === $value || 0 === $value || array() === $value;
+}
+
+/**
  * Cleans a whole concern: every field of the schema, nothing else.
  *
  * @param mixed $input Raw values by field key.
