@@ -5,10 +5,16 @@
  */
 export function overControl(el: HTMLElement | null, dx: number, dy: number): boolean {
   if (!el) return false;
-  const box = el.getBoundingClientRect();
-  if (!box.width) return false;
-  return [box.left + dx, box.left + box.width / 2, box.right - dx].some((x) =>
-    [box.top + dy, box.top + box.height / 2, box.bottom - dy].some((y) =>
+  const seen = el.getBoundingClientRect();
+  if (!seen.width) return false;
+  /* its full size around its middle: a piece that has stepped aside is drawn smaller (scaled down as it fades), and
+     measured that way it would look clear, come back, cover the control again, and flicker */
+  const cx = seen.left + seen.width / 2;
+  const cy = seen.top + seen.height / 2;
+  const w = el.offsetWidth / 2;
+  const h = el.offsetHeight / 2;
+  return [cx - w + dx, cx, cx + w - dx].some((x) =>
+    [cy - h + dy, cy, cy + h - dy].some((y) =>
       document.elementsFromPoint(x, y).some((under) => {
         if (under.closest(".chat-pop, .chat-launch, .chat-panel, .float-search")) return false;
         const control = under.closest('a[href], button, input, select, textarea, [role="button"], [role="tab"]');
