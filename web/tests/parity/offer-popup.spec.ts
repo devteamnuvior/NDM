@@ -1,6 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
 import { diff, fingerprint } from "./fingerprint";
 import { expectSamePixels, open, report, VIEWPORTS } from "./helpers";
+import { FEATURES } from "../../src/config/features";
+
+test.skip(!FEATURES.offerPopup, "the offer pop-up is switched off (config/features.ts)");
 
 /**
  * First-visit offer parity at every window size: both pages are opened with "?offer", which shows the
