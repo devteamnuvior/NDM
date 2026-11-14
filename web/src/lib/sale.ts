@@ -90,7 +90,7 @@ export async function buildSale({ look, planKey, copy: raw, mine, after }: SaleO
       }).slice(0, raw.specials.count);
 
   /* the words, with their tokens; a sentence whose value is not known is left out */
-  const values = { max: max ? String(max) : undefined, dates: words.short, dates_long: words.long, dates_full: words.full, end: words.end, code: code || undefined, phase: raw.name };
+  const values = { max: max ? String(max) : undefined, dates: words.short, dates_long: words.long, dates_full: words.full, end: words.end, code: code || undefined, /* the phase's name is the browser's to fill in: it follows the clock (see Tape) */ phase: "{{phase}}" };
   const fill = (text: string) => fillPrices(text, values);
   const terms = fill(raw.footer.terms);
   const copy: SaleCopy = {

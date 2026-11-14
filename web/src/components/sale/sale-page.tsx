@@ -102,10 +102,11 @@ function useSaleClock(step = 1000): SaleClock {
 }
 
 /* round 26: moving tapes. Two crossed strips close the hero */
-function Tape({ tone = "red", rev = false }: { tone?: "red" | "white"; rev?: boolean }) {
+function Tape({ tone = "red", rev = false, phase }: { tone?: "red" | "white"; rev?: boolean; phase: string }) {
   const { copy, T } = useSale();
   if (!copy.tape.length) return null;
-  const row = <span>{copy.tape.map((w) => <Fragment key={w}>{w}<i /></Fragment>)}</span>;
+  /* "{{phase}}" is the phase running now: Black Friday, Cyber Monday, Black Friday Extended */
+  const row = <span>{copy.tape.map((w) => <Fragment key={w}>{w.replace("{{phase}}", phase)}<i /></Fragment>)}</span>;
   return <div aria-hidden="true" className={`${T.p}-tape ${T.p}-tape-${tone}`}><div className={`${T.p}-tick-in ${rev ? 'is-rev' : ''}`}>{row}{row}{row}{row}</div></div>;
 }
 
@@ -242,7 +243,7 @@ function Hero({ t }: { t: SaleClock }) {
           <div className="mx-auto max-w-[520px]"><Countdown t={t} /></div>
         </div>
       </div>
-      <div className={`${T.p}-tapes`}><Tape tone="red" /><Tape tone="white" rev /></div>
+      <div className={`${T.p}-tapes`}><Tape tone="red" phase={t.phase?.eyebrow ?? copy.name} /><Tape tone="white" rev phase={t.phase?.eyebrow ?? copy.name} /></div>
     </section>
   );
 }

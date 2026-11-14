@@ -135,6 +135,7 @@ test("Black Friday: the old addresses redirect; its phases change the labels; af
   await expect(page.locator("main > section").first()).toContainText("Cyber Monday");
   await expect(page.getByRole("timer")).toContainText("Tue, Dec 1");
   await expect(page.locator("#deals article").first()).toContainText("CYBER MONDAY PRICE");
+  await expect(page.locator(".bfs-tape").first()).toContainText("Cyber Monday"); /* the ticker opens with the phase running now */
 
   await at(page, "2026-12-05T12:00:00-05:00");
   await page.goto(`${NEXT_URL}/black-friday`);
