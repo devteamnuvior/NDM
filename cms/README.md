@@ -241,10 +241,11 @@ site adds it), and prescription-drug cases (the "Botox" category) need Raymond V
 
 ## Concern pages
 
-A concern page of the site (for example `/wrinkles-fine-lines`) is a post of the **post type "Concerns"**
+A concern page of the site (for example `/concerns/wrinkles-fine-lines`) is a post of the **post type "Concerns"**
 (`ndm_concern`, in the admin menu). Every concern has the same design; a post carries only its own
-content. The post's **slug is the page's address** on the site, so a new published concern is a new
-page, without a new build.
+content. The page's address is **`/concerns/` and the post's slug**, so a new published concern is a new
+page, without a new build. (Until 2026-11-14 the address was the slug alone; the old one-part
+addresses send the visitor on.)
 
 Typed into the post (boxes under the title, stored as one post meta, `_ndm_concern`; the list of
 fields is `ndm_headless_concern_schema()` in `includes/concerns.php`):
@@ -297,7 +298,7 @@ Valadkhani's review.
 
 ## Procedure pages
 
-A procedure page of the site (for example `/botox`) is a post of one of the **six procedure post
+A procedure page of the site (for example `/injectables/botox`) is a post of one of the **six procedure post
 types**, listed together in the admin menu: "Procedures" (`ndm_procedure`), "Injectables"
 (`ndm_injectable`), "Laser" (`ndm_laser`), "Body" (`ndm_body`), "Veins" (`ndm_vein`) and "Hair"
 (`ndm_hair`). They are one post type in all but name (`ndm_headless_procedure_types()` in
@@ -306,8 +307,12 @@ lists the pages of all six, each with its `type`), so the site needs no change f
 must be unique across all six and the Concerns (WordPress adds a number otherwise). Botox is in
 Injectables. To move a page to another list without changing its address or content:
 `wp ndm procedure-move <slug> --to=ndm_injectable` (the import takes `"type"` per page). Every procedure has the same design, the Botox page's; a post
-carries only its own content. The post's **slug is the page's address** on the site, so a new
-published procedure is a new page, without a new build. The fields work like those of a concern
+carries only its own content. The page's address is **its list's folder and the post's slug**:
+`/procedures/`, `/injectables/`, `/laser/`, `/body/`, `/veins/` or `/hair/<slug>` (the folders are
+written in `ndm_headless_site_path()`, `includes/config.php`, and in the site's
+`web/src/lib/post-paths.ts`; a new list needs a folder in both). A new published procedure is a new
+page, without a new build. Moving a page to another list changes its folder; the old address sends the
+visitor on. (Until 2026-11-14 the address was the slug alone, `/botox`; it sends the visitor on.) The fields work like those of a concern
 (same boxes, rows, photo and search fields).
 
 Typed into the post (boxes under the title, stored as one post meta, `_ndm_procedure`; the list of
@@ -602,8 +607,8 @@ page that already holds different words.
 ## Blog (the list and the articles)
 
 The blog of the site (`/blog`) and its articles are WordPress's ordinary **posts**. A post that has
-text has its own page on the site, at its **slug** (`/what-causes-rosacea-redness`), without a new
-build. A post without text shows on the list only; its card opens the "Opens at" address (the article
+text has its own page on the site, at **`/blog/` and its slug** (`/blog/what-causes-rosacea-redness`),
+without a new build (the old one-part address sends the visitor on). A post without text shows on the list only; its card opens the "Opens at" address (the article
 on the clinic's earlier site) until its text is written here.
 
 | On the site | In WordPress |
