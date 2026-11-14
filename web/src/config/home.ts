@@ -1,3 +1,5 @@
+import { PAGES } from "@/config/routes";
+import { PROCEDURES_INDEX } from "@/lib/post-links";
 import { ACTIONS } from "@/config/routes";
 import { START_PANELS } from "@/config/home-start";
 import { TREATMENT_TABS } from "@/config/home-treatments";
@@ -61,12 +63,14 @@ export const PROCESS_LINKS: ProcessStepLink[] = [
   },
   {
     photoAlt: "VISIA® skin analysis results on the consultation room screen",
-    href: "#treatments",
+    /* the list of every procedure: the step shows on pages that have no treatments section of their own */
+    href: PROCEDURES_INDEX,
     buttonStyle: "ink",
   },
   {
     photoAlt: "A patient checking her skin in a hand mirror in the treatment chair",
-    href: "#visit",
+    /* the two clinics on the About page, for the same reason */
+    href: `${PAGES.about.path}#clinics`,
     buttonStyle: "ink",
   },
 ];

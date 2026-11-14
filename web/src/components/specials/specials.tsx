@@ -1,3 +1,4 @@
+import { getCampaign } from "@/lib/campaign";
 import { unstable_rethrow } from "next/navigation";
 import { connection } from "next/server";
 import { SpecialsWheel, type WheelOffer } from "@/components/specials/specials-wheel";
@@ -34,10 +35,14 @@ export async function Specials({ level = "h2", offersOnPage = false, offers }: S
   }
   if (!list.length) return null;
 
+  /* "View all offers": the Promotion page's list; in the VIP Sale's days the sale's own page */
+  const campaign = offersOnPage ? null : await getCampaign();
+  const all = campaign && !campaign.over && campaign.phase === "vip" ? pagePath("vipSale") : `${pagePath("promotion")}#offers`;
+
   /* the wheel only needs these fields: the rest of an offer is not sent to the browser with it */
   const wheel: WheelOffer[] = list.map(({ id, name, photo, position, tag, price, unit, deal, href }) => ({ id, name, photo, position, tag, price, unit, deal, href }));
   return (
-    <SpecialsWheel offers={wheel} level={level} offersHref={offersOnPage ? "#offers" : `${pagePath("promotion")}#offers`}>
+    <SpecialsWheel offers={wheel} level={level} offersHref={offersOnPage ? "#offers" : all}>
       <PayPlans className="mt-3" />
     </SpecialsWheel>
   );

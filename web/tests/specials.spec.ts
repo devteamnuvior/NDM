@@ -43,7 +43,7 @@ test.describe("desktop", () => {
     else await expect(current(page).locator(".deal-badge")).toHaveCount(0);
     await expect(current(page)).toContainText("per syringe");
     await expect(current(page).getByRole("link", { name: "Buy now" })).toHaveAttribute("href", "/pricing#pg-dermal-fillers-h");
-    await expect(page.locator(SECTION).getByRole("link", { name: "View all offers" })).toHaveAttribute("href", "/promotion#offers");
+    await expect(page.locator(SECTION).getByRole("link", { name: "View all offers" })).toHaveAttribute("href", /^\/(promotion#offers|vip-sale)$/); /* the sale's page in the VIP Sale's days */
   });
 
   test("arrows, arrow keys and a click on a side card turn the wheel; it wraps round", async ({ page }) => {
