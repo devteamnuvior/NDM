@@ -7,7 +7,9 @@ import { expectSamePixels, open, report, VIEWPORTS } from "./helpers";
  * cart (real entries of the price list) and the same last order saved in both. Deliberate differences,
  * put aside before measuring: the prototype's closing line "Prototype: nothing is charged or sent" (the
  * real page says "Nothing is charged online"), its "Not available in this preview" under card payment,
- * and the real form's hidden field that tells people from robots.
+ * and the real form's hidden field that tells people from robots. Also put aside, in both pages: the page
+ * head (steps, heading, help line), which the user changed on 2026-11-14 (steps and heading on one line
+ * each, the head a block of its own above the cards).
  */
 const LINES = [
   { key: "wc:42:44", cat: "Dermal Fillers", name: "Lip Enhancement", label: "2 Syringes", price: 1125, unit: "", was: 1500, productId: 42, variationId: 44, qty: 1 },
@@ -29,7 +31,7 @@ async function openBoth(browser: Browser, vp: { width: number; height: number },
     await p.evaluate(([cart, order]) => { localStorage.setItem("ndm-cart", JSON.stringify(cart)); localStorage.setItem("ndm-last-order", JSON.stringify(order)); }, [page.cart, ORDER] as const);
     await p.reload();
     await p.waitForSelector(SECTION, { state: "visible", timeout: 60_000 });
-    await p.addStyleTag({ content: ".offer-pop-root{display:none!important} input[name=company]{display:none!important}" });
+    await p.addStyleTag({ content: `.offer-pop-root{display:none!important} input[name=company]{display:none!important} ${SECTION} > div:first-child:has(#co-title), ol[aria-label="Checkout progress"]{display:none!important}` });
     await p.evaluate(() => {
       for (const el of Array.from(document.querySelectorAll("main p, main span"))) {
         if (el.children.length <= 1 && /Prototype: nothing is charged or sent/.test(el.textContent ?? "")) el.lastChild!.textContent = "Nothing is charged online";

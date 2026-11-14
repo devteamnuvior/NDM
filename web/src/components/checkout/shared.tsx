@@ -119,10 +119,14 @@ export const IconLock = () => (
   </svg>
 );
 
-/** 1 Cart · 2 Details · 3 Appointment · 4 Payment · 5 Review · 6 Confirmation */
+/**
+ * 1 Cart · 2 Details · 3 Appointment · 4 Payment · 5 Review · 6 Confirmation, always on one line (user,
+ * 2026-11-14; the prototype let the row wrap). Below the `lg` width only the current step shows its
+ * name (the others keep it for screen readers), and on phones the lines between the steps are left out.
+ */
 export function CheckoutSteps({ at, onStep }: { at: number; onStep?: (step: number) => void }) {
   return (
-    <ol className="flex flex-wrap items-center gap-x-3 gap-y-2 font-inter text-[12.5px] font-semibold tracking-[.12em] uppercase" role="list" aria-label="Checkout progress">
+    <ol className="flex flex-nowrap items-center gap-x-2 font-inter text-[12.5px] font-semibold tracking-[.12em] whitespace-nowrap uppercase sm:gap-x-3" role="list" aria-label="Checkout progress">
       {CHECKOUT_STEPS.map((t, i) => {
         const done = i < at;
         const now = i === at;
@@ -131,7 +135,7 @@ export function CheckoutSteps({ at, onStep }: { at: number; onStep?: (step: numb
             {done ? <IconTick size={12} /> : i + 1}
           </span>
         );
-        const label = <span className={now ? "text-ndm-ink" : done ? "text-ndm-deep" : "text-ndm-muted"}>{t}</span>;
+        const label = <span className={now ? "text-ndm-ink" : `max-lg:sr-only ${done ? "text-ndm-deep" : "text-ndm-muted"}`}>{t}</span>;
         return (
           <Fragment key={t}>
             <li aria-current={now ? "step" : undefined}>
@@ -152,7 +156,7 @@ export function CheckoutSteps({ at, onStep }: { at: number; onStep?: (step: numb
                 </span>
               )}
             </li>
-            {i < CHECKOUT_STEPS.length - 1 && <li aria-hidden="true" className={`h-px w-6 sm:w-10 ${done ? "bg-ndm-deep/40" : "bg-ndm-ink/15"}`} />}
+            {i < CHECKOUT_STEPS.length - 1 && <li aria-hidden="true" className={`hidden h-px max-w-10 min-w-3 flex-1 sm:block ${done ? "bg-ndm-deep/40" : "bg-ndm-ink/15"}`} />}
           </Fragment>
         );
       })}
@@ -192,26 +196,18 @@ export function CoAlert({ tone = "ok", title, children, className = "" }: { tone
 }
 
 /** The page head every step shares: steps, heading, one line of help. */
+/**
+ * The page head every step shares, a block of its own above the cards (user, 2026-11-14): the steps on
+ * one line, then the heading on one line with one line of help beside it, closed by a thin rule.
+ */
 export function CoHead({ at, lead, strong, text, onStep }: { at: number; lead: string; strong: string; text?: string | null; onStep?: (step: number) => void }) {
   return (
-    <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-      <div>
-        <CheckoutSteps at={at} onStep={onStep} />
-        <TwoTone
-          as="h1"
-          id="co-title"
-          className="mt-7"
-          size="text-[clamp(40px,4.6vw,68px)]"
-          lead={
-            <>
-              {lead}
-              <br />
-            </>
-          }
-          strong={strong}
-        />
+    <div className="co-head border-b border-ndm-ink/10 pb-[clamp(28px,3.4vw,48px)]">
+      <CheckoutSteps at={at} onStep={onStep} />
+      <div className="mt-7 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+        <TwoTone as="h1" id="co-title" className="sm:whitespace-nowrap" size="text-[clamp(40px,4.6vw,68px)]" lead={lead} strong={strong} />
+        {text && <p className="max-w-[44ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted lg:pb-2">{text}</p>}
       </div>
-      {text && <p className="max-w-[44ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted">{text}</p>}
     </div>
   );
 }
