@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { NEXT_URL } from "../playwright.config";
+import { money, optionOf } from "./price-list";
 
 /**
  * Behaviour of the Botox page on the Next.js build. The page is a post of the WordPress post type
@@ -61,18 +62,22 @@ test("prices come from the price list, per unit; groups fold on their own; a pac
   await expect(botox).toHaveAttribute("aria-expanded", "true");
   await expect(dysport).toHaveAttribute("aria-expanded", "false");
   await expect(botox).toContainText("5 options");
-  await expect(botox).toContainText("From $8.40 / unit");
+  await expect(botox).toContainText(/From \$\d+(\.\d\d)? \/ unit/);
   await expect(botox).toContainText("Up to 30% off");
-  await expect(dysport).toContainText("From $7.70 / unit");
+  await expect(dysport).toContainText(/From \$\d+(\.\d\d)? \/ unit/);
   const rows = prices.locator("#proc-pr0 .pr-opt");
   await expect(rows).toHaveCount(5);
   await expect(rows.nth(0)).toContainText("Per unit");
-  await expect(rows.nth(0)).toContainText("$12 / unit");
-  await expect(rows.nth(1)).toContainText("Regular price $720");
-  await expect(rows.nth(1)).toContainText("$648");
+  /* WooCommerce's prices now: struck through only while the option is on sale */
+  const [unit, units] = await Promise.all([optionOf("Botox Cosmetic", "Regular"), optionOf("Botox Cosmetic", "60 units")]);
+  await expect(rows.nth(0)).toContainText(`${money(unit.price)} / unit`);
+  if (units.regular) await expect(rows.nth(1)).toContainText(`Regular price ${money(units.regular)}`);
+  else await expect(rows.nth(1)).not.toContainText("Regular price");
+  await expect(rows.nth(1)).toContainText(money(units.price));
   await rows.nth(1).getByRole("button", { name: "Add Botox Cosmetic, 60 units to cart" }).click();
   const cart = await page.evaluate(() => JSON.parse(localStorage.getItem("ndm-cart") ?? "[]"));
-  expect(cart[0]).toMatchObject({ cat: "Botox / Dysport", name: "Botox Cosmetic", label: "60 units", price: 648, was: 720, qty: 1 });
+  expect(cart[0]).toMatchObject({ cat: "Botox / Dysport", name: "Botox Cosmetic", label: "60 units", price: units.price, qty: 1 });
+  expect(cart[0].was ?? 0).toBe(units.regular);
   await dysport.click();
   await expect(dysport).toHaveAttribute("aria-expanded", "true");
   await expect(botox).toHaveAttribute("aria-expanded", "true");

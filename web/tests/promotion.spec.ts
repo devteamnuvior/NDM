@@ -1,5 +1,14 @@
 import { expect, test } from "@playwright/test";
 import { NEXT_URL } from "../playwright.config";
+import { money, optionsOf } from "./price-list";
+
+/** The lip filler card as the price list has it now: its lowest price per syringe, and that option's offer. */
+async function lipCard(): Promise<{ price: string; badge: string }> {
+  const perSyringe = (await optionsOf("Lip Enhancement")).map((o) => ({ each: o.price / (Number.parseInt(o.label, 10) || 1), tag: o.tag }));
+  const low = perSyringe.reduce((a, b) => (b.each < a.each ? b : a));
+  return { price: money(low.each), badge: low.tag ? `%${low.tag.charAt(0)}${low.tag.slice(1).toLowerCase()}` : "" };
+}
+
 
 /** Behaviour of the migrated Promotion page on the Next.js build. */
 
@@ -40,9 +49,11 @@ test("ten offer cards with prices from the price list; Face and Body filter them
   await expect(cards).toHaveCount(10);
   const first = cards.first();
   await expect(first.locator("h3")).toHaveText("Lip Filler");
-  await expect(first).toContainText("$562.50");
+  const lip = await lipCard();
+  await expect(first).toContainText(lip.price);
   await expect(first).toContainText("per syringe");
-  await expect(first.locator(".deal-badge")).toHaveText("%Buy 1 get 1 50% off");
+  if (lip.badge) await expect(first.locator(".deal-badge")).toHaveText(lip.badge);
+  else await expect(first.locator(".deal-badge")).toHaveCount(0);
   await expect(first.getByRole("link", { name: "Buy now" })).toHaveAttribute("href", "/pricing#pg-dermal-fillers-h");
 
   const all = grid.getByRole("button", { name: "All" });

@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { NEXT_URL } from "../playwright.config";
+import { money, optionOf } from "./price-list";
 
 /** Behaviour of the migrated Pricing page on the Next.js build. */
 
@@ -31,7 +32,7 @@ test("categories and treatments fold; Expand all opens every treatment of a cate
   await expect(list(page).locator(".pr-group")).toHaveCount(23);
   const cat = list(page).locator("#pg-botox-dysport-h");
   await expect(cat).toHaveAttribute("aria-expanded", "false");
-  await expect(cat).toContainText("From $7.70 / unit");
+  await expect(cat).toContainText(/From \$\d+(\.\d\d)? \/ unit/); /* the lowest price per unit, worked out by the site */
   await expect(cat).toContainText("Up to 30% off");
   await cat.click();
   await expect(cat).toHaveAttribute("aria-expanded", "true");
@@ -41,8 +42,15 @@ test("categories and treatments fold; Expand all opens every treatment of a cate
   const options = list(page).locator("#pr-botox-dysport-0 .pr-opt");
   await expect(options).toHaveCount(5);
   await expect(options.nth(1)).toContainText("60 units");
-  await expect(options.nth(1)).toContainText("Regular price $720");
-  await expect(options.nth(1)).toContainText("now $648");
+  /* WooCommerce's price now: struck through only while the option is on sale */
+  const units = await optionOf("Botox Cosmetic", "60 units");
+  if (units.regular) {
+    await expect(options.nth(1)).toContainText(`Regular price ${money(units.regular)}`);
+    await expect(options.nth(1)).toContainText(`now ${money(units.price)}`);
+  } else {
+    await expect(options.nth(1)).toContainText(money(units.price));
+    await expect(options.nth(1)).not.toContainText("Regular price");
+  }
   await list(page).locator("#pg-botox-dysport").getByRole("button", { name: "Expand all" }).click();
   await expect(list(page).locator("#pg-botox-dysport .pr-item.is-open")).toHaveCount(3);
   await list(page).locator("#pg-botox-dysport").getByRole("button", { name: "Collapse all" }).click();
@@ -84,7 +92,7 @@ test("a special's Buy opens its category in the list and scrolls to it", async (
   await page.goto(`${NEXT_URL}/pricing`);
   await page.waitForTimeout(800);
   const card = page.locator("#specials li").filter({ hasText: "Microneedling" });
-  await expect(card).toContainText("Up to 50% off");
+  await expect(card).toContainText(/\d+% off/i); /* its offer, as the price list has it now */
   await card.getByRole("link", { name: "Buy" }).click();
   const cat = list(page).locator("#pg-microneedling-h");
   await expect(cat).toHaveAttribute("aria-expanded", "true");

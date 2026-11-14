@@ -1,5 +1,14 @@
 import { expect, test, type Page } from "@playwright/test";
 import { NEXT_URL } from "../playwright.config";
+import { money, optionsOf } from "./price-list";
+
+/** The lip filler card as the price list has it now: its lowest price per syringe, and that option's offer. */
+async function lipCard(): Promise<{ price: string; badge: string }> {
+  const perSyringe = (await optionsOf("Lip Enhancement")).map((o) => ({ each: o.price / (Number.parseInt(o.label, 10) || 1), tag: o.tag }));
+  const low = perSyringe.reduce((a, b) => (b.each < a.each ? b : a));
+  return { price: money(low.each), badge: low.tag ? `%${low.tag.charAt(0)}${low.tag.slice(1).toLowerCase()}` : "" };
+}
+
 
 /** Behaviour of the migrated monthly specials wheel on the Next.js build. */
 
@@ -23,8 +32,10 @@ test.describe("desktop", () => {
     await expect(page.locator(`${SECTION} article`)).toHaveCount(10);
     await expect(stage(page)).toHaveAttribute("aria-label", "Monthly specials, offer 1 of 10");
     await expect(current(page).locator("h3")).toHaveText("Lip Filler");
-    await expect(current(page).locator(".sw-price")).toHaveText("$562.50");
-    await expect(current(page).locator(".deal-badge")).toHaveText("%Buy 1 get 1 50% off");
+    const lip = await lipCard();
+    await expect(current(page).locator(".sw-price")).toHaveText(lip.price);
+    if (lip.badge) await expect(current(page).locator(".deal-badge")).toHaveText(lip.badge);
+    else await expect(current(page).locator(".deal-badge")).toHaveCount(0);
     await expect(current(page)).toContainText("per syringe");
     await expect(current(page).getByRole("link", { name: "Buy now" })).toHaveAttribute("href", "/pricing#pg-dermal-fillers-h");
     await expect(page.locator(SECTION).getByRole("link", { name: "View all offers" })).toHaveAttribute("href", "/promotion#offers");

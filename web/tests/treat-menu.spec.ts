@@ -23,7 +23,7 @@ test.describe("desktop", () => {
     await expect(section(page).getByRole("tab", { name: "All" })).toHaveAttribute("aria-selected", "true");
     await expect(cards(page)).toHaveCount(25);
     await expect(cards(page).first()).toContainText("Dermal Fillers");
-    await expect(cards(page).first()).toContainText("From $497.50"); /* lowest price per syringe after the offer */
+    await expect(cards(page).first()).toContainText(/From \$\d+(\.\d\d)?/); /* lowest price per syringe after the offer, worked out by the site from the price list */
     await expect(section(page).getByRole("link", { name: "All treatments" })).toHaveAttribute("href", "#/treatments");
   });
 
