@@ -1,0 +1,162 @@
+/* Buttons. Book Free Consultation (.btn-book) is the one signature button: amber pill, white arrow dot,
+   a deep-blue fill grows out of the dot on hover. Every other button is a plain pill with no icon:
+   ink, line (outline), light (on photos), glass (on dark panels). Ported 1:1 from the prototype. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 500;
+  font-size: 15.5px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-block: 0.12em;
+}
+.btn-sm {
+  height: 40px;
+  padding: 0 18px;
+  font-size: 14.5px;
+}
+.btn-block {
+  display: flex;
+  width: 100%;
+}
+.btn-ink {
+  background: #0f80c3;
+  color: #fff;
+}
+.btn-ink:hover,
+.btn-ink:focus-visible,
+.group:hover .btn-g.btn-ink {
+  background: #0a4f7a;
+}
+.btn-line {
+  background: transparent;
+  color: #1b242b;
+  border-color: rgba(27, 36, 43, 0.18);
+}
+.btn-line:hover,
+.btn-line:focus-visible,
+.group:hover .btn-g.btn-line {
+  background: #1b242b;
+  border-color: #1b242b;
+  color: #fff;
+}
+.btn-light {
+  background: #fff;
+  color: #1b242b;
+}
+.btn-light:hover,
+.btn-light:focus-visible,
+.group:hover .btn-g.btn-light {
+  background: #0f80c3;
+  border-color: #0f80c3;
+  color: #fff;
+  box-shadow: 0 16px 34px -12px rgba(15, 128, 195, 0.75);
+}
+.btn-glass {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.btn-glass:hover,
+.btn-glass:focus-visible {
+  background: #fff;
+  border-color: #fff;
+  color: #1b242b;
+}
+.btn-book {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 6px 0 22px;
+  background: #0f80c3;
+  color: #fff;
+  border-color: #0f80c3;
+  box-shadow: 0 12px 28px -16px rgba(15, 128, 195, 0.65);
+  transition: border-color 0.45s ease, box-shadow 0.5s ease, transform 0.2s ease;
+}
+.btn-book:hover,
+.btn-book:focus-visible,
+.group:hover .btn-g.btn-book {
+  border-color: #26b1e7;
+  box-shadow: 0 16px 34px -12px rgba(15, 128, 195, 0.65);
+}
+.btn-hot {
+  background: #ffa617;
+  border-color: #ffa617;
+  box-shadow: 0 12px 28px -12px rgba(255, 166, 23, 0.9);
+}
+.btn-hot .btn-dot {
+  color: #ffa617;
+}
+.btn-on-dark {
+  background: #fff;
+  color: #1b242b;
+  border-color: #fff;
+  box-shadow: 0 12px 28px -16px rgba(0, 0, 0, 0.5);
+}
+.btn-on-dark .btn-dot {
+  background: #0f80c3;
+  color: #fff;
+}
+.btn-on-dark:hover,
+.btn-on-dark:focus-visible,
+.group:hover .btn-g.btn-on-dark {
+  color: #fff;
+}
+.btn-book::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: 6px;
+  top: 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: #0a4f7a;
+  transform: translateY(-50%) scale(0);
+  transition: transform 0.6s var(--e-out);
+}
+.btn-book:hover::before,
+.btn-book:focus-visible::before,
+.group:hover .btn-g.btn-book::before {
+  transform: translateY(-50%) scale(22);
+}
+.btn-dot {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: #fff;
+  color: #1b242b;
+  transition: transform 0.5s var(--e-out), color 0.4s ease, background-color 0.4s ease;
+}
+.btn-book:hover .btn-dot,
+.btn-book:focus-visible .btn-dot,
+.group:hover .btn-g .btn-dot {
+  transform: rotate(-45deg);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+}

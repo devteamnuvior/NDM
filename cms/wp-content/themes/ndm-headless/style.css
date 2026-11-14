@@ -1,0 +1,10 @@
+/*
+Theme Name: NewDermaMed Headless
+Theme URI: https://newdermamed.com
+Author: NewDermaMed
+Description: WordPress needs one active theme. This one never renders: the Next.js app in ../web is the only frontend, and the ndm-headless must-use plugin sends every theme request there.
+Version: 1.0.0
+Requires at least: 6.5
+Requires PHP: 8.1
+Text Domain: ndm-headless
+*/

@@ -1,0 +1,139 @@
+{
+  "title": "NewDermaMed, Cosmetic & Laser Clinic, Toronto",
+  "description": "",
+  "hero": {
+    "tagline": "NewDermaMed, medical aesthetics in Toronto",
+    "lead": "Refined,",
+    "strong": "not redone.",
+    "intro": "Aesthetic, laser and skin treatments planned around your features, your skin and your pace.",
+    "button": "Find your treatment",
+    "proof": [
+      { "icon": "physician", "label": "Physician-led care" },
+      { "icon": "award", "label": "Top Choice Award, 2019 to 2026" },
+      { "icon": "clinics", "label": "Two Toronto clinics" },
+      { "icon": "analysis", "label": "Free VISIA® skin analysis" }
+    ],
+    "brands": ["Fotona", "Cutera", "VISIA®", "Dermapen 4", "Aptos", "Juvéderm®", "Sculptra®", "Radiesse®", "Mesoestetic", "Dermaceutic", "CoolSculpting®"]
+  },
+  "about": {
+    "tag": "About NewDermaMed",
+    "lead": "Toronto’s cosmetic",
+    "strong": "and laser clinic",
+    "text": "NewDermaMed offers convenience, privacy, and exceptional results with advanced skin rejuvenation and body contouring. Our expert staff delivers personalized care to help you achieve your most desirable appearance.",
+    "highlight": "NewDermaMed",
+    "stats": [
+      { "figure": "16+", "label": "Years in Toronto" },
+      { "figure": "8", "label": "Top Choice Awards" },
+      { "figure": "2", "label": "Toronto clinics" },
+      { "figure": "20+", "label": "Treatment categories" }
+    ]
+  },
+  "start": { "tag": "Two ways in, one clinic", "lead": "Where would you like", "strong": "to start?" },
+  "treatments": {
+    "tag": "Browse the menu",
+    "lead": "Treatments,",
+    "strong": "by what they do",
+    "text": "Every treatment shows a starting price. Pick a category to narrow the list."
+  },
+  "aptos": {
+    "tag": "Our signature",
+    "lead": "A non-surgical facelift,",
+    "strong": "with Aptos threads",
+    "intro": "Fine bioabsorbable threads that can lift and support facial tissue through a few tiny entry points, with no incisions.",
+    "chip": { "before": "Up to", "number": "24", "after": "months of lift and support" },
+    "dials": [
+      { "value": "60", "unit": "min", "label": "Treatment time", "spoken": "About 60 minutes", "fill": "34" },
+      { "value": "2", "unit": "weeks", "label": "Downtime", "spoken": "Up to about 2 weeks", "fill": "50" },
+      { "value": "24", "unit": "months", "label": "May last", "spoken": "Up to 24 months", "fill": "82" }
+    ],
+    "points": [
+      { "icon": "check", "label": "No surgery, no incisions" },
+      { "icon": "thread", "label": "Bioabsorbable P(LA/CL) threads" },
+      { "icon": "shield", "label": "Placed by trained medical professionals" }
+    ],
+    "areas": {
+      "tag": "Treatment areas",
+      "lead": "Where is Aptos",
+      "strong": "used in Canada?",
+      "text": "Visage Excellence is licensed in Canada for one clearly defined area, the midface. Every treatment starts with a careful marking of the zones.",
+      "photos": [
+        { "src": "https://nuvior.com/wp-content/themes/nuvior/assets/img/marking-1.jpg", "label": "Marking · Front", "alt": "Clinical marking of Visage Excellence treatment zones, front view" },
+        { "src": "https://nuvior.com/wp-content/themes/nuvior/assets/img/marking-2.jpg", "label": "Marking · Midface", "alt": "Clinical marking of Visage Excellence treatment zones, three-quarter view" },
+        { "src": "https://nuvior.com/wp-content/themes/nuvior/assets/img/marking-3.jpg", "label": "Marking · Vectors", "alt": "Clinical marking of Visage Excellence treatment zones, vector lines" },
+        { "src": "https://nuvior.com/wp-content/themes/nuvior/assets/img/marking-5.png", "label": "Marking · Valium", "alt": "Clinical marking of Visage Excellence treatment zones, Valium view" }
+      ]
+    }
+  },
+  "space": { "tag": "Inside our clinics", "lead": "Step inside", "strong": "NewDermaMed" },
+  "team": {
+    "tag": "Our medical team",
+    "lead": "The people",
+    "strong": "behind your care.",
+    "text": "Medically directed cosmetic and laser care in Toronto, from a team trained across family medicine, vascular surgery and medical aesthetics."
+  },
+  "results": {
+    "tag": "Before & after",
+    "lead": "Real results,",
+    "strong": "case by case",
+    "text": "Treatment cases photographed before and after. Drag any photo to compare."
+  },
+  "process": {
+    "tag": "How it works",
+    "lead": "How your treatment",
+    "strong": "journey works",
+    "steps": [
+      { "title": "Free consultation", "text": "Meet our team at either Toronto clinic for a free consultation and VISIA® skin analysis.", "button": "Book Free Consultation" },
+      { "title": "Your personal plan", "text": "Your provider recommends treatments for your goals and explains pricing before anything begins.", "button": "Explore treatments" },
+      { "title": "Treatment and follow-up", "text": "Licensed medical professionals perform your treatment and check in on your progress afterwards.", "button": "Find a clinic" }
+    ]
+  },
+  "reviews": {
+    "tag": "Testimonials",
+    "lead": "What our patients say",
+    "strong": "about their experience",
+    "note": "Patient reviews shared from Google · names shortened for privacy · individual results may vary."
+  },
+  "visit": {
+    "tag": "Our Toronto clinics",
+    "lead": "Two clinics in Toronto,",
+    "strong": "one team that cares for you",
+    "text": "Uptown near Sheppard-Yonge and Downtown near College Station, both offer free consultations and easy parking nearby."
+  },
+  "faq": {
+    "tag": "Questions & answers",
+    "lead": "Questions,",
+    "strong": "answered honestly",
+    "intro": "The things people ask us most before their first visit.",
+    "items": [
+      ["Is the first consultation really free?", "Yes. NewDermaMed offers complimentary consultations so you can discuss your goals and explore treatment options before committing."],
+      ["Where are your clinics?", "Uptown: 4763 Yonge Street, Toronto, ON M2N 5M5. Downtown: 790 Bay Street, Suite 900, Toronto, ON M5G 1N8."],
+      ["What are your clinic hours?", "Both clinics are open Monday to Friday, 9am – 7pm, and Saturday, 10am – 5pm."],
+      ["How do I check the price of a treatment?", "Prices are listed by category on our pricing page, along with current offers. Your provider confirms the final price after your consultation."],
+      ["Are prices the same at both locations?", "Yes. Listed prices and promotions apply at both clinics unless otherwise noted."],
+      ["Is financing available?", "Yes. We offer flexible payment plans through Affirm for Canadian residents aged 19+, with a minimum $500 purchase."],
+      ["Is laser hair removal permanent?", "Most people see long-term reduction. Maintenance sessions may be needed, and results vary by individual."],
+      ["How can I book an appointment?", "Call or text either clinic, email info@newdermamed.com, or book online, we’ll confirm your time and location."]
+    ]
+  },
+  "booking": {
+    "lead": "Book a free consultation",
+    "strong": "in a few short steps",
+    "text": "Uptown or Downtown. Your consultation and VISIA® skin analysis are free."
+  },
+  "shop": {
+    "tag": "Medical-grade skincare",
+    "lead": "Clinic skincare,",
+    "strong": "now online",
+    "text": "The medical-grade skincare we carry at our Toronto clinics, available to order from our online shop.",
+    "button": "Visit Skincare shop"
+  },
+  "journal": { "tag": "Skin insights journal", "lead": "Helpful tips and", "strong": "expert advice" },
+  "social": {
+    "tag": "@newdermamed",
+    "lead": "Our journey continues",
+    "strong": "on social.",
+    "text": "Treatment moments, skin tips and a look behind the scenes at our two Toronto clinics.",
+    "button": "Follow along",
+    "note": "Reels from @newdermamed on Instagram. Individual results may vary."
+  }
+}

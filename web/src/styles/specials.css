@@ -1,0 +1,35 @@
+/* Monthly specials wheel: offer cards on an arc, the red deal badge, the Buy button.
+   Copied rule for rule from the prototype, in its order. */
+.specials-wheel{--sw-panel:#EEF4F8;--sw-ink:#1B242B;--sw-muted:#5A646C;--sw-line:#E3E9EF;--sw-ctrl:rgba(27,36,43,.18);--sw-view:rgba(27,36,43,.06)}
+.sw-panel{background:var(--sw-panel);color:var(--sw-ink)}
+.sw-title{color:#1B242B}
+.sw-muted{color:var(--sw-muted)}
+.sw-stage{-webkit-mask-image:linear-gradient(180deg,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 86%,transparent 100%)}
+.sw-card{overflow:hidden;background:linear-gradient(180deg,#F4F9FD 0%,#fff 58%);border:1px solid var(--sw-line);box-shadow:0 26px 50px -30px rgba(15,60,95,.3);color:var(--sw-ink);transform-origin:50% 50%;transition:transform .9s var(--e-out),opacity .6s ease,border-color .5s ease,box-shadow .6s ease,background .6s ease}
+.sw-card::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,#0F80C3,#26B1E7);transform:scaleX(0);transform-origin:left;transition:transform .9s var(--e-out)}
+.sw-card.is-on{background:linear-gradient(180deg,#E6F3FB 0%,#fff 62%);border-color:rgba(32,158,217,.5);box-shadow:0 44px 70px -34px rgba(15,128,195,.45),0 0 0 5px rgba(32,158,217,.1)}
+.sw-card.is-on::before{transform:none}
+.sw-card:not(.is-on):hover{border-color:rgba(32,158,217,.35)}
+.sw-ring{border:1px solid rgba(32,158,217,.13)}
+.sw-badge{background:rgba(32,158,217,.1);color:#0F80C3;transition:background .5s ease,color .5s ease}
+.sw-card.is-on .sw-badge{background:#209ED9;color:#fff}
+.sw-photo{box-shadow:0 0 0 3px #fff,0 0 0 4px rgba(27,36,43,.08),0 10px 22px -12px rgba(27,36,43,.5);transition:box-shadow .5s ease}
+.sw-card.is-on .sw-photo{box-shadow:0 0 0 3px #fff,0 0 0 5px #209ED9,0 10px 22px -12px rgba(27,36,43,.5)}
+.sw-tag{border:1px solid rgba(15,128,195,.2);color:#0F80C3}
+.sw-tag.is-feature{background:#FFA617;border-color:#FFA617;color:#fff}
+.sw-price{color:#0F80C3;padding-bottom:.06em}
+.sw-pct{margin:.2em 0 0 .06em}
+.sw-cur{display:inline-block;font-size:.42em;vertical-align:top;margin:.2em .08em 0 0;letter-spacing:0;color:#0F80C3}
+.sw-buy{color:#0F80C3}.sw-buy:hover{color:#E8930D}
+.sw-ctrl{border-color:var(--sw-ctrl);color:var(--sw-ink)}
+.sw-ctrl:hover{background:var(--sw-ink);color:var(--sw-panel)}
+.sw-dot{background:var(--sw-ctrl)}
+.sw-dot.is-on{background:#FFA617}
+.sw-panel{background:linear-gradient(180deg,#FAFAF8 0%,var(--sw-panel) 16%,var(--sw-panel) 84%,#FAFAF8 100%)}
+.btn-buy{color:#fff}
+html:not([data-campaign]) main.seamless>.specials-wheel .sw-panel{background:linear-gradient(180deg,var(--sw-panel) 0%,var(--sw-panel) 72%,#FAFAF8 100%)}
+.deal-badge{position:relative;display:inline-flex;align-items:center;gap:7px;overflow:hidden;border-radius:999px;padding:6px 13px 6px 6px;white-space:nowrap;font:700 11.5px/1 "Helvetica Neue",Inter,Arial,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#EC3A50 0%,#C8182E 55%,#A0102A 100%);box-shadow:0 12px 24px -12px rgba(200,24,46,.85),inset 0 1px 0 rgba(255,255,255,.28)}
+.deal-badge i{display:grid;place-items:center;width:20px;height:20px;border-radius:999px;background:#fff;color:#C8182E;font:800 11px/1 "Helvetica Neue",Inter,Arial,sans-serif;font-style:normal}
+.deal-badge::after{content:"";position:absolute;inset:-40% -60%;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.38) 50%,transparent 60%);transform:translateX(-70%);animation:dealShine 4.5s ease-in-out infinite}
+@keyframes dealShine{0%,55%{transform:translateX(-70%)}85%,100%{transform:translateX(70%)}}
+@media (prefers-reduced-motion:reduce){.deal-badge::after{animation:none;display:none}}

@@ -1,0 +1,23 @@
+/* Booking: the glass card on the photo, the stacked steps, the picker and the dark summary card.
+   Copied rule for rule from the prototype, in its order. */
+.book-shell{background:rgba(250,250,248,.92);-webkit-backdrop-filter:blur(14px) saturate(130%);backdrop-filter:blur(14px) saturate(130%);box-shadow:0 40px 80px -40px rgba(11,15,19,.6)}
+.book-step{grid-area:1/1;min-width:0;transition:opacity .35s ease}.book-step.is-off{visibility:hidden;opacity:0}
+.book-sum{background:radial-gradient(90% 70% at 100% 0%,rgba(38,177,231,.32),transparent 60%),linear-gradient(160deg,#1B242B,#0B0F13)}
+.book-pop{visibility:hidden;transition:visibility 0s linear .5s}
+.book-pop.is-on{visibility:visible;transition-delay:0s}
+.book-scrim{opacity:0;transition:opacity .35s ease}
+.book-pop.is-on .book-scrim{opacity:1}
+.book-card{transform:translate3d(0,100%,0);transition:transform .55s var(--e-out)}
+.book-pop.is-on .book-card{transform:none}
+@media (min-width:640px){.book-card{opacity:0;transform:translate3d(0,18px,0) scale(.97);transition:transform .55s var(--e-out),opacity .3s ease}.book-pop.is-on .book-card{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.cart-pill,.book-scrim,.book-card{transition:none}.cart-bump{animation:none}}
+/* booking thank-you tick */
+.book-tick{animation:bookTick .6s var(--e-out) both}
+@keyframes bookTick{from{opacity:0;transform:scale(.6)}}
+.book-badge{background:linear-gradient(90deg,rgba(255,166,23,.18),rgba(255,166,23,.08));border:1px solid rgba(255,166,23,.35)}
+.book-badge-dot{box-shadow:0 6px 14px -6px rgba(255,166,23,.9)}
+.book-tab{position:relative}
+.book-tab-has::after{content:"";position:absolute;right:6px;top:6px;width:6px;height:6px;border-radius:999px;background:#FFA617}
+.book-opt{box-shadow:0 1px 0 rgba(27,36,43,.03)}
+@media (max-width:639px){.book-step.is-off{display:none}}
+.book-compact .book-step.is-off{display:none}
