@@ -355,9 +355,10 @@ function DealCard({ d, plan, toggle, badge }: PlanProps & { d: Deal; badge: stri
   const pay = o[4] || o[1];
   const save = o[2] > 0 ? o[2] - pay : 0;
   return (
-    <li id={`bf-${d.id}`} className="scroll-mt-[96px]">
-      <article className={`${T.p}-card flex h-full flex-col overflow-hidden rounded-[24px] bg-white p-5 ring-1 ring-black/[.06] sm:p-6 ${inPlan ? 'is-in' : ''}`}>
-        <div className={`${T.p}-head relative -mx-5 -mt-5 mb-5 flex min-h-[180px] flex-col justify-between gap-5 overflow-hidden p-5 text-white sm:-mx-6 sm:-mt-6 sm:p-6`}>
+    /* header, text, treatment, packages and price are five rows the cards of one grid row share (subgrid), so each lines up across the row */
+    <li id={`bf-${d.id}`} className="row-span-5 grid scroll-mt-[96px] grid-rows-subgrid gap-y-0">
+      <article className={`${T.p}-card row-span-5 grid grid-rows-subgrid gap-y-0 overflow-hidden rounded-[24px] bg-white p-5 ring-1 ring-black/[.06] sm:p-6 ${inPlan ? 'is-in' : ''}`}>
+        <div className={`${T.p}-head relative -mx-5 -mt-5 mb-5 flex min-h-[180px] flex-col gap-5 overflow-hidden p-5 text-white *:last:mt-auto sm:-mx-6 sm:-mt-6 sm:p-6`}>
           <span aria-hidden="true" className={`${T.p}-head-mark font-aeonik`}>%</span>
           <span className="relative flex items-center justify-between gap-3">
             <span className="font-inter text-[11.5px] font-semibold uppercase tracking-[.16em] text-white/65">{d.group}</span>
@@ -370,14 +371,20 @@ function DealCard({ d, plan, toggle, badge }: PlanProps & { d: Deal; badge: stri
               ? <span className="relative max-w-[11ch] font-aeonik text-[32px] leading-[1.02] tracking-[-0.02em]">{d.offer.replace(/ (free|50%\s*off)$/, '')} <span className={`tt-strong whitespace-nowrap ${T.light}`}>{(/(free|50%\s*off)$/.exec(d.offer) || [''])[0]}</span></span>
               : <span className="relative font-inter text-[13px] text-white/70">From <b className={`font-aeonik text-[34px] font-normal leading-none tracking-[-0.03em] ${T.light}`}>{money(d.from)}</b></span>}
         </div>
-        <p className="font-inter text-[14px] leading-[1.55] text-ndm-muted">{d.c.blurb}</p>
-        {d.items.length > 1 && (
-          <label className="mt-5 block">
-            <span className="font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-ndm-muted">Treatment or area</span>
+        <p className="mb-5 font-inter text-[14px] leading-[1.55] text-ndm-muted empty:mb-0">{d.c.blurb}</p>
+        {d.items.length > 1 ? (
+          <label className="block">
+            <span className="block font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-ndm-muted">Treatment or area</span>
             <select value={ii} onChange={(e) => setIi(+e.target.value)} className={`${T.p}-sel mt-2 h-12 w-full rounded-[14px] border border-black/10 pl-4 pr-10 font-inter text-[15px] ${T.ink} outline-hidden ${T.focus}`}>
               {d.items.map((x, k) => <option key={x[0]} value={k}>{bfsShort(x[0], cat)}</option>)}
             </select>
           </label>
+        ) : (
+          /* one treatment only: the same field, without a choice, so the packages sit level with the other cards */
+          <p>
+            <span className="block font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-ndm-muted">Treatment or area</span>
+            <span className={`mt-2 flex h-12 w-full items-center rounded-[14px] border border-black/10 bg-black/[.025] px-4 font-inter text-[15px] ${T.ink}`}><span className="truncate">{bfsShort(it[0], cat)}</span></span>
+          </p>
         )}
         <div className="mb-6 mt-5">
           <span className="font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-ndm-muted">Package</span>
@@ -391,20 +398,19 @@ function DealCard({ d, plan, toggle, badge }: PlanProps & { d: Deal; badge: stri
             ))}
           </div>
         </div>
-        <div className={`${T.p}-tear mt-auto pt-5`}>
-          <div className="flex items-end justify-between gap-3">
-            <p>
-              <span className="block font-inter text-[12px] text-ndm-muted">{bfsShort(it[0], cat)} · {o[0]}</span>
-              <span className="mt-1 flex items-baseline gap-2">
-                <b className={`font-aeonik text-[34px] font-normal leading-none tracking-[-0.03em] ${T.ink}`}>{money(pay)}</b>
-                {o[2] > 0 && <s className="font-inter text-[15px] text-ndm-muted">{money(o[2])}</s>}
-              </span>
+        <div className={`${T.p}-tear flex flex-col pt-5`}>
+          <p className="truncate font-inter text-[12px] text-ndm-muted">{bfsShort(it[0], cat)} · {o[0]}</p>
+          <div className="mt-1 flex items-end justify-between gap-3">
+            <p className="flex items-baseline gap-2">
+              <b className={`font-aeonik text-[34px] font-normal leading-none tracking-[-0.03em] ${T.ink}`}>{money(pay)}</b>
+              {o[2] > 0 && <s className="font-inter text-[15px] text-ndm-muted">{money(o[2])}</s>}
             </p>
             {(save > 0 || (!o[5] && o[3])) && <span className={`shrink-0 whitespace-nowrap pb-1 text-right font-inter text-[12.5px] font-semibold ${T.accent}`}>{save > 0 ? `You save ${money(save)}` : bfsTag(o[3])}</span>}
           </div>
           {o[4] ? <p className="mt-2 font-inter text-[12.5px] leading-[1.45] text-ndm-muted">Website price {money(o[1])} · {code} applied at checkout</p> : null}
+          <span className="grow" />
           <button type="button" onClick={() => toggle({ key, cat, item: bfsShort(it[0], cat), opt: o[0], price: o[1], reg: o[2] || 0, tag: o[5] ? '' : bfsTag(o[3]), code: o[4] || 0, name: it[0], pid: o[5], vid: o[6] })}
-            className={`btn mt-5 w-full ${inPlan ? 'btn-line' : 'btn-ink'}`} aria-pressed={inPlan}>
+            className={`btn mt-5 w-full shrink-0 ${inPlan ? 'btn-line' : 'btn-ink'}`} aria-pressed={inPlan}>
             {inPlan ? 'In my plan, tap to remove' : 'Add to my plan'}
           </button>
         </div>
@@ -551,7 +557,7 @@ function Plan({ plan, toggle, clear }: PlanProps & { clear: () => void }) {
           <p className="mt-1 font-inter text-[13px] text-ndm-muted">{plan.length} {plan.length === 1 ? 'treatment' : 'treatments'} in your plan</p>
           <div className="mt-6 grid gap-2.5">
             {code && <button type="button" onClick={checkout} disabled={!sendable} className="btn bfd-cta w-full disabled:cursor-not-allowed disabled:opacity-50">Go to checkout</button>}
-            <Button href="#/book" v="book" hot block>Book Free Consultation</Button>
+            {!code && <Button href="#/book" v="book" hot block>Book Free Consultation</Button>}
             <Button href={tel(PHONES[0].num)} v="line" block>Call Uptown {PHONES[0].num}</Button>
             <Button href={tel(PHONES[1].num)} v="line" block>Call Downtown {PHONES[1].num}</Button>
           </div>
