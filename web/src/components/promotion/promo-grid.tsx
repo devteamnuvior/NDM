@@ -27,7 +27,8 @@ export function PromoGrid({ offers }: { offers: Offer[] }) {
           <Eyebrow className="rv">Promotions</Eyebrow>
           <TwoTone
             id="offers"
-            className="rv mt-5"
+            /* a link to #offers lands with the tag and heading clear of the header bar */
+            className="rv mt-5 scroll-mt-[190px]"
             lead={
               <>
                 All current

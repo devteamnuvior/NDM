@@ -25,11 +25,14 @@ export function ProcHero({ title, sub, hero, where, offer: o }: TxHeroContent) {
     <section ref={section} data-nav="dark" aria-labelledby="proc-title" className="relative isolate overflow-hidden bg-ndm-night text-white">
       <div aria-hidden="true" className="absolute inset-0 -z-20 overflow-hidden">
         {/* a wide photo, and a tall one for phones */}
+        {/* a procedure whose page has no photo yet opens on the dark band alone, not on an empty image */}
+        {hero.desktop && (
         <picture>
           <source media="(max-width: 767px)" srcSet={withBaseSrcSet(hero.mobile)} />
           { }
           <img ref={photo} src={withBase(hero.desktop)} alt={hero.alt ?? ""} fetchPriority="high" className="absolute inset-x-0 -top-[10%] h-[120%] w-full object-cover will-change-transform" style={{ objectPosition: hero.position }} />
         </picture>
+        )}
       </div>
       <div
         aria-hidden="true"
