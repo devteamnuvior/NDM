@@ -1,28 +1,38 @@
 import type { Metadata } from "next";
+import { unstable_rethrow } from "next/navigation";
 import { Suspense } from "react";
 import { AccountPage } from "@/components/account/account-page";
+import { AccountSignIn } from "@/components/account/account-sign-in";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { ACCOUNT_ORDERS, type AccountOrderRow } from "@/config/account";
-import { getSitePrices } from "@/lib/site-prices";
+import { getAccountSession, isAccountConfigured } from "@/lib/account/session";
+import { WordPressError, getAccount } from "@/lib/wordpress";
 
 export const metadata: Metadata = {
   title: "My account, NewDermaMed Toronto",
-  description: "Your NewDermaMed account: appointments, plans, orders, membership and preferences.",
+  description: "Your NewDermaMed account: orders, saved plans and your details.",
   robots: { index: false, follow: false },
 };
 
-const same = (a: string, b: string): boolean => a.trim().toLowerCase() === b.trim().toLowerCase();
-
-/** The sample orders with their totals: each one is the WooCommerce price of the treatment and option it names. */
+/**
+ * Decided on every request: the signed-in customer's account, read fresh from WooCommerce, or the
+ * sign-in. A sign-in WordPress no longer accepts (the password changed, the account is gone) shows the
+ * sign-in again; the stale cookie opens nothing and is replaced by the next sign-in.
+ */
 async function Content() {
-  const prices = await getSitePrices();
-  const orders: AccountOrderRow[] = ACCOUNT_ORDERS.map((order) => {
-    const priced = order.priced;
-    const item = priced && prices?.categories.flatMap((c) => c.items).find((it) => same(it.name, priced.item));
-    const option = priced && item ? item.options.find((o) => same(o.label, priced.option)) : undefined;
-    return { ...order, total: option?.price ?? null };
-  });
-  return <AccountPage orders={orders} />;
+  const ready = isAccountConfigured();
+  const session = ready ? await getAccountSession() : null;
+  if (!session) return <AccountSignIn ready={ready} />;
+  let account;
+  try {
+    account = await getAccount(session);
+  } catch (error) {
+    unstable_rethrow(error);
+    if (!(error instanceof WordPressError)) throw error;
+    const ended = error.kind === "http" && error.status === 401 && error.code === "ndm_account_signed_out";
+    if (!ended) console.error("[account] the account could not be read:", error.kind, error.status ?? "", error.code ?? "");
+    return <AccountSignIn ready={ended} />;
+  }
+  return <AccountPage account={account} />;
 }
 
 export default function Page() {

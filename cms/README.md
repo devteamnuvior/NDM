@@ -663,6 +663,37 @@ price list when it loads, and "Place order request" creates a real WooCommerce o
 - Tax: WooCommerce tax is off, so the order total has no tax; the site shows 13% HST as an estimate.
   When taxes are switched on in WooCommerce, the site shows WooCommerce's tax instead.
 
+## Customer accounts ("My account")
+
+`/account` on the site is a WooCommerce customer: a WordPress user with the role "customer". The
+plugin's `includes/account.php` adds `ndm/v1/account/*` (all POST, JSON, never cached):
+
+| Route | Does |
+| --- | --- |
+| `sign-in` | checks an email address and password, answers the customer's ID and a stamp |
+| `register` | creates a WooCommerce customer (`wc_create_new_customer`) |
+| `view` | the customer's name, email, phone, preferred clinic, notification choices and orders |
+| `profile` | saves name, email, phone (WooCommerce billing phone) and preferred clinic (`ndm_clinic`) |
+| `notifications` | saves offers / newsletter / events in the user meta `ndm_notify`, with the date of each change (CASL) |
+| `password` | changes the password after checking the current one |
+| `reset-request`, `reset` | emails a link to the site's `/account/reset` page, and sets the new password from it |
+
+- Only the Next.js server calls them, with the site's own account (`ndm-site`, capability
+  `ndm_manage_customer_accounts`, added to the role `ndm_site`). Visitors get 401.
+- Only customers can be opened. An account that can do anything in wp-admin (administrator, shop
+  manager, editor) is refused: those sign in to WordPress.
+- The site keeps the customer's ID and a stamp in an encrypted, httpOnly cookie (`ndm_account`, 14
+  days). The stamp is derived from the stored password hash, so a password change or reset ends every
+  other sign-in. No password is kept on the Next.js server.
+- An order request placed while signed in carries `customerId` and becomes that customer's order
+  (`ndm/v1/orders`); "My account" lists the customer's WooCommerce orders with WooCommerce's own
+  totals and status names. Orders placed without a sign-in are not attached later by email address
+  (the address of a new account is not verified).
+- The reset email needs working mail on the WordPress server and `NDM_FRONTEND_URL` (the link's site).
+- No health information is stored or served (PHIPA). Not built yet: appointments, Premium membership,
+  wishlist, health and consent form status; the notification choices are stored only, nothing sends
+  email from them yet.
+
 ## Consultation requests ("Book a free consultation")
 
 The booking form of the Next.js site (the booking section of the home page, the pop-up behind every

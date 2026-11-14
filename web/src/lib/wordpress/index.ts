@@ -8,6 +8,21 @@ import "server-only";
  * (REST path, fields, cached readers built on `content.ts`), and export it below.
  */
 export { getAboutPage } from "./about";
+export {
+  accountRegister,
+  accountSignIn,
+  changeAccountPassword,
+  getAccount,
+  requestAccountReset,
+  resetAccountPassword,
+  saveAccountNotify,
+  saveAccountProfile,
+  type AccountData,
+  type AccountNotify,
+  type AccountOrder,
+  type AccountProfileInput,
+  type AccountWho,
+} from "./account";
 export { getAptosPage } from "./aptos";
 export { getBeforeAfter } from "./before-after";
 export { getBlogList, getBlogPost } from "./blog";

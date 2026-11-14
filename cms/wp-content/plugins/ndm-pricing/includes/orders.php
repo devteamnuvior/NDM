@@ -218,7 +218,20 @@ function ndm_pricing_rest_order( $request ) {
 		$extras[ $key ] = $value;
 	}
 
-	$order = wc_create_order( array( 'created_via' => 'ndm-site' ) );
+	// An order placed while signed in belongs to that customer's account ("My account" lists it).
+	$customer_id = $body['customerId'] ?? 0;
+	$owner       = is_int( $customer_id ) && $customer_id > 0 ? get_user_by( 'id', $customer_id ) : false;
+
+	if ( 0 !== $customer_id && ! ndm_pricing_is_customer( $owner ) ) {
+		return ndm_pricing_invalid( 'The customer account could not be read.' );
+	}
+
+	$order = wc_create_order(
+		array(
+			'created_via' => 'ndm-site',
+			'customer_id' => $owner ? $owner->ID : 0,
+		)
+	);
 
 	if ( is_wp_error( $order ) ) {
 		return new WP_Error( 'ndm_pricing_order_failed', 'The order request could not be saved.', array( 'status' => 500 ) );

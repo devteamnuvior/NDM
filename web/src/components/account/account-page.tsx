@@ -1,24 +1,26 @@
 "use client";
 
-import { useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { useMemo, useRef, useState, useSyncExternalStore, useTransition, type FormEvent, type ReactNode } from "react";
+import { changePasswordAction, saveNotifyAction, saveProfileAction, signOutAction, type AccountResult } from "@/app/(site)/account/actions";
+import { AccNote } from "@/components/account/account-sign-in";
 import { FIELD } from "@/components/checkout/shared";
 import { Button } from "@/components/ui/button";
 import { IconChevron } from "@/components/ui/icons";
 import { SiteLink } from "@/components/ui/site-link";
 import { SubNav } from "@/components/ui/sub-nav";
-import { ACCOUNT_TABS, type AccountOrderRow, type AccountTabId } from "@/config/account";
-import { PRODUCTS } from "@/config/shop";
+import { ACCOUNT_TABS, type AccountTabId } from "@/config/account";
 import { CLINICS } from "@/config/site";
 import { money } from "@/lib/cart";
 import { byId } from "@/lib/dom";
 import { contentLink, pageLink } from "@/lib/routes";
+import type { AccountData, AccountNotify, AccountOrder } from "@/lib/wordpress/account";
 import { scrollToY } from "@/lib/smooth-scroll";
-import { withBase } from "@/lib/base-path";
 
 /**
- * My account, ported from the prototype's src/account-ui.jsx: a section bar and eight sections of a
- * sample member's account. Sample data only: nothing is loaded from or sent to a server, and the health
- * and consent section shows a status only, never health information (PHIPA).
+ * My account, after the prototype's src/account-ui.jsx: a section bar and the sections of a signed-in
+ * WooCommerce customer's account (details, notification choices, password, orders). Appointments and
+ * Premium membership are left out for now; no health information is ever shown here (PHIPA).
  */
 
 const PLAN_KEY = "ndm-bf-plan";
@@ -38,14 +40,22 @@ function readPlan(): string {
     return "[]";
   }
 }
+/* The section named in the address, as it was when the page opened and after each change the visitor
+   makes to it. Read once and then only on "hashchange": after a saved change the framework puts its own
+   idea of the address back, and the open section must not jump with it. */
+let seenHash: string | null = null;
 function onHash(notify: () => void) {
-  window.addEventListener("hashchange", notify);
-  return () => window.removeEventListener("hashchange", notify);
+  const read = () => {
+    seenHash = window.location.hash.slice(1);
+    notify();
+  };
+  seenHash = window.location.hash.slice(1);
+  window.addEventListener("hashchange", read);
+  return () => window.removeEventListener("hashchange", read);
 }
+const readHash = (): string => (seenHash ??= window.location.hash.slice(1));
 
 const isTab = (k: string): k is AccountTabId => ACCOUNT_TABS.some((t) => t.id === k);
-
-const Todo = ({ children = "To confirm" }: { children?: ReactNode }) => <span className="acc-todo">{children}</span>;
 
 function AccCard({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <div className={`rounded-[24px] bg-white p-[clamp(18px,2.2vw,28px)] ring-1 ring-ndm-ink/[.06] shadow-[0_24px_50px_-42px_rgba(27,36,43,.45)] ${className}`}>{children}</div>;
@@ -61,19 +71,17 @@ function AccHead({ k, title, text }: { k: string; title: string; text?: string }
   );
 }
 
-function AccStatus({ s }: { s: string }) {
-  const tone = ["Completed", "Delivered", "Approved", "Complete"].includes(s) ? "is-ok" : s === "Booked" || s === "Active" ? "is-on" : "is-wait";
-  return <span className={`acc-status ${tone}`}>{s}</span>;
+/** An order's status as WooCommerce names it: green when done, blue while the clinic works on it. */
+function AccStatus({ s, tone }: { s: string; tone?: string }) {
+  const cls = tone === "completed" ? "is-ok" : tone === "processing" || s === "Saved" ? "is-on" : "is-wait";
+  return <span className={`acc-status ${cls}`}>{s}</span>;
 }
 
 /** The booking form's select, as the prototype's `BookSelect`. */
-function AccSelect({ value, placeholder, options }: { value: string; placeholder: string; options: string[] }) {
+function AccSelect({ name, value, onChange, placeholder, options }: { name?: string; value: string; onChange: (value: string) => void; placeholder: string; options: string[] }) {
   return (
     <span className="relative block">
-      <select required value={value} onChange={() => {}} aria-label={placeholder} className={`${FIELD} co-fld appearance-none pr-10`}>
-        <option value="" disabled>
-          {placeholder}
-        </option>
+      <select name={name} value={value} onChange={(e) => onChange(e.target.value)} aria-label={placeholder} className={`${FIELD} co-fld appearance-none pr-10`}>
         {options.map((x) => (
           <option key={x} className="text-ndm-ink">
             {x}
@@ -85,13 +93,18 @@ function AccSelect({ value, placeholder, options }: { value: string; placeholder
   );
 }
 
-function AccOrders({ rows }: { rows: AccountOrderRow[] }) {
+const DAY = new Intl.DateTimeFormat("en-CA", { month: "short", day: "numeric", year: "numeric", timeZone: "America/Toronto" });
+const orderDay = (o: AccountOrder): string => DAY.format(new Date(o.date));
+const orderItems = (o: AccountOrder): string => o.items.map((i) => (i.qty > 1 ? `${i.name} × ${i.qty}` : i.name)).join("; ");
+const orderClinic = (o: AccountOrder): string => o.clinic.replace(/^NewDermaMed\s+/, "");
+
+function AccOrders({ rows }: { rows: AccountOrder[] }) {
   return (
     <div className="no-scrollbar overflow-x-auto">
       <table className="w-full min-w-[640px] border-collapse font-inter text-[14px]">
         <thead>
           <tr className="text-left text-[12px] uppercase tracking-[.12em] text-ndm-muted">
-            {["Order", "Date", "Items", "Clinic", "Total", "Status", ""].map((h) => (
+            {["Order", "Date", "Items", "Clinic", "Total", "Status"].map((h) => (
               <th key={h} className={TH}>
                 {h}
               </th>
@@ -100,20 +113,15 @@ function AccOrders({ rows }: { rows: AccountOrderRow[] }) {
         </thead>
         <tbody>
           {rows.map((o) => (
-            <tr key={o.no} className="border-b border-ndm-line last:border-0">
-              <td className="py-3.5 font-medium text-ndm-ink px-px">{o.no}</td>
-              <td className="py-3.5 text-ndm-muted px-px">{o.date}</td>
-              <td className="py-3.5 text-ndm-ink px-px">{o.items}</td>
-              <td className="py-3.5 text-ndm-muted px-px">{o.clinic}</td>
-              {/* a treatment's total is WooCommerce's price; without one (WooCommerce unreachable) the cell stays empty */}
-              <td className="py-3.5 tabular-nums text-ndm-ink px-px">{o.priced ? (o.total ? money(o.total) : null) : <Todo>Shop order</Todo>}</td>
+            <tr key={o.number} className="border-b border-ndm-line last:border-0">
+              <td className="py-3.5 font-medium text-ndm-ink px-px">{o.number}</td>
+              <td className="py-3.5 whitespace-nowrap text-ndm-muted px-px">{orderDay(o)}</td>
+              <td className="py-3.5 pr-3 text-ndm-ink px-px">{orderItems(o)}</td>
+              <td className="py-3.5 text-ndm-muted px-px">{orderClinic(o)}</td>
+              {/* the order's own total in WooCommerce */}
+              <td className="py-3.5 tabular-nums text-ndm-ink px-px">{money(o.total)}</td>
               <td className="py-3.5 px-px">
-                <AccStatus s={o.status} />
-              </td>
-              <td className="py-3.5 text-right px-px">
-                <a href="#" onClick={(e) => e.preventDefault()} className="font-medium text-ndm-deep hover:underline">
-                  Receipt
-                </a>
+                <AccStatus s={o.statusName} tone={o.status} />
               </td>
             </tr>
           ))}
@@ -123,17 +131,31 @@ function AccOrders({ rows }: { rows: AccountOrderRow[] }) {
   );
 }
 
+function NoOrders() {
+  return (
+    <p className="font-inter text-[15px] leading-[1.6] text-ndm-muted">
+      No orders yet. Order requests you place while signed in appear here.{" "}
+      <SiteLink to={pageLink("pricing")} className="font-medium text-ndm-deep hover:underline">
+        See treatments and prices
+      </SiteLink>
+    </p>
+  );
+}
+
 /* Tailwind 3 left table cells the browser's own 1px padding, which the prototype's tables keep: stated here */
 const TH = "border-b border-ndm-line px-px pt-px pb-2.5 font-semibold";
 const H3 = "font-aeonik text-[22px] font-normal text-ndm-ink";
 const LABEL = "mb-1 block font-inter text-[12.5px] font-medium text-ndm-ink/80";
 const FLD = `${FIELD} co-fld`;
+const NO_CLINIC = "No preference";
 
-type NoteId = "orders" | "offers" | "news" | "events";
+type NoteId = "orders" | keyof AccountNotify;
+const RANGES = ["All time", "This year", "Last 90 days"];
 
-export function AccountPage({ orders }: { orders: AccountOrderRow[] }) {
+export function AccountPage({ account }: { account: AccountData }) {
+  const router = useRouter();
   /* the section named in the address ("/account#plans") opens first; a pick on the page then decides */
-  const hash = useSyncExternalStore(onHash, () => window.location.hash.slice(1), () => "");
+  const hash = useSyncExternalStore(onHash, readHash, () => "");
   const [picked, setPicked] = useState<AccountTabId | null>(null);
   const tab: AccountTabId = picked ?? (isTab(hash) ? hash : "dashboard");
   const root = useRef<HTMLElement>(null);
@@ -158,32 +180,80 @@ export function AccountPage({ orders }: { orders: AccountOrderRow[] }) {
       return [];
     }
   }, [planText]);
-  const [wish, setWish] = useState(() => PRODUCTS.slice(0, 6));
-  const [notes, setNotes] = useState<Record<NoteId, boolean>>({ orders: true, offers: false, news: true, events: false });
 
+  const { orders } = account;
+  const [busy, start] = useTransition();
+  /** Runs a change; a sign-in that has ended sends the visitor back to the sign-in. */
+  const run = (action: () => Promise<AccountResult>, done: (r: AccountResult) => void) =>
+    start(async () => {
+      const r = await action();
+      done(r);
+      if (r.ok || r.signedOut) router.refresh();
+    });
+
+  /* orders: search, status and date range, worked out in the browser from the customer's own list */
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState("All");
+  const [range, setRange] = useState(RANGES[0]);
+  const statuses = useMemo(() => ["All", ...Array.from(new Set(orders.map((o) => o.statusName)))], [orders]);
+  const shown = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const now = new Date();
+    return orders.filter((o) => {
+      if (status !== "All" && o.statusName !== status) return false;
+      const when = new Date(o.date);
+      if (range === "This year" && when.getFullYear() !== now.getFullYear()) return false;
+      if (range === "Last 90 days" && now.getTime() - when.getTime() > 90 * 86_400_000) return false;
+      return !q || `${o.number} ${orderItems(o)} ${o.clinic}`.toLowerCase().includes(q);
+    });
+  }, [orders, query, status, range]);
+
+  /* account details */
+  const [clinic, setClinic] = useState(account.clinic);
+  const [profile, setProfile] = useState<AccountResult | null>(null);
+  const [pass, setPass] = useState<AccountResult | null>(null);
+  const [notes, setNotes] = useState<AccountNotify>(account.notify);
+  const [noteResult, setNoteResult] = useState<AccountResult | null>(null);
+  const saveProfile = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    const v = (k: string) => String(f.get(k) ?? "");
+    run(() => saveProfileAction({ first: v("first"), last: v("last"), email: v("email"), phone: v("phone"), clinic }), setProfile);
+  };
+  const savePass = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const f = new FormData(form);
+    const v = (k: string) => String(f.get(k) ?? "");
+    run(
+      () => changePasswordAction({ current: v("current"), password: v("password"), again: v("again") }),
+      (r) => {
+        setPass(r);
+        if (r.ok) form.reset();
+      },
+    );
+  };
+  const flip = (k: keyof AccountNotify) => {
+    const before = notes;
+    const next = { ...notes, [k]: !notes[k] };
+    setNotes(next);
+    run(
+      () => saveNotifyAction(next),
+      (r) => {
+        setNoteResult(r.ok ? null : r);
+        if (!r.ok) setNotes(before); /* not saved: the switch goes back */
+      },
+    );
+  };
+
+  const latest = orders[0];
   const tiles: [k: string, v: string, d: string, to: AccountTabId][] = [
-    ["Next appointment", "Nov 18", "Uptown, 10:30 am", "plans"],
-    ["Premium membership", "Active", "Member since Jan 2026", "membership"],
-    ["Saved plans", String(1 + (plan.length ? 1 : 0)), "Ready to book", "plans"],
-    ["Health forms", "Complete", "Reviewed at your visit", "forms"],
+    ["Orders", String(orders.length), latest ? `Latest: ${latest.statusName}, ${orderDay(latest)}` : "No orders yet", "orders"],
+    ["Saved plans", plan.length ? "1" : "0", plan.length ? "Ready to book" : "None saved yet", "plans"],
+    ["Preferred clinic", account.clinic || "Not set", "Change it in Account details", "details"],
   ];
-  const benefits = [
-    ["Member pricing", "Pricing on selected treatments and packages."],
-    ["Priority booking", "Earlier access to appointment times."],
-    ["Skincare savings", "Savings on clinic skincare from our shop."],
-  ];
-  const history_ = [
-    ["Jan 8, 2026", "Membership started", "Joined"],
-    ["Nov 3, 2026", "Member pricing on Microneedling package", "Benefit"],
-  ];
-  const forms = [
-    ["Medical history form", "Reviewed with your provider at your first visit", "Complete"],
-    ["Treatment consent", "Signed at the clinic for each treatment", "Complete"],
-    ["Photo consent", "Optional, for your own before and after record", "Not given"],
-    ["Communication preferences (CASL)", "Manage below in Account details", "Set"],
-  ];
-  const switches: [k: NoteId, t: string, d: string, lock?: boolean][] = [
-    ["orders", "Appointment and order updates", "Confirmations and reminders. Always on for booked appointments.", true],
+  const switches: [k: NoteId, t: string, d: string][] = [
+    ["orders", "Appointment and order updates", "Confirmations and reminders. Always on for booked appointments."],
     ["offers", "Offers and promotions (CASL consent)", "Commercial electronic messages. You can withdraw consent at any time."],
     ["news", "Newsletter", "Skincare tips and clinic news, once a month."],
     ["events", "Events", "Invitations to clinic events and open days."],
@@ -194,11 +264,7 @@ export function AccountPage({ orders }: { orders: AccountOrderRow[] }) {
     label: (
       <>
         {label}
-        {id === "wishlist" ? (
-          <span className={`grid h-5 min-w-5 place-items-center rounded-full px-1.5 text-[11px] font-semibold ${tab === id ? "bg-white text-ndm-deep" : "bg-ndm-deep text-white"}`}>{wish.length}</span>
-        ) : soon ? (
-          <span className={`rounded-full px-2 py-0.5 text-[10.5px] font-semibold ${tab === id ? "bg-white/20" : "bg-ndm-mist text-ndm-muted"}`}>{soon}</span>
-        ) : null}
+        {soon ? <span className={`rounded-full px-2 py-0.5 text-[10.5px] font-semibold ${tab === id ? "bg-white/20" : "bg-ndm-mist text-ndm-muted"}`}>{soon}</span> : null}
       </>
     ),
   }));
@@ -211,10 +277,14 @@ export function AccountPage({ orders }: { orders: AccountOrderRow[] }) {
             My account
           </h1>
           <p className="font-inter text-[14px] text-ndm-muted">
-            Signed in as <b className="font-semibold text-ndm-ink">Alex M.</b> ·{" "}
-            <a href="#" onClick={(e) => e.preventDefault()} className="text-ndm-deep hover:underline">
+            Signed in as{" "}
+            <b className="font-semibold text-ndm-ink">
+              {account.first} {account.last}
+            </b>{" "}
+            ·{" "}
+            <button type="button" disabled={busy} onClick={() => run(signOutAction, () => {})} className="text-ndm-deep hover:underline">
               Sign out
-            </a>
+            </button>
           </p>
         </div>
       </section>
@@ -228,325 +298,178 @@ export function AccountPage({ orders }: { orders: AccountOrderRow[] }) {
         }}
       />
       <section className="px-[var(--gx)] pb-[clamp(72px,8vw,120px)] pt-[clamp(24px,3vw,40px)]">
-        <div>
-          <div>
-            <div className="min-w-0">
-              {tab === "dashboard" && (
-                <>
-                  <AccHead k="Dashboard" title="Welcome back, Alex" text="Your appointments, plans, orders and membership in one place." />
-                  <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                    {tiles.map(([k, v, d, to]) => (
-                      <button key={k} type="button" onClick={() => go(to)} className="acc-tile text-left">
-                        <span className="font-inter text-[12.5px] text-ndm-muted">{k}</span>
-                        <span className="mt-2 block font-aeonik text-[30px] leading-none tracking-[-0.03em] text-ndm-ink">{v}</span>
-                        <span className="mt-1.5 block font-inter text-[13px] text-ndm-muted">{d}</span>
-                      </button>
-                    ))}
-                  </div>
-                  <AccCard className="mt-5">
-                    <div className="mb-3 flex items-center justify-between">
-                      <h3 className={H3}>Recent orders &amp; receipts</h3>
-                      <button type="button" onClick={() => go("orders")} className="font-inter text-[14px] font-medium text-ndm-deep hover:underline">
-                        View all
-                      </button>
-                    </div>
-                    <AccOrders rows={orders.slice(0, 2)} />
-                  </AccCard>
-                  <div className="mt-5 grid gap-4 lg:grid-cols-2">
-                    <AccCard>
-                      <h3 className={H3}>Upcoming appointment</h3>
-                      <p className="mt-2 font-inter text-[15px] text-ndm-ink">Microneedling-Face, session 1 of 3</p>
-                      <p className="mt-1 font-inter text-[14px] text-ndm-muted">Tuesday, November 18 · 10:30 am · Uptown clinic</p>
-                      <div className="mt-5 flex flex-wrap gap-2.5">
-                        <Button href="#/book" v="ink" sm>
-                          Reschedule
-                        </Button>
-                        <Button href="#/book" v="line" sm>
-                          Add to calendar
-                        </Button>
-                      </div>
-                    </AccCard>
-                    <AccCard className="acc-member-mini">
-                      <p className="font-inter text-[12px] font-semibold uppercase tracking-[.14em] text-white/70">Premium membership</p>
-                      <p className="mt-2 font-aeonik text-[26px] leading-[1.1] text-white">Member pricing on your plan</p>
-                      <p className="mt-2 font-inter text-[14px] text-white/75">See your benefits and renewal date.</p>
-                      <button type="button" onClick={() => go("membership")} className="btn btn-glass btn-sm mt-5">
-                        Open membership
-                      </button>
-                    </AccCard>
-                  </div>
-                </>
-              )}
-
-              {tab === "plans" && (
-                <>
-                  <AccHead k="My plans & saved treatments" title="Book again in a tap" text="Treatment plans you saved, and packages with sessions left." />
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <AccCard>
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <h3 className={H3}>Microneedling-Face</h3>
-                          <p className="mt-1 font-inter text-[13.5px] text-ndm-muted">Package of 3 · 2 sessions left</p>
-                        </div>
-                        <AccStatus s="Active" />
-                      </div>
-                      <div className="acc-meter mt-5" aria-label="1 of 3 sessions used">
-                        <i style={{ width: "33%" }} />
-                      </div>
-                      <div className="mt-5 flex flex-wrap gap-2.5">
-                        <Button href="#/book" v="book" hot sm>
-                          Book Free Consultation
-                        </Button>
-                        <Button href={contentLink("pricing.html#pg-microneedling-h").href} v="line" sm>
-                          View prices
-                        </Button>
-                      </div>
-                    </AccCard>
-                    <AccCard>
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <h3 className={H3}>Black Friday plan</h3>
-                          <p className="mt-1 font-inter text-[13.5px] text-ndm-muted">{plan.length ? `${plan.length} treatments, ${money(plan.reduce((n, x) => n + x.price, 0))}` : "Build one on the Black Friday page"}</p>
-                        </div>
-                        <AccStatus s={plan.length ? "Saved" : "Empty"} />
-                      </div>
-                      {plan.length > 0 && (
-                        <ul className="mt-4 grid gap-1.5 font-inter text-[13.5px] text-ndm-ink" role="list">
-                          {plan.slice(0, 4).map((x) => (
-                            <li key={x.key}>
-                              {x.cat} · {x.item}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                      <div className="mt-5 flex flex-wrap gap-2.5">
-                        <Button href={contentLink("black-friday-sale.html#plan").href} v="ink" sm>
-                          {plan.length ? "Open my plan" : "See the deals"}
-                        </Button>
-                      </div>
-                    </AccCard>
-                  </div>
-                </>
-              )}
-
-              {tab === "orders" && (
-                <>
-                  <AccHead k="Orders & receipts" title="Your orders" text="Treatment requests from the cart and orders from the skincare shop." />
-                  <AccCard>
-                    <div className="mb-4 grid gap-2.5 sm:grid-cols-[minmax(0,1fr)_180px_180px]">
-                      <input type="search" placeholder="Search orders" className={FLD} aria-label="Search orders" />
-                      <AccSelect value="All" placeholder="Status" options={["All", "Booked", "Completed", "Delivered"]} />
-                      <AccSelect value="This year" placeholder="Date range" options={["This year", "Last 90 days", "All time"]} />
-                    </div>
-                    <AccOrders rows={orders} />
-                  </AccCard>
-                </>
-              )}
-
-              {tab === "payment" && (
-                <>
-                  <AccHead k="Payment methods" title="Coming soon" text="Treatments are paid at your appointment for now. Saved cards and financing will appear here." />
-                  <AccCard>
-                    <p className="font-inter text-[15px] text-ndm-muted">Flexible payment plans are available through Affirm at the clinic, for Canadian residents aged 19 and over, with a minimum $500 purchase.</p>
-                  </AccCard>
-                </>
-              )}
-
-              {tab === "membership" && (
-                <>
-                  <AccHead k="Premium membership" title="Your NewDermaMed membership" text="A membership for our patients, used only at our Uptown and Downtown clinics." />
-                  <div className="acc-member relative overflow-hidden rounded-[28px] p-[clamp(22px,3vw,40px)] text-white">
-                    <span aria-hidden="true" className="acc-member-glow" />
-                    <div className="relative flex flex-wrap items-end justify-between gap-6">
-                      <div>
-                        <p className="font-inter text-[12px] font-semibold uppercase tracking-[.16em] text-white/70">NewDermaMed Premium</p>
-                        <p className="mt-3 font-aeonik text-[clamp(34px,3.4vw,48px)] leading-none tracking-[-0.03em]">Alex M.</p>
-                        <p className="mt-2 font-inter text-[14px] text-white/75">
-                          Member since January 2026 · Renews <Todo>date</Todo>
-                        </p>
-                      </div>
-                      <AccStatus s="Active" />
-                    </div>
-                  </div>
-                  <div className="mt-5 grid gap-4 md:grid-cols-3">
-                    {benefits.map(([t, d]) => (
-                      <AccCard key={t}>
-                        <h3 className="font-aeonik text-[21px] font-normal text-ndm-ink">{t}</h3>
-                        <p className="mt-2 font-inter text-[14px] leading-[1.55] text-ndm-muted">{d}</p>
-                        <p className="mt-3">
-                          <Todo />
-                        </p>
-                      </AccCard>
-                    ))}
-                  </div>
-                  <AccCard className="mt-5">
-                    <h3 className={H3}>Membership history</h3>
-                    <div className="no-scrollbar mt-3 overflow-x-auto">
-                      <table className="w-full min-w-[520px] font-inter text-[14px]">
-                        <thead>
-                          <tr className="text-left text-[12px] uppercase tracking-[.12em] text-ndm-muted">
-                            {["Date", "Description", "Type"].map((h) => (
-                              <th key={h} className={TH}>
-                                {h}
-                              </th>
-                            ))}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {history_.map((r) => (
-                            <tr key={r[1]} className="border-b border-ndm-line last:border-0">
-                              {r.map((c, i) => (
-                                <td key={i} className="py-3 text-ndm-ink px-px">
-                                  {c}
-                                </td>
-                              ))}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                    <p className="mt-4 font-inter text-[13px] text-ndm-muted">
-                      Membership price, benefits and terms are being finalised by the clinic <Todo />
-                    </p>
-                  </AccCard>
-                </>
-              )}
-
-              {tab === "wishlist" && (
-                <>
-                  <AccHead k="Wishlist" title={`${wish.length} saved products`} text="Clinic skincare you saved from our online shop." />
-                  {wish.length ? (
-                    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                      {wish.map((p) => (
-                        <div key={p.href} className="flex items-center gap-3 rounded-[18px] bg-white p-3 ring-1 ring-ndm-ink/[.06]">
-                          <span className="grid size-[68px] shrink-0 place-items-center overflow-hidden rounded-[12px] bg-ndm-mist">
-                            {/* eslint-disable-next-line @next/next/no-img-element -- a photo on the shop's own site, as in the prototype */}
-                            <img src={withBase(p.image)} alt="" loading="lazy" className="h-[86%] w-[86%] object-contain" />
-                          </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block truncate font-inter text-[14.5px] capitalize text-ndm-ink">{p.name}</span>
-                            <span className="block font-inter text-[13px] text-ndm-muted">{p.size}</span>
-                            <span className="mt-1.5 flex gap-3 font-inter text-[13px]">
-                              <a href={withBase(p.href)} target="_blank" rel="noopener" className="font-medium text-ndm-deep hover:underline">
-                                Shop
-                              </a>
-                              <button type="button" onClick={() => setWish(wish.filter((x) => x.href !== p.href))} className="text-ndm-muted hover:text-ndm-ink">
-                                Remove
-                              </button>
-                            </span>
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <AccCard>
-                      <p className="font-inter text-[15px] text-ndm-muted">
-                        Your wishlist is empty.{" "}
-                        <button type="button" onClick={() => setWish(PRODUCTS.slice(0, 6))} className="text-ndm-deep hover:underline">
-                          Restore sample items (prototype only)
-                        </button>
-                      </p>
-                    </AccCard>
+        <div className="min-w-0">
+          {tab === "dashboard" && (
+            <>
+              <AccHead k="Dashboard" title={`Welcome back, ${account.first}`} text="Your plans, orders and details in one place." />
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {tiles.map(([k, v, d, to]) => (
+                  <button key={k} type="button" onClick={() => go(to)} className="acc-tile text-left">
+                    <span className="font-inter text-[12.5px] text-ndm-muted">{k}</span>
+                    <span className="mt-2 block font-aeonik text-[30px] leading-none tracking-[-0.03em] text-ndm-ink">{v}</span>
+                    <span className="mt-1.5 block font-inter text-[13px] text-ndm-muted">{d}</span>
+                  </button>
+                ))}
+              </div>
+              <AccCard className="mt-5">
+                <div className="mb-3 flex items-center justify-between">
+                  <h3 className={H3}>Recent orders &amp; receipts</h3>
+                  {orders.length > 0 && (
+                    <button type="button" onClick={() => go("orders")} className="font-inter text-[14px] font-medium text-ndm-deep hover:underline">
+                      View all
+                    </button>
                   )}
-                </>
-              )}
+                </div>
+                {orders.length ? <AccOrders rows={orders.slice(0, 2)} /> : <NoOrders />}
+              </AccCard>
+            </>
+          )}
 
-              {tab === "forms" && (
-                <>
-                  <AccHead k="Health & consent forms" title="Before your treatment" text="Status only. Your health history is reviewed in person by your provider and is never shown here." />
-                  <div className="grid gap-3">
-                    {forms.map(([t, d, s]) => (
-                      <AccCard key={t} className="flex flex-wrap items-center justify-between gap-3">
-                        <div>
-                          <h3 className="font-inter text-[15.5px] font-semibold text-ndm-ink">{t}</h3>
-                          <p className="mt-1 font-inter text-[13.5px] text-ndm-muted">{d}</p>
-                        </div>
-                        <AccStatus s={s} />
-                      </AccCard>
-                    ))}
+          {tab === "plans" && (
+            <>
+              <AccHead k="My plans & saved treatments" title="Book again in a tap" text="Treatment plans you saved in this browser." />
+              <div className="grid gap-4 md:grid-cols-2">
+                <AccCard>
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className={H3}>Black Friday plan</h3>
+                      <p className="mt-1 font-inter text-[13.5px] text-ndm-muted">{plan.length ? `${plan.length} treatments, ${money(plan.reduce((n, x) => n + x.price, 0))}` : "Build one on the Black Friday page"}</p>
+                    </div>
+                    <AccStatus s={plan.length ? "Saved" : "Empty"} />
                   </div>
-                  <p className="mt-4 font-inter text-[13px] text-ndm-muted">
-                    Questions about your records? See our{" "}
-                    <SiteLink to={pageLink("privacy")} className="text-ndm-deep hover:underline">
-                      Privacy Policy
-                    </SiteLink>
-                    .
-                  </p>
-                </>
-              )}
+                  {plan.length > 0 && (
+                    <ul className="mt-4 grid gap-1.5 font-inter text-[13.5px] text-ndm-ink" role="list">
+                      {plan.slice(0, 4).map((x) => (
+                        <li key={x.key}>
+                          {x.cat} · {x.item}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <div className="mt-5 flex flex-wrap gap-2.5">
+                    <Button href={contentLink("black-friday-sale.html#plan").href} v="ink" sm>
+                      {plan.length ? "Open my plan" : "See the deals"}
+                    </Button>
+                  </div>
+                </AccCard>
+              </div>
+            </>
+          )}
 
-              {tab === "details" && (
-                <>
-                  <AccHead k="Account details" title="Your profile" />
-                  <form onSubmit={(e) => e.preventDefault()} className="grid gap-5">
-                    <AccCard>
-                      <h3 className={H3}>Profile</h3>
-                      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                        <label>
-                          <span className={LABEL}>First name</span>
-                          <input defaultValue="Alex" className={FLD} />
-                        </label>
-                        <label>
-                          <span className={LABEL}>Last name</span>
-                          <input defaultValue="M." className={FLD} />
-                        </label>
-                        <label>
-                          <span className={LABEL}>Email</span>
-                          <input type="email" defaultValue="alex@example.com" className={FLD} />
-                        </label>
-                        <label>
-                          <span className={LABEL}>Phone</span>
-                          <input type="tel" defaultValue="" placeholder="Optional" className={FLD} />
-                        </label>
-                        <label className="sm:col-span-2">
-                          <span className={LABEL}>Preferred clinic</span>
-                          <AccSelect value="Uptown" placeholder="Clinic" options={CLINICS.map((c) => c.name)} />
-                        </label>
-                      </div>
-                      <div className="mt-5">
-                        <Button as="button" type="submit" v="ink" sm>
-                          Save changes
-                        </Button>
-                      </div>
-                    </AccCard>
-                    <AccCard>
-                      <h3 className={H3}>Password</h3>
-                      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                        {["Current password", "New password", "Confirm new password"].map((x) => (
-                          <label key={x}>
-                            <span className={LABEL}>{x}</span>
-                            <input type="password" autoComplete="off" className={FLD} />
-                          </label>
-                        ))}
-                      </div>
-                      <div className="mt-5">
-                        <Button as="button" type="submit" v="line" sm>
-                          Update password
-                        </Button>
-                      </div>
-                    </AccCard>
-                    <AccCard>
-                      <h3 className={H3}>Notifications</h3>
-                      <ul className="mt-3 divide-y divide-ndm-line" role="list">
-                        {switches.map(([k, t, d, lock]) => (
-                          <li key={k} className="flex items-start justify-between gap-4 py-3.5">
-                            <span>
-                              <span className="block font-inter text-[15px] font-medium text-ndm-ink">{t}</span>
-                              <span className="mt-0.5 block font-inter text-[13px] text-ndm-muted">{d}</span>
-                            </span>
-                            <button type="button" role="switch" aria-checked={notes[k]} disabled={lock} onClick={() => setNotes({ ...notes, [k]: !notes[k] })} className={`acc-switch ${notes[k] ? "is-on" : ""}`}>
-                              <i />
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    </AccCard>
+          {tab === "orders" && (
+            <>
+              <AccHead k="Orders & receipts" title="Your orders" text="Order requests you placed from the cart while signed in. Nothing is charged online: payment is taken at the clinic." />
+              <AccCard>
+                {orders.length ? (
+                  <>
+                    <div className="mb-4 grid gap-2.5 sm:grid-cols-[minmax(0,1fr)_180px_180px]">
+                      <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search orders" className={FLD} aria-label="Search orders" />
+                      <AccSelect value={status} onChange={setStatus} placeholder="Status" options={statuses} />
+                      <AccSelect value={range} onChange={setRange} placeholder="Date range" options={RANGES} />
+                    </div>
+                    {shown.length ? <AccOrders rows={shown} /> : <p className="font-inter text-[15px] text-ndm-muted">No orders match.</p>}
+                  </>
+                ) : (
+                  <NoOrders />
+                )}
+              </AccCard>
+            </>
+          )}
+
+          {tab === "payment" && (
+            <>
+              <AccHead k="Payment methods" title="Coming soon" text="Treatments are paid at your appointment for now. Saved cards and financing will appear here." />
+              <AccCard>
+                <p className="font-inter text-[15px] text-ndm-muted">Flexible payment plans are available through Affirm at the clinic, for Canadian residents aged 19 and over, with a minimum $500 purchase.</p>
+              </AccCard>
+            </>
+          )}
+
+          {tab === "details" && (
+            <>
+              <AccHead k="Account details" title="Your profile" />
+              <div className="grid gap-5">
+                <AccCard>
+                  <form onSubmit={saveProfile}>
+                    <h3 className={H3}>Profile</h3>
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                      <label>
+                        <span className={LABEL}>First name</span>
+                        <input name="first" required maxLength={60} autoComplete="given-name" defaultValue={account.first} className={FLD} />
+                      </label>
+                      <label>
+                        <span className={LABEL}>Last name</span>
+                        <input name="last" required maxLength={60} autoComplete="family-name" defaultValue={account.last} className={FLD} />
+                      </label>
+                      <label>
+                        <span className={LABEL}>Email</span>
+                        <input name="email" type="email" required maxLength={120} autoComplete="email" defaultValue={account.email} className={FLD} />
+                      </label>
+                      <label>
+                        <span className={LABEL}>Phone</span>
+                        <input name="phone" type="tel" maxLength={30} autoComplete="tel" defaultValue={account.phone} placeholder="Optional" className={FLD} />
+                      </label>
+                      <label className="sm:col-span-2">
+                        <span className={LABEL}>Preferred clinic</span>
+                        <AccSelect value={clinic || NO_CLINIC} onChange={(v) => setClinic(v === NO_CLINIC ? "" : v)} placeholder="Clinic" options={[NO_CLINIC, ...CLINICS.map((c) => c.name)]} />
+                      </label>
+                    </div>
+                    <div className="mt-5">
+                      <Button as="button" type="submit" v="ink" sm disabled={busy}>
+                        Save changes
+                      </Button>
+                    </div>
+                    <AccNote result={profile} />
                   </form>
-                </>
-              )}
-            </div>
-          </div>
-          <p className="mt-10 font-inter text-[12.5px] text-ndm-muted">Prototype: sample account data only. Nothing is loaded from or sent to a server.</p>
+                </AccCard>
+                <AccCard>
+                  <form onSubmit={savePass}>
+                    <h3 className={H3}>Password</h3>
+                    <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                      <label>
+                        <span className={LABEL}>Current password</span>
+                        <input name="current" type="password" required maxLength={128} autoComplete="current-password" className={FLD} />
+                      </label>
+                      <label>
+                        <span className={LABEL}>New password</span>
+                        <input name="password" type="password" required minLength={8} maxLength={128} autoComplete="new-password" className={FLD} />
+                      </label>
+                      <label>
+                        <span className={LABEL}>Confirm new password</span>
+                        <input name="again" type="password" required minLength={8} maxLength={128} autoComplete="new-password" className={FLD} />
+                      </label>
+                    </div>
+                    <div className="mt-5">
+                      <Button as="button" type="submit" v="line" sm disabled={busy}>
+                        Update password
+                      </Button>
+                    </div>
+                    <AccNote result={pass} />
+                  </form>
+                </AccCard>
+                <AccCard>
+                  <h3 className={H3}>Notifications</h3>
+                  <ul className="mt-3 divide-y divide-ndm-line" role="list">
+                    {switches.map(([k, t, d]) => {
+                      const on = k === "orders" ? true : notes[k];
+                      return (
+                        <li key={k} className="flex items-start justify-between gap-4 py-3.5">
+                          <span>
+                            <span className="block font-inter text-[15px] font-medium text-ndm-ink">{t}</span>
+                            <span className="mt-0.5 block font-inter text-[13px] text-ndm-muted">{d}</span>
+                          </span>
+                          <button type="button" role="switch" aria-label={t} aria-checked={on} disabled={k === "orders" || busy} onClick={() => k !== "orders" && flip(k)} className={`acc-switch ${on ? "is-on" : ""}`}>
+                            <i />
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <AccNote result={noteResult} />
+                </AccCard>
+              </div>
+            </>
+          )}
         </div>
       </section>
     </>

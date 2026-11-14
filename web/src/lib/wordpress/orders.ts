@@ -16,6 +16,8 @@ export interface OrderRequestInput {
   /** "2026-12-01, morning", or "Call me to find a time". */
   preferred: string;
   note: string;
+  /** The signed-in customer the order belongs to; left out for a visitor without an account. */
+  customerId?: number;
 }
 
 export interface PlacedOrder {

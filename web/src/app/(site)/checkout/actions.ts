@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { CHECKOUT_STEPS, HST, PROVINCES, TIMES_OF_DAY } from "@/config/checkout";
 import { CLINICS } from "@/config/site";
+import { getAccountSession } from "@/lib/account/session";
 import { CART_MAX, cartKey, type CartLine } from "@/lib/cart";
 import { WordPressError, isWordPressConfigured, placeOrderRequest } from "@/lib/wordpress";
 
@@ -104,8 +105,12 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
 
   if (!isWordPressConfigured()) return { ok: false, reason: "unreachable", message: "Order requests are not available right now. Please call the clinic." };
 
+  /* signed in: the order goes on that customer's account, where "My account" lists it */
+  const customerId = (await getAccountSession())?.id;
+
   try {
     const placed = await placeOrderRequest({
+      ...(customerId ? { customerId } : {}),
       lines,
       customer: { first, last, email, phone, address: street, apt, city, province: form.province, postal },
       clinic: `NewDermaMed ${clinic.name}`,

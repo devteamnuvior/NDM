@@ -1,11 +1,15 @@
 import { expect, test } from "@playwright/test";
 import { NEXT_URL } from "../playwright.config";
 
-/** Behaviour of the migrated My account page on the Next.js build (sample data only). */
+/**
+ * My account without a sign-in, on the Next.js build: the page shows the sign-in and nothing of an
+ * account. The signed-in account (a real WooCommerce customer) is tested end to end in
+ * tests/admin/account.spec.ts (npm run test:admin).
+ */
 
 test.use({ viewport: { width: 1440, height: 900 } });
 
-test("the old address redirects; title, one h1, breadcrumb, eight sections on the bar; no errors", async ({ page }) => {
+test("the old address redirects; title, one h1, breadcrumb, the sign-in; no errors", async ({ page }) => {
   const errors: string[] = [];
   page.on("console", (m) => {
     if (m.type() === "error") errors.push(m.text());
@@ -18,61 +22,47 @@ test("the old address redirects; title, one h1, breadcrumb, eight sections on th
   await expect(page.locator("h1")).toHaveText("My account");
   await expect(page.getByRole("navigation", { name: "Breadcrumb" })).toHaveText("Home/My account");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-  const bar = page.getByRole("navigation", { name: "Account" });
-  await expect(bar.getByRole("link")).toHaveCount(8);
-  await expect(bar.locator('[aria-current="true"]')).toHaveText("Dashboard");
+  await expect(page.getByRole("heading", { level: 2, name: "Sign in" })).toBeVisible();
+  /* nothing of an account without a sign-in: no section bar, no orders, no sample member */
+  await expect(page.getByRole("navigation", { name: "Account" })).toHaveCount(0);
+  await expect(page.locator("main table")).toHaveCount(0);
+  await expect(page.locator("main")).not.toContainText("Signed in as");
   await page.waitForLoadState("networkidle");
   expect(errors).toEqual([]);
 });
 
-test("the bar and the dashboard tiles switch sections, and the address keeps the section", async ({ page }) => {
+test("sign in, create account and forgot password are three forms in one card", async ({ page }) => {
   await page.goto(`${NEXT_URL}/account`);
-  const bar = page.getByRole("navigation", { name: "Account" });
-  await bar.getByRole("link", { name: /Orders/ }).click();
-  await expect(page.getByRole("heading", { level: 2, name: "Your orders" })).toBeVisible();
-  await expect(page).toHaveURL(`${NEXT_URL}/account#orders`);
-  await expect(page.locator("main tbody tr")).toHaveCount(3);
-  await bar.getByRole("link", { name: "Dashboard" }).click();
-  await page.getByRole("button", { name: /Health forms/ }).click();
-  await expect(page.getByRole("heading", { level: 2, name: "Before your treatment" })).toBeVisible();
-  await expect(bar.locator('[aria-current="true"]')).toHaveText("Health & consent forms");
+  await page.waitForLoadState("networkidle");
+  const main = page.locator("main");
+  await expect(main.getByLabel("Email")).toHaveAttribute("autocomplete", "email");
+  await expect(main.getByLabel("Password")).toHaveAttribute("autocomplete", "current-password");
+
+  await main.getByRole("tab", { name: "Create account" }).click();
+  await expect(main.getByRole("heading", { level: 2, name: "Create your account" })).toBeVisible();
+  await expect(main.getByLabel("First name")).toBeVisible();
+  await expect(main.getByLabel(/^Password/)).toHaveAttribute("autocomplete", "new-password");
+  await expect(main.getByRole("link", { name: "Terms" })).toHaveAttribute("href", /\/terms$/);
+  await expect(main.getByRole("link", { name: "Privacy Policy" })).toHaveAttribute("href", /\/privacy$/);
+
+  await main.getByRole("tab", { name: "Sign in" }).click();
+  await main.getByRole("button", { name: "Forgot your password?" }).click();
+  await expect(main.getByRole("heading", { level: 2, name: "Choose a new password" })).toBeVisible();
+  await expect(main.getByLabel("Password")).toHaveCount(0);
+  await main.getByRole("button", { name: "Back to sign in" }).click();
+  await expect(main.getByRole("heading", { level: 2, name: "Sign in" })).toBeVisible();
 });
 
-test("a section named in the address opens first", async ({ page }) => {
-  await page.goto(`${NEXT_URL}/account#membership`);
-  await expect(page.getByRole("heading", { level: 2, name: "Your NewDermaMed membership" })).toBeVisible();
+test("a reset link without its key asks for a new one", async ({ page }) => {
+  await page.goto(`${NEXT_URL}/account/reset`);
+  await expect(page.locator("h1")).toHaveText("Choose a new password");
+  await expect(page.locator("main")).toContainText("This link is not complete");
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
 });
 
-test("order totals are WooCommerce's prices; a shop order shows no amount", async ({ page }) => {
-  await page.goto(`${NEXT_URL}/account#orders`);
-  const rows = page.locator("main tbody tr");
-  await expect(rows.nth(0).locator("td").nth(4)).toHaveText(/^\$\d+(\.\d\d)?$/);
-  await expect(rows.nth(2).locator("td").nth(4)).toHaveText("Shop order");
-});
-
-test("wishlist: removing a product lowers the count on the bar; notification switches toggle", async ({ page }) => {
-  await page.goto(`${NEXT_URL}/account#wishlist`);
-  await expect(page.getByRole("heading", { level: 2, name: "6 saved products" })).toBeVisible();
-  await page.getByRole("button", { name: "Remove" }).first().click();
-  await expect(page.getByRole("heading", { level: 2, name: "5 saved products" })).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Account" }).getByRole("link", { name: /Wishlist/ })).toContainText("5");
-  await page.getByRole("navigation", { name: "Account" }).getByRole("link", { name: "Account details" }).click();
-  /* the switches carry no name of their own, as in the prototype: first = appointment updates (locked), second = offers */
-  const offers = page.getByRole("switch").nth(1);
-  await expect(offers).toHaveAttribute("aria-checked", "false");
-  await offers.click();
-  await expect(offers).toHaveAttribute("aria-checked", "true");
-  await expect(page.getByRole("switch").first()).toBeDisabled();
-});
-
-test("phone: no sideways scroll in any section", async ({ browser }) => {
-  const ctx = await browser.newContext({ viewport: { width: 375, height: 812 } });
-  const page = await ctx.newPage();
-  for (const tab of ["dashboard", "plans", "orders", "payment", "membership", "wishlist", "forms", "details"]) {
-    await page.goto(`${NEXT_URL}/account#${tab}`);
-    await page.reload();
-    await page.waitForSelector("#acc-title");
-    expect(await page.evaluate(() => document.documentElement.scrollWidth), tab).toBeLessThanOrEqual(375);
-  }
-  await ctx.close();
+test("phone: the sign-in fits a 375px window with no sideways scroll", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto(`${NEXT_URL}/account`);
+  await page.getByRole("tab", { name: "Create account" }).click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(375);
 });
