@@ -13,13 +13,15 @@ export interface TreatmentCard {
   image: { src: string; srcSet: string };
   /** Category label on the photo. */
   tag: string;
+  /** What an editor picked in WordPress to price the card ("product:<id>" or "category:<slug>"); empty: priced by its name. */
+  source?: string;
 }
 
 export interface TreatmentTab {
   id: string;
   label: string;
-  /** The button under the cards: where "all of this category" lives. */
-  all: { href: string; label: string };
+  /** The button under the cards: where "all of this category" lives. None: no button. */
+  all: { href: string; label: string } | null;
   cards: TreatmentCard[];
 }
 

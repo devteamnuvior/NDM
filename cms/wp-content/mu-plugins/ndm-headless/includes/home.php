@@ -14,10 +14,10 @@
  * - The words are kept in the page's revisions (WordPress's revisioned post meta): Revisions on the
  *   edit screen compares them box by box, and restoring a revision restores them.
  * - What the page shares with the rest of the site, or reads from elsewhere, lives in the site's code:
- *   the films, the concern panels and the treatment cards (their prices come from WooCommerce), the
+ *   the films, every price (WooCommerce), the
  *   team members, the before and after cases, the photos and links of How it works, the monthly
- *   specials (WooCommerce), the reviews and awards, the two clinics, the booking form, the shop's
- *   products, the journal posts and the reels.
+ *   specials (WooCommerce), the reviews and awards, the two clinics, the booking form, the journal
+ *   posts and the reels.
  * - `GET ndm/v1/home-page` gives the published home page; it answers 404 with the reason when no page
  *   is chosen, the page is not published or it holds no home page words yet, and the site then shows
  *   its built-in copy.
@@ -268,8 +268,46 @@ function ndm_headless_home_schema() {
 		array(
 			'id'     => 'treatments',
 			'title'  => 'Treatments',
-			'help'   => 'The heading above the treatment cards. The cards are the site\'s; their prices come from WooCommerce.',
-			'fields' => array_merge( $head( 'treat' ), array( array( 'key' => 'treat_text' ) + $text ) ),
+			'help'   => 'The heading, the category tabs and their cards. Every price on a card comes from WooCommerce.',
+			'fields' => array_merge(
+				$head( 'treat' ),
+				array(
+					array( 'key' => 'treat_text' ) + $text,
+					array( 'key' => 'treat_all_tab', 'label' => 'First tab (every card): name', 'type' => 'text', 'help' => 'It shows the cards of all the tabs below. Empty: "All".' ),
+					array( 'key' => 'treat_all_button', 'label' => 'First tab: button under the cards, words', 'type' => 'text', 'help' => 'Empty: "All treatments".' ),
+					array( 'key' => 'treat_all_link', 'label' => 'First tab: button under the cards, address', 'type' => 'text', 'help' => 'Empty: "#/treatments".' ),
+					array(
+						'key'    => 'treat_tabs',
+						'label'  => 'Tabs',
+						'type'   => 'repeater',
+						'add'    => 'Add a tab',
+						'title'  => 'label',
+						'help'   => 'One tab per category, in this order, after the first tab. No tab: the site shows its built-in tabs and cards.',
+						'fields' => array(
+							array( 'key' => 'label', 'label' => 'Tab name', 'type' => 'text', 'help' => 'For example "Injectables". A tab without a name is left out.' ),
+							array( 'key' => 'all_label', 'label' => 'Button under the cards: words', 'type' => 'text', 'help' => 'For example "All injectables". Empty: no button on this tab.' ),
+							array( 'key' => 'all_link', 'label' => 'Button under the cards: address', 'type' => 'text', 'help' => 'For example "/pricing".' ),
+							array(
+								'key'    => 'cards',
+								'label'  => 'Cards',
+								'type'   => 'repeater',
+								'add'    => 'Add a card',
+								'title'  => 'name',
+								'help'   => 'Add a card, then search for its WooCommerce product. The card takes the product\'s name, short description, image and category; the fields below replace them only for this card when filled in.',
+								'fields' => array(
+									array( 'key' => 'price_source', 'label' => 'Product (WooCommerce)', 'type' => 'product', 'help' => 'Search the price list and pick the product (or a whole category): its lowest price shows as "From" and can only be changed in the price manager. Empty: priced by the title below when the price list has it, else no price.' ),
+									array( 'key' => 'name', 'label' => 'Title', 'type' => 'text', 'help' => 'Empty: the product\'s name.' ),
+									array( 'key' => 'text', 'label' => 'Text', 'type' => 'textarea', 'help' => 'Three lines fit. Empty: the product\'s short description. Use qualified language ("may", "can"), and never name a prescription drug beside a benefit.' ),
+									array( 'key' => 'image', 'label' => 'Image', 'type' => 'image', 'help' => 'A landscape photo works best. Empty: the product\'s image. A card with no image at all is left out.' ),
+									array( 'key' => 'tag', 'label' => 'Tag on the photo', 'type' => 'text', 'help' => 'For example "Injectables". Empty: the product\'s category, else the tab name.' ),
+									array( 'key' => 'link', 'label' => 'Link', 'type' => 'text', 'help' => 'For example "/botox". Empty: the page with this title, once it exists.' ),
+									array( 'key' => 'price_note', 'label' => 'Words instead of a price', 'type' => 'text', 'help' => 'Shown only when WooCommerce has no price for the card, for example "Free" or "Priced at consultation". Never type an amount here.' ),
+								),
+							),
+						),
+					),
+				)
+			),
 		),
 		array(
 			'id'     => 'aptos',
@@ -415,12 +453,27 @@ function ndm_headless_home_schema() {
 		array(
 			'id'     => 'shop',
 			'title'  => 'Skincare Shop',
-			'help'   => 'The words above the products. The products and the shop\'s address are the site\'s.',
+			'help'   => 'The words, the shop\'s button and the products, all typed here (they are not read from WooCommerce).',
 			'fields' => array_merge(
 				$head( 'shop' ),
 				array(
 					array( 'key' => 'shop_text' ) + $text,
-					array( 'key' => 'shop_button', 'label' => 'Button', 'type' => 'text', 'help' => 'It opens the skincare shop. For example "Visit Skincare shop".' ),
+					array( 'key' => 'shop_button', 'label' => 'Button', 'type' => 'text', 'help' => 'It opens the skincare shop in a new tab. For example "Visit Skincare shop".' ),
+					array( 'key' => 'shop_link', 'label' => 'Button address', 'type' => 'text', 'help' => 'For example "https://shop.newdermamedlaserclinic.com/shop/". Empty: that address.' ),
+					array(
+						'key'    => 'shop_products',
+						'label'  => 'Products',
+						'type'   => 'repeater',
+						'add'    => 'Add a product',
+						'title'  => 'name',
+						'help'   => 'The first twelve show in the list (six on phones); every product also turns on the circle above the heading. A product without a name or a photo is left out. No product: the site shows its built-in products.',
+						'fields' => array(
+							array( 'key' => 'name', 'label' => 'Name', 'type' => 'text', 'help' => 'For example "Activ Retinol 0.5".' ),
+							array( 'key' => 'size', 'label' => 'Line under the name', 'type' => 'text', 'help' => 'For example "30 ml".' ),
+							array( 'key' => 'image', 'label' => 'Photo', 'type' => 'image', 'help' => 'A square photo of the product on white works best (it shows small).' ),
+							array( 'key' => 'link', 'label' => 'Link', 'type' => 'text', 'help' => 'The product\'s page in the shop; it opens in a new tab. Empty: the button\'s address.' ),
+						),
+					),
 				)
 			),
 		),
@@ -601,7 +654,7 @@ function ndm_headless_home_intro( $post ) {
 		$from = ndm_headless_home_previous_page( $post->ID );
 		echo '<p><strong>No home page words are saved on this page yet</strong>, so the site shows its built-in copy. ' . ( $from ? 'The boxes below start from the words of "' . esc_html( get_the_title( $from ) ) . '", the page that held them before; Update' : 'Update' ) . ' saves them to this page.</p>';
 	}
-	echo '<p>Filled in by the site, not typed here: the films, the concern panels and treatment cards with their prices (WooCommerce), the team members, the before and after cases, the monthly specials (WooCommerce), the reviews and awards, the two clinics, the booking form, the shop\'s products, the journal posts and the reels. The words of a section that other pages also show (Our Team, Before And After, How It Works, Testimonials, Booking, Social) change on the home page only.</p>';
+	echo '<p>Filled in by the site, not typed here: the films, every price (WooCommerce), the team members, the before and after cases, the monthly specials (WooCommerce), the reviews and awards, the two clinics, the booking form, the journal posts and the reels. The words of a section that other pages also show (Our Team, Before And After, How It Works, Testimonials, Booking, Social) change on the home page only.</p>';
 	echo '</div>';
 }
 add_action( 'edit_form_after_title', 'ndm_headless_home_intro' );
@@ -814,6 +867,22 @@ function ndm_headless_home_answer( $post ) {
 	foreach ( $content['start_panels'] as $i => $panel ) {
 		if ( ! empty( $panel['image']['id'] ) ) {
 			$content['start_panels'][ $i ]['image']['srcset'] = (string) wp_get_attachment_image_srcset( $panel['image']['id'], 'full' );
+		}
+	}
+
+	// The cards' photos (typed or the product's) fill cards at many widths: the site picks a size from WordPress's own.
+	$srcset = function ( $image ) {
+		if ( ! empty( $image['id'] ) ) {
+			$image['srcset'] = (string) wp_get_attachment_image_srcset( $image['id'], 'full' );
+		}
+		return $image;
+	};
+	foreach ( $content['treat_tabs'] as $i => $tab ) {
+		foreach ( $tab['cards'] as $j => $card ) {
+			$content['treat_tabs'][ $i ]['cards'][ $j ]['image'] = $srcset( $card['image'] );
+			if ( ! empty( $card['product']['image'] ) ) {
+				$content['treat_tabs'][ $i ]['cards'][ $j ]['product']['image'] = $srcset( $card['product']['image'] );
+			}
 		}
 	}
 

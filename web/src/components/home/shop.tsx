@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { RevealSection } from "@/components/ui/reveal-section";
 import { TwoTone } from "@/components/ui/two-tone";
-import { PRODUCTS, SHOP_ORBIT_TILES, SHOP_URL } from "@/config/shop";
+import { SHOP_ORBIT_TILES, type Product } from "@/config/shop";
 import type { HomeCopy } from "@/types/home";
 import { withBase } from "@/lib/base-path";
 
@@ -11,8 +11,8 @@ import { withBase } from "@/lib/base-path";
 
 /* one large circle of product tiles turning slowly above the heading; only its upper arc shows, the rest
    fades out. Tiles keep the same size on every screen, only the circle's radius changes. */
-function ShopOrbit() {
-  const tiles = Array.from({ length: SHOP_ORBIT_TILES }, (_, i) => PRODUCTS[i % PRODUCTS.length]);
+function ShopOrbit({ products }: { products: Product[] }) {
+  const tiles = Array.from({ length: SHOP_ORBIT_TILES }, (_, i) => products[i % products.length]);
   return (
     <div aria-hidden="true" className="shop-orbit pointer-events-none absolute inset-0 overflow-hidden">
       <div className="shop-ring absolute top-[var(--orbit-top)] left-1/2 size-[calc(var(--r)*2)]">
@@ -26,13 +26,13 @@ function ShopOrbit() {
   );
 }
 
-/** Skincare shop: the turning circle of products, the heading and link to the shop, then twelve products. */
+/** Skincare shop: the turning circle of products, the heading and link to the shop, then twelve products (all from `copy`: WordPress, else the built-in list). */
 export function Shop({ copy }: { copy: HomeCopy["shop"] }) {
-  const items = PRODUCTS.slice(0, 12);
+  const items = copy.products.slice(0, 12);
   return (
     <RevealSection aria-labelledby="shop" className="relative z-10 bg-ndm-paper pb-[clamp(8px,1.5vw,20px)]">
       <div className="shop-stage relative">
-        <ShopOrbit />
+        {copy.products.length > 0 && <ShopOrbit products={copy.products} />}
         <div className="relative px-[var(--gx)] pt-[var(--head-top)] text-center">
           <Eyebrow className="rv">{copy.tag}</Eyebrow>
           <TwoTone
@@ -51,7 +51,7 @@ export function Shop({ copy }: { copy: HomeCopy["shop"] }) {
             {copy.text}
           </p>
           <div className="rv mt-6 flex justify-center" style={{ transitionDelay: ".14s" }}>
-            <Button href={SHOP_URL} target="_blank" rel="noopener" v="ink">
+            <Button href={copy.link} target="_blank" rel="noopener" v="ink">
               {copy.button}
               <span className="sr-only"> (opens in a new tab)</span>
             </Button>
@@ -61,7 +61,7 @@ export function Shop({ copy }: { copy: HomeCopy["shop"] }) {
       <div className="relative mt-[clamp(20px,2.6vw,36px)] px-[var(--gx)] lg:mt-12!">
         <ul role="list" className="shop-list mx-auto grid max-w-[1280px] grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-3">
           {items.map((p, i) => (
-            <li key={p.href} className={`rv ${i >= 6 ? "hidden lg:block" : ""}`} style={{ transitionDelay: `${0.04 * (i % 6)}s` }}>
+            <li key={`${i}-${p.href}`} className={`rv ${i >= 6 ? "hidden lg:block" : ""}`} style={{ transitionDelay: `${0.04 * (i % 6)}s` }}>
               <a href={withBase(p.href)} target="_blank" rel="noopener" className="group flex h-full items-center gap-3 rounded-[16px] bg-ndm-mist/70 p-2 transition-colors hover:bg-ndm-mist sm:gap-4 sm:p-2.5">
                 <span className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-[10px] bg-white sm:size-[68px]">
                   <img src={withBase(p.image)} alt="" loading="lazy" className="h-[86%] w-[86%] object-contain transition-transform duration-500 group-hover:scale-105" />

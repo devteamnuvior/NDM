@@ -1,4 +1,6 @@
 import type { StartPanel } from "@/config/home-start";
+import type { TreatmentTab } from "@/config/home-treatments";
+import type { Product } from "@/config/shop";
 import type { WPConcernImage, WPConcernProduct } from "@/types/concern";
 
 /** Icons of the hero's proof points and of the Aptos section's chips: the drawings are the site's. */
@@ -38,7 +40,8 @@ export interface HomeCopy {
   };
   /** The panels come from WordPress, else they are the built-in ones (`START_PANELS`). */
   start: Head & { panels: StartPanel[] };
-  treatments: Head & { text: string };
+  /** The tabs come from WordPress, else they are the built-in ones (`TREATMENT_TABS`). `allTab` is the first tab, holding every card. */
+  treatments: Head & { text: string; allTab: { label: string; all: { href: string; label: string } }; tabs: TreatmentTab[] };
   aptos: Head & {
     intro: string;
     /** The chip on the figure: "Up to" "24" "months of lift and support". */
@@ -56,7 +59,8 @@ export interface HomeCopy {
   visit: Head & { text: string };
   faq: Head & { intro: string; items: [question: string, answer: string][] };
   booking: { lead: string; strong: string; text: string };
-  shop: Head & { text: string; button: string };
+  /** `link` is the button's address; the products come from WordPress, else they are the built-in ones (`PRODUCTS`). */
+  shop: Head & { text: string; button: string; link: string; products: Product[] };
   journal: Head;
   social: Head & { text: string; button: string; note: string };
 }
@@ -84,6 +88,24 @@ export interface WPStartPanel {
   }[];
   link_label: string;
   link: string;
+}
+
+/** A tab of "Treatments, by what they do" as WordPress serves it. */
+export interface WPTreatTab {
+  label: string;
+  all_label: string;
+  all_link: string;
+  cards: {
+    price_source: string;
+    /** The picked WooCommerce product (null for a category or nothing picked); its image comes with WordPress's sizes. */
+    product: (WPConcernProduct & { image: (WPConcernImage & { srcset?: string }) | null }) | null;
+    name: string;
+    text: string;
+    image: (WPConcernImage & { srcset?: string }) | null;
+    tag: string;
+    link: string;
+    price_note: string;
+  }[];
 }
 
 /**
@@ -120,6 +142,10 @@ export interface WPHomePage {
     treat_lead: string;
     treat_strong: string;
     treat_text: string;
+    treat_all_tab: string;
+    treat_all_button: string;
+    treat_all_link: string;
+    treat_tabs: WPTreatTab[];
     aptos_tag: string;
     aptos_lead: string;
     aptos_strong: string;
@@ -170,6 +196,8 @@ export interface WPHomePage {
     shop_strong: string;
     shop_text: string;
     shop_button: string;
+    shop_link: string;
+    shop_products: { name: string; size: string; image: WPConcernImage | null; link: string }[];
     journal_tag: string;
     journal_lead: string;
     journal_strong: string;

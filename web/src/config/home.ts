@@ -1,5 +1,7 @@
 import { ACTIONS } from "@/config/routes";
 import { START_PANELS } from "@/config/home-start";
+import { TREATMENT_TABS } from "@/config/home-treatments";
+import { PRODUCTS, SHOP_URL } from "@/config/shop";
 import type { HomeCopy } from "@/types/home";
 import copy from "./home-copy.json";
 
@@ -11,9 +13,20 @@ import copy from "./home-copy.json";
  * page is not published, what other pages show for the sections they share with the home page, and the
  * source of the one-time import (scripts/export-home.mjs).
  */
-/* the JSON file holds the words; the panels' built-in list lives in home-start.ts */
-const words = copy as unknown as Omit<HomeCopy, "start"> & { start: Omit<HomeCopy["start"], "panels"> };
-export const HOME_COPY: HomeCopy = { ...words, start: { ...words.start, panels: START_PANELS } };
+/* the JSON file holds the words; the built-in lists live elsewhere: the panels in home-start.ts, the treatment tabs in home-treatments.ts, the shop's products in shop.ts */
+const words = copy as unknown as Omit<HomeCopy, "start" | "treatments" | "shop"> & {
+  start: Omit<HomeCopy["start"], "panels">;
+  treatments: Omit<HomeCopy["treatments"], "allTab" | "tabs">;
+  shop: Omit<HomeCopy["shop"], "link" | "products">;
+};
+/** The first tab of the treatments carousel when WordPress does not name it. */
+export const TREAT_ALL_TAB: HomeCopy["treatments"]["allTab"] = { label: "All", all: { href: "#/treatments", label: "All treatments" } };
+export const HOME_COPY: HomeCopy = {
+  ...words,
+  start: { ...words.start, panels: START_PANELS },
+  treatments: { ...words.treatments, allTab: TREAT_ALL_TAB, tabs: TREATMENT_TABS },
+  shop: { ...words.shop, link: SHOP_URL, products: PRODUCTS },
+};
 
 /** The hero's film, and where its two buttons lead. */
 export const HERO = {

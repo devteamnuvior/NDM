@@ -1,9 +1,10 @@
 import "server-only";
-import { HOME_COPY } from "@/config/home";
+import { HOME_COPY, TREAT_ALL_TAB } from "@/config/home";
+import type { TreatmentCard, TreatmentTab } from "@/config/home-treatments";
 import { getHomePage, settle } from "@/lib/wordpress";
 import type { StartConcern, StartPanel } from "@/config/home-start";
 import { resolveLabel, toSlug } from "@/lib/routes";
-import type { HomeCopy, PointIcon, ProofIcon, WPHomePage, WPStartPanel } from "@/types/home";
+import type { HomeCopy, PointIcon, ProofIcon, WPHomePage, WPStartPanel, WPTreatTab } from "@/types/home";
 
 const PROOF_ICONS: ProofIcon[] = ["physician", "award", "clinics", "analysis"];
 const POINT_ICONS: PointIcon[] = ["check", "thread", "shield"];
@@ -68,6 +69,45 @@ function panelsFrom(rows: WPStartPanel[]): StartPanel[] | null {
   return panels.length ? panels : null;
 }
 
+/**
+ * The tabs of "Treatments, by what they do". A card takes its picked product's name, short description,
+ * image and category, and whatever is typed on the card replaces them for that card only. A tab without
+ * a name, and a card without a title or an image, are left out; so is a tab left with no card. Prices
+ * are not here: the section reads them from WooCommerce. No tab left: null (the built-in tabs are shown).
+ */
+function tabsFrom(rows: WPTreatTab[]): TreatmentTab[] | null {
+  const ids = new Set<string>();
+  const unique = (base: string) => {
+    let id = base || "tab";
+    for (let n = 2; ids.has(id) || id === "all"; n++) id = `${base}-${n}`;
+    ids.add(id);
+    return id;
+  };
+  const tabs = rows.flatMap((t): TreatmentTab[] => {
+    if (!t.label) return [];
+    const cards = t.cards.flatMap((c): TreatmentCard[] => {
+      const name = c.name || c.product?.name || "";
+      const image = c.image || c.product?.image;
+      if (!name || !image) return [];
+      return [
+        {
+          name,
+          text: c.text || c.product?.description || "",
+          /* never an amount: only shown when WooCommerce has no price for the card */
+          price: c.price_note,
+          href: c.link || resolveLabel(name).href,
+          image: { src: image.src, srcSet: image.srcset ?? "" },
+          tag: c.tag || c.product?.category || t.label,
+          source: c.price_source,
+        },
+      ];
+    });
+    if (!cards.length) return [];
+    return [{ id: unique(toSlug(t.label)), label: t.label, all: t.all_label ? { href: t.all_link || "#treatments", label: t.all_label } : null, cards }];
+  });
+  return tabs.length ? tabs : null;
+}
+
 /** The WordPress page as the sections read it. A row without its words, or a photo row without a photo, is left out. */
 function fromWordPress(wp: WPHomePage): HomeCopy {
   const c = wp.content;
@@ -97,6 +137,11 @@ function fromWordPress(wp: WPHomePage): HomeCopy {
       lead: c.treat_lead,
       strong: c.treat_strong,
       text: c.treat_text,
+      allTab: {
+        label: c.treat_all_tab || TREAT_ALL_TAB.label,
+        all: { href: c.treat_all_link || TREAT_ALL_TAB.all.href, label: c.treat_all_button || TREAT_ALL_TAB.all.label },
+      },
+      tabs: tabsFrom(c.treat_tabs ?? []) ?? HOME_COPY.treatments.tabs,
     },
     aptos: {
       tag: c.aptos_tag,
@@ -163,6 +208,13 @@ function fromWordPress(wp: WPHomePage): HomeCopy {
       strong: c.shop_strong,
       text: c.shop_text,
       button: c.shop_button,
+      link: c.shop_link || HOME_COPY.shop.link,
+      /* typed in WordPress (not WooCommerce): a product without a name or a photo is left out */
+      products: (() => {
+        const link = c.shop_link || HOME_COPY.shop.link;
+        const list = (c.shop_products ?? []).flatMap((p) => (p.name && p.image ? [{ name: p.name, size: p.size, image: p.image.src, href: p.link || link }] : []));
+        return list.length ? list : HOME_COPY.shop.products;
+      })(),
     },
     journal: {
       tag: c.journal_tag,

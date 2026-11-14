@@ -524,9 +524,11 @@ fields work like those of a concern. One box per section, in page order:
 | Search Engines | page title and description (empty description: none written) |
 | About NewDermaMed | tag, heading, text (lights up word by word), the word in blue, the numbers ("16+" and the line under it) |
 | Where To Start | tag, heading, and the **panels** (title, line under it, heading and text when open, photo with its focus closed and open, link for a panel without concerns); in each panel its **concerns** (button, card title, card text, the **treatments**, facts, small print, link at the bottom); a treatment picks a WooCommerce product or category (optional), with a name, a line and a link |
-| Treatments, Inside Our Clinics, Journal | tag and heading (Treatments also its text) |
+| Treatments | tag, heading, text, the first tab (name, button words and address), and the **tabs** (name, button under the cards); in each tab its **cards**: a WooCommerce product or category searched and picked, then an optional title, text, image, tag and link that replace the product's name, short description, image and category for that card only |
+| Inside Our Clinics, Journal | tag and heading |
 | Our Signature | tag, heading, text, the chip on the figure (words, number, words), the dials (number, unit, line, screen-reader sentence, ring fill in percent), the points (icon and words), then Treatment areas: tag, heading, text and the **photos** (photo from the media library and the line under it; the description is the photo's alternative text) |
 | Our Team, Before And After, Testimonials, Our Clinics, Booking, Skincare Shop, Social | tag (not Booking), heading, text; Testimonials and Social also their small line (keep "individual results may vary"), Shop and Social their button |
+| Skincare Shop (also) | the button's address and the **products**, typed by hand, not WooCommerce: name, line under it ("30 ml"), photo from the media library, link. The first twelve show in the list (six on phones), all of them on the turning circle; a product without a name or photo is left out, no product: the built-in list (`PRODUCTS` in `web/src/config/shop.ts`) |
 | How It Works | tag, heading, the three steps (title, text, button) |
 | FAQ | tag, heading, text, the questions. No question: no section |
 
@@ -536,14 +538,23 @@ a concern without its button words and a treatment without a name are left out; 
 site shows its built-in panels (`START_PANELS` in `web/src/config/home-start.ts`). The panels' photos
 are served with WordPress's own sizes.
 
+**Treatment cards** work the same way: the price is the picked product's or category's lowest, else
+the card's title found on the price list, else the card's "Words instead of a price" ("Free",
+"Priced at consultation"; never an amount), else none. A card takes the picked product's name, short
+description, image and category (the tag; else the tab's name) unless its own fields are filled in. A
+tab without a name, a card without a title or an image, and a tab left without cards are left out; no
+tab at all: the built-in tabs (`TREATMENT_TABS` in `web/src/config/home-treatments.ts`). The first tab
+("All") always holds every card. The 25 original cards were added to an existing home page with
+`--fill-empty=treat_all_tab,treat_all_button,treat_all_link,treat_tabs` (no product picked, so each is
+priced by its title as before).
+
 Lists inside lists (panel > concern > treatment) are fine in the edit screen: each level has its own
 placeholder for its "Add" button. PHP accepts at most `max_input_vars` fields per save (1000 here; the
-home page sends about 530): a save that reaches it keeps the words as they were and says so, instead of
+home page sends about 660): a save that reaches it keeps the words as they were and says so, instead of
 losing rows.
 
-Filled in by the site, not typed: the films, the treatment cards (prices from WooCommerce), the team members, the before and after cases, the photos and links of How it works, the
-monthly specials (WooCommerce), the reviews and awards, the two clinics, the booking form, the shop's
-products, the journal posts and the reels. Sections other pages also show (Our Team, Before And After,
+Filled in by the site, not typed: the films, every price (WooCommerce), the team members, the before and after cases, the photos and links of How it works, the
+monthly specials (WooCommerce), the reviews and awards, the two clinics, the booking form, the journal posts and the reels. Sections other pages also show (Our Team, Before And After,
 How It Works, Testimonials, Booking, Social) take these words on the home page only; the other pages
 keep the built-in copy.
 

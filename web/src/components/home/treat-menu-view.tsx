@@ -111,7 +111,7 @@ export function TreatMenuView({ tabs, copy }: { tabs: TreatmentTab[]; copy: Home
           style={{ scrollPaddingInline: "var(--gx)" }}
         >
           {tab.cards.map((c, i) => (
-            <article key={`${tab.id}-${c.name}`} className="tm-card2 tm-in group flex shrink-0 snap-start flex-col rounded-[22px] bg-white p-3 ring-1 ring-ndm-ink/[.06]" style={{ animationDelay: `${Math.min(i, 5) * 0.05}s` }}>
+            <article key={`${tab.id}-${i}-${c.name}`} className="tm-card2 tm-in group flex shrink-0 snap-start flex-col rounded-[22px] bg-white p-3 ring-1 ring-ndm-ink/[.06]" style={{ animationDelay: `${Math.min(i, 5) * 0.05}s` }}>
               <a href={withBase(c.href)} className="peach relative block aspect-[4/3.2] overflow-hidden rounded-[16px] bg-ndm-mist">
                 {/* eslint-disable-next-line @next/next/no-img-element -- hand-made WebP sizes, used as they are */}
                 <img
@@ -152,9 +152,11 @@ export function TreatMenuView({ tabs, copy }: { tabs: TreatmentTab[]; copy: Home
         </button>
       </div>
       <div className="px-[var(--gx)]">
-        <Button href={tab.all.href} v="line" sm>
-          {tab.all.label}
-        </Button>
+        {tab.all && (
+          <Button href={tab.all.href} v="line" sm>
+            {tab.all.label}
+          </Button>
+        )}
       </div>
     </section>
   );
