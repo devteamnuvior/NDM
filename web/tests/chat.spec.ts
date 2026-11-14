@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 import { NEXT_URL } from "../playwright.config";
 
 /** Behaviour of the migrated chat assistant on the Next.js build. */
@@ -67,25 +67,36 @@ test("the launcher steps aside while another overlay is open", async ({ page }) 
 test.describe("phone", () => {
   test.use({ viewport: { width: 375, height: 812 }, hasTouch: true });
 
-  test("the note steps aside while it lies over a button of the page, and comes back after", async ({ page }) => {
+  test("the note and the chat button step aside while they lie over a button of the page, and come back after", async ({ page }) => {
     await page.goto(NEXT_URL);
     const note = page.locator(".chat-pop");
+    const launcher = page.locator("button.chat-launch");
     await expect(note).toBeVisible({ timeout: 9000 });
-    /* bring "View all offers" under the note: the note hides, the button can be tapped */
-    const offers = page.getByRole("link", { name: "View all offers" });
-    const under = async (target: typeof offers) => {
-      const box = (await note.evaluate((el) => el.getBoundingClientRect().toJSON())) as { top: number; height: number };
-      await target.evaluate((el, middle) => {
+    /* scrolls so the middle of `target` sits at the middle of a floating piece */
+    const under = async (target: Locator, piece: Locator) => {
+      const middle = await piece.evaluate((el) => {
         const r = el.getBoundingClientRect();
-        window.scrollBy(0, r.top + r.height / 2 - middle);
-      }, box.top + box.height / 2);
+        return r.top + r.height / 2;
+      });
+      await target.evaluate((el, y) => {
+        const r = el.getBoundingClientRect();
+        window.scrollBy(0, r.top + r.height / 2 - y);
+      }, middle);
     };
-    await under(offers);
+    /* "View all offers" under the note: the note hides, the button can be tapped */
+    const offers = page.getByRole("link", { name: "View all offers" });
+    await under(offers, note);
     await expect(note).toBeHidden();
     await offers.click({ trial: true });
-    /* over plain text it shows again */
-    await under(page.getByText("Save on cosmetic treatment"));
-    await expect(note).toBeVisible();
+    /* the wheel's right arrow under the chat button: the chat button fades out, the arrow can be tapped */
+    const next = page.getByRole("button", { name: "Next offer" });
+    await under(next, launcher);
+    await expect(launcher).toHaveClass(/is-off/);
+    await next.click({ trial: true });
+    /* at the end of the page nothing lies under them: both are back */
+    await page.locator("h1").first().evaluate(() => window.scrollTo(0, 0));
+    await page.getByText("Refined,").first().evaluate((el) => window.scrollBy(0, el.getBoundingClientRect().top - 300));
+    await expect(launcher).not.toHaveClass(/is-off/);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
   });
 });

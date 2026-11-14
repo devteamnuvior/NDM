@@ -47,6 +47,25 @@ interface Message {
  * settles (once per visit), and a panel offering common questions or a free-text box. Client only.
  * @param hidden another overlay is open: the launcher steps out of the way
  */
+/**
+ * Whether a floating piece of the chat lies over a control of the page: a button or a short link counts, a whole
+ * card that is one link does not. Nine points of its box are looked at, `dx` and `dy` in from its edges.
+ */
+function overControl(el: HTMLElement | null, dx: number, dy: number): boolean {
+  if (!el) return false;
+  const box = el.getBoundingClientRect();
+  if (!box.width) return false;
+  return [box.left + dx, box.left + box.width / 2, box.right - dx].some((x) =>
+    [box.top + dy, box.top + box.height / 2, box.bottom - dy].some((y) =>
+      document.elementsFromPoint(x, y).some((under) => {
+        if (under.closest(".chat-pop, .chat-launch, .chat-panel")) return false;
+        const control = under.closest('a[href], button, input, select, textarea, [role="button"], [role="tab"]');
+        return !!control && control.getBoundingClientRect().height <= 72;
+      }),
+    ),
+  );
+}
+
 export function ChatBot({ hidden }: { hidden: boolean }) {
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState(false);
@@ -57,6 +76,7 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
   const [avoid, setAvoid] = useState(0);
   const pop = useRef<HTMLDivElement>(null);
   const [covers, setCovers] = useState(false); /* phones: true while the note lies over a button or link of the page, so it never blocks one */
+  const [btnCovers, setBtnCovers] = useState(false); /* phones: the same for the chat button itself */
   const [clear, setClear] = useState(false); /* phones: true once nothing marked data-pill-avoid sits mid-screen, so the note never covers it */
   const list = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
@@ -106,21 +126,9 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
       if (r.width && r.top < vh && r.bottom > vh - 120 && r.right > vw - 90) top = Math.min(top, r.top);
     });
     setAvoid(top < vh ? vh - top + 12 : 0);
-    /* phones: what lies under the note (it stays in place, unseen, while it steps aside). A button or a short link counts;
-       a whole card that is one link does not */
-    const box = vw < 768 ? pop.current?.getBoundingClientRect() : undefined;
-    setCovers(
-      !!box &&
-        [box.left + 8, box.left + box.width / 2, box.right - 8].some((x) =>
-          [box.top + 6, box.top + box.height / 2, box.bottom - 6].some((y) =>
-            document.elementsFromPoint(x, y).some((el) => {
-              if (el.closest(".chat-pop, .chat-launch")) return false;
-              const control = el.closest('a[href], button, input, select, textarea, [role="button"], [role="tab"]');
-              return !!control && control.getBoundingClientRect().height <= 72;
-            }),
-          ),
-        ),
-    );
+    /* phones: what lies under the note and under the chat button (each stays in place, unseen, while it steps aside) */
+    setCovers(vw < 768 && overControl(pop.current, 8, 6));
+    setBtnCovers(vw < 768 && overControl(btn.current, 10, 10));
     setClear(
       !Array.from(document.querySelectorAll("[data-pill-avoid]")).some((el) => {
         const r = el.getBoundingClientRect();
@@ -196,7 +204,8 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
   const left = CHAT_PRESETS.filter(([q]) => !asked.has(q));
   /* wide screens: sits above the cart bar when it shows (same corner) */
   const bottom = small ? Math.max(16, avoid) + 64 : Math.max(24, avoid);
-  const off = hidden && !open;
+  /* out of the way while another overlay is open, or (phones) while the button lies over a button of the page */
+  const off = (hidden || (small && btnCovers)) && !open;
 
   return (
     <>
