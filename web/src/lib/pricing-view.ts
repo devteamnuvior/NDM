@@ -1,6 +1,5 @@
-import { PRICE_SPECIALS } from "@/config/pricing";
 import type { PriceCategory, PriceOption } from "@/config/prices";
-import { createPriceBook, formatPrice, type PriceNames } from "@/lib/price-book";
+import { createPriceBook, type PriceNames } from "@/lib/price-book";
 import type { WooPricingTree, WooPriceFields } from "@/types/pricing";
 
 /**
@@ -51,6 +50,8 @@ export interface PriceCategoryView {
 }
 
 export interface PriceSpecialView {
+  /** WooCommerce product ID of the treatment the card stands for. */
+  id: number;
   name: string;
   /** "$245", ready to show. */
   price: string;
@@ -66,7 +67,6 @@ export interface PricingView {
   categories: PriceCategoryView[];
   /** How many treatments the list holds. */
   total: number;
-  specials: PriceSpecialView[];
 }
 
 /** What a product without variations calls its one price. */
@@ -152,12 +152,5 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
     };
   });
 
-  /* a special shows only while its treatment, or at least its category, is on the price list */
-  const specials = PRICE_SPECIALS.items.flatMap((s): PriceSpecialView[] => {
-    const info = book.priceInfo(s.name) ?? book.lowestPrice(s.category);
-    if (!info) return [];
-    return [{ name: s.name, price: formatPrice(info.value), unit: info.unit || (info.per ? ` / ${info.per.replace(/^per /, "")}` : ""), offer: info.offer ?? "", target: `pg-${s.category}` }];
-  });
-
-  return { categories, total: list.reduce((n, c) => n + c.items.length, 0), specials };
+  return { categories, total: list.reduce((n, c) => n + c.items.length, 0) };
 }

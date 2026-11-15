@@ -8,23 +8,8 @@ export const PRICE_FAQS: [question: string, answer: string][] = [
   ["Is financing available for treatments?", "Yes. We offer flexible payment plans through Affirm for Canadian citizens and residents aged 19 and over, with a minimum $500 purchase."],
 ];
 
-/**
- * Exclusive monthly specials shown above the price list: the designer's treatments (Lip Augmentation left out on 2026-11-14: it repeated Lip Filler). Their prices are read from WooCommerce; `category` is the price-list category the Buy button opens.
- */
+/** Words of the Exclusive monthly specials above the price list. Which treatments its cards show is kept in WooCommerce and managed at /manage/pricing; their prices are read from WooCommerce. */
 export const PRICE_SPECIALS = {
   sub: "Save on cosmetic treatment, apply for financing now",
   note: "for selected packages",
-  items: [
-    { name: "Botox", category: "botox-dysport" },
-    { name: "Laser Hair Removal", category: "laser-hair-removal" },
-    { name: "Lip Filler", category: "dermal-fillers" },
-    { name: "Microneedling", category: "microneedling" },
-    { name: "Chemical Peel", category: "chemical-peel" },
-    { name: "CoolSculpting", category: "coolsculpting-tight-sculpting" },
-    { name: "Sculptra", category: "skin-booster-and-bio-stimulators" },
-    { name: "Laser Skin Resurfacing", category: "laser-skin-resurfacing" },
-    { name: "Photo Rejuvenation", category: "photo-rejuvenation" },
-    { name: "PRP Hair Restoration", category: "hair-loss" },
-    { name: "PRP Face", category: "microneedling" },
-  ],
 };

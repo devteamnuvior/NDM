@@ -13,11 +13,12 @@ import { Faq } from "@/components/ui/faq";
 import { PRICE_FAQS, PRICE_SPECIALS } from "@/config/pricing";
 import { PRICE_NAMES } from "@/config/price-names";
 import { SALE_HEADLINE } from "@/config/sale";
-import { getOffers, specialsWithOfferPrices } from "@/lib/offers";
+import { priceSpecials } from "@/lib/offer-prices";
 import { pagePath } from "@/lib/routes";
 import type { WooCampaign } from "@/types/pricing";
+import type { WooPromotion } from "@/types/promotions";
 import { buildPricingView } from "@/lib/pricing-view";
-import { getPricingTree } from "@/lib/wordpress";
+import { getPricingTree, getPromotions } from "@/lib/wordpress";
 import { PriceListNotice } from "@/components/pricing/price-list-notice";
 import { unstable_rethrow } from "next/navigation";
 import { connection } from "next/server";
@@ -53,10 +54,11 @@ function saleOnPriceList(campaign: WooCampaign | null | undefined): PriceListSal
  * next visit, instead of showing prices it cannot vouch for.
  */
 async function PriceSections() {
+  let tree;
   let view;
   let sale: PriceListSale | null = null;
   try {
-    const tree = await getPricingTree();
+    tree = await getPricingTree();
     view = buildPricingView(tree, PRICE_NAMES);
     sale = saleOnPriceList(tree.campaign);
   } catch (error) {
@@ -71,14 +73,17 @@ async function PriceSections() {
     );
   }
 
-  /* a special that is also an offer shows the offer's own figures, so the wheel and this page agree */
-  let specials = view.specials;
+  /* the monthly specials are a list kept in WooCommerce; one that is also an offer shows the offer's own figures, so the wheel and this page agree */
+  let promotions: WooPromotion[] = [];
   try {
-    specials = specialsWithOfferPrices(specials, await getOffers());
+    promotions = await getPromotions();
   } catch (error) {
     unstable_rethrow(error);
     console.error("[pricing] the offers could not be read from WooCommerce:", error instanceof Error ? error.message : error);
   }
+  /* a plugin older than the list: the offers themselves, which is what the list starts as */
+  const chosen = tree.specials ?? promotions.map((p) => ({ productId: p.productId, name: p.name, scope: p.scope, productName: p.productName }));
+  const specials = priceSpecials(tree, chosen, promotions);
 
   if (!view.categories.length) {
     return (
@@ -92,7 +97,7 @@ async function PriceSections() {
   return (
     <>
       <PricingHero total={view.total} />
-      {specials.length > 0 && <PriceSpecials specials={specials}sub={PRICE_SPECIALS.sub} note={PRICE_SPECIALS.note} />}
+      {specials.length > 0 && <PriceSpecials specials={specials} sub={PRICE_SPECIALS.sub} note={PRICE_SPECIALS.note} />}
       <PriceList categories={view.categories} total={view.total} sale={sale} />
     </>
   );

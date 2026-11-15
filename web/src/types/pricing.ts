@@ -78,9 +78,26 @@ export interface WooCategory<P = WooProduct> {
   products: P[];
 }
 
+/** The most cards the Pricing page's Monthly specials can hold (the plugin refuses more). */
+export const SPECIALS_MAX = 24;
+
+/** One card of the Pricing page's Monthly specials (see cms/wp-content/plugins/ndm-pricing/includes/specials.php). It holds no price. */
+export interface WooSpecial {
+  /** WooCommerce product ID. */
+  productId: number;
+  /** Card title; empty shows the product's name. */
+  name: string;
+  /** Which price the card shows: this treatment's lowest, or the lowest of its whole category. */
+  scope: PromoScope;
+  /** The product's name in WooCommerce. */
+  productName: string;
+}
+
 export interface WooPricingTree<C = WooCategory> {
   currency: string;
   categories: C[];
+  /** The Pricing page's Monthly specials, in order. Absent only when the plugin is older than the list. */
+  specials?: WooSpecial[];
   /** The sale campaign, when one is stored in WooCommerce (public list only). */
   campaign?: WooCampaign | null;
   /** WooCommerce's tax for the cart's totals (public list only): the standard rate at the shop's base location. */
@@ -134,6 +151,8 @@ export interface WooProductPromo {
   /** Focus point of the photo, "50% 40%". */
   focus: string;
   scope: PromoScope;
+  /** The one option the offer's price is read from ("2 zones"); not edited on the screen. */
+  option?: string;
   /** A photo uploaded on the screen and not saved yet. */
   imageId?: number;
 }
@@ -172,6 +191,8 @@ export interface PricingPatch {
     variationOrder?: (number | `newv-${string}`)[];
   }[];
   variations?: { id: number; hidden?: boolean; label?: WooPromoLabel; regularPrice?: string; salePrice?: string }[];
+  /** The Pricing page's whole Monthly specials list, in its new order. */
+  specials?: { productId: number; name: string; scope: PromoScope }[];
 }
 
 export interface PricingSaveResult {

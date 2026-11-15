@@ -16,8 +16,11 @@
  *                             "removeVariations"?: [ 56 ],
  *                             "variationOrder"?: [ 57, "newv-1", 55 ] } ],
  *     "variations":       [ { "id": 55, "hidden"?, "label"?: { "text": "...", "enabled": true },
- *                             "regularPrice"?: "720", "salePrice"?: "648" } ]
+ *                             "regularPrice"?: "720", "salePrice"?: "648" } ],
+ *     "specials":         [ { "productId": 33, "name": "Lip Filler", "scope": "product" | "category" } ]
  *   }
+ *
+ * "specials" is the Pricing page's whole Monthly specials list, in its new order (see specials.php).
  *
  * "products" inside a category is that category's full list, in order: products missing from it are
  * taken out of the category, new ones are put in, and the order is kept. "variationOrder" is every
@@ -185,7 +188,7 @@ function ndm_pricing_plan( $body ) {
 		return ndm_pricing_invalid( 'The request body must be a JSON object.' );
 	}
 
-	$unknown = array_diff( array_keys( $body ), array( 'createCategories', 'categories', 'categoryOrder', 'products', 'variations' ) );
+	$unknown = array_diff( array_keys( $body ), array( 'createCategories', 'categories', 'categoryOrder', 'products', 'variations', 'specials' ) );
 
 	if ( $unknown ) {
 		return ndm_pricing_invalid( 'Unknown field: ' . sanitize_key( (string) reset( $unknown ) ) . '.' );
@@ -198,6 +201,7 @@ function ndm_pricing_plan( $body ) {
 		'products'   => array(),
 		'promos'     => array(),
 		'variations' => array(),
+		'specials'   => null,
 	);
 
 	// New categories.
@@ -467,6 +471,16 @@ function ndm_pricing_plan( $body ) {
 		$plan['variations'][ $id ] = $clean + $prices;
 	}
 
+	// The Pricing page's Monthly specials: the whole list, in its new order.
+	if ( array_key_exists( 'specials', $body ) ) {
+		$specials = ndm_specials_clean( $body['specials'] );
+		if ( is_wp_error( $specials ) ) {
+			return $specials;
+		}
+
+		$plan['specials'] = $specials;
+	}
+
 	return $plan;
 }
 
@@ -661,6 +675,10 @@ function ndm_pricing_apply( $plan ) {
 	}
 
 	ndm_promo_apply_product_changes( $plan['promos'] );
+
+	if ( null !== $plan['specials'] ) {
+		ndm_specials_store( $plan['specials'] );
+	}
 
 	ndm_pricing_flush();
 

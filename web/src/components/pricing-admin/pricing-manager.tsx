@@ -7,9 +7,10 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { IconSearch } from "@/components/ui/icons";
 import { TwoTone } from "@/components/ui/two-tone";
 import { money } from "@/lib/cart";
-import { buildPricingView } from "@/lib/pricing-view";
+import { priceSpecials } from "@/lib/offer-prices";
+import { buildPricingView, type PriceSpecialView } from "@/lib/pricing-view";
 import { lockScroll } from "@/lib/scroll-lock";
-import type { WooAdminProduct, WooAdminTree, WooAdminVariation, WooPromoLabel } from "@/types/pricing";
+import { SPECIALS_MAX, type WooAdminProduct, type WooAdminTree, type WooAdminVariation, type WooPromoLabel, type WooSpecial } from "@/types/pricing";
 import { PromoEditor } from "./promo-editor";
 import { changesOf, moved, newVariation, priceProblem, relocated, toDraft, toPublicTree, withPrices, type Changes, type Draft, type DraftCategory } from "./model";
 import { withBase } from "@/lib/base-path";
@@ -68,7 +69,7 @@ const Muted = ({ children }: { children: ReactNode }) => <span className={`${pil
 
 /* ---- rearranging: drag a box by its handle, or step it with the arrows (touch and keyboard) ---- */
 
-type DragKind = "category" | "product" | "variation";
+type DragKind = "category" | "product" | "variation" | "special";
 interface Dragging {
   kind: DragKind;
   /** What the list belongs to: "" for categories, a category key, or a product ID. */
@@ -300,8 +301,8 @@ function OptionRow({ v, inherited, unit, dirty, editing, onEdit, onChange, onRem
   );
 }
 
-/** Search WooCommerce products and add one to the category. */
-function ProductSearch({ csrf, exclude, onAdd, onSignedOut }: { csrf: string; exclude: number[]; onAdd: (p: WooAdminProduct) => void; onSignedOut: () => void }) {
+/** Search WooCommerce products and add one to the category, or (with `title` and `add`) to another list. */
+function ProductSearch({ csrf, exclude, onAdd, onSignedOut, title = "Add a WooCommerce product to this category", add = "Add to category" }: { csrf: string; exclude: number[]; onAdd: (p: WooAdminProduct) => void; onSignedOut: () => void; title?: string; add?: string }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<WooAdminProduct[] | null>(null);
   const [message, setMessage] = useState("");
@@ -318,7 +319,7 @@ function ProductSearch({ csrf, exclude, onAdd, onSignedOut }: { csrf: string; ex
 
   return (
     <div className="mb-5 rounded-[18px] border border-dashed border-ndm-ink/25 p-4">
-      <p className={caption}>Add a WooCommerce product to this category</p>
+      <p className={caption}>{title}</p>
       <form
         className="mt-2 flex flex-wrap gap-2"
         onSubmit={(e) => {
@@ -359,7 +360,7 @@ function ProductSearch({ csrf, exclude, onAdd, onSignedOut }: { csrf: string; ex
                   setResults((list) => list?.filter((x) => x.id !== p.id) ?? null);
                 }}
               >
-                Add to category
+                {add}
               </button>
             </li>
           ))}
@@ -404,6 +405,157 @@ function Preview({ draft, pending, onClose }: { draft: Draft; pending: number; o
         )}
       </div>
     </div>
+  );
+}
+
+/* ---- the Pricing page's Monthly specials: which treatments its cards show, in which order ---- */
+
+interface SpecialsSectionProps {
+  specials: WooSpecial[];
+  /** The card each treatment would show, by product ID; none when the treatment is not on the public price list. */
+  cards: Map<number, PriceSpecialView>;
+  inPromotions: (productId: number) => boolean;
+  changed: boolean;
+  csrf: string;
+  reorder: Reorder;
+  onChange: (change: (list: WooSpecial[]) => WooSpecial[]) => void;
+  onSignedOut: () => void;
+}
+
+const SCOPES = [
+  ["product", "This treatment's lowest price"],
+  ["category", "Lowest price of its whole category"],
+] as const;
+
+function SpecialsSection({ specials, cards, inPromotions, changed, csrf, reorder, onChange, onSignedOut }: SpecialsSectionProps) {
+  const [editing, setEditing] = useState<number | null>(null);
+  const set = (id: number, next: Partial<WooSpecial>) => onChange((list) => list.map((s) => (s.productId === id ? { ...s, ...next } : s)));
+  const full = specials.length >= SPECIALS_MAX;
+
+  return (
+    <section id="specials" aria-labelledby="specials-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(48px,5vw,80px)]">
+      <div className="mx-auto max-w-[1040px]">
+        <div className="text-center">
+          <Eyebrow>Monthly specials</Eyebrow>
+          <TwoTone
+            id="specials-title"
+            className="mt-5"
+            lead={
+              <>
+                Exclusive
+                <br />
+              </>
+            }
+            strong="monthly specials"
+          />
+          <p className="mx-auto mt-5 max-w-[60ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted">
+            These are the cards above the price list on the Pricing page, in this order. Search for a treatment to add its card, use the pencil to change a card&rsquo;s title or price setting or to remove it, and the handle or arrows to rearrange. Every price and offer tag is read from the price list below.
+          </p>
+          <p className="mt-4 flex flex-wrap items-center justify-center gap-2">
+            <Muted>
+              {specials.length} {specials.length === 1 ? "card" : "cards"}
+            </Muted>
+            {changed && <Unsaved />}
+          </p>
+        </div>
+
+        <ul className="mt-8 grid gap-2" role="list">
+          {specials.map((s, i) => {
+            const card = cards.get(s.productId);
+            const title = s.name.trim() || s.productName;
+            const on = editing === s.productId;
+            const offer = inPromotions(s.productId);
+            return (
+              <li key={s.productId} {...reorder.row("special", "", i, (from, to) => onChange((list) => relocated(list, from, to)))} className="rounded-[16px] bg-white py-3 pr-3 pl-1.5 ring-1 ring-ndm-ink/[.07] sm:pl-2">
+                <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-2 sm:grid-cols-[auto_minmax(0,1fr)_auto_auto] sm:gap-x-5">
+                  <span className="row-span-2 sm:row-span-1">
+                    <Mover small what={title} first={i === 0} last={i === specials.length - 1} onStep={(by) => onChange((list) => moved(list, i, by))} grip={reorder.grip("special", "", i)} />
+                  </span>
+                  <span className={`min-w-0 ${card ? "" : "opacity-60"}`}>
+                    <span className="block font-aeonik text-[clamp(18px,1.45vw,21px)] leading-[1.22] tracking-[-0.015em] text-ndm-ink">{title}</span>
+                    <span className="mt-0.5 block font-inter text-[12.5px] leading-[1.45] text-ndm-muted">
+                      Card {i + 1}, product: {s.productName}
+                    </span>
+                  </span>
+                  <span className="col-start-2 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-3 sm:row-start-1 sm:justify-end">
+                    {offer && <span className={`${pill} bg-[#E3F2FB] text-ndm-deep`}>In Promotions</span>}
+                    {card?.offer && <span className="pr-badge">{card.offer}</span>}
+                    {card ? (
+                      <span className="font-inter text-[13px] whitespace-nowrap text-ndm-muted">
+                        From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{card.price}</span>
+                        {card.unit}
+                      </span>
+                    ) : (
+                      <Muted>Not on the price list: no card shows</Muted>
+                    )}
+                  </span>
+                  <span className="col-start-3 row-span-2 row-start-1 sm:col-start-4 sm:row-span-1">
+                    <EditButton what={`the ${title} card`} on={on} onClick={() => setEditing(on ? null : s.productId)} />
+                  </span>
+                </div>
+                {on && (
+                  <div className={`${editor} mt-3 ml-1.5`}>
+                    <label className="block max-w-[420px]">
+                      <span className={caption}>Card title (empty shows the product&rsquo;s name)</span>
+                      <input type="text" value={s.name} maxLength={80} placeholder={s.productName} onChange={(e) => set(s.productId, { name: e.target.value })} className={`${field} mt-1.5`} />
+                    </label>
+                    <div className="mt-4">
+                      <span className={caption}>Price shown on the card</span>
+                      {offer ? (
+                        <p className="mt-1.5 max-w-[60ch] font-inter text-[14px] leading-[1.55] text-ndm-ink">This treatment is also in Promotions, so its card shows the same price and offer tag as there. Change that under the treatment&rsquo;s pencil in the price list.</p>
+                      ) : (
+                        <span className="mt-1.5 flex flex-wrap gap-2">
+                          {SCOPES.map(([scope, label]) => (
+                            <button
+                              key={scope}
+                              type="button"
+                              aria-pressed={s.scope === scope}
+                              onClick={() => set(s.productId, { scope })}
+                              className={`h-9 rounded-full border px-4 font-inter text-[13.5px] transition-colors ${s.scope === scope ? "border-ndm-deep bg-ndm-deep text-white" : "border-ndm-ink/15 bg-white text-ndm-ink hover:border-ndm-deep"}`}
+                            >
+                              {label}
+                            </button>
+                          ))}
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+                      <p className="font-inter text-[12.5px] text-ndm-muted">Product #{s.productId}. Removing the card changes nothing in the price list.</p>
+                      <button
+                        type="button"
+                        className={quiet}
+                        onClick={() => {
+                          onChange((list) => list.filter((x) => x.productId !== s.productId));
+                          setEditing(null);
+                        }}
+                      >
+                        Remove from Monthly specials
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+        {specials.length === 0 && <p className="text-center font-inter text-[14.5px] text-ndm-muted">No cards. The Pricing page leaves the Monthly specials section out until a treatment is added.</p>}
+
+        <div className="mt-4">
+          {full ? (
+            <p className="font-inter text-[13.5px] text-ndm-muted">Monthly specials holds at most {SPECIALS_MAX} cards. Remove one to add another.</p>
+          ) : (
+            <ProductSearch
+              csrf={csrf}
+              exclude={specials.map((s) => s.productId)}
+              onSignedOut={onSignedOut}
+              title="Add a treatment to Monthly specials"
+              add="Add to Monthly specials"
+              onAdd={(p) => onChange((list) => (list.length >= SPECIALS_MAX || list.some((s) => s.productId === p.id) ? list : [...list, { productId: p.id, name: "", scope: "product", productName: p.name }]))}
+            />
+          )}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -465,6 +617,11 @@ export function PricingManager({ tree, user, csrf, wpAdmin }: PricingManagerProp
   /* how many treatments are in Promotions, for the position picker and the limit */
   const promoCount = useMemo(() => Object.values(draft.products).filter((p) => p.promo).length, [draft]);
   const total = useMemo(() => new Set(draft.categories.flatMap((c) => c.productIds)).size, [draft]);
+  /* the Monthly specials cards visitors would see, by product */
+  const cards = useMemo(() => {
+    const offers = Object.values(draft.products).flatMap((p) => (p.promo ? [{ productId: p.id, scope: p.promo.scope, option: p.promo.option }] : []));
+    return new Map(priceSpecials(toPublicTree(draft), draft.specials, offers).map((card) => [card.id, card]));
+  }, [draft]);
 
   /* leaving with unsaved changes asks first */
   useEffect(() => {
@@ -601,6 +758,17 @@ export function PricingManager({ tree, user, csrf, wpAdmin }: PricingManagerProp
           </div>
         )}
       </header>
+
+      <SpecialsSection
+        specials={draft.specials}
+        cards={cards}
+        inPromotions={(id) => !!draft.products[id]?.promo}
+        changed={changes.specials}
+        csrf={csrf}
+        reorder={reorder}
+        onChange={(change) => setDraft((d) => ({ ...d, specials: change(d.specials) }))}
+        onSignedOut={signedOut}
+      />
 
       {/* the Pricing page's own price list section, with its styles; only the edit and move controls are added */}
       <section id="prices" aria-labelledby="prices-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(48px,5vw,80px)] pb-[clamp(64px,7vw,110px)]">
@@ -918,6 +1086,7 @@ export function PricingManager({ tree, user, csrf, wpAdmin }: PricingManagerProp
                             onSignedOut={signedOut}
                             onAdd={(p) => {
                               setDraft((d) => ({
+                                ...d,
                                 products: d.products[p.id] ? d.products : { ...d.products, [p.id]: p },
                                 categories: d.categories.map((x) => (x.key === c.key && !x.productIds.includes(p.id) ? { ...x, productIds: [...x.productIds, p.id] } : x)),
                               }));

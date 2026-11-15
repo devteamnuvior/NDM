@@ -1,4 +1,4 @@
-import type { CategoryRef, PricingPatch, WooAdminProduct, WooAdminTree, WooAdminVariation, WooPricingTree, WooPromoLabel } from "@/types/pricing";
+import type { CategoryRef, PricingPatch, WooAdminProduct, WooAdminTree, WooAdminVariation, WooPricingTree, WooPromoLabel, WooSpecial } from "@/types/pricing";
 
 /**
  * The management screen's working copy of the price list, and what turns it into one set of changes.
@@ -24,6 +24,8 @@ export interface Draft {
   categories: DraftCategory[];
   /** Every product on the screen by its WooCommerce ID (a product can sit in several categories). */
   products: Record<number, WooAdminProduct>;
+  /** The Pricing page's Monthly specials, in display order. */
+  specials: WooSpecial[];
 }
 
 export function toDraft(tree: WooAdminTree): Draft {
@@ -32,7 +34,7 @@ export function toDraft(tree: WooAdminTree): Draft {
     for (const p of c.products) products[p.id] = p;
     return { key: `c${c.id}`, id: c.id, slug: c.slug, name: c.name, description: c.description, visible: c.visible, perUnit: c.perUnit, productIds: c.products.map((p) => p.id) };
   });
-  return { categories, products };
+  return { categories, products, specials: tree.specials ?? [] };
 }
 
 const sameLabel = (a: WooPromoLabel, b: WooPromoLabel) => a.text.trim() === b.text.trim() && a.enabled === b.enabled;
@@ -48,6 +50,8 @@ export interface Changes {
   categories: Set<string>;
   products: Set<number>;
   variations: Set<number>;
+  /** Whether the Monthly specials differ (which treatments, their order, a card's title or price setting). */
+  specials: boolean;
   /** What stops a save, in plain words; empty when the draft can be saved. */
   problems: string[];
 }
@@ -163,8 +167,13 @@ export function changesOf(saved: Draft, draft: Draft): Changes {
     }
   }
 
-  const count = changed.categories.size + changed.products.size + changed.variations.size + (orderChanged ? 1 : 0);
-  return { patch, count, ...changed, problems: [...new Set(problems)] };
+  /* the Monthly specials are sent whole, in their order, when anything about them changed */
+  const specials = draft.specials.map((s) => ({ productId: s.productId, name: s.name.trim(), scope: s.scope }));
+  const specialsChanged = specials.length !== saved.specials.length || specials.some((s, i) => s.productId !== saved.specials[i].productId || s.name !== saved.specials[i].name || s.scope !== saved.specials[i].scope);
+  if (specialsChanged) patch.specials = specials;
+
+  const count = changed.categories.size + changed.products.size + changed.variations.size + (orderChanged ? 1 : 0) + (specialsChanged ? 1 : 0);
+  return { patch, count, ...changed, specials: specialsChanged, problems: [...new Set(problems)] };
 }
 
 /**
@@ -175,6 +184,7 @@ export function toPublicTree(draft: Draft): WooPricingTree {
   const label = (l: WooPromoLabel) => (l.enabled && l.text.trim() ? { text: l.text.trim(), enabled: true } : null);
   return {
     currency: "CAD",
+    specials: draft.specials,
     categories: draft.categories
       .filter((c) => c.visible)
       .map((c) => ({
