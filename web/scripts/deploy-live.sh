@@ -21,7 +21,7 @@ SITE=/home/newdermamedlaser/ndm-site
 WEB=$SITE/web
 ENV_FILE=$WEB/.env.production
 ACCOUNT=newdermamedlaser
-HEALTH=http://127.0.0.1:3000/react
+HEALTH=http://127.0.0.1:3000/
 
 exec 9> /run/ndm-deploy.lock
 if ! flock -n 9 || pgrep -f 'next build' > /dev/null; then
