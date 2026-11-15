@@ -440,8 +440,19 @@ function Deals({ pick, setPick, plan, toggle, badge }: PickProps & PlanProps & {
   const ref = useRef<HTMLElement>(null);
   useReveal(ref);
   const [tab, setTab] = useState('All deals');
+  /* a concern and a tab never narrow the list together, so no tab is ever empty: picking a concern goes back to
+     All deals, and choosing a tab lets the concern go */
+  const [seen, setSeen] = useState(pick);
+  if (seen !== pick) {
+    setSeen(pick);
+    if (pick) setTab('All deals');
+  }
   const ids = pick ? (copy.concerns.items.find((c) => c.name === pick)?.categories ?? null) : null;
-  const list = deals.filter((d) => (!ids || ids.includes(d.id)) && (tab === 'All deals' || d.group === tab));
+  /* inside a tab the cards follow the order the page lists its groups in (Laser Hair Removal first under Laser);
+     All deals keeps the price list's order */
+  const rank = (id: string) => copy.deals.groups.findIndex((g) => g.category === id);
+  const shown = deals.filter((d) => (!ids || ids.includes(d.id)) && (tab === 'All deals' || d.group === tab));
+  const list = tab === 'All deals' ? shown : [...shown].sort((x, y) => rank(x.id) - rank(y.id));
   return (
     <section ref={ref} id="deals" aria-labelledby={`${T.p}-d-title`} className="scroll-mt-[84px] px-[var(--gx)] pt-[clamp(64px,7vw,104px)]">
       <div className="mx-auto max-w-[1180px]">
@@ -457,7 +468,7 @@ function Deals({ pick, setPick, plan, toggle, badge }: PickProps & PlanProps & {
         <div className={`${T.p}-tabs no-scrollbar sticky top-[69px] z-40 -mx-[var(--gx)] mt-5 overflow-x-auto bg-[color-mix(in_srgb,var(--pp)_92%,transparent)] px-[var(--gx)] py-3 backdrop-blur-[10px]`}>
           <div className="inline-flex gap-1 rounded-full bg-black/[.05] p-1" role="tablist" aria-label="Deal categories">
             {tabs.map((x) => (
-              <button key={x} type="button" role="tab" aria-selected={tab === x} onClick={() => setTab(x)}
+              <button key={x} type="button" role="tab" aria-selected={tab === x} onClick={() => { setTab(x); if (pick) setPick(null); }}
                 className={`shrink-0 rounded-full px-4 py-2.5 font-inter text-[14px] transition-colors ${tab === x ? `${T.night} font-medium text-white` : `text-ndm-muted ${T.inkHover}`}`}>{x}</button>
             ))}
           </div>
