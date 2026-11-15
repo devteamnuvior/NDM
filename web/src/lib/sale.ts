@@ -65,7 +65,7 @@ export async function buildSale({ look, planKey, copy: raw, mine, after }: SaleO
   const groups = Object.fromEntries(raw.deals.groups.map((g) => [g.category, g.tab]));
   const deals = saleDeals(categories, groups, running);
   const held = new Set(deals.map((d) => d.group));
-  const tabs = ["All deals", ...new Set(raw.deals.groups.map((g) => g.tab).filter((t) => held.has(t)))];
+  const tabs = ["All Deals", ...new Set(raw.deals.groups.map((g) => g.tab).filter((t) => held.has(t)))];
   const max = running ? SALE_HEADLINE : bfsMax(deals);
   const code = running && campaign ? campaign.code : "";
 

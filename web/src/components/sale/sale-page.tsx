@@ -439,20 +439,20 @@ function Deals({ pick, setPick, plan, toggle, badge }: PickProps & PlanProps & {
   const { copy, deals, tabs, code, T } = useSale();
   const ref = useRef<HTMLElement>(null);
   useReveal(ref);
-  const [tab, setTab] = useState('All deals');
+  const [tab, setTab] = useState('All Deals');
   /* a concern and a tab never narrow the list together, so no tab is ever empty: picking a concern goes back to
      All deals, and choosing a tab lets the concern go */
   const [seen, setSeen] = useState(pick);
   if (seen !== pick) {
     setSeen(pick);
-    if (pick) setTab('All deals');
+    if (pick) setTab('All Deals');
   }
   const ids = pick ? (copy.concerns.items.find((c) => c.name === pick)?.categories ?? null) : null;
   /* inside a tab the cards follow the order the page lists its groups in (Laser Hair Removal first under Laser);
      All deals keeps the price list's order, after the first group of the page's list (Laser Hair Removal) */
   const rank = (id: string) => copy.deals.groups.findIndex((g) => g.category === id);
-  const shown = deals.filter((d) => (!ids || ids.includes(d.id)) && (tab === 'All deals' || d.group === tab));
-  const list = tab === 'All deals' ? [...shown.filter((d) => rank(d.id) === 0), ...shown.filter((d) => rank(d.id) !== 0)] : [...shown].sort((x, y) => rank(x.id) - rank(y.id));
+  const shown = deals.filter((d) => (!ids || ids.includes(d.id)) && (tab === 'All Deals' || d.group === tab));
+  const list = tab === 'All Deals' ? [...shown.filter((d) => rank(d.id) === 0), ...shown.filter((d) => rank(d.id) !== 0)] : [...shown].sort((x, y) => rank(x.id) - rank(y.id));
   return (
     <section ref={ref} id="deals" aria-labelledby={`${T.p}-d-title`} className="scroll-mt-[84px] px-[var(--gx)] pt-[clamp(64px,7vw,104px)]">
       <div className="mx-auto max-w-[1180px]">
@@ -477,7 +477,7 @@ function Deals({ pick, setPick, plan, toggle, badge }: PickProps & PlanProps & {
           <ul role="list" className="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {list.map((d) => <DealCard key={d.id} d={d} plan={plan} toggle={toggle} badge={badge} />)}
           </ul>
-        ) : <p className="mt-5 font-inter text-[15px] text-ndm-muted">No deals in this group for that concern. <button type="button" onClick={() => setTab('All deals')} className={`${T.accent} underline underline-offset-4`}>See all deals</button></p>}
+        ) : <p className="mt-5 font-inter text-[15px] text-ndm-muted">No deals in this group for that concern. <button type="button" onClick={() => setTab('All Deals')} className={`${T.accent} underline underline-offset-4`}>See all deals</button></p>}
         <p className="mt-6 font-inter text-[12.5px] leading-[1.55] text-ndm-muted">Prices in CAD from the current NewDermaMed price list, before tax.{code ? ` Code ${code} applies to eligible packages.` : ''} Your provider confirms which treatment suits you at your free consultation. Individual results may vary.</p>
       </div>
     </section>

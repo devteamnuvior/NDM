@@ -99,7 +99,7 @@ export interface SaleView {
   /** "Up to N%": the campaign's stated headline, or the best percentage among the deals. */
   max: number;
   deals: Deal[];
-  /** "All deals", then the tabs that hold a deal. */
+  /** "All Deals", then the tabs that hold a deal. */
   tabs: string[];
   cards: SalePriceCard[];
 }

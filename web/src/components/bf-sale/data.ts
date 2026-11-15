@@ -21,7 +21,7 @@ const BFS_GROUP: Record<string, string> = {
   'laser-vaginal-tightening': 'Wellness', 'snoring-treatment': 'Wellness', 'toenail-fungus-removal': 'Wellness',
 };
 
-export const BFS_TABS = ['All deals', 'Laser', 'Skin', 'Injectables', 'Body', 'Hair', 'Wellness'];
+export const BFS_TABS = ['All Deals', 'Laser', 'Skin', 'Injectables', 'Body', 'Hair', 'Wellness'];
 
 export const BFS_CONCERNS: [name: string, text: string, categoryIds: string[]][] = [
   ['Unwanted hair', 'Choose your area and laser hair removal package.', ['laser-hair-removal']],
