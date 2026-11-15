@@ -23,7 +23,12 @@ function ndm_pricing_public_tree() {
 		$tree = ndm_pricing_tree( false );
 		// A sale campaign changes prices and labels at fixed moments: the copy never outlives the next one.
 		$next = function_exists( 'ndm_campaign_next_change' ) ? ndm_campaign_next_change() : 0;
-		set_transient( NDM_PRICING_TRANSIENT, $tree, $next ? max( 1, min( HOUR_IN_SECONDS, $next - time() ) ) : HOUR_IN_SECONDS );
+
+		// The management side (the managers' routes, WP-CLI) never answers with a running sale's prices
+		// (campaign.php): a list built there is used for that request only, never kept for visitors.
+		if ( ! function_exists( 'ndm_campaign_overlay_on' ) || null === ndm_campaign_phase() || ndm_campaign_overlay_on() ) {
+			set_transient( NDM_PRICING_TRANSIENT, $tree, $next ? max( 1, min( HOUR_IN_SECONDS, $next - time() ) ) : HOUR_IN_SECONDS );
+		}
 	}
 
 	return $tree;
