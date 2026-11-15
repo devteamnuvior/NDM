@@ -323,18 +323,16 @@ function Concerns({ pick, setPick }: PickProps) {
           <p className="rv max-w-[46ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted lg:pb-2" style={{ transitionDelay: '.08s' }}>{copy.concerns.text}</p>
         </div>
         <ul role="list" className="mt-9 grid grid-cols-2 gap-3 md:grid-cols-3">
-          {list.map(({ name: n, text: d, k }, i) => {
+          {list.map(({ name: n, text: d }, i) => {
             const on = pick === n;
             return (
               <li key={n} className="rv" style={{ transitionDelay: `${0.03 * i}s` }}>
                 <button type="button" aria-pressed={on} onClick={() => { setPick(on ? null : n); if (!on) setTimeout(() => go('deals')(), 60); }}
                   className={`${T.p}-chip group relative flex h-full w-full flex-col overflow-hidden rounded-[22px] bg-white p-4 text-left ring-1 ring-black/[.06] sm:p-6`}>
                   <span className="flex items-start justify-between gap-3">
-                    <span className={`${T.p}-chip-n font-aeonik text-[clamp(38px,3.6vw,54px)] leading-none tracking-[-0.04em]`}>{k}</span>
+                    <span className="min-w-0 pt-1 font-aeonik text-[clamp(20px,1.8vw,26px)] leading-[1.12] tracking-[-0.015em]">{n}</span>
                     <span aria-hidden="true" className={`${T.p}-chip-go grid size-9 shrink-0 place-items-center rounded-full`}><IconArrow size={12} /></span>
                   </span>
-                  <span className={`${T.p}-chip-k mt-1 font-inter text-[11px] font-semibold uppercase tracking-[.14em]`}>{k === 1 ? 'treatment' : 'treatments'}</span>
-                  <span className="mt-4 font-aeonik text-[clamp(20px,1.8vw,26px)] leading-[1.12] tracking-[-0.015em]">{n}</span>
                   <span className={`${T.p}-chip-d mt-1.5 hidden font-inter text-[13.5px] leading-[1.45] sm:block`}>{d}</span>
                 </button>
               </li>
