@@ -20,6 +20,11 @@ function ndm_headless_block_frontend() {
 		return;
 	}
 
+	// WooCommerce's pay page, where a website order is paid by card (plugin ndm-pricing, payments.php).
+	if ( function_exists( 'is_checkout_pay_page' ) && is_checkout_pay_page() ) {
+		return;
+	}
+
 	$request = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
 	$target  = ndm_headless_frontend_target( ndm_headless_frontend_base(), $request );
 

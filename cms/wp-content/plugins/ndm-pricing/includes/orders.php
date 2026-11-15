@@ -226,10 +226,19 @@ function ndm_pricing_rest_order( $request ) {
 		return ndm_pricing_invalid( 'The customer account could not be read.' );
 	}
 
+	// "card": paid online on WooCommerce's pay page (includes/payments.php); anything else: at the clinic.
+	$card    = 'card' === ( $body['pay'] ?? 'clinic' );
+	$gateway = $card && function_exists( 'ndm_pricing_card_gateway' ) ? ndm_pricing_card_gateway() : null;
+
+	if ( $card && ! $gateway ) {
+		return ndm_pricing_invalid( 'Card payment is not available right now. Please choose to pay at your appointment.' );
+	}
+
 	$order = wc_create_order(
 		array(
 			'created_via' => 'ndm-site',
-			'customer_id' => $owner ? $owner->ID : 0,
+			// A card order joins the account once it is paid (ndm_pricing_attach_paid_order).
+			'customer_id' => $owner && ! $card ? $owner->ID : 0,
 		)
 	);
 
@@ -294,12 +303,24 @@ function ndm_pricing_rest_order( $request ) {
 		),
 		'billing'
 	);
-	$order->set_payment_method_title( 'Pay at the clinic' );
+	if ( $card ) {
+		$order->set_payment_method( $gateway );
+		if ( $owner ) {
+			$order->update_meta_data( '_ndm_account', $owner->ID );
+		}
+	} else {
+		$order->set_payment_method_title( 'Pay at the clinic' );
+	}
 	$order->set_customer_note( $extras['note'] );
 	$order->update_meta_data( '_ndm_clinic', $extras['clinic'] );
 	$order->update_meta_data( '_ndm_preferred_time', $extras['preferred'] );
 	$order->calculate_totals();
-	$order->set_status( 'on-hold', sprintf( 'Order request from the website. Clinic: %1$s. Preferred time: %2$s. Nothing has been charged.', $extras['clinic'], '' !== $extras['preferred'] ? $extras['preferred'] : 'not given' ) );
+	$when = '' !== $extras['preferred'] ? $extras['preferred'] : 'not given';
+	if ( $card ) {
+		$order->set_status( 'pending', sprintf( 'Order request from the website, to be paid by card online. Clinic: %1$s. Preferred time: %2$s.', $extras['clinic'], $when ) );
+	} else {
+		$order->set_status( 'on-hold', sprintf( 'Order request from the website. Clinic: %1$s. Preferred time: %2$s. Nothing has been charged.', $extras['clinic'], $when ) );
+	}
 	$order->save();
 
 	$response = rest_ensure_response(
@@ -315,6 +336,11 @@ function ndm_pricing_rest_order( $request ) {
 			'taxLabel'   => ndm_pricing_order_tax_label( $order ),
 			'tax'        => round( (float) $order->get_total_tax(), 2 ),
 			'total'      => round( (float) $order->get_total(), 2 ),
+			'pay'        => $card ? 'card' : 'clinic',
+			// Card: where to pay (WooCommerce's pay page), and what the confirmation page asks about.
+			'id'         => $card ? $order->get_id() : 0,
+			'key'        => $card ? $order->get_order_key() : '',
+			'payUrl'     => $card ? $order->get_checkout_payment_url() : '',
 		)
 	);
 	$response->set_status( 201 );

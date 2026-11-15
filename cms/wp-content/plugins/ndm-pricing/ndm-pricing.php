@@ -44,6 +44,7 @@ function ndm_pricing_boot() {
 	require_once NDM_PRICING_DIR . '/includes/save.php';
 	require_once NDM_PRICING_DIR . '/includes/rest.php';
 	require_once NDM_PRICING_DIR . '/includes/orders.php';
+	require_once NDM_PRICING_DIR . '/includes/payments.php';
 	require_once NDM_PRICING_DIR . '/includes/account.php';
 	require_once NDM_PRICING_DIR . '/includes/promotions.php';
 	require_once NDM_PRICING_DIR . '/includes/campaign.php';

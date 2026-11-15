@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { OrderReceipt } from "@/app/(site)/checkout/actions";
+import { checkOrderPaymentAction, type OrderReceipt, type PaymentCheck } from "@/app/(site)/checkout/actions";
 import { Button } from "@/components/ui/button";
 import { TwoTone } from "@/components/ui/two-tone";
 import { ORDER_STORAGE_KEY } from "@/config/checkout";
@@ -14,6 +14,15 @@ const NEXT_STEPS: [title: string, text: string][] = [
   ["Your consultation", "Your provider confirms your plan in person. Treatments are given only when they suit you."],
   ["Pay at the clinic", "You pay at your appointment. Individual results may vary."],
 ];
+const PAID_STEP: [title: string, text: string] = ["Paid online", "Your card payment is received. Individual results may vary."];
+
+/** A card order's ID and key: from the address WooCommerce sends the visitor back to, else from the receipt. */
+function cardOrder(o: OrderReceipt | null): { id: number; key: string } | null {
+  const q = new URLSearchParams(window.location.search);
+  const id = Number(q.get("order") ?? o?.orderId ?? 0);
+  const key = q.get("key") ?? o?.orderKey ?? "";
+  return Number.isInteger(id) && id > 0 && key ? { id, key } : null;
+}
 
 /** The last order request, as this browser kept it (order number, lines, totals, first name and clinic only). */
 function readOrder(): OrderReceipt | null {
@@ -29,16 +38,52 @@ function readOrder(): OrderReceipt | null {
 export function ConfirmPage() {
   /* undefined until the browser has looked: the order lives in this browser, not on the server */
   const [o, setO] = useState<OrderReceipt | null | undefined>(undefined);
+  /* a card order: what WooCommerce says about its payment (undefined while asking) */
+  const [check, setCheck] = useState<PaymentCheck | null | undefined>(undefined);
   useEffect(() => {
-    const id = requestAnimationFrame(() => setO(readOrder()));
-    return () => cancelAnimationFrame(id);
+    let live = true;
+    const id = requestAnimationFrame(() => {
+      const receipt = readOrder();
+      const card = cardOrder(receipt);
+      /* the receipt in this browser is for another order than the one WooCommerce sent back: leave it out */
+      setO(receipt && (!card || !receipt.orderId || receipt.orderId === card.id) ? receipt : null);
+      if (!card) return setCheck(null);
+      void checkOrderPaymentAction(card.id, card.key).then((r) => live && setCheck(r));
+    });
+    return () => {
+      live = false;
+      cancelAnimationFrame(id);
+    };
   }, []);
   const date = o ? new Date(o.date).toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" }) : "";
   const clinic = o ? CLINICS.find((c) => c.name === o.clinic) : undefined;
+  const paid = !!check && check.ok && check.paid;
+  const unpaidCard = !!check && check.ok && !check.paid;
+  const payUrl = check && check.ok ? check.payUrl : "";
   return (
     <section aria-labelledby="co-title" className={`co-band ${CO_WRAP}`}>
       <CheckoutSteps at={5} />
-      {o === undefined ? null : !o ? (
+      {o === undefined || check === undefined ? null : !o && check && check.ok ? (
+        /* back from the pay page in a browser without the receipt: WooCommerce's answer only */
+        <div className={`${CO_CARD} mt-10 flex flex-col items-center px-6 py-14 text-center`}>
+          <h1 id="co-title" className="font-aeonik text-[clamp(30px,3vw,42px)] leading-[1.1] font-normal text-ndm-ink">
+            {check.paid ? "Thank you, your payment is received" : "Your card payment was not completed"}
+          </h1>
+          <p className="mt-3 max-w-[48ch] font-inter text-[15px] text-ndm-muted">
+            Order number <b className="text-ndm-ink tabular-nums">{check.number}</b>. {check.paid ? "Our team contacts you within one business day to book your visit." : "Nothing has been charged."}
+          </p>
+          <div className="mt-7 flex flex-wrap justify-center gap-3">
+            {!check.paid && check.payUrl ? (
+              <Button href={check.payUrl} v="ink">
+                Complete card payment
+              </Button>
+            ) : null}
+            <Button href={pagePath("home")} v="line">
+              Back to home
+            </Button>
+          </div>
+        </div>
+      ) : !o ? (
         <div className={`${CO_CARD} mt-10 flex flex-col items-center px-6 py-14 text-center`}>
           <h1 id="co-title" className="font-aeonik text-[clamp(30px,3vw,42px)] leading-[1.1] font-normal text-ndm-ink">
             No recent order request
@@ -77,11 +122,20 @@ export function ConfirmPage() {
                     <br />
                   </>
                 }
-                strong="your request is in"
+                strong={paid ? "your order is paid" : unpaidCard ? "your request is saved" : "your request is in"}
               />
               <p className="relative mt-3 max-w-[52ch] font-inter text-[16px] leading-[1.6] text-white/85">
-                Our team contacts you within one business day to book your visit{clinic ? ` at NewDermaMed ${clinic.name}` : ""}. Nothing has been charged.
+                {unpaidCard
+                  ? "Your card payment was not completed, so nothing has been charged. You can finish it now, or call the clinic."
+                  : `Our team contacts you within one business day to book your visit${clinic ? ` at NewDermaMed ${clinic.name}` : ""}.${paid ? " Your card payment is received." : " Nothing has been charged."}`}
               </p>
+              {unpaidCard && payUrl ? (
+                <div className="relative mt-5">
+                  <Button href={payUrl} v="light">
+                    Complete card payment
+                  </Button>
+                </div>
+              ) : null}
               <span className="relative mt-5 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 font-inter text-[13.5px] ring-1 ring-white/25">
                 Order number <b className="font-semibold tabular-nums">{o.no}</b>
               </span>
@@ -90,8 +144,8 @@ export function ConfirmPage() {
               <dl className="grid grid-cols-3 [gap:1px] overflow-hidden rounded-[18px] border border-ndm-line bg-ndm-line">
                 {[
                   ["Date", date],
-                  ["Estimated total", money2(o.total)],
-                  ["Payment", "At the clinic"],
+                  [paid ? "Total paid" : "Estimated total", money2(o.total)],
+                  ["Payment", paid ? "Paid by card" : unpaidCard ? "Card, not completed" : "At the clinic"],
                 ].map(([k, v]) => (
                   <div key={k} className="bg-white px-4 py-3.5">
                     <dt className="font-inter text-[12px] text-ndm-muted">{k}</dt>
@@ -101,7 +155,7 @@ export function ConfirmPage() {
               </dl>
               <h2 className="mt-10 font-aeonik text-[24px] font-normal tracking-[-0.01em] text-ndm-ink">What happens next</h2>
               <ol className="mt-4 grid gap-3" role="list">
-                {NEXT_STEPS.map(([h, d], i) => (
+                {(paid ? [NEXT_STEPS[0], NEXT_STEPS[1], PAID_STEP] : NEXT_STEPS).map(([h, d], i) => (
                   <li key={h} className="flex items-start gap-4 rounded-[16px] bg-ndm-paper px-4 py-3.5">
                     <span className="grid size-8 shrink-0 place-items-center rounded-full bg-ndm-deep/10 font-inter text-[13px] font-semibold text-ndm-deep">{i + 1}</span>
                     <span>

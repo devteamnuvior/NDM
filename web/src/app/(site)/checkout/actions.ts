@@ -5,7 +5,7 @@ import { CHECKOUT_STEPS, PROVINCES, TIMES_OF_DAY } from "@/config/checkout";
 import { CLINICS } from "@/config/site";
 import { getAccountSession } from "@/lib/account/session";
 import { CART_MAX, cartKey, type CartLine } from "@/lib/cart";
-import { WordPressError, isWordPressConfigured, placeOrderRequest } from "@/lib/wordpress";
+import { WordPressError, getOrderPayment, isWordPressConfigured, placeOrderRequest } from "@/lib/wordpress";
 
 /**
  * Places an order request. The browser sends what was chosen (WooCommerce IDs and quantities) and the
@@ -37,6 +37,8 @@ export interface OrderRequestForm {
   company: string;
   /** The checkout code of a running sale ("PLUS30"), or "". WooCommerce decides what it takes off. */
   code?: string;
+  /** "card": pay online by card on WooCommerce's pay page; "clinic": pay at the appointment. */
+  pay?: "card" | "clinic";
 }
 
 /** What the confirmation page shows and keeps: no email, phone or address. */
@@ -56,6 +58,12 @@ export interface OrderReceipt {
   first: string;
   clinic: string;
   pay: string;
+  /** "card" orders are paid on WooCommerce's pay page: its address, and the order's ID and key, which
+   * the confirmation page uses to ask WooCommerce whether the payment went through. */
+  method?: "card" | "clinic";
+  payUrl?: string;
+  orderId?: number;
+  orderKey?: string;
 }
 
 export type OrderResult = { ok: true; order: OrderReceipt } | { ok: false; reason: "invalid" | "unavailable" | "busy" | "unreachable"; message: string };
@@ -109,6 +117,7 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
   if (typeof form.day !== "string" || (form.day !== "" && !/^\d{4}-\d{2}-\d{2}$/.test(form.day))) return invalid("Please choose a preferred day.");
   const code = typeof form.code === "string" && /^[A-Za-z0-9]{0,40}$/.test(form.code.trim()) ? form.code.trim().toUpperCase() : null;
   if (code === null) return invalid("The checkout code could not be read. Please remove it and try again.");
+  const pay = form.pay === "card" ? "card" : "clinic";
   if (form.agree !== true) return invalid(`Please accept the terms to place your request (step ${CHECKOUT_STEPS.indexOf("Review")}).`);
 
   if (!isWordPressConfigured()) return { ok: false, reason: "unreachable", message: "Order requests are not available right now. Please call the clinic." };
@@ -120,6 +129,7 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
     const placed = await placeOrderRequest({
       ...(customerId ? { customerId } : {}),
       ...(code ? { code } : {}),
+      pay,
       lines,
       customer: { first, last, email, phone, address: street, apt, city, province: form.province, postal },
       clinic: `NewDermaMed ${clinic.name}`,
@@ -142,7 +152,9 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
         ...(placed.code && discount > 0 ? { code: placed.code, discount } : {}),
         first,
         clinic: clinic.name,
-        pay: "Pay at your appointment",
+        ...(placed.pay === "card" && placed.payUrl && placed.id && placed.key
+          ? { pay: "Card, paid online", method: "card" as const, payUrl: placed.payUrl, orderId: placed.id, orderKey: placed.key }
+          : { pay: "Pay at your appointment", method: "clinic" as const }),
       },
     };
   } catch (error) {
@@ -153,5 +165,20 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
     if (error.kind === "http" && error.status === 422) return invalid(`${error.message} Remove the code or review your cart, then try again.`);
     console.error("[checkout] the order request could not be placed:", error.kind, error.status ?? "", error.message);
     return { ok: false, reason: "unreachable", message: "Your request could not be sent right now. Nothing was placed; please try again in a moment, or call the clinic." };
+  }
+}
+
+/** What the confirmation page shows about a card order: WooCommerce's answer, never the address bar's. */
+export type PaymentCheck = { ok: true; number: string; paid: boolean; payUrl: string } | { ok: false };
+
+export async function checkOrderPaymentAction(orderId: unknown, orderKey: unknown): Promise<PaymentCheck> {
+  if (typeof orderId !== "number" || !Number.isInteger(orderId) || orderId <= 0) return { ok: false };
+  if (typeof orderKey !== "string" || !/^wc_order_[A-Za-z0-9]{6,40}$/.test(orderKey)) return { ok: false };
+  if (!isWordPressConfigured()) return { ok: false };
+  try {
+    const p = await getOrderPayment(orderId, orderKey);
+    return { ok: true, number: String(p.number), paid: p.paid === true, payUrl: typeof p.payUrl === "string" ? p.payUrl : "" };
+  } catch {
+    return { ok: false };
   }
 }
