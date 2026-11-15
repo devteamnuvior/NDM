@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { OfferImg } from "@/components/specials/offer-photo";
 import type { Offer } from "@/components/specials/offers";
 import { SpecialIcon } from "@/components/specials/special-icon";
@@ -9,6 +9,7 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { TwoTone } from "@/components/ui/two-tone";
 import { FINANCING_URL } from "@/config/specials";
 import { useReveal } from "@/hooks/use-reveal";
+import { scrollToY } from "@/lib/smooth-scroll";
 
 const FILTERS = ["All", "Face", "Body"] as const;
 type Filter = (typeof FILTERS)[number];
@@ -18,6 +19,35 @@ export function PromoGrid({ offers }: { offers: Offer[] }) {
   const section = useRef<HTMLElement>(null);
   useReveal(section);
   const [pick, setPick] = useState<Filter>("All");
+
+  /* A visit to "#offers" (the wheel's button from another page, a link in a message): the offers arrive
+     after the page's first paint, in place of a loading note, so the browser's own jump lands on whatever was
+     there then. Once the section is in the page it is brought to the top itself, and once more after the
+     photos above it have taken their size; a visitor who has already scrolled is left where they are. */
+  useEffect(() => {
+    if (window.location.hash !== "#offers") return;
+    let moved = false;
+    const stop = () => {
+      moved = true;
+    };
+    const align = () => {
+      const head = section.current?.querySelector<HTMLElement>("#offers");
+      if (!head || moved) return;
+      scrollToY(Math.max(0, head.getBoundingClientRect().top + window.scrollY - 190), true);
+    };
+    window.addEventListener("wheel", stop, { passive: true });
+    window.addEventListener("touchmove", stop, { passive: true });
+    window.addEventListener("keydown", stop);
+    const frame = requestAnimationFrame(align);
+    const timers = [400, 1200, 2500].map((ms) => setTimeout(align, ms));
+    return () => {
+      cancelAnimationFrame(frame);
+      timers.forEach(clearTimeout);
+      window.removeEventListener("wheel", stop);
+      window.removeEventListener("touchmove", stop);
+      window.removeEventListener("keydown", stop);
+    };
+  }, []);
   const list = pick === "All" ? offers : offers.filter((s) => s.area === pick);
 
   return (

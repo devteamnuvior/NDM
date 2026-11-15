@@ -76,6 +76,15 @@ test("search: the cursor is in the box when it opens; no results says so, with t
   await expect(dialog.getByRole("link", { name: "Book Free Consultation" })).toBeVisible();
 });
 
+test("/promotion#offers lands on the offers heading, just under the header", async ({ page }) => {
+  await page.goto(`${NEXT_URL}/promotion#offers`);
+  const top = () => page.locator("#offers:visible").last().evaluate((el) => Math.round(el.getBoundingClientRect().top));
+  await page.waitForTimeout(3500);
+  const header = await page.locator("header").first().evaluate((el) => Math.round(el.getBoundingClientRect().bottom));
+  expect(await top()).toBeGreaterThanOrEqual(header);
+  expect(await top()).toBeLessThan(header + 140);
+});
+
 test.describe("phone", () => {
   test.use({ viewport: { width: 375, height: 812 }, hasTouch: true });
 
