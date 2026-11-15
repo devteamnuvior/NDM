@@ -27,10 +27,10 @@ test("the old address redirects; no errors; the header marks Promotion; one h1",
   await expect(page).toHaveTitle("Promotions, NewDermaMed Toronto");
   await expect(page.locator("h1")).toHaveCount(1);
   await expect(page.locator("h1")).toHaveText("Exclusive monthly specials");
-  /* during the VIP Sale the menu's Promotion item opens the sale instead, so it is not this page's link */
+  /* the menu's Promotion item opens this page, also during the VIP Sale */
   const promotion = page.locator("header nav").getByRole("link", { name: "Promotion" });
-  if ((await promotion.getAttribute("href")) === "/promotion") await expect(promotion).toHaveAttribute("aria-current", "page");
-  else await expect(promotion).toHaveAttribute("href", "/vip-sale");
+  await expect(promotion).toHaveAttribute("href", "/promotion");
+  await expect(promotion).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("navigation", { name: "Breadcrumb" })).toHaveText("Home/Promotions");
   await page.waitForLoadState("networkidle");
   expect(errors).toEqual([]);

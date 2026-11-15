@@ -146,7 +146,8 @@ const isPromotion = (href: string) => /(^|\/)promotion\/?(#.*)?$/.test(href.trim
 
 /**
  * The settings during the VIP Sale: the announcement that points to the offers names the sale and opens its
- * page, and so does the menu's Promotion item. Nothing is saved: when the phase ends the settings read as
+ * page, and so does the footer's Promotion link. The header menu's Promotion item always opens the Promotion
+ * page itself (user, 2026-11-15). Nothing is saved: when the phase ends the settings read as
  * they are written in WordPress again (the Black Friday phases set their own links).
  */
 function withVipSaleLinks(settings: SiteSettings): SiteSettings {
@@ -157,7 +158,6 @@ function withVipSaleLinks(settings: SiteSettings): SiteSettings {
   return {
     ...settings,
     header: { ...settings.header, announcement: { ...a, desktop: a.desktop.map(message(true)), mobile: a.mobile.map(message(false)) } },
-    menu: { ...settings.menu, items: settings.menu.items.map((item) => (item.kind === "link" && isPromotion(item.link) ? { ...item, link: sale } : item)) },
     /* the footer's Promotion link too: one with its own address, or one named after the page */
     footer: { ...settings.footer, columns: settings.footer.columns.map((c) => ({ ...c, links: c.links.map((l) => ((l.link ? isPromotion(l.link) : toSlug(l.label) === "promotion") ? { ...l, link: sale } : l)) })) },
   };
