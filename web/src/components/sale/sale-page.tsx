@@ -449,10 +449,10 @@ function Deals({ pick, setPick, plan, toggle, badge }: PickProps & PlanProps & {
   }
   const ids = pick ? (copy.concerns.items.find((c) => c.name === pick)?.categories ?? null) : null;
   /* inside a tab the cards follow the order the page lists its groups in (Laser Hair Removal first under Laser);
-     All deals keeps the price list's order */
+     All deals keeps the price list's order, after the first group of the page's list (Laser Hair Removal) */
   const rank = (id: string) => copy.deals.groups.findIndex((g) => g.category === id);
   const shown = deals.filter((d) => (!ids || ids.includes(d.id)) && (tab === 'All deals' || d.group === tab));
-  const list = tab === 'All deals' ? shown : [...shown].sort((x, y) => rank(x.id) - rank(y.id));
+  const list = tab === 'All deals' ? [...shown.filter((d) => rank(d.id) === 0), ...shown.filter((d) => rank(d.id) !== 0)] : [...shown].sort((x, y) => rank(x.id) - rank(y.id));
   return (
     <section ref={ref} id="deals" aria-labelledby={`${T.p}-d-title`} className="scroll-mt-[84px] px-[var(--gx)] pt-[clamp(64px,7vw,104px)]">
       <div className="mx-auto max-w-[1180px]">
