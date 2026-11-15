@@ -157,6 +157,22 @@ One-time import of the site's original ten offers (does nothing when offers alre
 node ../web/scripts/export-promotions.mjs | docker compose run --rm -T -v "<folder with the photos>:/tmp/promo:ro" cli wp ndm-pricing promotions --images=/tmp/promo
 ```
 
+## Monthly specials (Pricing page)
+
+Which treatments the Pricing page's "Exclusive monthly specials" cards show, and in which order, is one
+option, `ndm_pricing_specials` (plugin `includes/specials.php`): a list of `productId`, `name` (card
+title; empty shows the product's name) and `scope` (`product`: the treatment's lowest price and offer,
+`category`: its whole category's). It holds no price. At most 24 cards.
+
+- It is part of the price list: `specials` in `GET ndm/v1/pricing` and in the management tree, and
+  `specials` (the whole list, in its new order) in `POST ndm/v1/pricing/admin/save`.
+- Until it is saved for the first time it is the current offers, in their order.
+- It is managed in the "Monthly specials" section of the site's `/manage/pricing`.
+- A treatment that is also an offer shows the offer's own price, unit and tag on its card; one that is
+  not on the public price list gets no card. A deleted or trashed product drops out of the list.
+- Back to "follows the offers": `wp option delete ndm_pricing_specials`, then save any product (or
+  `wp transient delete ndm_pricing_public_tree`).
+
 ## Site search
 
 The search in the site header finds the menu's treatments and concerns plus the price list in
