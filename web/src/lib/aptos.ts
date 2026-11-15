@@ -46,6 +46,41 @@ function sections(p: TreatmentPage, groups: TxPriceGroup[]): Record<AptosSection
   };
 }
 
+/** A name as its words are compared: lower case, no ® or ™, no "and", plurals as singulars. */
+const words = (name: string): string[] =>
+  name
+    .replace(/[®™]/g, "")
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((w) => w && w !== "and")
+    .map((w) => w.replace(/s$/, ""));
+
+/**
+ * Where a treatment sits on the Pricing page: the category of WooCommerce's price list named like it
+ * ("Dermal fillers", "Skin boosters"), else the category of the first product named like it
+ * ("Sculptra®"). The link opens that category (see PriceGroup). Undefined when the list has neither.
+ */
+function priceSection(prices: SitePrices, names: string[]): string | undefined {
+  for (const name of names) {
+    const want = words(name);
+    if (!want.length) continue;
+    const has = (text: string) => {
+      const got = words(text);
+      return want.every((w) => got.includes(w));
+    };
+    const category = prices.categories.find((c) => has(c.name)) ?? prices.categories.find((c) => c.items.some((it) => has(it.name)));
+    if (category) return `/pricing#pg-${category.id}-h`;
+  }
+  return undefined;
+}
+
+/** The Elevate your results cards, each linked to its category on the Pricing page (else, as before, to its page in the menu). */
+function withPriceLinks(view: AptosView, prices: SitePrices | null): AptosView {
+  if (!prices) return view;
+  const links = view.page.pair.links.map((l) => ({ ...l, href: priceSection(prices, [l.name, l.menu]) }));
+  return { ...view, page: { ...view.page, pair: { ...view.page.pair, links } } };
+}
+
 /** The page with WooCommerce's amounts written into its copy, and only the sections it has content for. */
 function build(raw: TreatmentPage, groups: TxPriceGroup[], seo: { title: string; description: string; fallback: string }, faq: AptosView["faq"]): AptosView {
   const values = priceValues(groups, [raw, seo, faq]);
@@ -289,7 +324,8 @@ export async function getAptosView(slug: string): Promise<AptosView | null> {
   const read = await settle(getAptosPage);
   if (read.ok && !read.data) return null;
   const prices = await getSitePrices();
-  return read.ok && read.data ? fromWordPress(read.data, prices) : builtIn(slug, prices);
+  const view = read.ok && read.data ? fromWordPress(read.data, prices) : builtIn(slug, prices);
+  return view && withPriceLinks(view, prices);
 }
 
 /** The Aptos page's address when WordPress has it published (empty when it has not, or cannot be reached). */

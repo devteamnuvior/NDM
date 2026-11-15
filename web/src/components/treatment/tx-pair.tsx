@@ -2,7 +2,7 @@ import { TX_WRAP, TxHead } from "@/components/treatment/tx-head";
 import { IconArrow } from "@/components/ui/icons";
 import { RevealSection } from "@/components/ui/reveal-section";
 import { SiteLink } from "@/components/ui/site-link";
-import { resolveLabel } from "@/lib/routes";
+import { contentLink, resolveLabel } from "@/lib/routes";
 import type { TreatmentPage } from "@/types/treatment";
 import { withBase } from "@/lib/base-path";
 
@@ -38,7 +38,7 @@ export function TxPair({ pair: t, number }: { pair: TreatmentPage["pair"]; numbe
       <ul role="list" className={`${TX_WRAP} mt-5 grid gap-4 sm:grid-cols-3`}>
         {t.links.map((l, i) => (
           <li key={l.name} className="rv" style={{ transitionDelay: `${0.06 * i}s` }}>
-            <SiteLink to={resolveLabel(l.menu)} className="tx-pair-card group flex h-full flex-col rounded-[22px] bg-white p-2.5 ring-1 ring-ndm-ink/[.06]">
+            <SiteLink to={l.href ? contentLink(l.href) : resolveLabel(l.menu)} className="tx-pair-card group flex h-full flex-col rounded-[22px] bg-white p-2.5 ring-1 ring-ndm-ink/[.06]">
               <span className="peach relative block aspect-[16/11] overflow-hidden rounded-[16px] bg-ndm-mist">
                 {/* eslint-disable-next-line @next/next/no-img-element -- the home menu's own photo file */}
                 <img src={withBase(l.img)} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" style={{ transitionTimingFunction: "var(--e-out)" }} />

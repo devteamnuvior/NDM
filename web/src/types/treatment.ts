@@ -43,7 +43,8 @@ export interface TreatmentPage {
     text: string;
     groups: [when: string, treatments: string[]][];
     /** Menu label of each treatment that pairs well; its link comes from the route table. */
-    links: { name: string; menu: string; tag: string; img: string; line: string }[];
+    /** `href`: the treatment's category on the Pricing page, when the price list in WooCommerce has it. */
+    links: { name: string; menu: string; tag: string; img: string; line: string; href?: string }[];
   };
   prices: {
     lead: string;
