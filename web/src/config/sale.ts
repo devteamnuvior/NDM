@@ -7,10 +7,10 @@ import type { SaleCopy } from "@/types/sale";
  */
 
 /**
- * The campaign's headline, "Up to 60% off", as decided for its advertising. It is a stated claim, not a number
+ * The campaign's headline, "Up to 70% off", as decided for its advertising. It is a stated claim, not a number
  * worked out from the price list; without a campaign the pages show the best percentage among their deals.
  */
-export const SALE_HEADLINE = 60;
+export const SALE_HEADLINE = 70;
 
 /** The badge on the deal cards, by the campaign's phase. */
 export const SALE_BADGES: Record<string, string> = { vip: "SALE PRICE", "black-friday": "BLACK FRIDAY PRICE", "cyber-monday": "CYBER MONDAY PRICE", extended: "EXTENDED PRICE" };
