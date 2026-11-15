@@ -17,6 +17,8 @@
 /.next/
 /.next-react/
 /.next-test/
+/.next-a/
+/.next-b/
 /out/
 
 # production
