@@ -88,10 +88,8 @@ export const TEAM: TeamMember[] = [
     ],
     facts: [['Education', 'BSc, Biology'], ['Certifications', 'Cosmetic Dermatology, Medical Aesthetics'], ['Role', 'Director of NewDermaMed']],
   },
-  /* photo in; her profile (bio, focus, facts) is still to come, so the card has no profile dialog yet */
-  { id: 'team-heather', first: 'Heather', tag: 'Nurse Practitioner', sample: true, name: 'Heather Bouchard, NP', role: 'Nurse Practitioner', img: '/assets/team/heather.jpg' },
 ];
 
 /** Order of the portraits on the home page, and how far each drifts (px) as the section scrolls past. */
-export const TEAM_ORDER = ["team-alin", "team-negin", "team-luis", "team-heather"];
-export const TEAM_DRIFT = [-26, 30, -10, 22];
+export const TEAM_ORDER = ["team-alin", "team-negin", "team-luis"];
+export const TEAM_DRIFT = [-26, 30, -10];

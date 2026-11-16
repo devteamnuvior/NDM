@@ -15,7 +15,7 @@ const CRED = "font-inter text-[11.5px] font-[550] uppercase leading-[1.5] tracki
 const PEOPLE = TEAM_ORDER.map((id) => TEAM.find((m) => m.id === id)).filter((m): m is TeamMember => !!m);
 
 /**
- * Our team: four compact cards. A card opens the same profile dialog as the home page; a member whose
+ * Our team: compact cards, one per member. A card opens the same profile dialog as the home page; a member whose
  * profile has not arrived yet stays a plain card.
  */
 export function AboutTeam({ copy }: { copy: AboutCopy["team"] }) {
@@ -44,7 +44,7 @@ export function AboutTeam({ copy }: { copy: AboutCopy["team"] }) {
         strong={copy.strong}
         intro={copy.intro}
       />
-      <ul className="mt-[clamp(36px,4vw,56px)] grid gap-4 sm:grid-cols-2 xl:grid-cols-4" role="list">
+      <ul className="mt-[clamp(36px,4vw,56px)] grid gap-4 sm:grid-cols-2 xl:grid-cols-3" role="list">
         {PEOPLE.map((m, i) => (
           <li key={m.id} id={m.id} className="rv scroll-mt-[110px]" style={{ transitionDelay: `${0.06 * i}s` }}>
             <article aria-labelledby={`${m.id}-name`} className={`team-card group relative flex h-full flex-col overflow-hidden rounded-[24px] bg-white ring-1 ring-ndm-ink/[.06] transition-shadow ${m.sample ? "" : "hover:shadow-[0_30px_60px_-36px_rgba(27,36,43,.45)]"}`}>

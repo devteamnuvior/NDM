@@ -46,7 +46,7 @@ function TeamPortrait({ member: m, index, onOpen }: { member: TeamMember; index:
 }
 
 /**
- * Meet the team: copy on the left, four staggered portraits on the right. The portraits wipe up one after
+ * Meet the team: copy on the left, staggered portraits on the right. The portraits wipe up one after
  * another when the row comes into view, drift at different speeds while scrolling, and each one opens the
  * profile dialog.
  */
@@ -139,7 +139,7 @@ export function Team({ inner = false, copy = HOME_COPY.team }: TeamProps) {
             </Button>
           </div>
         </div>
-        <ul ref={row} role="list" className={`team-ports grid grid-cols-2 items-start gap-[clamp(10px,1.6vw,24px)] pb-[clamp(28px,3.4vw,56px)] sm:grid-cols-4 ${shown ? "in" : ""}`}>
+        <ul ref={row} role="list" className={`team-ports grid grid-cols-2 items-start gap-[clamp(10px,1.6vw,24px)] pb-[clamp(28px,3.4vw,56px)] sm:grid-cols-3 ${shown ? "in" : ""}`}>
           {PEOPLE.map((m, i) => (
             <li key={m.id} className="will-change-transform">
               <TeamPortrait

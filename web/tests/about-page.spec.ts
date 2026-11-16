@@ -27,18 +27,16 @@ test("a link to a part of the page lands on it", async ({ page }) => {
   await expect(page.locator("#contact")).toBeInViewport();
 });
 
-test("team cards open the profile dialog; a member without a profile stays a plain card", async ({ page }) => {
+test("team cards open the profile dialog", async ({ page }) => {
   await page.goto(`${NEXT_URL}/about`);
   const team = page.locator("#team");
-  await expect(team.locator("article")).toHaveCount(4);
+  await expect(team.locator("article")).toHaveCount(3);
   await team.getByRole("button", { name: /Alin Gharibian/ }).click();
   const dialog = page.getByRole("dialog", { name: "Alin Gharibian" });
   await expect(dialog).toBeVisible();
   await expect(dialog).toContainText("Alin Gharibian");
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveCount(0);
-  await expect(team.locator("#team-heather")).toContainText("Full profile coming soon");
-  await expect(team.locator("#team-heather button")).toHaveCount(0);
 });
 
 test("each clinic has a map with its pin and three parking pins, its details and directions", async ({ page }) => {

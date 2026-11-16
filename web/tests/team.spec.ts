@@ -17,13 +17,12 @@ async function goToSection(page: Page): Promise<void> {
 test.describe("desktop", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
-  test("four portraits in order; the fourth has no profile yet", async ({ page }) => {
+  test("three portraits in order, each opening a profile", async ({ page }) => {
     await goToSection(page);
     const buttons = page.locator(`${SECTION} .team-port button`);
-    await expect(buttons).toHaveCount(4);
-    await expect(page.locator(`${SECTION} .team-port`)).toContainText(["Alin Gharibian", "Dr. Negin Mastouri", "Dr. Luis Figueroa", "Heather Bouchard, NP"]);
-    await expect(buttons.nth(3)).toBeDisabled();
-    await expect(buttons.nth(3)).toHaveAttribute("aria-label", "Heather Bouchard, NP, Nurse Practitioner, profile coming soon");
+    await expect(buttons).toHaveCount(3);
+    await expect(page.locator(`${SECTION} .team-port`)).toContainText(["Alin Gharibian", "Dr. Negin Mastouri", "Dr. Luis Figueroa"]);
+    for (let i = 0; i < 3; i++) await expect(buttons.nth(i)).toBeEnabled();
     await expect(page.locator(`${SECTION} .team-lines`)).toHaveClass(/\bin\b/);
   });
 
