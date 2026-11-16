@@ -57,7 +57,7 @@ echo "running from $current, building into $next"
 
 rm -rf "${WEB:?}/$next"
 podman --root /root/ndm-build/storage --runroot /run/ndm-build run --rm --network host \
-  --cpus 8 --memory 4g --user 1005:1009 -e HOME=/tmp -e NEXT_DIST_DIR="$next" \
+  --cpus 8 --memory 4g --user 1005:1009 -e HOME=/tmp -e NEXT_DIST_DIR="$next" -e NEXT_BUILD_CPUS=8 \
   -v "$WEB":/app -w /app docker.io/library/node:22-bookworm-slim npx next build
 built=$?
 

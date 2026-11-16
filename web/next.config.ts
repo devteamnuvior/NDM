@@ -15,7 +15,15 @@ const legacyOrigin = process.env.LEGACY_ORIGIN?.replace(/\/+$/, "");
 const basePath = (process.env.NEXT_BASE_PATH ?? "").trim().replace(/\/+$/, "");
 if (basePath && !/^\/[a-z0-9-]+$/.test(basePath)) throw new Error(`NEXT_BASE_PATH must look like "/react", not "${basePath}"`);
 
+/**
+ * How many workers a build may start. Next.js counts the machine's CPUs, which inside the live server's
+ * build container is all 32 of the host's although the container is capped at 8 CPUs and 4 GB: 31 workers
+ * do not fit in that memory. scripts/deploy-live.sh sets NEXT_BUILD_CPUS=8; unset, Next.js decides.
+ */
+const buildCpus = Number(process.env.NEXT_BUILD_CPUS) || 0;
+
 const nextConfig: NextConfig = {
+  ...(buildCpus > 0 ? { experimental: { cpus: buildCpus } } : {}),
   /* a second build (for example the /react one) can go to its own folder, leaving .next as it is */
   distDir: process.env.NEXT_DIST_DIR?.trim() || ".next",
   basePath,
