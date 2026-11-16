@@ -40,10 +40,6 @@ export const BOTOX: ProcedurePage = {
       "Results"
     ],
     [
-      "film",
-      "The clinic"
-    ],
-    [
       "prices",
       "Prices"
     ],
@@ -54,6 +50,10 @@ export const BOTOX: ProcedurePage = {
     [
       "why",
       "Why NewDermaMed"
+    ],
+    [
+      "film",
+      "The clinic"
     ],
     [
       "visit",

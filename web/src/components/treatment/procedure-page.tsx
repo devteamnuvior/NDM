@@ -49,11 +49,11 @@ export function ProcedurePage({ view }: { view: ProcedureView }) {
       {has("why-choose") && <ProcChoose choose={p.choose} number={n("why-choose")} />}
       {has("watch") && <TxReel reel={p.reel} facts={p.facts} number={n("watch")} />}
       {has("results") && <TxResults results={p.results} number={n("results")} dark />}
-      <TxFilm film={p.film} number={n("film")} />
       {has("prices") && <ProcPrices lead={p.prices.lead} strong={p.prices.strong} category={p.prices.category} number={n("prices")} groups={groups} />}
       {has("guide") && <ProcGuide guide={p.guide} number={n("guide")} />}
       {/* the same on every procedure page */}
       <TxWhy why={p.why} number={n("why")} />
+      <TxFilm film={p.film} number={n("film")} />
       <Team inner />
       <Saying />
       <TxVisit number={n("visit")} />
