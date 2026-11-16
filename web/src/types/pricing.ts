@@ -78,10 +78,10 @@ export interface WooCategory<P = WooProduct> {
   products: P[];
 }
 
-/** The most cards the Pricing page's Monthly specials can hold (the plugin refuses more). */
+/** The most cards the Pricing page's Monthly specials, or the offers carousel, can hold (the plugin refuses more). */
 export const SPECIALS_MAX = 24;
 
-/** One card of the Pricing page's Monthly specials (see cms/wp-content/plugins/ndm-pricing/includes/specials.php). It holds no price. */
+/** One card of the Pricing page's Monthly specials, or of the offers carousel (see cms/wp-content/plugins/ndm-pricing/includes/specials.php). It holds no price. */
 export interface WooSpecial {
   /** WooCommerce product ID. */
   productId: number;
@@ -98,6 +98,8 @@ export interface WooPricingTree<C = WooCategory> {
   categories: C[];
   /** The Pricing page's Monthly specials, in order. Absent only when the plugin is older than the list. */
   specials?: WooSpecial[];
+  /** The offers carousel (home, Promotion and sale pages), in order. Absent only when the plugin is older than the list. */
+  carousel?: WooSpecial[];
   /** The sale campaign, when one is stored in WooCommerce (public list only). */
   campaign?: WooCampaign | null;
   /** WooCommerce's tax for the cart's totals (public list only): the standard rate at the shop's base location. */
@@ -193,6 +195,8 @@ export interface PricingPatch {
   variations?: { id: number; hidden?: boolean; label?: WooPromoLabel; regularPrice?: string; salePrice?: string }[];
   /** The Pricing page's whole Monthly specials list, in its new order. */
   specials?: { productId: number; name: string; scope: PromoScope }[];
+  /** The offers carousel's whole list, in its new order. */
+  carousel?: { productId: number; name: string; scope: PromoScope }[];
 }
 
 export interface PricingSaveResult {

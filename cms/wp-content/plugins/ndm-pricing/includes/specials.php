@@ -1,10 +1,14 @@
 <?php
 /**
- * The Pricing page's "Monthly specials" cards: which treatments they show, in which order.
+ * Two lists of treatments shown as cards, each kept on its own and managed in its own section of the
+ * price manager:
  *
- * One option holds the list:
+ *   "specials"   the Pricing page's "Monthly specials" cards        option ndm_pricing_specials
+ *   "carousel"   the offers carousel (home, Promotion, sale pages)   option ndm_pricing_carousel
  *
- *   ndm_pricing_specials   list of  productId  WooCommerce product ID
+ * Each option holds:
+ *
+ *                          list of  productId  WooCommerce product ID
  *                                   name       card title ("Lip Filler"); empty shows the product's own name
  *                                   scope      "product"  the card shows this treatment's lowest price and offer
  *                                              "category" the lowest price and offer of its whole category
@@ -16,16 +20,28 @@
  * Until the list is saved for the first time it is the current offers, in their order: that is what
  * the page showed before the list could be managed.
  *
- * The list travels with the price list (`specials` in ndm/v1/pricing and in the management tree) and
- * is saved with it (`specials` in ndm/v1/pricing/admin/save: the whole list, in its new order).
+ * A carousel card's photo is the product's own image, its tag the product's category.
+ *
+ * The lists travel with the price list (`specials` and `carousel` in ndm/v1/pricing and in the
+ * management tree) and are saved with it (the same keys in ndm/v1/pricing/admin/save: the whole list,
+ * in its new order).
  *
  * @package NDM_Pricing
  */
 
 defined( 'ABSPATH' ) || exit;
 
-const NDM_SPECIALS_OPTION = 'ndm_pricing_specials';
-const NDM_SPECIALS_MAX    = 24;
+const NDM_SPECIALS_MAX   = 24;
+const NDM_SPECIALS_LISTS = array(
+	'specials' => array(
+		'option' => 'ndm_pricing_specials',
+		'label'  => 'Monthly specials',
+	),
+	'carousel' => array(
+		'option' => 'ndm_pricing_carousel',
+		'label'  => 'The offers carousel',
+	),
+);
 
 /**
  * The list before its first save: the offers, in their order.
@@ -76,13 +92,14 @@ function ndm_specials_default() {
 }
 
 /**
- * The monthly specials, in order, each with its product's current name. A product that no longer
+ * One of the lists, in order, each entry with its product's current name. A product that no longer
  * exists (deleted or in the trash) is left out.
  *
+ * @param string $which "specials" or "carousel".
  * @return array<int,array{productId:int,name:string,scope:string,productName:string}>
  */
-function ndm_specials() {
-	$stored = get_option( NDM_SPECIALS_OPTION, null );
+function ndm_specials( $which = 'specials' ) {
+	$stored = get_option( NDM_SPECIALS_LISTS[ $which ]['option'], null );
 	$stored = is_array( $stored ) ? $stored : ndm_specials_default();
 	$list   = array();
 	$seen   = array();
@@ -110,16 +127,19 @@ function ndm_specials() {
 /**
  * Checks the list a save sends. Writes nothing.
  *
- * @param mixed $list The incoming "specials".
+ * @param mixed  $list  The incoming list.
+ * @param string $which "specials" or "carousel".
  * @return array<int,array{productId:int,name:string,scope:string}>|WP_Error
  */
-function ndm_specials_clean( $list ) {
+function ndm_specials_clean( $list, $which = 'specials' ) {
+	$label = NDM_SPECIALS_LISTS[ $which ]['label'];
+
 	if ( ! is_array( $list ) || ( $list && ! wp_is_numeric_array( $list ) ) ) {
-		return ndm_pricing_invalid( 'specials must be a list.' );
+		return ndm_pricing_invalid( "$which must be a list." );
 	}
 
 	if ( count( $list ) > NDM_SPECIALS_MAX ) {
-		return ndm_pricing_invalid( sprintf( 'At most %d treatments can be shown in Monthly specials.', NDM_SPECIALS_MAX ) );
+		return ndm_pricing_invalid( sprintf( '%s: at most %d treatments.', $label, NDM_SPECIALS_MAX ) );
 	}
 
 	$clean = array();
@@ -129,16 +149,16 @@ function ndm_specials_clean( $list ) {
 		$product = is_int( $id ) && $id > 0 && ! isset( $clean[ $id ] ) ? wc_get_product( $id ) : null;
 
 		if ( ! $product instanceof WC_Product || $product instanceof WC_Product_Variation || 'trash' === $product->get_status() ) {
-			return ndm_pricing_invalid( 'Monthly specials: unknown or repeated product.', 404 );
+			return ndm_pricing_invalid( "$label: unknown or repeated product.", 404 );
 		}
 
-		$name = ndm_pricing_clean_text( $entry['name'] ?? '', "Monthly special $id: the card title", 80 );
+		$name = ndm_pricing_clean_text( $entry['name'] ?? '', "$label, product $id: the card title", 80 );
 		if ( is_wp_error( $name ) ) {
 			return $name;
 		}
 
 		if ( ! in_array( $entry['scope'] ?? 'product', NDM_PROMO_SCOPES, true ) ) {
-			return ndm_pricing_invalid( "Monthly special $id: unknown price setting." );
+			return ndm_pricing_invalid( "$label, product $id: unknown price setting." );
 		}
 
 		$clean[ $id ] = array(
@@ -154,8 +174,9 @@ function ndm_specials_clean( $list ) {
 /**
  * Stores the list. The caller clears the stored price list (ndm_pricing_flush).
  *
- * @param array<int,array{productId:int,name:string,scope:string}> $list Clean list.
+ * @param array<int,array{productId:int,name:string,scope:string}> $list  Clean list.
+ * @param string                                                   $which "specials" or "carousel".
  */
-function ndm_specials_store( $list ) {
-	update_option( NDM_SPECIALS_OPTION, $list, false );
+function ndm_specials_store( $list, $which = 'specials' ) {
+	update_option( NDM_SPECIALS_LISTS[ $which ]['option'], $list, false );
 }

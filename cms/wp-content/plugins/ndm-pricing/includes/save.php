@@ -17,10 +17,12 @@
  *                             "variationOrder"?: [ 57, "newv-1", 55 ] } ],
  *     "variations":       [ { "id": 55, "hidden"?, "label"?: { "text": "...", "enabled": true },
  *                             "regularPrice"?: "720", "salePrice"?: "648" } ],
- *     "specials":         [ { "productId": 33, "name": "Lip Filler", "scope": "product" | "category" } ]
+ *     "specials":         [ { "productId": 33, "name": "Lip Filler", "scope": "product" | "category" } ],
+ *     "carousel":         [ the same shape ]
  *   }
  *
- * "specials" is the Pricing page's whole Monthly specials list, in its new order (see specials.php).
+ * "specials" is the Pricing page's whole Monthly specials list and "carousel" the offers carousel's,
+ * each in its new order (see specials.php).
  *
  * "products" inside a category is that category's full list, in order: products missing from it are
  * taken out of the category, new ones are put in, and the order is kept. "variationOrder" is every
@@ -188,7 +190,7 @@ function ndm_pricing_plan( $body ) {
 		return ndm_pricing_invalid( 'The request body must be a JSON object.' );
 	}
 
-	$unknown = array_diff( array_keys( $body ), array( 'createCategories', 'categories', 'categoryOrder', 'products', 'variations', 'specials' ) );
+	$unknown = array_diff( array_keys( $body ), array( 'createCategories', 'categories', 'categoryOrder', 'products', 'variations', 'specials', 'carousel' ) );
 
 	if ( $unknown ) {
 		return ndm_pricing_invalid( 'Unknown field: ' . sanitize_key( (string) reset( $unknown ) ) . '.' );
@@ -202,6 +204,7 @@ function ndm_pricing_plan( $body ) {
 		'promos'     => array(),
 		'variations' => array(),
 		'specials'   => null,
+		'carousel'   => null,
 	);
 
 	// New categories.
@@ -471,14 +474,16 @@ function ndm_pricing_plan( $body ) {
 		$plan['variations'][ $id ] = $clean + $prices;
 	}
 
-	// The Pricing page's Monthly specials: the whole list, in its new order.
-	if ( array_key_exists( 'specials', $body ) ) {
-		$specials = ndm_specials_clean( $body['specials'] );
-		if ( is_wp_error( $specials ) ) {
-			return $specials;
-		}
+	// The Pricing page's Monthly specials and the offers carousel: each the whole list, in its new order.
+	foreach ( array_keys( NDM_SPECIALS_LISTS ) as $which ) {
+		if ( array_key_exists( $which, $body ) ) {
+			$cards = ndm_specials_clean( $body[ $which ], $which );
+			if ( is_wp_error( $cards ) ) {
+				return $cards;
+			}
 
-		$plan['specials'] = $specials;
+			$plan[ $which ] = $cards;
+		}
 	}
 
 	return $plan;
@@ -676,8 +681,10 @@ function ndm_pricing_apply( $plan ) {
 
 	ndm_promo_apply_product_changes( $plan['promos'] );
 
-	if ( null !== $plan['specials'] ) {
-		ndm_specials_store( $plan['specials'] );
+	foreach ( array_keys( NDM_SPECIALS_LISTS ) as $which ) {
+		if ( null !== $plan[ $which ] ) {
+			ndm_specials_store( $plan[ $which ], $which );
+		}
 	}
 
 	ndm_pricing_flush();

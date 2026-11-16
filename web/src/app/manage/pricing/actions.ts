@@ -29,7 +29,7 @@ async function failure(error: unknown): Promise<ActionResult<never>> {
   return { ok: false, reason: "unreachable", message: "WooCommerce could not be reached. Nothing was changed; please try again." };
 }
 
-const PATCH_KEYS = new Set(["createCategories", "categories", "categoryOrder", "products", "variations", "specials"]);
+const PATCH_KEYS = new Set(["createCategories", "categories", "categoryOrder", "products", "variations", "specials", "carousel"]);
 const MAX_PATCH_BYTES = 400_000;
 
 /** A first look at the changes: the right outer shape and a sensible size. WordPress checks every field. */

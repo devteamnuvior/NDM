@@ -39,7 +39,7 @@ async function OfferSections() {
   if (!offers.length) return <PromoNotice state="empty" />;
   return (
     <>
-      <Specials level="h1" offersOnPage offers={offers} />
+      <Specials level="h1" offersOnPage />
       <PromoGrid offers={offers} />
     </>
   );

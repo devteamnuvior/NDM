@@ -26,6 +26,8 @@ export interface Draft {
   products: Record<number, WooAdminProduct>;
   /** The Pricing page's Monthly specials, in display order. */
   specials: WooSpecial[];
+  /** The offers carousel (home, Promotion and sale pages), in display order. */
+  carousel: WooSpecial[];
 }
 
 export function toDraft(tree: WooAdminTree): Draft {
@@ -34,7 +36,7 @@ export function toDraft(tree: WooAdminTree): Draft {
     for (const p of c.products) products[p.id] = p;
     return { key: `c${c.id}`, id: c.id, slug: c.slug, name: c.name, description: c.description, visible: c.visible, perUnit: c.perUnit, productIds: c.products.map((p) => p.id) };
   });
-  return { categories, products, specials: tree.specials ?? [] };
+  return { categories, products, specials: tree.specials ?? [], carousel: tree.carousel ?? [] };
 }
 
 const sameLabel = (a: WooPromoLabel, b: WooPromoLabel) => a.text.trim() === b.text.trim() && a.enabled === b.enabled;
@@ -52,6 +54,8 @@ export interface Changes {
   variations: Set<number>;
   /** Whether the Monthly specials differ (which treatments, their order, a card's title or price setting). */
   specials: boolean;
+  /** The same for the offers carousel. */
+  carousel: boolean;
   /** What stops a save, in plain words; empty when the draft can be saved. */
   problems: string[];
 }
@@ -167,13 +171,17 @@ export function changesOf(saved: Draft, draft: Draft): Changes {
     }
   }
 
-  /* the Monthly specials are sent whole, in their order, when anything about them changed */
-  const specials = draft.specials.map((s) => ({ productId: s.productId, name: s.name.trim(), scope: s.scope }));
-  const specialsChanged = specials.length !== saved.specials.length || specials.some((s, i) => s.productId !== saved.specials[i].productId || s.name !== saved.specials[i].name || s.scope !== saved.specials[i].scope);
-  if (specialsChanged) patch.specials = specials;
+  /* the Monthly specials and the offers carousel are each sent whole, in their order, when anything about them changed */
+  const cards = { specials: false, carousel: false };
+  for (const which of ["specials", "carousel"] as const) {
+    const was = saved[which];
+    const list = draft[which].map((s) => ({ productId: s.productId, name: s.name.trim(), scope: s.scope }));
+    cards[which] = list.length !== was.length || list.some((s, i) => s.productId !== was[i].productId || s.name !== was[i].name || s.scope !== was[i].scope);
+    if (cards[which]) patch[which] = list;
+  }
 
-  const count = changed.categories.size + changed.products.size + changed.variations.size + (orderChanged ? 1 : 0) + (specialsChanged ? 1 : 0);
-  return { patch, count, ...changed, specials: specialsChanged, problems: [...new Set(problems)] };
+  const count = changed.categories.size + changed.products.size + changed.variations.size + (orderChanged ? 1 : 0) + (cards.specials ? 1 : 0) + (cards.carousel ? 1 : 0);
+  return { patch, count, ...changed, ...cards, problems: [...new Set(problems)] };
 }
 
 /**
@@ -185,6 +193,7 @@ export function toPublicTree(draft: Draft): WooPricingTree {
   return {
     currency: "CAD",
     specials: draft.specials,
+    carousel: draft.carousel,
     categories: draft.categories
       .filter((c) => c.visible)
       .map((c) => ({

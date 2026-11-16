@@ -1,6 +1,7 @@
 import "server-only";
 import type { Offer } from "@/components/specials/offers";
-import { offerOptionPrice, offerPrice, offerPriceChoices } from "@/lib/offer-prices";
+import type { WheelOffer } from "@/components/specials/specials-wheel";
+import { cardPrice, offerOptionPrice, offerPrice, offerPriceChoices } from "@/lib/offer-prices";
 import { pagePath } from "@/lib/routes";
 import { getPricingTree, getPromotions } from "@/lib/wordpress";
 
@@ -34,6 +35,42 @@ export async function getOffers(): Promise<Offer[]> {
         area: p.area,
         icon: p.icon,
         text: p.text,
+        ...shown,
+        href: `${pagePath("pricing")}#pg-${choice.slug}-h`,
+      },
+    ];
+  });
+}
+
+/**
+ * The offers carousel (home, Promotion and sale pages): its own list of treatments, kept in WooCommerce
+ * and managed in the price manager, apart from the Promotion page's offer cards. A card shows the
+ * product's own photo and category; a treatment that is also an offer shows the offer's price, unit and
+ * tag, any other its own lowest price or its category's. A treatment that is not on the public price
+ * list gets no card. Throws a WordPressError when WooCommerce cannot be reached.
+ */
+export async function getCarousel(): Promise<WheelOffer[]> {
+  const [promotions, tree] = await Promise.all([getPromotions(), getPricingTree()]);
+  /* a plugin older than the list: the offers themselves, which is what the list starts as */
+  const list = tree.carousel ?? promotions.map((p) => ({ productId: p.productId, name: p.name, scope: p.scope, productName: p.productName }));
+  const choices = offerPriceChoices(tree);
+  const offerOf = new Map(promotions.map((p) => [p.productId, p]));
+  const images = new Map(tree.categories.flatMap((c) => c.products.flatMap((p) => (p.image ? [[p.id, p.image] as const] : []))));
+
+  return list.flatMap((s): WheelOffer[] => {
+    const choice = choices.get(s.productId);
+    if (!choice) return [];
+    const offer = offerOf.get(s.productId);
+    const shown = cardPrice(tree, choice, s, offer);
+    if (!shown) return [];
+    const image = offer?.image ?? images.get(s.productId) ?? null;
+    return [
+      {
+        id: s.productId,
+        name: s.name || s.productName,
+        photo: image ? { src: image.src, srcSet: image.srcSet } : null,
+        position: offer?.focus ?? "50% 50%",
+        tag: choice.tag,
         ...shown,
         href: `${pagePath("pricing")}#pg-${choice.slug}-h`,
       },

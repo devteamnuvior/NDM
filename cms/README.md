@@ -170,6 +170,10 @@ title; empty shows the product's name) and `scope` (`product`: the treatment's l
 - It is managed in the "Monthly specials" section of the site's `/manage/pricing`.
 - A treatment that is also an offer shows the offer's own price, unit and tag on its card; one that is
   not on the public price list gets no card. A deleted or trashed product drops out of the list.
+- The offers carousel (home, top of the Promotion page, sale pages) is a second list of the same kind:
+  option `ndm_pricing_carousel`, key `carousel` in the same two routes, its own section in the manager.
+  A carousel card shows the product's own image and category. The Promotion page's offer cards still
+  follow the offers (`_ndm_promo`).
 - Back to "follows the offers": `wp option delete ndm_pricing_specials`, then save any product (or
   `wp transient delete ndm_pricing_public_tree`).
 

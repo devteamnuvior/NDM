@@ -75,7 +75,17 @@ export interface SpecialOffer {
 }
 
 /**
- * The Pricing page's Monthly specials cards, in the list's order. A treatment that is also an offer
+ * The price a card of one of the lists (Monthly specials, the offers carousel) shows: the offer's own
+ * figures when the treatment is also an offer, else its own lowest price or its category's, as the card is set.
+ */
+export function cardPrice(tree: WooPricingTree, choice: OfferPriceChoice, card: Pick<WooSpecial, "productId" | "scope">, offer: SpecialOffer | undefined): OfferPrice | null {
+  if (!offer) return offerPrice(choice, card.scope);
+  return (offer.option ? offerOptionPrice(tree, card.productId, offer.option) : null) ?? offerPrice(choice, offer.scope);
+}
+
+/**
+ * The Pricing page's Monthly specials cards, in the list's order. (The manager's draft uses it for the
+ * offers carousel too: the figures follow the same rules.) A treatment that is also an offer
  * (the wheel, the Promotion page) shows the offer's own price, unit and offer line, so every page
  * agrees; any other shows its own lowest price or its category's, as its card is set. A treatment that
  * is not on the public price list has no price to show and gets no card.
@@ -86,8 +96,7 @@ export function priceSpecials(tree: WooPricingTree, specials: readonly WooSpecia
   return specials.flatMap((s): PriceSpecialView[] => {
     const choice = choices.get(s.productId);
     if (!choice) return [];
-    const offer = offerOf.get(s.productId);
-    const shown = offer ? ((offer.option ? offerOptionPrice(tree, s.productId, offer.option) : null) ?? offerPrice(choice, offer.scope)) : offerPrice(choice, s.scope);
+    const shown = cardPrice(tree, choice, s, offerOf.get(s.productId));
     if (!shown) return [];
     return [{ id: s.productId, name: s.name || s.productName, price: "$" + shown.price, unit: shown.unit ? " / " + shown.unit.replace(/^per /, "") : "", offer: shown.deal, target: `pg-${choice.slug}` }];
   });

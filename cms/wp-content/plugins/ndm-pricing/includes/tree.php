@@ -271,8 +271,9 @@ function ndm_pricing_tree( $admin = false ) {
 		'categories' => $categories,
 	);
 
-	// The Pricing page's Monthly specials: which treatments its cards show (specials.php).
-	$tree['specials'] = ndm_specials();
+	// The Pricing page's Monthly specials and the offers carousel: which treatments their cards show (specials.php).
+	$tree['specials'] = ndm_specials( 'specials' );
+	$tree['carousel'] = ndm_specials( 'carousel' );
 
 	if ( ! $admin && function_exists( 'ndm_campaign_public' ) ) {
 		// The sale campaign, if one is stored: its code, its phase now, its dates.

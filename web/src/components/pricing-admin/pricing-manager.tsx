@@ -69,7 +69,7 @@ const Muted = ({ children }: { children: ReactNode }) => <span className={`${pil
 
 /* ---- rearranging: drag a box by its handle, or step it with the arrows (touch and keyboard) ---- */
 
-type DragKind = "category" | "product" | "variation" | "special";
+type DragKind = "category" | "product" | "variation" | "specials" | "carousel";
 interface Dragging {
   kind: DragKind;
   /** What the list belongs to: "" for categories, a category key, or a product ID. */
@@ -408,13 +408,34 @@ function Preview({ draft, pending, onClose }: { draft: Draft; pending: number; o
   );
 }
 
-/* ---- the Pricing page's Monthly specials: which treatments its cards show, in which order ---- */
+/* ---- two lists of cards, each its own section: the Pricing page's Monthly specials, and the offers carousel ---- */
+
+const CARD_LISTS = {
+  specials: {
+    tag: "Pricing page",
+    strong: "cards",
+    name: "Monthly specials",
+    intro: "These are the cards above the price list on the Pricing page, in this order. Search for a treatment to add its card, use the pencil to change a card\u2019s title or price setting or to remove it, and the handle or arrows to rearrange. Every price and offer tag is read from the price list below.",
+    empty: "No cards. The Pricing page leaves the Monthly specials section out until a treatment is added.",
+  },
+  carousel: {
+    tag: "Home and Promotion pages",
+    strong: "carousel",
+    name: "the carousel",
+    intro: "These are the cards of the turning carousel on the home page and at the top of the Promotion page, in this order. It is a list of its own: the Promotion page\u2019s offer cards and the Pricing page\u2019s cards above do not follow it. Each card shows the product\u2019s own photo and category from WooCommerce; every price and offer tag is read from the price list below.",
+    empty: "No cards. The pages leave the carousel out until a treatment is added.",
+  },
+} as const;
 
 interface SpecialsSectionProps {
+  /** Which list this section manages. */
+  kind: keyof typeof CARD_LISTS;
   specials: WooSpecial[];
   /** The card each treatment would show, by product ID; none when the treatment is not on the public price list. */
   cards: Map<number, PriceSpecialView>;
   inPromotions: (productId: number) => boolean;
+  /** For lists whose cards carry the product's photo: whether it has one; undefined when that is not known here. */
+  hasPhoto?: (productId: number) => boolean | undefined;
   changed: boolean;
   csrf: string;
   reorder: Reorder;
@@ -427,30 +448,29 @@ const SCOPES = [
   ["category", "Lowest price of its whole category"],
 ] as const;
 
-function SpecialsSection({ specials, cards, inPromotions, changed, csrf, reorder, onChange, onSignedOut }: SpecialsSectionProps) {
+function SpecialsSection({ kind, specials, cards, inPromotions, hasPhoto, changed, csrf, reorder, onChange, onSignedOut }: SpecialsSectionProps) {
+  const copy = CARD_LISTS[kind];
   const [editing, setEditing] = useState<number | null>(null);
   const set = (id: number, next: Partial<WooSpecial>) => onChange((list) => list.map((s) => (s.productId === id ? { ...s, ...next } : s)));
   const full = specials.length >= SPECIALS_MAX;
 
   return (
-    <section id="specials" aria-labelledby="specials-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(48px,5vw,80px)]">
+    <section id={kind} aria-labelledby={`${kind}-title`} className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(48px,5vw,80px)]">
       <div className="mx-auto max-w-[1040px]">
         <div className="text-center">
-          <Eyebrow>Monthly specials</Eyebrow>
+          <Eyebrow>{copy.tag}</Eyebrow>
           <TwoTone
-            id="specials-title"
+            id={`${kind}-title`}
             className="mt-5"
             lead={
               <>
-                Exclusive
+                Monthly specials
                 <br />
               </>
             }
-            strong="monthly specials"
+            strong={copy.strong}
           />
-          <p className="mx-auto mt-5 max-w-[60ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted">
-            These are the cards above the price list on the Pricing page, in this order. Search for a treatment to add its card, use the pencil to change a card&rsquo;s title or price setting or to remove it, and the handle or arrows to rearrange. Every price and offer tag is read from the price list below.
-          </p>
+          <p className="mx-auto mt-5 max-w-[60ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted">{copy.intro}</p>
           <p className="mt-4 flex flex-wrap items-center justify-center gap-2">
             <Muted>
               {specials.length} {specials.length === 1 ? "card" : "cards"}
@@ -466,10 +486,10 @@ function SpecialsSection({ specials, cards, inPromotions, changed, csrf, reorder
             const on = editing === s.productId;
             const offer = inPromotions(s.productId);
             return (
-              <li key={s.productId} {...reorder.row("special", "", i, (from, to) => onChange((list) => relocated(list, from, to)))} className="rounded-[16px] bg-white py-3 pr-3 pl-1.5 ring-1 ring-ndm-ink/[.07] sm:pl-2">
+              <li key={s.productId} {...reorder.row(kind, "", i, (from, to) => onChange((list) => relocated(list, from, to)))} className="rounded-[16px] bg-white py-3 pr-3 pl-1.5 ring-1 ring-ndm-ink/[.07] sm:pl-2">
                 <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-2 sm:grid-cols-[auto_minmax(0,1fr)_auto_auto] sm:gap-x-5">
                   <span className="row-span-2 sm:row-span-1">
-                    <Mover small what={title} first={i === 0} last={i === specials.length - 1} onStep={(by) => onChange((list) => moved(list, i, by))} grip={reorder.grip("special", "", i)} />
+                    <Mover small what={title} first={i === 0} last={i === specials.length - 1} onStep={(by) => onChange((list) => moved(list, i, by))} grip={reorder.grip(kind, "", i)} />
                   </span>
                   <span className={`min-w-0 ${card ? "" : "opacity-60"}`}>
                     <span className="block font-aeonik text-[clamp(18px,1.45vw,21px)] leading-[1.22] tracking-[-0.015em] text-ndm-ink">{title}</span>
@@ -479,6 +499,7 @@ function SpecialsSection({ specials, cards, inPromotions, changed, csrf, reorder
                   </span>
                   <span className="col-start-2 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-3 sm:row-start-1 sm:justify-end">
                     {offer && <span className={`${pill} bg-[#E3F2FB] text-ndm-deep`}>In Promotions</span>}
+                    {card && hasPhoto?.(s.productId) === false && <Muted>No photo in WooCommerce</Muted>}
                     {card?.offer && <span className="pr-badge">{card.offer}</span>}
                     {card ? (
                       <span className="font-inter text-[13px] whitespace-nowrap text-ndm-muted">
@@ -529,7 +550,7 @@ function SpecialsSection({ specials, cards, inPromotions, changed, csrf, reorder
                           setEditing(null);
                         }}
                       >
-                        Remove from Monthly specials
+                        Remove from {copy.name}
                       </button>
                     </div>
                   </div>
@@ -538,18 +559,18 @@ function SpecialsSection({ specials, cards, inPromotions, changed, csrf, reorder
             );
           })}
         </ul>
-        {specials.length === 0 && <p className="text-center font-inter text-[14.5px] text-ndm-muted">No cards. The Pricing page leaves the Monthly specials section out until a treatment is added.</p>}
+        {specials.length === 0 && <p className="text-center font-inter text-[14.5px] text-ndm-muted">{copy.empty}</p>}
 
         <div className="mt-4">
           {full ? (
-            <p className="font-inter text-[13.5px] text-ndm-muted">Monthly specials holds at most {SPECIALS_MAX} cards. Remove one to add another.</p>
+            <p className="font-inter text-[13.5px] text-ndm-muted">This list holds at most {SPECIALS_MAX} cards. Remove one to add another.</p>
           ) : (
             <ProductSearch
               csrf={csrf}
               exclude={specials.map((s) => s.productId)}
               onSignedOut={onSignedOut}
-              title="Add a treatment to Monthly specials"
-              add="Add to Monthly specials"
+              title={`Add a treatment to ${copy.name}`}
+              add={`Add to ${copy.name}`}
               onAdd={(p) => onChange((list) => (list.length >= SPECIALS_MAX || list.some((s) => s.productId === p.id) ? list : [...list, { productId: p.id, name: "", scope: "product", productName: p.name }]))}
             />
           )}
@@ -617,10 +638,12 @@ export function PricingManager({ tree, user, csrf, wpAdmin }: PricingManagerProp
   /* how many treatments are in Promotions, for the position picker and the limit */
   const promoCount = useMemo(() => Object.values(draft.products).filter((p) => p.promo).length, [draft]);
   const total = useMemo(() => new Set(draft.categories.flatMap((c) => c.productIds)).size, [draft]);
-  /* the Monthly specials cards visitors would see, by product */
+  /* the Monthly specials and the carousel cards visitors would see, by product */
   const cards = useMemo(() => {
     const offers = Object.values(draft.products).flatMap((p) => (p.promo ? [{ productId: p.id, scope: p.promo.scope, option: p.promo.option }] : []));
-    return new Map(priceSpecials(toPublicTree(draft), draft.specials, offers).map((card) => [card.id, card]));
+    const tree = toPublicTree(draft);
+    const of = (list: WooSpecial[]) => new Map(priceSpecials(tree, list, offers).map((card) => [card.id, card]));
+    return { specials: of(draft.specials), carousel: of(draft.carousel) };
   }, [draft]);
 
   /* leaving with unsaved changes asks first */
@@ -759,16 +782,21 @@ export function PricingManager({ tree, user, csrf, wpAdmin }: PricingManagerProp
         )}
       </header>
 
-      <SpecialsSection
-        specials={draft.specials}
-        cards={cards}
-        inPromotions={(id) => !!draft.products[id]?.promo}
-        changed={changes.specials}
-        csrf={csrf}
-        reorder={reorder}
-        onChange={(change) => setDraft((d) => ({ ...d, specials: change(d.specials) }))}
-        onSignedOut={signedOut}
-      />
+      {(["specials", "carousel"] as const).map((kind) => (
+        <SpecialsSection
+          key={kind}
+          kind={kind}
+          specials={draft[kind]}
+          cards={cards[kind]}
+          inPromotions={(id) => !!draft.products[id]?.promo}
+          hasPhoto={kind === "carousel" ? (id) => (draft.products[id] ? !!draft.products[id].image : undefined) : undefined}
+          changed={changes[kind]}
+          csrf={csrf}
+          reorder={reorder}
+          onChange={(change) => setDraft((d) => ({ ...d, [kind]: change(d[kind]) }))}
+          onSignedOut={signedOut}
+        />
+      ))}
 
       {/* the Pricing page's own price list section, with its styles; only the edit and move controls are added */}
       <section id="prices" aria-labelledby="prices-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(48px,5vw,80px)] pb-[clamp(64px,7vw,110px)]">
