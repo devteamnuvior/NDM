@@ -62,9 +62,10 @@ test("prices come from the price list, per unit; groups fold on their own; a pac
   await expect(botox).toHaveAttribute("aria-expanded", "true");
   await expect(dysport).toHaveAttribute("aria-expanded", "false");
   await expect(botox).toContainText("5 options");
-  await expect(botox).toContainText(/From \$\d+(\.\d\d)? \/ unit/);
-  await expect(botox).toContainText("Up to 30% off");
-  await expect(dysport).toContainText(/From \$\d+(\.\d\d)? \/ unit/);
+  /* while a sale runs the regular price is struck through before the "from" price, and the offer is the sale's pill */
+  await expect(botox).toContainText(/From\s*(Regular price \$\d+(\.\d\d)?\s*)?\$\d+(\.\d\d)? \/ unit/);
+  await expect(botox.locator(".pr-badge, .sb")).toContainText(/30%\s*off/i);
+  await expect(dysport).toContainText(/From\s*(Regular price \$\d+(\.\d\d)?\s*)?\$\d+(\.\d\d)? \/ unit/);
   const rows = prices.locator("#proc-pr0 .pr-opt");
   await expect(rows).toHaveCount(5);
   await expect(rows.nth(0)).toContainText("Per unit");
@@ -84,20 +85,25 @@ test("prices come from the price list, per unit; groups fold on their own; a pac
   await expect(prices.locator("#proc-pr1 .pr-opt")).toHaveCount(5);
 });
 
-test("each price group reads as its row on the Pricing page: the same From price, offer badge and checkout code lines", async ({ page }) => {
-  /* what a folding row shows when closed, and how many of its options carry the checkout code's line */
+test("each price group reads as its row on the Pricing page: the same From price, offer tag and checkout code lines", async ({ page }) => {
+  /* what a folding row shows when closed (the "from" price with the struck regular price before it, the offer tag or
+     sale pill), and how many of its options carry the checkout code's line ("Extra 30% with PLUS30") */
   const read = (rows: Locator) =>
     rows.evaluateAll((els) =>
       els.map((el) => {
         const head = el.querySelector("button")!;
         const text = head.textContent!.replace(/\s+/g, " ");
-        return { from: /From\s*\$[\d.]+(\s*\/\s*unit)?/.exec(text)?.[0].replace(/\s+/g, " ") ?? "", badge: head.querySelector(".pr-badge")?.textContent?.replace(/\s+/g, " ").trim() ?? "", code: el.querySelectorAll(".pr-code").length };
+        return {
+          from: /From\s*(Regular price\s*\$[\d.]+\s*)?\$[\d.]+(\s*\/\s*unit)?/.exec(text)?.[0].replace(/\s+/g, " ") ?? "",
+          badge: head.querySelector(".pr-badge, .sb")?.textContent?.replace(/\s+/g, " ").trim() ?? "",
+          code: [...el.querySelectorAll(".pr-opt2-with")].filter((w) => /Extra \d+% with/.test(w.textContent ?? "")).length,
+        };
       }),
     );
   await page.goto(`${NEXT_URL}/injectables/botox`);
   const groups = await read(page.locator("#prices .pr-group"));
   expect(groups.length).toBeGreaterThan(0);
-  for (const g of groups) expect(g.from).toMatch(/^From \$/);
+  for (const g of groups) expect(g.from).toMatch(/^From (Regular price )?\$/);
   await page.goto(`${NEXT_URL}/pricing`);
   const rows = await read(page.locator("#pg-botox-dysport .pr-item"));
   for (const g of groups) expect(rows).toContainEqual(g);

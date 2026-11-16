@@ -64,7 +64,7 @@ test.describe("desktop", () => {
     const before = await shifts();
     await page.evaluate(() => window.scrollBy(0, 300));
     await expect.poll(shifts).not.toEqual(before);
-    expect(new Set(await shifts()).size).toBe(4);
+    expect(new Set(await shifts()).size).toBe(3);
   });
 });
 

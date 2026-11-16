@@ -32,8 +32,10 @@ test("categories and treatments fold; Expand all opens every treatment of a cate
   await expect(list(page).locator(".pr-group")).toHaveCount(23);
   const cat = list(page).locator("#pg-botox-dysport-h");
   await expect(cat).toHaveAttribute("aria-expanded", "false");
-  await expect(cat).toContainText(/From \$\d+(\.\d\d)? \/ unit/); /* the lowest price per unit, worked out by the site */
-  await expect(cat).toContainText("Up to 30% off");
+  /* the lowest price per unit, worked out by the site; while a sale runs the regular price is struck through before it */
+  await expect(cat).toContainText(/From\s*(Regular price \$\d+(\.\d\d)?\s*)?\$\d+(\.\d\d)? \/ unit/);
+  /* the offer: the plain tag ("Up to 30% off"), or the sale's pill while a sale runs ("30% OFF") */
+  await expect(cat.locator(".pr-badge, .sb")).toContainText(/30%\s*off/i);
   await cat.click();
   await expect(cat).toHaveAttribute("aria-expanded", "true");
   const row = list(page).locator("#pr-botox-dysport-0-h");
@@ -46,7 +48,9 @@ test("categories and treatments fold; Expand all opens every treatment of a cate
   const units = await optionOf("Botox Cosmetic", "60 units");
   if (units.regular) {
     await expect(options.nth(1)).toContainText(`Regular price ${money(units.regular)}`);
-    await expect(options.nth(1)).toContainText(`now ${money(units.price)}`);
+    /* the price to pay, or struck through too when the sale's checkout code takes it lower */
+    await expect(options.nth(1)).toContainText(money(units.price));
+    await expect(options.nth(1)).toContainText(/now \$\d/);
   } else {
     await expect(options.nth(1)).toContainText(money(units.price));
     await expect(options.nth(1)).not.toContainText("Regular price");
