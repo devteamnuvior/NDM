@@ -33,8 +33,8 @@ function TreatmentRow({ cat, it, uid, open, onToggle }) {
             {note && <span className="mt-1 block font-inter text-[13.5px] leading-[1.45] text-ndm-muted">{note}</span>}
           </span>
           <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            {offer && <span className="pr-badge">{offer}</span>}
-            <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{money(from)}</span>{fromUnit}</span>
+            <SaleTag offer={offer} badge={saleBadge(opts.map((o) => o[3]))} small />
+            <FromPrice value={from} unit={fromUnit} src={pf && pf.src} noWords />
           </span>
           <span aria-hidden="true" className="pr-plus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
         </button>
@@ -45,19 +45,7 @@ function TreatmentRow({ cat, it, uid, open, onToggle }) {
             {opts.map(([label, p, was, tag]) => {
               const line = { key: `${name}|${label}`, cat: cat.name, name, label, price: p, was: was || 0, unit: perUnit(cat, label) };
               return (
-                <li key={label} className="pr-opt grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-[14px] bg-white py-3 pl-4 pr-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6 sm:pl-5">
-                  <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
-                    <span className="font-inter text-[15px] text-ndm-ink">{label}</span>
-                    {tag && <span className="pr-tag">{tag}</span>}
-                  </span>
-                  <span className="col-start-1 row-start-2 flex items-baseline gap-2.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                    {was ? <s className="pr-was"><span className="sr-only">Regular price </span>{money(was)}</s> : null}
-                    <span className={`font-aeonik text-[22px] leading-none tracking-[-0.02em] ${was ? 'text-ndm-deep' : 'text-ndm-ink'}`}>
-                      {was ? <span className="sr-only">now </span> : null}{money(p)}{line.unit && <span className="font-inter text-[13px] tracking-normal text-ndm-muted">{line.unit}</span>}
-                    </span>
-                  </span>
-                  <span className="col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><QtyControl line={line} label={`${name}, ${label}`} /></span>
-                </li>
+                <OptionRow key={label} label={label} price={p} was={was || 0} tag={tag} unit={line.unit} action={<QtyControl line={line} label={`${name}, ${label}`} />} />
               );
             })}
           </ul>
@@ -149,15 +137,15 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }) {
             <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{c.name}</span>
           </span>
           <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            {offer && <span className="pr-badge">{offer}</span>}
-            <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{money(from)}</span>{fromUnit}</span>
+            <SaleTag offer={offer} badge={saleBadge(opts.map((o) => o[3]))} />
+            <FromPrice value={from} unit={fromUnit} src={pf && pf.src} withItem={c.items.length > 1} big />
           </span>
           <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
         </button>
       </h3>
       <div id={uid} role="region" aria-labelledby={`${uid}-h`} className="pr-body" {...(on ? {} : { inert: '' })}>
         <div>
-          <div className="flex items-center justify-between gap-x-4 pb-2 sm:gap-x-8">
+          <div className="pr-gintro flex items-center justify-between gap-x-4 pb-2 sm:gap-x-8">
             <p className="min-w-0 max-w-[60ch] font-inter text-[15px] leading-[1.55] text-ndm-muted">{c.blurb}</p>
             {shown.length > 1 && (
               <button type="button" onClick={() => setItems(shown.map(([, i]) => i), !allOpen)} className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-ndm-ink/15 px-4 py-2 font-inter text-[13.5px] text-ndm-ink transition-colors hover:border-ndm-ink hover:bg-ndm-ink hover:text-white">

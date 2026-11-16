@@ -389,6 +389,7 @@ function ProcPrices({ p }) {
         <ul className="pr-groups rv mt-[clamp(40px,4.5vw,64px)]" role="list" style={{ transitionDelay: '.14s' }}>
           {groups.map((g, gi) => {
             const on = open[gi], pct = pctOf(g.rows), hid = `proc-pr-h${gi}`, bid = `proc-pr${gi}`;
+            const gsrc = rowsSource(g.rows, true);
             return (
               <li key={g.name} className={`pr-group ${on ? 'is-open' : ''}`}>
                 <h3 className="pr-ghead m-0">
@@ -399,32 +400,20 @@ function ProcPrices({ p }) {
                       <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{g.title}</span>
                     </span>
                     <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                      {pct > 0 && <span className="pr-badge">Up to {pct}% off</span>}
-                      <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{pfmt(rowsFrom(g.rows, true))}</span> / unit</span>
+                      <SaleTag offer={pct > 0 ? `Up to ${pct}%\u00a0off` : ""} badge={saleBadge(g.rows.map((r) => r[3]))} />
+                      <FromPrice value={rowsFrom(g.rows, true)} unit=" / unit" src={gsrc} />
                     </span>
                     <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
                   </button>
                 </h3>
                 <div id={bid} role="region" aria-labelledby={hid} className="pr-body" {...(on ? {} : { inert: '' })}>
                   <div>
-                    <p className="max-w-[60ch] pb-2 font-inter text-[15px] leading-[1.55] text-ndm-muted">{g.blurb}</p>
+                    <p className="pr-gintro max-w-[60ch] pb-2 font-inter text-[15px] leading-[1.55] text-ndm-muted">{g.blurb}</p>
                     <ul className="pr-sub grid gap-2 py-4" role="list">
                       {g.rows.map(([label, price, was, tag]) => {
                         const line = { key: `${g.name}|${label}`, cat: pr.cat, name: g.name, label, price, was: was || 0, unit: unit(label) };
                         return (
-                          <li key={label} className="pr-opt grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-[14px] py-3 pl-4 pr-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6 sm:pl-5">
-                            <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
-                              <span className="font-inter text-[15px] text-ndm-ink">{label === 'Regular' ? 'Per unit' : label}</span>
-                              {tag && <span className="pr-tag">{tag}</span>}
-                            </span>
-                            <span className="col-start-1 row-start-2 flex items-baseline gap-2.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                              {was ? <s className="pr-was"><span className="sr-only">Regular price </span>{money(was)}</s> : null}
-                              <span className={`font-aeonik text-[22px] leading-none tracking-[-0.02em] ${was ? 'text-ndm-deep' : 'text-ndm-ink'}`}>
-                                {was ? <span className="sr-only">now </span> : null}{money(price)}{line.unit && <span className="font-inter text-[13px] tracking-normal text-ndm-muted">{line.unit}</span>}
-                              </span>
-                            </span>
-                            <span className="col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><QtyControl line={line} label={`${g.name}, ${label}`} /></span>
-                          </li>
+                          <OptionRow key={label} label={label === 'Regular' ? 'Per unit' : label} price={price} was={was || 0} tag={tag} unit={line.unit} action={<QtyControl line={line} label={`${g.name}, ${label}`} />} />
                         );
                       })}
                     </ul>
