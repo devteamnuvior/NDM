@@ -612,7 +612,7 @@ function TxPrices({ p }) {
                   {pr.rows.map(([label, price, was, tag]) => {
                     const line = { key: `${pr.name}|${label}`, cat: pr.cat, name: pr.name, label, price, was: was || 0, unit: unit(label) };
                     return (
-                      <OptionRow key={label} label={label === pr.unitLabel ? 'Per unit' : label} price={price} was={was || 0} tag={tag} unit={line.unit} action={<QtyControl line={line} label={`${pr.name}, ${label}`} />} />
+                      <OptionRow key={label} mark={pr.rows.length > 1 && !!psrc && label === psrc.label} label={label === pr.unitLabel ? 'Per unit' : label} price={price} was={was || 0} tag={tag} unit={line.unit} action={<QtyControl line={line} label={`${pr.name}, ${label}`} />} />
                     );
                   })}
                 </ul>

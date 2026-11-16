@@ -38,6 +38,8 @@ export interface PriceListSale {
 const SaleContext = createContext<PriceListSale | null>(null);
 
 function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView; it: PriceItemView; uid: string; open: boolean; onToggle: () => void }) {
+  /* the treatment (and below, its option) the category's "from" price is read from: marked with the blue dot */
+  const isSource = cat.items.length > 1 ? it.name === cat.fromSource?.item : it.options.length > 1;
   const sale = useContext(SaleContext);
   return (
     <li className={`pr-item ${open ? "is-open" : ""}`}>
@@ -59,7 +61,7 @@ function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView
           <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
             <OfferTag offer={it.offer} badge={it.badge} coded={it.coded} small />
             {/* inside a category the prices carry no note of where they come from (only the category's own "from" does) */}
-            <FromPrice from={it.from} unit={it.fromUnit} source={it.fromSource && { ...it.fromSource, label: "", count: 1 }} />
+            <FromPrice from={it.from} unit={it.fromUnit} source={it.fromSource && { ...it.fromSource, label: "", count: 1 }} mark={isSource} />
           </span>
           <span aria-hidden="true" className="pr-plus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1">
             <i />
@@ -80,6 +82,7 @@ function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView
                   price={o.price}
                   was={o.was}
                   code={sale ? o.code : undefined}
+                  mark={isSource && o.label === cat.fromSource?.label}
                   codeName={sale?.code}
                   codePercent={sale?.percent}
                   tag={o.tag}

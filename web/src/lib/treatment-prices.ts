@@ -13,7 +13,7 @@ import { bestOffer, saleBadge } from "@/lib/pricing-view";
  */
 export function priceGroup(head: Pick<TxPriceGroup, "name" | "title" | "blurb">, options: PriceOption[], unitLabel?: string): TxPriceGroup {
   /* the Pricing page's own sum, over this one treatment */
-  const low = createPriceBook([{ id: "group", name: "", perUnit: !!unitLabel, blurb: "", items: [{ name: head.name, note: "", options }] }]).lowestPrice("group");
+  const low = createPriceBook([{ id: "group", name: "", perUnit: !!unitLabel, blurb: "", items: [{ name: head.name, note: "", options }] }]).lowestPrice("group", undefined, true);
   return {
     ...head,
     rows: options.map((o) => ({

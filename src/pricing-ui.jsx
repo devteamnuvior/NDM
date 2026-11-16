@@ -23,6 +23,9 @@ function TreatmentRow({ cat, it, uid, open, onToggle }) {
   const pf = priceFrom(cat.id, name);
   const from = pf ? pf.value : Math.min(...opts.map((o) => o[1]));
   const fromUnit = pf ? pf.unit : perUnit(cat, opts.find((o) => o[1] === from)[0]);
+  /* the treatment (and below, its option) the category's "from" price is read from: marked with the blue dot */
+  const catPf = priceFrom(cat.id);
+  const isSource = !!catPf && (cat.items.length > 1 ? catPf.src.item === name : opts.length > 1);
   return (
     <li className={`pr-item ${open ? 'is-open' : ''}`}>
       <h4 className="m-0">
@@ -34,7 +37,7 @@ function TreatmentRow({ cat, it, uid, open, onToggle }) {
           </span>
           <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
             <SaleTag offer={offer} badge={saleBadge(opts.map((o) => o[3]))} small />
-            <FromPrice value={from} unit={fromUnit} src={pf && pf.src} noWords />
+            <FromPrice value={from} unit={fromUnit} src={pf && pf.src} noWords mark={isSource} />
           </span>
           <span aria-hidden="true" className="pr-plus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
         </button>
@@ -45,7 +48,7 @@ function TreatmentRow({ cat, it, uid, open, onToggle }) {
             {opts.map(([label, p, was, tag]) => {
               const line = { key: `${name}|${label}`, cat: cat.name, name, label, price: p, was: was || 0, unit: perUnit(cat, label) };
               return (
-                <OptionRow key={label} label={label} price={p} was={was || 0} tag={tag} unit={line.unit} action={<QtyControl line={line} label={`${name}, ${label}`} />} />
+                <OptionRow key={label} mark={isSource && label === catPf.src.label} label={label} price={p} was={was || 0} tag={tag} unit={line.unit} action={<QtyControl line={line} label={`${name}, ${label}`} />} />
               );
             })}
           </ul>

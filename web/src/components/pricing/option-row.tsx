@@ -39,13 +39,15 @@ export interface OptionRowProps {
   /** The Add to cart control. */
   action: ReactNode;
   data?: Record<string, string | number | undefined>;
+  /** The blue dot: the "from" price above is read from this option. */
+  mark?: boolean;
 }
 
 /**
  * One option of a treatment, in the stacked-discount layout: its name, how many it covers and the price of
  * one, the offer pill; on the right the earlier prices struck through, the price to pay large, and the saving.
  */
-export function OptionRow({ label, price, was, code, codeName, codePercent, tag, unit, action, data }: OptionRowProps) {
+export function OptionRow({ label, price, was, code, codeName, codePercent, tag, unit, action, data, mark }: OptionRowProps) {
   const sale = useSaleTags();
   const coded = !!(sale && code && code < price);
   const final = coded ? (code as number) : price;
@@ -89,6 +91,7 @@ export function OptionRow({ label, price, was, code, codeName, codePercent, tag,
           </span>
         )}
         <span data-look={sale?.look} className="pr-opt2-now">
+          {mark && <i className="pr-dot" aria-hidden="true" title="The lowest price" />}
           {struck.length ? <span className="sr-only">now </span> : null}
           {money(final)}
           {unit && <span className="pr-opt2-unit">{unit}</span>}

@@ -157,7 +157,7 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
   const categories = list.map((c): PriceCategoryView => {
     const perUnit = (label: string) => (c.perUnit && label === "Regular" ? " / unit" : "");
     const all = c.items.flatMap((it) => it.options);
-    const low = book.lowestPrice(c.id);
+    const low = book.lowestPrice(c.id, undefined, true);
     return {
       id: c.id,
       termId: c.termId,
@@ -170,7 +170,7 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
       badge: saleBadge(all),
       coded: all.some((o) => o.code),
       items: c.items.map((it) => {
-        const itemLow = book.lowestPrice(c.id, it.name);
+        const itemLow = book.lowestPrice(c.id, it.name, true);
         const min = Math.min(...it.options.map((o) => o.price));
         return {
           id: it.id,

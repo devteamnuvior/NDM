@@ -78,15 +78,21 @@ export function createPriceBook(categories: PriceCategory[], names: PriceNames =
     return (wanted.length ? wanted : c.items).flatMap((it) => it.options.map((o) => ({ ...o, item: it.name })));
   }
 
-  function lowestPrice(categoryId: string, item?: PriceItemName): LowestPrice | null {
+  /**
+   * `withCode`: count a line's price with the running sale's checkout code where the code applies, so the "from"
+   * price is the lowest price the price tables show (the Pricing page and the treatment pages' tables).
+   * On a tie the bigger package wins (Package of 6 over Package of 3 at the same price per session).
+   */
+  function lowestPrice(categoryId: string, item?: PriceItemName, withCode = false): LowestPrice | null {
     const c = BY_ID.get(categoryId);
     const options = optionsOf(categoryId, item);
     if (!c || !options.length) return null;
-    let best: { value: number; option: Option; count: number } | null = null;
+    let best: { value: number; option: Option; count: number; paid: number } | null = null;
     for (const o of options) {
       const count = /regular/i.test(o.label) ? 1 : countIn(o.label);
-      const value = o.price / count;
-      if (!best || value < best.value - 0.001) best = { value, option: o, count };
+      const paid = withCode && o.code && o.code < o.price ? o.code : o.price;
+      const value = paid / count;
+      if (!best || value < best.value - 0.001 || (Math.abs(value - best.value) <= 0.001 && count > best.count)) best = { value, option: o, count, paid };
     }
     if (!best) return null;
     const percent = Math.max(0, ...options.map((o) => percentOff(o.tag)));
@@ -103,8 +109,9 @@ export function createPriceBook(categories: PriceCategory[], names: PriceNames =
             .replace(/^Save \$(\d+)\sOff$/i, "Save $$$1")
         : "";
     const per = c.perUnit ? "per unit" : /syringe/i.test(best.option.label) ? "per syringe" : /zone/i.test(best.option.label) ? "per zone" : best.count > 1 || /session/i.test(best.option.label) ? "per session" : "";
-    const was = best.option.regular && best.option.regular > best.option.price ? Math.round((best.option.regular / best.count) * 100) / 100 : 0;
-    return { value: Math.round(best.value * 100) / 100, unit: c.perUnit ? " / unit" : "", per, percent, offer, source: { item: best.option.item, label: best.option.label, was, price: best.option.price, count: best.count } };
+    const full = best.option.regular && best.option.regular > best.paid ? best.option.regular : best.paid < best.option.price ? best.option.price : 0;
+    const was = full ? Math.round((full / best.count) * 100) / 100 : 0;
+    return { value: Math.round(best.value * 100) / 100, unit: c.perUnit ? " / unit" : "", per, percent, offer, source: { item: best.option.item, label: best.option.label, was, price: best.paid, count: best.count } };
   }
 
   /** [category id, treatment] for a name used anywhere on the site, or null when it is not on the price list. */

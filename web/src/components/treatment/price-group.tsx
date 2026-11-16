@@ -105,6 +105,7 @@ export function PriceGroup({ group: g, headId, bodyId, category, startOpen, sing
                 code={r.code}
                 codeName={r.codeName}
                 codePercent={r.codePercent}
+                mark={g.rows.length > 1 && !!g.fromSource && (r.label === g.fromSource.label || r.shown === g.fromSource.label)}
                 tag={r.tag}
                 unit={r.unit}
                 action={<QtyControl line={{ key: `${g.name}|${r.label}`, cat: category, name: g.name, label: r.label, price: r.price, was: r.regular, unit: r.unit ?? "" }} label={`${g.name}, ${r.label}`} />}

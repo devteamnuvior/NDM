@@ -413,7 +413,7 @@ function ProcPrices({ p }) {
                       {g.rows.map(([label, price, was, tag]) => {
                         const line = { key: `${g.name}|${label}`, cat: pr.cat, name: g.name, label, price, was: was || 0, unit: unit(label) };
                         return (
-                          <OptionRow key={label} label={label === 'Regular' ? 'Per unit' : label} price={price} was={was || 0} tag={tag} unit={line.unit} action={<QtyControl line={line} label={`${g.name}, ${label}`} />} />
+                          <OptionRow key={label} mark={g.rows.length > 1 && !!gsrc && label === gsrc.label} label={label === 'Regular' ? 'Per unit' : label} price={price} was={was || 0} tag={tag} unit={line.unit} action={<QtyControl line={line} label={`${g.name}, ${label}`} />} />
                         );
                       })}
                     </ul>

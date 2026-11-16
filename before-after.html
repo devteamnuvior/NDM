@@ -919,7 +919,7 @@ function priceOptions(id, item) {
 function priceFrom(id, item) {
   const c = PRICE_BY_ID[id]; const os = priceOptions(id, item); if (!c || !os.length) return null;
   let best = null;
-  os.forEach((o) => { const n = /regular/i.test(o.label) ? 1 : pCount(o.label); const v = o.price / n; if (!best || v < best.v - 0.001) best = { v, o, n }; });
+  os.forEach((o) => { const n = /regular/i.test(o.label) ? 1 : pCount(o.label); const v = o.price / n; if (!best || v < best.v - 0.001 || (Math.abs(v - best.v) <= 0.001 && n > best.n)) best = { v, o, n }; });
   const pct = Math.max(0, ...os.map((o) => pPct(o.tag)));
   const tags = os.map((o) => o.tag).filter(Boolean);
   const offer = pct ? `Up to ${pct}% off` : (tags[0] ? tags[0].replace(/\bOFF\b/g, 'off').replace(/^BUY 1 GET 1/i, 'Buy 1 get 1').replace(/\bFREE\b/, 'free').replace(/^Save \$(\d+)\sOff$/i, 'Save $$$1') : '');
@@ -961,7 +961,7 @@ const SALE_LOOK = 'vip';
 /* the lowest row of one price table and how it is counted (per unit when the table is priced per unit) */
 const rowsSource = (rows, perUnit) => {
   let best = null;
-  rows.forEach((r) => { const n = perUnit && !/regular/i.test(r[0]) ? pCount(r[0]) : 1; const v = r[1] / n; if (!best || v < best.v - 0.001) best = { v, r, n }; });
+  rows.forEach((r) => { const n = perUnit && !/regular/i.test(r[0]) ? pCount(r[0]) : 1; const v = r[1] / n; if (!best || v < best.v - 0.001 || (Math.abs(v - best.v) <= 0.001 && n > best.n)) best = { v, r, n }; });
   return best ? { label: best.r[0], price: best.r[1], count: best.n, reg: best.r[2] ? Math.round((best.r[2] / best.n) * 100) / 100 : 0 } : null;
 };
 /* a clinic tag in the pill's words: "Save $1000 Off" -> "SAVE $1,000" */
@@ -985,12 +985,12 @@ const sourceWords = (s, withItem) => {
   return what;
 };
 /* "From $343 / session": in the sale's colour with the regular price struck through, and under it, marked with a blue dot, where it comes from */
-function FromPrice({ value, unit, src, withItem, big, noWords }) {
+function FromPrice({ value, unit, src, withItem, big, noWords, mark }) {
   const cut = SALE_LOOK && src && src.reg > value;
   const words = noWords ? '' : sourceWords(src, withItem);
   return (
     <span className="flex flex-col items-start sm:items-end">
-      <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From {cut ? <s className="pr-was mr-1"><span className="sr-only">Regular price </span>{pfmt(src.reg)}</s> : null}<span data-look={SALE_LOOK || undefined} className={`pr-from font-aeonik tracking-[-0.02em] ${big ? 'text-[22px]' : 'text-[20px]'} ${SALE_LOOK && cut ? 'is-sale' : 'text-ndm-ink'}`}>{pfmt(value)}</span>{unit}</span>
+      <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">{mark && <i className="pr-dot" aria-hidden="true" />}From {cut ? <s className="pr-was mr-1"><span className="sr-only">Regular price </span>{pfmt(src.reg)}</s> : null}<span data-look={SALE_LOOK || undefined} className={`pr-from font-aeonik tracking-[-0.02em] ${big ? 'text-[22px]' : 'text-[20px]'} ${SALE_LOOK && cut ? 'is-sale' : 'text-ndm-ink'}`}>{pfmt(value)}</span>{unit}</span>
       {words && <span className="pr-src mt-1 font-inter text-[11.5px] leading-[1.35] text-ndm-muted"><i aria-hidden="true" /><span className="sr-only">Lowest price, from </span>{words}</span>}
     </span>
   );
@@ -1004,7 +1004,7 @@ const optCount = (label) => {
   const p = /package of (\d+)/i.exec(label);
   return p ? { n: +p[1], one: 'session', many: 'sessions' } : null;
 };
-function OptionRow({ label, price, was, tag, unit, action }) {
+function OptionRow({ label, price, was, tag, unit, action, mark }) {
   const cnt = optCount(label);
   const cut = was > price;
   const save = Math.round(((was || price) - price) * 100) / 100;
@@ -1020,7 +1020,7 @@ function OptionRow({ label, price, was, tag, unit, action }) {
       </span>
       <span className={`pr-opt2-price ${cut ? '' : 'is-single'}`}>
         {cut && <span className="pr-opt2-was"><s><span className="sr-only">Regular price </span>{pfmt(was)}</s></span>}
-        <span data-look={SALE_LOOK || undefined} className="pr-opt2-now">{cut ? <span className="sr-only">now </span> : null}{pfmt(price)}{unit && <span className="pr-opt2-unit">{unit}</span>}</span>
+        <span data-look={SALE_LOOK || undefined} className="pr-opt2-now">{mark && <i className="pr-dot" aria-hidden="true" />}{cut ? <span className="sr-only">now </span> : null}{pfmt(price)}{unit && <span className="pr-opt2-unit">{unit}</span>}</span>
         {cut && save > 0 && <span className="pr-opt2-with"><span className="pr-opt2-save">You save {pfmt(save)}</span></span>}
       </span>
       <span className="pr-opt2-act">{action}</span>
@@ -1046,6 +1046,7 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .pr-opt.pr-opt2{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:28px;padding:15px 13px 15px 21px;border:1px solid transparent;border-radius:14px;background:#FAFAF8;box-shadow:none!important}
 .pr-opt2.is-featured{background:#fff;border-color:#E3E3E0;box-shadow:none!important}
 .pr-ghead>button,.pr-gintro{padding-inline:clamp(14px,2.4vw,28px)}
+.pr-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:999px;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18);vertical-align:middle;transform:translateY(-2px)}
 .pr-opt2-info{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
 .pr-opt2-name{font-family:Manrope,sans-serif;font-size:15.5px;font-weight:500;color:#1B242B}
 .pr-opt2-meta{margin-top:3px;font-family:Manrope,sans-serif;font-size:12.5px;color:#6B7480}

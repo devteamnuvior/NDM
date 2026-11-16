@@ -63,7 +63,7 @@ export function sourceWords(s: PriceSource | null | undefined, withItem: boolean
  * "From $343 / session": during a sale in the sale's colour with the regular price struck through; under it,
  * marked with a small blue dot, where the price is read from ("Microneedling-Face, Package of 3").
  */
-export function FromPrice({ from, unit, source, withItem, big }: { from: number | string; unit?: string; source?: PriceSource | null; withItem?: boolean; big?: boolean }) {
+export function FromPrice({ from, unit, source, withItem, big, mark }: { from: number | string; unit?: string; source?: PriceSource | null; withItem?: boolean; big?: boolean; /** the blue dot: this is the price the category's "from" is read from */ mark?: boolean }) {
   const sale = useSaleTags();
   const value = typeof from === "number" ? money(from) : from;
   const cut = sale && source && source.was > 0;
@@ -71,6 +71,7 @@ export function FromPrice({ from, unit, source, withItem, big }: { from: number 
   return (
     <span className="flex flex-col items-start sm:items-end">
       <span className="font-inter text-[13px] whitespace-nowrap text-ndm-muted">
+        {mark && <i className="pr-dot" aria-hidden="true" title="The category's lowest price" />}
         From{" "}
         {cut ? (
           <s className="pr-was mr-1">

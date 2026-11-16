@@ -117,3 +117,6 @@
 
 /* the category header and its intro line sit on the same side padding as the treatments in the panel below (user, 2026-11-16) */
 .pr-ghead>button,.pr-gintro{padding-inline:clamp(14px,2.4vw,28px)}
+
+/* the blue dot beside the price the category's "from" price is read from (the same dot as the note under it) */
+.pr-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:999px;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18);vertical-align:middle;transform:translateY(-2px)}
