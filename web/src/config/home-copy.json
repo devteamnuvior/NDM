@@ -43,7 +43,7 @@
     "chip": { "before": "Up to", "number": "24", "after": "months of lift and support" },
     "dials": [
       { "value": "60", "unit": "min", "label": "Treatment time", "spoken": "About 60 minutes", "fill": "34" },
-      { "value": "2", "unit": "weeks", "label": "Downtime", "spoken": "Up to about 2 weeks", "fill": "50" },
+      { "value": "1", "unit": "session", "label": "For most plans", "spoken": "One session for most plans", "fill": "20" },
       { "value": "24", "unit": "months", "label": "May last", "spoken": "Up to 24 months", "fill": "82" }
     ],
     "points": [

@@ -31,8 +31,8 @@ export const APTOS: TreatmentPage = {
       "60 minutes"
     ],
     [
-      "Recovery time",
-      "Up to 2 weeks"
+      "Sessions",
+      "One for most plans"
     ],
     [
       "May last",
