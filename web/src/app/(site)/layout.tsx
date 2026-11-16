@@ -12,14 +12,18 @@ import { getConcernPaths } from "@/lib/concern";
 import { articlePath } from "@/lib/post-paths";
 import { getProcedurePaths } from "@/lib/procedure";
 import { getSiteSettings } from "@/lib/site-settings";
+import { getCampaign, saleTagsOf } from "@/lib/campaign";
+import { SaleTagsProvider } from "@/components/pricing/sale-tags";
 
 /** Pages inside the site's header and footer (every page except the Black Friday sale page, which has its own). */
 export default async function SiteLayout({ children }: { children: ReactNode }) {
   /* the concern and procedure pages published in WordPress (the pages of the Aptos design are procedures too): the header links them and starts dark on them; on an article it marks About */
   /* the header and footer settings (WordPress: Site Settings) */
-  const [concerns, procedures, aptos, articles, settings] = await Promise.all([getConcernPaths(), getProcedurePaths(), getAptosSlugs(), getArticleSlugs(), getSiteSettings()]);
+  /* the running sale, for the look of every price table's offer tags */
+  const [concerns, procedures, aptos, articles, settings, campaign] = await Promise.all([getConcernPaths(), getProcedurePaths(), getAptosSlugs(), getArticleSlugs(), getSiteSettings(), getCampaign()]);
   return (
     <SiteSettingsProvider value={settings}>
+    <SaleTagsProvider value={saleTagsOf(campaign)}>
     <ConcernPathsProvider concerns={concerns} procedures={[...procedures, ...aptos.map((slug) => ({ slug, path: `/${slug}` }))]} articles={articles.map((slug) => ({ slug, path: articlePath(slug) }))}>
       <div className="site-root">
         <a
@@ -36,6 +40,7 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
       {/* switched off for now (config/features.ts) */}
       {FEATURES.offerPopup && <OfferPopup />}
     </ConcernPathsProvider>
+    </SaleTagsProvider>
     </SiteSettingsProvider>
   );
 }

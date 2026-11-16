@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { QtyControl } from "@/components/cart/qty-control";
+import { FromPrice, OfferTag } from "@/components/pricing/sale-tags";
+import { OptionRow } from "@/components/pricing/option-row";
+import type { PriceSource } from "@/lib/price-book";
 
 /** One row of a price table, with its amounts already written out ("$2500"). */
 export interface TxPriceRow {
@@ -18,6 +21,10 @@ export interface TxPriceRow {
   tag?: string;
   /** While a sale runs, on a package its checkout code applies to: "Extra 30% off with code PLUS30: $720.30". */
   codeText?: string;
+  /** While a sale runs: the price with the checkout code, its name and percentage. */
+  code?: number;
+  codeName?: string;
+  codePercent?: number;
 }
 
 export interface TxPriceGroup {
@@ -36,6 +43,11 @@ export interface TxPriceGroup {
   percent: number;
   /** The offer badge of the group, as its row on the Pricing page shows it ("Up to 30% off", "Save $1000 Off"); "" when there is none. */
   offer?: string;
+  /** Where the "from" price is read from (the option, its price and count); null when unknown. */
+  fromSource?: PriceSource | null;
+  /** The offer as the sale pill shows it, and whether the checkout code applies to any row. */
+  badge?: string[];
+  coded?: boolean;
 }
 
 interface PriceGroupProps {
@@ -71,11 +83,8 @@ export function PriceGroup({ group: g, headId, bodyId, category, startOpen, sing
             <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{g.title}</span>
           </span>
           <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            {g.offer ? <span className="pr-badge">{g.offer}</span> : g.percent > 0 && <span className="pr-badge">Up to {g.percent}%&nbsp;off</span>}
-            <span className="font-inter text-[13px] whitespace-nowrap text-ndm-muted">
-              From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{g.from}</span>
-              {g.fromUnit}
-            </span>
+            <OfferTag offer={g.offer || (g.percent > 0 ? `Up to ${g.percent}% off` : "")} badge={g.badge ?? []} coded={!!g.coded} />
+            <FromPrice from={g.from} unit={g.fromUnit} source={g.rows.length > 1 ? g.fromSource : g.fromSource && { ...g.fromSource, label: "", count: 1 }} />
           </span>
           <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1">
             <i />
@@ -85,33 +94,21 @@ export function PriceGroup({ group: g, headId, bodyId, category, startOpen, sing
       </h3>
       <div id={bodyId} role="region" aria-labelledby={headId} className="pr-body" inert={!open}>
         <div>
-          <p className="max-w-[60ch] pb-2 font-inter text-[15px] leading-[1.55] text-ndm-muted">{g.blurb}</p>
+          <p className="pr-gintro max-w-[60ch] pb-2 font-inter text-[15px] leading-[1.55] text-ndm-muted">{g.blurb}</p>
           <ul className="pr-sub grid gap-2 py-4" role="list">
             {g.rows.map((r) => (
-              <li key={r.label} className="pr-opt grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-[14px] py-3 pr-3 pl-4 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6 sm:pl-5">
-                <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
-                  <span className="font-inter text-[15px] text-ndm-ink">{r.shown ?? r.label}</span>
-                  {r.tag && <span className="pr-tag">{r.tag}</span>}
-                  {/* the price with the checkout code, on the packages the code applies to (as on the Pricing page) */}
-                  {r.codeText && <span className="pr-code basis-full font-inter text-[13px] leading-[1.4] font-semibold text-ndm-deep">{r.codeText}</span>}
-                </span>
-                <span className="col-start-1 row-start-2 flex items-baseline gap-2.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                  {r.regular ? (
-                    <s className="pr-was">
-                      <span className="sr-only">Regular price </span>
-                      {r.regularText}
-                    </s>
-                  ) : null}
-                  <span className={`font-aeonik text-[22px] leading-none tracking-[-0.02em] ${r.regular ? "text-ndm-deep" : "text-ndm-ink"}`}>
-                    {r.regular ? <span className="sr-only">now </span> : null}
-                    {r.priceText}
-                    {r.unit && <span className="font-inter text-[13px] tracking-normal text-ndm-muted">{r.unit}</span>}
-                  </span>
-                </span>
-                <span className="col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1">
-                  <QtyControl line={{ key: `${g.name}|${r.label}`, cat: category, name: g.name, label: r.label, price: r.price, was: r.regular, unit: r.unit ?? "" }} label={`${g.name}, ${r.label}`} />
-                </span>
-              </li>
+              <OptionRow
+                key={r.label}
+                label={r.shown ?? r.label}
+                price={r.price}
+                was={r.regular}
+                code={r.code}
+                codeName={r.codeName}
+                codePercent={r.codePercent}
+                tag={r.tag}
+                unit={r.unit}
+                action={<QtyControl line={{ key: `${g.name}|${r.label}`, cat: category, name: g.name, label: r.label, price: r.price, was: r.regular, unit: r.unit ?? "" }} label={`${g.name}, ${r.label}`} />}
+              />
             ))}
           </ul>
         </div>

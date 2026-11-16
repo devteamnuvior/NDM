@@ -34,6 +34,15 @@ const normalise = (s: string | undefined): string =>
 
 type Option = PriceOption & { item: string };
 
+/** Where a lowest price is read from: the treatment, the option, the option's own price and how many units, syringes, zones or sessions it covers (the price divided by it), and its regular price on the same count (0 without a sale). */
+export interface PriceSource {
+  item: string;
+  label: string;
+  was: number;
+  price: number;
+  count: number;
+}
+
 export interface LowestPrice {
   /** Lowest price after the offer, counted per unit, per syringe, per zone or per session. */
   value: number;
@@ -44,6 +53,8 @@ export interface LowestPrice {
   percent: number;
   /** The offer in sentence case, e.g. "Up to 30% off", "Buy 1 get 1 free". */
   offer: string;
+  /** Where the price comes from: the treatment, the option's label, and that option's regular price on the same count (0 without a sale). */
+  source: PriceSource;
 }
 
 /**
@@ -92,7 +103,8 @@ export function createPriceBook(categories: PriceCategory[], names: PriceNames =
             .replace(/^Save \$(\d+)\sOff$/i, "Save $$$1")
         : "";
     const per = c.perUnit ? "per unit" : /syringe/i.test(best.option.label) ? "per syringe" : /zone/i.test(best.option.label) ? "per zone" : best.count > 1 || /session/i.test(best.option.label) ? "per session" : "";
-    return { value: Math.round(best.value * 100) / 100, unit: c.perUnit ? " / unit" : "", per, percent, offer };
+    const was = best.option.regular && best.option.regular > best.option.price ? Math.round((best.option.regular / best.count) * 100) / 100 : 0;
+    return { value: Math.round(best.value * 100) / 100, unit: c.perUnit ? " / unit" : "", per, percent, offer, source: { item: best.option.item, label: best.option.label, was, price: best.option.price, count: best.count } };
   }
 
   /** [category id, treatment] for a name used anywhere on the site, or null when it is not on the price list. */

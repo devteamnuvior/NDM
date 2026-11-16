@@ -7,11 +7,13 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { IconSearch } from "@/components/ui/icons";
 import { TwoTone } from "@/components/ui/two-tone";
 import { useReveal } from "@/hooks/use-reveal";
-import { cartKey, money } from "@/lib/cart";
-import type { PriceCategoryView, PriceItemView } from "@/lib/pricing-view";
+import { cartKey } from "@/lib/cart";
+import { type PriceCategoryView, type PriceItemView } from "@/lib/pricing-view";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
 import { jumpToPriceGroup, PRICE_GROUP_HASH } from "@/lib/price-jump";
+import { FromPrice, OfferTag, type SaleLook } from "@/components/pricing/sale-tags";
+import { OptionRow } from "@/components/pricing/option-row";
 
 const Stroke = ({ d }: { d: string }) => (
   <svg width={16} height={16} viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -21,6 +23,7 @@ const Stroke = ({ d }: { d: string }) => (
 
 type Hit = [item: PriceItemView, index: number];
 
+
 /**
  * The sale that is running, as the price list shows it: the checkout code and its percentage (the line under
  * every package the code applies to), and the banner above the list while the sale has one.
@@ -28,7 +31,9 @@ type Hit = [item: PriceItemView, index: number];
 export interface PriceListSale {
   code: string;
   percent: number;
-  banner?: { name: string; text: string; cta: string; href: string };
+  banner?: { name: string; text: string; cta: string; href: string; ends: string };
+  /** The colours of the offer tags: "vip" (red and blue), "bf" (black and gold), "holiday" (green and gold), "newyear" (slate). */
+  look: SaleLook;
 }
 const SaleContext = createContext<PriceListSale | null>(null);
 
@@ -46,15 +51,15 @@ function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView
           className="pr-head group grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 py-[18px] text-left sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6"
         >
           <span className="min-w-0">
-            <span className="block font-aeonik text-[clamp(18px,1.45vw,22px)] leading-[1.22] tracking-[-0.015em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{it.name}</span>
+            <span className="block font-aeonik text-[clamp(18px,1.45vw,22px)] leading-[1.22] tracking-[-0.015em] text-ndm-ink transition-colors group-hover:text-ndm-deep">
+              {it.name}
+            </span>
             {it.note && <span className="mt-1 block font-inter text-[13.5px] leading-[1.45] text-ndm-muted">{it.note}</span>}
           </span>
           <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            {it.offer && <span className="pr-badge">{it.offer}</span>}
-            <span className="font-inter text-[13px] whitespace-nowrap text-ndm-muted">
-              From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{money(it.from)}</span>
-              {it.fromUnit}
-            </span>
+            <OfferTag offer={it.offer} badge={it.badge} coded={it.coded} small />
+            {/* inside a category the prices carry no note of where they come from (only the category's own "from" does) */}
+            <FromPrice from={it.from} unit={it.fromUnit} source={it.fromSource && { ...it.fromSource, label: "", count: 1 }} />
           </span>
           <span aria-hidden="true" className="pr-plus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1">
             <i />
@@ -68,34 +73,19 @@ function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView
             {it.options.map((o) => {
               const line = { key: cartKey(o.productId, o.variationId), cat: cat.name, name: it.name, label: o.label, price: o.price, was: o.was, unit: o.unit, productId: o.productId, variationId: o.variationId };
               return (
-                <li key={o.variationId || o.label} data-product={o.productId} data-variation={o.variationId || undefined} className="pr-opt grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-[14px] bg-white py-3 pr-3 pl-4 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6 sm:pl-5">
-                  <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
-                    <span className="font-inter text-[15px] text-ndm-ink">{o.label}</span>
-                    {o.tag && <span className="pr-tag">{o.tag}</span>}
-                    {/* the price with the checkout code, on the packages the code applies to */}
-                    {sale && o.code ? (
-                      <span className="pr-code basis-full font-inter text-[13px] leading-[1.4] font-semibold text-ndm-deep">
-                        Extra {sale.percent}%{"\u00a0"}off with code {sale.code}: {money(o.code)}
-                      </span>
-                    ) : null}
-                  </span>
-                  <span className="col-start-1 row-start-2 flex items-baseline gap-2.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                    {o.was ? (
-                      <s className="pr-was">
-                        <span className="sr-only">Regular price </span>
-                        {money(o.was)}
-                      </s>
-                    ) : null}
-                    <span className={`font-aeonik text-[22px] leading-none tracking-[-0.02em] ${o.was ? "text-ndm-deep" : "text-ndm-ink"}`}>
-                      {o.was ? <span className="sr-only">now </span> : null}
-                      {money(o.price)}
-                      {o.unit && <span className="font-inter text-[13px] tracking-normal text-ndm-muted">{o.unit}</span>}
-                    </span>
-                  </span>
-                  <span className="col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1">
-                    <QtyControl line={line} label={`${it.name}, ${o.label}`} />
-                  </span>
-                </li>
+                <OptionRow
+                  key={o.variationId || o.label}
+                  data={{ "data-product": o.productId, "data-variation": o.variationId || undefined }}
+                  label={o.label}
+                  price={o.price}
+                  was={o.was}
+                  code={sale ? o.code : undefined}
+                  codeName={sale?.code}
+                  codePercent={sale?.percent}
+                  tag={o.tag}
+                  unit={o.unit}
+                  action={<QtyControl line={line} label={`${it.name}, ${o.label}`} />}
+                />
               );
             })}
           </ul>
@@ -139,11 +129,8 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }: P
             <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{c.name}</span>
           </span>
           <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            {c.offer && <span className="pr-badge">{c.offer}</span>}
-            <span className="font-inter text-[13px] whitespace-nowrap text-ndm-muted">
-              From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{money(c.from)}</span>
-              {c.fromUnit}
-            </span>
+            <OfferTag offer={c.offer} badge={c.badge} coded={c.coded} />
+            <FromPrice from={c.from} unit={c.fromUnit} big source={c.fromSource} withItem={c.items.length > 1} />
           </span>
           <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1">
             <i />
@@ -153,7 +140,7 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }: P
       </h3>
       <div id={uid} role="region" aria-labelledby={`${uid}-h`} className="pr-body" inert={!on}>
         <div>
-          <div className="flex items-center justify-between gap-x-4 pb-2 sm:gap-x-8">
+          <div className="pr-gintro flex items-center justify-between gap-x-4 pb-2 sm:gap-x-8">
             <p className="max-w-[60ch] min-w-0 font-inter text-[15px] leading-[1.55] text-ndm-muted">{c.blurb}</p>
             {count > 1 && (
               <button
@@ -239,15 +226,21 @@ export function PriceList({ categories, total, sale = null }: { categories: Pric
 
   return (
     <SaleContext value={sale}>
-      <section ref={section} id="prices" aria-labelledby="prices-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(64px,7vw,110px)] pb-[clamp(64px,7vw,110px)]">
+      <section ref={section} id="prices" data-sale={sale?.look} aria-labelledby="prices-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(64px,7vw,110px)] pb-[clamp(64px,7vw,110px)]">
       <div className="mx-auto max-w-[1040px]">
         {sale?.banner && (
-          <aside aria-label={sale.banner.name} data-nav="dark" className="pr-sale rv mb-[clamp(36px,4vw,56px)] flex flex-col gap-4 rounded-[22px] bg-ndm-night px-5 py-5 text-white sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-7">
-            <p className="font-inter text-[15px] leading-[1.55] text-white/85">
-              <strong className="font-semibold text-white">{sale.banner.name}:</strong> {sale.banner.text}
-            </p>
+          <aside aria-label={sale.banner.name} className="pr-sale rv mb-[clamp(36px,4vw,56px)] flex flex-col gap-4 rounded-[22px] px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-7">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+              <span className="sb sb-split sb-sm shrink-0 self-start sm:self-center">
+                <span className="sb-a">{sale.banner.name.toUpperCase()}</span>
+                <span className="sb-b">ENDS {sale.banner.ends.toUpperCase()}</span>
+              </span>
+              <p className="pr-sale-text font-inter text-[14.5px] leading-[1.55]">
+                <strong className="font-semibold">{sale.banner.name}:</strong> {sale.banner.text}
+              </p>
+            </div>
             <span className="shrink-0">
-              <Button href={sale.banner.href} v="light">
+              <Button href={sale.banner.href} v="line">
                 {sale.banner.cta}
               </Button>
             </span>

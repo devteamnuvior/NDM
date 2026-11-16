@@ -1,5 +1,5 @@
 import type { PriceCategory, PriceOption } from "@/config/prices";
-import { createPriceBook, type PriceNames } from "@/lib/price-book";
+import { createPriceBook, type PriceNames, type PriceSource } from "@/lib/price-book";
 import type { WooPricingTree, WooPriceFields } from "@/types/pricing";
 
 /**
@@ -33,6 +33,12 @@ export interface PriceItemView {
   offer: string;
   from: number;
   fromUnit: string;
+  /** Where the "from" price is read from; null when it is not worked out from the list. */
+  fromSource: PriceSource | null;
+  /** The offer as the sale badge shows it, in one or two parts ("BUY 1", "GET 1 FREE"). */
+  badge: string[];
+  /** Whether the checkout code applies to any of its options. */
+  coded: boolean;
   options: PriceOptionView[];
 }
 
@@ -46,6 +52,10 @@ export interface PriceCategoryView {
   offer: string;
   from: number;
   fromUnit: string;
+  /** Where the "from" price is read from; null when it is not worked out from the list. */
+  fromSource: PriceSource | null;
+  badge: string[];
+  coded: boolean;
   items: PriceItemView[];
 }
 
@@ -82,6 +92,26 @@ export function bestOffer(options: PriceOption[]): string {
   const pct = Math.max(0, ...tags.map((t) => Number(/^(\d+)%\s*OFF$/i.exec(t)?.[1] ?? 0)));
   /* no-break space: "off" never wraps away from its number */
   return pct ? `Up to ${pct}% off` : tags[0];
+}
+
+/** A clinic tag in the sale pill's words: "SALE 30% OFF" -> "30% OFF", "Save $1000 Off" -> "SAVE $1,000". */
+export function tagWords(tag: string): string {
+  return tag
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, " ")
+    .replace(/^SALE\s+/, "")
+    .replace(/^SAVE \$(\d+)(?: OFF)?$/, (_, n: string) => `SAVE $${Number(n).toLocaleString("en-CA")}`);
+}
+
+/** The offer of a list of options as the sale badge shows it: the biggest percentage, else the first tag, split after "BUY 1". */
+export function saleBadge(options: PriceOption[]): string[] {
+  const tags = options.map((o) => (o.tag ? tagWords(o.tag) : "")).filter(Boolean);
+  if (!tags.length) return [];
+  const pct = (t: string) => Number(/^(\d+)%\s*OFF$/i.exec(t)?.[1] ?? 0);
+  const tag = [...tags].sort((a, b) => pct(b) - pct(a))[0];
+  const buy = /^(BUY \d+)\s+(GET .+)$/.exec(tag);
+  return buy ? [buy[1], buy[2]] : [tag];
 }
 
 /** One WooCommerce price as the price list's option: the price to pay, and the regular price while a sale runs. */
@@ -136,6 +166,9 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
       offer: bestOffer(all),
       from: low ? low.value : Math.min(...all.map((o) => o.price)),
       fromUnit: low ? low.unit : "",
+      fromSource: low?.source ?? null,
+      badge: saleBadge(all),
+      coded: all.some((o) => o.code),
       items: c.items.map((it) => {
         const itemLow = book.lowestPrice(c.id, it.name);
         const min = Math.min(...it.options.map((o) => o.price));
@@ -146,6 +179,9 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
           offer: bestOffer(it.options),
           from: itemLow ? itemLow.value : min,
           fromUnit: itemLow ? itemLow.unit : perUnit(it.options.find((o) => o.price === min)?.label ?? ""),
+          fromSource: itemLow?.source ?? null,
+          badge: saleBadge(it.options),
+          coded: it.options.some((o) => o.code),
           options: it.options.map((o) => ({ label: o.label, price: o.price, was: o.regular || 0, tag: o.tag, unit: perUnit(o.label), productId: o.productId, variationId: o.variationId, ...(o.code ? { code: o.code } : {}) })),
         };
       }),

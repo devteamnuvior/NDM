@@ -15,6 +15,7 @@ import { PRICE_NAMES } from "@/config/price-names";
 import { SALE_HEADLINE } from "@/config/sale";
 import { priceSpecials } from "@/lib/offer-prices";
 import { pagePath } from "@/lib/routes";
+import { dateWords } from "@/lib/campaign";
 import type { WooCampaign } from "@/types/pricing";
 import type { WooPromotion } from "@/types/promotions";
 import { buildPricingView } from "@/lib/pricing-view";
@@ -43,9 +44,11 @@ function saleOnPriceList(campaign: WooCampaign | null | undefined): PriceListSal
           text: `up to ${SALE_HEADLINE}%\u00a0off selected packages. Eligible packages take an extra ${campaign.percent}%\u00a0off with code ${campaign.code} at checkout.`,
           cta: `See the ${phase.label}`,
           href: pagePath("vipSale"),
+          ends: dateWords(Date.parse(phase.to)),
         }
       : undefined;
-  return { code: campaign.code, percent: campaign.percent, banner };
+  /* the VIP Sale keeps the site's red and blue; the Black Friday phases wear black and gold */
+  return { code: campaign.code, percent: campaign.percent, banner, look: campaign.phase === "vip" ? "vip" : "bf" };
 }
 
 /**

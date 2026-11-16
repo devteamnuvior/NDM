@@ -61,3 +61,9 @@ export async function getCampaign(): Promise<Campaign | null> {
   const read = await settle(getPricingTree);
   return read.ok ? toCampaign(read.data.campaign) : null;
 }
+
+/** The look of the offer tags while the campaign runs: the VIP Sale keeps the site's red and blue, the later phases black and gold. Null outside the sale. */
+export function saleTagsOf(c: Campaign | null): { look: "vip" | "bf"; percent: number } | null {
+  if (!c || c.over || !c.phase) return null;
+  return { look: c.phase === "vip" ? "vip" : "bf", percent: c.percent };
+}
