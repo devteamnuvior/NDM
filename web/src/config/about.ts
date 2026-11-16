@@ -243,7 +243,7 @@ export const ABOUT_COPY: AboutCopy = {
       ],
       [
         "What are your clinic hours?",
-        "Both clinics are open Monday to Friday, 9am to 7pm, and Saturday, 10am to 5pm."
+        "Both clinics are open Monday to Friday, 10am to 7pm, and Saturday, 10am to 5pm."
       ],
       [
         "How do I book a consultation?",

@@ -68,7 +68,7 @@ export function AboutContact({ copy }: { copy: AboutCopy["contact"] }) {
               <IconMail size={15} />
               {ABOUT_EMAIL}
             </a>
-            <span className="text-ndm-muted">Mon to Fri 9am to 7pm · Sat 10am to 5pm</span>
+            <span className="text-ndm-muted">Mon to Fri 10am to 7pm · Sat 10am to 5pm</span>
           </p>
         </div>
         <div className="rv rounded-[22px] bg-white p-[clamp(20px,2.4vw,32px)] ring-1 ring-ndm-ink/[.07]" style={{ transitionDelay: ".12s" }}>

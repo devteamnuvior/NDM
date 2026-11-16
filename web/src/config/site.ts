@@ -35,7 +35,7 @@ export const CLINICS: Clinic[] = [
 ];
 
 export const HOURS: ReadonlyArray<readonly [days: string, hours: string]> = [
-  ["Monday – Friday", "9am – 7pm"],
+  ["Monday – Friday", "10am – 7pm"],
   ["Saturday", "10am – 5pm"],
 ];
 

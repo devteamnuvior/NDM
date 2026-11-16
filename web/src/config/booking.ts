@@ -35,10 +35,10 @@ export const BOOK_CLINIC_OPTIONS: [value: string, label: string][] = [
 export const BOOK_ONLINE_URL = "https://newdermamedlaserclinic.com/online-booking/";
 
 /** First and last request hour of a weekday (0 is Sunday), or null when the clinics are closed. */
-export const bookHours = (weekday: number): [first: number, last: number] | null => (weekday === 0 ? null : weekday === 6 ? [10, 16] : [9, 18]);
+export const bookHours = (weekday: number): [first: number, last: number] | null => (weekday === 0 ? null : weekday === 6 ? [10, 16] : [10, 18]);
 
 /**
- * Request times of a day, as hours. Monday to Friday 9 to 7, Saturday 10 to 5, Sunday closed; one slot
+ * Request times of a day, as hours. Monday to Friday 10 to 7, Saturday 10 to 5, Sunday closed; one slot
  * every hour, the last an hour before closing. Today: only the times still ahead.
  */
 export function bookSlots(d: Date): number[] {

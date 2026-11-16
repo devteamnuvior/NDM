@@ -10,7 +10,7 @@ import { pageLink, pagePath } from "@/lib/routes";
 import { withBase } from "@/lib/base-path";
 
 const PHOTOS: Record<Clinic["id"], StaticImageData> = { uptown, downtown };
-const OPEN = "Monday to Friday 9am to 7pm, Saturday 10am to 5pm";
+const OPEN = "Monday to Friday 10am to 7pm, Saturday 10am to 5pm";
 
 /** Visit us: the two clinics as photo cards with the address, phone and hours; a card opens the About page's contact part. */
 export function TxVisit({ number }: { number: string }) {
