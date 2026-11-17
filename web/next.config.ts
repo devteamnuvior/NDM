@@ -22,12 +22,33 @@ if (basePath && !/^\/[a-z0-9-]+$/.test(basePath)) throw new Error(`NEXT_BASE_PAT
  */
 const buildCpus = Number(process.env.NEXT_BUILD_CPUS) || 0;
 
+/**
+ * Photos kept in WordPress's media library may go through the image optimizer (src/lib/optimized-image.ts):
+ * only files under wp-content/uploads of the WordPress this site reads (WORDPRESS_PUBLIC_URL, WORDPRESS_API_URL).
+ * A WordPress on this machine (local work) is a local address, which the optimizer refuses unless told otherwise.
+ */
+const wordpressUploads = [process.env.WORDPRESS_PUBLIC_URL, process.env.WORDPRESS_API_URL].flatMap((raw) => {
+  try {
+    const url = new URL((raw ?? "").trim());
+    const folder = url.pathname.replace(/\/wp-json.*$/, "").replace(/\/+$/, "");
+    return [{ protocol: url.protocol.replace(":", "") as "http" | "https", hostname: url.hostname, port: url.port, pathname: `${folder}/wp-content/uploads/**` }];
+  } catch {
+    return [];
+  }
+});
+const wordpressIsLocal = wordpressUploads.some((p) => p.hostname === "localhost" || p.hostname === "127.0.0.1");
+
 const nextConfig: NextConfig = {
   ...(buildCpus > 0 ? { experimental: { cpus: buildCpus } } : {}),
   /* a second build (for example the /react one) can go to its own folder, leaving .next as it is */
   distDir: process.env.NEXT_DIST_DIR?.trim() || ".next",
   basePath,
   env: { NEXT_PUBLIC_BASE_PATH: basePath },
+  images: {
+    remotePatterns: wordpressUploads,
+    qualities: [60, 75],
+    ...(wordpressIsLocal ? { dangerouslyAllowLocalIP: true } : {}),
+  },
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {

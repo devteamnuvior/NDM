@@ -27,6 +27,7 @@ import { useReveal } from "@/hooks/use-reveal";
 import { withBase, withBaseSrcSet } from "@/lib/base-path";
 import { cartKey, checkCart, setCartQty, setTypedCode } from "@/lib/cart";
 import { byId } from "@/lib/dom";
+import { optimized, optimizedSrcSet } from "@/lib/optimized-image";
 import { formatPrice as money } from "@/lib/prices";
 import { tel } from "@/lib/routes";
 import { scrollToY } from "@/lib/smooth-scroll";
@@ -34,7 +35,7 @@ import type { SaleLook, SalePhase, SalePriceCard, SaleView } from "@/types/sale"
 
 /* the two looks: every class that differs between them (the rest hangs on the page's own CSS, prefix `p`) */
 const LOOKS: Record<SaleView["look"], SaleLook> = {
-  vip: { p: "vip", bar: "bg-[#0B1B29]/95", night: "bg-[#0B1B29]", focus: "focus:border-ndm-deep", skip: "focus:bg-ndm-deep", ink: "text-ndm-ink", inkHover: "hover:text-ndm-ink", accent: "text-ndm-deep", accentBg: "bg-ndm-deep", light: "text-[#E2C27A]", lightBg: "bg-[#E2C27A]", pale: "text-[#F0D79B]", photo: "bg-[#F2F2EF]" },
+  vip: { p: "vip", bar: "bg-[#0B1B29]/95", night: "bg-[#0B1B29]", focus: "focus:border-ndm-deep", skip: "focus:bg-ndm-deep", ink: "text-ndm-ink", inkHover: "hover:text-ndm-ink", accent: "text-[#0C72AE]", accentBg: "bg-ndm-deep", light: "text-[#E2C27A]", lightBg: "bg-[#E2C27A]", pale: "text-[#F0D79B]", photo: "bg-[#F2F2EF]" },
   bfs: { p: "bfs", bar: "bg-[#0B0B0C]/95", night: "bg-[#0B0B0C]", focus: "focus:border-[#0B0B0C]", skip: "focus:bg-[#D3121F]", ink: "text-[#0B0B0C]", inkHover: "hover:text-[#0B0B0C]", accent: "text-[#D3121F]", accentBg: "bg-[#D3121F]", light: "text-[#EE3A45]", lightBg: "bg-[#EE3A45]", pale: "text-[#FF5A63]", photo: "bg-[#F3F1EF]" },
 };
 
@@ -125,10 +126,10 @@ function Header({ count }: { count: number }) {
   return (
     <header className={`sticky top-0 z-50 border-b border-white/10 ${T.bar} text-white backdrop-blur-[14px]`}>
       <div className="mx-auto flex h-[68px] max-w-[1280px] items-center justify-between gap-2 sm:gap-4 px-[var(--gx)] min-[1480px]:max-w-[1400px]">
-        <Link href="/" className="shrink-0" aria-label="NewDermaMed home"><img src={withBase("/assets/icons/logo-white.svg")} alt="NewDermaMed" className="h-7 w-auto min-[400px]:h-8 sm:h-10" /></Link>
+        <Link href="/" prefetch={false} className="shrink-0" aria-label="NewDermaMed home"><img src={withBase("/assets/icons/logo-white.svg")} alt="NewDermaMed" width="208" height="40" className="h-7 w-auto min-[400px]:h-8 sm:h-10" /></Link>
         {/* narrow desktops (1024 to 1279px): tighter links, no Home link (the logo opens it) and the phone as an icon, so the booking button stays whole */}
         <nav aria-label={`${copy.name} page`} className="hidden items-center gap-2 whitespace-nowrap lg:flex min-[1100px]:gap-3 xl:gap-6">
-          <Link href="/" className={`${T.p}-nav hidden font-inter text-[14.5px] xl:inline`}>Home</Link>
+          <Link href="/" prefetch={false} className={`${T.p}-nav hidden font-inter text-[14.5px] xl:inline`}>Home</Link>
           {links.map(([id, l]) => (
             <a key={id} href={`#${id}`} onClick={go(id)} aria-current={here === id ? 'location' : undefined} className={`${T.p}-nav inline-flex items-center gap-2 font-inter text-[13.5px] xl:text-[14.5px] ${here === id ? 'is-on' : ''}`}>
               {l}{id === 'plan' && count > 0 && <span className={`grid h-5 min-w-5 place-items-center rounded-full ${T.accentBg} px-1.5 text-[11px] font-semibold text-white tabular-nums`}>{count}</span>}
@@ -181,7 +182,7 @@ function Countdown({ t }: { t: SaleClock }) {
 function CardPicture({ card, sizes, lazy = false }: { card: SalePriceCard; sizes: string; lazy?: boolean }) {
   const { T } = useSale();
   return card.img
-    ? <img src={withBase(card.img)} srcSet={withBaseSrcSet(card.set)} sizes={sizes} alt="" loading={lazy ? 'lazy' : undefined} decoding="async" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: card.pos }} />
+    ? <Pic src={card.img} set={card.set} widths={[256, 384, 640, 828]} sizes={sizes} lazy={lazy} position={card.pos} className="absolute inset-0 h-full w-full object-cover" />
     : <span aria-hidden="true" className={`${T.p}-head absolute inset-0 grid place-items-center px-4 text-center font-aeonik text-[clamp(22px,2vw,30px)] leading-[1.05] tracking-[-0.02em] text-white`}>{card.qty}</span>;
 }
 
@@ -222,6 +223,27 @@ function Fan() {
   );
 }
 
+/* A photo through the site's image optimizer (small, modern format), for the photos that load with the page: fewer
+   bytes before the first screen is complete. Written as plain HTML so it can carry `onerror`: if the optimizer
+   cannot answer, the photo's own file (and WordPress's own sizes of it) loads instead. */
+function Pic({ src, set, widths, sizes, className, position, width, height, lazy = false, first = false }: { src: string; set?: string; widths: number[]; sizes: string; className: string; position: string; width?: number; height?: number; lazy?: boolean; first?: boolean }) {
+  const esc = (v: string) => v.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  const own = withBase(src);
+  const ownSet = withBaseSrcSet(set) ?? '';
+  const small = optimizedSrcSet(src, widths);
+  const html = [
+    `<img src="${esc(small ? optimized(src, widths[widths.length - 1]) : own)}"`,
+    small ? `srcset="${esc(small)}"` : ownSet && `srcset="${esc(ownSet)}"`,
+    `sizes="${esc(sizes)}"`,
+    small && `data-src="${esc(own)}" data-set="${esc(ownSet)}" onerror="this.onerror=null;if(this.dataset.set)this.srcset=this.dataset.set;else this.removeAttribute('srcset');this.src=this.dataset.src"`,
+    width && height && `width="${width}" height="${height}"`,
+    lazy && 'loading="lazy"',
+    first ? 'fetchpriority="high"' : 'decoding="async"',
+    `alt="" class="${esc(className)}" style="object-position:${esc(position)}">`,
+  ].filter(Boolean).join(' ');
+  return <div className="contents" dangerouslySetInnerHTML={{ __html: html }} />;
+}
+
 /* round 26: the hero. A giant outlined percentage behind the words, a fan of tickets with the countdown, crossed tapes */
 function Hero({ t }: { t: SaleClock }) {
   const { copy, max, T } = useSale();
@@ -229,7 +251,8 @@ function Hero({ t }: { t: SaleClock }) {
   return (
     <section aria-labelledby={`${T.p}-title`} className={`${T.p}-hero relative isolate overflow-hidden text-white`}>
       {/* round 28: the clinic at night sits behind the tickets and the countdown, fading into the dark on the left and at the bottom */}
-      <img src={withBase(photo.src)} width={photo.width} height={photo.height} alt="" fetchPriority="high" decoding="async" className={`${T.p}-hero-pic absolute right-0 top-0 -z-10 h-[46%] w-full object-cover lg:h-full lg:w-[60%]`} style={{ objectPosition: '58% 50%' }} />
+      {/* on phones it sits at a quarter strength under a fade, so half the screen's width is enough */}
+      <Pic src={photo.src} widths={[640, 828, 1080, 1920]} sizes="(min-width: 1024px) 60vw, 50vw" width={photo.width} height={photo.height} first position="58% 50%" className={`${T.p}-hero-pic absolute right-0 top-0 -z-10 h-[46%] w-full object-cover lg:h-full lg:w-[60%]`} />
       {max > 0 && <span aria-hidden="true" className={`${T.p}-big font-aeonik`}>{max}%</span>}
       <div className="mx-auto grid max-w-[1280px] gap-12 px-[var(--gx)] pb-[clamp(36px,4vw,56px)] pt-[clamp(48px,6vw,96px)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,.95fr)] lg:items-center">
         <div className={`${T.p}-rise`}>
@@ -645,15 +668,15 @@ function Footer({ t }: { t: SaleClock }) {
           <div className="flex flex-wrap gap-2.5"><Button href="#/book" v="book" hot>Book Free Consultation</Button><Button href="#deals" v="glass" onClick={go('deals')}>See the deals</Button></div>
         </div>
         <div className="flex flex-col gap-6 pt-8 md:flex-row md:items-center md:justify-between">
-          <Link href="/"><img src={withBase("/assets/icons/logo-white.svg")} alt="NewDermaMed" className="h-10 w-auto" /></Link>
+          <Link href="/" prefetch={false}><img src={withBase("/assets/icons/logo-white.svg")} alt="NewDermaMed" width="208" height="40" className="h-10 w-auto" /></Link>
           <p className="font-inter text-[13.5px] text-white/60">{CLINICS.map((c) => `${c.name} ${c.phone}`).join(' · ')} · <a href={`mailto:${EMAIL}`} className="hover:text-white">{EMAIL}</a></p>
           <p className="flex flex-wrap gap-x-5 gap-y-2 font-inter text-[13.5px] text-white/60">
-            <Link href="/" className="hover:text-white">Main site</Link><Link href="/pricing" className="hover:text-white">Full price list</Link><a href={SHOP_URL} target="_blank" rel="noopener" className="hover:text-white">Skincare shop ↗</a>
+            <Link href="/" prefetch={false} className="hover:text-white">Main site</Link><Link href="/pricing" prefetch={false} className="hover:text-white">Full price list</Link><a href={SHOP_URL} target="_blank" rel="noopener" className="hover:text-white">Skincare shop ↗</a>
           </p>
         </div>
         <div className="mt-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-10">
-          <p className="max-w-[90ch] font-inter text-[12px] leading-[1.6] text-white/45">© 2026 NewDermaMed. {copy.footer.terms}</p>
-          <a href="https://thenexthealth.ca/" target="_blank" rel="noopener" className={`${T.p}-credit group flex shrink-0 items-center gap-2.5 font-inter text-[11px] uppercase tracking-[.16em] text-white/35 transition-colors hover:text-white/70`}>
+          <p className="max-w-[90ch] font-inter text-[12px] leading-[1.6] text-white/60">© 2026 NewDermaMed. {copy.footer.terms}</p>
+          <a href="https://thenexthealth.ca/" target="_blank" rel="noopener" className={`${T.p}-credit group flex shrink-0 items-center gap-2.5 font-inter text-[11px] uppercase tracking-[.16em] text-white/60 transition-colors hover:text-white/85`}>
             Site by<img src={withBase("/assets/partners/next-health-white.svg")} alt="Next Health" width="88" height="16" className="h-4 w-auto opacity-40 transition-opacity group-hover:opacity-80" />
           </a>
         </div>

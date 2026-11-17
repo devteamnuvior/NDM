@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { BfsClass } from "@/components/bf-sale/bfs-class";
 import { SalePage } from "@/components/sale/sale-page";
 import { BLACK_FRIDAY_COPY } from "@/config/sale";
@@ -28,12 +27,14 @@ async function Sale() {
 export default function BlackFridayPage() {
   return (
     <>
-      {/* the page's look hangs on a class on <html>: set it before the first paint */}
-      <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("bfs")' }} />
       <BfsClass />
-      <Suspense fallback={null}>
-        <Sale />
-      </Suspense>
+      {/* no Suspense around it: everything it reads is cached, so the page's content is in the first HTML and
+          paints at once (inside a boundary it arrives hidden and is only shown by a script, after the photos and fonts) */}
+      <Sale />
+      {/* the page's look hangs on a class on <html>: set before the first paint. An inline script waits for the
+          stylesheet, and the browser reads nothing below it meanwhile, so it comes after the page's content:
+          placed above it, the first paint was empty and the content only showed after the scripts had run */}
+      <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("bfs")' }} />
     </>
   );
 }

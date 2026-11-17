@@ -16,8 +16,10 @@ const fraunces = Fraunces({
   display: "swap",
 });
 const manrope = Manrope({ subsets: ["latin"], variable: "--ff-manrope", display: "swap" });
-/* only downloaded on devices without Helvetica Neue, so it is not preloaded */
-const inter = Inter({ subsets: ["latin"], axes: ["opsz"], variable: "--ff-inter", display: "swap", preload: false });
+/* only downloaded on devices without Helvetica Neue (Android, Windows), so it is not preloaded. Without the
+   optical size axis: it is used for small text only (menus, buttons, fields), where that axis changes nothing
+   to see, and the file is a third smaller on the phones that do download it */
+const inter = Inter({ subsets: ["latin"], variable: "--ff-inter", display: "swap", preload: false });
 
 export const metadata: Metadata = {
   title: "NewDermaMed, Cosmetic & Laser Clinic, Toronto",
