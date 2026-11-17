@@ -344,25 +344,35 @@ function ProcChoose({ p }) {
   const ref = useRef(null);
   useReveal(ref);
   const c = p.choose.cards;
-  const card = ([t, d], i) => (
-    <li key={t} className="rv flex flex-col rounded-[22px] bg-white sm:min-h-[220px] p-[clamp(20px,2vw,28px)] ring-1 ring-ndm-ink/[.06]" style={{ transitionDelay: `${0.06 * i}s` }}>
-      <span aria-hidden="true" className="grid size-10 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconCheckBadge /></span>
-      <h3 className="mt-auto pt-5 font-aeonik text-[22px] sm:pt-8 font-normal leading-[1.2] tracking-[-0.01em] text-ndm-ink">{t}</h3>
-      <p className="mt-2 font-inter text-[14.5px] leading-[1.6] text-ndm-muted">{d}</p>
-    </li>
-  );
   return (
     <section ref={ref} id="why-choose" aria-labelledby="choose-title" className="relative z-10 scroll-mt-[170px] bg-ndm-mist px-[var(--gx)] py-[clamp(72px,8vw,120px)]">
-      <div className="text-center">
-        <Eyebrow className="rv">{txNum(p, 'why-choose') && <span className="tabular-nums text-ndm-deep">{txNum(p, 'why-choose')}</span>}{p.choose.tag || 'Why choose this treatment'}</Eyebrow>
-        <TwoTone id="choose-title" className="rv mx-auto mt-5" lead={twoLine(p.choose.lead || 'Who it may suit,')} strong={p.choose.strong || 'and safety first'} style={{ transitionDelay: '.06s' }} />
-      </div>
-      <div className="mx-auto mt-[clamp(36px,4vw,56px)] grid max-w-[1180px] gap-3 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-4">
-        <div className="rv rv-clip relative min-h-[360px] overflow-hidden rounded-[22px] bg-ndm-line md:col-span-2 lg:order-2 lg:col-span-1 lg:min-h-0" style={{ transitionDelay: '.08s' }}>
-          <img src={p.choose.img} alt={p.choose.alt || 'Close-up of a woman’s face in soft natural light'} loading="lazy" className={`absolute inset-0 h-full w-full ${p.choose.fit === 'contain' ? 'object-contain' : 'object-cover object-[50%_40%]'}`} style={p.choose.bg ? { background: p.choose.bg } : undefined} />
+      <div className="mx-auto grid max-w-[1180px] items-start gap-[clamp(36px,4vw,56px)] lg:grid-cols-[minmax(0,1.12fr)_minmax(0,.88fr)] lg:gap-[clamp(48px,5vw,80px)]">
+        {/* words: left */}
+        <div className="min-w-0">
+          <Eyebrow className="rv">{txNum(p, 'why-choose') && <span className="tabular-nums text-ndm-deep">{txNum(p, 'why-choose')}</span>}{p.choose.tag || 'Why choose this treatment'}</Eyebrow>
+          <TwoTone id="choose-title" className="rv mt-5" lead={twoLine(p.choose.lead || 'Who it may suit,')} strong={p.choose.strong || 'and safety first'} style={{ transitionDelay: '.06s' }} />
+          {p.choose.text && <p className="rv mt-5 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>{p.choose.text}</p>}
+          <ol className="mt-[clamp(28px,3.2vw,44px)] grid gap-x-[clamp(24px,3vw,44px)] sm:grid-cols-2" role="list">
+            {c.map(([t, d], i) => (
+              <li key={t} className="choose-item rv flex gap-4 border-t border-ndm-ink/10 py-[clamp(18px,2vw,24px)]" style={{ transitionDelay: `${0.05 * i + 0.1}s` }}>
+                <span aria-hidden="true" className="choose-num mt-[3px] grid size-9 shrink-0 place-items-center rounded-full bg-white font-inter text-[12.5px] font-semibold tabular-nums text-ndm-deep ring-1 ring-ndm-blue/15">{String(i + 1).padStart(2, '0')}</span>
+                <div className="min-w-0">
+                  <h3 className="font-aeonik text-[clamp(19px,1.5vw,21px)] font-normal leading-[1.25] tracking-[-0.01em] text-ndm-ink">{t}</h3>
+                  <p className="mt-1.5 font-inter text-[14.5px] leading-[1.6] text-ndm-muted">{d}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
-        <ul className="grid gap-3 lg:order-1 lg:gap-4" role="list">{c.slice(0, Math.ceil(c.length / 2)).map(card)}</ul>
-        <ul className="grid gap-3 lg:order-3 lg:gap-4" role="list">{c.slice(Math.ceil(c.length / 2)).map((x, i) => card(x, i + Math.ceil(c.length / 2)))}</ul>
+        {/* photo: right */}
+        <figure className="rv rv-clip relative m-0 aspect-[4/5] overflow-hidden rounded-[28px] bg-ndm-line lg:sticky lg:top-[170px] lg:aspect-auto lg:h-[min(720px,calc(100vh-200px))] lg:min-h-[560px]" style={{ transitionDelay: '.08s' }}>
+          <img src={p.choose.img} alt={p.choose.alt || 'Close-up of a woman’s face in soft natural light'} loading="lazy" className={`absolute inset-0 h-full w-full ${p.choose.fit === 'contain' ? 'object-contain' : 'object-cover object-[50%_35%]'}`} style={p.choose.bg ? { background: p.choose.bg } : undefined} />
+          <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ndm-night/45 to-transparent" />
+          <figcaption className="absolute inset-x-4 bottom-4 flex items-center gap-3 rounded-[18px] bg-white/85 p-3 pr-4 backdrop-blur-md sm:inset-x-5 sm:bottom-5">
+            <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconCheckBadge /></span>
+            <span className="font-inter text-[13.5px] leading-[1.4] text-ndm-ink">Every plan starts with a <strong className="font-semibold">free consultation</strong> and VISIA® skin analysis.</span>
+          </figcaption>
+        </figure>
       </div>
     </section>
   );
