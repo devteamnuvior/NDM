@@ -501,8 +501,10 @@ foreach ( array_keys( ndm_headless_procedure_types() ) as $ndm_procedure_type ) 
 unset( $ndm_procedure_type );
 
 /**
- * A procedure page's address is its slug alone, whatever its post type: a slug already taken by a page
- * of another procedure type (or by a concern) gets a number, as WordPress does within one post type.
+ * The site finds a procedure by its slug alone, whatever its list (ndm/v1/procedures/<slug>), so a slug
+ * already taken by a page of another procedure type gets a number, as WordPress does within one post
+ * type. A concern may have the same slug as a procedure: concerns have their own folder and route
+ * (/concerns/double-chin beside /injectables/double-chin).
  *
  * @param string $slug        The slug WordPress chose.
  * @param int    $post_id     Post ID.
@@ -516,9 +518,6 @@ function ndm_headless_procedure_unique_slug( $slug, $post_id, $post_status, $pos
 	}
 
 	$types = array_keys( ndm_headless_procedure_types() );
-	if ( defined( 'NDM_CONCERN_POST_TYPE' ) ) {
-		$types[] = NDM_CONCERN_POST_TYPE;
-	}
 
 	$taken = function ( $candidate ) use ( $types, $post_id ) {
 		return (bool) get_posts(
