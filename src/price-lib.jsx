@@ -53,7 +53,7 @@ const priceRows = (id, item) => { const c = PRICE_BY_ID[id]; const it = c && c.i
 /* the lowest price in one price table after its discounts; per unit when the table is priced per unit (e.g. 220 units $1848 -> $8.40) */
 const rowsFrom = (rows, perUnit) => Math.round(Math.min(...rows.map((r) => (perUnit && !/regular/i.test(r[0]) ? r[1] / pCount(r[0]) : r[1]))) * 100) / 100;
 /* ---------------------------------------------------------------- sale tags and where a "from" price comes from (2026-11-16)
-   SALE_LOOK: the look of the offer tags while a promotion runs: 'vip' (red and blue), 'bf' (black and gold), 'holiday' (green and gold),
+   SALE_LOOK: the look of the offer tags while a promotion runs: 'vip' and 'bf' (black and gold, like VIP Early Access + Black Friday), 'holiday' (green and gold),
    'newyear' (slate), or '' for the plain red tags. Every price table (pricing, Botox, Aptos) reads it. */
 const SALE_LOOK = 'vip';
 /* the lowest row of one price table and how it is counted (per unit when the table is priced per unit) */
@@ -138,7 +138,7 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .sb-split .sb-a{border-radius:999px 0 0 999px;box-shadow:inset 1.5px 0 0 var(--a-ring),inset 0 1.5px 0 var(--a-ring),inset 0 -1.5px 0 var(--a-ring)}
 .sb-b{background:var(--b-bg);color:var(--b-fg);border-radius:0 999px 999px 0}
 .pr-from.is-sale{color:var(--now,#0F80C3)}.pr-from[data-look]{--now:#0F80C3}
-.sb[data-look="bf"],.pr-from[data-look="bf"]{--a-bg:#0B0F13;--a-fg:#fff;--a-ring:#0B0F13;--b-bg:#D4B574;--b-fg:#0B0F13;--now:#9A7A3A}
+.sb[data-look="vip"],.pr-from[data-look="vip"],.sb[data-look="bf"],.pr-from[data-look="bf"]{--a-bg:#0B0F13;--a-fg:#fff;--a-ring:#0B0F13;--b-bg:#D4B574;--b-fg:#0B0F13;--now:#9A7A3A}
 .sb[data-look="holiday"],.pr-from[data-look="holiday"]{--a-bg:#173D2C;--a-fg:#fff;--a-ring:#173D2C;--b-bg:#D4B574;--b-fg:#173D2C;--now:#1E5A3E}
 .sb[data-look="newyear"],.pr-from[data-look="newyear"]{--a-bg:#fff;--a-fg:#1B242B;--a-ring:rgba(27,36,43,.25);--b-bg:#4A5763;--b-fg:#fff;--now:#0F80C3}
 .pr-opt.pr-opt2{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:28px;padding:15px 13px 15px 21px;border:1px solid transparent;border-radius:14px;background:#FAFAF8;box-shadow:none!important}
@@ -154,7 +154,7 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .pr-opt2-was s{text-decoration-thickness:1px}
 .pr-opt2-was s+s{margin-left:8px}
 .pr-opt2-now{margin:2px 0;font-family:Fraunces,Georgia,serif;font-size:28px;line-height:1.1;letter-spacing:-.01em;color:#0B5F93}
-.pr-opt2-now[data-look="bf"]{color:#9A7A3A}
+.pr-opt2-now[data-look="vip"],.pr-opt2-now[data-look="bf"]{color:#9A7A3A}
 .pr-opt2-now[data-look="holiday"]{color:#1E5A3E}
 .pr-opt2-price.is-single .pr-opt2-now{font-size:22px;color:#1B242B}
 .pr-opt2-unit{margin-left:2px;font-family:Manrope,sans-serif;font-size:13px;letter-spacing:0;color:#6B7480}
