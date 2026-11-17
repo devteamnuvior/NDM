@@ -9,8 +9,9 @@
  * Only editors, shop managers and administrators see the list (wp-admin > Consultation),
  * where each request carries a status the team sets by hand: New, Contacted, Booked, Closed.
  *
- * A request holds a person's name and contact details. It is written here and read in wp-admin,
- * nowhere else: no route returns it, and the answer to the website is only a reference number.
+ * A request holds a person's name and contact details. It is written here, read in wp-admin and
+ * emailed once to the clinic (ndm_headless_booking_notify): no route returns it, and the answer to
+ * the website is only a reference number.
  *
  * The secret is the one the two servers already share (NDM_REVALIDATE_SECRET).
  *
@@ -299,6 +300,9 @@ function ndm_headless_rest_booking( $request ) {
 	update_post_meta( $id, NDM_HEADLESS_BOOKING_META, wp_slash( $record ) );
 	update_post_meta( $id, NDM_HEADLESS_BOOKING_STATUS, 'new' );
 
+	// The request is saved: the email is a notice on top, and its failure never fails the request.
+	ndm_headless_booking_notify( $id );
+
 	$response = rest_ensure_response(
 		array(
 			'saved'  => true,
@@ -365,6 +369,78 @@ function ndm_headless_booking_request_line( $record ) {
 	}
 
 	return 'Call back: ' . $record['call_time'];
+}
+
+/**
+ * Where the notice of a new request goes: info@newdermamed.com, or the addresses in
+ * NDM_BOOKING_NOTIFY (wp-config constant or environment; several separated by commas, "off" = none).
+ *
+ * @return string[]
+ */
+function ndm_headless_booking_notify_to() {
+	$setting = ndm_headless_setting( 'NDM_BOOKING_NOTIFY' );
+
+	if ( 'off' === strtolower( $setting ) ) {
+		return array();
+	}
+
+	$to = array_filter( array_map( 'sanitize_email', explode( ',', '' === $setting ? 'info@newdermamed.com' : $setting ) ), 'is_email' );
+
+	return array_values( $to );
+}
+
+/**
+ * Emails a saved request to the clinic, with a link to it in wp-admin.
+ *
+ * @param int $id Post ID.
+ * @return bool Whether WordPress handed the email on.
+ */
+function ndm_headless_booking_notify( $id ) {
+	$to = ndm_headless_booking_notify_to();
+
+	if ( ! $to ) {
+		return false;
+	}
+
+	$record = ndm_headless_booking_record( $id );
+	$name   = trim( $record['first'] . ' ' . $record['last'] );
+	$rows   = array(
+		'Name'                => $name,
+		'Mobile number'       => $record['phone'],
+		'Email'               => $record['email'],
+		'Reach by'            => implode( ', ', (array) $record['via'] ),
+		'Concerns'            => implode( ', ', (array) $record['interests'] ),
+		'In their words'      => $record['other'],
+		'VISIA skin analysis' => $record['visia'] ? 'Included' : 'Not added',
+		'Asked for'           => ndm_headless_booking_request_line( $record ),
+		'Clinic'              => $record['clinic'],
+		'Sent from'           => $record['page'],
+		'Received'            => get_the_date( 'D, M j, Y, g:i a', $id ),
+	);
+	$lines  = array( 'A new consultation request came in from the website.', '' );
+
+	foreach ( $rows as $label => $value ) {
+		if ( '' !== trim( (string) $value ) ) {
+			$lines[] = $label . ': ' . $value;
+		}
+	}
+
+	$lines[] = '';
+	$lines[] = 'Open it in WordPress to set its status:';
+	$lines[] = admin_url( 'post.php?post=' . (int) $id . '&action=edit' );
+	$lines[] = '';
+	$lines[] = 'A time picked on the website is a request: confirm it with the visitor and put it in the clinic calendar.';
+
+	// The name is already one line of plain text; the subject carries no contact details.
+	$subject = 'New consultation request #' . (int) $id . ': ' . ndm_headless_booking_request_line( $record ) . ', ' . $record['clinic'];
+	$headers = array( 'Content-Type: text/plain; charset=UTF-8' );
+
+	if ( is_email( $record['email'] ) ) {
+		// Replying to the notice writes to the visitor.
+		$headers[] = 'Reply-To: ' . $record['email'];
+	}
+
+	return (bool) wp_mail( $to, $subject, implode( "\n", $lines ), $headers );
 }
 
 /**

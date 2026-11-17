@@ -858,7 +858,12 @@ WordPress. The team reads them in wp-admin under **Consultation**.
   offers, a day the clinics are open, an hour still ahead (Toronto time), same-site requests only, a
   hidden anti-robot field and a small per-address limit.
 - A picked time is a **request**: nothing checks it against the clinic calendar, two visitors can pick
-  the same hour, and no email or text is sent. The team confirms each one.
+  the same hour, and no email or text is sent to the visitor. The team confirms each one.
+- Each saved request is emailed once to the clinic, `info@newdermamed.com`, with its details and a
+  link to it in wp-admin (`ndm_headless_booking_notify`; replying writes to the visitor). Other
+  addresses: `define( 'NDM_BOOKING_NOTIFY', 'a@x.com, b@x.com' )` in wp-config, `'off'` for none. A
+  failed email never fails the request. It is sent with WordPress's own `wp_mail`, so it arrives only
+  if the server can send mail.
 - These records are personal information (PHIPA / PIPEDA): decide how long they are kept, and host
   the database in Canada, before production.
 - Test: `web/tests/admin/booking.spec.ts` (`npm run test:admin`; makes two records and deletes them).
