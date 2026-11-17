@@ -135,7 +135,10 @@ export function HeaderBar({ dark, current, top = 36, visible = true, cartCount =
           WebkitBackdropFilter: GLASS,
         }}
       >
-        <div className="mx-auto grid h-[64px] max-w-[1920px] grid-cols-[auto_1fr_auto] items-center gap-4 px-[var(--gx)] xl:h-[84px] xl:grid-cols-[1fr_auto_1fr] xl:gap-3 2xl:gap-4">
+        {/* below xl the menu is in the drawer, so the bar is the logo and the actions: the logo takes all the room the
+            actions leave (user, 2026-11-17; the prototype kept an empty third column, which cost the logo 16px and left
+            the actions short of the right edge). Phones: a closer gap, and the menu icon's glyph sits on the gutter line */}
+        <div className="mx-auto grid h-[64px] max-w-[1920px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-[var(--gx)] sm:gap-4 xl:h-[84px] xl:grid-cols-[1fr_auto_1fr] xl:gap-3 2xl:gap-4">
           <SiteLink to={pageLink("home")} aria-label="NewDermaMed home" className="relative block h-[30px] justify-self-start sm:h-[34px] xl:h-[34px] 2xl:h-[42px]">
             {/* eslint-disable @next/next/no-img-element -- SVG logos: nothing for the image optimizer to do */}
             <img src={withBase("/assets/icons/logo-color.svg")} alt="" width={317} height={62} fetchPriority="high" className="h-full w-auto object-contain object-left transition-opacity duration-500" style={{ opacity: tone ? 0 : 1 }} />
@@ -203,7 +206,7 @@ export function HeaderBar({ dark, current, top = 36, visible = true, cartCount =
             </div>
           </nav>
 
-          <div className="flex items-center gap-1 justify-self-end sm:gap-1.5">
+          <div className="flex items-center gap-1 justify-self-end max-sm:-mr-2 sm:gap-1.5">
             <button type="button" onClick={onSearch} aria-label="Search treatments" className={`max-md:hidden! ${icon}`}>
               <IconSearch size={21} />
             </button>

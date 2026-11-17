@@ -35,7 +35,7 @@ export function HeroStage({ children }: { children: ReactNode }) {
 
   return (
     <HeroFilmContext value={film}>
-      <section ref={section} id="top" data-nav="dark" aria-labelledby="hero-title" className="hf">
+      <section ref={section} id="top" data-nav="dark" data-float-hold="" aria-labelledby="hero-title" className="hf">
         {children}
       </section>
     </HeroFilmContext>

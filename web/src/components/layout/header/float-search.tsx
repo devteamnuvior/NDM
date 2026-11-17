@@ -3,7 +3,7 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { IconSearch } from "@/components/ui/icons";
 import { useOnScroll } from "@/hooks/use-on-scroll";
-import { overControl } from "@/lib/over-control";
+import { floatHeld, overControl } from "@/lib/over-control";
 
 export interface FloatSearchProps {
   onOpen: () => void;
@@ -31,7 +31,7 @@ export function FloatSearch({ onOpen, hidden, lift = 0 }: FloatSearchProps) {
       if (r.width && r.top < vh && r.bottom > vh - 120 && r.right > vw - 90) top = Math.min(top, r.top);
     });
     setAvoid(top < vh ? vh - top + 12 : 0);
-    setCovers(vw < 768 && overControl(btn.current, 9, 9));
+    setCovers(floatHeld() || (vw < 768 && overControl(btn.current, 9, 9)));
   };
   useOnScroll(measure);
   /* also twice a second: the page under the button can change without a scroll (a slider turning, a panel opening) */

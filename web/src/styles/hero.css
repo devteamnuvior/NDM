@@ -109,10 +109,26 @@
   background: #fff;
   color: #1b242b;
 }
-/* phones: no pause button beside the brand band (user, 2026-11-17: the hero is crowded there); differs from the prototype on purpose */
+/* phones (user, 2026-11-17: the hero is crowded there); differs from the prototype on purpose:
+   no pause button beside the brand band, and the band is a strip of its own under the first screen
+   (the words fill the window, the band follows on the hero's dark colour) */
 @media (max-width: 639px) {
   .hf-toggle {
     display: none;
+  }
+  .hf {
+    min-height: 0;
+  }
+  .hf-in {
+    display: flex;
+    min-height: max(620px, 100svh);
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .hf-band {
+    background: #0b0f13;
+    border-top: 0;
+    padding-left: 0;
   }
 }
 .marquee-mask {

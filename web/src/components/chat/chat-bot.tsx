@@ -10,7 +10,7 @@ import { useOnScroll } from "@/hooks/use-on-scroll";
 import { armChime, playChime } from "@/lib/chime";
 import { tel } from "@/lib/routes";
 import { withBase } from "@/lib/base-path";
-import { overControl } from "@/lib/over-control";
+import { floatHeld, overControl } from "@/lib/over-control";
 
 /* the agent's photo is a small local file, shown at its own size */
 /* eslint-disable @next/next/no-img-element */
@@ -109,8 +109,9 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
     });
     setAvoid(top < vh ? vh - top + 12 : 0);
     /* phones: what lies under the note and under the chat button (each stays in place, unseen, while it steps aside) */
-    setCovers(vw < 768 && overControl(pop.current, 8, 6));
-    setBtnCovers(vw < 768 && overControl(btn.current, 10, 10));
+    const held = floatHeld(); /* phones, home page: not before the hero has scrolled past */
+    setCovers(held || (vw < 768 && overControl(pop.current, 8, 6)));
+    setBtnCovers(held || (vw < 768 && overControl(btn.current, 10, 10)));
     setClear(
       !Array.from(document.querySelectorAll("[data-pill-avoid]")).some((el) => {
         const r = el.getBoundingClientRect();

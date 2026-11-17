@@ -66,7 +66,8 @@ export function Hero({ copy }: { copy: HomeCopy["hero"] }) {
           aria-label="Why clients choose NewDermaMed"
         >
           {proof.map((p, i) => (
-            <li key={i} className="flex items-start gap-2 sm:items-center sm:gap-2.5 md:whitespace-nowrap">
+            /* phones: the first two only, side by side (user, 2026-11-17) */
+            <li key={i} className={`flex items-start gap-2 sm:items-center sm:gap-2.5 md:whitespace-nowrap ${i > 1 ? "max-sm:hidden" : ""}`}>
               <svg viewBox="0 0 16 16" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="mt-px shrink-0 text-[#7FD3F5] sm:mt-0">
                 {PROOF_ICONS[p.icon]}
               </svg>
