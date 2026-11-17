@@ -23,6 +23,7 @@ pageParity({
     { name: "assess", selector: sec("assess"), pixelRatio: 0.004 },
     {
       name: "options",
+      prices: true,
       selector: sec("options"),
       pixelRatio: 0.01,
       /* one card's price is worded differently on purpose: the prototype typed "From $413 per session" for

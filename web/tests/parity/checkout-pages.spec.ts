@@ -1,6 +1,7 @@
 import { expect, test, type Browser, type Page } from "@playwright/test";
 import { diff, fingerprint } from "./fingerprint";
 import { expectSamePixels, open, report, VIEWPORTS } from "./helpers";
+import { saleRuns } from "../price-list";
 
 /**
  * Cart, checkout and order confirmation pages against the prototype, at every window size, with the same
@@ -19,10 +20,11 @@ const ORDER = { no: "1042", date: "2026-11-12T15:00:00.000Z", lines: LINES, sub:
 const SECTION = 'main > section[aria-labelledby="co-title"]';
 
 const PAGES = [
-  { name: "cart", legacy: "/cart.html", next: "/cart", cart: LINES },
-  { name: "cart-empty", legacy: "/cart.html", next: "/cart", cart: [] },
-  { name: "checkout", legacy: "/checkout.html", next: "/checkout", cart: LINES },
-  { name: "order-confirmed", legacy: "/order-confirmed.html", next: "/order-confirmed", cart: [] },
+  /* prices: the page shows WooCommerce's prices (the cart's lines, the suggestions under an empty cart), the campaign's while a sale runs */
+  { name: "cart", legacy: "/cart.html", next: "/cart", cart: LINES, prices: true },
+  { name: "cart-empty", legacy: "/cart.html", next: "/cart", cart: [], prices: true },
+  { name: "checkout", legacy: "/checkout.html", next: "/checkout", cart: LINES, prices: true },
+  { name: "order-confirmed", legacy: "/order-confirmed.html", next: "/order-confirmed", cart: [], prices: false },
 ];
 
 async function openBoth(browser: Browser, vp: { width: number; height: number }, page: (typeof PAGES)[number]): Promise<[Page, Page]> {
@@ -49,6 +51,7 @@ for (const vp of VIEWPORTS) {
   test.describe(`cart and checkout pages parity @ ${vp.name}`, () => {
     for (const page of PAGES) {
       test(page.name, async ({ browser }, testInfo) => {
+        test.skip(page.prices && (await saleRuns().catch(() => false)), "a sale campaign is running: this page shows its prices");
         const [legacy, next] = await openBoth(browser, vp, page);
         const fa = await fingerprint(legacy, SECTION);
         const d = diff(fa, await fingerprint(next, SECTION));

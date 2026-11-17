@@ -13,6 +13,7 @@ const logos = (p: Page) =>
 
 pageParity({
   name: "promotion",
+  pricePage: true,
   paths: { legacy: "/promotion.html", next: "/promotion" },
   sectionCount: 9,
   sections: [

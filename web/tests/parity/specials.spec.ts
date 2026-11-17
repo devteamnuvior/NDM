@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import { diff, fingerprint } from "./fingerprint";
 import { expectSamePixels, open, report, showSection, VIEWPORTS } from "./helpers";
+import { saleRuns } from "../price-list";
 
 /**
  * Monthly specials parity at every window size, in two states: as the wheel rests on its first offer, and
@@ -15,6 +16,8 @@ for (const vp of VIEWPORTS) {
     let height = 0;
 
     test.beforeAll(async ({ browser }) => {
+      /* the offers and their prices are WooCommerce's: the campaign's while a sale runs */
+      test.skip(await saleRuns().catch(() => false), "a sale campaign is running: the offers show its prices and tags");
       [legacy, next] = await Promise.all([open(browser, "legacy", vp), open(browser, "next", vp)]);
       const [a, b] = [await showSection(legacy, SECTION), await showSection(next, SECTION)];
       expect(b, "section height").toBe(a);

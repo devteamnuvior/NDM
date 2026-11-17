@@ -53,5 +53,8 @@ export async function optionOf(product: string, label: string): Promise<ListedOp
   return found;
 }
 
+/** The running sale's phase ("vip", "black-friday" ...), or null when no sale runs or WordPress cannot be reached. */
+export const salePhase = async (): Promise<string | null> => (await read().catch(() => null))?.campaign?.phase ?? null;
+
 /** Whether a sale campaign is running (its prices are on the list). */
 export const saleRuns = async (): Promise<boolean> => !!(await read()).campaign?.phase;

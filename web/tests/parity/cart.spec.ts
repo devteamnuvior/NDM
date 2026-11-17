@@ -1,6 +1,7 @@
 import { expect, test, type Browser, type Page } from "@playwright/test";
 import { diff, fingerprint } from "./fingerprint";
 import { expectSamePixels, open, report, VIEWPORTS } from "./helpers";
+import { saleRuns } from "../price-list";
 
 /**
  * Cart parity at every window size, with the same two lines saved in both pages' cart: the floating cart
@@ -28,6 +29,8 @@ async function openBoth(browser: Browser, vp: { width: number; height: number },
 for (const vp of VIEWPORTS) {
   test.describe(`cart parity @ ${vp.name}`, () => {
     test("the floating cart bar and the filled drawer", async ({ browser }, testInfo) => {
+      /* the new site re-prices the saved lines from WooCommerce: the campaign's prices while a sale runs */
+      test.skip(await saleRuns().catch(() => false), "a sale campaign is running: the cart shows its prices");
       const [legacy, next] = await openBoth(browser, vp, LINES);
       for (const p of [legacy, next]) {
         await p.evaluate(() => window.scrollTo(0, window.innerHeight * 1.5));

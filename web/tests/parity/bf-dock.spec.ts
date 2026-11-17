@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import { diff, fingerprint } from "./fingerprint";
 import { expectSamePixels, open, report, VIEWPORTS } from "./helpers";
+import { salePhase } from "../price-list";
 
 /**
  * Black Friday tab parity at every window size (both pages read the same fixed date): the tab at the
@@ -9,7 +10,9 @@ import { expectSamePixels, open, report, VIEWPORTS } from "./helpers";
  */
 for (const vp of VIEWPORTS) {
   test(`Black Friday tab parity @ ${vp.name}`, async ({ browser }, testInfo) => {
-    const [legacy, next] = await Promise.all([open(browser, "legacy", vp), open(browser, "next", vp)]);
+    /* the prototype's tab is the Black Friday one; during the VIP Sale the new site's tab names that sale */
+    test.skip((await salePhase()) === "vip", "the VIP Sale phase is running: the tab reads VIP Sale, which the prototype does not have");
+    const [legacy, next] = await Promise.all([open(browser, "legacy", vp, "", undefined, { saleTab: true }), open(browser, "next", vp, "", undefined, { saleTab: true })]);
     const both = async (fn: (p: Page) => Promise<unknown>) => {
       await fn(legacy);
       await fn(next);

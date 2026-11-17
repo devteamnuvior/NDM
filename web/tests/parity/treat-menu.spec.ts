@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import { diff, fingerprint } from "./fingerprint";
 import { expectSamePixels, open, report, showSection, VIEWPORTS } from "./helpers";
+import { saleRuns } from "../price-list";
 
 /**
  * "Treatments, by what they do" parity, in three states at every window size: as it loads (All tab),
@@ -15,6 +16,8 @@ for (const vp of VIEWPORTS) {
     let next: Page;
 
     test.beforeAll(async ({ browser }) => {
+      /* every card carries a "From" price: the campaign's while a sale runs, which the prototype's fixed list does not have */
+      test.skip(await saleRuns().catch(() => false), "a sale campaign is running: the cards show its prices");
       [legacy, next] = await Promise.all([open(browser, "legacy", vp), open(browser, "next", vp)]);
     });
     test.afterAll(async () => {

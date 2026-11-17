@@ -6,6 +6,7 @@ const list = (p: Page) => p.locator("#prices");
 
 pageParity({
   name: "pricing",
+  pricePage: true,
   paths: { legacy: "/pricing.html", next: "/pricing" },
   sectionCount: 10,
   sections: [

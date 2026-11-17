@@ -17,6 +17,9 @@ for (const vp of VIEWPORTS) {
       await fn(next);
     };
     const check = async (state: string, root: string, pixels: boolean) => {
+      /* the question field takes the focus when the panel opens, a moment sooner or later on each page, and a
+         focused field is drawn with its focus ring: compared without the focus */
+      await both((p) => p.evaluate(() => (document.activeElement as HTMLElement | null)?.blur()));
       const d = diff(await fingerprint(legacy, root), await fingerprint(next, root));
       report(`${vp.name}-chat-${state}`, d);
       expect(d, `${state}: ${JSON.stringify(d.slice(0, 10), null, 1)}`).toEqual([]);
@@ -27,6 +30,8 @@ for (const vp of VIEWPORTS) {
       await expectSamePixels(testInfo, `${vp.name}-chat-${state}`, legacy, next, { x: Math.ceil(b.x) + 1, y: Math.ceil(b.y) + 1, width: Math.floor(b.width) - 2, height: Math.floor(b.height) - 2 }, 0.002);
     };
 
+    /* phones: the button waits until the home hero has scrolled past (2026-11-17) */
+    if (vp.width < 640) await both((p) => p.evaluate(() => window.scrollTo(0, window.innerHeight)));
     await both((p) => p.waitForSelector(LAUNCH, { state: "visible", timeout: 20_000 }));
     await both((p) => p.waitForTimeout(700));
     await check("launcher", LAUNCH, true);

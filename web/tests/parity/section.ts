@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { diff, fingerprint } from "./fingerprint";
-import { expectSamePixels, open, report, showSection, VIEWPORTS } from "./helpers";
+import { expectSamePixels, hideFloats, open, report, showSection, VIEWPORTS } from "./helpers";
 
 interface SectionParityOptions {
   /** Short name for reports and screenshots. */
@@ -29,6 +29,7 @@ export function sectionParity({ name, selector, minElements = 15, pixelRatio = 0
 
       test.beforeAll(async ({ browser }) => {
         [legacy, next] = await Promise.all([open(browser, "legacy", vp), open(browser, "next", vp)]);
+        await hideFloats(legacy, next);
         const [a, b] = [await showSection(legacy, selector), await showSection(next, selector)];
         height = a;
         if (settle) {

@@ -6,6 +6,7 @@ const by = (id: string) => `main > section[aria-labelledby="${id}"]`;
 
 pageParity({
   name: "botox",
+  priceSections: ["prices"],
   paths: { legacy: "/botox.html", next: "/injectables/botox" },
   sectionCount: 16,
   sections: [
@@ -29,9 +30,10 @@ pageParity({
         }),
     },
     { name: "film", selector: sec("film"), pixelRatio: 0.01 },
-    { name: "prices", selector: sec("prices") },
+    { name: "prices", selector: sec("prices"), prices: true },
     {
       name: "prices-second-open",
+      prices: true,
       selector: sec("prices"),
       prepare: async (p) => {
         await p.locator("#proc-pr-h0").click();
