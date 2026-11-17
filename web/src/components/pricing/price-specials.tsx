@@ -8,7 +8,6 @@ import type { PriceSpecialView } from "@/lib/pricing-view";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
 import { withBase } from "@/lib/base-path";
-import { DealPill } from "@/components/specials/deal-pill";
 
 interface PriceSpecialsProps {
   specials: PriceSpecialView[];
@@ -50,16 +49,19 @@ export function PriceSpecials({ specials, sub, note }: PriceSpecialsProps) {
           {sub}
         </p>
       </div>
-      {/* centred cards: the offer pill, a From chip, the price with its unit, the name, Buy and the note */}
+      {/* centred cards: the red offer tag, a From chip, the price with its unit, the name, Buy and the note */}
       <ul role="list" className="mx-auto mt-[clamp(28px,3.4vw,44px)] grid w-full max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
         {specials.map((s, i) => (
           <li key={s.id} className="rv ps-card flex flex-col items-center rounded-[22px] bg-white px-3 pt-4 pb-5 text-center ring-1 ring-ndm-ink/[.06] md:px-5 md:pt-5 md:pb-6" style={{ transitionDelay: `${0.04 * i}s` }}>
             {s.offer ? (
-              <DealPill deal={s.offer} />
+              <span className="deal-badge">
+                <i aria-hidden="true">%</i>
+                {s.offer}
+              </span>
             ) : (
               /* keeps the tag's place, so every card's price sits on one line */
-              <span className="dp invisible" aria-hidden="true">
-                <span className="dp-a">OFFER</span>
+              <span className="deal-badge invisible" aria-hidden="true">
+                <i>%</i>Offer
               </span>
             )}
             <span className="mt-4 rounded-full bg-ndm-blue/10 px-3 py-1 font-inter text-[11px] font-semibold tracking-[.16em] text-ndm-deep uppercase">From</span>

@@ -143,7 +143,6 @@ export const BOTOX: ProcedurePage = {
     "tag": "About",
     "lead": "What can I expect",
     "strong": "from Botox® treatment?",
-    "dark": true,
     "tabs": [
       {
         "label": "Treatment Overview",

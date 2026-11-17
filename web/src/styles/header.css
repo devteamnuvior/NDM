@@ -115,13 +115,6 @@
   border-radius: 50%;
   background: #209ed9;
   box-shadow: 0 0 0 3px rgba(32, 158, 217, 0.18);
-  animation: ndmBeat 1.6s ease-out infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .menu-item[aria-current="page"]::before,
-  .menu-item-m[aria-current="page"]::before {
-    animation: none;
-  }
 }
 
 /* Aptos NAMICA card (NUVIOR purple) */

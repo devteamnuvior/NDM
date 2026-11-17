@@ -52,18 +52,6 @@
   :where(main[data-page="aptos"]) .tx-thread.in .tx-bub{animation:txBub 5.5s ease-in-out var(--d,0s) infinite}
   @keyframes txBub{0%{opacity:0;transform:translateY(10px) scale(.4)}20%{opacity:.95;transform:translateY(0) scale(1)}70%{opacity:.75;transform:translateY(-14px) scale(1)}100%{opacity:0;transform:translateY(-26px) scale(1.25)}}
   :where(main[data-page="aptos"]) .tx-nav a{transition:background-color .3s ease,color .3s ease}
-  /* round 41: the 24-month lifeline (TxLifeline) */
-  :where(main[data-page="aptos"]) .tx-life-num{font-size:clamp(64px,7vw,96px);color:#fff;text-shadow:0 0 30px rgba(201,194,244,.45)}
-  :where(main[data-page="aptos"]) .tx-life-base{background:rgba(201,194,244,.18)}
-  :where(main[data-page="aptos"]) .tx-life-fill{width:0;transition:width 2.6s cubic-bezier(.22,1,.36,1)}
-  :where(main[data-page="aptos"]) .tx-life.in .tx-life-fill{width:100%}
-  :where(main[data-page="aptos"]) .tx-life-ha{background:linear-gradient(90deg,rgba(201,194,244,.16),rgba(201,194,244,.04));border:1px dashed rgba(201,194,244,.35)}
-  :where(main[data-page="aptos"]) .tx-life-mark{width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;background:#352862;border:2px solid rgba(201,194,244,.45);transition:background .4s ease var(--d),border-color .4s ease var(--d),box-shadow .4s ease var(--d)}
-  :where(main[data-page="aptos"]) .tx-life-mark.is-end{width:15px;height:15px;margin:-7.5px 0 0 -7.5px}
-  :where(main[data-page="aptos"]) .tx-life.in .tx-life-mark{background:#fff;border-color:#C9C2F4;box-shadow:0 0 0 4px rgba(201,194,244,.18),0 0 16px rgba(201,194,244,.7)}
-  :where(main[data-page="aptos"]) .tx-life-key{display:inline-block;width:18px;height:10px;border-radius:999px;background:#C9C2F4;box-shadow:0 0 10px rgba(201,194,244,.6)}
-  :where(main[data-page="aptos"]) .tx-life-key.is-ha{background:rgba(201,194,244,.16);border:1px dashed rgba(201,194,244,.6);box-shadow:none}
-  @media (prefers-reduced-motion:reduce){:where(main[data-page="aptos"]) .tx-life-fill,:where(main[data-page="aptos"]) .tx-life-mark{transition:none}}
   @media (prefers-reduced-motion:reduce){:where(main[data-page="aptos"]) .tx-step{opacity:1;transform:none;transition:none}:where(main[data-page="aptos"]) .tx-line i{transform:none;transition:none}:where(main[data-page="aptos"]) .tx-ring-spin,:where(main[data-page="aptos"]) .tx-product-img,:where(main[data-page="aptos"]) .tx-thread.in .tx-bub{animation:none}:where(main[data-page="aptos"]) .tx-bub{opacity:.8;transform:none}}
   /* treatments inside an open category: blue circle, white plus */
   :where(main[data-page="aptos"]) .pr-sub .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}

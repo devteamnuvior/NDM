@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
+import { createContext, use, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useFilm, type Film } from "@/hooks/use-film";
 import { useOnScroll } from "@/hooks/use-on-scroll";
 import { withBase } from "@/lib/base-path";
@@ -35,14 +35,6 @@ function nextLook(prev: Look, n: number): Look {
   return { move: pick(MOVES, prev.move), n };
 }
 
-const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
-const reducedMotion = () => window.matchMedia(REDUCED_MOTION).matches;
-function watchReducedMotion(onChange: () => void) {
-  const mq = window.matchMedia(REDUCED_MOTION);
-  mq.addEventListener("change", onChange);
-  return () => mq.removeEventListener("change", onChange);
-}
-
 const HeroFilmContext = createContext<HeroPlay | null>(null);
 
 function useHeroFilm(): HeroPlay {
@@ -58,12 +50,9 @@ function useHeroFilm(): HeroPlay {
 export function HeroStage({ children, slides = 0 }: { children: ReactNode; slides?: number }) {
   const section = useRef<HTMLElement>(null);
   const film = useFilm();
-  /* header photos: the next one fades in every few seconds; the pause button holds them (held from the start with reduced motion) */
+  /* header photos: the next one fades in every few seconds, never with reduced motion; the pause button holds them */
   const [slide, setSlide] = useState(0);
-  /* with reduced motion the photos start held, as in the prototype: the button then reads Play, and pressing it runs them */
-  const reduced = useSyncExternalStore(watchReducedMotion, reducedMotion, () => false);
-  const [chosen, setChosen] = useState<boolean | null>(null);
-  const held = chosen ?? reduced;
+  const [held, setHeld] = useState(false);
   const [seen, setSeen] = useState(true);
   /* the photos run only while the header is on screen and the tab is visible */
   useEffect(() => {
@@ -79,13 +68,13 @@ export function HeroStage({ children, slides = 0 }: { children: ReactNode; slide
     };
   }, [slides]);
   useEffect(() => {
-    if (slides < 2 || held || !seen) return;
+    if (slides < 2 || held || !seen || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const t = setTimeout(() => setSlide((s) => (s + 1) % slides), PHOTO_MS);
     return () => clearTimeout(t);
   }, [slides, held, seen, slide]);
   const go = (i: number) => setSlide(((i % slides) + slides) % slides);
   const play: HeroPlay = slides
-    ? { video: film.video, paused: held, toggle: () => setChosen(!held), slide, slides, go }
+    ? { video: film.video, paused: held, toggle: () => setHeld((h) => !h), slide, slides, go }
     : { ...film, slide: 0, slides: 0, go: () => {} };
 
   useOnScroll(() => {

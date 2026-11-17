@@ -18,7 +18,7 @@ export const PROCEDURE_SHARED = {
   intro: { id: BOTOX.intro.id, tag: BOTOX.intro.tag, ratio: BOTOX.intro.ratio, position: BOTOX.intro.position },
   /** The clinic film; its heading starts with the procedure's name. */
   film: { src: BOTOX.film.src, poster: BOTOX.film.poster, strong: BOTOX.film.strong, text: BOTOX.film.text, chips: BOTOX.film.chips },
-  overview: { tag: BOTOX.overview.tag, dark: BOTOX.overview.dark },
+  overview: { tag: BOTOX.overview.tag },
   choose: { tag: BOTOX.choose.tag, lead: BOTOX.choose.lead },
   reel: { lead: BOTOX.reel.lead, strong: BOTOX.reel.strong },
   results: { strong: BOTOX.results.strong, text: BOTOX.results.text },

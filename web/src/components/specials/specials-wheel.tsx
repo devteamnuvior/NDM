@@ -10,7 +10,6 @@ import { FINANCING_URL } from "@/config/specials";
 import { useReveal } from "@/hooks/use-reveal";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
-import { DealPill } from "@/components/specials/deal-pill";
 
 export interface WheelOffer {
   /** WooCommerce product ID. */
@@ -233,7 +232,10 @@ export function SpecialsWheel({ offers, level: Heading, offersHref, children }: 
                         the button keeps its height (it used to be squeezed flat) */}
                     <span className="flex min-h-0 flex-1 flex-col items-center justify-center text-center">
                       {s.deal && (
-                        <DealPill deal={s.deal} small={tight} className="shrink-0" style={{ marginTop: tight ? 10 : 0, marginBottom: tight ? 6 * k : 12 }} />
+                        <span className={`deal-badge shrink-0 ${tight ? "deal-badge-sm" : ""}`} style={{ marginTop: tight ? 10 : 0, marginBottom: tight ? 6 * k : 12 }}>
+                          <i aria-hidden="true">%</i>
+                          {s.deal}
+                        </span>
                       )}
                       <span className={`sw-muted font-inter text-[11px] tracking-[.18em] uppercase ${tight ? "leading-none" : ""}`}>From</span>
                       <span className={`sw-price font-aeonik leading-none ${tight ? "" : "mt-1"} tracking-[-0.035em] whitespace-nowrap`} style={{ fontSize: 40 * k }}>
