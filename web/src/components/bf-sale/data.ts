@@ -124,8 +124,10 @@ export const saleDeals = (categories: PriceCategory[], groups: Record<string, st
     const offered = items.flatMap((it) => it[2].filter(inSale));
     const tags = offered.map((o) => o[3]).filter((t): t is string => !!t);
     const pct = campaign ? (c.perUnit ? 0 : Math.max(0, ...offered.map((o) => (o[2] > 0 ? Math.round((1 - (o[4] || o[1]) / o[2]) * 100) : 0)))) : Math.max(0, ...tags.map(bfsPct));
-    /* a per-unit category with one treatment in the sale goes by that treatment's name ("Botox Cosmetic") */
-    const name = campaign && c.perUnit && items.length === 1 ? items[0][0] : c.name;
+    /* a per-unit category goes by the treatments it has in the sale, never by its own name, which can name one that is not
+       ("Botox / Dysport" with only Botox Cosmetic and Hyperhidrosis in the sale): "Botox Cosmetic", "Botox Cosmetic & Hyperhidrosis" */
+    const inSaleNames = items.map((it) => it[0]);
+    const name = campaign && c.perUnit && items.length ? (inSaleNames.length > 1 ? `${inSaleNames.slice(0, -1).join(", ")} & ${inSaleNames[inSaleNames.length - 1]}` : inSaleNames[0]) : c.name;
     return { c: { name, blurb: c.blurb }, id: c.id, group: groups[c.id], items, pct, offer: pct ? `Up to ${pct}%\u00a0off` : campaign ? "" : bfsTag(tags[0]), from: Math.min(...offered.map((o) => o[4] || o[1])) };
   })
   .filter((d) => d.items.length);

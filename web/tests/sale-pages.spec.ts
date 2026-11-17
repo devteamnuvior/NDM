@@ -12,7 +12,9 @@ import { NEXT_URL } from "../playwright.config";
 test.use({ viewport: { width: 1440, height: 900 } });
 
 const at = (page: Page, when: string) => page.clock.setFixedTime(new Date(when));
-const card = (page: Page, name: string) => page.locator("#deals article").filter({ has: page.getByRole("heading", { name, exact: true }) });
+const card = (page: Page, name: string | RegExp) => page.locator("#deals article").filter({ has: page.getByRole("heading", { name, exact: true }) });
+/* the per-unit card goes by the treatments it has in the sale: "Botox Cosmetic", or "Botox Cosmetic & Hyperhidrosis" */
+const BOTOX_CARD = /^Botox Cosmetic( & .+)?$/;
 
 test("VIP Sale: its own look and words, the gift line, the timer, no Black Friday wording", async ({ page }) => {
   const errors: string[] = [];
@@ -64,7 +66,7 @@ test("deal cards: only lines in the sale, the price with the code, the website p
   await expect(hair).toContainText("Website price $399 · PLUS30 applied at checkout");
 
   /* the prescription product: name, units and price, no percentage and no code */
-  const botox = card(page, "Botox Cosmetic");
+  const botox = card(page, BOTOX_CARD);
   await expect(botox.getByRole("group").getByRole("button")).toHaveText(["60 units$504", "120 units$1008", "180 units$1512"]);
   await expect(botox).not.toContainText("% off");
   await expect(botox).not.toContainText("PLUS30");
@@ -81,7 +83,7 @@ test("the plan: website total, with the code, the saving; Go to checkout fills t
   const hair = card(page, "Laser Hair Removal");
   await hair.locator("select").selectOption({ label: "Brazilian" });
   await hair.getByRole("button", { name: "Add to my plan" }).click();
-  const botox = card(page, "Botox Cosmetic");
+  const botox = card(page, BOTOX_CARD);
   await botox.getByRole("button", { name: "Add to my plan" }).click();
   const plan = page.locator("#plan");
   await expect(plan).toContainText("Website total$903");
