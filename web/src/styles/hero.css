@@ -133,10 +133,11 @@
   color: #1b242b;
 }
 /* phones (user, 2026-11-17: the hero is crowded there); differs from the prototype on purpose:
-   no pause button beside the brand band, and the band is a strip of its own under the first screen
+   no pause button or photo bars beside the brand band (the header photos still change on their own), and the band is a strip of its own under the first screen
    (the words fill the window, the band follows on the hero's dark colour) */
 @media (max-width: 639px) {
-  .hf-toggle {
+  .hf-toggle,
+  .hs-dots {
     display: none;
   }
   .hf {
