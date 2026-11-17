@@ -209,7 +209,8 @@ function Fan() {
           <li key={x.title} className={`${T.p}-fan-card ${T.p}-pos-${Math.min(pos, 3)}`} aria-hidden={pos > 2}>
             <a href="#specials" tabIndex={pos > 2 ? -1 : 0} onClick={(e) => { if (pos !== 1 && pos < 3) { e.preventDefault(); setK((v) => v + (pos === 2 ? 1 : -1)); } else go('specials')(e); }}
               className={`block h-full w-full overflow-hidden rounded-[22px] bg-white ${T.ink} shadow-[0_40px_70px_-30px_rgba(0,0,0,.85)]`}>
-              <span className="relative block h-[62%] overflow-hidden"><CardPicture card={x} sizes="220px" /></span>
+              {/* lazy: the tickets are not shown on phones, and a lazy photo that is not shown is never downloaded */}
+              <span className="relative block h-[62%] overflow-hidden"><CardPicture card={x} sizes="220px" lazy /></span>
               <span className="block border-t-2 border-dashed border-black/10 px-3.5 pt-2.5">
                 <span className="block truncate font-aeonik text-[18px] leading-[1.15]">{x.title}</span>
                 <span className="mt-0.5 block truncate font-inter text-[12.5px] text-ndm-muted">{x.qty} · <b className={`font-semibold ${T.accent}`}>{money(x.price)}</b></span>
