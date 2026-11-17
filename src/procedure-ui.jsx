@@ -112,9 +112,9 @@ const PROC = {
     doctor: { name: 'Dr. Negin Mastouri', role: 'Medical Director', img: 'assets/team/negin.jpg' },
     /* related treatments as photo cards: [title, link to the treatment's own page, photo, group]; slug() opens the page once it
        exists (PAGE_LINKS) and a #/slug placeholder until then */
-    related: [['Dermal Fillers', slug('Dermal Fillers'), 'assets/home/v3/jawline-720.webp', 'Injectable'], ['Lip Augmentation', slug('Lip Augmentation'), 'assets/home/v3/lips-720.webp', 'Injectable'],
-      ['Skin Boosters', slug('Skin Boosters'), 'assets/home/v3/booster-720.webp', 'Injectable'], ['Aptos Thread Lift', slug('Aptos Thread Lift'), 'assets/aptos/midface-vectors.jpg', 'Bio-stimulator'],
-      ['Sculptra®', slug('Sculptra®'), 'assets/home/v3/sculptra-720.webp', 'Bio-stimulator'], ['Microneedling', slug('Microneedling'), 'assets/home/v3/mneedle-720.webp', 'Skin']],
+    related: [['Dermal Fillers', slug('Dermal Fillers'), 'assets/home/menu/dermal-fillers.jpg', 'Injectable'], ['Lip Augmentation', slug('Lip Augmentation'), 'assets/home/menu/lip-fillers.jpg', 'Injectable'],
+      ['Skin Boosters', slug('Skin Boosters'), 'assets/home/menu/skin-boosters.jpg', 'Injectable'], ['Aptos Thread Lift', slug('Aptos Thread Lift'), 'assets/aptos/midface-vectors.jpg', 'Bio-stimulator'],
+      ['Sculptra®', slug('Sculptra®'), 'assets/home/menu/sculptra.jpg', 'Bio-stimulator'], ['Microneedling', slug('Microneedling'), 'assets/home/menu/microneedling.jpg', 'Skin']],
   },
   faq: { lead: 'FAQ For', strong: 'Botox®', sub: 'Everything you need to know before starting your journey with us.' },
   faqs: [
