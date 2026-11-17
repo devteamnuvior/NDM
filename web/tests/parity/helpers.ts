@@ -41,7 +41,7 @@ const HOME: PagePaths = { legacy: "/index.html", next: "/" };
  *   - phones, home hero (2026-11-17): no pause button, the first two proof points, the brand band as a strip
  *     under the first screen, and the chat and search buttons away until the hero has scrolled past.
  */
-const PHONE_HERO = `<style id="parity-now">@media (max-width:639px){.hf-toggle,.hs-dots{display:none}.hf{min-height:0}.hf-in{display:flex;min-height:max(620px,100svh);flex-direction:column;justify-content:flex-end}.hf-band{background:#0b0f13;border-top:0;padding-left:0}.hf-in>ul>li:nth-child(n+3){display:none}html.float-held .chat-launch,html.float-held .chat-pop,html.float-held .float-search{opacity:0!important;pointer-events:none!important}}</style><script>(function(){function t(){var el=document.querySelector("section.hf");document.documentElement.classList.toggle("float-held",innerWidth<640&&!!el&&el.getBoundingClientRect().bottom>innerHeight*0.5)}setInterval(t,150);addEventListener("scroll",t,{passive:true})})()</script>`;
+const PHONE_HERO = `<style id="parity-now">@media (max-width:639px){.hf-toggle,.hs-dots{display:none}.hf-band{display:flex}.hf-in{padding-bottom:76px}.hf{min-height:0}.hf-in{display:flex;min-height:max(620px,100svh);flex-direction:column;justify-content:flex-end}.hf-band{background:#0b0f13;border-top:0;padding-left:0}.hf-in>ul>li:nth-child(n+3){display:none}html.float-held .chat-launch,html.float-held .chat-pop,html.float-held .float-search{opacity:0!important;pointer-events:none!important}}</style><script>(function(){function t(){var el=document.querySelector("section.hf");document.documentElement.classList.toggle("float-held",innerWidth<640&&!!el&&el.getBoundingClientRect().bottom>innerHeight*0.5)}setInterval(t,150);addEventListener("scroll",t,{passive:true})})()</script>`;
 const SALE_HEADLINE = 70; /* src/config/sale.ts */
 export function prototypeNow(html: string, phase: string | null): string {
   let out = html
@@ -60,6 +60,20 @@ export function prototypeNow(html: string, phase: string | null): string {
     /* procedure pages: the clinic film follows Why NewDermaMed, in the page and in the section bar (2026-11-16) */
     .replace("['film', 'The clinic'], ['prices', 'Prices'], ['guide', 'Good to know'], ['why', 'Why NewDermaMed'],", "['prices', 'Prices'], ['guide', 'Good to know'], ['why', 'Why NewDermaMed'], ['film', 'The clinic'],")
     .replace(/(<TxFilm p=\{PROC\} \/>)(\s*)(<ProcPrices p=\{PROC\} \/>\s*<ProcGuide p=\{PROC\} \/>\s*<TxWhy p=\{PROC\} \/>)/, "$3$2$1")
+    /* 2026-11-17, prototype only: the announcement bar's Black Friday look and the magnifier on the Start search button */
+    .replace("const bfLook = !useBfClock(60000).over;", "const bfLook = false;")
+    .replace('group-hover:bg-[#0A4F7A]" aria-hidden="true"><IconSearch size={20} /></span>', 'group-hover:bg-[#0A4F7A]" aria-hidden="true"><IconArrow /></span>')
+    /* 2026-11-17, prototype only: its own calmer phone hero (smaller words, no second button, no brand band on phones). The
+       site keeps the phone hero the user approved that day, so the prototype's hero gets its earlier classes back; and the
+       photo header's labels are given the site's words */
+    .replace('<p className="font-inter text-[13px] font-medium text-white/75 sm:text-[clamp(14px,1.05vw,16px)] sm:text-white/80">', '<p className="font-inter text-[clamp(14px,1.05vw,16px)] font-medium text-white/80">')
+    .replace('<p className="mt-4 max-w-[34ch] font-inter text-[15px] leading-[1.55] text-white/80 sm:mt-5 sm:max-w-[46ch] sm:text-[clamp(16px,1.1vw+3px,20px)] sm:leading-[1.5] sm:text-white/85">', '<p className="mt-5 max-w-[46ch] font-inter text-[clamp(16px,1.1vw+3px,20px)] leading-[1.5] text-white/85">')
+    .replace('<div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-7">', '<div className="mt-7 flex flex-wrap items-center gap-3">')
+    .replace('<span className="max-sm:hidden"><Btn href="#start" v="glass">Find your treatment</Btn></span>', '<Btn href="#start" v="glass">Find your treatment</Btn>')
+    .replace('<ul className="mt-5 grid max-w-[calc(100%-8px)] grid-cols-2 gap-x-4 gap-y-2.5 font-inter text-[12.5px] font-medium', '<ul className="mt-6 grid max-w-[calc(100%-8px)] grid-cols-2 gap-x-4 gap-y-2.5 font-inter text-[13px] font-medium')
+    .replace('<p className="sr-only" aria-live="polite">{`Photo ${slide + 1} of ${n}: ${HERO_SLIDES[slide].alt}`}</p>', "")
+    .replace("paused ? 'Play header slideshow' : 'Pause header slideshow'", "paused ? 'Play header photos' : 'Pause header photos'")
+    .replace("aria-label={`Show photo ${i + 1}: ${h.alt}`}", "aria-label={`Show header photo ${i + 1}`}")
     .replace("</head>", `${PHONE_HERO}</head>`);
   if (phase === "vip") {
     out = out

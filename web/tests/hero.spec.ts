@@ -3,8 +3,6 @@ import { NEXT_URL } from "../playwright.config";
 
 /** Behaviour of the migrated home hero on the Next.js build. */
 
-const video = (page: Page) => page.locator("#top video");
-const isPlaying = (page: Page) => video(page).evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime > 0);
 
 function watchErrors(page: Page): string[] {
   const errors: string[] = [];
@@ -32,25 +30,36 @@ test.describe("desktop", () => {
     await expect(page.getByRole("list", { name: "Why clients choose NewDermaMed" }).getByRole("listitem")).toHaveCount(4);
   });
 
-  test("the film plays muted on its own, loads the large file, and the button pauses and resumes it", async ({ page }) => {
+  test("the header is three photo slides that change on their own; the button holds and resumes them", async ({ page }) => {
     await page.goto(NEXT_URL);
-    await expect.poll(() => isPlaying(page), { timeout: 15_000 }).toBe(true);
-    expect(await video(page).evaluate((v: HTMLVideoElement) => v.muted && v.loop && v.playsInline)).toBe(true);
-    expect(await video(page).evaluate((v: HTMLVideoElement) => v.currentSrc)).toContain("hero-1600.mp4");
-    await page.getByRole("button", { name: "Pause background video" }).click();
-    await expect(page.getByRole("button", { name: "Play background video" })).toBeVisible();
-    expect(await video(page).evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
-    await page.getByRole("button", { name: "Play background video" }).click();
-    await expect.poll(() => video(page).evaluate((v: HTMLVideoElement) => v.paused)).toBe(false);
+    const slides = page.locator("#top .hs-slide");
+    await expect(slides).toHaveCount(3);
+    await expect(slides.nth(0)).toHaveClass(/\bis-on\b/);
+    await expect(page.locator("#top video")).toHaveCount(0);
+    /* the first photo is the one painted first: fetched at once, the others when they are needed */
+    expect(await slides.nth(0).locator("img").getAttribute("loading")).toBe("eager");
+    expect(await slides.nth(1).locator("img").getAttribute("loading")).toBe("lazy");
+    /* only the photo in view is read out */
+    expect(await slides.nth(0).locator("img").getAttribute("alt")).not.toBe("");
+    expect(await slides.nth(1).locator("img").getAttribute("alt")).toBe("");
+    await page.getByRole("button", { name: "Pause header photos" }).click();
+    await expect(page.getByRole("button", { name: "Play header photos" })).toBeVisible();
+    await expect(page.locator("#top")).toHaveClass(/\bhs-paused\b/);
+    await page.waitForTimeout(7500);
+    await expect(slides.nth(0)).toHaveClass(/\bis-on\b/);
+    await page.getByRole("button", { name: "Play header photos" }).click();
+    await expect(page.locator("#top")).not.toHaveClass(/\bhs-paused\b/);
+    await expect(slides.nth(1)).toHaveClass(/\bis-on\b/, { timeout: 10_000 });
   });
 
-  test("the film stops when the hero leaves the screen and resumes when it returns", async ({ page }) => {
+  test("a bar under the photos shows the photo in view and picks another", async ({ page }) => {
     await page.goto(NEXT_URL);
-    await expect.poll(() => isPlaying(page), { timeout: 15_000 }).toBe(true);
-    await page.evaluate(() => window.scrollTo(0, window.innerHeight * 1.6));
-    await expect.poll(() => video(page).evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
-    await page.evaluate(() => window.scrollTo(0, 0));
-    await expect.poll(() => video(page).evaluate((v: HTMLVideoElement) => v.paused)).toBe(false);
+    const bars = page.getByRole("group", { name: "Header photos" }).getByRole("button");
+    await expect(bars).toHaveCount(3);
+    await expect(bars.nth(0)).toHaveAttribute("aria-current", "true");
+    await bars.nth(2).click();
+    await expect(page.locator("#top .hs-slide").nth(2)).toHaveClass(/\bis-on\b/);
+    await expect(bars.nth(2)).toHaveAttribute("aria-current", "true");
   });
 
   test("the film drifts and the words fade as the page scrolls", async ({ page }) => {
@@ -107,11 +116,10 @@ test.describe("desktop", () => {
 test.describe("reduced motion", () => {
   test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
 
-  test("the film stays on its poster, nothing animates, smooth scrolling is off", async ({ page }) => {
+  test("the first photo stays, nothing animates, smooth scrolling is off", async ({ page }) => {
     await page.goto(NEXT_URL);
-    await page.waitForTimeout(2000);
-    expect(await video(page).evaluate((v: HTMLVideoElement) => v.paused && v.currentTime === 0)).toBe(true);
-    await expect(page.getByRole("button", { name: "Play background video" })).toBeVisible();
+    await page.waitForTimeout(7500);
+    await expect(page.locator("#top .hs-slide").nth(0)).toHaveClass(/\bis-on\b/);
     await expect(page.locator("html")).not.toHaveClass(/lenis/);
     await page.evaluate(() => window.scrollTo(0, 300));
     await page.waitForTimeout(400);
@@ -122,20 +130,23 @@ test.describe("reduced motion", () => {
 test.describe("phone", () => {
   test.use({ viewport: { width: 375, height: 812 }, hasTouch: true });
 
-  test("loads the small film, no errors, no sideways scroll, search button clear of the band", async ({ page }) => {
+  test("the third photo has a phone version; no errors, no sideways scroll; no pause button or bars; chat and search wait for the hero", async ({ page }) => {
     const errors = watchErrors(page);
     await page.goto(NEXT_URL);
-    await expect.poll(() => isPlaying(page), { timeout: 15_000 }).toBe(true);
-    expect(await video(page).evaluate((v: HTMLVideoElement) => v.currentSrc)).toContain("hero-960.mp4");
+    await page.waitForLoadState("networkidle");
+    await expect(page.locator("#top .hs-slide")).toHaveCount(3);
+    expect(await page.locator("#top .hs-slide").nth(2).locator("source").getAttribute("srcset")).toContain("visia-m");
     expect(errors).toEqual([]);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
-    /* the button glides up to its place above the band */
-    await expect
-      .poll(async () => {
-        const band = (await page.locator("#top .hf-band").boundingBox())!;
-        const search = (await page.locator("button.float-search").boundingBox())!;
-        return search.y + search.height <= band.y;
-      })
-      .toBe(true);
+    /* the hero is kept calm on phones (2026-11-17): the first two proof points, no pause button, no photo bars */
+    await expect(page.locator("#top .hf-toggle")).toBeHidden();
+    await expect(page.locator("#top .hs-dots")).toBeHidden();
+    await expect(page.getByRole("list", { name: "Why clients choose NewDermaMed" }).getByRole("listitem")).toHaveCount(2);
+    /* the floating buttons stay away until the hero is more than half scrolled past */
+    await expect(page.locator("button.float-search")).toHaveClass(/\bis-off\b/);
+    await expect(page.locator("button.chat-launch")).toHaveClass(/\bis-off\b/);
+    await page.evaluate(() => window.scrollTo(0, window.innerHeight));
+    await expect(page.locator("button.float-search")).not.toHaveClass(/\bis-off\b/);
+    await expect(page.locator("button.chat-launch")).not.toHaveClass(/\bis-off\b/);
   });
 });

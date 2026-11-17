@@ -117,7 +117,7 @@ export function MegaMenu({ open, current, onLink, eager }: MenuPanelProps) {
                 >
                   <span className="flex items-center gap-2">
                     {c.label}
-                    {c.id === hereCat && <i aria-hidden="true" className="size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(32,158,217,.18)]" />}
+                    {c.id === hereCat && <i aria-hidden="true" className="ndm-beat size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(32,158,217,.18)]" />}
                   </span>
                   <IconArrow className={`transition-transform ${on ? "translate-x-0 opacity-100" : "-translate-x-1 opacity-0"}`} />
                 </button>

@@ -1,22 +1,89 @@
 "use client";
 
-import { useRef, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { TX_WRAP } from "@/components/treatment/tx-head";
 import { useInView } from "@/hooks/use-in-view";
 import { useReveal } from "@/hooks/use-reveal";
 import type { TreatmentPage } from "@/types/treatment";
 import { withBase } from "@/lib/base-path";
 
-/* the capsules along the thread: where each one sits and how large it is */
-const TOPS = [28, 62, 40, 70, 22, 55, 35, 66, 30, 48, 72, 26, 58, 38, 64, 44, 30, 56];
-const SIZES = [10, 6, 14, 8, 12, 5, 9, 13, 6, 11, 7, 10, 5, 12, 8, 6, 9, 7];
+/* the capsules of the first six months: where each one sits and how large it is */
+const TOPS = [28, 62, 40, 70, 22, 55, 35, 66, 30, 48, 72, 26];
+const SIZES = [10, 6, 12, 8, 11, 5, 9, 12, 6, 10, 7, 9];
 
-/** How long it lasts: one wide purple card; capsules drift along the thread and open over the months. */
+/**
+ * The lifeline of the card (user, 2026-11-17): a counter climbs to the card's own number of months, the lift line
+ * runs from day 0 to that month with a mark at every quarter, and the HA capsules drift only over the first six
+ * months, where the hyaluronic acid is released. Decorative: the card's words say the same.
+ */
+function TxLifeline({ months, run }: { months: number; run: boolean }) {
+  /* the server and the first paint show the full number; the count starts once the card is in view */
+  const [n, setN] = useState(months);
+  useEffect(() => {
+    if (!run || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    let t0 = 0;
+    const tick = (t: number) => {
+      if (!t0) t0 = t;
+      const k = Math.min(1, (t - t0) / 2600);
+      setN(Math.round(months * (1 - Math.pow(1 - k, 3))));
+      if (k < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [run, months]);
+  const marks = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(months * f));
+  const ha = Math.min(1, 6 / months);
+  return (
+    <div aria-hidden="true" className={`tx-life ${run ? "in" : ""}`}>
+      <p className="flex items-end gap-3">
+        <span className="tx-life-num font-aeonik leading-[.8] tracking-[-0.04em] tabular-nums">{n}</span>
+        <span className="pb-1 font-inter text-[14px] leading-[1.35] text-white/75">
+          months a lift
+          <br />
+          may last
+        </span>
+      </p>
+      <div className="tx-thread relative mt-7 h-[96px]">
+        <span className="tx-life-ha absolute top-[10%] bottom-[10%] left-0 rounded-[14px]" style={{ width: `${ha * 100}%` }} />
+        <span className="tx-life-base absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full" />
+        <span className="tx-thread-line tx-life-fill absolute top-1/2 left-0 h-[3px] -translate-y-1/2 rounded-full" />
+        {TOPS.map((top, i) => (
+          <i key={i} className="tx-bub absolute rounded-full" style={{ left: `${((i * 0.08 + 0.02) * ha * 100).toFixed(1)}%`, top: `${top}%`, width: `${SIZES[i]}px`, "--d": `${(i * 0.18).toFixed(2)}s` } as CSSProperties} />
+        ))}
+        {marks.map((m, i) => (
+          <span key={i} className={`tx-life-mark absolute top-1/2 ${i === 4 ? "is-end" : ""}`} style={{ left: `${i * 25}%`, "--d": `${(i * 0.62).toFixed(2)}s` } as CSSProperties} />
+        ))}
+      </div>
+      <div className="relative mt-2 h-4 font-inter text-[11.5px] tracking-[.12em] text-white/60 uppercase">
+        {marks.map((m, i) => (
+          <span key={i} className={`absolute top-0 whitespace-nowrap ${i === 0 ? "" : i === 4 ? "-translate-x-full text-white" : "-translate-x-1/2"}`} style={{ left: `${i * 25}%` }}>
+            {i === 0 ? "Day 0" : i === 4 ? `${m} months` : m}
+          </span>
+        ))}
+      </div>
+      <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 font-inter text-[13px] text-white/75">
+        <span className="inline-flex items-center gap-2">
+          <i className="tx-life-key is-ha" />
+          HA released, first 6 months
+        </span>
+        <span className="inline-flex items-center gap-2">
+          <i className="tx-life-key" />
+          Lift held by your own collagen
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/** How long it lasts: one wide purple card with the lifeline of the months beside its words. */
 export function TxLasting({ duration: d, number }: { duration: TreatmentPage["duration"]; number: string }) {
   const section = useRef<HTMLElement>(null);
   const box = useRef<HTMLDivElement>(null);
   useReveal(section);
   const run = useInView(box);
+  /* the card's own number ("24", "Up to 24"): the line runs to it */
+  const lifeMonths = parseInt(String(d.stat).replace(/[^0-9]/g, ""), 10) || 24;
   return (
     <section ref={section} aria-labelledby="duration-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <div ref={box} className={TX_WRAP}>
@@ -44,19 +111,7 @@ export function TxLasting({ duration: d, number }: { duration: TreatmentPage["du
               </p>
             </div>
           </div>
-          <div>
-            <div aria-hidden="true" className={`tx-thread relative h-[150px] ${run ? "in" : ""}`}>
-              <span className="tx-thread-line absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full" />
-              {TOPS.map((top, i) => (
-                <i key={i} className="tx-bub absolute rounded-full" style={{ left: `${(i * 5.6 + 2).toFixed(1)}%`, top: `${top}%`, width: `${SIZES[i]}px`, "--d": `${(i * 0.14).toFixed(2)}s` } as CSSProperties} />
-              ))}
-            </div>
-            <div aria-hidden="true" className="mt-2 flex justify-between font-inter text-[12px] tracking-[.12em] text-white/65 uppercase">
-              <span>Day 0</span>
-              <span>Months 1 to 3</span>
-              <span>Up to 6 months</span>
-            </div>
-          </div>
+          <TxLifeline months={lifeMonths} run={run} />
         </article>
       </div>
     </section>

@@ -104,13 +104,14 @@ test("a special's Buy opens its category in the list and scrolls to it", async (
   await expect.poll(async () => Math.round((await cat.boundingBox())!.y), { timeout: 8000 }).toBeLessThan(260);
 });
 
-test("on inner pages the Buy button's hover is ink, as in the original", async ({ page }) => {
+test("an offer card's Buy button is black and turns gold on hover (the black and gold cards, 2026-11-17)", async ({ page }) => {
   await page.goto(`${NEXT_URL}/pricing`);
   const buy = page.locator("#specials a.btn-buy").first();
   await buy.evaluate((el) => el.scrollIntoView({ block: "center" })); /* clear of the fixed header */
   await page.waitForTimeout(600);
+  expect(await buy.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe("rgb(11, 15, 19)");
   await buy.hover();
-  await expect.poll(() => buy.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe("rgb(27, 36, 43)");
+  await expect.poll(() => buy.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe("rgb(212, 181, 116)");
 });
 
 test("arriving with #prices lands on the price list", async ({ page }) => {

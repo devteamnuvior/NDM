@@ -4,6 +4,7 @@ import { Appointment } from "@/components/home/appointment";
 import { AptosCare } from "@/components/home/aptos-care";
 import { BeforeAfter } from "@/components/home/before-after";
 import { Hero } from "@/components/home/hero";
+import { HomeTape } from "@/components/home/home-tape";
 import { Journal } from "@/components/home/journal";
 import { Process } from "@/components/home/process";
 import { Saying } from "@/components/home/saying";
@@ -34,6 +35,7 @@ export default async function HomePage() {
   return (
     <main id="main">
       <Hero copy={copy.hero} />
+      <HomeTape />
       <About copy={copy.about} />
       <Start copy={copy.start} />
       <TreatMenu copy={copy.treatments} />
