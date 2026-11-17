@@ -248,6 +248,12 @@
   /* announcement bar attention */
   .promo-attn{background:linear-gradient(90deg,#0F80C3,#209ED9 30%,#26B1E7 50%,#209ED9 70%,#0F80C3);background-size:200% 100%;animation:promoFlow 9s linear infinite}
   @keyframes promoFlow{to{background-position:-200% 0}}
+  /* Black Friday look of the bar (round 36): the sale page's black with its red glow, a red NEW pill; on every page until the sale is over */
+  .promo-attn.is-bf{background:radial-gradient(55% 300% at 100% 0%,rgba(211,18,29,.42),transparent 62%),radial-gradient(45% 300% at 0% 100%,rgba(211,18,29,.22),transparent 70%),#0B0B0C;animation:none;box-shadow:inset 0 -1px 0 rgba(255,255,255,.1)}
+  .promo-attn.is-bf .promo-shine{display:none}
+  .promo-attn.is-bf .promo-new{background:#D3121F;color:#fff}
+  .promo-attn.is-bf .promo-ping{background:#fff}
+  .promo-attn.is-bf svg{color:#EE3A45}
   .promo-shine{background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:250% 100%;background-repeat:no-repeat;background-position:150% 0;mix-blend-mode:soft-light;animation:promoShine 5.5s cubic-bezier(.45,0,.25,1) 1.4s infinite}
   @keyframes promoShine{0%{background-position:150% 0}35%,100%{background-position:-60% 0}}
   .promo-ping::after{content:"";position:absolute;inset:0;border-radius:999px;background:#FFA617;animation:promoPing 1.6s ease-out infinite}
@@ -652,7 +658,8 @@
   .nav-here.is-left{left:0;margin-left:0;bottom:-9px}
   @keyframes navHere{from{transform:scaleX(0);opacity:0}to{transform:none;opacity:1}}
   .menu-item[aria-current="page"],.menu-item-m[aria-current="page"]{color:#0F80C3;font-weight:600}
-  .menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{content:'';flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18)}
+  .menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{content:'';flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18);animation:ndmBeat 1.6s ease-out infinite}
+  @media (prefers-reduced-motion: reduce){.menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{animation:none}}
   /* section tag: brand-mark chip + label in a pill with a fine blue-to-amber edge and a slow light sweep */
   .eyebrow{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;gap:10px;padding:4px 18px 4px 4px;border:1px solid transparent;border-radius:999px;font-size:15px;font-weight:500;line-height:1.2;letter-spacing:-.005em;color:#1B242B;
     background:linear-gradient(180deg,#fff,#F3F9FD) padding-box,linear-gradient(115deg,rgba(38,177,231,.6),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(255,166,23,.55)) border-box;
@@ -840,6 +847,23 @@
   @keyframes ov2SpinS{to{transform:rotate(360deg)}}
   .ov2-stat-ring{animation-name:ov2SpinS}
   @media (prefers-reduced-motion:reduce){.ov2-orb,.ov2-ring,.ov2-stat-ring{animation:none}}
+  /* About on a dark band (p.overview.dark, Botox): one full-width piece, the panel loses its card, edge and shadow */
+  main>section#overview.ov2.ov2-dark{background:radial-gradient(60% 70% at 90% 0%,rgba(38,177,231,.22),transparent 60%),radial-gradient(50% 60% at 0% 100%,rgba(28,127,192,.28),transparent 65%),linear-gradient(160deg,#0F3F63 0%,#0A2A44 55%,#0B1824 100%)}
+  .ov2-dark .ov2-orb{opacity:.28}
+  .ov2-dark .ov2-ring circle{stroke:rgba(255,255,255,.12)}
+  .ov2-dark .ov2-panel{background:none;box-shadow:none;border-radius:0;overflow:visible}
+  .ov2-dark .ov2-tabs{border-bottom-color:rgba(255,255,255,.14);padding-left:0;padding-right:0}
+  .ov2-dark .ov2-tab{color:rgba(255,255,255,.66)}
+  .ov2-dark .ov2-tab:hover{color:#fff;background:rgba(255,255,255,.06)}
+  .ov2-dark .ov2-tab.is-on{color:#fff;background:rgba(38,177,231,.16);box-shadow:inset 0 0 0 1px rgba(38,177,231,.45)}
+  .ov2-dark .ov2-num{color:rgba(255,255,255,.35)}
+  .ov2-dark .ov2-tab.is-on .ov2-num{color:#26B1E7}
+  .ov2-dark [role=tabpanel]{padding-left:0;padding-right:0}
+  .ov2-dark .text-ndm-ink{color:#fff}
+  .ov2-dark .text-ndm-muted{color:rgba(255,255,255,.72)}
+  .ov2-dark .text-ndm-deep{color:#26B1E7}
+  .ov2-dark .border-ndm-ink\/10{border-color:rgba(255,255,255,.14)}
+  .ov2-dark .ov2-stat-ring circle{fill:rgba(38,177,231,.08);stroke:rgba(38,177,231,.7)}
   /* round 24: the book card in Good to know */
   .guide-book{background:radial-gradient(120% 90% at 100% 0%,#1C7FC0 0%,rgba(28,127,192,0) 55%),linear-gradient(155deg,#0F5E92 0%,#0A3D60 55%,#0B2234 100%);box-shadow:0 40px 70px -40px rgba(10,61,96,.75)}
   .guide-book-glow{position:absolute;right:-60px;bottom:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(255,166,23,.35),transparent 65%);pointer-events:none}
@@ -1150,7 +1174,7 @@ const priceRows = (id, item) => { const c = PRICE_BY_ID[id]; const it = c && c.i
 /* the lowest price in one price table after its discounts; per unit when the table is priced per unit (e.g. 220 units $1848 -> $8.40) */
 const rowsFrom = (rows, perUnit) => Math.round(Math.min(...rows.map((r) => (perUnit && !/regular/i.test(r[0]) ? r[1] / pCount(r[0]) : r[1]))) * 100) / 100;
 /* ---------------------------------------------------------------- sale tags and where a "from" price comes from (2026-11-16)
-   SALE_LOOK: the look of the offer tags while a promotion runs: 'vip' (red and blue), 'bf' (black and gold), 'holiday' (green and gold),
+   SALE_LOOK: the look of the offer tags while a promotion runs: 'vip' and 'bf' (black and gold, like VIP Early Access + Black Friday), 'holiday' (green and gold),
    'newyear' (slate), or '' for the plain red tags. Every price table (pricing, Botox, Aptos) reads it. */
 const SALE_LOOK = 'vip';
 /* the lowest row of one price table and how it is counted (per unit when the table is priced per unit) */
@@ -1172,6 +1196,14 @@ function SaleTag({ offer, badge, small, plain = 'pr-badge' }) {
   if (!SALE_LOOK) return offer ? <span className={plain}>{offer}</span> : null;
   if (!badge || !badge.length) return null;
   return <span data-look={SALE_LOOK} className={`sb ${small ? 'sb-sm' : ''} ${badge.length > 1 ? 'sb-split' : ''}`}>{badge.map((t, i) => <span key={i} className={i ? 'sb-b' : 'sb-a'}>{t}</span>)}</span>;
+}
+/* the offer of a specials card (wheel, Promotion cards, Pricing specials) as a pill in the pricing tags' pattern, in the site's
+   own navy and sky (round 37): "Up to 30% off" -> UP TO | 30% OFF, "Buy 1 get 1 free" -> BUY 1 | GET 1 FREE, "Save $1000" -> SAVE $1,000 */
+const dealParts = (d) => { const t = tagWords(d); const m = /^(UP TO|BUY \d+)\s+(.+)$/.exec(t); return m ? [m[1], m[2]] : t ? [t] : []; };
+function DealPill({ deal, className = '' }) {
+  const p = dealParts(deal);
+  if (!p.length) return null;
+  return <span className={`dp ${p.length > 1 ? 'dp-split' : ''} ${className}`}>{p.map((t, i) => <span key={i} className={i ? 'dp-b' : 'dp-a'}>{t}</span>)}</span>;
 }
 /* where a lowest price is read from: "Skin Booster, 2 Syringes" (withItem puts the treatment first) */
 const sourceWords = (s, withItem) => {
@@ -1234,6 +1266,11 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .sb-a{background:var(--a-bg);color:var(--a-fg);box-shadow:inset 0 0 0 1.5px var(--a-ring);border-radius:999px}
 .sb-split .sb-a{border-radius:999px 0 0 999px;box-shadow:inset 1.5px 0 0 var(--a-ring),inset 0 1.5px 0 var(--a-ring),inset 0 -1.5px 0 var(--a-ring)}
 .sb-b{background:var(--b-bg);color:var(--b-fg);border-radius:0 999px 999px 0}
+.dp{display:inline-flex;align-items:stretch;border-radius:999px;overflow:hidden;white-space:nowrap;font:700 11px/1 Manrope,sans-serif;letter-spacing:.06em}
+.dp>span{display:inline-flex;align-items:center;padding:6px 10px}
+.dp-a{background:#0A4F7A;color:#fff;border-radius:999px}
+.dp-split .dp-a{border-radius:999px 0 0 999px}
+.dp-b{background:#E3F3FC;color:#0A4F7A;border-radius:0 999px 999px 0}
 .pr-from.is-sale{color:var(--now,#0F80C3)}.pr-from[data-look]{--now:#0F80C3}
 .sb[data-look="vip"],.pr-from[data-look="vip"],.sb[data-look="bf"],.pr-from[data-look="bf"]{--a-bg:#0B0F13;--a-fg:#fff;--a-ring:#0B0F13;--b-bg:#D4B574;--b-fg:#0B0F13;--now:#9A7A3A}
 .sb[data-look="holiday"],.pr-from[data-look="holiday"]{--a-bg:#173D2C;--a-fg:#fff;--a-ring:#173D2C;--b-bg:#D4B574;--b-fg:#173D2C;--now:#1E5A3E}
@@ -1242,6 +1279,9 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .pr-opt2.is-featured{background:#fff;border-color:#E3E3E0;box-shadow:none!important}
 .pr-ghead>button,.pr-gintro{padding-inline:clamp(14px,2.4vw,28px)}
 .pr-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:999px;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18);vertical-align:middle;transform:translateY(-2px)}
+.pr-dot,.pr-src i,.pr-src-tag i,.ndm-beat{animation:ndmBeat 1.6s ease-out infinite}
+@keyframes ndmBeat{0%{scale:1;box-shadow:0 0 0 0 rgba(32,158,217,.5)}12%{scale:1.3}24%{scale:1}36%{scale:1.2}55%{scale:1;box-shadow:0 0 0 7px rgba(32,158,217,0)}100%{scale:1;box-shadow:0 0 0 0 rgba(32,158,217,0)}}
+@media (prefers-reduced-motion: reduce){.pr-dot,.pr-src i,.pr-src-tag i,.ndm-beat{animation:none}}
 .pr-opt2-info{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
 .pr-opt2-name{font-family:Manrope,sans-serif;font-size:15.5px;font-weight:500;color:#1B242B}
 .pr-opt2-meta{margin-top:3px;font-family:Manrope,sans-serif;font-size:12.5px;color:#6B7480}
@@ -1551,6 +1591,7 @@ const Stars = ({ rating = 5, className = '' }) => (
 function PromoBar({ hidden }) {
   const desktop = useMedia('(min-width: 1024px)');
   const cd = useCountdown(CAMPAIGN && CAMPAIGN.until);
+  const bfLook = !useBfClock(60000).over; /* round 36: the Black Friday look until the sale is over */
   const msgs = CAMPAIGN ? (desktop ? [
     { k: 'cmp', node: <a href={CAMPAIGN.barCta[1]} className="underline-offset-4 hover:underline">{CAMPAIGN.bar} <span className="font-medium">→</span></a> },
   ] : [
@@ -1580,7 +1621,7 @@ function PromoBar({ hidden }) {
   return (
     <div
       role="region" aria-label="Clinic announcements"
-      className={`promo-attn fixed inset-x-0 top-0 z-[60] h-9 overflow-hidden text-white font-mont text-[12.5px] sm:text-[13px] ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
+      className={`promo-attn ${bfLook ? 'is-bf' : ''} fixed inset-x-0 top-0 z-[60] h-9 overflow-hidden text-white font-mont text-[12.5px] sm:text-[13px] ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
       style={{ transition: hidden ? 'transform .5s ease-out' : 'transform .9s cubic-bezier(.34,1.56,.64,1)' }}
       onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
@@ -1674,7 +1715,7 @@ function MegaMenu({ open, onLink }) {
                 aria-pressed={on}
                 className={`w-full flex items-center justify-between rounded-[12px] px-4 py-3 text-left font-mont text-[14px] transition-colors ${on ? 'bg-white text-ndm-blue shadow-sm' : 'text-ndm-ink hover:bg-white/70'}`}
               >
-                <span className="flex items-center gap-2">{c.label}{c.id === HERE_CAT && <i aria-hidden="true" className="size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(32,158,217,.18)]" />}</span>
+                <span className="flex items-center gap-2">{c.label}{c.id === HERE_CAT && <i aria-hidden="true" className="ndm-beat size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(32,158,217,.18)]" />}</span>
                 <IconArrow className={`transition-transform ${on ? 'translate-x-0 opacity-100' : '-translate-x-1 opacity-0'}`} />
               </button>
             </li>
@@ -3006,7 +3047,7 @@ function Promotions({ level = 'h1' }) {
                       </>
                     ) : (
                       <>
-                        {s.deal && <span className="deal-badge mb-3"><i aria-hidden="true">%</i>{s.deal}</span>}
+                        {s.deal && <DealPill deal={s.deal} className="mb-3" />}
                         <span className="sw-muted font-inter text-[11px] uppercase tracking-[.18em]">From</span>
                         <span className="sw-price mt-1 whitespace-nowrap font-aeonik leading-none tracking-[-0.035em]" style={{ fontSize: 40 * k }}><span className="sw-cur">$</span>{s.p}</span>
                         <span className="sw-muted mt-2 font-inter text-[12.5px]">{s.u || 'for selected packages'}</span>
@@ -4779,7 +4820,7 @@ function PromoGrid() {
               <div className="relative aspect-[16/10] overflow-hidden rounded-[16px] bg-ndm-mist">
                 <img src={s.img} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" style={{ transitionTimingFunction: 'var(--e-out)', objectPosition: s.pos }} />
                 {CAMPAIGN_LOOK && <span className="cmp-badge absolute left-3 top-3">{CAMPAIGN.badge}</span>}
-                {s.deal && !CAMPAIGN_LOOK && <span className="deal-badge absolute left-3 top-3"><i aria-hidden="true">%</i>{s.deal}</span>}
+                {s.deal && !CAMPAIGN_LOOK && <DealPill deal={s.deal} className="absolute left-3 top-3" />}
               </div>
               <div className="relative mt-5 flex items-center justify-between gap-2 px-3">
                 <span className="promo-badge grid size-12 shrink-0 place-items-center rounded-full"><SpecialIcon k={s.icon} /></span>
@@ -5489,7 +5530,7 @@ const PROC = {
     chips: ['4763 Yonge St, Uptown', '790 Bay St, Downtown', 'Free consultation', 'VISIA® skin analysis'] },
   /* About (ProcOverview tabs): Ray's five tabs; the key numbers beside them are this page's */
   overview: {
-    tag: 'About', lead: 'What can I expect', strong: 'from Botox® treatment?',
+    tag: 'About', lead: 'What can I expect', strong: 'from Botox® treatment?', dark: true, /* a full-bleed dark band, no card (ProcOverview) */
     tabs: [
       { label: 'Treatment Overview', stat: ['20+', 'years of clinical research'], text: [
         'By momentarily relaxing the underlying muscles that cause expression lines, Botox® Cosmetic is a reliable, non-surgical procedure that reduces wrinkles and fine lines. Botox® is one of the most researched and secure cosmetic procedures in the world, having been used in more than 78 countries and undergoing more than 20 years of clinical research. Our experts at NewDermaMed use precise injections to produce refreshed, natural-looking results without changing your distinctive facial expressions.'] },
@@ -5694,7 +5735,7 @@ function ProcGlance({ p, wide }) {
 function ProcOverview({ p }) {
   const ref = useRef(null), tabs = useRef([]);
   useReveal(ref);
-  const o = p.overview;
+  const o = p.overview, dk = !!o.dark;
   const n = txNum(p, 'overview');
   const [act, setAct] = useState(0);
   const key = (e, i) => {
@@ -5705,13 +5746,13 @@ function ProcOverview({ p }) {
     setAct(m); if (tabs.current[m]) tabs.current[m].focus();
   };
   return (
-    <section ref={ref} id="overview" aria-labelledby="overview-title" className="ov2 relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)] text-ndm-ink">
+    <section ref={ref} id="overview" aria-labelledby="overview-title" data-nav={dk ? 'dark' : undefined} className={`ov2 ${dk ? 'ov2-dark text-white' : 'text-ndm-ink'} relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)]`}>
       <span aria-hidden="true" className="ov2-orb ov2-orb-a" /><span aria-hidden="true" className="ov2-orb ov2-orb-b" /><span aria-hidden="true" className="ov2-orb ov2-orb-c" />
       <svg aria-hidden="true" viewBox="0 0 400 400" className="ov2-ring"><circle cx="200" cy="200" r="190" /><circle cx="200" cy="200" r="150" /></svg>
       <div className={`${TX_WRAP} relative`}>
         <div className="text-center">
-          <Eyebrow className="rv">{n && <span className="tabular-nums text-ndm-deep">{n}</span>}{o.tag}</Eyebrow>
-          <TwoTone id="overview-title" className="rv mx-auto mt-3" size="text-[clamp(26px,min(2.8vw,4.6vh),40px)]" lead={twoLine(o.lead)} strong={o.strong} style={{ transitionDelay: '.06s' }} />
+          <Eyebrow dark={dk} className="rv">{n && <span className={`tabular-nums ${dk ? 'text-ndm-sky' : 'text-ndm-deep'}`}>{n}</span>}{o.tag}</Eyebrow>
+          <TwoTone id="overview-title" dark={dk} className="rv mx-auto mt-3" size="text-[clamp(26px,min(2.8vw,4.6vh),40px)]" lead={twoLine(o.lead)} strong={o.strong} style={{ transitionDelay: '.06s' }} />
         </div>
         {/* round 31: the tab names sit in one row on top again; the panel below is compact so the section fits one view */}
         <div className="rv ov2-panel relative mt-[clamp(16px,2.6vh,28px)] overflow-hidden rounded-[26px]" style={{ transitionDelay: '.1s' }}>

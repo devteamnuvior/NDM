@@ -273,6 +273,12 @@
   /* announcement bar attention */
   .promo-attn{background:linear-gradient(90deg,#0F80C3,#209ED9 30%,#26B1E7 50%,#209ED9 70%,#0F80C3);background-size:200% 100%;animation:promoFlow 9s linear infinite}
   @keyframes promoFlow{to{background-position:-200% 0}}
+  /* Black Friday look of the bar (round 36): the sale page's black with its red glow, a red NEW pill; on every page until the sale is over */
+  .promo-attn.is-bf{background:radial-gradient(55% 300% at 100% 0%,rgba(211,18,29,.42),transparent 62%),radial-gradient(45% 300% at 0% 100%,rgba(211,18,29,.22),transparent 70%),#0B0B0C;animation:none;box-shadow:inset 0 -1px 0 rgba(255,255,255,.1)}
+  .promo-attn.is-bf .promo-shine{display:none}
+  .promo-attn.is-bf .promo-new{background:#D3121F;color:#fff}
+  .promo-attn.is-bf .promo-ping{background:#fff}
+  .promo-attn.is-bf svg{color:#EE3A45}
   .promo-shine{background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:250% 100%;background-repeat:no-repeat;background-position:150% 0;mix-blend-mode:soft-light;animation:promoShine 5.5s cubic-bezier(.45,0,.25,1) 1.4s infinite}
   @keyframes promoShine{0%{background-position:150% 0}35%,100%{background-position:-60% 0}}
   .promo-ping::after{content:"";position:absolute;inset:0;border-radius:999px;background:#FFA617;animation:promoPing 1.6s ease-out infinite}
@@ -302,6 +308,33 @@
   .hf-toggle{display:grid;flex-shrink:0;place-items:center;width:40px;height:40px;border-radius:999px;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:background-color .3s ease,color .3s ease}
   .hf-toggle:hover,.hf-toggle:focus-visible{background:#fff;color:#1B242B}
   @media (prefers-reduced-motion:reduce){.hf-in>*{animation:none}.hf-marq{animation:none}}
+  /* phones (user, 2026-11-17): a calmer hero; the brand band and pause button are left out, the red tape follows the hero,
+     and the chat and search buttons wait until the hero is half scrolled past */
+  @media (max-width:639px){
+    .hf-band{display:none}
+    .hf-in{padding-bottom:40px}
+    .float-search,.chat-pop,.chat-launch{transition:opacity .35s ease,visibility .35s ease}
+    html.hero-hold .float-search,html.hero-hold .chat-pop,html.hero-hold .chat-launch{opacity:0;visibility:hidden;pointer-events:none}
+  }
+  /* the Black Friday page's crossed tapes (bfs-tapes: bfs-tape-red over bfs-tape-white), the same look, on its black */
+  .home-tape{position:relative;z-index:2;display:block;overflow:hidden;background:radial-gradient(45% 140% at 0% 100%,rgba(211,18,29,.22),transparent 70%),#0B0B0C}
+  .home-tape:focus-visible{outline:2px solid #EE3A45;outline-offset:-2px}
+  .bfs-tapes{position:relative;height:118px;margin-top:8px}
+  .bfs-tape{overflow:hidden;white-space:nowrap;padding:11px 0;font:600 12.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase}
+  .bfs-tapes .bfs-tape{position:absolute;left:-5%;width:110%}
+  .bfs-tapes .bfs-tape:first-child{top:22px;transform:rotate(-2.2deg);z-index:1}
+  .bfs-tapes .bfs-tape:last-child{top:52px;transform:rotate(1.6deg)}
+  .bfs-tape-red{background:#D3121F;color:#fff}
+  .bfs-tape-white{background:#fff;color:#0B0B0C}
+  .bfs-tape-white i{background:#D3121F!important;opacity:1!important}
+  .bfs-tick-in.is-rev{animation-direction:reverse}
+  .bfs-tick-in{display:inline-flex;animation:bfsTick 38s linear infinite}
+  .bfs-tick-in span{display:inline-flex;align-items:center;gap:22px;padding-right:22px}
+  .bfs-tick-in i{width:5px;height:5px;border-radius:9px;background:#fff;opacity:.7}
+  .home-tape:hover .bfs-tick-in{animation-play-state:paused}
+  @keyframes bfsTick{to{transform:translateX(-50%)}}
+  @media (max-width:767px){.bfs-tapes{height:104px}}
+  @media (prefers-reduced-motion:reduce){.bfs-tick-in{animation:none}}
 
   /* where would you like to start: expanding photo panels; a concern opens its options in place */
   .st{display:flex;gap:14px;height:clamp(520px,42vw,620px);transition:height .7s var(--e-out)}
@@ -790,7 +823,8 @@
   .nav-here.is-left{left:0;margin-left:0;bottom:-9px}
   @keyframes navHere{from{transform:scaleX(0);opacity:0}to{transform:none;opacity:1}}
   .menu-item[aria-current="page"],.menu-item-m[aria-current="page"]{color:#0F80C3;font-weight:600}
-  .menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{content:'';flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18)}
+  .menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{content:'';flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18);animation:ndmBeat 1.6s ease-out infinite}
+  @media (prefers-reduced-motion: reduce){.menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{animation:none}}
   /* section tag: brand-mark chip + label in a pill with a fine blue-to-amber edge and a slow light sweep */
   .eyebrow{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;gap:10px;padding:4px 18px 4px 4px;border:1px solid transparent;border-radius:999px;font-size:15px;font-weight:500;line-height:1.2;letter-spacing:-.005em;color:#1B242B;
     background:linear-gradient(180deg,#fff,#F3F9FD) padding-box,linear-gradient(115deg,rgba(38,177,231,.6),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(255,166,23,.55)) border-box;
@@ -1106,7 +1140,7 @@ const priceRows = (id, item) => { const c = PRICE_BY_ID[id]; const it = c && c.i
 /* the lowest price in one price table after its discounts; per unit when the table is priced per unit (e.g. 220 units $1848 -> $8.40) */
 const rowsFrom = (rows, perUnit) => Math.round(Math.min(...rows.map((r) => (perUnit && !/regular/i.test(r[0]) ? r[1] / pCount(r[0]) : r[1]))) * 100) / 100;
 /* ---------------------------------------------------------------- sale tags and where a "from" price comes from (2026-11-16)
-   SALE_LOOK: the look of the offer tags while a promotion runs: 'vip' (red and blue), 'bf' (black and gold), 'holiday' (green and gold),
+   SALE_LOOK: the look of the offer tags while a promotion runs: 'vip' and 'bf' (black and gold, like VIP Early Access + Black Friday), 'holiday' (green and gold),
    'newyear' (slate), or '' for the plain red tags. Every price table (pricing, Botox, Aptos) reads it. */
 const SALE_LOOK = 'vip';
 /* the lowest row of one price table and how it is counted (per unit when the table is priced per unit) */
@@ -1128,6 +1162,14 @@ function SaleTag({ offer, badge, small, plain = 'pr-badge' }) {
   if (!SALE_LOOK) return offer ? <span className={plain}>{offer}</span> : null;
   if (!badge || !badge.length) return null;
   return <span data-look={SALE_LOOK} className={`sb ${small ? 'sb-sm' : ''} ${badge.length > 1 ? 'sb-split' : ''}`}>{badge.map((t, i) => <span key={i} className={i ? 'sb-b' : 'sb-a'}>{t}</span>)}</span>;
+}
+/* the offer of a specials card (wheel, Promotion cards, Pricing specials) as a pill in the pricing tags' pattern, in the site's
+   own navy and sky (round 37): "Up to 30% off" -> UP TO | 30% OFF, "Buy 1 get 1 free" -> BUY 1 | GET 1 FREE, "Save $1000" -> SAVE $1,000 */
+const dealParts = (d) => { const t = tagWords(d); const m = /^(UP TO|BUY \d+)\s+(.+)$/.exec(t); return m ? [m[1], m[2]] : t ? [t] : []; };
+function DealPill({ deal, className = '' }) {
+  const p = dealParts(deal);
+  if (!p.length) return null;
+  return <span className={`dp ${p.length > 1 ? 'dp-split' : ''} ${className}`}>{p.map((t, i) => <span key={i} className={i ? 'dp-b' : 'dp-a'}>{t}</span>)}</span>;
 }
 /* where a lowest price is read from: "Skin Booster, 2 Syringes" (withItem puts the treatment first) */
 const sourceWords = (s, withItem) => {
@@ -1190,6 +1232,11 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .sb-a{background:var(--a-bg);color:var(--a-fg);box-shadow:inset 0 0 0 1.5px var(--a-ring);border-radius:999px}
 .sb-split .sb-a{border-radius:999px 0 0 999px;box-shadow:inset 1.5px 0 0 var(--a-ring),inset 0 1.5px 0 var(--a-ring),inset 0 -1.5px 0 var(--a-ring)}
 .sb-b{background:var(--b-bg);color:var(--b-fg);border-radius:0 999px 999px 0}
+.dp{display:inline-flex;align-items:stretch;border-radius:999px;overflow:hidden;white-space:nowrap;font:700 11px/1 Manrope,sans-serif;letter-spacing:.06em}
+.dp>span{display:inline-flex;align-items:center;padding:6px 10px}
+.dp-a{background:#0A4F7A;color:#fff;border-radius:999px}
+.dp-split .dp-a{border-radius:999px 0 0 999px}
+.dp-b{background:#E3F3FC;color:#0A4F7A;border-radius:0 999px 999px 0}
 .pr-from.is-sale{color:var(--now,#0F80C3)}.pr-from[data-look]{--now:#0F80C3}
 .sb[data-look="vip"],.pr-from[data-look="vip"],.sb[data-look="bf"],.pr-from[data-look="bf"]{--a-bg:#0B0F13;--a-fg:#fff;--a-ring:#0B0F13;--b-bg:#D4B574;--b-fg:#0B0F13;--now:#9A7A3A}
 .sb[data-look="holiday"],.pr-from[data-look="holiday"]{--a-bg:#173D2C;--a-fg:#fff;--a-ring:#173D2C;--b-bg:#D4B574;--b-fg:#173D2C;--now:#1E5A3E}
@@ -1198,6 +1245,9 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .pr-opt2.is-featured{background:#fff;border-color:#E3E3E0;box-shadow:none!important}
 .pr-ghead>button,.pr-gintro{padding-inline:clamp(14px,2.4vw,28px)}
 .pr-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:999px;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18);vertical-align:middle;transform:translateY(-2px)}
+.pr-dot,.pr-src i,.pr-src-tag i,.ndm-beat{animation:ndmBeat 1.6s ease-out infinite}
+@keyframes ndmBeat{0%{scale:1;box-shadow:0 0 0 0 rgba(32,158,217,.5)}12%{scale:1.3}24%{scale:1}36%{scale:1.2}55%{scale:1;box-shadow:0 0 0 7px rgba(32,158,217,0)}100%{scale:1;box-shadow:0 0 0 0 rgba(32,158,217,0)}}
+@media (prefers-reduced-motion: reduce){.pr-dot,.pr-src i,.pr-src-tag i,.ndm-beat{animation:none}}
 .pr-opt2-info{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
 .pr-opt2-name{font-family:Manrope,sans-serif;font-size:15.5px;font-weight:500;color:#1B242B}
 .pr-opt2-meta{margin-top:3px;font-family:Manrope,sans-serif;font-size:12.5px;color:#6B7480}
@@ -1467,6 +1517,7 @@ const Stars = ({ rating = 5, className = '' }) => (
 function PromoBar({ hidden }) {
   const desktop = useMedia('(min-width: 1024px)');
   const cd = useCountdown(CAMPAIGN && CAMPAIGN.until);
+  const bfLook = !useBfClock(60000).over; /* round 36: the Black Friday look until the sale is over */
   const msgs = CAMPAIGN ? (desktop ? [
     { k: 'cmp', node: <a href={CAMPAIGN.barCta[1]} className="underline-offset-4 hover:underline">{CAMPAIGN.bar} <span className="font-medium">→</span></a> },
   ] : [
@@ -1496,7 +1547,7 @@ function PromoBar({ hidden }) {
   return (
     <div
       role="region" aria-label="Clinic announcements"
-      className={`promo-attn fixed inset-x-0 top-0 z-[60] h-9 overflow-hidden text-white font-mont text-[12.5px] sm:text-[13px] ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
+      className={`promo-attn ${bfLook ? 'is-bf' : ''} fixed inset-x-0 top-0 z-[60] h-9 overflow-hidden text-white font-mont text-[12.5px] sm:text-[13px] ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
       style={{ transition: hidden ? 'transform .5s ease-out' : 'transform .9s cubic-bezier(.34,1.56,.64,1)' }}
       onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
@@ -1590,7 +1641,7 @@ function MegaMenu({ open, onLink }) {
                 aria-pressed={on}
                 className={`w-full flex items-center justify-between rounded-[12px] px-4 py-3 text-left font-mont text-[14px] transition-colors ${on ? 'bg-white text-ndm-blue shadow-sm' : 'text-ndm-ink hover:bg-white/70'}`}
               >
-                <span className="flex items-center gap-2">{c.label}{c.id === HERE_CAT && <i aria-hidden="true" className="size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(32,158,217,.18)]" />}</span>
+                <span className="flex items-center gap-2">{c.label}{c.id === HERE_CAT && <i aria-hidden="true" className="ndm-beat size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(32,158,217,.18)]" />}</span>
                 <IconArrow className={`transition-transform ${on ? 'translate-x-0 opacity-100' : '-translate-x-1 opacity-0'}`} />
               </button>
             </li>
@@ -2121,6 +2172,8 @@ function Hero({ sectionRef, onIntroDone }) {
     if (media.current) media.current.style.transform = `translate3d(0,${(y * 0.32).toFixed(1)}px,0)`;
     if (inner.current) inner.current.style.opacity = Math.max(0, 1 - y / (h * 0.75)).toFixed(3);
   }, []);
+  useOnScroll(() => { document.documentElement.classList.toggle('hero-hold', window.scrollY < window.innerHeight * 0.5); }, []);
+  useEffect(() => () => document.documentElement.classList.remove('hero-hold'), []);
   return (
     <section ref={sectionRef} id="top" data-nav="dark" aria-labelledby="hero-title" className="hf">
       <div ref={media} className="hf-media" aria-hidden="true">
@@ -2132,21 +2185,21 @@ function Hero({ sectionRef, onIntroDone }) {
       {c && <div className="hf-tint cmp-tint" aria-hidden="true" />}
       <div ref={inner} className="hf-in px-[var(--gx)] pt-[118px] pb-[76px] md:grid md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-x-12 md:pt-[clamp(150px,24vh,240px)] md:pb-[clamp(30px,5.5vh,60px)]">
         <div>
-        {c ? <CampaignHeroTag c={c} /> : <p className="font-inter text-[clamp(14px,1.05vw,16px)] font-medium text-white/80">NewDermaMed, medical aesthetics in Toronto</p>}
+        {c ? <CampaignHeroTag c={c} /> : <p className="font-inter text-[13px] font-medium text-white/75 sm:text-[clamp(14px,1.05vw,16px)] sm:text-white/80">NewDermaMed, medical aesthetics in Toronto</p>}
         <h1 id="hero-title" className="mt-4 max-w-[14ch] font-aeonik text-[clamp(44px,6vw,94px)] font-normal leading-[1.02] tracking-[-0.035em] [text-shadow:0_20px_35px_rgba(0,0,0,.15)]">
           {c ? <>{c.head[0]}<br /><span className="tt-strong cmp-hl">{c.head[1]}</span></> : <>Refined,<br /><span className="tt-strong text-ndm-sky">not redone.</span></>}
         </h1>
-        <p className="mt-5 max-w-[46ch] font-inter text-[clamp(16px,1.1vw+3px,20px)] leading-[1.5] text-white/85">
+        <p className="mt-4 max-w-[34ch] font-inter text-[15px] leading-[1.55] text-white/80 sm:mt-5 sm:max-w-[46ch] sm:text-[clamp(16px,1.1vw+3px,20px)] sm:leading-[1.5] sm:text-white/85">
           {c ? c.sub : 'Aesthetic, laser and skin treatments planned around your features, your skin and your pace.'}
         </p>
-        <div className="mt-7 flex flex-wrap items-center gap-3">
+        <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-7">
           <Btn href={c ? c.cta[1] : '#/book'} v="book" hot>{c ? c.cta[0] : 'Book Free Consultation'}</Btn>
-          <Btn href="#start" v="glass">Find your treatment</Btn>
+          <span className="max-sm:hidden"><Btn href="#start" v="glass">Find your treatment</Btn></span>
         </div>
         </div>
-        <ul className="mt-6 grid max-w-[calc(100%-8px)] grid-cols-2 gap-x-4 gap-y-2.5 font-inter text-[13px] font-medium leading-[1.35] text-white/85 sm:mt-7 sm:text-[14px] md:mt-0 md:max-w-none md:grid-cols-1 md:gap-y-3.5 md:rounded-[20px] md:border md:border-white/15 md:bg-white/[.08] md:px-6 md:py-5 md:backdrop-blur-[12px]" aria-label="Why clients choose NewDermaMed">
-          {HERO_PROOF.map(([t, d]) => (
-            <li key={t} className="flex items-start gap-2 sm:items-center sm:gap-2.5 md:whitespace-nowrap">
+        <ul className="mt-5 grid max-w-[calc(100%-8px)] grid-cols-2 gap-x-4 gap-y-2.5 font-inter text-[12.5px] font-medium leading-[1.35] text-white/85 sm:mt-7 sm:text-[14px] md:mt-0 md:max-w-none md:grid-cols-1 md:gap-y-3.5 md:rounded-[20px] md:border md:border-white/15 md:bg-white/[.08] md:px-6 md:py-5 md:backdrop-blur-[12px]" aria-label="Why clients choose NewDermaMed">
+          {HERO_PROOF.map(([t, d], i) => (
+            <li key={t} className={`flex items-start gap-2 sm:items-center sm:gap-2.5 md:whitespace-nowrap ${i > 1 ? 'max-sm:hidden' : ''}`}>
               <svg viewBox="0 0 16 16" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="mt-px shrink-0 text-[#7FD3F5] sm:mt-0">{d}</svg>{t}
             </li>
           ))}
@@ -2169,6 +2222,23 @@ function Hero({ sectionRef, onIntroDone }) {
         </div>
       </div>
     </section>
+  );
+}
+
+/* ---------------------------------------------------------------- the Black Friday page's crossed tapes under the hero (user, 2026-11-17):
+   bfs-tapes as on that page (red over white, opposite directions, on its black); opens the sale page, gone once the sale is over */
+const HOME_TAPE_WORDS = [`Black Friday · ${BF_SALE.when}`, `${BF_SALE.badge} selected treatments`, 'Buy 1 get 1 offers', 'Free consultation and VISIA® skin analysis', 'Uptown and Downtown Toronto'];
+function HomeTapeStrip({ tone, rev }) {
+  const row = <span>{HOME_TAPE_WORDS.map((w) => <Fragment key={w}>{w}<i /></Fragment>)}</span>;
+  return <div className={`bfs-tape bfs-tape-${tone}`}><div className={`bfs-tick-in ${rev ? 'is-rev' : ''}`}>{row}{row}{row}{row}</div></div>;
+}
+function HomeTape() {
+  const bf = useBfClock(60000);
+  if (bf.over) return null;
+  return (
+    <a href={BF_SALE.href} className="home-tape" aria-label={`Black Friday, ${BF_SALE.when}: ${BF_SALE.badge.toLowerCase()} selected treatments. See the sale`}>
+      <div aria-hidden="true" className="bfs-tapes"><HomeTapeStrip tone="red" /><HomeTapeStrip tone="white" rev /></div>
+    </a>
   );
 }
 
@@ -2784,7 +2854,7 @@ function Promotions({ level = 'h2' }) {
                       </>
                     ) : (
                       <>
-                        {s.deal && <span className="deal-badge mb-3"><i aria-hidden="true">%</i>{s.deal}</span>}
+                        {s.deal && <DealPill deal={s.deal} className="mb-3" />}
                         <span className="sw-muted font-inter text-[11px] uppercase tracking-[.18em]">From</span>
                         <span className="sw-price mt-1 whitespace-nowrap font-aeonik leading-none tracking-[-0.035em]" style={{ fontSize: 40 * k }}><span className="sw-cur">$</span>{s.p}</span>
                         <span className="sw-muted mt-2 font-inter text-[12.5px]">{s.u || 'for selected packages'}</span>
@@ -4037,7 +4107,7 @@ function Start({ onSearch }) {
         <button type="button" onClick={onSearch} className="rv group flex h-[60px] w-full max-w-[440px] items-center gap-3 rounded-full border border-ndm-line bg-white pl-5 pr-2 text-left shadow-[0_18px_40px_-30px_rgba(27,36,43,.45)] transition-colors hover:border-ndm-ink/30" style={{ transitionDelay: '.1s' }}>
           <IconSearch className="shrink-0 text-ndm-muted" />
           <span className="flex-1 font-inter text-[16px] text-ndm-muted">Search treatments</span>
-          <span className="grid size-11 place-items-center rounded-full bg-ndm-deep text-white transition-[transform,background-color] group-hover:translate-x-0.5 group-hover:bg-[#0A4F7A]" aria-hidden="true"><IconArrow /></span>
+          <span className="grid size-11 place-items-center rounded-full bg-ndm-deep text-white transition-[transform,background-color] group-hover:translate-x-0.5 group-hover:bg-[#0A4F7A]" aria-hidden="true"><IconSearch size={20} /></span>
         </button>
       </div>
 
@@ -5141,6 +5211,7 @@ function App() {
       <Header dark={dark} top={36} visible onSearch={() => setSearch(true)} onDrawer={() => setDrawer(true)} onCart={() => setCartOpen(true)} cartCount={cart.count} />
       <main id="main">
         <Hero sectionRef={heroRef} onIntroDone={() => setIntroDone(true)} />
+        <HomeTape />
         <Statement />
         <Start onSearch={() => setSearch(true)} />
         <TreatMenu />

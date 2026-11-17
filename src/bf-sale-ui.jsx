@@ -50,7 +50,7 @@ const BFS_DEALS = PRICE_CATS.filter((c) => !BFS_SKIP.includes(c.id) && BFS_GROUP
 }).filter((d) => d.items.length);
 const BFS_MAX = Math.max(...BFS_DEALS.map((d) => d.pct));
 const BFS_COUNT = BFS_DEALS.reduce((n, d) => n + d.items.length, 0);
-const bfsGo = (id) => (e) => { const el = document.getElementById(id); if (!el) return; if (e) e.preventDefault(); scrollToY(el.getBoundingClientRect().top + window.scrollY - 84); };
+const bfsGo = (id) => (e) => { const el = document.getElementById(id); if (!el) return; if (e) e.preventDefault(); scrollToY(el.getBoundingClientRect().top + window.scrollY - 120); };
 const bfsShort = (name, cat) => name.replace(new RegExp('^' + cat.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*[-–]?\\s*', 'i'), '').replace(/^LHR - /, '') || name;
 
 /* the clock and timer tiles are shared with the site (useBfClock, BfTimer in the shells, round 24) */
@@ -194,9 +194,9 @@ function BfsHeader({ count }) {
      something is in the plan */
   const links = [['how', 'How it works'], ['concerns', 'Concerns'], ['deals', 'Deals'], ['specials', 'Specials'], ['plan', 'My plan'], ['clinics', 'Clinics']];
   const [here, setHere] = useState('');
-  useOnScroll(() => { let cur = ''; links.forEach(([id]) => { const e = document.getElementById(id); if (e && e.getBoundingClientRect().top < 140) cur = id; }); setHere(cur); }, []);
+  useOnScroll(() => { let cur = ''; links.forEach(([id]) => { const e = document.getElementById(id); if (e && e.getBoundingClientRect().top < 176) cur = id; }); setHere(cur); }, []);
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0B0B0C]/95 text-white backdrop-blur-[14px]">
+    <header className="sticky top-9 z-50 border-b border-white/10 bg-[#0B0B0C]/95 text-white backdrop-blur-[14px]">
       <div className="mx-auto flex h-[68px] max-w-[1280px] items-center justify-between gap-4 px-[var(--gx)]">
         <a href="index.html" className="shrink-0" aria-label="NewDermaMed home"><img src="assets/icons/logo-white.svg" alt="NewDermaMed" className="h-7 w-auto min-[400px]:h-8 sm:h-10" /></a>
         <nav aria-label="Black Friday page" className="hidden items-center gap-5 whitespace-nowrap lg:flex xl:gap-7">
@@ -327,7 +327,7 @@ function BfsConcerns({ pick, setPick }) {
   const ref = useRef(null);
   useReveal(ref);
   return (
-    <section ref={ref} id="concerns" aria-labelledby="bfs-c-title" className="scroll-mt-[84px] px-[var(--gx)] pt-[clamp(64px,7vw,104px)]">
+    <section ref={ref} id="concerns" aria-labelledby="bfs-c-title" className="scroll-mt-[120px] px-[var(--gx)] pt-[clamp(64px,7vw,104px)]">
       <div className="mx-auto max-w-[1180px]">
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,.8fr)] lg:items-end">
           <div>
@@ -372,7 +372,7 @@ function BfsDealCard({ d, plan, toggle }) {
   const cat = d.c.name;
   const save = o[2] > 0 ? o[2] - o[1] : 0;
   return (
-    <li id={`bf-${d.id}`} className="scroll-mt-[96px]">
+    <li id={`bf-${d.id}`} className="scroll-mt-[132px]">
       <article className={`bfs-card flex h-full flex-col overflow-hidden rounded-[24px] bg-white p-5 ring-1 ring-black/[.06] sm:p-6 ${inPlan ? 'is-in' : ''}`}>
         <div className="bfs-head relative -mx-5 -mt-5 mb-5 flex min-h-[180px] flex-col justify-between gap-5 overflow-hidden p-5 text-white sm:-mx-6 sm:-mt-6 sm:p-6">
           <span aria-hidden="true" className="bfs-head-mark font-aeonik">%</span>
@@ -430,7 +430,7 @@ function BfsDeals({ pick, setPick, plan, toggle }) {
   const ids = pick ? BFS_CONCERNS.find((c) => c[0] === pick)[2] : null;
   const list = BFS_DEALS.filter((d) => (!ids || ids.includes(d.id)) && (tab === 'All deals' || d.group === tab));
   return (
-    <section ref={ref} id="deals" aria-labelledby="bfs-d-title" className="scroll-mt-[84px] px-[var(--gx)] pt-[clamp(64px,7vw,104px)]">
+    <section ref={ref} id="deals" aria-labelledby="bfs-d-title" className="scroll-mt-[120px] px-[var(--gx)] pt-[clamp(64px,7vw,104px)]">
       <div className="mx-auto max-w-[1180px]">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -465,7 +465,7 @@ function BfsSpecials() {
   const list = BFS_SPECIALS;
   const catOf = (s) => { const m = /#pg-([a-z0-9-]+)-h/.exec(s.h || ''); return m && BFS_DEALS.some((d) => d.id === m[1]) ? m[1] : null; };
   return (
-    <section ref={ref} id="specials" aria-labelledby="bfs-s-title" data-nav="dark" className="bfs-dark bfs-band relative mt-[clamp(64px,7vw,104px)] scroll-mt-[68px] overflow-hidden px-[var(--gx)] py-[clamp(72px,8vw,120px)] text-white">
+    <section ref={ref} id="specials" aria-labelledby="bfs-s-title" data-nav="dark" className="bfs-dark bfs-band relative mt-[clamp(64px,7vw,104px)] scroll-mt-[104px] overflow-hidden px-[var(--gx)] py-[clamp(72px,8vw,120px)] text-white">
       <span aria-hidden="true" className="bfs-big bfs-big-l font-aeonik">%</span>
       <div className="mx-auto max-w-[1180px]">
         <div className="text-center">
@@ -511,7 +511,7 @@ function BfsHow() {
   useReveal(ref);
   const steps = [['Choose', 'a concern or a treatment'], ['Pick', 'a package and see your savings'], ['Book', 'a free consultation to claim it']];
   return (
-    <section ref={ref} id="how" aria-labelledby="bfs-h-title" className="scroll-mt-[84px] px-[var(--gx)] pt-[clamp(40px,5vw,64px)]">
+    <section ref={ref} id="how" aria-labelledby="bfs-h-title" className="scroll-mt-[120px] px-[var(--gx)] pt-[clamp(40px,5vw,64px)]">
       <div className="mx-auto max-w-[1180px]">
         <h2 id="bfs-h-title" className="rv font-inter text-[12px] font-semibold uppercase tracking-[.18em] text-[#D3121F]">How it works</h2>
         <ol className="bfs-how mt-4 grid gap-3 md:grid-cols-3 md:gap-4">
@@ -532,7 +532,7 @@ function BfsPlan({ plan, toggle, clear }) {
   const total = plan.reduce((n, p) => n + p.price, 0);
   const saved = plan.reduce((n, p) => n + (p.reg ? p.reg - p.price : 0), 0);
   return (
-    <section id="plan" aria-labelledby="bfs-p-title" data-nav="dark" className="bfs-dark mt-[clamp(64px,7vw,104px)] scroll-mt-[68px] px-[var(--gx)] py-[clamp(64px,7vw,104px)] text-white">
+    <section id="plan" aria-labelledby="bfs-p-title" data-nav="dark" className="bfs-dark mt-[clamp(64px,7vw,104px)] scroll-mt-[104px] px-[var(--gx)] py-[clamp(64px,7vw,104px)] text-white">
       <div className="mx-auto grid max-w-[1180px] gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)]">
         <div>
           <p className="bfs-step bg-white/10"><b>3</b>Step 3</p>
@@ -586,7 +586,7 @@ function BfsPlan({ plan, toggle, clear }) {
 
 function BfsClinics() {
   return (
-    <section id="clinics" aria-labelledby="bfs-k-title" className="scroll-mt-[84px] px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
+    <section id="clinics" aria-labelledby="bfs-k-title" className="scroll-mt-[120px] px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <div className="mx-auto max-w-[1180px]">
         <p className="font-inter text-[12px] font-semibold uppercase tracking-[.18em] text-[#D3121F]">Two Toronto clinics</p>
         <h2 id="bfs-k-title" className="mt-4 font-aeonik text-[clamp(32px,3.6vw,52px)] font-normal leading-[1.04] tracking-[-0.03em] text-[#0B0B0C]">Find your<br /><span className="tt-strong text-[#D3121F]">NewDermaMed.</span></h2>
