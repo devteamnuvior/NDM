@@ -12,6 +12,8 @@ export interface HeroPhoto {
   desktop: string;
   mobile: string;
   alt: string;
+  /** How much a light photo is darkened under the words, 0 to 1 (the site's own photos set it; WordPress photos get 0.15). */
+  dim?: number;
 }
 
 /** A section's tag and its two-line heading. */

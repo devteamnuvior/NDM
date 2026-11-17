@@ -32,8 +32,8 @@ const PROOF_ICONS: Record<ProofIcon, ReactNode> = {
 export function Hero({ copy }: { copy: HomeCopy["hero"] }) {
   const { film, primaryCta, secondaryHref } = HERO;
   const { tagline, lead, strong, intro, button, proof, brands } = copy;
-  const photos = copy.photos ?? [];
-  /* the poster is the first thing painted on the home page (the first photo loads first on its own) */
+  /* the header is photo slides (user, 2026-11-17): WordPress's "Header photos", or the site's three when there are none */
+  const photos = copy.photos?.length ? copy.photos : HERO.photos.map((p) => ({ ...p, desktop: withBase(p.desktop), mobile: withBase(p.mobile) }));
   if (!photos.length) preload(withBase(film.poster), { as: "image", fetchPriority: "high" });
 
   return (

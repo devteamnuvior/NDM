@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use, useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, use, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useFilm, type Film } from "@/hooks/use-film";
 import { useOnScroll } from "@/hooks/use-on-scroll";
 import { withBase } from "@/lib/base-path";
@@ -10,10 +10,30 @@ import type { HeroPhoto } from "@/types/home";
 interface HeroPlay extends Film {
   slide: number;
   slides: number;
+  go: (i: number) => void;
 }
 
-/** How long each header photo stays before the next fades in. */
-const PHOTO_MS = 6000;
+/** How long each header photo stays before the next comes in. */
+const PHOTO_MS = 6500;
+
+/*
+ * The film's motion, played on the photos (user, 2026-11-17): each time a photo dissolves in it takes, at random, one slow
+ * camera move (a push, pull, pan or rise); no light effects (user). The first photo's move is fixed, so the page the server
+ * sends matches the first paint.
+ */
+const MOVES = ["push", "pull", "pan-l", "pan-r", "rise"] as const;
+interface Look {
+  move: (typeof MOVES)[number];
+  n: number;
+}
+const FIRST: Look = { move: "push", n: 0 };
+function pick<T>(list: readonly T[], not?: T): T {
+  const rest = list.filter((x) => x !== not);
+  return rest[Math.floor(Math.random() * rest.length)];
+}
+function nextLook(prev: Look, n: number): Look {
+  return { move: pick(MOVES, prev.move), n };
+}
 
 const HeroFilmContext = createContext<HeroPlay | null>(null);
 
@@ -33,12 +53,29 @@ export function HeroStage({ children, slides = 0 }: { children: ReactNode; slide
   /* header photos: the next one fades in every few seconds, never with reduced motion; the pause button holds them */
   const [slide, setSlide] = useState(0);
   const [held, setHeld] = useState(false);
+  const [seen, setSeen] = useState(true);
+  /* the photos run only while the header is on screen and the tab is visible */
   useEffect(() => {
-    if (slides < 2 || held || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = setInterval(() => setSlide((s) => (s + 1) % slides), PHOTO_MS);
-    return () => clearInterval(t);
-  }, [slides, held]);
-  const play: HeroPlay = slides ? { video: film.video, paused: held, toggle: () => setHeld((h) => !h), slide, slides } : { ...film, slide: 0, slides: 0 };
+    const el = section.current;
+    if (!el || !slides) return;
+    const io = new IntersectionObserver(([e]) => setSeen(e.isIntersecting), { threshold: 0.15 });
+    io.observe(el);
+    const vis = () => setSeen(!document.hidden && el.getBoundingClientRect().bottom > 0);
+    document.addEventListener("visibilitychange", vis);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", vis);
+    };
+  }, [slides]);
+  useEffect(() => {
+    if (slides < 2 || held || !seen || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setTimeout(() => setSlide((s) => (s + 1) % slides), PHOTO_MS);
+    return () => clearTimeout(t);
+  }, [slides, held, seen, slide]);
+  const go = (i: number) => setSlide(((i % slides) + slides) % slides);
+  const play: HeroPlay = slides
+    ? { video: film.video, paused: held, toggle: () => setHeld((h) => !h), slide, slides, go }
+    : { ...film, slide: 0, slides: 0, go: () => {} };
 
   useOnScroll(() => {
     const el = section.current;
@@ -54,7 +91,7 @@ export function HeroStage({ children, slides = 0 }: { children: ReactNode; slide
 
   return (
     <HeroFilmContext value={play}>
-      <section ref={section} id="top" data-nav="dark" data-float-hold="" aria-labelledby="hero-title" className="hf">
+      <section ref={section} id="top" data-nav="dark" data-float-hold="" aria-labelledby="hero-title" className={`hf ${slides && held ? "hs-paused" : ""}`}>
         {children}
       </section>
     </HeroFilmContext>
@@ -80,14 +117,41 @@ export function HeroFilm({ poster, mobile, desktop }: { poster: string; mobile: 
  */
 export function HeroPhotos({ photos }: { photos: HeroPhoto[] }) {
   const { slide } = useHeroFilm();
+  /* each photo keeps the look it last came in with, so a photo that is fading out does not jump */
+  const [looks, setLooks] = useState<Look[]>(() => photos.map((_, i) => ({ ...FIRST, n: i })));
+  const [shown, setShown] = useState(0);
+  if (slide !== shown) {
+    setShown(slide);
+    setLooks((L) => L.map((l, i) => (i === slide ? nextLook(L[shown], Math.max(...L.map((x) => x.n)) + 1) : l)));
+  }
   return (
     <div data-hero-media className="hf-media">
-      {photos.map((p, i) => (
-        <picture key={i} className={`hf-photo ${i === slide ? "is-on" : ""}`}>
-          <source media="(max-width: 760px)" srcSet={p.mobile} />
-          {/* a WordPress photo as it is, like the site's other WordPress photos (no image optimizer); photos out of view have no alt */}
-          <img src={p.desktop} alt={i === slide ? p.alt : ""} decoding="async" loading={i === 0 ? "eager" : "lazy"} fetchPriority={i === 0 ? "high" : "auto"} />
-        </picture>
+      {photos.map((p, i) => {
+        const l = looks[i] ?? FIRST;
+        return (
+          <div key={i} className={`hs-slide ${i === slide ? "is-on" : ""}`} style={{ "--hs-dim": p.dim ?? 0 } as CSSProperties}>
+            <picture key={l.n} className={`hs-pic mv-${l.move}`}>
+              <source media="(max-width: 760px)" srcSet={p.mobile} />
+              {/* a WordPress photo as it is, like the site's other WordPress photos (no image optimizer); photos out of view have no alt */}
+              <img src={p.desktop} alt={i === slide ? p.alt : ""} draggable={false} decoding="async" loading={i === 0 ? "eager" : "lazy"} fetchPriority={i === 0 ? "high" : "auto"} />
+            </picture>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/** One small bar for each header photo: it fills while the photo shows, and a click shows that photo. */
+function HeroDots() {
+  const { slide, slides, go } = useHeroFilm();
+  if (slides < 2) return null;
+  return (
+    <div className="hs-dots" role="group" aria-label="Header photos">
+      {Array.from({ length: slides }, (_, i) => (
+        <button key={i} type="button" onClick={() => go(i)} aria-label={`Show header photo ${i + 1}`} aria-current={i === slide || undefined} className={`hs-dot ${i === slide ? "is-on" : ""}`}>
+          <i key={i === slide ? `on-${slide}` : "off"} style={{ animationDuration: `${PHOTO_MS}ms` }} />
+        </button>
       ))}
     </div>
   );
@@ -99,6 +163,7 @@ export function HeroFilmToggle() {
   if (slides === 1) return null;
   const what = slides ? "header photos" : "background video";
   return (
+    <>
     <button type="button" onClick={toggle} className="hf-toggle" aria-label={paused ? `Play ${what}` : `Pause ${what}`}>
       {paused ? (
         <svg viewBox="0 0 14 14" width="13" height="13" fill="currentColor" aria-hidden="true">
@@ -111,5 +176,7 @@ export function HeroFilmToggle() {
         </svg>
       )}
     </button>
+    <HeroDots />
+    </>
   );
 }

@@ -37,6 +37,12 @@ export const HERO = {
     mobile: "/assets/home/v3/hero-960.mp4",
     desktop: "/assets/home/v3/hero-1600.mp4",
   },
+  /* the header's three photo slides (the film's three scenes) while WordPress has no "Header photos" (user, 2026-11-17) */
+  photos: [
+    { desktop: "/assets/home/hero/exterior.jpg", mobile: "/assets/home/hero/exterior.jpg", alt: "The NewDermaMed clinic at night", dim: 0 },
+    { desktop: "/assets/home/hero/reception.jpg", mobile: "/assets/home/hero/reception.jpg", alt: "The NewDermaMed reception", dim: 0.22 },
+    { desktop: "/assets/home/hero/visia.jpg", mobile: "/assets/home/hero/visia-m.jpg", alt: "A VISIA® skin analysis at NewDermaMed", dim: 0.24 },
+  ],
   primaryCta: { label: "Book Free Consultation", href: ACTIONS.book },
   secondaryHref: "#start",
 };

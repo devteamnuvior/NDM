@@ -167,7 +167,7 @@ function ndm_headless_home_schema() {
 					'label'  => 'Header photos',
 					'type'   => 'repeater',
 					'add'    => 'Add a photo',
-					'help'   => 'With at least one photo, the header shows these photos one after another in place of the film; with none, it plays the film. Each row is one photo in two versions. A row without a desktop photo is left out. The description read by screen readers is the desktop photo\'s "Alternative text" in the media library.',
+					'help'   => 'The header is three photo slides, each played with one of the film\'s effects chosen at random (a slow camera move, a dissolve and a light effect). Up to three rows; the first three are shown. With none, the site\'s own three photos show (the clinic at night, the reception, a VISIA® analysis). Each row is one photo in two versions. A row without a desktop photo is left out. The description read by screen readers is the desktop photo\'s "Alternative text" in the media library.',
 					'fields' => array(
 						array( 'key' => 'desktop', 'label' => 'Desktop photo', 'type' => 'image', 'help' => 'A wide landscape photo, at least 1920 x 1080. The words sit over its lower left part.' ),
 						array( 'key' => 'mobile', 'label' => 'Phone photo', 'type' => 'image', 'help' => 'A tall portrait photo, at least 1080 x 1920, shown on screens up to 760px wide. Empty: the desktop photo is used.' ),

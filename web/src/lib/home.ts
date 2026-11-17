@@ -123,7 +123,8 @@ function fromWordPress(wp: WPHomePage): HomeCopy {
       button: c.hero_button,
       proof: c.hero_proof.flatMap((p) => (p.label ? [{ icon: icon(PROOF_ICONS, p.icon), label: p.label }] : [])),
       brands: c.hero_brands,
-      photos: (c.hero_photos ?? []).flatMap((p) => (p.desktop ? [{ desktop: p.desktop.src, mobile: (p.mobile ?? p.desktop).src, alt: p.desktop.alt }] : [])),
+      /* three slides at most (user, 2026-11-17) */
+      photos: (c.hero_photos ?? []).flatMap((p) => (p.desktop ? [{ desktop: p.desktop.src, mobile: (p.mobile ?? p.desktop).src, alt: p.desktop.alt, dim: 0.15 }] : [])).slice(0, 3),
     },
     about: {
       tag: c.about_tag,
