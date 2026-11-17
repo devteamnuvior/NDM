@@ -109,6 +109,12 @@
   background: #fff;
   color: #1b242b;
 }
+/* phones: no pause button beside the brand band (user, 2026-11-17: the hero is crowded there); differs from the prototype on purpose */
+@media (max-width: 639px) {
+  .hf-toggle {
+    display: none;
+  }
+}
 .marquee-mask {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
