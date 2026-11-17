@@ -7,6 +7,13 @@ import type { WPConcernImage, WPConcernProduct } from "@/types/concern";
 export type ProofIcon = "physician" | "award" | "clinics" | "analysis";
 export type PointIcon = "check" | "thread" | "shield";
 
+/** One header photo in two versions: `mobile` on screens up to 760px wide (the desktop photo when none was given). */
+export interface HeroPhoto {
+  desktop: string;
+  mobile: string;
+  alt: string;
+}
+
 /** A section's tag and its two-line heading. */
 interface Head {
   tag: string;
@@ -29,6 +36,8 @@ export interface HomeCopy {
     proof: { icon: ProofIcon; label: string }[];
     /** Technology and brands in the band along the bottom edge. */
     brands: string[];
+    /** Photos shown one after another in place of the film (WordPress "Header photos"); empty or missing: the film. */
+    photos?: HeroPhoto[];
   };
   about: Head & {
     /** Shown word by word as the section scrolls into view. */
@@ -126,6 +135,8 @@ export interface WPHomePage {
     hero_button: string;
     hero_proof: { icon: string; label: string }[];
     hero_brands: string[];
+    /** Missing from a WordPress whose plugin predates the field. */
+    hero_photos?: { desktop: WPConcernImage | null; mobile: WPConcernImage | null }[];
     seo_title: string;
     seo_description: string;
     about_tag: string;

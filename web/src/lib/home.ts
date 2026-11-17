@@ -123,6 +123,7 @@ function fromWordPress(wp: WPHomePage): HomeCopy {
       button: c.hero_button,
       proof: c.hero_proof.flatMap((p) => (p.label ? [{ icon: icon(PROOF_ICONS, p.icon), label: p.label }] : [])),
       brands: c.hero_brands,
+      photos: (c.hero_photos ?? []).flatMap((p) => (p.desktop ? [{ desktop: p.desktop.src, mobile: (p.mobile ?? p.desktop).src, alt: p.desktop.alt }] : [])),
     },
     about: {
       tag: c.about_tag,

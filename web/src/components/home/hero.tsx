@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { preload } from "react-dom";
-import { HeroFilm, HeroFilmToggle, HeroStage } from "@/components/home/hero-stage";
+import { HeroFilm, HeroFilmToggle, HeroPhotos, HeroStage } from "@/components/home/hero-stage";
 import { Button } from "@/components/ui/button";
 import { HERO } from "@/config/home";
 import type { HomeCopy, ProofIcon } from "@/types/home";
@@ -28,16 +28,17 @@ const PROOF_ICONS: Record<ProofIcon, ReactNode> = {
   analysis: <path d="M8 1.5l1.4 4.1 4.1 1.4-4.1 1.4L8 12.5 6.6 8.4 2.5 7l4.1-1.4z" />,
 };
 
-/** Home hero: one clinic film, the headline, the proof points and the brand band. */
+/** Home hero: one clinic film (or the WordPress header photos in its place), the headline, the proof points and the brand band. */
 export function Hero({ copy }: { copy: HomeCopy["hero"] }) {
   const { film, primaryCta, secondaryHref } = HERO;
   const { tagline, lead, strong, intro, button, proof, brands } = copy;
-  /* the poster is the first thing painted on the home page */
-  preload(withBase(film.poster), { as: "image", fetchPriority: "high" });
+  const photos = copy.photos ?? [];
+  /* the poster is the first thing painted on the home page (the first photo loads first on its own) */
+  if (!photos.length) preload(withBase(film.poster), { as: "image", fetchPriority: "high" });
 
   return (
-    <HeroStage>
-      <HeroFilm {...film} />
+    <HeroStage slides={photos.length}>
+      {photos.length ? <HeroPhotos photos={photos} /> : <HeroFilm {...film} />}
       <div
         data-hero-words
         className="hf-in px-[var(--gx)] pt-[118px] pb-[76px] md:grid md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-x-12 md:pt-[clamp(150px,24vh,240px)] md:pb-[clamp(30px,5.5vh,60px)]"

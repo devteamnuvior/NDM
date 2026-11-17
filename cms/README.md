@@ -654,7 +654,7 @@ fields work like those of a concern. One box per section, in page order:
 
 | Box | Fields |
 |---|---|
-| Header | line above the heading, heading in two lines, text, second button's words, the points beside the heading (icon and words), the brands in the moving band (one per line) |
+| Header | line above the heading, heading in two lines, text, second button's words, the points beside the heading (icon and words), the brands in the moving band (one per line), and the **header photos** (each row a desktop photo and a phone photo from the media library; the phone photo shows up to 760px wide, empty: the desktop photo; a row without a desktop photo is left out). With at least one photo the header shows them one after another (6 seconds each, a fade, held by the pause button, still with reduced motion) in place of the film; with none it plays the film |
 | Search Engines | page title and description (empty description: none written) |
 | About NewDermaMed | tag, heading, text (lights up word by word), the word in blue, the numbers ("16+" and the line under it) |
 | Where To Start | tag, heading, and the **panels** (title, line under it, heading and text when open, photo with its focus closed and open, link for a panel without concerns); in each panel its **concerns** (button, card title, card text, the **treatments**, facts, small print, link at the bottom); a treatment picks a WooCommerce product or category (optional), with a name, a line and a link |
