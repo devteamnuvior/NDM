@@ -3642,8 +3642,6 @@ const TEAM = [
     ],
     facts: [['Education', 'BSc, Biology'], ['Certifications', 'Cosmetic Dermatology, Medical Aesthetics'], ['Role', 'Director of NewDermaMed']],
   },
-  /* photo in; her profile (bio, focus, facts) is still to come, so the card has no profile dialog yet */
-  { id: 'team-heather', first: 'Heather', tag: 'Nurse Practitioner', sample: true, name: 'Heather Bouchard, NP', role: 'Nurse Practitioner', img: 'assets/team/heather.jpg' },
 ];
 
 const TEAM_LABEL = 'font-inter text-[11.5px] font-[550] uppercase tracking-[.14em] text-ndm-muted';
@@ -3762,8 +3760,8 @@ function TeamProfile({ m, onClose }) {
 /* meet the team: copy on the left, three staggered portraits on the right (Alin, Negin, Luis).
    The portraits wipe up one after another when the row comes into view, drift at different speeds while scrolling,
    and each one opens the profile dialog. */
-const TEAM_ORDER = ['team-alin', 'team-negin', 'team-luis', 'team-heather'];
-const TEAM_DRIFT = [-26, 30, -10, 22]; /* px of parallax over the section's pass through the viewport */
+const TEAM_ORDER = ['team-alin', 'team-negin', 'team-luis'];
+const TEAM_DRIFT = [-26, 30, -10]; /* px of parallax over the section's pass through the viewport */
 
 function TeamPortrait({ m, i, onOpen }) {
   return (
@@ -3822,7 +3820,7 @@ function Team() {
             <Btn href="#/book" v="book">Book Free Consultation</Btn>
           </div>
         </div>
-        <ul ref={row} role="list" className={`team-ports grid grid-cols-2 items-start gap-[clamp(10px,1.6vw,24px)] sm:grid-cols-4 pb-[clamp(28px,3.4vw,56px)] ${shown ? 'in' : ''}`}>
+        <ul ref={row} role="list" className={`team-ports grid grid-cols-2 items-start gap-[clamp(10px,1.6vw,24px)] sm:grid-cols-3 pb-[clamp(28px,3.4vw,56px)] ${shown ? 'in' : ''}`}>
           {people.map((m, i) => (
             <li key={m.id} ref={(el) => (cells.current[i] = el)} className="will-change-transform">
               <TeamPortrait m={m} i={i} onOpen={open(m)} />
