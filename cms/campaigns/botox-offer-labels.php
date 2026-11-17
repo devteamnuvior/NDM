@@ -50,6 +50,12 @@ foreach ( $options as list( $variation, $label ) ) {
 		continue;
 	}
 	$units = (int) $m[1];
+	// Only what visitors see on the price list (the rule of the public list in tree.php): the live product also holds
+	// options that are hidden, switched off or without a price, and those are left alone.
+	if ( ndm_pricing_is_hidden( $variation ) || 'publish' !== $variation->get_status() || (float) $variation->get_price( 'edit' ) <= 0 ) {
+		WP_CLI::log( sprintf( '  %-10s not on the public price list: left as it is', $label ) );
+		continue;
+	}
 	$line  = $variation->get_meta( NDM_CAMPAIGN_META );
 	$in    = is_array( $line ) && isset( $line['price'] );
 	$price = $in ? (float) $line['price'] : (float) ( '' !== (string) $variation->get_sale_price( 'edit' ) ? $variation->get_sale_price( 'edit' ) : $variation->get_regular_price( 'edit' ) );
