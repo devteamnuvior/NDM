@@ -79,7 +79,7 @@ export function FromPrice({ from, unit, source, withItem, big, mark }: { from: n
             {money(source.was)}
           </s>
         ) : null}
-        <span data-look={sale?.look} className={`pr-from font-aeonik tracking-[-0.02em] ${big ? "text-[22px]" : "text-[20px]"} ${sale ? "is-sale" : "text-ndm-ink"}`}>
+        <span data-look={sale?.look} className={`pr-from font-aeonik tracking-[-0.02em] ${big ? "text-[22px]" : "text-[20px]"} ${cut ? "is-sale" : "text-ndm-ink"}`}>
           {value}
         </span>
         {unit}
