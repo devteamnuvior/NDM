@@ -3,7 +3,7 @@ import { BUILT_IN_CONCERNS, CONCERN_SHARED } from "@/config/concern";
 import { withRealLinks } from "@/lib/site-links";
 import { getArticleSlugs } from "@/lib/blog";
 import type { LowestPrice } from "@/lib/price-book";
-import { articlePath, concernPath } from "@/lib/post-paths";
+import { articlePath, concernPath, parentCrumbs, type PostCrumb } from "@/lib/post-paths";
 import { pagePath, resolveLabel, toSlug } from "@/lib/routes";
 import { fromText, fromTextLong, getSitePrices, lowestOfSource, type SitePrices } from "@/lib/site-prices";
 import { getConcern, getConcernList, settle } from "@/lib/wordpress";
@@ -14,6 +14,10 @@ export interface ConcernView {
   page: ConcernPage;
   title: string;
   description: string;
+  /** The page's address: "/concerns/", its parents' slugs and its slug. */
+  path: string;
+  /** The pages above this one, from the top down, for the breadcrumb. Empty for a page without a parent. */
+  parents: PostCrumb[];
 }
 
 type Low = (LowestPrice & { categoryId: string }) | null;
@@ -119,7 +123,7 @@ function fromWordPress(wp: WPConcern, prices: SitePrices | null, articles: strin
     faqs: c.faqs.map((f) => [f.q, f.a]),
   };
 
-  return { page, title: c.seo_title || `${wp.title} Treatment Toronto | NewDermaMed`, description: c.seo_description || c.intro };
+  return { page, title: c.seo_title || `${wp.title} Treatment Toronto | NewDermaMed`, description: c.seo_description || c.intro, path: concernPath(wp.slug, wp.parents), parents: parentCrumbs(wp.parents, concernPath) };
 }
 
 /** The built-in copy of a concern (shown when WordPress cannot be reached), with WooCommerce's prices when those can be read. */
@@ -132,6 +136,8 @@ function builtIn(slug: string, prices: SitePrices | null): ConcernView | null {
   const all = list.map((o, i) => priced(o, lows[i]));
   return {
     ...own,
+    path: concernPath(slug),
+    parents: [],
     page: {
       ...p,
       facts: facts(list.length, starting(lows)),
@@ -164,5 +170,6 @@ export async function getConcernSlugs(): Promise<string[]> {
 
 /** Every published concern with its address ("/concerns/wrinkles-fine-lines"); empty when WordPress cannot be reached. */
 export async function getConcernPaths(): Promise<{ slug: string; path: string }[]> {
-  return (await getConcernSlugs()).map((slug) => ({ slug, path: concernPath(slug) }));
+  const read = await settle(getConcernList);
+  return read.ok ? read.data.map((c) => ({ slug: c.slug, path: concernPath(c.slug, c.parents) })) : [];
 }

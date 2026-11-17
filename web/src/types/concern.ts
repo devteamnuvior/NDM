@@ -68,10 +68,18 @@ export interface WPConcernProduct {
   image: WPConcernImage | null;
 }
 
+/** A page above a procedure or a concern: the post chosen as its "Parent Page" in WordPress, or a parent of that one. */
+export interface PostParent {
+  slug: string;
+  title: string;
+}
+
 /** A concern in the list of concerns (`ndm/v1/concerns`). */
 export interface WPConcernSummary {
-  /** Its address on the site: "/<slug>". */
+  /** The post's slug; its address on the site is "/concerns/<slug>", after its parents' slugs when it has a parent (`concernPath`). */
   slug: string;
+  /** The pages above this one, from the top down. Missing on an older WordPress. */
+  parents?: PostParent[];
   title: string;
 }
 

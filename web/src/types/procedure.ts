@@ -1,9 +1,11 @@
-import type { WPConcernImage } from "@/types/concern";
+import type { PostParent, WPConcernImage } from "@/types/concern";
 
 /** A procedure in the list of procedures (`ndm/v1/procedures`). */
 export interface WPProcedureSummary {
   /** The post's slug; its address on the site is the post type's folder and the slug ("/injectables/botox", `procedurePath`). */
   slug: string;
+  /** The pages above this one, from the top down (its "Parent Page" in WordPress): their slugs come before this page's in its address ("/injectables/double-chin/belkyra-kybella"). Missing on an older WordPress. */
+  parents?: PostParent[];
   title: string;
   /** The post type's name in WordPress: "Procedures", "Injectables", "Laser", "Body", "Veins" or "Hair". Missing on a WordPress without the procedure lists. */
   type?: string;

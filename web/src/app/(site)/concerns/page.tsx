@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 /** Every concern page WordPress holds, by name: where "See all concerns" and the footer's Concerns link lead. */
 export default async function ConcernsIndex() {
   const read = await settle(getConcernList);
-  const items = (read.ok ? read.data : []).map((c) => ({ title: c.title, path: concernPath(c.slug) })).sort((a, b) => a.title.localeCompare(b.title));
+  const items = (read.ok ? read.data : []).map((c) => ({ title: c.title, path: concernPath(c.slug, c.parents) })).sort((a, b) => a.title.localeCompare(b.title));
   return (
     <PostIndex
       crumb="Concerns"

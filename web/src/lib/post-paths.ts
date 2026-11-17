@@ -11,6 +11,9 @@
  *   Hair                 /hair/<slug>
  *   blog posts           /blog/<slug>
  *
+ * A procedure or a concern with a parent page (WordPress's "Parent Page" box) has its parents' slugs
+ * before its own: /injectables/double-chin/belkyra-kybella.
+ *
  * The Aptos Thread Lift page is a standard WordPress page, not a post type, and keeps /aptos-thread-lift.
  * The same folders are written in the mu-plugin (`ndm_headless_site_path()`, includes/config.php), which
  * shows each post's address in wp-admin. An old one-part address ("/botox") redirects to the new one.
@@ -44,9 +47,25 @@ export function isProcedureFolder(folder: string): folder is ProcedureFolder {
   return FOLDERS.includes(folder);
 }
 
-export const procedurePath = (type: string | undefined, slug: string): string => `/${procedureFolder(type)}/${slug}`;
-export const concernPath = (slug: string): string => `/${CONCERN_FOLDER}/${slug}`;
+/** The slugs of a page's address after its folder: its parents' slugs, from the top down, then its own. */
+const trail = (slug: string, parents: readonly { slug: string }[] = []): string => [...parents.map((p) => p.slug), slug].join("/");
+
+/** A procedure's address. With parent pages: "/injectables/double-chin/belkyra-kybella". */
+export const procedurePath = (type: string | undefined, slug: string, parents?: readonly { slug: string }[]): string => `/${procedureFolder(type)}/${trail(slug, parents)}`;
+/** A concern's address. With parent pages: "/concerns/<parent>/<slug>". */
+export const concernPath = (slug: string, parents?: readonly { slug: string }[]): string => `/${CONCERN_FOLDER}/${trail(slug, parents)}`;
+
+/** The pages above a post with their own addresses, for the breadcrumb: each one's address runs through the ones before it. */
+export function parentCrumbs(parents: readonly { slug: string; title: string }[] | undefined, path: (slug: string, above: readonly { slug: string }[]) => string): PostCrumb[] {
+  return (parents ?? []).map((p, i, all) => ({ title: p.title, path: path(p.slug, all.slice(0, i)) }));
+}
 export const articlePath = (slug: string): string => `/${BLOG_FOLDER}/${slug}`;
+
+/** A page above the current one, in the breadcrumb. */
+export interface PostCrumb {
+  title: string;
+  path: string;
+}
 
 /** A page published in WordPress: the post's slug and its address on the site ("/injectables/botox"). */
 export interface PostPath {

@@ -12,8 +12,8 @@ import { getConcernList, getProcedureList, settle } from "@/lib/wordpress";
 export async function getPostLists(): Promise<PostLists> {
   const [concerns, procedures] = await Promise.all([settle(getConcernList), settle(getProcedureList)]);
   return {
-    concerns: concerns.ok ? concerns.data.map((c) => ({ slug: c.slug, path: concernPath(c.slug) })) : [],
-    procedures: [...(procedures.ok ? procedures.data.map((p) => ({ slug: p.slug, path: procedurePath(p.type, p.slug) })) : []), { slug: APTOS_SLUG, path: `/${APTOS_SLUG}` }],
+    concerns: concerns.ok ? concerns.data.map((c) => ({ slug: c.slug, path: concernPath(c.slug, c.parents) })) : [],
+    procedures: [...(procedures.ok ? procedures.data.map((p) => ({ slug: p.slug, path: procedurePath(p.type, p.slug, p.parents) })) : []), { slug: APTOS_SLUG, path: `/${APTOS_SLUG}` }],
   };
 }
 

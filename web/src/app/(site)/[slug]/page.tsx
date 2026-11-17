@@ -5,7 +5,7 @@ import { BUILT_IN_APTOS } from "@/config/aptos";
 import { getAptosSlugs, getAptosView } from "@/lib/aptos";
 import { getArticleView } from "@/lib/blog";
 import { getConcernView } from "@/lib/concern";
-import { articlePath, concernPath } from "@/lib/post-paths";
+import { articlePath } from "@/lib/post-paths";
 import { getProcedureView } from "@/lib/procedure";
 
 /**
@@ -33,7 +33,8 @@ export async function generateMetadata({ params }: PageProps<"/[slug]">): Promis
 async function movedTo(slug: string): Promise<string | null> {
   const procedure = await getProcedureView(slug);
   if (procedure) return procedure.path;
-  if (await getConcernView(slug)) return concernPath(slug);
+  const concern = await getConcernView(slug);
+  if (concern) return concern.path;
   if (await getArticleView(slug)) return articlePath(slug);
   return null;
 }

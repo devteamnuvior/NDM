@@ -1295,6 +1295,8 @@ function ndm_headless_concern_answer( $post ) {
 	return array(
 		'id'       => $post->ID,
 		'slug'     => $post->post_name,
+		// The pages above this one, from the top down (includes/parents.php): their slugs come before this page's in its address.
+		'parents'  => ndm_headless_post_parent_list( $post ),
 		'title'    => html_entity_decode( get_the_title( $post ), ENT_QUOTES, 'UTF-8' ),
 		'modified' => mysql_to_rfc3339( $post->post_modified_gmt ),
 		'hero'     => ndm_headless_concern_image( (int) get_post_thumbnail_id( $post ) ),
@@ -1360,8 +1362,9 @@ function ndm_headless_concern_rest_list() {
 	$list = array();
 	foreach ( $posts as $post ) {
 		$list[] = array(
-			'slug'  => $post->post_name,
-			'title' => html_entity_decode( get_the_title( $post ), ENT_QUOTES, 'UTF-8' ),
+			'slug'    => $post->post_name,
+			'parents' => ndm_headless_post_parent_list( $post ),
+			'title'   => html_entity_decode( get_the_title( $post ), ENT_QUOTES, 'UTF-8' ),
 		);
 	}
 

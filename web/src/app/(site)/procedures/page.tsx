@@ -23,7 +23,7 @@ export default async function ProceduresIndex() {
   const groups: PostIndexGroup[] = GROUPS.map(([folder, title]) => ({
     id: folder,
     title,
-    items: list.filter((p) => procedureFolder(p.type) === folder).map((p) => ({ title: p.title, path: procedurePath(p.type, p.slug) })).sort((a, b) => a.title.localeCompare(b.title)),
+    items: list.filter((p) => procedureFolder(p.type) === folder).map((p) => ({ title: p.title, path: procedurePath(p.type, p.slug, p.parents) })).sort((a, b) => a.title.localeCompare(b.title)),
   }));
   groups.splice(1, 0, { id: "thread-lift", title: "Thread lift", items: [{ title: "Aptos Thread Lift", path: `/${APTOS_SLUG}` }] });
   return (

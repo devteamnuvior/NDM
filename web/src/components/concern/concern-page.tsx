@@ -22,6 +22,7 @@ import { TxWhy } from "@/components/treatment/tx-why";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Faq } from "@/components/ui/faq";
 import type { ConcernView } from "@/lib/concern";
+import type { ResolvedLink } from "@/types/navigation";
 
 /** A concern page (for example /concerns/wrinkles-fine-lines): one design for every post of the WordPress post type "Concerns". */
 export function ConcernPage({ view }: { view: ConcernView }) {
@@ -29,7 +30,7 @@ export function ConcernPage({ view }: { view: ConcernView }) {
   const n = (id: string) => txNumber(p.nav, id);
   return (
     <main id="main" data-shell="inner" data-page="concern">
-      <Breadcrumb items={[[p.crumbs[0], crumbLink(p.crumbs[0])], p.crumbs[1]]} dark />
+      <Breadcrumb items={[[p.crumbs[0], crumbLink(p.crumbs[0])], ...view.parents.map((x): [string, ResolvedLink] => [x.title, { href: x.path, internal: true }]), p.crumbs[1]]} dark />
       <ProcHero title={p.title} sub={p.sub} hero={p.hero} where={p.where} />
       <TxGlance facts={p.facts} />
       <section aria-label="Book a free consultation" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-6 lg:hidden">

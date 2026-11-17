@@ -31,6 +31,7 @@ require_once NDM_HEADLESS_DIR . '/includes/pages.php';
 require_once NDM_HEADLESS_DIR . '/includes/before-after.php';
 require_once NDM_HEADLESS_DIR . '/includes/concerns.php';
 require_once NDM_HEADLESS_DIR . '/includes/procedures.php';
+require_once NDM_HEADLESS_DIR . '/includes/parents.php';
 require_once NDM_HEADLESS_DIR . '/includes/aptos.php';
 require_once NDM_HEADLESS_DIR . '/includes/about.php';
 require_once NDM_HEADLESS_DIR . '/includes/vip-sale.php';

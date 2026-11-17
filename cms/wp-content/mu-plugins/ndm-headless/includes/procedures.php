@@ -468,7 +468,7 @@ function ndm_headless_procedure_intro( $post ) {
 	} else {
 		echo '<p><strong>Page on the site:</strong> its address is the "Slug" below, made from the title when the procedure is first saved.</p>';
 	}
-	echo '<p>Every page of Procedures, Injectables, Skin, Laser, Body, Veins and Hair has the same design and the same boxes; the address is the folder of its list and the slug (/injectables/botox, /skin/..., /laser/..., /body/..., /veins/..., /hair/..., /procedures/...), and the slug must be unique across all of them.</p>';
+	echo '<p>Every page of Procedures, Injectables, Skin, Laser, Body, Veins and Hair has the same design and the same boxes; the address is the folder of its list and the slug (/injectables/botox, /skin/..., /laser/..., /body/..., /veins/..., /hair/..., /procedures/...), and the slug must be unique across all of them. A page with a parent (the "Parent Page" box) has the parent\'s slug before its own: /injectables/double-chin/belkyra-kybella.</p>';
 	echo '<p>Filled in by the site on every procedure page, not typed here: every price and offer (from the products picked in the Price List box), the section bar, the booking form, the clinic film, Why NewDermaMed, Our team, Testimonials, Visit us and Start your journey. A section whose box is left empty is left out of the page.</p>';
 	echo '</div>';
 }
@@ -597,6 +597,8 @@ function ndm_headless_procedure_answer( $post ) {
 	return array(
 		'id'       => $post->ID,
 		'slug'     => $post->post_name,
+		// The pages above this one, from the top down (includes/parents.php): their slugs come before this page's in its address.
+		'parents'  => ndm_headless_post_parent_list( $post ),
 		'title'    => html_entity_decode( get_the_title( $post ), ENT_QUOTES, 'UTF-8' ),
 		// Which list the page is in: "Procedures", "Injectables", "Laser"...
 		'type'     => ndm_headless_procedure_types()[ $post->post_type ][0],
@@ -654,9 +656,10 @@ function ndm_headless_procedure_rest_list() {
 	$list = array();
 	foreach ( $posts as $post ) {
 		$list[] = array(
-			'slug'  => $post->post_name,
-			'title' => html_entity_decode( get_the_title( $post ), ENT_QUOTES, 'UTF-8' ),
-			'type'  => ndm_headless_procedure_types()[ $post->post_type ][0],
+			'slug'    => $post->post_name,
+			'parents' => ndm_headless_post_parent_list( $post ),
+			'title'   => html_entity_decode( get_the_title( $post ), ENT_QUOTES, 'UTF-8' ),
+			'type'    => ndm_headless_procedure_types()[ $post->post_type ][0],
 		);
 	}
 

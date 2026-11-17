@@ -2,7 +2,7 @@ import "server-only";
 import type { TxPriceGroup } from "@/components/treatment/price-group";
 import { withRealLinks } from "@/lib/site-links";
 import { BUILT_IN_PROCEDURES, PROCEDURE_SHARED } from "@/config/procedure";
-import { procedurePath } from "@/lib/post-paths";
+import { parentCrumbs, procedurePath, type PostCrumb } from "@/lib/post-paths";
 import { formatPrice } from "@/lib/price-book";
 import { fillPrices, fillPricesDeep, getSitePrices, type SitePrices } from "@/lib/site-prices";
 import { priceGroup } from "@/lib/treatment-prices";
@@ -17,8 +17,10 @@ export interface ProcedureView {
   groups: TxPriceGroup[];
   title: string;
   description: string;
-  /** The page's address: its post type's folder and its slug ("/injectables/botox"). */
+  /** The page's address: its post type's folder, its parents' slugs and its slug ("/injectables/botox"). */
   path: string;
+  /** The pages above this one, from the top down, for the breadcrumb. Empty for a page without a parent. */
+  parents: PostCrumb[];
 }
 
 type Category = SitePrices["categories"][number];
@@ -106,7 +108,7 @@ function sections(p: ProcedurePage, groups: TxPriceGroup[]): Record<string, bool
 }
 
 /** The page with WooCommerce's amounts written into its copy, and only the sections it has content for. */
-function build(raw: ProcedurePage, sources: Source[], seo: { title: string; description: string; fallback: string }, path: string): ProcedureView {
+function build(raw: ProcedurePage, sources: Source[], seo: { title: string; description: string; fallback: string }, path: string, parents: PostCrumb[] = []): ProcedureView {
   /* one group per product, whatever was picked twice */
   const groups = sources.filter((s, i) => sources.findIndex((x) => x.item.id === s.item.id) === i).map(toGroup);
   const values = priceValues(groups, [raw, seo]);
@@ -118,7 +120,7 @@ function build(raw: ProcedurePage, sources: Source[], seo: { title: string; desc
     /* the offer card only while WooCommerce has an offer on the first product */
     offer: values.maxoff ? filled.offer : undefined,
   };
-  return { page, groups, title: fillPrices(seo.title, values) || seo.fallback, description: fillPrices(seo.description, values) || filled.sub, path };
+  return { page, groups, title: fillPrices(seo.title, values) || seo.fallback, description: fillPrices(seo.description, values) || filled.sub, path, parents };
 }
 
 /** The page title when none is written, or when its price is not known. */
@@ -195,7 +197,7 @@ function fromWordPress(wp: WPProcedure, prices: SitePrices | null): ProcedureVie
     faqs: c.faqs.map((f) => [f.q, f.a]),
   };
 
-  return build(page, sources, { title: c.seo_title, description: c.seo_description, fallback: plainTitle(name) }, procedurePath(wp.type, wp.slug));
+  return build(page, sources, { title: c.seo_title, description: c.seo_description, fallback: plainTitle(name) }, procedurePath(wp.type, wp.slug, wp.parents), parentCrumbs(wp.parents, (slug, above) => procedurePath(wp.type, slug, above)));
 }
 
 /** The built-in copy of a procedure (shown when WordPress cannot be reached), with WooCommerce's prices when those can be read. */
@@ -233,5 +235,5 @@ export async function getProcedureSlugs(): Promise<string[]> {
 /** Every published procedure with its address ("/injectables/botox"); empty when WordPress cannot be reached. */
 export async function getProcedurePaths(): Promise<{ slug: string; path: string }[]> {
   const read = await settle(getProcedureList);
-  return read.ok ? read.data.map((p) => ({ slug: p.slug, path: procedurePath(p.type, p.slug) })) : [];
+  return read.ok ? read.data.map((p) => ({ slug: p.slug, path: procedurePath(p.type, p.slug, p.parents) })) : [];
 }

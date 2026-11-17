@@ -25,7 +25,7 @@ export function Breadcrumb({ items, dark }: BreadcrumbProps) {
           const [label, to] = Array.isArray(x) ? x : [x, undefined];
           const last = i === items.length - 1;
           return (
-            <Fragment key={label}>
+            <Fragment key={`${i}:${label}`}>
               <li aria-hidden="true" className={dark ? "text-white/35" : "text-ndm-ink/30"}>
                 /
               </li>
