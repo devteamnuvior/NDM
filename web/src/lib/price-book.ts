@@ -19,8 +19,9 @@ function countIn(label: string): number {
 }
 
 function percentOff(tag: string | undefined): number {
-  /* the price list ties "OFF" to its number with a no-break space, so any white space is accepted */
-  const m = /^(\d+)%\s*OFF$/i.exec(tag ?? "");
+  /* the price list ties "OFF" to its number with a no-break space, so any white space is accepted; a sale campaign puts its
+     badge before the figure ("SALE 30% OFF", "BLACK FRIDAY 30% OFF"), which is the same offer (user, 2026-11-18) */
+  const m = /(?:^|\s)(\d+)%\s*OFF$/i.exec((tag ?? "").trim());
   return m ? Number(m[1]) : 0;
 }
 
