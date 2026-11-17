@@ -5498,7 +5498,7 @@ const PROC = {
      what it is, how it works, the areas treated, who it may not suit), in qualified language; the live safety paragraph closes it */
   intro: {
     id: 'benefits', tag: 'Benefits', lead: 'What is Botox® Cosmetic', strong: 'and how does it work?',
-    img: 'assets/botox/why-choose.jpg', fit: 'contain', bg: '#EFEDE7', /* the treatment-area diagram, shown whole */
+    img: 'assets/botox/why-choose.jpg', ratio: '1 / 1', pos: '50% 50%', /* the treatment-area diagram: a square frame, so it fills top to bottom and shows whole */
     alt: 'Treatment areas: forehead lines, frown lines, crow’s feet, jawline slimming, neck bands and hyperhidrosis',
     text: [
       'Botox® Cosmetic is a Health Canada approved prescription neuromodulator. At NewDermaMed it is given only by our licensed medical team, after a free in-person assessment at our Uptown clinic near Yonge and Sheppard or our Downtown clinic near Bay and College.',
@@ -6213,7 +6213,7 @@ function TxIntro({ p }) {
       <TxHead p={p} id={t.id || 'what'} tag={t.tag} hid="intro-title" lead={t.lead} strong={t.strong} />
       <div className={`${TX_WRAP} mt-[clamp(28px,3.4vw,48px)] grid items-center gap-8 lg:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] lg:gap-[clamp(40px,5vw,72px)]`}>
         <div className="rv relative mx-auto w-full max-w-[460px] lg:max-w-none" style={{ transitionDelay: '.1s' }}>
-          <div className={`relative aspect-[5/4] overflow-hidden rounded-[24px] bg-ndm-mist lg:aspect-auto ${t.para ? 'lg:h-[min(50vh,460px)]' : 'lg:h-[min(62vh,560px)]'}`}>
+          <div className={`relative overflow-hidden rounded-[24px] bg-ndm-mist ${t.ratio ? '' : `aspect-[5/4] lg:aspect-auto ${t.para ? 'lg:h-[min(50vh,460px)]' : 'lg:h-[min(62vh,560px)]'}`}`} style={t.ratio ? { aspectRatio: t.ratio } : undefined}>
             <img src={t.img} alt={t.alt || ''} loading="lazy" className={`absolute inset-0 h-full w-full ${t.fit === 'contain' ? 'object-contain' : 'object-cover'}`} style={{ objectPosition: t.pos || '50% 40%', background: t.bg }} />
           </div>
           {t.ring && (

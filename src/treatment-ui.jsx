@@ -169,7 +169,7 @@ function TxIntro({ p }) {
       <TxHead p={p} id={t.id || 'what'} tag={t.tag} hid="intro-title" lead={t.lead} strong={t.strong} />
       <div className={`${TX_WRAP} mt-[clamp(28px,3.4vw,48px)] grid items-center gap-8 lg:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] lg:gap-[clamp(40px,5vw,72px)]`}>
         <div className="rv relative mx-auto w-full max-w-[460px] lg:max-w-none" style={{ transitionDelay: '.1s' }}>
-          <div className={`relative aspect-[5/4] overflow-hidden rounded-[24px] bg-ndm-mist lg:aspect-auto ${t.para ? 'lg:h-[min(50vh,460px)]' : 'lg:h-[min(62vh,560px)]'}`}>
+          <div className={`relative overflow-hidden rounded-[24px] bg-ndm-mist ${t.ratio ? '' : `aspect-[5/4] lg:aspect-auto ${t.para ? 'lg:h-[min(50vh,460px)]' : 'lg:h-[min(62vh,560px)]'}`}`} style={t.ratio ? { aspectRatio: t.ratio } : undefined}>
             <img src={t.img} alt={t.alt || ''} loading="lazy" className={`absolute inset-0 h-full w-full ${t.fit === 'contain' ? 'object-contain' : 'object-cover'}`} style={{ objectPosition: t.pos || '50% 40%', background: t.bg }} />
           </div>
           {t.ring && (
