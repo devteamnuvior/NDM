@@ -107,7 +107,8 @@ export const BOTOX: ProcedurePage = {
     "lead": "What is Botox® Cosmetic",
     "strong": "and how does it work?",
     "img": "/assets/botox/why-choose.jpg",
-    "contain": "#EFEDE7",
+    "ratio": "1 / 1",
+    "position": "50% 50%",
     "alt": "Treatment areas: forehead lines, frown lines, crow’s feet, jawline slimming, neck bands and hyperhidrosis",
     "text": [
       "Botox® Cosmetic is a Health Canada approved prescription neuromodulator. At NewDermaMed it is given only by our licensed medical team, after a free in-person assessment at our Uptown clinic near Yonge and Sheppard or our Downtown clinic near Bay and College.",

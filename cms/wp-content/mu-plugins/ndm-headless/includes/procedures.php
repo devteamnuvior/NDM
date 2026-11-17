@@ -225,7 +225,7 @@ function ndm_headless_procedure_schema() {
 				array( 'key' => 'benefits_chips', 'label' => 'Short labels under the text', 'type' => 'lines', 'help' => 'One per line, for example the areas treated.', 'rows' => 4 ),
 				array( 'key' => 'benefits_note', 'label' => 'Note (safety line)', 'type' => 'textarea' ),
 				array( 'key' => 'benefits_image', 'label' => 'Picture', 'type' => 'image' ),
-				array( 'key' => 'benefits_diagram', 'label' => 'The picture is a diagram: show all of it instead of filling the frame', 'type' => 'checkbox' ),
+				array( 'key' => 'benefits_diagram', 'label' => 'The picture is a square diagram: show it in a square frame, whole', 'type' => 'checkbox' ),
 			),
 		),
 		array(

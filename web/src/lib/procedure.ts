@@ -151,7 +151,9 @@ function fromWordPress(wp: WPProcedure, prices: SitePrices | null): ProcedureVie
     nav: S.nav,
     intro: {
       ...S.intro,
-      contain: c.benefits_diagram ? S.intro.contain : undefined,
+      /* a diagram sits in a square frame, centred, so it shows whole; a photo fills the usual wide frame */
+      ratio: c.benefits_diagram ? S.intro.ratio : undefined,
+      position: c.benefits_diagram ? S.intro.position : undefined,
       lead: c.benefits_lead,
       strong: c.benefits_strong,
       img: c.benefits_image?.src ?? "",

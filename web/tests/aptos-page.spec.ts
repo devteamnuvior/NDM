@@ -26,8 +26,8 @@ test("the quick facts sit half over the header photo, with both clinics' numbers
   await page.goto(`${NEXT_URL}/aptos-thread-lift`);
   await page.waitForTimeout(1200);
   const glance = page.getByRole("region", { name: "Treatment at a glance" });
-  await expect(glance.locator("dt")).toHaveText(["Treatment type", "Duration", "Recovery time", "May last"]);
-  await expect(glance.locator("dd")).toHaveText(["Minimally invasive", "60 minutes", "Up to 2 weeks", "Up to 24 months"]);
+  await expect(glance.locator("dt")).toHaveText(["Treatment type", "Duration", "Sessions", "May last"]);
+  await expect(glance.locator("dd")).toHaveText(["Minimally invasive", "60 minutes", "One for most plans", "Up to 24 months"]);
   await expect(glance.getByRole("link", { name: "Call the Downtown clinic at 416-671-9766" })).toHaveAttribute("href", "tel:+14166719766");
   await expect(glance.getByRole("link", { name: "Call the Uptown clinic at 416-224-8800" })).toHaveAttribute("href", "tel:+14162248800");
   const hero = (await page.locator('section[aria-labelledby="proc-title"]').boundingBox())!;

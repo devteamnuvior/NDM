@@ -49,3 +49,6 @@ next-env.d.ts
 /test-results/
 /playwright-report/
 /tests/**/*-snapshots/
+
+# builds sent to another folder (NEXT_DIST_DIR): .next-a, .next-b, .next-test, .next-verify ...
+/.next-*/

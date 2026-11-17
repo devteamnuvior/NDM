@@ -77,8 +77,8 @@ export interface TxIntroContent {
   img: string;
   alt: string;
   position?: string;
-  /** Show the whole picture on this background (a diagram), instead of filling the frame. */
-  contain?: string;
+  /** The frame's own shape ("1 / 1"), for a diagram that must show whole; left out, the usual wide frame. */
+  ratio?: string;
   points: [title: string, text: string][];
 }
 
@@ -108,7 +108,7 @@ export interface ProcedurePage extends TxHeroContent {
   intro: TxIntroContent;
   film: { src: string; poster: string; lead: string; strong: string; text: string; chips: string[] };
   overview: { tag: string; lead: string; strong: string; tabs: { label: string; stat: [figure: string, label: string]; text: string[]; link?: [href: string, label: string] }[] };
-  choose: { img: string; alt: string; tag: string; lead: string; strong: string; cards: [title: string, text: string][] };
+  choose: { img: string; alt: string; tag: string; lead: string; strong: string; text?: string; cards: [title: string, text: string][] };
   reel: { src: string; poster: string; tag: string; lead: string; strong: string; text: string };
   why: TxWhyContent;
   results: TxResultsContent;

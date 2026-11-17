@@ -40,7 +40,7 @@ const content = {
   benefits_chips: p.intro.chips,
   benefits_note: p.intro.note,
   benefits_image: photo(p.intro.img, p.intro.alt),
-  benefits_diagram: !!p.intro.contain,
+  benefits_diagram: !!p.intro.ratio,
   about_lead: p.overview.lead,
   about_strong: p.overview.strong,
   tabs: p.overview.tabs.map((t) => ({ label: t.label, figure: t.stat[0], figure_label: t.stat[1], text: t.text, link: t.link?.[0] ?? "", link_label: t.link?.[1] ?? "" })),

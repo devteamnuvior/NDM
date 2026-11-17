@@ -15,7 +15,7 @@ export const PROCEDURE_SHARED = {
   /** The offer card of the header: its title is the procedure's, its figure is WooCommerce's largest offer. */
   offer: { tag: BOTOX.offer!.tag, big: BOTOX.offer!.big, href: BOTOX.offer!.href, cta: BOTOX.offer!.cta },
   /** Benefits: the section's tag, and the background a diagram is shown whole on. */
-  intro: { id: BOTOX.intro.id, tag: BOTOX.intro.tag, contain: BOTOX.intro.contain },
+  intro: { id: BOTOX.intro.id, tag: BOTOX.intro.tag, ratio: BOTOX.intro.ratio, position: BOTOX.intro.position },
   /** The clinic film; its heading starts with the procedure's name. */
   film: { src: BOTOX.film.src, poster: BOTOX.film.poster, strong: BOTOX.film.strong, text: BOTOX.film.text, chips: BOTOX.film.chips },
   overview: { tag: BOTOX.overview.tag },
