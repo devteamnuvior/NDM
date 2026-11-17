@@ -24,6 +24,29 @@
   height: 100%;
   object-fit: cover;
 }
+/* header photos (user, 2026-11-17): three photo slides, each with one of the film's slow camera moves chosen at random (no light effects)
+   (same as the prototype's index.html, round 42) */
+.hs-slide{position:absolute;inset:0;overflow:hidden;opacity:0;transition:opacity 1.6s ease;background:#0B0F13}
+.hs-slide.is-on{opacity:1;z-index:1}
+.hs-slide::after{content:"";position:absolute;inset:0;background:rgba(11,15,19,var(--hs-dim));pointer-events:none}
+.hs-pic,.hs-pic img{position:absolute;inset:0;width:100%;height:100%}
+.hs-pic img{object-fit:cover}
+.hs-pic{transform-origin:50% 50%;animation:none 8.2s cubic-bezier(.33,0,.2,1) both}
+.hs-pic.mv-push{animation-name:hsPush}.hs-pic.mv-pull{animation-name:hsPull}.hs-pic.mv-pan-l{animation-name:hsPanL}.hs-pic.mv-pan-r{animation-name:hsPanR}.hs-pic.mv-rise{animation-name:hsRise}
+@keyframes hsPush{from{transform:scale(1.02)}to{transform:scale(1.14)}}
+@keyframes hsPull{from{transform:scale(1.15)}to{transform:scale(1.03)}}
+@keyframes hsPanL{from{transform:scale(1.12) translate3d(2.4%,0,0)}to{transform:scale(1.12) translate3d(-2.4%,0,0)}}
+@keyframes hsPanR{from{transform:scale(1.12) translate3d(-2.4%,0,0)}to{transform:scale(1.12) translate3d(2.4%,0,0)}}
+@keyframes hsRise{from{transform:scale(1.12) translate3d(0,2.2%,0)}to{transform:scale(1.12) translate3d(0,-2.2%,0)}}
+.hs-paused .hs-pic,.hs-paused .hs-dot i{animation-play-state:paused}
+.hs-dots{display:flex;flex-shrink:0;gap:6px}
+.hs-dot{position:relative;width:34px;height:20px;padding:0}
+.hs-dot::before,.hs-dot i{content:"";position:absolute;left:0;right:0;top:9px;height:2px;border-radius:2px;background:rgba(255,255,255,.28)}
+.hs-dot i{right:auto;width:0;background:#fff}
+.hs-dot.is-on i{animation:hsDot linear both}
+@keyframes hsDot{to{width:100%}}
+@media (prefers-reduced-motion:reduce){.hs-pic,.hs-slide,.hs-dot.is-on i{animation:none!important}.hs-dot.is-on i{width:100%}}
+
 .hf::before {
   content: "";
   position: absolute;

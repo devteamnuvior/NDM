@@ -37,7 +37,7 @@ const PROC = {
     chips: ['4763 Yonge St, Uptown', '790 Bay St, Downtown', 'Free consultation', 'VISIA® skin analysis'] },
   /* About (ProcOverview tabs): Ray's five tabs; the key numbers beside them are this page's */
   overview: {
-    tag: 'About', lead: 'What can I expect', strong: 'from Botox® treatment?',
+    tag: 'About', lead: 'What can I expect', strong: 'from Botox® treatment?', dark: true, /* a full-bleed dark band, no card (ProcOverview) */
     tabs: [
       { label: 'Treatment Overview', stat: ['20+', 'years of clinical research'], text: [
         'By momentarily relaxing the underlying muscles that cause expression lines, Botox® Cosmetic is a reliable, non-surgical procedure that reduces wrinkles and fine lines. Botox® is one of the most researched and secure cosmetic procedures in the world, having been used in more than 78 countries and undergoing more than 20 years of clinical research. Our experts at NewDermaMed use precise injections to produce refreshed, natural-looking results without changing your distinctive facial expressions.'] },
@@ -112,9 +112,9 @@ const PROC = {
     doctor: { name: 'Dr. Negin Mastouri', role: 'Medical Director', img: 'assets/team/negin.jpg' },
     /* related treatments as photo cards: [title, link to the treatment's own page, photo, group]; slug() opens the page once it
        exists (PAGE_LINKS) and a #/slug placeholder until then */
-    related: [['Dermal Fillers', slug('Dermal Fillers'), 'assets/home/v3/jawline-720.webp', 'Injectable'], ['Lip Augmentation', slug('Lip Augmentation'), 'assets/home/v3/lips-720.webp', 'Injectable'],
-      ['Skin Boosters', slug('Skin Boosters'), 'assets/home/v3/booster-720.webp', 'Injectable'], ['Aptos Thread Lift', slug('Aptos Thread Lift'), 'assets/aptos/midface-vectors.jpg', 'Bio-stimulator'],
-      ['Sculptra®', slug('Sculptra®'), 'assets/home/v3/sculptra-720.webp', 'Bio-stimulator'], ['Microneedling', slug('Microneedling'), 'assets/home/v3/mneedle-720.webp', 'Skin']],
+    related: [['Dermal Fillers', slug('Dermal Fillers'), 'assets/home/menu/dermal-fillers.jpg', 'Injectable'], ['Lip Augmentation', slug('Lip Augmentation'), 'assets/home/menu/lip-fillers.jpg', 'Injectable'],
+      ['Skin Boosters', slug('Skin Boosters'), 'assets/home/menu/skin-boosters.jpg', 'Injectable'], ['Aptos Thread Lift', slug('Aptos Thread Lift'), 'assets/aptos/midface-vectors.jpg', 'Bio-stimulator'],
+      ['Sculptra®', slug('Sculptra®'), 'assets/home/menu/sculptra.jpg', 'Bio-stimulator'], ['Microneedling', slug('Microneedling'), 'assets/home/menu/microneedling.jpg', 'Skin']],
   },
   faq: { lead: 'FAQ For', strong: 'Botox®', sub: 'Everything you need to know before starting your journey with us.' },
   faqs: [
@@ -242,7 +242,7 @@ function ProcGlance({ p, wide }) {
 function ProcOverview({ p }) {
   const ref = useRef(null), tabs = useRef([]);
   useReveal(ref);
-  const o = p.overview;
+  const o = p.overview, dk = !!o.dark;
   const n = txNum(p, 'overview');
   const [act, setAct] = useState(0);
   const key = (e, i) => {
@@ -253,13 +253,13 @@ function ProcOverview({ p }) {
     setAct(m); if (tabs.current[m]) tabs.current[m].focus();
   };
   return (
-    <section ref={ref} id="overview" aria-labelledby="overview-title" className="ov2 relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)] text-ndm-ink">
+    <section ref={ref} id="overview" aria-labelledby="overview-title" data-nav={dk ? 'dark' : undefined} className={`ov2 ${dk ? 'ov2-dark text-white' : 'text-ndm-ink'} relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)]`}>
       <span aria-hidden="true" className="ov2-orb ov2-orb-a" /><span aria-hidden="true" className="ov2-orb ov2-orb-b" /><span aria-hidden="true" className="ov2-orb ov2-orb-c" />
       <svg aria-hidden="true" viewBox="0 0 400 400" className="ov2-ring"><circle cx="200" cy="200" r="190" /><circle cx="200" cy="200" r="150" /></svg>
       <div className={`${TX_WRAP} relative`}>
         <div className="text-center">
-          <Eyebrow className="rv">{n && <span className="tabular-nums text-ndm-deep">{n}</span>}{o.tag}</Eyebrow>
-          <TwoTone id="overview-title" className="rv mx-auto mt-3" size="text-[clamp(26px,min(2.8vw,4.6vh),40px)]" lead={twoLine(o.lead)} strong={o.strong} style={{ transitionDelay: '.06s' }} />
+          <Eyebrow dark={dk} className="rv">{n && <span className={`tabular-nums ${dk ? 'text-ndm-sky' : 'text-ndm-deep'}`}>{n}</span>}{o.tag}</Eyebrow>
+          <TwoTone id="overview-title" dark={dk} className="rv mx-auto mt-3" size="text-[clamp(26px,min(2.8vw,4.6vh),40px)]" lead={twoLine(o.lead)} strong={o.strong} style={{ transitionDelay: '.06s' }} />
         </div>
         {/* round 31: the tab names sit in one row on top again; the panel below is compact so the section fits one view */}
         <div className="rv ov2-panel relative mt-[clamp(16px,2.6vh,28px)] overflow-hidden rounded-[26px]" style={{ transitionDelay: '.1s' }}>

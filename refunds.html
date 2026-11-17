@@ -232,6 +232,12 @@
   /* announcement bar attention */
   .promo-attn{background:linear-gradient(90deg,#0F80C3,#209ED9 30%,#26B1E7 50%,#209ED9 70%,#0F80C3);background-size:200% 100%;animation:promoFlow 9s linear infinite}
   @keyframes promoFlow{to{background-position:-200% 0}}
+  /* Black Friday look of the bar (round 36): the sale page's black with its red glow, a red NEW pill; on every page until the sale is over */
+  .promo-attn.is-bf{background:radial-gradient(55% 300% at 100% 0%,rgba(211,18,29,.42),transparent 62%),radial-gradient(45% 300% at 0% 100%,rgba(211,18,29,.22),transparent 70%),#0B0B0C;animation:none;box-shadow:inset 0 -1px 0 rgba(255,255,255,.1)}
+  .promo-attn.is-bf .promo-shine{display:none}
+  .promo-attn.is-bf .promo-new{background:#D3121F;color:#fff}
+  .promo-attn.is-bf .promo-ping{background:#fff}
+  .promo-attn.is-bf svg{color:#EE3A45}
   .promo-shine{background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:250% 100%;background-repeat:no-repeat;background-position:150% 0;mix-blend-mode:soft-light;animation:promoShine 5.5s cubic-bezier(.45,0,.25,1) 1.4s infinite}
   @keyframes promoShine{0%{background-position:150% 0}35%,100%{background-position:-60% 0}}
   .promo-ping::after{content:"";position:absolute;inset:0;border-radius:999px;background:#FFA617;animation:promoPing 1.6s ease-out infinite}
@@ -636,7 +642,8 @@
   .nav-here.is-left{left:0;margin-left:0;bottom:-9px}
   @keyframes navHere{from{transform:scaleX(0);opacity:0}to{transform:none;opacity:1}}
   .menu-item[aria-current="page"],.menu-item-m[aria-current="page"]{color:#0F80C3;font-weight:600}
-  .menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{content:'';flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18)}
+  .menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{content:'';flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18);animation:ndmBeat 1.6s ease-out infinite}
+  @media (prefers-reduced-motion: reduce){.menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{animation:none}}
   /* section tag: brand-mark chip + label in a pill with a fine blue-to-amber edge and a slow light sweep */
   .eyebrow{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;gap:10px;padding:4px 18px 4px 4px;border:1px solid transparent;border-radius:999px;font-size:15px;font-weight:500;line-height:1.2;letter-spacing:-.005em;color:#1B242B;
     background:linear-gradient(180deg,#fff,#F3F9FD) padding-box,linear-gradient(115deg,rgba(38,177,231,.6),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(255,166,23,.55)) border-box;
@@ -987,7 +994,7 @@ const priceRows = (id, item) => { const c = PRICE_BY_ID[id]; const it = c && c.i
 /* the lowest price in one price table after its discounts; per unit when the table is priced per unit (e.g. 220 units $1848 -> $8.40) */
 const rowsFrom = (rows, perUnit) => Math.round(Math.min(...rows.map((r) => (perUnit && !/regular/i.test(r[0]) ? r[1] / pCount(r[0]) : r[1]))) * 100) / 100;
 /* ---------------------------------------------------------------- sale tags and where a "from" price comes from (2026-11-16)
-   SALE_LOOK: the look of the offer tags while a promotion runs: 'vip' (red and blue), 'bf' (black and gold), 'holiday' (green and gold),
+   SALE_LOOK: the look of the offer tags while a promotion runs: 'vip' and 'bf' (black and gold, like VIP Early Access + Black Friday), 'holiday' (green and gold),
    'newyear' (slate), or '' for the plain red tags. Every price table (pricing, Botox, Aptos) reads it. */
 const SALE_LOOK = 'vip';
 /* the lowest row of one price table and how it is counted (per unit when the table is priced per unit) */
@@ -1009,6 +1016,14 @@ function SaleTag({ offer, badge, small, plain = 'pr-badge' }) {
   if (!SALE_LOOK) return offer ? <span className={plain}>{offer}</span> : null;
   if (!badge || !badge.length) return null;
   return <span data-look={SALE_LOOK} className={`sb ${small ? 'sb-sm' : ''} ${badge.length > 1 ? 'sb-split' : ''}`}>{badge.map((t, i) => <span key={i} className={i ? 'sb-b' : 'sb-a'}>{t}</span>)}</span>;
+}
+/* the offer of a specials card (wheel, Promotion cards, Pricing specials) as a pill in the pricing tags' pattern, in the site's
+   own navy and sky (round 37): "Up to 30% off" -> UP TO | 30% OFF, "Buy 1 get 1 free" -> BUY 1 | GET 1 FREE, "Save $1000" -> SAVE $1,000 */
+const dealParts = (d) => { const t = tagWords(d); const m = /^(UP TO|BUY \d+)\s+(.+)$/.exec(t); return m ? [m[1], m[2]] : t ? [t] : []; };
+function DealPill({ deal, className = '' }) {
+  const p = dealParts(deal);
+  if (!p.length) return null;
+  return <span className={`dp ${p.length > 1 ? 'dp-split' : ''} ${className}`}>{p.map((t, i) => <span key={i} className={i ? 'dp-b' : 'dp-a'}>{t}</span>)}</span>;
 }
 /* where a lowest price is read from: "Skin Booster, 2 Syringes" (withItem puts the treatment first) */
 const sourceWords = (s, withItem) => {
@@ -1071,6 +1086,11 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .sb-a{background:var(--a-bg);color:var(--a-fg);box-shadow:inset 0 0 0 1.5px var(--a-ring);border-radius:999px}
 .sb-split .sb-a{border-radius:999px 0 0 999px;box-shadow:inset 1.5px 0 0 var(--a-ring),inset 0 1.5px 0 var(--a-ring),inset 0 -1.5px 0 var(--a-ring)}
 .sb-b{background:var(--b-bg);color:var(--b-fg);border-radius:0 999px 999px 0}
+.dp{display:inline-flex;align-items:stretch;border-radius:999px;overflow:hidden;white-space:nowrap;font:700 11px/1 Manrope,sans-serif;letter-spacing:.06em}
+.dp>span{display:inline-flex;align-items:center;padding:6px 10px}
+.dp-a{background:#0B0F13;color:#E2C88A;border-radius:999px}
+.dp-split .dp-a{border-radius:999px 0 0 999px}
+.dp-b{background:#D4B574;color:#0B0F13;border-radius:0 999px 999px 0}
 .pr-from.is-sale{color:var(--now,#0F80C3)}.pr-from[data-look]{--now:#0F80C3}
 .sb[data-look="vip"],.pr-from[data-look="vip"],.sb[data-look="bf"],.pr-from[data-look="bf"]{--a-bg:#0B0F13;--a-fg:#fff;--a-ring:#0B0F13;--b-bg:#D4B574;--b-fg:#0B0F13;--now:#9A7A3A}
 .sb[data-look="holiday"],.pr-from[data-look="holiday"]{--a-bg:#173D2C;--a-fg:#fff;--a-ring:#173D2C;--b-bg:#D4B574;--b-fg:#173D2C;--now:#1E5A3E}
@@ -1079,6 +1099,9 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .pr-opt2.is-featured{background:#fff;border-color:#E3E3E0;box-shadow:none!important}
 .pr-ghead>button,.pr-gintro{padding-inline:clamp(14px,2.4vw,28px)}
 .pr-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:999px;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18);vertical-align:middle;transform:translateY(-2px)}
+.pr-dot,.pr-src i,.pr-src-tag i,.ndm-beat{animation:ndmBeat 1.6s ease-out infinite}
+@keyframes ndmBeat{0%{scale:1;box-shadow:0 0 0 0 rgba(32,158,217,.5)}12%{scale:1.3}24%{scale:1}36%{scale:1.2}55%{scale:1;box-shadow:0 0 0 7px rgba(32,158,217,0)}100%{scale:1;box-shadow:0 0 0 0 rgba(32,158,217,0)}}
+@media (prefers-reduced-motion: reduce){.pr-dot,.pr-src i,.pr-src-tag i,.ndm-beat{animation:none}}
 .pr-opt2-info{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
 .pr-opt2-name{font-family:Manrope,sans-serif;font-size:15.5px;font-weight:500;color:#1B242B}
 .pr-opt2-meta{margin-top:3px;font-family:Manrope,sans-serif;font-size:12.5px;color:#6B7480}
@@ -1106,7 +1129,33 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .pr-opt2-now{font-size:27px}
 .pr-opt2:not(.is-featured) .pr-opt2-info,.pr-opt2:not(.is-featured) .pr-opt2-price{grid-column:1}
 .pr-opt2:not(.is-featured) .pr-opt2-act{grid-column:2;grid-row:1 / span 2;align-self:center}
-}`;
+}
+/* round 40 (user, 2026-11-17): every offer card (the offers wheel, the promotion page's "All current offers", the pricing page's
+   Monthly specials) is one light, premium glass card: frosted white over a soft sky and champagne glow, a hairline white edge,
+   champagne accents and solid black buttons that turn gold on hover (no gradients); black and gold like the VIP tags (round 41). The Black Friday page keeps its gold tickets (html.bf) */
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-stage{background:radial-gradient(34% 42% at 30% 56%,rgba(38,177,231,.2),transparent 70%),radial-gradient(28% 40% at 70% 60%,rgba(212,181,116,.2),transparent 72%),radial-gradient(30% 36% at 50% 34%,rgba(15,128,195,.12),transparent 70%)}
+section:has(article.promo-card),section:has(li.ps-card){background-image:radial-gradient(40% 32% at 16% 42%,rgba(38,177,231,.12),transparent 70%),radial-gradient(36% 32% at 84% 72%,rgba(212,181,116,.15),transparent 72%)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card){background:linear-gradient(140deg,rgba(255,255,255,.88) 0%,rgba(255,255,255,.55) 42%,rgba(255,255,255,.4) 70%,rgba(255,255,255,.62) 100%);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.92);box-shadow:inset 0 1px 0 #fff,inset 0 0 0 1px rgba(11,15,19,.05),0 1px 2px rgba(11,15,19,.05),0 24px 54px -30px rgba(11,15,19,.32)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card)::before{display:none}
+li.ps-card{transition:transform .6s var(--e-out),border-color .4s ease,box-shadow .6s ease}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card.is-on{background:linear-gradient(140deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.68) 45%,rgba(255,255,255,.52) 75%,rgba(255,255,255,.74) 100%);border-color:rgba(212,181,116,.6);box-shadow:inset 0 1px 0 #fff,0 0 0 4px rgba(212,181,116,.1),0 2px 4px rgba(11,15,19,.05),0 40px 80px -36px rgba(11,15,19,.45)}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card:not(.is-on):hover{border-color:rgba(212,181,116,.45)}
+@media (hover:hover){article.promo-card:hover,li.ps-card:hover{transform:translateY(-4px);border-color:rgba(212,181,116,.6);box-shadow:inset 0 1px 0 #fff,0 0 0 4px rgba(212,181,116,.08),0 36px 70px -34px rgba(11,15,19,.42)}
+  article.promo-card:hover .promo-badge{background:#0B0F13;color:#E2C88A}}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card) .sw-ring{border-color:rgba(212,181,116,.2)}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card :is(.sw-price,.sw-cur){background:none;color:#0B0F13}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) .sw-cur{color:#B8964F}
+article.promo-card .text-ndm-deep{color:#0B0F13}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.sw-tag,.promo-tag){background:rgba(255,255,255,.6);border:1px solid rgba(11,15,19,.12);color:#0B0F13}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .sw-tag.is-feature{background:#0B0F13;border-color:#0B0F13;color:#E2C88A}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .sw-photo,html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card.is-on .sw-photo{box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(212,181,116,.5),0 10px 22px -12px rgba(11,15,19,.45)}
+article.promo-card .promo-badge{background:rgba(255,255,255,.75);color:#0B0F13;box-shadow:inset 0 0 0 1px rgba(212,181,116,.45)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.btn-ink,.btn-buy){background:#0B0F13;border-color:#0B0F13;color:#fff;box-shadow:0 10px 22px -14px rgba(11,15,19,.8)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.btn-ink,.btn-buy):is(:hover,:focus-visible){background:#D4B574;border-color:#D4B574;color:#0B0F13}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .btn-line{background:rgba(255,255,255,.5);border-color:rgba(11,15,19,.16);color:#0B0F13}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .btn-line:is(:hover,:focus-visible){background:#0B0F13;border-color:#0B0F13;color:#fff}
+li.ps-card > span:nth-child(2){background:rgba(255,255,255,.6);color:#0B0F13;box-shadow:inset 0 0 0 1px rgba(212,181,116,.45)}
+@media (prefers-reduced-transparency:reduce){:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card){background:#fff}}`;
   document.head.appendChild(st);
 }
 /* PRICES:END */
@@ -1388,6 +1437,7 @@ const Stars = ({ rating = 5, className = '' }) => (
 function PromoBar({ hidden }) {
   const desktop = useMedia('(min-width: 1024px)');
   const cd = useCountdown(CAMPAIGN && CAMPAIGN.until);
+  const bfLook = !useBfClock(60000).over; /* round 36: the Black Friday look until the sale is over */
   const msgs = CAMPAIGN ? (desktop ? [
     { k: 'cmp', node: <a href={CAMPAIGN.barCta[1]} className="underline-offset-4 hover:underline">{CAMPAIGN.bar} <span className="font-medium">→</span></a> },
   ] : [
@@ -1417,7 +1467,7 @@ function PromoBar({ hidden }) {
   return (
     <div
       role="region" aria-label="Clinic announcements"
-      className={`promo-attn fixed inset-x-0 top-0 z-[60] h-9 overflow-hidden text-white font-mont text-[12.5px] sm:text-[13px] ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
+      className={`promo-attn ${bfLook ? 'is-bf' : ''} fixed inset-x-0 top-0 z-[60] h-9 overflow-hidden text-white font-mont text-[12.5px] sm:text-[13px] ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
       style={{ transition: hidden ? 'transform .5s ease-out' : 'transform .9s cubic-bezier(.34,1.56,.64,1)' }}
       onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
@@ -1511,7 +1561,7 @@ function MegaMenu({ open, onLink }) {
                 aria-pressed={on}
                 className={`w-full flex items-center justify-between rounded-[12px] px-4 py-3 text-left font-mont text-[14px] transition-colors ${on ? 'bg-white text-ndm-blue shadow-sm' : 'text-ndm-ink hover:bg-white/70'}`}
               >
-                <span className="flex items-center gap-2">{c.label}{c.id === HERE_CAT && <i aria-hidden="true" className="size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(32,158,217,.18)]" />}</span>
+                <span className="flex items-center gap-2">{c.label}{c.id === HERE_CAT && <i aria-hidden="true" className="ndm-beat size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(32,158,217,.18)]" />}</span>
                 <IconArrow className={`transition-transform ${on ? 'translate-x-0 opacity-100' : '-translate-x-1 opacity-0'}`} />
               </button>
             </li>
@@ -2721,17 +2771,17 @@ const NDM = 'https://newdermamedlaserclinic.com';
 const FEES = `${NDM}/fees-financing/`;
 const SPECIALS = [ /* round 34: the twelve monthly specials the designer picked; price, unit and offer come from the price list (below) */
   { n: 'Botox', img: 'assets/pricing/price-1.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Botox / Dysport', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-botox-dysport-h', d: 'Priced per unit, planned at your free consultation.' },
-  { n: 'Lip Augmentation', img: 'assets/pricing/price-2.jpg', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Shape and definition for the lips, planned with you.' },
-  { n: 'Laser Hair Removal', img: 'assets/journal/laser-hair-removal.webp', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Laser Hair Removal', area: 'Body', icon: 'body', h: 'pricing.html#pg-laser-hair-removal-h', d: 'Medical-grade laser hair reduction, priced per area.' },
-  { n: 'Lip Filler', img: 'assets/treatments/lip-filler.jpg', pos: '50% 35%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
-  { n: 'Microneedling', img: 'assets/treatments/microneedling.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
-  { n: 'Chemical Peel', img: 'assets/treatments/chemical-peel.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
-  { n: 'CoolSculpting', img: 'assets/home/v3/hipdip-720.webp', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Body Contouring', area: 'Body', icon: 'body', h: 'pricing.html#pg-coolsculpting-tight-sculpting-h', d: 'Non-invasive body contouring, priced per zone.' },
-  { n: 'Sculptra', img: 'assets/treatments/sculptra.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Bio-stimulators', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Gradual, collagen-building facial lift.' },
-  { n: 'Laser Skin Resurfacing', img: 'assets/treatments/laser-resurfacing.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
-  { n: 'Photo Rejuvenation', img: 'assets/treatments/photo-rejuvenation.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
-  { n: 'PRP Hair Restoration', img: 'assets/pricing/price-7.jpg', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Hair Loss', area: 'Hair', icon: 'hair', h: 'pricing.html#pg-hair-loss-h', d: 'PRP scalp treatment for thinning hair, priced by area.' },
-  { n: 'PRP Face', img: 'assets/pricing/price-4.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Microneedling with PRP for the face.' }
+  { n: 'Lip Augmentation', img: 'assets/home/menu/lip-fillers.jpg', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Shape and definition for the lips, planned with you.' },
+  { n: 'Laser Hair Removal', img: 'assets/home/menu/laser-hair-removal.jpg', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Laser Hair Removal', area: 'Body', icon: 'body', h: 'pricing.html#pg-laser-hair-removal-h', d: 'Medical-grade laser hair reduction, priced per area.' },
+  { n: 'Lip Filler', img: 'assets/home/menu/lip-fillers.jpg', pos: '50% 35%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
+  { n: 'Microneedling', img: 'assets/home/menu/microneedling.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
+  { n: 'Chemical Peel', img: 'assets/home/menu/chemical-peels.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
+  { n: 'CoolSculpting', img: 'assets/home/menu/coolsculpting.jpg', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Body Contouring', area: 'Body', icon: 'body', h: 'pricing.html#pg-coolsculpting-tight-sculpting-h', d: 'Non-invasive body contouring, priced per zone.' },
+  { n: 'Sculptra', img: 'assets/home/menu/sculptra.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Bio-stimulators', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Gradual, collagen-building facial lift.' },
+  { n: 'Laser Skin Resurfacing', img: 'assets/home/menu/laser-skin-resurfacing.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
+  { n: 'Photo Rejuvenation', img: 'assets/home/menu/photo-rejuvenation.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
+  { n: 'PRP Hair Restoration', img: 'assets/home/menu/prp-hair-restoration.jpg', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Hair Loss', area: 'Hair', icon: 'hair', h: 'pricing.html#pg-hair-loss-h', d: 'PRP scalp treatment for thinning hair, priced by area.' },
+  { n: 'PRP Face', img: 'assets/home/menu/microneedling.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Microneedling with PRP for the face.' }
 ];
 
 /* round 29: each special shows the price list's lowest price after the discount, its unit and its offer (priceInfo / priceFrom) */
@@ -2843,7 +2893,7 @@ function Promotions({ level = 'h1' }) {
                       </>
                     ) : (
                       <>
-                        {s.deal && <span className="deal-badge mb-3"><i aria-hidden="true">%</i>{s.deal}</span>}
+                        {s.deal && <DealPill deal={s.deal} className="mb-3" />}
                         <span className="sw-muted font-inter text-[11px] uppercase tracking-[.18em]">From</span>
                         <span className="sw-price mt-1 whitespace-nowrap font-aeonik leading-none tracking-[-0.035em]" style={{ fontSize: 40 * k }}><span className="sw-cur">$</span>{s.p}</span>
                         <span className="sw-muted mt-2 font-inter text-[12.5px]">{s.u || 'for selected packages'}</span>
@@ -3014,13 +3064,13 @@ function TwoTone({ as: Tag = 'h2', id, lead, strong, dark, className = '', size 
 /* ---------------------------------------------------------------- treatments (Aurel carousel) */
 const TREATS = [
   { t: 'Lip Enhancement', tag: 'Injectables', d: 'Hyaluronic acid filler placed with restraint, for lips that can look softer and more defined.', p: 'From $750', img: 'assets/treatments/lip-filler.jpg', pos: '50% 50%' },
-  { t: 'Skin Booster', tag: 'Injectables', d: 'Micro-injections of hyaluronic acid that may improve hydration and overall skin quality.', p: 'From $399', img: 'assets/treatments/skin-booster.jpg', pos: '50% 45%' },
-  { t: 'Microneedling', tag: 'Skin & collagen', d: 'Controlled micro-channels that support your skin’s own collagen, with PRP or exosomes optional.', p: 'From $245', img: 'assets/treatments/microneedling.jpg', pos: '50% 45%' },
+  { t: 'Skin Booster', tag: 'Injectables', d: 'Micro-injections of hyaluronic acid that may improve hydration and overall skin quality.', p: 'From $399', img: 'assets/home/menu/skin-boosters.jpg', pos: '50% 45%' },
+  { t: 'Microneedling', tag: 'Skin & collagen', d: 'Controlled micro-channels that support your skin’s own collagen, with PRP or exosomes optional.', p: 'From $245', img: 'assets/home/menu/microneedling.jpg', pos: '50% 45%' },
   { t: 'Age Element® Facial', tag: 'Skin & collagen', d: 'A medical-grade facial, with Glass Glow and Acne Relief versions tailored at your visit.', p: 'From $249', img: 'assets/treatments/age-element-facial.jpg', pos: '50% 42%' },
-  { t: 'Laser Skin Resurfacing', tag: 'Laser & light', d: 'Fractional laser for texture, tone and fine lines, planned around your downtime.', p: 'From $990', img: 'assets/treatments/laser-resurfacing.jpg', pos: '50% 45%' },
-  { t: 'Photo-Rejuvenation', tag: 'Laser & light', d: 'IPL light therapy that can reduce the look of redness, sun spots and uneven tone.', p: 'From $395', img: 'assets/treatments/photo-rejuvenation.jpg', pos: '50% 42%' },
-  { t: 'Chemical Peel', tag: 'Skin & collagen', d: 'Light, medium or deep peels, chosen for your skin type and goals.', p: 'From $149', img: 'assets/treatments/chemical-peel.jpg', pos: '50% 38%' },
-  { t: 'Sculptra®', tag: 'Bio-stimulator', d: 'Poly-L-lactic acid that supports gradual collagen production over a series of sessions.', p: 'From $699', img: 'assets/treatments/sculptra.jpg', pos: '50% 40%' },
+  { t: 'Laser Skin Resurfacing', tag: 'Laser & light', d: 'Fractional laser for texture, tone and fine lines, planned around your downtime.', p: 'From $990', img: 'assets/home/menu/laser-skin-resurfacing.jpg', pos: '50% 45%' },
+  { t: 'Photo-Rejuvenation', tag: 'Laser & light', d: 'IPL light therapy that can reduce the look of redness, sun spots and uneven tone.', p: 'From $395', img: 'assets/home/menu/photo-rejuvenation.jpg', pos: '50% 42%' },
+  { t: 'Chemical Peel', tag: 'Skin & collagen', d: 'Light, medium or deep peels, chosen for your skin type and goals.', p: 'From $149', img: 'assets/home/menu/chemical-peels.jpg', pos: '50% 38%' },
+  { t: 'Sculptra®', tag: 'Bio-stimulator', d: 'Poly-L-lactic acid that supports gradual collagen production over a series of sessions.', p: 'From $699', img: 'assets/home/menu/sculptra.jpg', pos: '50% 40%' },
 ];
 
 function Treatments() {
@@ -4616,7 +4666,7 @@ function PromoGrid() {
               <div className="relative aspect-[16/10] overflow-hidden rounded-[16px] bg-ndm-mist">
                 <img src={s.img} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" style={{ transitionTimingFunction: 'var(--e-out)', objectPosition: s.pos }} />
                 {CAMPAIGN_LOOK && <span className="cmp-badge absolute left-3 top-3">{CAMPAIGN.badge}</span>}
-                {s.deal && !CAMPAIGN_LOOK && <span className="deal-badge absolute left-3 top-3"><i aria-hidden="true">%</i>{s.deal}</span>}
+                {s.deal && !CAMPAIGN_LOOK && <DealPill deal={s.deal} className="absolute left-3 top-3" />}
               </div>
               <div className="relative mt-5 flex items-center justify-between gap-2 px-3">
                 <span className="promo-badge grid size-12 shrink-0 place-items-center rounded-full"><SpecialIcon k={s.icon} /></span>

@@ -233,6 +233,12 @@
   /* announcement bar attention */
   .promo-attn{background:linear-gradient(90deg,#0F80C3,#209ED9 30%,#26B1E7 50%,#209ED9 70%,#0F80C3);background-size:200% 100%;animation:promoFlow 9s linear infinite}
   @keyframes promoFlow{to{background-position:-200% 0}}
+  /* Black Friday look of the bar (round 36): the sale page's black with its red glow, a red NEW pill; on every page until the sale is over */
+  .promo-attn.is-bf{background:radial-gradient(55% 300% at 100% 0%,rgba(211,18,29,.42),transparent 62%),radial-gradient(45% 300% at 0% 100%,rgba(211,18,29,.22),transparent 70%),#0B0B0C;animation:none;box-shadow:inset 0 -1px 0 rgba(255,255,255,.1)}
+  .promo-attn.is-bf .promo-shine{display:none}
+  .promo-attn.is-bf .promo-new{background:#D3121F;color:#fff}
+  .promo-attn.is-bf .promo-ping{background:#fff}
+  .promo-attn.is-bf svg{color:#EE3A45}
   .promo-shine{background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:250% 100%;background-repeat:no-repeat;background-position:150% 0;mix-blend-mode:soft-light;animation:promoShine 5.5s cubic-bezier(.45,0,.25,1) 1.4s infinite}
   @keyframes promoShine{0%{background-position:150% 0}35%,100%{background-position:-60% 0}}
   .promo-ping::after{content:"";position:absolute;inset:0;border-radius:999px;background:#FFA617;animation:promoPing 1.6s ease-out infinite}
@@ -637,7 +643,8 @@
   .nav-here.is-left{left:0;margin-left:0;bottom:-9px}
   @keyframes navHere{from{transform:scaleX(0);opacity:0}to{transform:none;opacity:1}}
   .menu-item[aria-current="page"],.menu-item-m[aria-current="page"]{color:#0F80C3;font-weight:600}
-  .menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{content:'';flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18)}
+  .menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{content:'';flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18);animation:ndmBeat 1.6s ease-out infinite}
+  @media (prefers-reduced-motion: reduce){.menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{animation:none}}
   /* section tag: brand-mark chip + label in a pill with a fine blue-to-amber edge and a slow light sweep */
   .eyebrow{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;gap:10px;padding:4px 18px 4px 4px;border:1px solid transparent;border-radius:999px;font-size:15px;font-weight:500;line-height:1.2;letter-spacing:-.005em;color:#1B242B;
     background:linear-gradient(180deg,#fff,#F3F9FD) padding-box,linear-gradient(115deg,rgba(38,177,231,.6),rgba(27,36,43,.10) 42%,rgba(27,36,43,.10) 62%,rgba(255,166,23,.55)) border-box;
@@ -703,6 +710,18 @@
   .tx-thread.in .tx-bub{animation:txBub 5.5s ease-in-out var(--d,0s) infinite}
   @keyframes txBub{0%{opacity:0;transform:translateY(10px) scale(.4)}20%{opacity:.95;transform:translateY(0) scale(1)}70%{opacity:.75;transform:translateY(-14px) scale(1)}100%{opacity:0;transform:translateY(-26px) scale(1.25)}}
   .tx-nav a{transition:background-color .3s ease,color .3s ease}
+  /* round 41: the 24-month lifeline (TxLifeline) */
+  .tx-life-num{font-size:clamp(64px,7vw,96px);color:#fff;text-shadow:0 0 30px rgba(201,194,244,.45)}
+  .tx-life-base{background:rgba(201,194,244,.18)}
+  .tx-life-fill{width:0;transition:width 2.6s cubic-bezier(.22,1,.36,1)}
+  .tx-life.in .tx-life-fill{width:100%}
+  .tx-life-ha{background:linear-gradient(90deg,rgba(201,194,244,.16),rgba(201,194,244,.04));border:1px dashed rgba(201,194,244,.35)}
+  .tx-life-mark{width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;background:#352862;border:2px solid rgba(201,194,244,.45);transition:background .4s ease var(--d),border-color .4s ease var(--d),box-shadow .4s ease var(--d)}
+  .tx-life-mark.is-end{width:15px;height:15px;margin:-7.5px 0 0 -7.5px}
+  .tx-life.in .tx-life-mark{background:#fff;border-color:#C9C2F4;box-shadow:0 0 0 4px rgba(201,194,244,.18),0 0 16px rgba(201,194,244,.7)}
+  .tx-life-key{display:inline-block;width:18px;height:10px;border-radius:999px;background:#C9C2F4;box-shadow:0 0 10px rgba(201,194,244,.6)}
+  .tx-life-key.is-ha{background:rgba(201,194,244,.16);border:1px dashed rgba(201,194,244,.6);box-shadow:none}
+  @media (prefers-reduced-motion:reduce){.tx-life-fill,.tx-life-mark{transition:none}}
   @media (prefers-reduced-motion:reduce){.tx-step{opacity:1;transform:none;transition:none}.tx-line i{transform:none;transition:none}.tx-ring-spin,.tx-product-img,.tx-thread.in .tx-bub{animation:none}.tx-bub{opacity:.8;transform:none}}
   /* treatments inside an open category: blue circle, white plus */
   .pr-sub .pr-plus{background:#0F80C3;border-color:#0F80C3;color:#fff}
@@ -1050,7 +1069,7 @@ const priceRows = (id, item) => { const c = PRICE_BY_ID[id]; const it = c && c.i
 /* the lowest price in one price table after its discounts; per unit when the table is priced per unit (e.g. 220 units $1848 -> $8.40) */
 const rowsFrom = (rows, perUnit) => Math.round(Math.min(...rows.map((r) => (perUnit && !/regular/i.test(r[0]) ? r[1] / pCount(r[0]) : r[1]))) * 100) / 100;
 /* ---------------------------------------------------------------- sale tags and where a "from" price comes from (2026-11-16)
-   SALE_LOOK: the look of the offer tags while a promotion runs: 'vip' (red and blue), 'bf' (black and gold), 'holiday' (green and gold),
+   SALE_LOOK: the look of the offer tags while a promotion runs: 'vip' and 'bf' (black and gold, like VIP Early Access + Black Friday), 'holiday' (green and gold),
    'newyear' (slate), or '' for the plain red tags. Every price table (pricing, Botox, Aptos) reads it. */
 const SALE_LOOK = 'vip';
 /* the lowest row of one price table and how it is counted (per unit when the table is priced per unit) */
@@ -1072,6 +1091,14 @@ function SaleTag({ offer, badge, small, plain = 'pr-badge' }) {
   if (!SALE_LOOK) return offer ? <span className={plain}>{offer}</span> : null;
   if (!badge || !badge.length) return null;
   return <span data-look={SALE_LOOK} className={`sb ${small ? 'sb-sm' : ''} ${badge.length > 1 ? 'sb-split' : ''}`}>{badge.map((t, i) => <span key={i} className={i ? 'sb-b' : 'sb-a'}>{t}</span>)}</span>;
+}
+/* the offer of a specials card (wheel, Promotion cards, Pricing specials) as a pill in the pricing tags' pattern, in the site's
+   own navy and sky (round 37): "Up to 30% off" -> UP TO | 30% OFF, "Buy 1 get 1 free" -> BUY 1 | GET 1 FREE, "Save $1000" -> SAVE $1,000 */
+const dealParts = (d) => { const t = tagWords(d); const m = /^(UP TO|BUY \d+)\s+(.+)$/.exec(t); return m ? [m[1], m[2]] : t ? [t] : []; };
+function DealPill({ deal, className = '' }) {
+  const p = dealParts(deal);
+  if (!p.length) return null;
+  return <span className={`dp ${p.length > 1 ? 'dp-split' : ''} ${className}`}>{p.map((t, i) => <span key={i} className={i ? 'dp-b' : 'dp-a'}>{t}</span>)}</span>;
 }
 /* where a lowest price is read from: "Skin Booster, 2 Syringes" (withItem puts the treatment first) */
 const sourceWords = (s, withItem) => {
@@ -1134,6 +1161,11 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .sb-a{background:var(--a-bg);color:var(--a-fg);box-shadow:inset 0 0 0 1.5px var(--a-ring);border-radius:999px}
 .sb-split .sb-a{border-radius:999px 0 0 999px;box-shadow:inset 1.5px 0 0 var(--a-ring),inset 0 1.5px 0 var(--a-ring),inset 0 -1.5px 0 var(--a-ring)}
 .sb-b{background:var(--b-bg);color:var(--b-fg);border-radius:0 999px 999px 0}
+.dp{display:inline-flex;align-items:stretch;border-radius:999px;overflow:hidden;white-space:nowrap;font:700 11px/1 Manrope,sans-serif;letter-spacing:.06em}
+.dp>span{display:inline-flex;align-items:center;padding:6px 10px}
+.dp-a{background:#0B0F13;color:#E2C88A;border-radius:999px}
+.dp-split .dp-a{border-radius:999px 0 0 999px}
+.dp-b{background:#D4B574;color:#0B0F13;border-radius:0 999px 999px 0}
 .pr-from.is-sale{color:var(--now,#0F80C3)}.pr-from[data-look]{--now:#0F80C3}
 .sb[data-look="vip"],.pr-from[data-look="vip"],.sb[data-look="bf"],.pr-from[data-look="bf"]{--a-bg:#0B0F13;--a-fg:#fff;--a-ring:#0B0F13;--b-bg:#D4B574;--b-fg:#0B0F13;--now:#9A7A3A}
 .sb[data-look="holiday"],.pr-from[data-look="holiday"]{--a-bg:#173D2C;--a-fg:#fff;--a-ring:#173D2C;--b-bg:#D4B574;--b-fg:#173D2C;--now:#1E5A3E}
@@ -1142,6 +1174,9 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .pr-opt2.is-featured{background:#fff;border-color:#E3E3E0;box-shadow:none!important}
 .pr-ghead>button,.pr-gintro{padding-inline:clamp(14px,2.4vw,28px)}
 .pr-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:999px;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18);vertical-align:middle;transform:translateY(-2px)}
+.pr-dot,.pr-src i,.pr-src-tag i,.ndm-beat{animation:ndmBeat 1.6s ease-out infinite}
+@keyframes ndmBeat{0%{scale:1;box-shadow:0 0 0 0 rgba(32,158,217,.5)}12%{scale:1.3}24%{scale:1}36%{scale:1.2}55%{scale:1;box-shadow:0 0 0 7px rgba(32,158,217,0)}100%{scale:1;box-shadow:0 0 0 0 rgba(32,158,217,0)}}
+@media (prefers-reduced-motion: reduce){.pr-dot,.pr-src i,.pr-src-tag i,.ndm-beat{animation:none}}
 .pr-opt2-info{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
 .pr-opt2-name{font-family:Manrope,sans-serif;font-size:15.5px;font-weight:500;color:#1B242B}
 .pr-opt2-meta{margin-top:3px;font-family:Manrope,sans-serif;font-size:12.5px;color:#6B7480}
@@ -1169,7 +1204,33 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .pr-opt2-now{font-size:27px}
 .pr-opt2:not(.is-featured) .pr-opt2-info,.pr-opt2:not(.is-featured) .pr-opt2-price{grid-column:1}
 .pr-opt2:not(.is-featured) .pr-opt2-act{grid-column:2;grid-row:1 / span 2;align-self:center}
-}`;
+}
+/* round 40 (user, 2026-11-17): every offer card (the offers wheel, the promotion page's "All current offers", the pricing page's
+   Monthly specials) is one light, premium glass card: frosted white over a soft sky and champagne glow, a hairline white edge,
+   champagne accents and solid black buttons that turn gold on hover (no gradients); black and gold like the VIP tags (round 41). The Black Friday page keeps its gold tickets (html.bf) */
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-stage{background:radial-gradient(34% 42% at 30% 56%,rgba(38,177,231,.2),transparent 70%),radial-gradient(28% 40% at 70% 60%,rgba(212,181,116,.2),transparent 72%),radial-gradient(30% 36% at 50% 34%,rgba(15,128,195,.12),transparent 70%)}
+section:has(article.promo-card),section:has(li.ps-card){background-image:radial-gradient(40% 32% at 16% 42%,rgba(38,177,231,.12),transparent 70%),radial-gradient(36% 32% at 84% 72%,rgba(212,181,116,.15),transparent 72%)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card){background:linear-gradient(140deg,rgba(255,255,255,.88) 0%,rgba(255,255,255,.55) 42%,rgba(255,255,255,.4) 70%,rgba(255,255,255,.62) 100%);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.92);box-shadow:inset 0 1px 0 #fff,inset 0 0 0 1px rgba(11,15,19,.05),0 1px 2px rgba(11,15,19,.05),0 24px 54px -30px rgba(11,15,19,.32)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card)::before{display:none}
+li.ps-card{transition:transform .6s var(--e-out),border-color .4s ease,box-shadow .6s ease}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card.is-on{background:linear-gradient(140deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.68) 45%,rgba(255,255,255,.52) 75%,rgba(255,255,255,.74) 100%);border-color:rgba(212,181,116,.6);box-shadow:inset 0 1px 0 #fff,0 0 0 4px rgba(212,181,116,.1),0 2px 4px rgba(11,15,19,.05),0 40px 80px -36px rgba(11,15,19,.45)}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card:not(.is-on):hover{border-color:rgba(212,181,116,.45)}
+@media (hover:hover){article.promo-card:hover,li.ps-card:hover{transform:translateY(-4px);border-color:rgba(212,181,116,.6);box-shadow:inset 0 1px 0 #fff,0 0 0 4px rgba(212,181,116,.08),0 36px 70px -34px rgba(11,15,19,.42)}
+  article.promo-card:hover .promo-badge{background:#0B0F13;color:#E2C88A}}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card) .sw-ring{border-color:rgba(212,181,116,.2)}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card :is(.sw-price,.sw-cur){background:none;color:#0B0F13}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) .sw-cur{color:#B8964F}
+article.promo-card .text-ndm-deep{color:#0B0F13}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.sw-tag,.promo-tag){background:rgba(255,255,255,.6);border:1px solid rgba(11,15,19,.12);color:#0B0F13}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .sw-tag.is-feature{background:#0B0F13;border-color:#0B0F13;color:#E2C88A}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .sw-photo,html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card.is-on .sw-photo{box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(212,181,116,.5),0 10px 22px -12px rgba(11,15,19,.45)}
+article.promo-card .promo-badge{background:rgba(255,255,255,.75);color:#0B0F13;box-shadow:inset 0 0 0 1px rgba(212,181,116,.45)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.btn-ink,.btn-buy){background:#0B0F13;border-color:#0B0F13;color:#fff;box-shadow:0 10px 22px -14px rgba(11,15,19,.8)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.btn-ink,.btn-buy):is(:hover,:focus-visible){background:#D4B574;border-color:#D4B574;color:#0B0F13}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .btn-line{background:rgba(255,255,255,.5);border-color:rgba(11,15,19,.16);color:#0B0F13}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .btn-line:is(:hover,:focus-visible){background:#0B0F13;border-color:#0B0F13;color:#fff}
+li.ps-card > span:nth-child(2){background:rgba(255,255,255,.6);color:#0B0F13;box-shadow:inset 0 0 0 1px rgba(212,181,116,.45)}
+@media (prefers-reduced-transparency:reduce){:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card){background:#fff}}`;
   document.head.appendChild(st);
 }
 /* PRICES:END */
@@ -1451,6 +1512,7 @@ const Stars = ({ rating = 5, className = '' }) => (
 function PromoBar({ hidden }) {
   const desktop = useMedia('(min-width: 1024px)');
   const cd = useCountdown(CAMPAIGN && CAMPAIGN.until);
+  const bfLook = !useBfClock(60000).over; /* round 36: the Black Friday look until the sale is over */
   const msgs = CAMPAIGN ? (desktop ? [
     { k: 'cmp', node: <a href={CAMPAIGN.barCta[1]} className="underline-offset-4 hover:underline">{CAMPAIGN.bar} <span className="font-medium">→</span></a> },
   ] : [
@@ -1480,7 +1542,7 @@ function PromoBar({ hidden }) {
   return (
     <div
       role="region" aria-label="Clinic announcements"
-      className={`promo-attn fixed inset-x-0 top-0 z-[60] h-9 overflow-hidden text-white font-mont text-[12.5px] sm:text-[13px] ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
+      className={`promo-attn ${bfLook ? 'is-bf' : ''} fixed inset-x-0 top-0 z-[60] h-9 overflow-hidden text-white font-mont text-[12.5px] sm:text-[13px] ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
       style={{ transition: hidden ? 'transform .5s ease-out' : 'transform .9s cubic-bezier(.34,1.56,.64,1)' }}
       onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
@@ -1574,7 +1636,7 @@ function MegaMenu({ open, onLink }) {
                 aria-pressed={on}
                 className={`w-full flex items-center justify-between rounded-[12px] px-4 py-3 text-left font-mont text-[14px] transition-colors ${on ? 'bg-white text-ndm-blue shadow-sm' : 'text-ndm-ink hover:bg-white/70'}`}
               >
-                <span className="flex items-center gap-2">{c.label}{c.id === HERE_CAT && <i aria-hidden="true" className="size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(32,158,217,.18)]" />}</span>
+                <span className="flex items-center gap-2">{c.label}{c.id === HERE_CAT && <i aria-hidden="true" className="ndm-beat size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(32,158,217,.18)]" />}</span>
                 <IconArrow className={`transition-transform ${on ? 'translate-x-0 opacity-100' : '-translate-x-1 opacity-0'}`} />
               </button>
             </li>
@@ -2784,17 +2846,17 @@ const NDM = 'https://newdermamedlaserclinic.com';
 const FEES = `${NDM}/fees-financing/`;
 const SPECIALS = [ /* round 34: the twelve monthly specials the designer picked; price, unit and offer come from the price list (below) */
   { n: 'Botox', img: 'assets/pricing/price-1.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Botox / Dysport', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-botox-dysport-h', d: 'Priced per unit, planned at your free consultation.' },
-  { n: 'Lip Augmentation', img: 'assets/pricing/price-2.jpg', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Shape and definition for the lips, planned with you.' },
-  { n: 'Laser Hair Removal', img: 'assets/journal/laser-hair-removal.webp', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Laser Hair Removal', area: 'Body', icon: 'body', h: 'pricing.html#pg-laser-hair-removal-h', d: 'Medical-grade laser hair reduction, priced per area.' },
-  { n: 'Lip Filler', img: 'assets/treatments/lip-filler.jpg', pos: '50% 35%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
-  { n: 'Microneedling', img: 'assets/treatments/microneedling.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
-  { n: 'Chemical Peel', img: 'assets/treatments/chemical-peel.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
-  { n: 'CoolSculpting', img: 'assets/home/v3/hipdip-720.webp', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Body Contouring', area: 'Body', icon: 'body', h: 'pricing.html#pg-coolsculpting-tight-sculpting-h', d: 'Non-invasive body contouring, priced per zone.' },
-  { n: 'Sculptra', img: 'assets/treatments/sculptra.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Bio-stimulators', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Gradual, collagen-building facial lift.' },
-  { n: 'Laser Skin Resurfacing', img: 'assets/treatments/laser-resurfacing.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
-  { n: 'Photo Rejuvenation', img: 'assets/treatments/photo-rejuvenation.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
-  { n: 'PRP Hair Restoration', img: 'assets/pricing/price-7.jpg', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Hair Loss', area: 'Hair', icon: 'hair', h: 'pricing.html#pg-hair-loss-h', d: 'PRP scalp treatment for thinning hair, priced by area.' },
-  { n: 'PRP Face', img: 'assets/pricing/price-4.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Microneedling with PRP for the face.' }
+  { n: 'Lip Augmentation', img: 'assets/home/menu/lip-fillers.jpg', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Shape and definition for the lips, planned with you.' },
+  { n: 'Laser Hair Removal', img: 'assets/home/menu/laser-hair-removal.jpg', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Laser Hair Removal', area: 'Body', icon: 'body', h: 'pricing.html#pg-laser-hair-removal-h', d: 'Medical-grade laser hair reduction, priced per area.' },
+  { n: 'Lip Filler', img: 'assets/home/menu/lip-fillers.jpg', pos: '50% 35%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
+  { n: 'Microneedling', img: 'assets/home/menu/microneedling.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
+  { n: 'Chemical Peel', img: 'assets/home/menu/chemical-peels.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
+  { n: 'CoolSculpting', img: 'assets/home/menu/coolsculpting.jpg', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Body Contouring', area: 'Body', icon: 'body', h: 'pricing.html#pg-coolsculpting-tight-sculpting-h', d: 'Non-invasive body contouring, priced per zone.' },
+  { n: 'Sculptra', img: 'assets/home/menu/sculptra.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Bio-stimulators', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Gradual, collagen-building facial lift.' },
+  { n: 'Laser Skin Resurfacing', img: 'assets/home/menu/laser-skin-resurfacing.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
+  { n: 'Photo Rejuvenation', img: 'assets/home/menu/photo-rejuvenation.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
+  { n: 'PRP Hair Restoration', img: 'assets/home/menu/prp-hair-restoration.jpg', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Hair Loss', area: 'Hair', icon: 'hair', h: 'pricing.html#pg-hair-loss-h', d: 'PRP scalp treatment for thinning hair, priced by area.' },
+  { n: 'PRP Face', img: 'assets/home/menu/microneedling.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Microneedling with PRP for the face.' }
 ];
 
 /* round 29: each special shows the price list's lowest price after the discount, its unit and its offer (priceInfo / priceFrom) */
@@ -2906,7 +2968,7 @@ function Promotions({ level = 'h1' }) {
                       </>
                     ) : (
                       <>
-                        {s.deal && <span className="deal-badge mb-3"><i aria-hidden="true">%</i>{s.deal}</span>}
+                        {s.deal && <DealPill deal={s.deal} className="mb-3" />}
                         <span className="sw-muted font-inter text-[11px] uppercase tracking-[.18em]">From</span>
                         <span className="sw-price mt-1 whitespace-nowrap font-aeonik leading-none tracking-[-0.035em]" style={{ fontSize: 40 * k }}><span className="sw-cur">$</span>{s.p}</span>
                         <span className="sw-muted mt-2 font-inter text-[12.5px]">{s.u || 'for selected packages'}</span>
@@ -3077,13 +3139,13 @@ function TwoTone({ as: Tag = 'h2', id, lead, strong, dark, className = '', size 
 /* ---------------------------------------------------------------- treatments (Aurel carousel) */
 const TREATS = [
   { t: 'Lip Enhancement', tag: 'Injectables', d: 'Hyaluronic acid filler placed with restraint, for lips that can look softer and more defined.', p: 'From $750', img: 'assets/treatments/lip-filler.jpg', pos: '50% 50%' },
-  { t: 'Skin Booster', tag: 'Injectables', d: 'Micro-injections of hyaluronic acid that may improve hydration and overall skin quality.', p: 'From $399', img: 'assets/treatments/skin-booster.jpg', pos: '50% 45%' },
-  { t: 'Microneedling', tag: 'Skin & collagen', d: 'Controlled micro-channels that support your skin’s own collagen, with PRP or exosomes optional.', p: 'From $245', img: 'assets/treatments/microneedling.jpg', pos: '50% 45%' },
+  { t: 'Skin Booster', tag: 'Injectables', d: 'Micro-injections of hyaluronic acid that may improve hydration and overall skin quality.', p: 'From $399', img: 'assets/home/menu/skin-boosters.jpg', pos: '50% 45%' },
+  { t: 'Microneedling', tag: 'Skin & collagen', d: 'Controlled micro-channels that support your skin’s own collagen, with PRP or exosomes optional.', p: 'From $245', img: 'assets/home/menu/microneedling.jpg', pos: '50% 45%' },
   { t: 'Age Element® Facial', tag: 'Skin & collagen', d: 'A medical-grade facial, with Glass Glow and Acne Relief versions tailored at your visit.', p: 'From $249', img: 'assets/treatments/age-element-facial.jpg', pos: '50% 42%' },
-  { t: 'Laser Skin Resurfacing', tag: 'Laser & light', d: 'Fractional laser for texture, tone and fine lines, planned around your downtime.', p: 'From $990', img: 'assets/treatments/laser-resurfacing.jpg', pos: '50% 45%' },
-  { t: 'Photo-Rejuvenation', tag: 'Laser & light', d: 'IPL light therapy that can reduce the look of redness, sun spots and uneven tone.', p: 'From $395', img: 'assets/treatments/photo-rejuvenation.jpg', pos: '50% 42%' },
-  { t: 'Chemical Peel', tag: 'Skin & collagen', d: 'Light, medium or deep peels, chosen for your skin type and goals.', p: 'From $149', img: 'assets/treatments/chemical-peel.jpg', pos: '50% 38%' },
-  { t: 'Sculptra®', tag: 'Bio-stimulator', d: 'Poly-L-lactic acid that supports gradual collagen production over a series of sessions.', p: 'From $699', img: 'assets/treatments/sculptra.jpg', pos: '50% 40%' },
+  { t: 'Laser Skin Resurfacing', tag: 'Laser & light', d: 'Fractional laser for texture, tone and fine lines, planned around your downtime.', p: 'From $990', img: 'assets/home/menu/laser-skin-resurfacing.jpg', pos: '50% 45%' },
+  { t: 'Photo-Rejuvenation', tag: 'Laser & light', d: 'IPL light therapy that can reduce the look of redness, sun spots and uneven tone.', p: 'From $395', img: 'assets/home/menu/photo-rejuvenation.jpg', pos: '50% 42%' },
+  { t: 'Chemical Peel', tag: 'Skin & collagen', d: 'Light, medium or deep peels, chosen for your skin type and goals.', p: 'From $149', img: 'assets/home/menu/chemical-peels.jpg', pos: '50% 38%' },
+  { t: 'Sculptra®', tag: 'Bio-stimulator', d: 'Poly-L-lactic acid that supports gradual collagen production over a series of sessions.', p: 'From $699', img: 'assets/home/menu/sculptra.jpg', pos: '50% 40%' },
 ];
 
 function Treatments() {
@@ -4679,7 +4741,7 @@ function PromoGrid() {
               <div className="relative aspect-[16/10] overflow-hidden rounded-[16px] bg-ndm-mist">
                 <img src={s.img} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]" style={{ transitionTimingFunction: 'var(--e-out)', objectPosition: s.pos }} />
                 {CAMPAIGN_LOOK && <span className="cmp-badge absolute left-3 top-3">{CAMPAIGN.badge}</span>}
-                {s.deal && !CAMPAIGN_LOOK && <span className="deal-badge absolute left-3 top-3"><i aria-hidden="true">%</i>{s.deal}</span>}
+                {s.deal && !CAMPAIGN_LOOK && <DealPill deal={s.deal} className="absolute left-3 top-3" />}
               </div>
               <div className="relative mt-5 flex items-center justify-between gap-2 px-3">
                 <span className="promo-badge grid size-12 shrink-0 place-items-center rounded-full"><SpecialIcon k={s.icon} /></span>
@@ -5389,7 +5451,7 @@ const PROC = {
     chips: ['4763 Yonge St, Uptown', '790 Bay St, Downtown', 'Free consultation', 'VISIA® skin analysis'] },
   /* About (ProcOverview tabs): Ray's five tabs; the key numbers beside them are this page's */
   overview: {
-    tag: 'About', lead: 'What can I expect', strong: 'from Botox® treatment?',
+    tag: 'About', lead: 'What can I expect', strong: 'from Botox® treatment?', dark: true, /* a full-bleed dark band, no card (ProcOverview) */
     tabs: [
       { label: 'Treatment Overview', stat: ['20+', 'years of clinical research'], text: [
         'By momentarily relaxing the underlying muscles that cause expression lines, Botox® Cosmetic is a reliable, non-surgical procedure that reduces wrinkles and fine lines. Botox® is one of the most researched and secure cosmetic procedures in the world, having been used in more than 78 countries and undergoing more than 20 years of clinical research. Our experts at NewDermaMed use precise injections to produce refreshed, natural-looking results without changing your distinctive facial expressions.'] },
@@ -5464,9 +5526,9 @@ const PROC = {
     doctor: { name: 'Dr. Negin Mastouri', role: 'Medical Director', img: 'assets/team/negin.jpg' },
     /* related treatments as photo cards: [title, link to the treatment's own page, photo, group]; slug() opens the page once it
        exists (PAGE_LINKS) and a #/slug placeholder until then */
-    related: [['Dermal Fillers', slug('Dermal Fillers'), 'assets/home/v3/jawline-720.webp', 'Injectable'], ['Lip Augmentation', slug('Lip Augmentation'), 'assets/home/v3/lips-720.webp', 'Injectable'],
-      ['Skin Boosters', slug('Skin Boosters'), 'assets/home/v3/booster-720.webp', 'Injectable'], ['Aptos Thread Lift', slug('Aptos Thread Lift'), 'assets/aptos/midface-vectors.jpg', 'Bio-stimulator'],
-      ['Sculptra®', slug('Sculptra®'), 'assets/home/v3/sculptra-720.webp', 'Bio-stimulator'], ['Microneedling', slug('Microneedling'), 'assets/home/v3/mneedle-720.webp', 'Skin']],
+    related: [['Dermal Fillers', slug('Dermal Fillers'), 'assets/home/menu/dermal-fillers.jpg', 'Injectable'], ['Lip Augmentation', slug('Lip Augmentation'), 'assets/home/menu/lip-fillers.jpg', 'Injectable'],
+      ['Skin Boosters', slug('Skin Boosters'), 'assets/home/menu/skin-boosters.jpg', 'Injectable'], ['Aptos Thread Lift', slug('Aptos Thread Lift'), 'assets/aptos/midface-vectors.jpg', 'Bio-stimulator'],
+      ['Sculptra®', slug('Sculptra®'), 'assets/home/menu/sculptra.jpg', 'Bio-stimulator'], ['Microneedling', slug('Microneedling'), 'assets/home/menu/microneedling.jpg', 'Skin']],
   },
   faq: { lead: 'FAQ For', strong: 'Botox®', sub: 'Everything you need to know before starting your journey with us.' },
   faqs: [
@@ -5594,7 +5656,7 @@ function ProcGlance({ p, wide }) {
 function ProcOverview({ p }) {
   const ref = useRef(null), tabs = useRef([]);
   useReveal(ref);
-  const o = p.overview;
+  const o = p.overview, dk = !!o.dark;
   const n = txNum(p, 'overview');
   const [act, setAct] = useState(0);
   const key = (e, i) => {
@@ -5605,13 +5667,13 @@ function ProcOverview({ p }) {
     setAct(m); if (tabs.current[m]) tabs.current[m].focus();
   };
   return (
-    <section ref={ref} id="overview" aria-labelledby="overview-title" className="ov2 relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)] text-ndm-ink">
+    <section ref={ref} id="overview" aria-labelledby="overview-title" data-nav={dk ? 'dark' : undefined} className={`ov2 ${dk ? 'ov2-dark text-white' : 'text-ndm-ink'} relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)]`}>
       <span aria-hidden="true" className="ov2-orb ov2-orb-a" /><span aria-hidden="true" className="ov2-orb ov2-orb-b" /><span aria-hidden="true" className="ov2-orb ov2-orb-c" />
       <svg aria-hidden="true" viewBox="0 0 400 400" className="ov2-ring"><circle cx="200" cy="200" r="190" /><circle cx="200" cy="200" r="150" /></svg>
       <div className={`${TX_WRAP} relative`}>
         <div className="text-center">
-          <Eyebrow className="rv">{n && <span className="tabular-nums text-ndm-deep">{n}</span>}{o.tag}</Eyebrow>
-          <TwoTone id="overview-title" className="rv mx-auto mt-3" size="text-[clamp(26px,min(2.8vw,4.6vh),40px)]" lead={twoLine(o.lead)} strong={o.strong} style={{ transitionDelay: '.06s' }} />
+          <Eyebrow dark={dk} className="rv">{n && <span className={`tabular-nums ${dk ? 'text-ndm-sky' : 'text-ndm-deep'}`}>{n}</span>}{o.tag}</Eyebrow>
+          <TwoTone id="overview-title" dark={dk} className="rv mx-auto mt-3" size="text-[clamp(26px,min(2.8vw,4.6vh),40px)]" lead={twoLine(o.lead)} strong={o.strong} style={{ transitionDelay: '.06s' }} />
         </div>
         {/* round 31: the tab names sit in one row on top again; the panel below is compact so the section fits one view */}
         <div className="rv ov2-panel relative mt-[clamp(16px,2.6vh,28px)] overflow-hidden rounded-[26px]" style={{ transitionDelay: '.1s' }}>
@@ -5696,25 +5758,35 @@ function ProcChoose({ p }) {
   const ref = useRef(null);
   useReveal(ref);
   const c = p.choose.cards;
-  const card = ([t, d], i) => (
-    <li key={t} className="rv flex flex-col rounded-[22px] bg-white sm:min-h-[220px] p-[clamp(20px,2vw,28px)] ring-1 ring-ndm-ink/[.06]" style={{ transitionDelay: `${0.06 * i}s` }}>
-      <span aria-hidden="true" className="grid size-10 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconCheckBadge /></span>
-      <h3 className="mt-auto pt-5 font-aeonik text-[22px] sm:pt-8 font-normal leading-[1.2] tracking-[-0.01em] text-ndm-ink">{t}</h3>
-      <p className="mt-2 font-inter text-[14.5px] leading-[1.6] text-ndm-muted">{d}</p>
-    </li>
-  );
   return (
     <section ref={ref} id="why-choose" aria-labelledby="choose-title" className="relative z-10 scroll-mt-[170px] bg-ndm-mist px-[var(--gx)] py-[clamp(72px,8vw,120px)]">
-      <div className="text-center">
-        <Eyebrow className="rv">{txNum(p, 'why-choose') && <span className="tabular-nums text-ndm-deep">{txNum(p, 'why-choose')}</span>}{p.choose.tag || 'Why choose this treatment'}</Eyebrow>
-        <TwoTone id="choose-title" className="rv mx-auto mt-5" lead={twoLine(p.choose.lead || 'Who it may suit,')} strong={p.choose.strong || 'and safety first'} style={{ transitionDelay: '.06s' }} />
-      </div>
-      <div className="mx-auto mt-[clamp(36px,4vw,56px)] grid max-w-[1180px] gap-3 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-4">
-        <div className="rv rv-clip relative min-h-[360px] overflow-hidden rounded-[22px] bg-ndm-line md:col-span-2 lg:order-2 lg:col-span-1 lg:min-h-0" style={{ transitionDelay: '.08s' }}>
-          <img src={p.choose.img} alt={p.choose.alt || 'Close-up of a woman’s face in soft natural light'} loading="lazy" className={`absolute inset-0 h-full w-full ${p.choose.fit === 'contain' ? 'object-contain' : 'object-cover object-[50%_40%]'}`} style={p.choose.bg ? { background: p.choose.bg } : undefined} />
+      <div className="mx-auto grid max-w-[1180px] items-start gap-[clamp(36px,4vw,56px)] lg:grid-cols-[minmax(0,1.12fr)_minmax(0,.88fr)] lg:gap-[clamp(48px,5vw,80px)]">
+        {/* words: left */}
+        <div className="min-w-0">
+          <Eyebrow className="rv">{txNum(p, 'why-choose') && <span className="tabular-nums text-ndm-deep">{txNum(p, 'why-choose')}</span>}{p.choose.tag || 'Why choose this treatment'}</Eyebrow>
+          <TwoTone id="choose-title" className="rv mt-5" lead={twoLine(p.choose.lead || 'Who it may suit,')} strong={p.choose.strong || 'and safety first'} style={{ transitionDelay: '.06s' }} />
+          {p.choose.text && <p className="rv mt-5 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>{p.choose.text}</p>}
+          <ol className="mt-[clamp(28px,3.2vw,44px)] grid gap-x-[clamp(24px,3vw,44px)] sm:grid-cols-2" role="list">
+            {c.map(([t, d], i) => (
+              <li key={t} className="choose-item rv flex gap-4 border-t border-ndm-ink/10 py-[clamp(18px,2vw,24px)]" style={{ transitionDelay: `${0.05 * i + 0.1}s` }}>
+                <span aria-hidden="true" className="choose-num mt-[3px] grid size-9 shrink-0 place-items-center rounded-full bg-white font-inter text-[12.5px] font-semibold tabular-nums text-ndm-deep ring-1 ring-ndm-blue/15">{String(i + 1).padStart(2, '0')}</span>
+                <div className="min-w-0">
+                  <h3 className="font-aeonik text-[clamp(19px,1.5vw,21px)] font-normal leading-[1.25] tracking-[-0.01em] text-ndm-ink">{t}</h3>
+                  <p className="mt-1.5 font-inter text-[14.5px] leading-[1.6] text-ndm-muted">{d}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
-        <ul className="grid gap-3 lg:order-1 lg:gap-4" role="list">{c.slice(0, Math.ceil(c.length / 2)).map(card)}</ul>
-        <ul className="grid gap-3 lg:order-3 lg:gap-4" role="list">{c.slice(Math.ceil(c.length / 2)).map((x, i) => card(x, i + Math.ceil(c.length / 2)))}</ul>
+        {/* photo: right */}
+        <figure className="rv rv-clip relative m-0 aspect-[4/5] overflow-hidden rounded-[28px] bg-ndm-line lg:sticky lg:top-[170px] lg:aspect-auto lg:h-[min(720px,calc(100vh-200px))] lg:min-h-[560px]" style={{ transitionDelay: '.08s' }}>
+          <img src={p.choose.img} alt={p.choose.alt || 'Close-up of a woman’s face in soft natural light'} loading="lazy" className={`absolute inset-0 h-full w-full ${p.choose.fit === 'contain' ? 'object-contain' : 'object-cover object-[50%_35%]'}`} style={p.choose.bg ? { background: p.choose.bg } : undefined} />
+          <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ndm-night/45 to-transparent" />
+          <figcaption className="absolute inset-x-4 bottom-4 flex items-center gap-3 rounded-[18px] bg-white/85 p-3 pr-4 backdrop-blur-md sm:inset-x-5 sm:bottom-5">
+            <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconCheckBadge /></span>
+            <span className="font-inter text-[13.5px] leading-[1.4] text-ndm-ink">Every plan starts with a <strong className="font-semibold">free consultation</strong> and VISIA® skin analysis.</span>
+          </figcaption>
+        </figure>
       </div>
     </section>
   );
@@ -6191,12 +6263,48 @@ function TxSafety({ p }) {
   );
 }
 
+/* the 24-month lifeline of the how-long-it-lasts card (Aptos): counter, lift line with six-month marks, HA window over the first six months */
+function TxLifeline({ months, run }) {
+  const [n, setN] = useState(REDUCED ? months : 0);
+  useEffect(() => {
+    if (!run || REDUCED) return;
+    let raf, t0;
+    const tick = (t) => { if (!t0) t0 = t; const k = Math.min(1, (t - t0) / 2600); setN(Math.round(months * (1 - Math.pow(1 - k, 3)))); if (k < 1) raf = requestAnimationFrame(tick); };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [run, months]);
+  const marks = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(months * f));
+  const ha = Math.min(1, 6 / months);
+  return (
+    <div aria-hidden="true" className={`tx-life ${run ? 'in' : ''}`}>
+      <p className="flex items-end gap-3"><span className="tx-life-num font-aeonik tabular-nums leading-[.8] tracking-[-0.04em]">{n}</span><span className="pb-1 font-inter text-[14px] leading-[1.35] text-white/75">months a lift<br />may last</span></p>
+      <div className="tx-thread relative mt-7 h-[96px]">
+        <span className="tx-life-ha absolute bottom-[10%] top-[10%] left-0 rounded-[14px]" style={{ width: `${ha * 100}%` }} />
+        <span className="tx-life-base absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full" />
+        <span className="tx-thread-line tx-life-fill absolute left-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full" />
+        {Array.from({ length: 12 }, (_, i) => (
+          <i key={i} className="tx-bub absolute rounded-full" style={{ left: `${((i * 0.08 + 0.02) * ha * 100).toFixed(1)}%`, top: `${[28, 62, 40, 70, 22, 55, 35, 66, 30, 48, 72, 26][i]}%`, width: `${[10, 6, 12, 8, 11, 5, 9, 12, 6, 10, 7, 9][i]}px`, '--d': `${(i * 0.18).toFixed(2)}s` }} />
+        ))}
+        {marks.map((m, i) => <span key={m} className={`tx-life-mark absolute top-1/2 ${i === 4 ? 'is-end' : ''}`} style={{ left: `${i * 25}%`, '--d': `${(i * 0.62).toFixed(2)}s` }} />)}
+      </div>
+      <div className="relative mt-2 h-4 font-inter text-[11.5px] uppercase tracking-[.12em] text-white/60">
+        {marks.map((m, i) => <span key={m} className={`absolute top-0 whitespace-nowrap ${i === 0 ? '' : i === 4 ? '-translate-x-full text-white' : '-translate-x-1/2'}`} style={{ left: `${i * 25}%` }}>{i === 0 ? 'Day 0' : i === 4 ? `${m} months` : m}</span>)}
+      </div>
+      <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 font-inter text-[13px] text-white/75">
+        <span className="inline-flex items-center gap-2"><i className="tx-life-key is-ha" />HA released, first 6 months</span>
+        <span className="inline-flex items-center gap-2"><i className="tx-life-key" />Lift held by your own collagen</span>
+      </div>
+    </div>
+  );
+}
+
 /* how long it lasts: one wide card (the Aptos one carries NUVIOR's HA release motion); how many sessions now sits with the price */
 function TxLasting({ p }) {
   const ref = useRef(null), box = useRef(null);
   useReveal(ref);
   const run = useInView(box, { threshold: 0.35 });
   const d = p.duration;
+  const lifeMonths = parseInt(String(d.stat).replace(/[^0-9]/g, ''), 10) || 24;
   return (
     <section ref={ref} aria-labelledby="duration-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <div ref={box} className={TX_WRAP}>
@@ -6211,16 +6319,10 @@ function TxLasting({ p }) {
               <p className="max-w-[40ch] font-inter text-[13.5px] leading-[1.5] text-white/70"><span className="block text-white/90">{d.label}</span>{d.note}</p>
             </div>
           </div>
-          {/* HA release along the thread (NUVIOR Aptos family motion): capsules drift and open over the months */}
-          <div>
-            <div aria-hidden="true" className={`tx-thread relative h-[150px] ${run ? 'in' : ''}`}>
-              <span className="tx-thread-line absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full" />
-              {Array.from({ length: 18 }, (_, i) => (
-                <i key={i} className="tx-bub absolute rounded-full" style={{ left: `${(i * 5.6 + 2).toFixed(1)}%`, top: `${[28, 62, 40, 70, 22, 55, 35, 66, 30, 48, 72, 26, 58, 38, 64, 44, 30, 56][i]}%`, width: `${[10, 6, 14, 8, 12, 5, 9, 13, 6, 11, 7, 10, 5, 12, 8, 6, 9, 7][i]}px`, '--d': `${(i * 0.14).toFixed(2)}s` }} />
-              ))}
-            </div>
-            <div aria-hidden="true" className="mt-2 flex justify-between font-inter text-[12px] uppercase tracking-[.12em] text-white/65"><span>Day 0</span><span>Months 1 to 3</span><span>Up to 6 months</span></div>
-          </div>
+          {/* round 41 (user, 2026-11-17): the motion now tells the 24 months: a counter climbs to the card's own number, the lift line
+             runs from day 0 to month 24 with a mark every six months, and the HA capsules drift only over the first six months,
+             where the hyaluronic acid is released */}
+          <TxLifeline months={lifeMonths} run={run} />
         </article>
       </div>
     </section>
@@ -6736,9 +6838,9 @@ const APT = {
     text: 'Your provider may suggest pairing your thread lift with other treatments. Some can be done at the same visit, if suitable; others are usually planned a few weeks later, once the area has settled.',
     groups: [['At the same visit, if suitable', ['Neuromodulators', 'Hyaluronic acid dermal fillers', 'Skin boosters']], ['A few weeks later', ['Sculptra®', 'Radiesse®', 'Microneedling', 'Medical-grade facials and peels']]],
     links: [
-      ['Dermal fillers', slug('Dermal Fillers'), 'Injectables', 'assets/home/v3/lips-1000.webp', 'Hyaluronic acid gel for volume and contour.'],
-      ['Sculptra®', slug('Sculptra®'), 'Bio-stimulator', 'assets/home/v3/sculptra-1000.webp', 'A collagen stimulator, planned over a few visits.'],
-      ['Skin boosters', slug('Mesotherapy & Skin Boosters'), 'Injectables', 'assets/home/v3/booster-1000.webp', 'Fine injections that may improve skin hydration.'],
+      ['Dermal fillers', slug('Dermal Fillers'), 'Injectables', 'assets/home/menu/dermal-fillers.jpg', 'Hyaluronic acid gel for volume and contour.'],
+      ['Sculptra®', slug('Sculptra®'), 'Bio-stimulator', 'assets/home/menu/sculptra.jpg', 'A collagen stimulator, planned over a few visits.'],
+      ['Skin boosters', slug('Mesotherapy & Skin Boosters'), 'Injectables', 'assets/home/menu/skin-boosters.jpg', 'Fine injections that may improve skin hydration.'],
     ],
   },
   why: {

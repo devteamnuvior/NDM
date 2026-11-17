@@ -76,6 +76,14 @@ function SaleTag({ offer, badge, small, plain = 'pr-badge' }) {
   if (!badge || !badge.length) return null;
   return <span data-look={SALE_LOOK} className={`sb ${small ? 'sb-sm' : ''} ${badge.length > 1 ? 'sb-split' : ''}`}>{badge.map((t, i) => <span key={i} className={i ? 'sb-b' : 'sb-a'}>{t}</span>)}</span>;
 }
+/* the offer of a specials card (wheel, Promotion cards, Pricing specials) as a pill in the pricing tags' pattern, in the site's
+   own navy and sky (round 37): "Up to 30% off" -> UP TO | 30% OFF, "Buy 1 get 1 free" -> BUY 1 | GET 1 FREE, "Save $1000" -> SAVE $1,000 */
+const dealParts = (d) => { const t = tagWords(d); const m = /^(UP TO|BUY \d+)\s+(.+)$/.exec(t); return m ? [m[1], m[2]] : t ? [t] : []; };
+function DealPill({ deal, className = '' }) {
+  const p = dealParts(deal);
+  if (!p.length) return null;
+  return <span className={`dp ${p.length > 1 ? 'dp-split' : ''} ${className}`}>{p.map((t, i) => <span key={i} className={i ? 'dp-b' : 'dp-a'}>{t}</span>)}</span>;
+}
 /* where a lowest price is read from: "Skin Booster, 2 Syringes" (withItem puts the treatment first) */
 const sourceWords = (s, withItem) => {
   if (!s) return '';
@@ -137,6 +145,11 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .sb-a{background:var(--a-bg);color:var(--a-fg);box-shadow:inset 0 0 0 1.5px var(--a-ring);border-radius:999px}
 .sb-split .sb-a{border-radius:999px 0 0 999px;box-shadow:inset 1.5px 0 0 var(--a-ring),inset 0 1.5px 0 var(--a-ring),inset 0 -1.5px 0 var(--a-ring)}
 .sb-b{background:var(--b-bg);color:var(--b-fg);border-radius:0 999px 999px 0}
+.dp{display:inline-flex;align-items:stretch;border-radius:999px;overflow:hidden;white-space:nowrap;font:700 11px/1 Manrope,sans-serif;letter-spacing:.06em}
+.dp>span{display:inline-flex;align-items:center;padding:6px 10px}
+.dp-a{background:#0B0F13;color:#E2C88A;border-radius:999px}
+.dp-split .dp-a{border-radius:999px 0 0 999px}
+.dp-b{background:#D4B574;color:#0B0F13;border-radius:0 999px 999px 0}
 .pr-from.is-sale{color:var(--now,#0F80C3)}.pr-from[data-look]{--now:#0F80C3}
 .sb[data-look="vip"],.pr-from[data-look="vip"],.sb[data-look="bf"],.pr-from[data-look="bf"]{--a-bg:#0B0F13;--a-fg:#fff;--a-ring:#0B0F13;--b-bg:#D4B574;--b-fg:#0B0F13;--now:#9A7A3A}
 .sb[data-look="holiday"],.pr-from[data-look="holiday"]{--a-bg:#173D2C;--a-fg:#fff;--a-ring:#173D2C;--b-bg:#D4B574;--b-fg:#173D2C;--now:#1E5A3E}
@@ -145,6 +158,9 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .pr-opt2.is-featured{background:#fff;border-color:#E3E3E0;box-shadow:none!important}
 .pr-ghead>button,.pr-gintro{padding-inline:clamp(14px,2.4vw,28px)}
 .pr-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:999px;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18);vertical-align:middle;transform:translateY(-2px)}
+.pr-dot,.pr-src i,.pr-src-tag i,.ndm-beat{animation:ndmBeat 1.6s ease-out infinite}
+@keyframes ndmBeat{0%{scale:1;box-shadow:0 0 0 0 rgba(32,158,217,.5)}12%{scale:1.3}24%{scale:1}36%{scale:1.2}55%{scale:1;box-shadow:0 0 0 7px rgba(32,158,217,0)}100%{scale:1;box-shadow:0 0 0 0 rgba(32,158,217,0)}}
+@media (prefers-reduced-motion: reduce){.pr-dot,.pr-src i,.pr-src-tag i,.ndm-beat{animation:none}}
 .pr-opt2-info{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
 .pr-opt2-name{font-family:Manrope,sans-serif;font-size:15.5px;font-weight:500;color:#1B242B}
 .pr-opt2-meta{margin-top:3px;font-family:Manrope,sans-serif;font-size:12.5px;color:#6B7480}
@@ -172,6 +188,32 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .pr-opt2-now{font-size:27px}
 .pr-opt2:not(.is-featured) .pr-opt2-info,.pr-opt2:not(.is-featured) .pr-opt2-price{grid-column:1}
 .pr-opt2:not(.is-featured) .pr-opt2-act{grid-column:2;grid-row:1 / span 2;align-self:center}
-}`;
+}
+/* round 40 (user, 2026-11-17): every offer card (the offers wheel, the promotion page's "All current offers", the pricing page's
+   Monthly specials) is one light, premium glass card: frosted white over a soft sky and champagne glow, a hairline white edge,
+   champagne accents and solid black buttons that turn gold on hover (no gradients); black and gold like the VIP tags (round 41). The Black Friday page keeps its gold tickets (html.bf) */
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-stage{background:radial-gradient(34% 42% at 30% 56%,rgba(38,177,231,.2),transparent 70%),radial-gradient(28% 40% at 70% 60%,rgba(212,181,116,.2),transparent 72%),radial-gradient(30% 36% at 50% 34%,rgba(15,128,195,.12),transparent 70%)}
+section:has(article.promo-card),section:has(li.ps-card){background-image:radial-gradient(40% 32% at 16% 42%,rgba(38,177,231,.12),transparent 70%),radial-gradient(36% 32% at 84% 72%,rgba(212,181,116,.15),transparent 72%)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card){background:linear-gradient(140deg,rgba(255,255,255,.88) 0%,rgba(255,255,255,.55) 42%,rgba(255,255,255,.4) 70%,rgba(255,255,255,.62) 100%);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.92);box-shadow:inset 0 1px 0 #fff,inset 0 0 0 1px rgba(11,15,19,.05),0 1px 2px rgba(11,15,19,.05),0 24px 54px -30px rgba(11,15,19,.32)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card)::before{display:none}
+li.ps-card{transition:transform .6s var(--e-out),border-color .4s ease,box-shadow .6s ease}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card.is-on{background:linear-gradient(140deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.68) 45%,rgba(255,255,255,.52) 75%,rgba(255,255,255,.74) 100%);border-color:rgba(212,181,116,.6);box-shadow:inset 0 1px 0 #fff,0 0 0 4px rgba(212,181,116,.1),0 2px 4px rgba(11,15,19,.05),0 40px 80px -36px rgba(11,15,19,.45)}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card:not(.is-on):hover{border-color:rgba(212,181,116,.45)}
+@media (hover:hover){article.promo-card:hover,li.ps-card:hover{transform:translateY(-4px);border-color:rgba(212,181,116,.6);box-shadow:inset 0 1px 0 #fff,0 0 0 4px rgba(212,181,116,.08),0 36px 70px -34px rgba(11,15,19,.42)}
+  article.promo-card:hover .promo-badge{background:#0B0F13;color:#E2C88A}}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card) .sw-ring{border-color:rgba(212,181,116,.2)}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card :is(.sw-price,.sw-cur){background:none;color:#0B0F13}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) .sw-cur{color:#B8964F}
+article.promo-card .text-ndm-deep{color:#0B0F13}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.sw-tag,.promo-tag){background:rgba(255,255,255,.6);border:1px solid rgba(11,15,19,.12);color:#0B0F13}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .sw-tag.is-feature{background:#0B0F13;border-color:#0B0F13;color:#E2C88A}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .sw-photo,html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card.is-on .sw-photo{box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(212,181,116,.5),0 10px 22px -12px rgba(11,15,19,.45)}
+article.promo-card .promo-badge{background:rgba(255,255,255,.75);color:#0B0F13;box-shadow:inset 0 0 0 1px rgba(212,181,116,.45)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.btn-ink,.btn-buy){background:#0B0F13;border-color:#0B0F13;color:#fff;box-shadow:0 10px 22px -14px rgba(11,15,19,.8)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.btn-ink,.btn-buy):is(:hover,:focus-visible){background:#D4B574;border-color:#D4B574;color:#0B0F13}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .btn-line{background:rgba(255,255,255,.5);border-color:rgba(11,15,19,.16);color:#0B0F13}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .btn-line:is(:hover,:focus-visible){background:#0B0F13;border-color:#0B0F13;color:#fff}
+li.ps-card > span:nth-child(2){background:rgba(255,255,255,.6);color:#0B0F13;box-shadow:inset 0 0 0 1px rgba(212,181,116,.45)}
+@media (prefers-reduced-transparency:reduce){:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card){background:#fff}}`;
   document.head.appendChild(st);
 }

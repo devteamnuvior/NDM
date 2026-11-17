@@ -235,6 +235,23 @@ SPACING = '''
   @keyframes ov2SpinS{to{transform:rotate(360deg)}}
   .ov2-stat-ring{animation-name:ov2SpinS}
   @media (prefers-reduced-motion:reduce){.ov2-orb,.ov2-ring,.ov2-stat-ring{animation:none}}
+  /* About on a dark band (p.overview.dark, Botox): one full-width piece, the panel loses its card, edge and shadow */
+  main>section#overview.ov2.ov2-dark{background:radial-gradient(60% 70% at 90% 0%,rgba(38,177,231,.22),transparent 60%),radial-gradient(50% 60% at 0% 100%,rgba(28,127,192,.28),transparent 65%),linear-gradient(160deg,#0F3F63 0%,#0A2A44 55%,#0B1824 100%)}
+  .ov2-dark .ov2-orb{opacity:.28}
+  .ov2-dark .ov2-ring circle{stroke:rgba(255,255,255,.12)}
+  .ov2-dark .ov2-panel{background:none;box-shadow:none;border-radius:0;overflow:visible}
+  .ov2-dark .ov2-tabs{border-bottom-color:rgba(255,255,255,.14);padding-left:0;padding-right:0}
+  .ov2-dark .ov2-tab{color:rgba(255,255,255,.66)}
+  .ov2-dark .ov2-tab:hover{color:#fff;background:rgba(255,255,255,.06)}
+  .ov2-dark .ov2-tab.is-on{color:#fff;background:rgba(38,177,231,.16);box-shadow:inset 0 0 0 1px rgba(38,177,231,.45)}
+  .ov2-dark .ov2-num{color:rgba(255,255,255,.35)}
+  .ov2-dark .ov2-tab.is-on .ov2-num{color:#26B1E7}
+  .ov2-dark [role=tabpanel]{padding-left:0;padding-right:0}
+  .ov2-dark .text-ndm-ink{color:#fff}
+  .ov2-dark .text-ndm-muted{color:rgba(255,255,255,.72)}
+  .ov2-dark .text-ndm-deep{color:#26B1E7}
+  .ov2-dark .border-ndm-ink\/10{border-color:rgba(255,255,255,.14)}
+  .ov2-dark .ov2-stat-ring circle{fill:rgba(38,177,231,.08);stroke:rgba(38,177,231,.7)}
   /* round 24: the book card in Good to know */
   .guide-book{background:radial-gradient(120% 90% at 100% 0%,#1C7FC0 0%,rgba(28,127,192,0) 55%),linear-gradient(155deg,#0F5E92 0%,#0A3D60 55%,#0B2234 100%);box-shadow:0 40px 70px -40px rgba(10,61,96,.75)}
   .guide-book-glow{position:absolute;right:-60px;bottom:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(255,166,23,.35),transparent 65%);pointer-events:none}

@@ -95,9 +95,9 @@ const APT = {
     text: 'Your provider may suggest pairing your thread lift with other treatments. Some can be done at the same visit, if suitable; others are usually planned a few weeks later, once the area has settled.',
     groups: [['At the same visit, if suitable', ['Neuromodulators', 'Hyaluronic acid dermal fillers', 'Skin boosters']], ['A few weeks later', ['Sculptra®', 'Radiesse®', 'Microneedling', 'Medical-grade facials and peels']]],
     links: [
-      ['Dermal fillers', slug('Dermal Fillers'), 'Injectables', 'assets/home/v3/lips-1000.webp', 'Hyaluronic acid gel for volume and contour.'],
-      ['Sculptra®', slug('Sculptra®'), 'Bio-stimulator', 'assets/home/v3/sculptra-1000.webp', 'A collagen stimulator, planned over a few visits.'],
-      ['Skin boosters', slug('Mesotherapy & Skin Boosters'), 'Injectables', 'assets/home/v3/booster-1000.webp', 'Fine injections that may improve skin hydration.'],
+      ['Dermal fillers', slug('Dermal Fillers'), 'Injectables', 'assets/home/menu/dermal-fillers.jpg', 'Hyaluronic acid gel for volume and contour.'],
+      ['Sculptra®', slug('Sculptra®'), 'Bio-stimulator', 'assets/home/menu/sculptra.jpg', 'A collagen stimulator, planned over a few visits.'],
+      ['Skin boosters', slug('Mesotherapy & Skin Boosters'), 'Injectables', 'assets/home/menu/skin-boosters.jpg', 'Fine injections that may improve skin hydration.'],
     ],
   },
   why: {

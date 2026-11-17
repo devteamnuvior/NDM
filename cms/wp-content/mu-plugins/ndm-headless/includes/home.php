@@ -142,7 +142,7 @@ function ndm_headless_home_schema() {
 		array(
 			'id'     => 'hero',
 			'title'  => 'Header',
-			'help'   => 'The words over the film at the top of the page. The film and the Book Free Consultation button are the site\'s.',
+			'help'   => 'The words over the film at the top of the page, and the photos shown in place of the film. The film and the Book Free Consultation button are the site\'s.',
 			'fields' => array(
 				array( 'key' => 'hero_tagline', 'label' => 'Line above the heading', 'type' => 'text' ),
 				array( 'key' => 'hero_lead', 'help' => 'For example "Refined,".' ) + $line,
@@ -162,6 +162,17 @@ function ndm_headless_home_schema() {
 					),
 				),
 				array( 'key' => 'hero_brands', 'label' => 'Technology and brands in the moving band', 'type' => 'lines', 'help' => 'One name on each line.' ),
+				array(
+					'key'    => 'hero_photos',
+					'label'  => 'Header photos',
+					'type'   => 'repeater',
+					'add'    => 'Add a photo',
+					'help'   => 'The header is three photo slides, each played with one of the film\'s effects chosen at random (a slow camera move, a dissolve and a light effect). Up to three rows; the first three are shown. With none, the site\'s own three photos show (the clinic at night, the reception, a VISIA® analysis). Each row is one photo in two versions. A row without a desktop photo is left out. The description read by screen readers is the desktop photo\'s "Alternative text" in the media library.',
+					'fields' => array(
+						array( 'key' => 'desktop', 'label' => 'Desktop photo', 'type' => 'image', 'help' => 'A wide landscape photo, at least 1920 x 1080. The words sit over its lower left part.' ),
+						array( 'key' => 'mobile', 'label' => 'Phone photo', 'type' => 'image', 'help' => 'A tall portrait photo, at least 1080 x 1920, shown on screens up to 760px wide. Empty: the desktop photo is used.' ),
+					),
+				),
 			),
 		),
 		array(
