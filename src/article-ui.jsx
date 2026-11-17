@@ -3,7 +3,7 @@
 const ARTICLE = {
   slug: '/what-causes-rosacea-redness/',
   lead: ['What causes', 'rosacea redness'],
-  hero: `${POST_IMG}2025/11/1-What-Causes-Rosacea-Redness.webp`,
+  hero: postImg('/what-causes-rosacea-redness/'),
   intro: 'You’re not the only one who has noticed that your face is often red or flushed, or has tiny visible blood vessels, and wondered what could be causing it. Rosacea is a condition that often causes redness and swelling in the middle of the face, and knowing what drives that redness is the first step to managing it. In this article we look at what rosacea redness is, the biological and environmental factors that can make it worse, how to spot your own triggers, and how we approach care for each person.',
   body: [
     ['h2', 'Getting to know rosacea redness'],
