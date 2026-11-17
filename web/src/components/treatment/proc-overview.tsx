@@ -20,7 +20,8 @@ interface ProcOverviewProps {
 const repeatsBooking = ([href, label]: [string, string]) => href.trim() === ACTIONS.book || label.trim().toLowerCase() === "book free consultation";
 
 /**
- * About the treatment: its tabs on a light panel, one panel shown at a time with its key number beside it.
+ * About the treatment: its tabs, one panel shown at a time with its key number beside it; on a light panel, or (`dark`,
+ * every procedure page since 2026-11-17) as one full-width dark band without the card.
  * Every panel stays in the page (the hidden ones `hidden`), so all the text is there for search engines.
  */
 export function ProcOverview({ overview: o, facts, number }: ProcOverviewProps) {
@@ -28,6 +29,7 @@ export function ProcOverview({ overview: o, facts, number }: ProcOverviewProps) 
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   useReveal(section);
   const [act, setAct] = useState(0);
+  const dk = !!o.dark;
   const key = (e: KeyboardEvent, i: number) => {
     const k = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
     if (!k) return;
@@ -37,7 +39,7 @@ export function ProcOverview({ overview: o, facts, number }: ProcOverviewProps) 
     tabs.current[m]?.focus();
   };
   return (
-    <section ref={section} id="overview" aria-labelledby="overview-title" className="ov2 relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)] text-ndm-ink">
+    <section ref={section} id="overview" aria-labelledby="overview-title" data-nav={dk ? "dark" : undefined} className={`ov2 ${dk ? "ov2-dark text-white" : "text-ndm-ink"} relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)]`}>
       <span aria-hidden="true" className="ov2-orb ov2-orb-a" />
       <span aria-hidden="true" className="ov2-orb ov2-orb-b" />
       <span aria-hidden="true" className="ov2-orb ov2-orb-c" />
@@ -47,11 +49,12 @@ export function ProcOverview({ overview: o, facts, number }: ProcOverviewProps) 
       </svg>
       <div className={`${TX_WRAP} relative`}>
         <div className="text-center">
-          <TxTag number={number}>
+          <TxTag number={number} dark={dk}>
             {o.tag}
           </TxTag>
           <TwoTone
             id="overview-title"
+            dark={dk}
             className="rv mx-auto mt-3"
             size="text-[clamp(26px,min(2.8vw,4.6vh),40px)]"
             lead={

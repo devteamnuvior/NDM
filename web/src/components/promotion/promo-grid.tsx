@@ -10,6 +10,7 @@ import { TwoTone } from "@/components/ui/two-tone";
 import { FINANCING_URL } from "@/config/specials";
 import { useReveal } from "@/hooks/use-reveal";
 import { scrollToY } from "@/lib/smooth-scroll";
+import { DealPill } from "@/components/specials/deal-pill";
 
 const FILTERS = ["All", "Face", "Body"] as const;
 type Filter = (typeof FILTERS)[number];
@@ -100,12 +101,7 @@ export function PromoGrid({ offers }: { offers: Offer[] }) {
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]"
                   style={{ transitionTimingFunction: "var(--e-out)", objectPosition: s.position }}
                 />
-                {s.deal && (
-                  <span className="deal-badge absolute top-3 left-3">
-                    <i aria-hidden="true">%</i>
-                    {s.deal}
-                  </span>
-                )}
+                {s.deal && <DealPill deal={s.deal} className="absolute top-3 left-3" />}
               </div>
               <div className="relative mt-5 flex items-center justify-between gap-2 px-3">
                 <span className="promo-badge grid size-12 shrink-0 place-items-center rounded-full">

@@ -107,7 +107,7 @@ export interface ProcedurePage extends TxHeroContent {
   nav: [id: string, label: string][];
   intro: TxIntroContent;
   film: { src: string; poster: string; lead: string; strong: string; text: string; chips: string[] };
-  overview: { tag: string; lead: string; strong: string; tabs: { label: string; stat: [figure: string, label: string]; text: string[]; link?: [href: string, label: string] }[] };
+  overview: { tag: string; lead: string; strong: string; /** One full-width dark band, the panel without its card. */ dark?: boolean; tabs: { label: string; stat: [figure: string, label: string]; text: string[]; link?: [href: string, label: string] }[] };
   choose: { img: string; alt: string; tag: string; lead: string; strong: string; text?: string; cards: [title: string, text: string][] };
   reel: { src: string; poster: string; tag: string; lead: string; strong: string; text: string };
   why: TxWhyContent;

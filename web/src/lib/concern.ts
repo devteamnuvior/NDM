@@ -3,7 +3,7 @@ import { BUILT_IN_CONCERNS, CONCERN_SHARED } from "@/config/concern";
 import { withRealLinks } from "@/lib/site-links";
 import { getArticleSlugs } from "@/lib/blog";
 import type { LowestPrice } from "@/lib/price-book";
-import { articlePath, concernPath, parentCrumbs, type PostCrumb } from "@/lib/post-paths";
+import { articlePath, concernPath, parentCrumbs, postPath, type PostCrumb, type PostPath } from "@/lib/post-paths";
 import { pagePath, resolveLabel, toSlug } from "@/lib/routes";
 import { fromText, fromTextLong, getSitePrices, lowestOfSource, type SitePrices } from "@/lib/site-prices";
 import { getConcern, getConcernList, settle } from "@/lib/wordpress";
@@ -169,7 +169,7 @@ export async function getConcernSlugs(): Promise<string[]> {
 }
 
 /** Every published concern with its address ("/concerns/wrinkles-fine-lines"); empty when WordPress cannot be reached. */
-export async function getConcernPaths(): Promise<{ slug: string; path: string }[]> {
+export async function getConcernPaths(): Promise<PostPath[]> {
   const read = await settle(getConcernList);
-  return read.ok ? read.data.map((c) => ({ slug: c.slug, path: concernPath(c.slug, c.parents) })) : [];
+  return read.ok ? read.data.map((c) => postPath(c.slug, concernPath(c.slug, c.parents), toSlug(c.title))) : [];
 }

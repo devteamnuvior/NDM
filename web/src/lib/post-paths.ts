@@ -71,6 +71,18 @@ export interface PostCrumb {
 export interface PostPath {
   slug: string;
   path: string;
+  /** The post's title written as a slug ("Belkyra® / Kybella® (Double Chin)" -> "belkyra-kybella-double-chin"), when it differs from the post's own slug: a menu entry or a link that names the page by its title still finds it. */
+  name?: string;
+}
+
+/** A page's entry for the lists of post addresses; `titleSlug` is the title written as a slug (`toSlug`). */
+export function postPath(slug: string, path: string, titleSlug: string): PostPath {
+  return titleSlug && titleSlug !== slug ? { slug, path, name: titleSlug } : { slug, path };
+}
+
+/** The page with this slug, else the page whose title reads as this slug. */
+export function postNamed(list: readonly PostPath[], slug: string): PostPath | undefined {
+  return list.find((p) => p.slug === slug) ?? list.find((p) => p.name === slug);
 }
 
 /**
@@ -80,7 +92,7 @@ export interface PostPath {
  * menu looks for a procedure first.
  */
 export function menuPost(slug: string, concerns: readonly PostPath[], procedures: readonly PostPath[], prefer: "concerns" | "procedures" = "procedures"): PostPath | undefined {
-  const concern = () => concerns.find((p) => p.slug === slug) ?? concerns.find((p) => p.slug === `${slug}-concern`);
-  const procedure = () => procedures.find((p) => p.slug === slug);
+  const concern = () => concerns.find((p) => p.slug === slug) ?? concerns.find((p) => p.slug === `${slug}-concern`) ?? concerns.find((p) => p.name === slug);
+  const procedure = () => postNamed(procedures, slug);
   return prefer === "concerns" ? (concern() ?? procedure()) : (procedure() ?? concern());
 }

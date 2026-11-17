@@ -2,7 +2,8 @@ import "server-only";
 import type { TxPriceGroup } from "@/components/treatment/price-group";
 import { withRealLinks } from "@/lib/site-links";
 import { BUILT_IN_PROCEDURES, PROCEDURE_SHARED } from "@/config/procedure";
-import { parentCrumbs, procedurePath, type PostCrumb } from "@/lib/post-paths";
+import { parentCrumbs, postPath, procedurePath, type PostCrumb, type PostPath } from "@/lib/post-paths";
+import { toSlug } from "@/lib/routes";
 import { formatPrice } from "@/lib/price-book";
 import { fillPrices, fillPricesDeep, getSitePrices, type SitePrices } from "@/lib/site-prices";
 import { priceGroup } from "@/lib/treatment-prices";
@@ -233,7 +234,7 @@ export async function getProcedureSlugs(): Promise<string[]> {
 }
 
 /** Every published procedure with its address ("/injectables/botox"); empty when WordPress cannot be reached. */
-export async function getProcedurePaths(): Promise<{ slug: string; path: string }[]> {
+export async function getProcedurePaths(): Promise<PostPath[]> {
   const read = await settle(getProcedureList);
-  return read.ok ? read.data.map((p) => ({ slug: p.slug, path: procedurePath(p.type, p.slug, p.parents) })) : [];
+  return read.ok ? read.data.map((p) => postPath(p.slug, procedurePath(p.type, p.slug, p.parents), toSlug(p.title))) : [];
 }

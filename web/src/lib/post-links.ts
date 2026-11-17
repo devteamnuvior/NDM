@@ -1,6 +1,6 @@
 import { SHOP_URL } from "@/config/shop";
 import { FINANCING_URL } from "@/config/specials";
-import { PROCEDURE_FOLDERS, type PostPath } from "@/lib/post-paths";
+import { postNamed, PROCEDURE_FOLDERS, type PostPath } from "@/lib/post-paths";
 
 /*
  * The prototype wrote a link to a page that did not exist yet as "#/slug" ("#/microneedling"). The pages
@@ -63,7 +63,7 @@ const FIXED: Readonly<Record<string, string>> = {
   "book-online": "#/book",
 };
 
-const find = (list: readonly PostPath[], slug: string, aliases: Readonly<Record<string, string>>): PostPath | undefined => list.find((p) => p.slug === slug) ?? (aliases[slug] ? list.find((p) => p.slug === aliases[slug]) : undefined);
+const find = (list: readonly PostPath[], slug: string, aliases: Readonly<Record<string, string>>): PostPath | undefined => list.find((p) => p.slug === slug) ?? (aliases[slug] ? list.find((p) => p.slug === aliases[slug]) : undefined) ?? postNamed(list, slug);
 
 /**
  * The real address of a "#/slug" placeholder. `prefer` says what the link means where a slug could be

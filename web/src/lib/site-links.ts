@@ -1,7 +1,8 @@
 import "server-only";
 import { APTOS_SLUG } from "@/config/aptos";
 import { linkPlaceholders, type PostLists } from "@/lib/post-links";
-import { concernPath, procedurePath } from "@/lib/post-paths";
+import { concernPath, postPath, procedurePath } from "@/lib/post-paths";
+import { toSlug } from "@/lib/routes";
 import { getConcernList, getProcedureList, settle } from "@/lib/wordpress";
 
 /**
@@ -12,8 +13,8 @@ import { getConcernList, getProcedureList, settle } from "@/lib/wordpress";
 export async function getPostLists(): Promise<PostLists> {
   const [concerns, procedures] = await Promise.all([settle(getConcernList), settle(getProcedureList)]);
   return {
-    concerns: concerns.ok ? concerns.data.map((c) => ({ slug: c.slug, path: concernPath(c.slug, c.parents) })) : [],
-    procedures: [...(procedures.ok ? procedures.data.map((p) => ({ slug: p.slug, path: procedurePath(p.type, p.slug, p.parents) })) : []), { slug: APTOS_SLUG, path: `/${APTOS_SLUG}` }],
+    concerns: concerns.ok ? concerns.data.map((c) => postPath(c.slug, concernPath(c.slug, c.parents), toSlug(c.title))) : [],
+    procedures: [...(procedures.ok ? procedures.data.map((p) => postPath(p.slug, procedurePath(p.type, p.slug, p.parents), toSlug(p.title))) : []), { slug: APTOS_SLUG, path: `/${APTOS_SLUG}` }],
   };
 }
 
