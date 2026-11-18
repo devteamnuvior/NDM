@@ -25,7 +25,6 @@ pageParity({
     { name: "breadcrumb", selector: "nav.crumbs" },
     { name: "hero", selector: by("proc-title"), pixelRatio: 0.004 },
     { name: "glance", selector: ".tx-glance" },
-    { name: "phone-form", selector: 'main > section[aria-label="Book a free consultation"]', widths: (w) => w < 1024 },
     { name: "section-bar", selector: "nav.tx-nav" },
     { name: "what", selector: sec("what"), pixelRatio: 0.004 },
     { name: "how", selector: sec("how") },

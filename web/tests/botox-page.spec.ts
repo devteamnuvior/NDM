@@ -152,7 +152,7 @@ test.describe("phone", () => {
   test.use({ viewport: { width: 375, height: 812 } });
   test("no sideways scroll down the whole page", async ({ page }) => {
     await page.goto(`${NEXT_URL}/injectables/botox`);
-    await expect(page.locator("#mobile-form-title")).toBeVisible();
+    await expect(page.locator("#mobile-form-title")).toHaveCount(0);
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await page.waitForTimeout(400);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);

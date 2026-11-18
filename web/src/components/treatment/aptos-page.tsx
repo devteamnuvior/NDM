@@ -2,7 +2,6 @@ import { crumbLink } from "@/lib/post-links";
 import { Saying } from "@/components/home/saying";
 import { Team } from "@/components/home/team";
 import { ProcAnalysis } from "@/components/treatment/proc-analysis";
-import { ProcForm } from "@/components/treatment/proc-form";
 import { ProcHero } from "@/components/treatment/proc-hero";
 import { TxCare } from "@/components/treatment/tx-care";
 import { TxExpect } from "@/components/treatment/tx-expect";
@@ -37,9 +36,6 @@ export function AptosPage({ view }: { view: AptosView }) {
       <Breadcrumb items={[[p.crumbs[0], crumbLink(p.crumbs[0])], p.crumbs[1]]} dark />
       <ProcHero title={p.title} sub={p.sub} hero={p.hero} />
       {p.facts.length > 0 && <TxGlance facts={p.facts} />}
-      <section aria-label="Book a free consultation" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-6 lg:hidden">
-        <ProcForm id="mobile-form" className="ring-1 ring-ndm-ink/[.06]" />
-      </section>
       <TxNav nav={p.nav} />
       {has.what && <TxIntro intro={p.intro} number={n("what")} />}
       {has.how && <TxSteps steps={p.steps} number={n("how")} />}

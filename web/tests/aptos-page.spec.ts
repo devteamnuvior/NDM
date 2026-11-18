@@ -99,10 +99,10 @@ test("the header form is the compact booking form; Start your journey opens", as
 
 test.describe("phone", () => {
   test.use({ viewport: { width: 375, height: 812 } });
-  test("the booking form has its own block under the facts; no sideways scroll", async ({ page }) => {
+  test("no booking form on phones; no sideways scroll", async ({ page }) => {
     await page.goto(`${NEXT_URL}/aptos-thread-lift`);
     await expect(page.locator("#hero-form-title")).toBeHidden();
-    await expect(page.locator("#mobile-form-title")).toBeVisible();
+    await expect(page.locator("#mobile-form-title")).toHaveCount(0);
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await page.waitForTimeout(400);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);

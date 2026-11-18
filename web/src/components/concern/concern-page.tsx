@@ -10,7 +10,6 @@ import { CnUnderstand } from "@/components/concern/cn-understand";
 import { Saying } from "@/components/home/saying";
 import { Team } from "@/components/home/team";
 import { ProcAnalysis } from "@/components/treatment/proc-analysis";
-import { ProcForm } from "@/components/treatment/proc-form";
 import { ProcHero } from "@/components/treatment/proc-hero";
 import { TxExpect } from "@/components/treatment/tx-expect";
 import { TxGlance } from "@/components/treatment/tx-glance";
@@ -33,9 +32,6 @@ export function ConcernPage({ view }: { view: ConcernView }) {
       <Breadcrumb items={[[p.crumbs[0], crumbLink(p.crumbs[0])], ...view.parents.map((x): [string, ResolvedLink] => [x.title, { href: x.path, internal: true }]), p.crumbs[1]]} dark />
       <ProcHero title={p.title} sub={p.sub} hero={p.hero} where={p.where} />
       <TxGlance facts={p.facts} />
-      <section aria-label="Book a free consultation" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-6 lg:hidden">
-        <ProcForm id="mobile-form" className="ring-1 ring-ndm-ink/[.06]" />
-      </section>
       <TxNav nav={p.nav} />
       <CnIntro page={p} number={n("about")} />
       <CnUnderstand notice={p.notice} cause={p.cause} number={n("understand")} />

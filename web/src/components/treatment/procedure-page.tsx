@@ -4,7 +4,6 @@ import { Saying } from "@/components/home/saying";
 import { Team } from "@/components/home/team";
 import { ProcAnalysis } from "@/components/treatment/proc-analysis";
 import { ProcChoose } from "@/components/treatment/proc-choose";
-import { ProcForm } from "@/components/treatment/proc-form";
 import { ProcGuide } from "@/components/treatment/proc-guide";
 import { ProcHero } from "@/components/treatment/proc-hero";
 import { ProcOverview } from "@/components/treatment/proc-overview";
@@ -40,9 +39,6 @@ export function ProcedurePage({ view }: { view: ProcedureView }) {
       <Breadcrumb items={[...p.crumbs.slice(0, -1).map((x): [string, ResolvedLink] => [x, crumbLink(x)]), ...view.parents.map((x): [string, ResolvedLink] => [x.title, { href: x.path, internal: true }]), p.crumbs[p.crumbs.length - 1]]} dark />
       <ProcHero title={p.title} sub={p.sub} hero={p.hero} where={p.where} offer={p.offer} />
       {p.facts.length > 0 && <TxGlance facts={p.facts} />}
-      <section aria-label="Book a free consultation" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-6 lg:hidden">
-        <ProcForm id="mobile-form" className="ring-1 ring-ndm-ink/[.06]" />
-      </section>
       <TxNav nav={p.nav} />
       {has("benefits") && <TxIntro intro={p.intro} number={n("benefits")} />}
       {has("overview") && <ProcOverview overview={p.overview} facts={p.facts} number={n("overview")} />}
