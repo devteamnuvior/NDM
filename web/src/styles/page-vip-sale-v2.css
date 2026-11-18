@@ -84,7 +84,23 @@ button:hover>.v2-play{transform:scale(1.06)}
   .v2-row{grid-template-columns:minmax(0,1fr) auto;gap:12px 14px;padding:18px 0}
   .v2-row-name,.v2-row-pick{grid-column:1/-1}
   .v2-add{height:48px;min-width:140px}
+  /* phones (user, 2026-11-18): every treatment is a card of its own (one long white sheet with thin lines read as clutter):
+     the name with its offer tag at the right edge, the pickers, a thin line, the price with its saving on one line under it,
+     then the button across the card (beside the price, a long price ran into it) */
+  .v2-panel.v2-panel{background:none;box-shadow:none;padding:0;border-radius:0}
+  .v2-row,.v2-row:last-child{padding:16px;margin-bottom:12px;border:1px solid #E3E8EE;border-radius:20px;background:#fff;box-shadow:0 10px 26px -20px rgba(16,32,48,.35)}
+  .v2-row:last-child{margin-bottom:0}
+  .v2-row .v2-row-name{flex-wrap:nowrap;align-items:flex-start;justify-content:space-between}
+  .v2-row-name .v2-tag{flex:none;margin-top:4px}
+  .v2-row-pick{padding-bottom:14px;border-bottom:1px solid #EDF0F4}
+  .v2-row-price,.v2-row .v2-add{grid-column:1/-1}
+  .v2-row .v2-row-price{white-space:normal}
+  .v2-row .v2-row-price>span>span{display:inline}
+  .v2-row .v2-add{width:100%;height:46px}
+  .v2-rows-in>.v2-row::after{left:20px;right:20px}
 }
+/* wide phones and small tablets: the card has room for the price beside its button */
+@media (min-width:560px) and (max-width:767px){.v2-row .v2-row-price{grid-column:1}.v2-row .v2-add{grid-column:2;width:auto}}
 /* questions */
 .v2-q summary{list-style:none}
 .v2-q summary::-webkit-details-marker{display:none}

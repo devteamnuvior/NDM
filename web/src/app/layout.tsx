@@ -3,6 +3,7 @@ import { Fraunces, Inter, Manrope } from "next/font/google";
 import { BookPopup } from "@/components/booking/book-popup";
 import { EarlyReveal } from "@/components/layout/early-reveal";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
+import { TagManager, TagManagerNoScript } from "@/components/layout/tag-manager";
 import "./globals.css";
 
 /* Fraunces: headings. Manrope: text. Inter: the fallback behind Helvetica Neue for menus, buttons and fields.
@@ -43,10 +44,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body>
+        <TagManagerNoScript />
         <SmoothScroll />
         {children}
         <BookPopup />
         <EarlyReveal />
+        <TagManager />
       </body>
     </html>
   );
