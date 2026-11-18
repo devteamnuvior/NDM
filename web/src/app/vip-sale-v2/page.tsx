@@ -1,37 +1,35 @@
 import type { Metadata } from "next";
-import { VipSaleV2 } from "@/components/sale/vip-sale-v2";
+import { redirect } from "next/navigation";
+import { SalePage } from "@/components/sale/sale-page";
 import { VipClass } from "@/components/vip-sale/vip-class";
-import { bfsMax } from "@/components/bf-sale/data";
-import { VIP2, VIP2_LIST_KEY } from "@/config/vip-sale-v2";
 import type { CampaignPhase } from "@/lib/campaign";
-import { buildSale } from "@/lib/sale";
+import { pagePath } from "@/lib/routes";
+import { buildSale, saleIsPast } from "@/lib/sale";
 import { getVipSaleCopy } from "@/lib/vip-sale";
 
 /*
- * The redesigned VIP Sale page, a clone for review beside the live /vip-sale: phase 1 and phase 2 of the
- * marketing team's redesign document (2026-11-17) and the changes that follow it. It reads the same campaign,
- * deals and prices from WooCommerce as /vip-sale; only the page around them is new. Kept out of search engines
- * and linked from nowhere.
+ * The earlier VIP Sale design, kept at this address since 2026-11-18 (user) when the redesigned page took over
+ * /vip-sale. It is a parked copy: linked from nowhere, and always marked "noindex, nofollow" so search engines
+ * do not list it or follow its links. Same campaign, deals and prices as /vip-sale.
  */
 
 const mine = (phase: CampaignPhase) => phase.id === "vip";
-const view = async () => buildSale({ look: "vip", planKey: VIP2_LIST_KEY, copy: await getVipSaleCopy(), mine, after: "" });
+const view = async () => buildSale({ look: "vip", planKey: "ndm-vip-plan", copy: await getVipSaleCopy(), mine, after: pagePath("blackFridaySale") });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { deals, phases } = await view();
-  const fill = (text: string) => text.replaceAll("{{max}}", String(bfsMax(deals))).replaceAll("{{day}}", phases.at(-1)?.day ?? "");
-  return { title: fill(VIP2.title), description: fill(VIP2.description), robots: { index: false, follow: false } };
+  const { copy } = await view();
+  return { title: copy.title, description: copy.description, robots: { index: false, follow: false, googleBot: { index: false, follow: false } } };
 }
 
 async function Sale() {
-  return <VipSaleV2 view={await view()} />;
+  if (await saleIsPast(mine)) redirect(pagePath("blackFridaySale"));
+  return <SalePage view={await view()} />;
 }
 
-export default function VipSaleV2Route() {
+export default function VipSaleEarlierRoute() {
   return (
     <>
       <VipClass />
-      {/* no Suspense around it and the class script after the content, as on /vip-sale (see that page) */}
       <Sale />
       <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("vip")' }} />
     </>

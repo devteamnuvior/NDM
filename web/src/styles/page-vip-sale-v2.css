@@ -30,6 +30,7 @@
 .v2-play::before{content:"";border-left:20px solid #A9812E;border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:6px}
 button:hover>.v2-play{transform:scale(1.06)}
 /* the price list */
+.v2-tabs{background:color-mix(in srgb,#FAFAF8 90%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .v2-chip{flex:none;font:600 14px/1 Inter,"Helvetica Neue",Arial,sans-serif;padding:12px 17px;border-radius:999px;border:1px solid #CBD3DD;background-color:#fff;color:#14202E;-webkit-tap-highlight-color:transparent;transition:background-color .28s ease,border-color .28s ease,color .28s ease}
 .v2-chip[aria-pressed="true"]{background-color:#0B1B29;border-color:#0B1B29;color:#fff}
 .v2-row{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1.7fr) minmax(0,1fr) auto;gap:8px 22px;align-items:center;padding:18px 0;border-bottom:1px solid #E2E7EE}

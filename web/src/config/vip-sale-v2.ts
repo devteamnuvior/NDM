@@ -1,7 +1,7 @@
 import { SALE_SHARED } from "@/config/sale";
 
 /*
- * The redesigned VIP Sale page (/vip-sale-v2, a local clone for review; not linked from anywhere and kept out of
+ * The redesigned VIP Sale page (at /vip-sale since 2026-11-18; first a clone at /vip-sale-v2, kept out of
  * search engines). Its words follow the marketing team's redesign document of 2026-11-17 ("VIP Sale page
  * redesign", phase 1 and phase 2). No price, percentage or date is written here: prices and the best saving are
  * read from WooCommerce, the deadline from the campaign.
@@ -9,7 +9,7 @@ import { SALE_SHARED } from "@/config/sale";
  * Before publishing: Raymond's written approval of the prices, the gift wording and every claim on this page.
  */
 
-export const VIP2_PATH = "/vip-sale-v2";
+export const VIP2_PATH = "/vip-sale";
 
 /** Where the visitor's list is kept in the browser. */
 export const VIP2_LIST_KEY = "ndm-vip2-list";

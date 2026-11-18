@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element -- the page's photos are plain images, as on /vip-sale */
 
 /*
- * The redesigned VIP Sale page (/vip-sale-v2): built for visitors who arrive from an ad and do not know the clinic.
+ * The VIP Sale page (/vip-sale since 2026-11-18; first shown at /vip-sale-v2): built for visitors who arrive from an ad and do not know the clinic.
  * One message and one button in the hero with real prices beside it, the clinic itself (film, photos, awards, both
  * locations) before the prices, one price list with one final price per package, a list bar that keeps the saving
  * and Check out in view, what happens after buying, the questions new clients ask, a small chat and both phone
@@ -534,10 +534,14 @@ function PriceList({ view, rows, best, day, inList, toggle }: { view: SaleView; 
         <Tag>{rows.length} treatments on sale</Tag>
         <Title id="v2-list-title" lead={VIP2.list.lead} strong={VIP2.list.strong} />
         <p className="mt-2.5 font-inter text-[16px] leading-[1.6] text-ndm-muted">{VIP2.list.text.replace("{{day}}", day)}</p>
-        <div role="group" aria-label="Filter the price list" className="no-scrollbar -mx-[var(--gx)] mt-6 flex gap-2 overflow-x-auto px-[var(--gx)] sm:mx-0 sm:flex-wrap sm:px-0">
-          {["All", ...tabs].map((x) => <button key={x} type="button" aria-pressed={tab === x} onClick={() => { if (x !== tab) { setTab(x); setPlayed(true); } }} className="v2-chip">{x}</button>)}
+        {/* the filters stay under the page header for as long as the list is on screen; the strip is the page's own
+            colour, so it only shows once rows pass under it */}
+        <div className="v2-tabs sticky top-[64px] z-40 -mx-[var(--gx)] mt-3 px-[var(--gx)] py-3">
+          <div role="group" aria-label="Filter the price list" className="no-scrollbar -mx-[var(--gx)] flex gap-2 overflow-x-auto px-[var(--gx)] sm:mx-0 sm:flex-wrap sm:px-0">
+            {["All", ...tabs].map((x) => <button key={x} type="button" aria-pressed={tab === x} onClick={() => { if (x !== tab) { setTab(x); setPlayed(true); } }} className="v2-chip">{x}</button>)}
+          </div>
         </div>
-        <div className="mt-5 rounded-[22px] bg-white px-4 py-1 shadow-[0_14px_40px_rgba(16,32,48,.08)] sm:px-[26px]">
+        <div className="mt-2 rounded-[22px] bg-white px-4 py-1 shadow-[0_14px_40px_rgba(16,32,48,.08)] sm:px-[26px]">
           <ul key={tab} role="list" className={played ? "v2-rows-in" : undefined}>{shown.map((d, i) => <Row key={d.id} d={d} best={best} tagged={d.id === head} order={i} inList={inList} toggle={toggle} />)}</ul>
         </div>
         <p className="mx-1 mt-4 font-inter text-[13.5px] leading-[1.55] text-ndm-muted">{VIP2.list.fine}</p>

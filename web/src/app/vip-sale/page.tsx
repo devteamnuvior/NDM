@@ -1,22 +1,32 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { SalePage } from "@/components/sale/sale-page";
+import { VipSaleV2 } from "@/components/sale/vip-sale-v2";
 import { VipClass } from "@/components/vip-sale/vip-class";
+import { bfsMax } from "@/components/bf-sale/data";
 import { VIP_SALE_PATH } from "@/config/vip-sale";
+import { VIP2, VIP2_LIST_KEY } from "@/config/vip-sale-v2";
 import type { CampaignPhase } from "@/lib/campaign";
 import { pagePath } from "@/lib/routes";
 import { buildSale, saleIsPast } from "@/lib/sale";
 import { absolute } from "@/lib/seo";
 import { getVipSaleCopy } from "@/lib/vip-sale";
 
+/*
+ * The VIP Sale page: since 2026-11-18 (user) the redesigned page (the marketing team's redesign document of
+ * 2026-11-17 and the changes after it), which was first shown at /vip-sale-v2. The earlier design now lives at
+ * /vip-sale-v2, kept out of search engines. Deals, prices and the campaign are WooCommerce's, as before; the page's
+ * search-engine switch is still the WordPress VIP Sale page's "noindex" setting.
+ */
+
 /** The VIP Sale is the campaign's first phase. */
 const mine = (phase: CampaignPhase) => phase.id === "vip";
-const view = async () => buildSale({ look: "vip", planKey: "ndm-vip-plan", copy: await getVipSaleCopy(), mine, after: pagePath("blackFridaySale") });
+const view = async () => buildSale({ look: "vip", planKey: VIP2_LIST_KEY, copy: await getVipSaleCopy(), mine, after: pagePath("blackFridaySale") });
 
-/** Title, description and social card from the page's settings in WordPress. */
 export async function generateMetadata(): Promise<Metadata> {
-  const { copy } = await view();
-  const { title, description } = copy;
+  const { deals, phases, copy } = await view();
+  const fill = (text: string) => text.replaceAll("{{max}}", String(bfsMax(deals))).replaceAll("{{day}}", phases.at(-1)?.day ?? "");
+  const title = fill(VIP2.title);
+  const description = fill(VIP2.description);
   return {
     title,
     description,
@@ -26,13 +36,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-/** The page with its settings (WordPress) and its deals and prices (WooCommerce). Once the VIP Sale is over it hands over to Black Friday. */
+/** Once the VIP Sale is over the address hands over to Black Friday. */
 async function Sale() {
   if (await saleIsPast(mine)) redirect(pagePath("blackFridaySale"));
-  return <SalePage view={await view()} />;
+  return <VipSaleV2 view={await view()} />;
 }
 
-/** The VIP Sale page. It has its own header and footer, so it sits outside the (site) layout. */
+/** It has its own header and footer, so it sits outside the (site) layout. */
 export default function VipSaleRoute() {
   return (
     <>
@@ -40,9 +50,8 @@ export default function VipSaleRoute() {
       {/* no Suspense around it: everything it reads is cached, so the page's content is in the first HTML and
           paints at once (inside a boundary it arrives hidden and is only shown by a script, after the photos and fonts) */}
       <Sale />
-      {/* the page's look hangs on a class on <html>: set before the first paint. An inline script waits for the
-          stylesheet, and the browser reads nothing below it meanwhile, so it comes after the page's content:
-          placed above it, the first paint was empty and the content only showed after the scripts had run */}
+      {/* the page's look hangs on a class on <html>, set by a script placed after the content: above it, the
+          browser read nothing below it until the stylesheet had loaded */}
       <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("vip")' }} />
     </>
   );
