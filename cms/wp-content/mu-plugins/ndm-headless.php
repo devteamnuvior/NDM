@@ -39,4 +39,5 @@ require_once NDM_HEADLESS_DIR . '/includes/home.php';
 require_once NDM_HEADLESS_DIR . '/includes/blog.php';
 require_once NDM_HEADLESS_DIR . '/includes/bookings.php';
 require_once NDM_HEADLESS_DIR . '/includes/booking-reports.php';
+require_once NDM_HEADLESS_DIR . '/includes/messages.php';
 require_once NDM_HEADLESS_DIR . '/includes/settings.php';
