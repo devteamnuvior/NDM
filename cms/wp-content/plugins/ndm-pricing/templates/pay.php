@@ -48,6 +48,8 @@ $ndm_site = ndm_pricing_site_base();
 	.ndm-pay-card #place_order:hover, .ndm-pay-card button[type=submit]:hover { background:var(--navy); }
 	.ndm-pay-card .woocommerce-error, .ndm-pay-card .woocommerce-info, .ndm-pay-card .woocommerce-message { list-style:none; margin:0 0 16px; padding:12px 16px; border-radius:12px; background:var(--mist); }
 	.ndm-pay-card .woocommerce-error { background:#FDECEC; color:#8A1C1C; }
+	/* WooCommerce's own icon sits on top of the first word here: leave it out */
+	.ndm-pay-card .woocommerce-error::before, .ndm-pay-card .woocommerce-info::before, .ndm-pay-card .woocommerce-message::before { content:none; display:none; }
 	/* WooCommerce's own checkout styles: grey-purple boxes and boxed tables, recoloured */
 	.ndm-pay .ndm-pay-card table.shop_table { border:0; border-radius:0; }
 	.ndm-pay .ndm-pay-card table.shop_table td, .ndm-pay .ndm-pay-card table.shop_table th { border-left:0; border-right:0; border-top:0; padding-left:0; padding-right:0; }

@@ -270,3 +270,27 @@ function ndm_pricing_attach_paid_order( $order_id, $from, $to, $order ) {
 	}
 }
 add_action( 'woocommerce_order_status_changed', 'ndm_pricing_attach_paid_order', 20, 4 );
+
+/**
+ * A website order is created by the site's own server, so WooCommerce records the server's address as
+ * the customer's. The card gateway sends that address to Bambora with the payment, and every payment
+ * sent with the server's own address was declined (2026-11-18). The pay page is opened by the visitor's
+ * own browser: when the payment is sent, the order takes the address and browser of that request.
+ *
+ * @param WC_Order $order The order about to be paid.
+ */
+function ndm_pricing_pay_from_visitor( $order ) {
+	if ( ! $order instanceof WC_Order || ! ndm_pricing_is_site_order( $order ) ) {
+		return;
+	}
+	$ip = class_exists( 'WC_Geolocation' ) ? (string) WC_Geolocation::get_ip_address() : '';
+	if ( '' === $ip || ! filter_var( $ip, FILTER_VALIDATE_IP ) || $ip === $order->get_customer_ip_address() ) {
+		return;
+	}
+	$order->set_customer_ip_address( $ip );
+	if ( function_exists( 'wc_get_user_agent' ) ) {
+		$order->set_customer_user_agent( wc_get_user_agent() );
+	}
+	$order->save();
+}
+add_action( 'woocommerce_before_pay_action', 'ndm_pricing_pay_from_visitor', 5 );
