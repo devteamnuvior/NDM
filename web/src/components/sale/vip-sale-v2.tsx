@@ -752,29 +752,36 @@ function Footer() {
 
 /* ------------------------------------------------------------------ the list: bar and sheet */
 
-function ListBar({ list, t, show, openList, checkout }: { list: PlanLine[]; t: Clock; show: boolean; openList: () => void; checkout: () => void }) {
+/** The chat mark: a speech bubble in the page's gold. */
+const IconChat = ({ size = 18 }: { size?: number }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="#E2C27A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" /></svg>
+);
+
+function ListBar({ list, t, show, openList, checkout, chatOpen, toggleChat }: { list: PlanLine[]; t: Clock; show: boolean; openList: () => void; checkout: () => void; chatOpen: boolean; toggleChat: () => void }) {
   const { withCode, saved } = planTotals(list);
   const n = list.length;
   const left = leftWords(t);
   if (!n && !show) return null;
   return (
     <div className={`fixed inset-x-0 bottom-0 z-[60] border-t border-white/[.14] bg-[#09141F]/95 pb-[env(safe-area-inset-bottom)] text-white shadow-[0_-10px_30px_rgba(0,0,0,.35)] backdrop-blur-[10px] ${n ? "" : "lg:hidden"}`}>
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-3 px-[var(--gx)] py-2.5">
+      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-2.5 px-[var(--gx)] py-2.5 sm:gap-3">
+        {/* phones: the chat lives in the bar as a small icon, so nothing floats over the price list */}
+        <button type="button" aria-expanded={chatOpen} aria-label={VIP2.chat.title} onClick={toggleChat} className="grid size-11 shrink-0 place-items-center rounded-full border border-white/25 bg-white/[.06] sm:hidden"><IconChat /></button>
         {n ? (
           <>
-            <button type="button" onClick={openList} aria-live="polite" className="min-w-0 text-left font-inter leading-[1.3]">
-              <b className="block whitespace-nowrap text-[14.5px] font-semibold"><span className="max-sm:hidden">{VIP2.name}: </span>{n} {n === 1 ? "treatment" : "treatments"}<span className="tabular-nums min-[400px]:hidden"> · {money(withCode)}</span> <span className="font-normal text-white/60 underline underline-offset-[5px] max-[359px]:hidden">View</span></b>
+            <button type="button" onClick={openList} aria-live="polite" className="min-w-0 flex-1 overflow-hidden text-left font-inter leading-[1.3]">
+              <b className="block whitespace-nowrap text-[14.5px] font-semibold"><span className="max-sm:hidden">{VIP2.name}: </span>{n} {n === 1 ? "treatment" : "treatments"}<span className="tabular-nums min-[400px]:hidden"> · {money(withCode)}</span> <span className="font-normal text-white/60 underline underline-offset-[5px] max-sm:hidden">View</span></b>
               {saved > 0 && <span className="block text-[13.5px] font-semibold text-[#F0D79B]">You save {money(saved)}</span>}
             </button>
             <span className="flex shrink-0 items-center gap-4">
               <b className="font-aeonik text-[26px] font-normal leading-none tabular-nums max-[399px]:hidden">{money(withCode)}</b>
-              <button type="button" onClick={checkout} className="btn bfd-cta h-12 px-6 font-semibold">{VIP2.checkout}</button>
+              <button type="button" onClick={checkout} className="btn bfd-cta h-12 px-6 font-semibold max-sm:px-5">{VIP2.checkout}</button>
             </span>
           </>
         ) : (
           <>
-            <span className="min-w-0 whitespace-nowrap font-inter leading-[1.3]"><b className="block text-[14.5px] font-semibold">VIP Sale</b><span className="block text-[13.5px] text-[#F0D79B]">{left ? `${left} left` : "Sale prices shown"}</span></span>
-            <a href="#vip-list" onClick={go("vip-list")} className="btn bfd-cta h-12 shrink-0 px-6 font-semibold max-[359px]:px-4 max-[359px]:text-[14.5px]">{VIP2.hero.button}</a>
+            <span className="min-w-0 flex-1 overflow-hidden whitespace-nowrap font-inter leading-[1.3]"><b className="block text-[14.5px] font-semibold">VIP Sale</b><span className="block text-[13.5px] text-[#F0D79B]">{left ? `${left} left` : "Sale prices shown"}</span></span>
+            <a href="#vip-list" onClick={go("vip-list")} className="btn bfd-cta h-12 shrink-0 px-6 font-semibold max-sm:px-5 max-[359px]:px-3.5 max-[359px]:text-[14px]">{VIP2.hero.button}</a>
           </>
         )}
       </div>
@@ -838,7 +845,8 @@ function ListSheet({ list, remove, close, checkout }: { list: PlanLine[]; remove
 /* ------------------------------------------------------------------ chat */
 
 /** Sale and booking questions only: the same answers as the questions block, and the phone numbers for a person.
- * On phones it sits on the left (user, 2026-11-18), clear of the buttons on the right of the price list. */
+ * On phones its panel opens from the left, and once the bottom bar shows, the launcher is the bar's own small icon
+ * (user, 2026-11-18), so nothing floats over the price list. */
 function Chat({ open, setOpen, day, lifted }: { open: boolean; setOpen: (on: boolean) => void; day: string; lifted: "all" | "small" | "" }) {
   const c = VIP2.chat;
   const [log, setLog] = useState<{ me: boolean; text: string }[]>([]);
@@ -861,8 +869,8 @@ function Chat({ open, setOpen, day, lifted }: { open: boolean; setOpen: (on: boo
           <p className="border-t border-black/[.08] px-3.5 py-2.5 font-inter text-[12px] leading-[1.4] text-ndm-muted">{c.foot}<span className="mt-1 block"><Calls dark={false} from="chat" /></span></p>
         </div>
       )}
-      <button type="button" aria-expanded={open} onClick={() => { setOpen(!open); if (!open) track("Contact", { method: "chat", from: "launcher" }); }} className="inline-flex h-12 items-center gap-2 rounded-full border border-white/25 bg-[#0B1B29] pl-3.5 pr-[18px] font-inter text-[14.5px] font-semibold text-white shadow-[0_10px_26px_rgba(0,0,0,.4)]">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#E2C27A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" /></svg>{c.button}
+      <button type="button" aria-expanded={open} onClick={() => { setOpen(!open); if (!open) track("Contact", { method: "chat", from: "launcher" }); }} className={`${lifted ? "max-sm:hidden" : ""} inline-flex h-12 items-center gap-2 rounded-full border border-white/25 bg-[#0B1B29] pl-3.5 pr-[18px] font-inter text-[14.5px] font-semibold text-white shadow-[0_10px_26px_rgba(0,0,0,.4)]`}>
+        <IconChat />{c.button}
       </button>
     </div>
   );
@@ -950,7 +958,7 @@ export function VipSaleV2({ view }: { view: SaleView }) {
       </main>
       <Footer />
       <Chat open={chat} setOpen={setChat} day={day} lifted={list.length > 0 ? "all" : past ? "small" : ""} />
-      <ListBar list={list} t={t} show={past} openList={() => setSheet(true)} checkout={checkout} />
+      <ListBar list={list} t={t} show={past} openList={() => setSheet(true)} checkout={checkout} chatOpen={chat} toggleChat={() => { if (!chat) track("Contact", { method: "chat", from: "bar" }); setChat(!chat); }} />
       {sheet && <ListSheet list={list} remove={(key) => setList((l) => l.filter((x) => x.key !== key))} close={() => setSheet(false)} checkout={checkout} />}
     </>
   );
