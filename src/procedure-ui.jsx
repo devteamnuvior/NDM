@@ -143,14 +143,46 @@ const IconTick = (p) => <Svg size={14} vb="0 0 14 14" {...p}><path d="m3 7.3 2.6
 
 /* ---------------------------------------------------------------- booking form (hero card on desktop, its own block on phones) */
 /* the hero and phone form: the shared booking form (BookForm) in its compact layout, after Ray's version (round 12) */
+/* ---------------------------------------------------------------- Black Friday badge on the booking form (user, 2026-11-18)
+   The bottom tab's look, small: the red % mark, "Black Friday Sale" and the tab's offer line (BF_SALE.badge), linking to the
+   sale page; gone after the live site's Black Friday window (Dec 7, Toronto time). */
+const BFB_END = '2026-12-07T23:59:00-05:00';
+if (typeof document !== 'undefined' && !document.getElementById('bfb-css')) {
+  const st = document.createElement('style'); st.id = 'bfb-css';
+  st.textContent = `.bfb{display:inline-flex;align-items:center;gap:9px;padding:6px 12px 6px 6px;border-radius:14px;background:#0B0B0C;color:#fff;text-decoration:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 10px 24px -16px rgba(11,11,12,.6);transition:box-shadow .2s}
+.bfb:hover{box-shadow:inset 0 0 0 1px rgba(238,58,69,.5),0 10px 24px -16px rgba(11,11,12,.6)}
+.bfb-mark{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:9px;background:linear-gradient(150deg,#EE3A45,#A50E18);font-family:Fraunces,Georgia,serif;font-size:17px;line-height:1;color:#fff}
+.bfb-text{display:flex;flex-direction:column;gap:4px}
+.bfb-label{font:500 13px/1 Inter,"Helvetica Neue",Arial,sans-serif;white-space:nowrap}
+.bfb-badge{font:600 11.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;color:#FF6B73;white-space:nowrap}
+.proc-form-head{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:start;gap:12px}
+.proc-form-head .bfb{margin-top:2px}
+@media (max-width:479px){.proc-form-head{grid-template-columns:minmax(0,1fr) auto}.proc-form-head .bfb{grid-column:1 / -1;grid-row:2;justify-self:start;margin-top:0}}`;
+  document.head.appendChild(st);
+}
+function BfFormBadge() {
+  if (Date.now() > new Date(BFB_END).getTime()) return null;
+  const sale = typeof BF_SALE !== 'undefined' ? BF_SALE : { href: 'black-friday-sale.html', badge: 'Up to 60% off' };
+  return (
+    <a href={sale.href} className="bfb" aria-label={`Black Friday Sale, ${sale.badge}. See the offers`}>
+      <span aria-hidden="true" className="bfb-mark">%</span>
+      <span className="bfb-text" aria-hidden="true">
+        <span className="bfb-label">Black Friday Sale</span>
+        <span className="bfb-badge">{sale.badge}</span>
+      </span>
+    </a>
+  );
+}
+
 function ProcForm({ id, className = '' }) {
   const hid = `${id}-title`;
   return (
     <div className={`proc-form book-compact rounded-[22px] bg-white p-[clamp(20px,2.2vw,28px)] text-ndm-ink ${className}`} role="region" aria-labelledby={hid}>
-      <div className="mb-4 flex items-start justify-between gap-3">
+      <div className="proc-form-head mb-4">
         <h2 id={hid} className="font-aeonik text-[clamp(24px,2vw,28px)] font-normal leading-[1.1] tracking-[-0.025em]">
           Book your <br /><span className="tt-strong text-ndm-deep">free consultation</span>
         </h2>
+        <BfFormBadge />
         <span aria-hidden="true" className="book-badge-dot mt-1 grid size-9 shrink-0 place-items-center rounded-full bg-ndm-amber text-white"><IconArrow size={13} /></span>
       </div>
       <div className="flex flex-col"><BookForm compact thanksId={`${id}-thanks`} /></div>
