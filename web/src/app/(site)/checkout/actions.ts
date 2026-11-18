@@ -1,7 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { CHECKOUT_STEPS, PROVINCES, TIMES_OF_DAY } from "@/config/checkout";
+import { CHECKOUT_STEPS, PROVINCES } from "@/config/checkout";
 import { CLINICS } from "@/config/site";
 import { getAccountSession } from "@/lib/account/session";
 import { CART_MAX, cartKey, type CartLine } from "@/lib/cart";
@@ -26,11 +26,6 @@ export interface OrderRequestForm {
   postal: string;
   /** "Uptown" or "Downtown". */
   clinic: string;
-  /** "2026-12-01", or "" for any day. */
-  day: string;
-  time: string;
-  /** "Call me to find a time instead". */
-  call: boolean;
   note: string;
   agree: boolean;
   /** Left empty by people; filled in by form-filling robots. */
@@ -113,8 +108,6 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
   if (!/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(postal)) return invalid("Please enter a Canadian postal code such as M2N 5M5.");
   const clinic = CLINICS.find((c) => c.name === form.clinic);
   if (!clinic) return invalid("Please choose a clinic.");
-  if (!(TIMES_OF_DAY as readonly string[]).includes(form.time)) return invalid("Please choose a time of day.");
-  if (typeof form.day !== "string" || (form.day !== "" && !/^\d{4}-\d{2}-\d{2}$/.test(form.day))) return invalid("Please choose a preferred day.");
   const code = typeof form.code === "string" && /^[A-Za-z0-9]{0,40}$/.test(form.code.trim()) ? form.code.trim().toUpperCase() : null;
   if (code === null) return invalid("The checkout code could not be read. Please remove it and try again.");
   const pay = form.pay === "card" ? "card" : "clinic";
@@ -133,7 +126,8 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
       lines,
       customer: { first, last, email, phone, address: street, apt, city, province: form.province, postal },
       clinic: `NewDermaMed ${clinic.name}`,
-      preferred: form.call === true ? "Call me to find a time" : `${form.day || "Any day"}, ${form.time.toLowerCase()}`,
+      /* no appointment step for now (user, 2026-11-18): the team arranges the visit, WordPress notes "not given" */
+      preferred: "",
       note,
     });
     /* tax and total are WooCommerce's own: it taxed the order when it created it */

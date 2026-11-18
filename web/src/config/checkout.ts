@@ -4,7 +4,7 @@
 /** localStorage key of the last order request: order number, lines, totals, first name and clinic only. */
 export const ORDER_STORAGE_KEY = "ndm-last-order";
 
-export const CHECKOUT_STEPS = ["Cart", "Details", "Appointment", "Payment", "Review", "Confirmation"] as const;
+export const CHECKOUT_STEPS = ["Cart", "Details", "Payment", "Review", "Confirmation"] as const;
 
 export const PROVINCES = ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon"] as const;
 
