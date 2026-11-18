@@ -658,6 +658,35 @@
   @media (min-width:768px){.eyebrow{font-size:16px;padding:5px 20px 5px 5px;gap:11px}.eyebrow-mark{width:32px;height:32px}.eyebrow-mark img{width:20px;height:20px}}
   @media (prefers-reduced-motion:reduce){.eyebrow::after,.nav-here{animation:none}}
 
+
+  /* before & after redesign (2026-11-18, round 2) */
+  .ba-glass{background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 30px 60px -36px rgba(0,0,0,.6)}
+  .ba-filter{background:rgba(250,250,248,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+  .ba-card{box-shadow:inset 0 0 0 1px rgba(27,36,43,.06);transition:transform .55s var(--e-out),box-shadow .55s var(--e-out)}
+  .ba-card-img{transition:transform 1.2s var(--e-out)}
+  .ba-card-shade{background:linear-gradient(180deg,rgba(11,15,19,0) 55%,rgba(11,15,19,.28));opacity:0;transition:opacity .45s ease}
+  .ba-zoom{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s var(--e-out)}
+  @media (hover:hover){.ba-card:hover{transform:translateY(-4px);box-shadow:inset 0 0 0 1px rgba(15,128,195,.25),0 34px 64px -38px rgba(15,60,95,.5)}.ba-card:hover .ba-card-img{transform:scale(1.04)}.ba-card:hover .ba-card-shade,.ba-card:hover .ba-zoom{opacity:1;transform:none}}
+  @media (hover:none){.ba-zoom{opacity:1;transform:none}}
+  .ba-note-n{position:absolute;right:18px;top:6px;font-size:84px;line-height:1;letter-spacing:-.04em;color:rgba(15,128,195,.08)}
+  .ba-fig{animation:baIn .45s var(--e-out) both}
+  @keyframes baIn{from{opacity:0;transform:translateY(10px) scale(.985)}}
+  @media (prefers-reduced-motion:reduce){.ba-card,.ba-card-img,.ba-zoom,.ba-card-shade{transition:none}.ba-fig{animation:none}}
+  .ba-chip{background:#fff;color:rgba(27,36,43,.82);box-shadow:inset 0 0 0 1px rgba(27,36,43,.09)}
+  .ba-chip:hover{color:#1B242B;box-shadow:inset 0 0 0 1px rgba(15,128,195,.35)}
+  .ba-chip-n{background:rgba(27,36,43,.06);color:#5A646C}
+  .ba-chip.is-on{background:#0F80C3;color:#fff;box-shadow:none}
+  .ba-chip.is-on .ba-chip-n{background:rgba(255,255,255,.22);color:#fff}
+  .ba-viewer{background:rgba(6,9,12,.96);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  .ba-v-side,.ba-v-step{background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+  .ba-v-side:hover,.ba-v-step:hover{background:#fff;color:#0B0F13}
+  .ba-v-about{background:#fff;color:#0B0F13}
+  .ba-v-about:hover{background:#26B1E7;color:#0B0F13}
+  /* testimonials as on the Botox page: the words on the 1180px column, the card row edge to edge */
+  main{--tx:max(var(--gx),calc((100% - 1180px) / 2))}
+  main>section[aria-labelledby="testimonials"]{padding:clamp(64px,7vw,104px) 0!important}
+  main>section[aria-labelledby="testimonials"]>div:not(.promo-rev-rows),main>section[aria-labelledby="testimonials"]>p{padding-left:var(--tx)!important;padding-right:var(--tx)!important}
+
   .peach{position:relative}
   .peach::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 18% 8%,rgba(255,186,148,.35),rgba(255,186,148,0) 62%);mix-blend-mode:soft-light}
 </style>
@@ -5308,47 +5337,257 @@ function ChatBot({ ready, hidden }) {
 /* ---------------------------------------------------------------- the gallery (src/before-after-data.json) */
 const G = {"title": "Real Patient Transformations – Before & After Gallery", "title2": "Real Patient Results", "subs": ["See real transformations with body contouring, skin tightening & more.", "Preview transformations from our clinic."], "cases": [{"src": "assets/before-after/Belkyra-56068-e1762377630364.webp", "label": "Belkyra"}, {"src": "assets/before-after/Belkyra-56068-2-e1762377694914.webp", "label": "Belkyra"}, {"src": "assets/before-after/Botox-2-1-e1762377732143.webp", "label": "Botox"}, {"src": "assets/before-after/Botox-3-1-e1762377757277.webp", "label": "Botox"}, {"src": "assets/before-after/Botox-99249-1-e1762377779571.webp", "label": "Botox"}, {"src": "assets/before-after/Chemical-peel-1-e1762377797976.webp", "label": "Chemical peel"}, {"src": "assets/before-after/Dermamelan-1-e1762377822853.webp", "label": "Dermamelan"}, {"src": "assets/before-after/Dermamelan-2-e1762377844744.webp", "label": "Dermamelan"}, {"src": "assets/before-after/Dermamelan-3-e1762377874768.webp", "label": "Dermamelan"}, {"src": "assets/before-after/Fractional-skin-resurfacing-2-e1762377900809.webp", "label": "Fractional skin resurfacing"}, {"src": "assets/before-after/Fractional-skin-resurfacing-3-e1762377925491.webp", "label": "Fractional skin resurfacing"}, {"src": "assets/before-after/Fractional-skin-resurfacing-1-e1762377951819.webp", "label": "Fractional skin resurfacing"}, {"src": "assets/before-after/Laser-acne_Chemical-peels-3-e1762377973669.webp", "label": "Laser acne Chemical peels"}, {"src": "assets/before-after/Laser-acne_Chemical-peels-4-e1762377997761.webp", "label": "Laser acne Chemical peels"}, {"src": "assets/before-after/Laser-Acne-1-e1762378021592.webp", "label": "Laser acne"}, {"src": "assets/before-after/Laser-Acne-2-e1762378043163.webp", "label": "Laser acne"}, {"src": "assets/before-after/Laser-Acne-4-e1762378062572.webp", "label": "Laser acne"}, {"src": "assets/before-after/Lip-fillers-1-e1762378082190.webp", "label": "Lip fillers"}, {"src": "assets/before-after/Lip-fillers-16292-e1762378105455.webp", "label": "Lip fillers"}, {"src": "assets/before-after/Lip-fillers-21967-e1762378124805.webp", "label": "Lip fillers"}, {"src": "assets/before-after/Microneedling-1-e1762378144199.webp", "label": "Microneedling"}, {"src": "assets/before-after/Microneedling-2-e1762378165402.webp", "label": "Microneedling"}, {"src": "assets/before-after/Microneedling-3-e1762378186416.webp", "label": "Microneedling"}, {"src": "assets/before-after/Mole-removal-61338-e1762378211836.webp", "label": "Mole removal"}, {"src": "assets/before-after/Mole-removal-41946-e1762378232160.webp", "label": "Mole removal"}, {"src": "assets/before-after/Mole-removal-60371-e1762378254409.webp", "label": "Mole removal"}, {"src": "assets/before-after/Tear-Troughs-16681-1-e1762378274239.webp", "label": "Tear Troughs"}, {"src": "assets/before-after/Tear-Troughs-17133-e1762378299589.webp", "label": "Tear Troughs"}, {"src": "assets/before-after/Tear-Troughs-17407-e1762378320172.webp", "label": "Tear Troughs"}, {"src": "assets/before-after/PPR-Hair-6543-2-e1762378339135.webp", "label": "PRP Hair"}, {"src": "assets/before-after/PPR-Hair-6543-e1762378358448.webp", "label": "PRP Hair"}, {"src": "assets/before-after/PPR-Hair-24715-e1762378377981.webp", "label": "PRP Hair"}, {"src": "assets/before-after/Stretch-Marks-2-e1762378395380.webp", "label": "Stretch Marks"}, {"src": "assets/before-after/Stretch-Marks-3-e1762378413913.webp", "label": "Stretch Marks"}, {"src": "assets/before-after/Stretch-Marks-4-e1762378429550.webp", "label": "Stretch Marks"}], "labels": ["Belkyra", "Botox", "Chemical peel", "Dermamelan", "Fractional skin resurfacing", "Laser acne Chemical peels", "Laser acne", "Lip fillers", "Microneedling", "Mole removal", "Tear Troughs", "PRP Hair", "Stretch Marks"]};
 
-/* ---------------------------------------------------------------- before & after gallery: the live home page's cases, filtered by treatment */
-function Gallery() {
-  const ref = useRef(null), grid = useRef(null);
-  useReveal(ref);
-  const [on, setOn] = useState('All');
-  const [open, setOpen] = useState(null);
-  const list = G.cases.filter((c) => on === 'All' || c.label === on);
-  useEffect(() => { const el = grid.current; if (!el) return; el.querySelectorAll('.rv').forEach((x) => x.classList.add('in')); }, [on]);
-  useEffect(() => { if (open === null) return; const k = (e) => { if (e.key === 'Escape') setOpen(null); }; window.addEventListener('keydown', k); return () => window.removeEventListener('keydown', k); }, [open]);
-  const t = G.title.split(/\s[–-]\s/);
+/* ---------------------------------------------------------------- before & after (redesign, user 2026-11-18, round 2): the procedure and
+   concern pages' photo header (dark, full width, words on the left, the numbers on a glass card on the right), a sticky treatment
+   bar, the cases in the treatment pages' 1180px column and spacing, a full-size viewer with previous / next and the treatment's
+   own page, "Good to know" as numbered cards, the testimonials and Start your journey.
+   Cases come from src/before-after-data.json; category cover photos (no before and after in them) are not cases. */
+const BA_LIVE = 'https://newdermamedlaserclinic.com';
+/* the treatment page each gallery category belongs to (prototype pages where they exist, else the live site) */
+const BA_PAGES = {
+  'botox': 'botox.html', 'belkyra': `${BA_LIVE}/injectables/double-chin/belkyra-kybella`, 'chemical peel': `${BA_LIVE}/skin/aesthetic/chemical-peels`,
+  'dermamelan': `${BA_LIVE}/skin/aesthetic/dermamelan`, 'fractional skin resurfacing': `${BA_LIVE}/skin/laser-skin-resurfacing`,
+  'laser acne chemical peels': `${BA_LIVE}/skin/acne-treatments`, 'laser acne': `${BA_LIVE}/skin/acne-treatments`, 'lip fillers': `${BA_LIVE}/injectables/lip-augmentation`,
+  'microneedling': `${BA_LIVE}/skin/aesthetic/microneedling`, 'mole removal': `${BA_LIVE}/skin/mole-removal`, 'tear troughs': `${BA_LIVE}/injectables/tear-trough-correction`,
+  'prp hair': `${BA_LIVE}/hair/hair-loss-treatments`, 'stretch marks': `${BA_LIVE}/body/stretch-marks`,
+};
+const baPage = (label) => BA_PAGES[(label || '').toLowerCase()] || '';
+const baExt = (href) => /^https?:/.test(href) ? { target: '_blank', rel: 'noopener' } : {};
+const baAlt = (c) => (c.label ? `${c.label}, before and after` : 'Before and after');
+const BA_NOTES = [
+  ['Individual results may vary', 'Every photo is one person’s result. Yours depends on your skin, health, the plan and aftercare.'],
+  ['Shown as taken', 'Photos are shared as they were taken at the clinic, with part of the face covered for privacy.'],
+  ['Start with a consultation', 'A free consultation and VISIA® skin analysis tell you which results are realistic for you.'],
+];
+
+function BaViewer({ list, at, onClose, onGo }) {
+  const c = list[at];
+  const box = useRef(null);
+  useEffect(() => {
+    const k = (e) => { if (e.key === 'Escape') onClose(); if (e.key === 'ArrowRight') onGo(1); if (e.key === 'ArrowLeft') onGo(-1); };
+    window.addEventListener('keydown', k);
+    lockScroll(true);
+    box.current && box.current.focus();
+    return () => { window.removeEventListener('keydown', k); lockScroll(false); };
+  }, [onClose, onGo]);
+  const href = baPage(c.label);
+  const side = 'ba-v-side grid size-14 shrink-0 place-items-center rounded-full text-white transition-colors max-md:hidden';
+  const step = 'ba-v-step inline-flex h-12 items-center gap-2 rounded-full px-5 font-inter text-[15px] font-medium text-white transition-colors';
   return (
-    <section ref={ref} aria-labelledby="gallery-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pb-[clamp(72px,8vw,120px)] pt-[clamp(160px,14vw,210px)]">
-      <div className="mx-auto max-w-[860px] text-center">
-        <Eyebrow className="rv">{G.title2 || 'Before & after'}</Eyebrow>
-        <TwoTone as="h1" id="gallery-title" className="rv mx-auto mt-5" size="text-[clamp(34px,4.2vw,62px)]" lead={<>{t[0]}<br /></>} strong={t[1] || ''} style={{ transitionDelay: '.06s' }} />
-        {G.subs.map((s, i) => <p key={i} className={`rv mx-auto mt-4 max-w-[56ch] font-inter leading-[1.6] ${i ? 'text-[15px] text-ndm-muted' : 'text-[17px] text-ndm-ink/85'}`} style={{ transitionDelay: '.1s' }}>{s}</p>)}
+    <div role="dialog" aria-modal="true" aria-label={baAlt(c)} className="ba-viewer fixed inset-0 z-[95] flex flex-col" onClick={onClose}>
+      <div className="flex items-center justify-between px-[var(--gx)] py-4" onClick={(e) => e.stopPropagation()}>
+        <span className="rounded-full bg-white/10 px-3.5 py-1.5 font-inter text-[13.5px] font-medium tabular-nums text-white">{at + 1} of {list.length}</span>
+        <button ref={box} type="button" onClick={onClose} aria-label="Close" className="ba-v-side grid size-12 place-items-center rounded-full text-white"><IconClose /></button>
       </div>
-      <div className="rv mx-auto mt-[clamp(28px,3.4vw,44px)] flex max-w-[1180px] flex-wrap justify-center gap-1.5" role="group" aria-label="Filter by treatment">
-        {['All', ...G.labels].map((l) => <button key={l} type="button" onClick={() => setOn(l)} aria-pressed={on === l} className={`rounded-full px-3.5 py-2 font-inter text-[13.5px] transition-colors ${on === l ? 'bg-ndm-deep text-white' : 'bg-white text-ndm-ink ring-1 ring-ndm-ink/10 hover:ring-ndm-deep'}`}>{l}</button>)}
+      <div className="flex min-h-0 flex-1 items-center justify-center gap-5 px-[var(--gx)]">
+        <button type="button" aria-label="Previous case" onClick={(e) => { e.stopPropagation(); onGo(-1); }} className={side}><IconArrow size={18} className="rotate-180" /></button>
+        <figure key={c.src} className="ba-fig m-0 flex max-h-full min-h-0 w-full max-w-[780px] flex-col" onClick={(e) => e.stopPropagation()}>
+          <div className="min-h-0 flex-1 overflow-hidden rounded-[20px] bg-white p-2 shadow-[0_40px_90px_-40px_rgba(0,0,0,.9)]">
+            <img src={c.src} alt={baAlt(c)} className="h-full max-h-[62vh] w-full rounded-[14px] object-contain" />
+          </div>
+          <figcaption className="mt-5 flex flex-wrap items-end justify-between gap-4">
+            <span>
+              <span className="block font-aeonik text-[clamp(26px,2.6vw,34px)] leading-[1.1] tracking-[-0.02em] text-white">{c.label || 'Before & after'}</span>
+              <span className="mt-1.5 block font-inter text-[15px] text-white/80">Individual results may vary</span>
+            </span>
+            {href && <a href={href} {...baExt(href)} className="ba-v-about group inline-flex h-12 items-center gap-2 rounded-full px-5 font-inter text-[15px] font-medium transition-colors">About {c.label}<IconArrow size={14} className="transition-transform group-hover:translate-x-1" /></a>}
+          </figcaption>
+        </figure>
+        <button type="button" aria-label="Next case" onClick={(e) => { e.stopPropagation(); onGo(1); }} className={side}><IconArrow size={18} /></button>
       </div>
-      <ul ref={grid} className="mx-auto mt-7 grid max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4" role="list">
-        {list.map((c, i) => (
-          <li key={c.src} className="rv in">
-            <button type="button" onClick={() => setOpen(c)} className="group block w-full overflow-hidden rounded-[18px] bg-white p-2 text-left ring-1 ring-ndm-ink/[.06] shadow-[0_22px_44px_-36px_rgba(27,36,43,.35)]">
-              <span className="peach relative block aspect-[4/3] overflow-hidden rounded-[12px] bg-ndm-mist"><img src={c.src} alt={c.label ? `${c.label}, before and after` : 'Before and after'} loading={i < 8 ? 'eager' : 'lazy'} decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.04]" /></span>
-              <span className="flex items-center justify-between gap-2 px-1.5 pb-1 pt-2.5"><span className="font-inter text-[13.5px] font-medium text-ndm-ink">{c.label || 'Before & after'}</span><span className="font-inter text-[12px] text-ndm-muted">View</span></span>
-            </button>
-          </li>
-        ))}
-      </ul>
-      <p className="mx-auto mt-8 flex max-w-[1180px] items-start gap-2.5 font-inter text-[13px] leading-[1.5] text-ndm-muted"><BaIconInfo className="mt-0.5 shrink-0" />Photos show individual cases and are shared for illustration only. Individual results may vary.</p>
-      <div className="mt-10 flex justify-center"><Btn href="#/book" v="book" hot>Book Free Consultation</Btn></div>
-      {open && (
-        <div role="dialog" aria-modal="true" aria-label={open.label || 'Before and after'} className="fixed inset-0 z-[95] flex items-center justify-center bg-[#0B0F13]/85 p-4" onClick={() => setOpen(null)}>
-          <figure className="m-0 max-h-full max-w-[1100px]" onClick={(e) => e.stopPropagation()}>
-            <img src={open.src} alt={open.label ? `${open.label}, before and after` : 'Before and after'} className="max-h-[80vh] w-auto max-w-full rounded-[14px] object-contain" />
-            <figcaption className="mt-3 flex items-center justify-between font-inter text-[14px] text-white/85"><span>{open.label}</span><span className="text-white/60">Individual results may vary</span></figcaption>
-          </figure>
-          <button type="button" onClick={() => setOpen(null)} aria-label="Close" className="absolute right-4 top-4 grid size-11 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20"><IconClose /></button>
+      <div className="flex items-center justify-center gap-3 px-[var(--gx)] pb-6 pt-5" onClick={(e) => e.stopPropagation()}>
+        <button type="button" onClick={() => onGo(-1)} className={step}><IconArrow size={14} className="rotate-180" />Previous</button>
+        <button type="button" onClick={() => onGo(1)} className={step}>Next<IconArrow size={14} /></button>
+      </div>
+    </div>
+  );
+}
+
+const BA_HERO = { d: 'assets/hero/treatment-room.jpg', alt: 'A treatment room at NewDermaMed, with VISIA skin analysis images on the screen', pos: '50% 50%' };
+const BA_WRAP = 'mx-auto w-full max-w-[1180px]';
+
+function BaHero({ cases, labels, onBrowse }) {
+  const ref = useRef(null), pic = useRef(null);
+  useReveal(ref);
+  useOnScroll(() => {
+    const img = pic.current; if (!img || REDUCED) return;
+    const h = img.parentElement.offsetHeight;
+    img.style.transform = `translate3d(0,${Math.min(window.scrollY * 0.2, h * 0.1).toFixed(1)}px,0)`;
+  }, []);
+  const stats = [[cases, 'Cases'], [labels, 'Treatments'], ['2', 'Toronto clinics']];
+  return (
+    <section ref={ref} data-nav="dark" aria-labelledby="gallery-title" className="ba-hero relative isolate overflow-hidden bg-ndm-night text-white">
+      <div aria-hidden="true" className="absolute inset-0 -z-20 overflow-hidden">
+        <img ref={pic} src={BA_HERO.d} alt="" fetchpriority="high" className="absolute inset-x-0 -top-[10%] h-[120%] w-full object-cover will-change-transform" style={{ objectPosition: BA_HERO.pos }} />
+      </div>
+      <div aria-hidden="true" className="absolute inset-0 -z-10 hidden lg:block" style={{ background: 'linear-gradient(90deg,rgba(11,15,19,.8) 0%,rgba(11,15,19,.5) 50%,rgba(11,15,19,.3) 100%),linear-gradient(180deg,rgba(11,15,19,.55) 0%,rgba(11,15,19,0) 30%,rgba(11,15,19,0) 70%,rgba(11,15,19,.45) 100%)' }} />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 lg:hidden" style={{ background: 'linear-gradient(180deg,rgba(11,15,19,.6) 0%,rgba(11,15,19,.4) 30%,rgba(11,15,19,.7) 62%,rgba(11,15,19,.9) 100%)' }} />
+      <div className="grid items-end gap-10 px-[var(--gx)] pb-[clamp(36px,5vw,72px)] pt-[184px] sm:pt-[170px] lg:min-h-[min(88svh,820px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,400px)] lg:items-center xl:gap-[clamp(48px,6vw,110px)]">
+        <div className="max-w-[640px]">
+          <Eyebrow dark className="rv">Before &amp; after</Eyebrow>
+          <TwoTone as="h1" id="gallery-title" dark className="rv mt-5" size="text-[clamp(44px,5.6vw,88px)]" lead={<>Real patients,<br /></>} strong="real results" style={{ transitionDelay: '.04s' }} />
+          <p className="rv mt-5 max-w-[48ch] font-inter text-[16.5px] leading-[1.6] text-white/80" style={{ transitionDelay: '.08s' }}>Cases from our Uptown and Downtown clinics, by treatment. Each photo shows one person’s result, as it was taken at the clinic.</p>
+          <p className="rv mt-3 flex items-start gap-2 font-inter text-[14px] leading-[1.5] text-white/75" style={{ transitionDelay: '.1s' }}><IconPin size={15} className="mt-0.5 shrink-0 text-ndm-sky" />Uptown on Yonge Street and Downtown on Bay Street, Toronto</p>
+          <div className="rv mt-8 flex flex-wrap gap-3" style={{ transitionDelay: '.14s' }}>
+            <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
+            <Btn href="#ba-cases" v="glass" onClick={(e) => { e.preventDefault(); onBrowse(); }}>Browse the cases</Btn>
+          </div>
         </div>
-      )}
+        <div className="ba-glass rv rounded-[26px] p-[clamp(20px,2.2vw,30px)]" style={{ transitionDelay: '.18s' }}>
+          <p className="font-mont text-[11.5px] uppercase tracking-[.16em] text-white/70">The gallery</p>
+          <dl className="mt-4 grid grid-cols-3 gap-3">
+            {stats.map(([n, t]) => (
+              <div key={t} className="border-l border-white/15 pl-3 first:border-l-0 first:pl-0">
+                <dt className="sr-only">{t}</dt>
+                <dd className="font-aeonik text-[clamp(30px,2.6vw,40px)] leading-none tracking-[-0.03em] tabular-nums">{n}<span className="mt-1.5 block font-inter text-[12.5px] tracking-normal text-white/65">{t}</span></dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-5 flex items-start gap-2 border-t border-white/15 pt-4 font-inter text-[13px] leading-[1.5] text-white/75"><BaIconInfo className="mt-0.5 shrink-0" />Individual results may vary. Your provider explains what is realistic for you.</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Gallery() {
+  const grid = useRef(null), sec = useRef(null), notes = useRef(null);
+  useReveal(sec); useReveal(notes);
+  const cases = G.cases;
+  const labels = G.labels.filter((l) => cases.some((c) => c.label === l));
+  const count = (l) => cases.filter((c) => c.label === l).length;
+  const [on, setOn] = useState('All');
+  const [open, setOpen] = useState(-1);
+  const list = cases.filter((c) => on === 'All' || c.label === on);
+  const toCases = () => { const el = document.getElementById('ba-cases'); el && scrollToY(el.getBoundingClientRect().top + window.scrollY - 160); };
+  const go = useCallback((d) => setOpen((i) => (i + d + list.length) % list.length), [list.length]);
+  const close = useCallback(() => setOpen(-1), []);
+  useEffect(() => { const el = grid.current; if (el) el.querySelectorAll('.rv').forEach((x) => x.classList.add('in')); }, [on]);
+  const about = on !== 'All' && baPage(on);
+  return (
+    <>
+      <BaHero cases={cases.length} labels={labels.length} onBrowse={toCases} />
+
+
+      <section ref={sec} id="ba-cases" aria-labelledby="ba-cases-title" className="relative z-10 scroll-mt-[170px] bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
+        <div className={BA_WRAP}>
+          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <div>
+              <Eyebrow className="rv">Gallery</Eyebrow>
+              <TwoTone id="ba-cases-title" className="rv mt-5" size="text-[clamp(32px,3.4vw,52px)]" lead={<>{on === 'All' ? 'Every case,' : `${on},`}<br /></>} strong={`${list.length} ${list.length === 1 ? 'case' : 'cases'}`} style={{ transitionDelay: '.06s' }} />
+            </div>
+            <p className="rv max-w-[380px] font-inter text-[15px] leading-[1.6] text-ndm-muted md:mb-2" style={{ transitionDelay: '.1s' }}>
+              {about ? <>Open a case to see it full size. <a href={about} {...baExt(about)} className="font-medium text-ndm-deep underline-offset-4 hover:underline">Read about {on}</a>.</> : 'Open a case to see it full size, then go on to the case before or after it.'}
+            </p>
+          </div>
+          <div role="group" aria-label="Filter by treatment" className="rv mt-[clamp(24px,2.6vw,36px)] flex flex-wrap gap-2" style={{ transitionDelay: '.12s' }}>
+            {['All', ...labels].map((l) => (
+              <button key={l} type="button" onClick={() => setOn(l)} aria-pressed={on === l}
+                className={`ba-chip inline-flex items-center gap-2 rounded-full py-2 pl-4 pr-2.5 font-inter text-[14px] transition-colors ${on === l ? 'is-on' : ''}`}>
+                {l}<span className="ba-chip-n rounded-full px-2 py-0.5 text-[12px] tabular-nums">{l === 'All' ? cases.length : count(l)}</span>
+              </button>
+            ))}
+          </div>
+          <ul ref={grid} className="mt-[clamp(20px,2.2vw,32px)] grid gap-4 sm:grid-cols-2 lg:grid-cols-3" role="list">
+            {list.map((c, i) => (
+              <li key={c.src} className="rv in">
+                <button type="button" onClick={() => setOpen(i)} className="ba-card group relative block w-full overflow-hidden rounded-[24px] bg-white text-left">
+                  <span className="relative block aspect-[431/310] overflow-hidden bg-ndm-mist">
+                    <img src={c.src} alt={baAlt(c)} loading={i < 6 ? 'eager' : 'lazy'} decoding="async" className="ba-card-img absolute inset-0 h-full w-full object-cover" />
+                    <span className="ba-card-shade absolute inset-0" aria-hidden="true" />
+                    <span className="ba-zoom absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 font-inter text-[12.5px] font-medium text-ndm-ink backdrop-blur-[8px]" aria-hidden="true">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>View
+                    </span>
+                  </span>
+                  <span className="flex items-center justify-between gap-3 px-5 pb-5 pt-4">
+                    <span>
+                      <span className="block font-aeonik text-[20px] leading-[1.15] tracking-[-0.02em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{c.label || 'Before & after'}</span>
+                      <span className="mt-1 block font-inter text-[12.5px] text-ndm-muted">Case {String(i + 1).padStart(2, '0')} · Individual results may vary</span>
+                    </span>
+                    <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-full bg-ndm-paper text-ndm-deep ring-1 ring-ndm-ink/[.08] transition-colors group-hover:bg-ndm-deep group-hover:text-white"><IconArrow size={13} /></span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section ref={notes} aria-labelledby="ba-notes-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pb-[clamp(64px,7vw,104px)]">
+        <div className={BA_WRAP}>
+          <Eyebrow className="rv">Good to know</Eyebrow>
+          <TwoTone id="ba-notes-title" className="rv mt-5" size="text-[clamp(32px,3.4vw,52px)]" lead={<>Reading before<br /></>} strong="and after photos" style={{ transitionDelay: '.06s' }} />
+          <ol className="rv mt-[clamp(28px,3vw,44px)] grid gap-4 md:grid-cols-3" style={{ transitionDelay: '.1s' }}>
+            {BA_NOTES.map(([t, d], i) => (
+              <li key={t} className="ba-note relative overflow-hidden rounded-[24px] bg-white p-[clamp(22px,2.2vw,30px)] ring-1 ring-ndm-ink/[.06]">
+                <span aria-hidden="true" className="ba-note-n font-aeonik tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                <span className="relative block font-aeonik text-[22px] leading-[1.2] tracking-[-0.02em] text-ndm-ink">{t}</span>
+                <span className="relative mt-2 block font-inter text-[14.5px] leading-[1.6] text-ndm-muted">{d}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {open >= 0 && list[open] && <BaViewer list={list} at={open} onClose={close} onGo={go} />}
+    </>
+  );
+}
+
+
+/* ---------------------------------------------------------------- Start your journey: start with a free skin analysis
+   (round 19, after the futuron.framer.website "Join a Community" card; own file since round 34, shared by the treatment,
+   concern, blog and article pages). A rounded photo card at the content width; a deep NDM-navy gradient over the left and the
+   bottom carries the words, which sit left: tag, heading, line and the two actions. When it comes into view the card opens
+   from the middle out to both sides and the words sharpen from a blur. Photo: the VISIA consultation room. */
+const JR_CSS = `
+.jr-card{clip-path:inset(0 50% 0 50% round 32px);transition:clip-path 1.2s cubic-bezier(.7,0,.2,1);box-shadow:0 40px 80px -50px rgba(11,15,19,.6)}
+.jr-card.is-on{clip-path:inset(0 0 0 0 round 32px)}
+.jr-card .jr-pic{transform:scale(1.12);transition:transform 2.2s cubic-bezier(.2,.7,.2,1)}
+.jr-card.is-on .jr-pic{transform:scale(1)}
+/* desktop: the photo fills the right two thirds and fades into the navy card, so the face sits right of the words; phones: face centred */
+.jr-card{background:#0B1B29}
+@media (min-width:768px){.jr-card .jr-pic{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 34%);mask-image:linear-gradient(90deg,transparent 0,#000 34%)}}
+.jr-shade{background:linear-gradient(90deg,rgba(9,22,34,.9) 0%,rgba(9,22,34,.72) 34%,rgba(9,22,34,.18) 66%,rgba(9,22,34,0) 100%),linear-gradient(0deg,rgba(10,52,84,.72) 0%,rgba(10,52,84,0) 55%)}
+@media (max-width:767px){.jr-card{clip-path:inset(0 50% 0 50% round 24px)}.jr-card.is-on{clip-path:inset(0 0 0 0 round 24px)}
+  .jr-shade{background:linear-gradient(0deg,rgba(9,22,34,.94) 0%,rgba(9,22,34,.8) 42%,rgba(9,22,34,.1) 78%,rgba(9,22,34,0) 100%)}}
+.jr-card .jr-t{opacity:0;filter:blur(14px);transform:translateY(12px);transition:opacity .9s ease,filter 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.jr-card.is-on .jr-t{opacity:1;filter:blur(0);transform:none}
+@media (prefers-reduced-motion:reduce){.jr-card,.jr-card .jr-pic,.jr-card .jr-t{clip-path:none;transform:none;filter:none;opacity:1;transition:none}}
+`;
+function ProcAnalysis() {
+  const card = useRef(null);
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    const el = card.current; if (!el) return;
+    /* the card is clipped to nothing until it opens, so watch its section */
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setOn(true); io.disconnect(); } }, { threshold: 0.2 });
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.8) setOn(true);
+    io.observe(el.parentElement);
+    return () => io.disconnect();
+  }, []);
+  /* a second trigger from the scroll position, in case the browser delays the visibility check */
+  useOnScroll(() => {
+    const el = card.current; if (!el || el.classList.contains('is-on')) return;
+    if (el.parentElement.getBoundingClientRect().top < window.innerHeight * 0.85) setOn(true);
+  }, []);
+  const t = (k) => ({ transitionDelay: `${0.75 + k * 0.12}s` });
+  return (
+    <section aria-labelledby="analysis-title" className="relative z-10 px-[var(--gx)] py-[clamp(40px,5vw,72px)]">
+      <style>{JR_CSS}</style>
+      <div ref={card} className={`jr-card mx-auto w-full max-w-[1180px] relative isolate flex min-h-[600px] flex-col justify-end md:min-h-[clamp(460px,40vw,520px)] overflow-hidden rounded-[24px] p-6 text-white md:justify-center md:rounded-[32px] md:p-[56px] ${on ? 'is-on' : ''}`}>
+        <img src="assets/home/visia-consult.jpg" alt="" loading="lazy" decoding="async" className="jr-pic absolute inset-0 -z-20 h-full w-full object-cover object-[80%_30%] md:left-auto md:w-[66%] md:object-[62%_45%]" />
+        <span aria-hidden="true" className="jr-shade absolute inset-0 -z-10" />
+        <div className="max-w-[620px]">
+          <div className="jr-t" style={t(0)}><Eyebrow dark>Start your journey</Eyebrow></div>
+          <TwoTone id="analysis-title" dark className="jr-t mt-5" size="text-[clamp(32px,3.4vw,48px)]" lead={<>Start with a free<br /></>} strong="skin analysis" style={t(1)} />
+          <p className="jr-t mt-4 max-w-[46ch] font-inter text-[15.5px] leading-[1.65] text-white/80" style={t(2)}>Your first consultation and VISIA® skin analysis are free, at Uptown or Downtown. No pressure, just a clear plan.</p>
+          <div className="jr-t mt-7 flex flex-wrap items-center gap-x-5 gap-y-3" style={t(3)}>
+            <Btn href="#/book" v="book" hot>Book Free Consultation</Btn>
+            <Btn href="about.html#contact" v="light">Find a clinic</Btn>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
@@ -5356,10 +5595,14 @@ function Gallery() {
 /* ---------------------------------------------------------------- app (before & after) */
 function App() {
   const cart = useCartState();
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
   const [search, setSearch] = useState(false);
   const [drawer, setDrawer] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  useOnScroll(() => {
+    const probe = 70;
+    setDark([...document.querySelectorAll('[data-nav="dark"]')].some((el) => { const r = el.getBoundingClientRect(); return r.top <= probe && r.bottom >= probe; }));
+  }, []);
   useEffect(() => { lockScroll(search || drawer || cartOpen); }, [search, drawer, cartOpen]);
   return (
     <CartCtx.Provider value={cart}>
@@ -5367,9 +5610,10 @@ function App() {
       <PromoBar hidden={false} />
       <Header dark={dark} top={36} visible onSearch={() => setSearch(true)} onDrawer={() => setDrawer(true)} onCart={() => setCartOpen(true)} cartCount={cart.count} />
       <main id="main">
-        <Breadcrumb items={['Before & after']} />
+        <Breadcrumb items={['Before & after']} dark />
         <Gallery />
         <PromoReviews />
+        <ProcAnalysis />
       </main>
       <Footer />
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} onBrowse={() => { window.location.href = 'pricing.html#prices'; }} />
