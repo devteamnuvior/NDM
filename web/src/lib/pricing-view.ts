@@ -114,6 +114,18 @@ export function saleBadge(options: PriceOption[]): string[] {
   return buy ? [buy[1], buy[2]] : [tag];
 }
 
+/**
+ * Whether the checkout code belongs beside that badge ("30% OFF" | "+ EXTRA 30%"): only when the option the badge
+ * is read from takes the code. A fixed line such as "70% OFF" does not, so its badge stands alone even if other
+ * options of the same treatment take the code. Without any tag, any option that takes the code counts.
+ */
+export function badgeCoded(options: PriceOption[]): boolean {
+  const tagged = options.filter((o) => o.tag && tagWords(o.tag));
+  if (!tagged.length) return options.some((o) => !!o.code);
+  const pct = (o: PriceOption) => Number(/^(\d+)%\s*OFF$/i.exec(tagWords(o.tag ?? ""))?.[1] ?? 0);
+  return !![...tagged].sort((a, b) => pct(b) - pct(a))[0].code;
+}
+
 /** One WooCommerce price as the price list's option: the price to pay, and the regular price while a sale runs. */
 function option(fields: WooPriceFields & { campaign?: { code: boolean; codePrice: string } }, label: string, tag: string | undefined, productId: number, variationId: number, by?: { code: string; percent: number } | null): Option {
   const price = Number(fields.price);
@@ -168,7 +180,7 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
       fromUnit: low ? low.unit : "",
       fromSource: low?.source ?? null,
       badge: saleBadge(all),
-      coded: all.some((o) => o.code),
+      coded: badgeCoded(all),
       items: c.items.map((it) => {
         const itemLow = book.lowestPrice(c.id, it.name, true);
         const min = Math.min(...it.options.map((o) => o.price));
@@ -181,7 +193,7 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
           fromUnit: itemLow ? itemLow.unit : perUnit(it.options.find((o) => o.price === min)?.label ?? ""),
           fromSource: itemLow?.source ?? null,
           badge: saleBadge(it.options),
-          coded: it.options.some((o) => o.code),
+          coded: badgeCoded(it.options),
           options: it.options.map((o) => ({ label: o.label, price: o.price, was: o.regular || 0, tag: o.tag, unit: perUnit(o.label), productId: o.productId, variationId: o.variationId, ...(o.code ? { code: o.code } : {}) })),
         };
       }),

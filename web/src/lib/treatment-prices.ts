@@ -1,7 +1,7 @@
 import type { TxPriceGroup } from "@/components/treatment/price-group";
 import type { PriceOption } from "@/config/prices";
 import { createPriceBook, formatPrice, rowsPercent } from "@/lib/prices";
-import { bestOffer, saleBadge } from "@/lib/pricing-view";
+import { badgeCoded, bestOffer, saleBadge } from "@/lib/pricing-view";
 
 /**
  * One group of a treatment page's price table, from price-list options, with every amount written out.
@@ -34,6 +34,6 @@ export function priceGroup(head: Pick<TxPriceGroup, "name" | "title" | "blurb">,
     offer: bestOffer(options),
     fromSource: low ? { ...low.source, label: low.source.label === unitLabel ? "Per unit" : low.source.label } : null,
     badge: saleBadge(options),
-    coded: options.some((o) => !!o.code),
+    coded: badgeCoded(options),
   };
 }
