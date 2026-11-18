@@ -294,3 +294,28 @@ function ndm_pricing_pay_from_visitor( $order ) {
 	$order->save();
 }
 add_action( 'woocommerce_before_pay_action', 'ndm_pricing_pay_from_visitor', 5 );
+
+/**
+ * What the pay page tells the visitor when the card processor refuses a card (the gateway's "Detailed
+ * Decline Messages" setting must be on; without it the gateway shows one general sentence). The pay page
+ * has no address fields: a card refused for its billing address needs a new order with the right one,
+ * so the gateway's own "verify the address and try again" would leave the visitor with nothing to change.
+ *
+ * @param string $message    The gateway's message.
+ * @param string $message_id What was wrong ("avs_mismatch", "csc_mismatch", "card_declined", ...).
+ * @return string
+ */
+function ndm_pricing_decline_message( $message, $message_id ) {
+	if ( ! ndm_pricing_is_pay_request() ) {
+		return $message;
+	}
+	switch ( $message_id ) {
+		case 'avs_mismatch':
+			return 'The billing address on this order does not match the address your bank has for this card, so the payment was not taken. Please go back to the checkout and place the order again with the card\'s billing address and postal code, or use another card.';
+		case 'csc_mismatch':
+		case 'csc_invalid':
+			return 'The security code (CVV) does not match this card, so the payment was not taken. Please check the three digits on the back of the card and try again.';
+	}
+	return $message;
+}
+add_filter( 'wc_payment_gateway_transaction_response_user_message', 'ndm_pricing_decline_message', 10, 2 );
