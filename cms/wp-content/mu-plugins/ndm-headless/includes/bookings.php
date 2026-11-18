@@ -426,7 +426,7 @@ function ndm_headless_booking_notify( $id ) {
 		'VISIA skin analysis' => $record['visia'] ? 'Included' : 'Not added',
 		'Asked for'           => ndm_headless_booking_request_line( $record ),
 		'Clinic'              => $record['clinic'],
-		'Sent from'           => $record['page'],
+		'Sent from page'      => ndm_headless_booking_page_label( $record['page'] ) . ( '/' === $record['page'] ? ' (/)' : '' ),
 		'Received'            => get_the_date( 'D, M j, Y, g:i a', $id ),
 	);
 	$lines  = array( 'A new consultation request came in from the website.', '' );
@@ -456,6 +456,36 @@ function ndm_headless_booking_notify( $id ) {
 }
 
 /**
+ * The page of the site a request was sent from, as words: "Home page", "/injectables/botox", or
+ * "Not recorded" when the form sent none.
+ *
+ * @param string $page The page's path, as saved.
+ * @return string
+ */
+function ndm_headless_booking_page_label( $page ) {
+	$page = trim( (string) $page );
+
+	if ( '' === $page || '/' !== $page[0] ) {
+		return 'Not recorded';
+	}
+
+	return '/' === $page ? 'Home page' : $page;
+}
+
+/**
+ * The full address of the page a request was sent from, or an empty string when it is not known.
+ *
+ * @param string $page The page's path, as saved.
+ * @return string
+ */
+function ndm_headless_booking_page_url( $page ) {
+	$page = trim( (string) $page );
+	$site = ndm_headless_frontend_url();
+
+	return '' === $page || '/' !== $page[0] || '' === $site ? '' : $site . $page;
+}
+
+/**
  * The list's columns.
  *
  * @param array $columns Columns.
@@ -465,6 +495,7 @@ function ndm_headless_booking_columns( $columns ) {
 	return array(
 		'cb'           => isset( $columns['cb'] ) ? $columns['cb'] : '',
 		'title'        => 'Request',
+		'ndm_page'     => 'Sent from page',
 		'ndm_contact'  => 'Contact',
 		'ndm_concerns' => 'Concerns',
 		'ndm_clinic'   => 'Clinic',
@@ -483,7 +514,12 @@ add_filter( 'manage_' . NDM_HEADLESS_BOOKING_TYPE . '_posts_columns', 'ndm_headl
 function ndm_headless_booking_column( $column, $id ) {
 	$record = ndm_headless_booking_record( $id );
 
-	if ( 'ndm_contact' === $column ) {
+	if ( 'ndm_page' === $column ) {
+		$url   = ndm_headless_booking_page_url( $record['page'] );
+		$label = esc_html( ndm_headless_booking_page_label( $record['page'] ) );
+
+		echo '<strong>' . ( '' !== $url ? '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . $label . '</a>' : $label ) . '</strong>';
+	} elseif ( 'ndm_contact' === $column ) {
 		echo esc_html( $record['phone'] ) . '<br>' . esc_html( $record['email'] ) . '<br><span class="description">Reach by: ' . esc_html( implode( ', ', (array) $record['via'] ) ) . '</span>';
 	} elseif ( 'ndm_concerns' === $column ) {
 		echo esc_html( implode( ', ', (array) $record['interests'] ) );
@@ -529,7 +565,7 @@ function ndm_headless_booking_details_box( $post ) {
 		'VISIA® skin analysis' => $record['visia'] ? 'Included' : 'Not added',
 		'Asked for'            => ndm_headless_booking_request_line( $record ),
 		'Clinic'               => $record['clinic'],
-		'Sent from'            => $record['page'],
+		'Sent from page'       => ndm_headless_booking_page_label( $record['page'] ) . ( '/' === $record['page'] ? ' (/)' : '' ),
 		'Received'             => get_the_date( 'D, M j, Y, g:i a', $post ),
 	);
 

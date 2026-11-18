@@ -866,6 +866,17 @@ WordPress. The team reads them in wp-admin under **Consultation**.
   addresses: `define( 'NDM_BOOKING_NOTIFY', 'a@x.com, b@x.com' )` in wp-config, `'off'` for none. A
   failed email never fails the request. It is sent with WordPress's own `wp_mail`, so it arrives only
   if the server can send mail.
+- The page the form was sent from is shown in the list's own column, "Sent from page" ("Home page"
+  or the page's address, linked to the page), on the request's screen and in the emails.
+- **Reports** (`includes/booking-reports.php`): every 3 days, and on the 1st of each month for the
+  month that ended, an email to `alin.gharibian@gmail.com`, `raymond@nuvior.com` and
+  `info@newdermamed.com` counts the requests by page (its name, linked) and clinic, then lists them
+  (name, page, request, clinic, the first two concerns; no phone number or email address; at
+  most 60 listed, the counts cover all). Other addresses: `define( 'NDM_BOOKING_REPORT_TO', '...' )`,
+  `'off'` for none. One WP-Cron event a day at about 8 am Toronto time (`ndm_headless_booking_reports`)
+  sends what is due; the option `ndm_booking_report_state` holds the first day not yet reported and
+  the last month reported, so a late or failed run still covers every day. By hand:
+  `wp ndm booking-report [--period=days|month] [--days=<n>] [--this-month] [--to=<addresses>] [--dry-run]`.
 - These records are personal information (PHIPA / PIPEDA): decide how long they are kept, and host
   the database in Canada, before production.
 - Test: `web/tests/admin/booking.spec.ts` (`npm run test:admin`; makes two records and deletes them).
