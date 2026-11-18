@@ -265,7 +265,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
           clinic: p === "call" ? f.callClinic : undefined,
           callTime: p === "call" ? f.callTime : undefined,
           page: window.location.pathname,
-          company: field("company"),
+          company: field("ndm_hp"),
         }),
       });
       const result = (await answer.json().catch(() => null)) as { ok?: boolean; reason?: string; message?: string } | null;
@@ -463,7 +463,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
           </div>
           <p className="mt-3 font-inter text-[12px] text-ndm-muted">Please don’t include medical details. We use your details only to arrange your visit.</p>
           {/* left empty by people, filled in by form-filling robots */}
-          <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+          <input type="text" name="ndm_hp" tabIndex={-1} autoComplete="off" data-1p-ignore="" data-lpignore="true" aria-hidden="true" className="hidden" />
         </fieldset>
 
         <fieldset data-step="2" className={stepClass("2")} {...stepAttr("2")}>

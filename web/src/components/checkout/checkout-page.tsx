@@ -73,7 +73,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
       clinic,
       note: field("note"),
       agree: fd.get("agree") === "on",
-      company: field("company"),
+      company: field("ndm_hp"),
       code: code.applied,
       pay: byCard ? "card" : "clinic",
     };
@@ -180,7 +180,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
                   </label>
                 </div>
                 {/* not for people: left empty, it tells a person from a form-filling robot */}
-                <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="sr-only" />
+                <input type="text" name="ndm_hp" tabIndex={-1} autoComplete="off" data-1p-ignore="" data-lpignore="true" aria-hidden="true" className="sr-only" />
               </fieldset>
 
               <fieldset className={block}>

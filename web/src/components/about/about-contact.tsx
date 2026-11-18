@@ -38,7 +38,7 @@ export function AboutContact({ copy }: { copy: AboutCopy["contact"] }) {
       const answer = await fetch(withBase("/api/contact"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: field("name"), phone: field("phone"), email: field("email"), clinic, message: field("message"), page: window.location.pathname, company: field("company") }),
+        body: JSON.stringify({ name: field("name"), phone: field("phone"), email: field("email"), clinic, message: field("message"), page: window.location.pathname, company: field("ndm_hp") }),
       });
       const result = (await answer.json().catch(() => null)) as { ok?: boolean; message?: string } | null;
       if (answer.ok && result?.ok === true) {
@@ -147,7 +147,7 @@ export function AboutContact({ copy }: { copy: AboutCopy["contact"] }) {
                 <textarea required name="message" maxLength={2000} rows={4} placeholder="How can we help?" aria-label="How can we help?" className={`${FIELD} h-auto resize-none py-3 sm:col-span-2`} />
               </div>
               {/* left empty by people, filled in by form-filling robots */}
-              <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute -left-[9999px] h-px w-px opacity-0" />
+              <input type="text" name="ndm_hp" tabIndex={-1} autoComplete="off" data-1p-ignore="" data-lpignore="true" aria-hidden="true" className="absolute -left-[9999px] h-px w-px opacity-0" />
               {err && (
                 <p role="alert" className="mt-4 font-inter text-[13.5px] leading-[1.5] text-[#B42318]">
                   {err}
