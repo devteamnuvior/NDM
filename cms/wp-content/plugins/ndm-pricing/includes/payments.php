@@ -225,6 +225,27 @@ function ndm_pricing_pay_template( $template ) {
 add_filter( 'template_include', 'ndm_pricing_pay_template', 99 );
 
 /**
+ * A card order that was never paid is cancelled by WooCommerce's own clean-up, like an unpaid order of
+ * its own checkout: after WooCommerce > Settings > Products > Inventory > "Hold stock (minutes)", while
+ * stock management is on. Without this WooCommerce leaves orders it did not create alone, and an
+ * abandoned card order could be paid at its old price long after a sale has ended. A cancelled order's
+ * pay page takes no payment. Order requests paid at the clinic are on hold, never pending, so they are
+ * not touched.
+ *
+ * @param bool     $cancel Whether WooCommerce cancels the order.
+ * @param WC_Order $order  A pending order older than the time limit.
+ * @return bool
+ */
+function ndm_pricing_cancel_unpaid_card_order( $cancel, $order ) {
+	if ( $cancel || ! ndm_pricing_is_site_order( $order ) ) {
+		return $cancel;
+	}
+
+	return ndm_pricing_card_gateway_id() === $order->get_payment_method();
+}
+add_filter( 'woocommerce_cancel_unpaid_order', 'ndm_pricing_cancel_unpaid_card_order', 10, 2 );
+
+/**
  * A card order placed while signed in is put on the customer's account once it is paid. Until then it
  * has no account, because WooCommerce lets only that WordPress user open the pay page of an order that
  * belongs to an account, and the website's sign-in is not a WordPress sign-in.
