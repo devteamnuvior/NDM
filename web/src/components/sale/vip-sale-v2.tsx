@@ -529,6 +529,22 @@ function PriceList({ view, rows, best, day, inList, toggle }: { view: SaleView; 
   /* the rows play their entrance only once a tab has been chosen, never on the page's first paint */
   const [played, setPlayed] = useState(false);
   const shown = rows.filter((d) => tab === "All" || d.group === tab);
+  const bar = useRef<HTMLDivElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
+  /* a filter chosen while the bar is fixed over the list (rows have passed under it) brings the list's first row
+     back under the bar, so the new list is read from its top. Measured after the new list is drawn, against the
+     place the bar is fixed at (the header's height), because a shorter list can carry the bar itself off screen. */
+  const [jump, setJump] = useState(0);
+  const pick = (x: string) => {
+    if (x !== tab) { setTab(x); setPlayed(true); }
+    setJump((n) => n + 1);
+  };
+  useEffect(() => {
+    if (!jump || !bar.current || !panel.current) return;
+    const under = 64 + bar.current.offsetHeight;
+    const top = panel.current.getBoundingClientRect().top;
+    if (top < under) scrollToY(top + window.scrollY - under - 8, true);
+  }, [jump]);
   return (
     <section id="vip-list" aria-labelledby="v2-list-title" className="scroll-mt-[64px] px-[var(--gx)] py-[clamp(68px,8.6vw,128px)]">
       <div className="mx-auto max-w-[1180px]">
@@ -537,12 +553,12 @@ function PriceList({ view, rows, best, day, inList, toggle }: { view: SaleView; 
         <p className="mt-2.5 font-inter text-[16px] leading-[1.6] text-ndm-muted">{VIP2.list.text.replace("{{day}}", day)}</p>
         {/* the filters stay under the page header for as long as the list is on screen; the strip is the page's own
             colour, so it only shows once rows pass under it */}
-        <div className="v2-tabs sticky top-[64px] z-40 -mx-[var(--gx)] mt-3 px-[var(--gx)] py-3">
+        <div ref={bar} className="v2-tabs sticky top-[64px] z-40 -mx-[var(--gx)] mt-3 px-[var(--gx)] py-3">
           <div role="group" aria-label="Filter the price list" className="no-scrollbar -mx-[var(--gx)] flex gap-2 overflow-x-auto px-[var(--gx)] sm:mx-0 sm:flex-wrap sm:px-0">
-            {["All", ...tabs].map((x) => <button key={x} type="button" aria-pressed={tab === x} onClick={() => { if (x !== tab) { setTab(x); setPlayed(true); } }} className="v2-chip">{x}</button>)}
+            {["All", ...tabs].map((x) => <button key={x} type="button" aria-pressed={tab === x} onClick={() => pick(x)} className="v2-chip">{x}</button>)}
           </div>
         </div>
-        <div className="mt-2 rounded-[22px] bg-white px-4 py-1 shadow-[0_14px_40px_rgba(16,32,48,.08)] sm:px-[26px]">
+        <div ref={panel} className="mt-2 rounded-[22px] bg-white px-4 py-1 shadow-[0_14px_40px_rgba(16,32,48,.08)] sm:px-[26px]">
           <ul key={tab} role="list" className={played ? "v2-rows-in" : undefined}>{shown.map((d, i) => <Row key={d.id} d={d} best={best} tagged={d.id === head} order={i} inList={inList} toggle={toggle} />)}</ul>
         </div>
         <p className="mx-1 mt-4 font-inter text-[13.5px] leading-[1.55] text-ndm-muted">{VIP2.list.fine}</p>
