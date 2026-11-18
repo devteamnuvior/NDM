@@ -160,6 +160,35 @@
     background: linear-gradient(180deg, rgba(11, 15, 19, 0.62) 0%, rgba(11, 15, 19, 0.12) 18%, rgba(11, 15, 19, 0.56) 38%, rgba(11, 15, 19, 0.7) 60%, rgba(11, 15, 19, 0.9) 100%),
       linear-gradient(90deg, rgba(11, 15, 19, 0.5), rgba(11, 15, 19, 0) 62%);
   }
+  /* phones (user, 2026-11-18): the two buttons share one row. To fit, Book Free Consultation has no arrow dot here and both
+     take a size that follows the window's width; differs from the prototype on purpose */
+  .hf-cta {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+  .hf-cta .btn {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 46px;
+    padding: 0 12px;
+    font-size: clamp(12.5px, 3.55vw, 14.5px);
+  }
+  .hf-cta .btn-book {
+    justify-content: center;
+  }
+  .hf-cta .btn-dot {
+    display: none;
+  }
+}
+/* narrower than the two buttons need: one under the other, full width */
+@media (max-width: 349px) {
+  .hf-cta {
+    flex-wrap: wrap;
+  }
+  .hf-cta .btn {
+    flex-basis: 100%;
+    font-size: 15px;
+  }
 }
 .marquee-mask {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
