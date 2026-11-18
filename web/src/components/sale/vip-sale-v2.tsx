@@ -258,7 +258,9 @@ function useTopPacks(view: SaleView, packs: Pack[]): { p: Pack; title: string; s
     const out: { p: Pack; title: string; sub: string }[] = [];
     if (best) {
       const cut = best.it[0].lastIndexOf(" - ");
-      out.push({ p: best, title: cut > 0 ? best.it[0].slice(0, cut) : best.it[0], sub: [cut > 0 ? best.it[0].slice(cut + 3) : "", best.o[0]].filter(Boolean).join(" · ") });
+      /* a name that opens with a short code ("LHR - Lip (Upper)") takes its category's name instead: "Laser Hair Removal" */
+      const lead = cut > 0 ? best.it[0].slice(0, cut) : best.it[0];
+      out.push({ p: best, title: cut > 0 && lead.length < 5 ? best.d.c.name : lead, sub: [cut > 0 ? best.it[0].slice(cut + 3) : "", best.o[0]].filter(Boolean).join(" · ") });
     }
     const cards = view.cards.filter((c) => !c.drug && c.cat && c.regular > c.price);
     for (const c of [...cards.filter((x) => /^(lip filler|skin booster)$/i.test(x.title)), ...cards]) {
