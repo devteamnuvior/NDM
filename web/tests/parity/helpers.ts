@@ -78,6 +78,11 @@ export function prototypeNow(html: string, phase: string | null): string {
     .replace('<p className="sr-only" aria-live="polite">{`Photo ${slide + 1} of ${n}: ${HERO_SLIDES[slide].alt}`}</p>', "")
     .replace("paused ? 'Play header slideshow' : 'Pause header slideshow'", "paused ? 'Play header photos' : 'Pause header photos'")
     .replace("aria-label={`Show photo ${i + 1}: ${h.alt}`}", "aria-label={`Show header photo ${i + 1}`}")
+    /* 2026-11-18, treatment heroes on phones (user): a stronger night colour behind the words, and the offer card in two rows */
+    .replace('className="absolute inset-0 -z-10 lg:hidden"', 'className="absolute inset-0 -z-10 max-sm:!bg-[linear-gradient(180deg,rgba(11,15,19,.62)_0%,rgba(11,15,19,.58)_30%,rgba(11,15,19,.7)_62%,rgba(11,15,19,.9)_100%)] lg:hidden"')
+    .replace('overflow-hidden rounded-[18px] lg:mb-0 py-3 pl-4 pr-3"', 'overflow-hidden rounded-[18px] lg:mb-0 py-3 pl-4 pr-3 max-sm:grid max-sm:w-full max-sm:grid-cols-[minmax(0,1fr)_auto] max-sm:gap-x-3 max-sm:gap-y-2 max-sm:py-3.5"')
+    .replace(/<span className="min-w-0">(\s*<span className="offer-pill [^"]*)"/, '<span className="min-w-0 max-sm:col-span-2">$1 max-sm:whitespace-nowrap"')
+    .replace('className="offer-big flex items-baseline gap-1.5 whitespace-nowrap"', 'className="offer-big flex items-baseline gap-1.5 whitespace-nowrap max-sm:!border-l-0 max-sm:!pl-0"')
     .replace("</head>", `${PHONE_HERO}</head>`);
   if (phase === "vip") {
     out = out
