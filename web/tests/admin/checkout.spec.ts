@@ -74,6 +74,7 @@ test("the cart is corrected from WooCommerce, and the order request becomes a Wo
   await page.getByLabel("First name").fill("Sam");
   await page.getByLabel("Last name").fill("Tester");
   await page.getByLabel("Email address").fill("sam.tester@example.test");
+  await page.getByLabel("Phone").fill("416 555 0100");
   await page.getByLabel("Address", { exact: true }).fill("1 Test Street");
   await page.getByLabel("City").fill("Toronto");
   await page.getByLabel("Postal code").fill("123");

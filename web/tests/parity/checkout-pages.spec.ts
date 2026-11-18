@@ -47,6 +47,12 @@ async function openBoth(browser: Browser, vp: { width: number; height: number },
       /* no appointment step for now (user, 2026-11-18): the site has three checkout steps and asks for the clinic with the details */
       for (const el of Array.from(document.querySelectorAll("main p, main button"))) {
         if (el.textContent === "Step 1 of 4") el.textContent = "Step 1 of 3";
+      }
+      /* the phone is required (the card processor refuses a payment without one): no "(optional)" beside it */
+      for (const el of Array.from(document.querySelectorAll("main label span span"))) {
+        if (el.textContent === "(optional)" && el.parentElement?.textContent?.trim().startsWith("Phone")) el.remove();
+      }
+      for (const el of Array.from(document.querySelectorAll("main p, main button"))) {
         if (el.textContent?.trim() === "Continue to appointment") el.firstChild!.textContent = "Continue to payment";
       }
       window.scrollTo(0, 0);

@@ -102,8 +102,10 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
   const city = text(form.city, 60);
   const postal = text(form.postal, 10);
   const note = text(form.note, 500);
-  if (!first || !last || !email || phone === null || !street || apt === null || !city || !postal || note === null) return invalid("Please check your details: something is missing or too long.");
+  if (!first || !last || !email || !phone || !street || apt === null || !city || !postal || note === null) return invalid("Please check your details: something is missing or too long.");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return invalid("Please enter a valid email address.");
+  /* the card processor refuses a payment without a phone number */
+  if (phone.replace(/\D/g, "").length < 7) return invalid("Please enter a phone number.");
   if (!(PROVINCES as readonly string[]).includes(form.province)) return invalid("Please choose a province.");
   if (!/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(postal)) return invalid("Please enter a Canadian postal code such as M2N 5M5.");
   const clinic = CLINICS.find((c) => c.name === form.clinic);

@@ -179,10 +179,9 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
                     <input required type="email" name="email" autoComplete="email" maxLength={120} className={fld} />
                   </label>
                   <label className="col-span-2 sm:col-span-1">
-                    <span className={label}>
-                      Phone <span className="font-normal text-ndm-muted">(optional)</span>
-                    </span>
-                    <input type="tel" name="phone" autoComplete="tel" maxLength={30} className={fld} />
+                    {/* required: the card processor refuses a payment without a phone number (Bambora 314, 2026-11-18) */}
+                    <span className={label}>Phone</span>
+                    <input required type="tel" name="phone" autoComplete="tel" maxLength={30} pattern="(?:\D*\d){7,}\D*" title="A phone number with at least 7 digits" className={fld} />
                   </label>
                 </div>
                 {/* not for people: left empty, it tells a person from a form-filling robot */}
