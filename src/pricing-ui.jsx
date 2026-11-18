@@ -199,6 +199,23 @@ function PriceSpecials() {
   );
 }
 
+/* the VIP Sale banner above the price list (user, 2026-11-18; the same banner the Next.js pricing page shows during the VIP phase):
+   black, one thin gold light slowly circling the edge, a soft gold glow; shown until the VIP phase ends (Nov 19, 11:59 pm Toronto) */
+const PR_VIP = { name: 'VIP Sale', ends: 'NOV 19', until: Date.parse('2026-11-20T05:00:00Z'),
+  text: 'up to 70% off selected packages. Eligible packages take an extra 30% off, applied at checkout.', href: 'vip-sale.html', cta: 'See the VIP Sale' };
+function PriceSaleBanner() {
+  if (Date.now() > PR_VIP.until) return null;
+  return (
+    <aside aria-label={PR_VIP.name} className="pr-sale rv mb-[clamp(36px,4vw,56px)] flex flex-col gap-4 rounded-[22px] px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-7">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+        <span className="pr-sale-pill shrink-0 self-start sm:self-center"><span className="a">VIP SALE</span><span className="b">ENDS {PR_VIP.ends}</span></span>
+        <p className="pr-sale-text font-inter text-[14.5px] leading-[1.55]"><strong className="font-semibold">{PR_VIP.name}:</strong> {PR_VIP.text}</p>
+      </div>
+      <span className="shrink-0"><a href={PR_VIP.href} className="btn pr-sale-btn"><span>{PR_VIP.cta}</span></a></span>
+    </aside>
+  );
+}
+
 function PriceList() {
   const ref = useRef(null);
   useReveal(ref);
@@ -224,6 +241,7 @@ function PriceList() {
   return (
     <section ref={ref} id="prices" aria-labelledby="prices-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(64px,7vw,110px)] pb-[clamp(64px,7vw,110px)]">
       <div className="mx-auto max-w-[1040px]">
+        <PriceSaleBanner />
         <div className="text-center">
           <Eyebrow className="rv">Price list</Eyebrow>
           <TwoTone id="prices-title" className="rv mt-5" lead="Prices and" strong="current offers" style={{ transitionDelay: '.06s' }} />
