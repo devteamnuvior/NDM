@@ -80,6 +80,23 @@
 #prices[data-sale="bf"] .pr-sale-text,#prices[data-sale="holiday"] .pr-sale-text{color:rgba(255,255,255,.75)}
 #prices[data-sale="bf"] .pr-sale-text strong,#prices[data-sale="holiday"] .pr-sale-text strong{color:#fff}
 #prices[data-sale="newyear"] .pr-sale{background:#F2F3F5}
+/* the VIP Sale banner (user, 2026-11-18): black, one thin gold light that slowly circles the edge, a soft gold glow in the
+   corner; the pills in gold, the button a white pill. Nothing else moves. */
+@property --pr-sale-a{syntax:"<angle>";initial-value:0deg;inherits:false}
+#prices[data-sale="vip"] .pr-sale{position:relative;isolation:isolate;overflow:hidden;color:#fff;
+  background:radial-gradient(70% 140% at 0% 0%,rgba(212,181,116,.18),transparent 60%),radial-gradient(50% 120% at 100% 100%,rgba(212,181,116,.08),transparent 65%),#0B0B0C;
+  box-shadow:0 0 0 1px rgba(212,181,116,.22),0 30px 60px -38px rgba(11,11,12,.7)}
+#prices[data-sale="vip"] .pr-sale::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;padding:1px;pointer-events:none;
+  background:conic-gradient(from var(--pr-sale-a),transparent 0deg,rgba(242,214,150,.95) 28deg,transparent 70deg,transparent 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+  animation:prSaleEdge 7s linear infinite}
+@keyframes prSaleEdge{to{--pr-sale-a:360deg}}
+#prices[data-sale="vip"] .pr-sale .sb{--a-bg:#D4B574;--a-fg:#0B0B0C;--a-ring:#D4B574;--b-bg:rgba(212,181,116,.12);--b-fg:#E8D3A0}
+#prices[data-sale="vip"] .pr-sale-text{color:rgba(255,255,255,.74)}
+#prices[data-sale="vip"] .pr-sale-text strong{color:#E8D3A0}
+#prices[data-sale="vip"] .pr-sale .btn-line{background:#fff;border-color:#fff;color:#0B0B0C}
+#prices[data-sale="vip"] .pr-sale .btn-line:is(:hover,:focus-visible){background:#D4B574;border-color:#D4B574;color:#0B0B0C}
+@media (prefers-reduced-motion:reduce){#prices[data-sale="vip"] .pr-sale::before{animation:none;--pr-sale-a:200deg}}
 
 /* option rows in the stacked-discount layout (designer's reference, 2026-11-16): name, count and price of one, the offer pill;
    the earlier prices struck through, the price to pay large, the saving; Add to cart on the right */
