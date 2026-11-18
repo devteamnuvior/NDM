@@ -128,7 +128,7 @@ export const IconLock = () => (
 );
 
 /**
- * 1 Cart · 2 Details · 3 Payment · 4 Review · 5 Confirmation, always on one line (user,
+ * 1 Cart · 2 Details · 3 Payment · 4 Confirmation, always on one line (user,
  * 2026-11-14; the prototype let the row wrap). Below the `lg` width only the current step shows its
  * name (the others keep it for screen readers), and on phones the lines between the steps are left out.
  */

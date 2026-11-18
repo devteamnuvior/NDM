@@ -358,7 +358,7 @@ export function AccountPage({ account }: { account: AccountData }) {
 
           {tab === "orders" && (
             <>
-              <AccHead k="Orders & receipts" title="Your orders" text="Orders you placed from the cart while signed in. Orders are paid online by card at checkout." />
+              <AccHead k="Orders & receipts" title="Your orders" text="Order requests you placed from the cart while signed in. Nothing is charged online: payment is taken at the clinic." />
               <AccCard>
                 {orders.length ? (
                   <>
@@ -378,7 +378,7 @@ export function AccountPage({ account }: { account: AccountData }) {
 
           {tab === "payment" && (
             <>
-              <AccHead k="Payment methods" title="Coming soon" text="Orders are paid online by card at checkout. Saved cards and financing will appear here." />
+              <AccHead k="Payment methods" title="Coming soon" text="Treatments are paid at your appointment for now. Saved cards and financing will appear here." />
               <AccCard>
                 <p className="font-inter text-[15px] text-ndm-muted">Flexible payment plans are available through Affirm at the clinic, for Canadian residents aged 19 and over, with a minimum $500 purchase.</p>
               </AccCard>

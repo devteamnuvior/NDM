@@ -68,7 +68,7 @@ test("the cart is corrected from WooCommerce, and the order request becomes a Wo
   await expect(option.getByRole("group", { name: "Quantity, Botox Cosmetic, 60 units" })).toContainText("2"); /* already in the cart */
   await page.locator("#pr-botox-dysport-0 .pr-opt").first().getByRole("button", { name: "Add Botox Cosmetic, Regular to cart" }).click();
 
-  /* checkout: details (with the clinic), payment, review */
+  /* checkout: details (with the clinic), then payment with the terms (no review step, user, 2026-11-18) */
   await page.goto(`${NEXT_URL}/checkout`);
   await expect(page.locator("h1:visible")).toHaveText(/Your\s*details/);
   await page.getByLabel("First name").fill("Sam");
@@ -84,37 +84,32 @@ test("the cart is corrected from WooCommerce, and the order request becomes a Wo
   await expect(page.getByLabel("Preferred day")).toHaveCount(0); /* no appointment step for now (user, 2026-11-18) */
   await page.getByRole("button", { name: "Continue to payment" }).click();
   await expect(page.locator("h1:visible")).toHaveText(/How you\s*pay/);
-  await page.getByRole("button", { name: "Continue to review" }).click();
-  await expect(main).toContainText("2 in your cart, $1478.04 estimated"); /* (2 x 648 + 12) + 13% */
+  await expect(page.getByRole("button", { name: "Continue to review" })).toHaveCount(0);
   await page.getByRole("checkbox", { name: /I accept/ }).check();
-  /* every order is paid online by card (user, 2026-11-18): there is no "pay at your appointment" */
-  await expect(main).not.toContainText(/Pay at your appointment|Place order request/);
-  await page.getByRole("button", { name: /Continue to card payment/ }).click();
+  await page.getByRole("button", { name: /Place order request/ }).click();
 
-  /* WooCommerce's pay page for the order; its number is kept in the browser's receipt */
-  await page.waitForURL(/order-pay\/\d+/);
-  const no = /order-pay\/(\d+)/.exec(page.url())![1];
-  placed.push(no);
-
-  /* back on the site before paying: the confirmation says the payment is not completed */
-  await page.goto(`${NEXT_URL}/order-confirmed`);
+  /* confirmation, with WooCommerce's own order number */
+  await page.waitForURL(`${NEXT_URL}/order-confirmed`);
   await expect(page.locator("h1:visible")).toContainText("Thank you, Sam,");
-  await expect(main).toContainText("Your card payment was not completed");
-  await expect(main.getByRole("link", { name: "Complete card payment" })).toBeVisible();
+  const no = (await main.locator("b.tabular-nums").first().innerText()).trim();
+  expect(no).toMatch(/^\d+$/);
+  placed.push(no);
+  await expect(main).toContainText("Nothing has been charged");
   await expect(main.getByText("Botox Cosmetic").first()).toBeVisible();
 
-  /* the order is in WooCommerce: pending until it is paid, at WooCommerce's prices */
+  /* the order is in WooCommerce: on hold, unpaid, at WooCommerce's prices */
   const order = JSON.parse(
-    wp("eval", `$o = wc_get_order(${Number(no)}); echo wp_json_encode(array('status' => $o->get_status(), 'total' => (float) $o->get_total(), 'via' => $o->get_created_via(), 'email' => $o->get_billing_email(), 'postcode' => $o->get_billing_postcode(), 'clinic' => $o->get_meta('_ndm_clinic'), 'when' => $o->get_meta('_ndm_preferred_time'), 'items' => array_values(array_map(fn($i) => array($i->get_variation_id(), $i->get_quantity(), (float) $i->get_total()), $o->get_items()))));`),
+    wp("eval", `$o = wc_get_order(${Number(no)}); echo wp_json_encode(array('status' => $o->get_status(), 'total' => (float) $o->get_total(), 'via' => $o->get_created_via(), 'pay' => $o->get_payment_method_title(), 'email' => $o->get_billing_email(), 'postcode' => $o->get_billing_postcode(), 'clinic' => $o->get_meta('_ndm_clinic'), 'when' => $o->get_meta('_ndm_preferred_time'), 'items' => array_values(array_map(fn($i) => array($i->get_variation_id(), $i->get_quantity(), (float) $i->get_total()), $o->get_items()))));`),
   ) as Record<string, unknown>;
   expect(order).toEqual({
-    status: "pending",
+    status: "on-hold",
     total: 1308,
     via: "ndm-site",
+    pay: "Pay at the clinic",
     email: "sam.tester@example.test",
     postcode: "M2N 5M5",
     clinic: "NewDermaMed Uptown",
-    when: "",
+    when: "2026-12-01, morning",
     items: [
       [20, 2, 1296],
       [19, 1, 12],
