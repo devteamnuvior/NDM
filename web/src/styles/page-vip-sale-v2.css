@@ -1,0 +1,116 @@
+/* The redesigned VIP Sale page (/vip-sale-v2). It shares the VIP Sale's look (page-vip-sale.css: navy, serif, gold;
+   <html> carries the class "vip"); these are the pieces only this page has. Every rule starts with a v2- class. */
+.v2-gold{background:linear-gradient(180deg,#F6E7B8 0%,#D9B565 55%,#B98D38 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* the same gold on a light ground */
+.v2-gold-d{background:linear-gradient(180deg,#C9A24E 0%,#A9812E 55%,#7A5A16 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.v2-shine{background:linear-gradient(90deg,#fff 0%,#F4E6BD 55%,#E3C47E 100%);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.1em}
+.v2-tag{display:inline-block;background:linear-gradient(118deg,#C99A2E,#F3D57F 45%,#DDB045);color:#1B1403;font:700 10.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:5px 9px;border-radius:999px;white-space:nowrap}
+/* header: the menu links and the phone mark */
+.v2-nav{display:flex;align-items:center;padding:8px 0}
+/* the label rolls up and out while its gold copy rolls in from below (after dermahub.ca's menu) */
+.v2-roll{display:block;position:relative;overflow:hidden;line-height:1.2}
+.v2-roll>span{display:block;transition:transform .48s cubic-bezier(.22,.61,.36,1),opacity .38s}
+.v2-roll>span:last-child{position:absolute;inset:0;opacity:0;transform:translateY(100%);color:#A9812E}
+.v2-nav:hover .v2-roll>span:first-child,.v2-nav:focus-visible .v2-roll>span:first-child{opacity:0;transform:translateY(-100%)}
+.v2-nav:hover .v2-roll>span:last-child,.v2-nav:focus-visible .v2-roll>span:last-child{opacity:1;transform:translateY(0)}
+@media (prefers-reduced-motion:reduce){.v2-roll>span{transition:opacity .2s}}
+.v2-phone{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;color:#0B1B29;background:linear-gradient(135deg,#F3DDA6,#C9A24E);box-shadow:0 0 0 4px rgba(201,162,78,.16),0 8px 18px -8px rgba(143,107,40,.7),inset 0 1px 0 rgba(255,255,255,.55)}
+/* the strip under the hero */
+.v2-cell{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px 12px;text-align:left;border-left:1px solid rgba(255,255,255,.1)}
+.v2-cell b{color:#fff;font-weight:600}
+.v2-cell:first-child{border-left:0}
+@media (max-width:1023px){.v2-cell{justify-content:flex-start;padding:12px 14px}.v2-cell:nth-child(3){border-left:0}.v2-cell:nth-child(n+3){border-top:1px solid rgba(255,255,255,.1)}}
+/* the hero card's small add button */
+.v2-mini{height:42px;padding:0 18px;border-radius:999px;border:1px solid rgba(240,215,155,.55);color:#F0D79B;font:600 13.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;transition:background-color .25s ease,color .25s ease}
+.v2-mini:hover{background:rgba(240,215,155,.12)}
+.v2-mini.is-on{background:linear-gradient(135deg,#E2C27A,#C9A24E);border-color:#C9A24E;color:#0B1B29}
+.v2-mini.is-on::before,.v2-add.is-on::before{content:"\2713\00a0\00a0"}
+/* the clinic film's play mark */
+.v2-play{position:relative;display:grid;place-items:center;width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.92);box-shadow:0 0 0 8px rgba(255,255,255,.35);transition:transform .3s ease}
+.v2-play::before{content:"";border-left:20px solid #A9812E;border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:6px}
+button:hover>.v2-play{transform:scale(1.06)}
+/* the price list */
+.v2-chip{flex:none;font:600 14px/1 Inter,"Helvetica Neue",Arial,sans-serif;padding:12px 17px;border-radius:999px;border:1px solid #CBD3DD;background-color:#fff;color:#14202E;-webkit-tap-highlight-color:transparent;transition:background-color .28s ease,border-color .28s ease,color .28s ease}
+.v2-chip[aria-pressed="true"]{background-color:#0B1B29;border-color:#0B1B29;color:#fff}
+.v2-row{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1.7fr) minmax(0,1fr) auto;gap:8px 22px;align-items:center;padding:18px 0;border-bottom:1px solid #E2E7EE}
+.v2-row:last-child{border-bottom:0}
+/* the awards: each year's badge arrives in turn, and the number counts with it */
+.v2-badge{opacity:.14;transform:scale(.72);filter:grayscale(1);transition:opacity .45s ease,transform .6s cubic-bezier(.2,1.5,.4,1),filter .45s ease}
+.v2-badge.is-in{opacity:1;transform:none;filter:none}
+.v2-badge.is-new img{animation:v2Ring .6s ease-out}
+.v2-fig{position:relative;display:inline-block}
+.v2-count{animation:v2Tick .28s cubic-bezier(.2,.8,.3,1)}
+/* the awards number: it lands larger, a band of light crosses it and two gold rings open behind it */
+.v2-fig-star.is-done{animation:v2Land 1s cubic-bezier(.2,1.5,.4,1)}
+.v2-fig-star.is-done .v2-count{animation:v2Shine 1.5s ease-out .15s;background-image:linear-gradient(105deg,transparent 42%,#FFF6D6 50%,transparent 58%),linear-gradient(180deg,#C9A24E 0%,#A9812E 55%,#7A5A16 100%);background-size:300% 100%,100% 100%;background-position:120% 0,0 0;background-repeat:no-repeat}
+.v2-fig-star.is-done::before,.v2-fig-star.is-done::after{content:"";position:absolute;left:50%;top:50%;width:1.25em;height:1.25em;margin:-.625em 0 0 -.625em;border-radius:50%;border:2px solid rgba(201,162,78,.7);opacity:0;pointer-events:none;animation:v2Halo 1.1s ease-out .1s}
+.v2-fig-star.is-done::after{animation-delay:.38s}
+@keyframes v2Tick{from{transform:translateY(34%);opacity:0}}
+@keyframes v2Land{0%{transform:scale(.82)}40%{transform:scale(1.3)}100%{transform:none}}
+@keyframes v2Shine{from{background-position:120% 0,0 0}to{background-position:-20% 0,0 0}}
+@keyframes v2Halo{from{transform:scale(.55);opacity:.9}to{transform:scale(1.9);opacity:0}}
+@keyframes v2Ring{from{box-shadow:0 0 0 0 rgba(201,162,78,.55);border-radius:50%}to{box-shadow:0 0 0 14px rgba(201,162,78,0);border-radius:50%}}
+@media (prefers-reduced-motion:reduce){.v2-badge{transition:none}.v2-count,.v2-fig-star,.v2-fig-star::before,.v2-fig-star::after,.v2-badge.is-new img{animation:none!important}}
+/* the pickers: a pill with the chosen value, the choices on a card under it */
+.v2-dd{position:relative;min-width:0}
+.v2-dd-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:46px;padding:0 15px 0 16px;border-radius:999px;border:1px solid #D5DBE3;background:#F6F7F9;color:#14202E;font:500 14.5px/1.2 Inter,"Helvetica Neue",Arial,sans-serif;text-align:left;transition:border-color .2s ease,background-color .2s ease,box-shadow .2s ease}
+.v2-dd-btn svg{flex:none;color:#8F6B28;transition:transform .25s ease}
+.v2-dd-btn:hover{border-color:#C9A24E;background:#fff}
+.v2-dd-btn:focus-visible{outline:3px solid #C9A24E;outline-offset:2px}
+.v2-dd.is-open .v2-dd-btn{border-color:#0B1B29;background:#fff;box-shadow:0 0 0 3px rgba(201,162,78,.28)}
+.v2-dd.is-open .v2-dd-btn svg{transform:rotate(180deg)}
+.v2-dd-list{position:absolute;z-index:30;left:0;right:0;top:calc(100% + 8px);max-height:292px;overflow-y:auto;overscroll-behavior:contain;padding:6px;border-radius:18px;background:#fff;border:1px solid rgba(11,27,41,.1);box-shadow:0 24px 60px -18px rgba(11,27,41,.4);animation:v2Drop .18s ease both}
+.v2-dd-list.is-wide{left:auto;min-width:230px}
+.v2-dd-opt{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 12px;border-radius:12px;cursor:pointer;color:#14202E;font:400 14.5px/1.25 Inter,"Helvetica Neue",Arial,sans-serif}
+.v2-dd-opt:hover{background:#F2F4F7}
+.v2-dd-opt[aria-selected="true"]{background:#0B1B29;color:#fff;font-weight:600}
+.v2-dd-hint{flex:none;font-variant-numeric:tabular-nums;color:#8F6B28;font-weight:600}
+.v2-dd-opt[aria-selected="true"] .v2-dd-hint{color:#F0D79B}
+@keyframes v2Drop{from{transform:translateY(-6px)}}
+.v2-add{height:46px;min-width:148px;padding:0 18px;border-radius:999px;border:1.5px solid #0B1B29;color:#0B1B29;font:600 14.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;white-space:nowrap;transition:background-color .25s ease,color .25s ease}
+.v2-add:hover{background:rgba(11,27,41,.06)}
+.v2-add.is-on{background:#0B1B29;color:#fff}
+/* desktop: the treatment's name stays on one line, so its column is as wide as the longest name and the pickers take less */
+@media (min-width:1280px){
+  .v2-row{grid-template-columns:300px minmax(0,1fr) 212px auto;gap:8px 20px}
+  .v2-row-pick{--v2-pack:158px}
+  .v2-row-name{white-space:nowrap}
+}
+@media (min-width:1360px){.v2-row{grid-template-columns:304px minmax(0,1fr) 236px auto}}
+@media (max-width:767px){
+  /* phones: the name, the pickers, then the price beside its button */
+  .v2-row{grid-template-columns:minmax(0,1fr) auto;gap:12px 14px;padding:18px 0}
+  .v2-row-name,.v2-row-pick{grid-column:1/-1}
+  .v2-add{height:48px;min-width:140px}
+}
+/* questions */
+.v2-q summary{list-style:none}
+.v2-q summary::-webkit-details-marker{display:none}
+.v2-q summary::after{content:"+";flex:none;color:#5A646C;font-weight:400;font-size:22px;line-height:1}
+.v2-q[open] summary::after{content:"\2212"}
+@media (prefers-reduced-motion:reduce){.v2-play,.v2-mini,.v2-add,.v2-chip,.v2-dd-btn,.v2-dd-btn svg{transition:none}.v2-dd-list{animation:none}}
+/* footer: a light ground with two soft glows, after dermahub.ca's */
+.v2-foot{background:#F5F3EE}
+.v2-foot-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(34vw 34vw at 100% 62%,rgba(226,194,122,.34),transparent 66%),radial-gradient(30vw 30vw at -4% 104%,rgba(15,128,195,.08),transparent 65%)}
+.v2-dot{position:relative;width:8px;height:8px;border-radius:50%;background:#9AA3AB}
+.v2-dot.is-open{background:#2C8A57}
+.v2-dot.is-open::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(44,138,87,.6);animation:v2Pulse 2s ease-out infinite}
+@keyframes v2Pulse{from{transform:scale(.6);opacity:1}to{transform:scale(1.5);opacity:0}}
+@media (prefers-reduced-motion:reduce){.v2-dot.is-open::after{animation:none}}
+/* the closing band: wide rings on a warm light ground, after dermahub.ca's */
+/* the same ground as the footer under it, so the two read as one piece with no edge between them */
+.v2-final{background:#F5F3EE}
+.v2-rings{position:absolute;left:50%;top:50%;z-index:-1;width:min(1500px,170vw);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;border:1px solid rgba(169,129,46,.2);-webkit-mask-image:linear-gradient(180deg,transparent 30%,#000 44%,#000 52%,transparent 62%);mask-image:linear-gradient(180deg,transparent 30%,#000 44%,#000 52%,transparent 62%)}
+.v2-rings::before,.v2-rings::after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(169,129,46,.22)}
+.v2-rings::before{inset:12%}
+.v2-rings::after{inset:26%;border-color:rgba(169,129,46,.28)}
+.v2-call{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:56px;padding:0 24px;border-radius:999px;border:1px solid rgba(11,27,41,.2);background:rgba(255,255,255,.7);color:#0B1B29;font:400 15.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;white-space:nowrap;transition:border-color .25s ease,background-color .25s ease}
+.v2-call svg{color:#8F6B28}
+.v2-call:hover{border-color:#C9A24E;background:#fff}
+/* choosing a tab of the price list: its rows rise into place one after another, out of a soft blur, and a gold line runs under each */
+.v2-rows-in>.v2-row{position:relative;animation:v2RowIn .62s cubic-bezier(.22,.8,.24,1) backwards;animation-delay:calc(var(--i,0)*55ms)}
+.v2-rows-in>.v2-row::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,#C9A24E 35%,#E2C27A 65%,transparent);transform-origin:0 50%;transform:scaleX(0);opacity:0;pointer-events:none;animation:v2RowLine .9s cubic-bezier(.3,.7,.2,1) backwards;animation-delay:calc(var(--i,0)*55ms + 80ms)}
+@keyframes v2RowIn{from{opacity:0;transform:translateY(22px);filter:blur(7px)}60%{filter:blur(0)}to{opacity:1;transform:none;filter:none}}
+@keyframes v2RowLine{0%{transform:scaleX(0);opacity:0}45%{transform:scaleX(1);opacity:.9}100%{transform:scaleX(1);opacity:0}}
+@media (prefers-reduced-motion:reduce){.v2-rows-in>.v2-row{animation:v2RowFade .2s ease backwards;animation-delay:0s}.v2-rows-in>.v2-row::after{animation:none}}
+@keyframes v2RowFade{from{opacity:0}}
