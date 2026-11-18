@@ -210,7 +210,7 @@ export function CoAlert({ tone = "ok", title, children, className = "" }: { tone
  */
 export function CoHead({ at, lead, strong, text, onStep }: { at: number; lead: string; strong: string; text?: string | null; onStep?: (step: number) => void }) {
   return (
-    <div className="co-head border-b border-ndm-ink/10 pb-[clamp(28px,3.4vw,48px)]">
+    <div className="co-head border-b border-ndm-ink/10 pb-[clamp(16px,1.7vw,24px)]">
       <CheckoutSteps at={at} onStep={onStep} />
       {/* the help line sits on the heading's own baseline (its last line when it wraps); smaller heading: user, 2026-11-18 */}
       <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:[align-items:last_baseline] lg:justify-between lg:gap-10">

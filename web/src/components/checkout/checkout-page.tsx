@@ -130,7 +130,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
       <CoHead at={1 + step} lead={head[0]} strong={head[1]} text={head[2]} onStep={(i) => setStep(Math.min(step, i))} />
       <RemovedNotice />
       {!ready ? null : empty ? (
-        <div className={`${CO_CARD} mt-10 flex flex-col items-center px-6 py-14 text-center`}>
+        <div className={`${CO_CARD} mt-7 flex flex-col items-center px-6 py-14 text-center`}>
           <h2 className="font-aeonik text-[clamp(26px,2.6vw,34px)] leading-[1.15] font-normal text-ndm-ink">There is nothing to check out yet</h2>
           <p className="mt-3 max-w-[42ch] font-inter text-[15px] text-ndm-muted">Add a treatment from the price list first.</p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
@@ -143,7 +143,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
           </div>
         </div>
       ) : (
-        <div className="mt-10 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)] lg:items-start">
+        <div className="mt-7 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)] lg:items-start">
           {/* phones: the order summary folds above the form */}
           <details className={`co-sum ${CO_CARD} px-5 py-4 lg:hidden`}>
             <summary className="flex cursor-pointer items-center justify-between gap-4 font-inter text-[14.5px] font-medium text-ndm-deep">
