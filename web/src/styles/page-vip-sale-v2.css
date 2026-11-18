@@ -74,7 +74,8 @@ button:hover>.v2-play{transform:scale(1.06)}
 @media (min-width:1280px){
   .v2-row{grid-template-columns:300px minmax(0,1fr) 212px auto;gap:8px 20px}
   .v2-row-pick{--v2-pack:158px}
-  .v2-row-name{white-space:nowrap}
+  /* the offer tag drops under a name it does not fit beside, never over the pickers */
+  .v2-row-title{white-space:nowrap}
 }
 @media (min-width:1360px){.v2-row{grid-template-columns:304px minmax(0,1fr) 236px auto}}
 @media (max-width:767px){
