@@ -306,12 +306,13 @@ function Hero({ view, t, day, best, top, inList, toggle }: { view: SaleView; t: 
           <div className="vip-cd rounded-[22px] px-5 pb-5 pt-1.5 shadow-[0_30px_70px_rgba(0,0,0,.45)] sm:px-[26px]">
             <p className="flex items-center justify-between gap-3 py-4 font-inter text-[11.5px] font-semibold uppercase tracking-[.17em] text-[#DCE4EC]"><span className="inline-flex items-center gap-2.5"><i aria-hidden="true" className="size-[7px] rounded-full bg-[#C9A24E]" />{VIP2.hero.card}</span><span className="text-white/50">{day}</span></p>
             <ul role="list">
-              {top.map(({ p, title, sub }, i) => {
+              {top.map(({ p, title, sub }) => {
                 const on = inList(p.key);
                 return (
                   <li key={p.key} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 border-t border-white/10 py-3.5">
                     <div className="min-w-0">
-                      {i === 0 && p.pct >= 50 && <span className="v2-tag mb-2">{p.pct}% off</span>}
+                      {/* every row says its own saving, worked out from its two prices */}
+                      {p.pct > 0 && <span className="v2-tag mb-2">{p.pct}% off</span>}
                       <span className="block font-aeonik text-[clamp(19px,1.7vw,22px)] leading-[1.2] text-white">{title}</span>
                       <span className="mt-0.5 block font-inter text-[13.5px] text-white/55">{sub}</span>
                     </div>
