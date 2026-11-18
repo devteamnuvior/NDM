@@ -1,0 +1,1324 @@
+{
+ "source": "Snapshot of the live WordPress procedures and concerns plus web/src/config/procedures-hub.ts, made by the build of procedures.html",
+ "groups": [
+  {
+   "id": "injectables",
+   "title": "Injectables & fillers",
+   "intro": "Prescription treatments and hyaluronic acid fillers, planned around your features after an in-person assessment.",
+   "cards": [
+    {
+     "slug": "botox",
+     "title": "Botox®",
+     "href": "botox.html",
+     "text": "Botox® Cosmetic, a prescription treatment. Your provider explains whether it suits you at a consultation.",
+     "areas": [
+      "face"
+     ],
+     "concerns": [
+      "Consultation required"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/hero.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "dermal-fillers",
+     "title": "Dermal Fillers",
+     "href": "https://newdermamedlaserclinic.com/injectables/dermal-fillers",
+     "text": "Hyaluronic acid fillers that can restore lost volume and soften folds, placed conservatively.",
+     "areas": [
+      "face"
+     ],
+     "concerns": [
+      "Volume loss",
+      "Folds"
+     ],
+     "img": "assets/home/menu/dermal-fillers.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "juvederm",
+     "title": "Juvéderm®",
+     "href": "https://newdermamedlaserclinic.com/injectables/juvederm",
+     "text": "The Juvéderm® family of hyaluronic acid fillers, chosen by area and the result you have in mind.",
+     "areas": [
+      "face"
+     ],
+     "concerns": [
+      "Volume loss",
+      "Lips"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/Juvederm-Treatment-Toronto.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "lip-augmentation",
+     "title": "Lip Augmentation",
+     "href": "https://newdermamedlaserclinic.com/injectables/lip-augmentation",
+     "text": "Lip filler for shape, balance and hydration, planned to keep a natural proportion.",
+     "areas": [
+      "face"
+     ],
+     "concerns": [
+      "Thin lips"
+     ],
+     "img": "assets/home/menu/lip-fillers.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "tear-trough-correction",
+     "title": "Tear Trough Correction",
+     "href": "https://newdermamedlaserclinic.com/injectables/tear-trough-correction",
+     "text": "Careful filler placement that may soften under-eye hollows and the shadow they cast.",
+     "areas": [
+      "face"
+     ],
+     "concerns": [
+      "Under-eye hollows"
+     ],
+     "img": "assets/home/menu/under-eye-filler.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "soft-lift",
+     "title": "Soft Lift™",
+     "href": "https://newdermamedlaserclinic.com/injectables/soft-lift",
+     "text": "A combined injectable plan for the mid and lower face, mapped at your consultation.",
+     "areas": [
+      "face"
+     ],
+     "concerns": [
+      "Volume loss",
+      "Sagging"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/7.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "belkyra-kybella",
+     "title": "Belkyra® / Kybella® (Double Chin)",
+     "href": "https://newdermamedlaserclinic.com/injectables/double-chin/belkyra-kybella",
+     "text": "Belkyra® / Kybella®, a prescription injectable for the area under the chin. Suitability is assessed in person.",
+     "areas": [
+      "face"
+     ],
+     "concerns": [
+      "Consultation required"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/Belkyra-Treatment-Toronto.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "mesotherapy-skin-boosters",
+     "title": "Mesotherapy & Skin Boosters",
+     "href": "https://newdermamedlaserclinic.com/injectables/mesotherapy-skin-boosters",
+     "text": "Fine injections of hyaluronic acid and nutrients that may improve hydration and skin quality.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Dull skin",
+      "Fine lines"
+     ],
+     "img": "assets/home/menu/skin-boosters.jpg",
+     "pos": "50% 40%"
+    }
+   ]
+  },
+  {
+   "id": "collagen",
+   "title": "Collagen stimulators & thread lift",
+   "intro": "Options that work with your own collagen over weeks to months, for gradual and natural-looking support.",
+   "cards": [
+    {
+     "slug": "sculptra",
+     "title": "Sculptra®",
+     "href": "https://newdermamedlaserclinic.com/injectables/sculptra",
+     "text": "A poly-L-lactic acid biostimulator that supports collagen, usually planned over a few visits.",
+     "areas": [
+      "face",
+      "body"
+     ],
+     "concerns": [
+      "Volume loss",
+      "Skin laxity"
+     ],
+     "img": "assets/home/menu/sculptra.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "radiesse",
+     "title": "Radiesse®",
+     "href": "https://newdermamedlaserclinic.com/injectables/radiesse",
+     "text": "A calcium hydroxylapatite biostimulator that adds structure and supports collagen in the face and hands.",
+     "areas": [
+      "face"
+     ],
+     "concerns": [
+      "Volume loss",
+      "Jawline"
+     ],
+     "img": "assets/home/menu/radiesse.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "aptos-thread-lift",
+     "title": "Aptos Thread Lift",
+     "href": "aptos-thread-lift.html",
+     "text": "Absorbable APTOS threads that lift and support the skin without surgery, in one session for most plans.",
+     "areas": [
+      "face"
+     ],
+     "concerns": [
+      "Sagging",
+      "Jowls"
+     ],
+     "img": "assets/aptos/midface-vectors.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "exosome-skin-therapy",
+     "title": "Exosome Skin Therapy",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/exosome-skin-therapy",
+     "text": "Exosome serums applied after microneedling or resurfacing to support the skin's recovery.",
+     "areas": [
+      "skin"
+     ],
+     "concerns": [
+      "Texture",
+      "Fine lines"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/15.jpg",
+     "pos": "50% 30%"
+    }
+   ]
+  },
+  {
+   "id": "laser",
+   "title": "Laser & light",
+   "intro": "Medical lasers and intense pulsed light, set for your skin type and the concern being treated.",
+   "cards": [
+    {
+     "slug": "laser-skin-resurfacing",
+     "title": "Laser Skin Resurfacing",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/laser-skin-resurfacing",
+     "text": "Laser resurfacing that can refine texture, tone and fine lines, from light to deeper settings.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Texture",
+      "Fine lines",
+      "Scars"
+     ],
+     "img": "assets/home/menu/laser-skin-resurfacing.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "micro-laser-peel",
+     "title": "Micro Laser Peel",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/micro-laser-peel",
+     "text": "A light laser peel for brightness and smoother texture, with a short recovery for most skin.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Texture",
+      "Dull skin"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/27.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "photo-rejuvenation",
+     "title": "Photo Rejuvenation",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/photo-rejuvenation",
+     "text": "Intense pulsed light that may reduce the look of sun spots, redness and uneven tone.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Sun spots",
+      "Redness"
+     ],
+     "img": "assets/home/menu/photo-rejuvenation.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "skin-tightening",
+     "title": "Skin Tightening",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/skin-tightening",
+     "text": "Non-invasive energy treatments that gently heat deeper layers to improve the look of mild laxity.",
+     "areas": [
+      "face",
+      "body"
+     ],
+     "concerns": [
+      "Skin laxity",
+      "Sagging"
+     ],
+     "img": "assets/home/menu/laser-skin-tightening.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "laser-hair-removal",
+     "title": "Laser Hair Removal",
+     "href": "https://newdermamedlaserclinic.com/laser/laser-hair-removal",
+     "text": "Medical-grade laser hair reduction for the face and body, planned for your skin and hair type.",
+     "areas": [
+      "face",
+      "body"
+     ],
+     "concerns": [
+      "Unwanted hair"
+     ],
+     "img": "assets/home/menu/laser-hair-removal.jpg",
+     "pos": "50% 40%"
+    }
+   ]
+  },
+  {
+   "id": "skin",
+   "title": "Skin treatments & facials",
+   "intro": "Clinical skin care, from collagen induction and peels to medical facials, chosen after a skin analysis.",
+   "cards": [
+    {
+     "slug": "visia-skin-analysis",
+     "title": "VISIA® Skin Analysis",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/visia-skin-analysis",
+     "text": "Imaging that maps spots, wrinkles, texture, pores and redness. Included with every consultation.",
+     "areas": [
+      "skin"
+     ],
+     "concerns": [
+      "Skin analysis"
+     ],
+     "img": "assets/home/menu/visia-skin-analysis.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "microneedling",
+     "title": "Microneedling",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/microneedling",
+     "text": "Collagen induction with Dermapen 4, with PRP or exosomes as options for your skin's needs.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Acne scars",
+      "Texture",
+      "Fine lines"
+     ],
+     "img": "assets/home/menu/microneedling.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "chemical-peels",
+     "title": "Chemical Peels",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/chemical-peels",
+     "text": "Professional peels, light to deeper, chosen for your skin type, tone and the concern being treated.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Texture",
+      "Pigmentation",
+      "Acne"
+     ],
+     "img": "assets/home/menu/chemical-peels.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "dermamelan",
+     "title": "Dermamelan®",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/dermamelan",
+     "text": "A professional depigmenting protocol by Mesoestetic for stubborn pigmentation and uneven tone.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Melasma",
+      "Pigmentation"
+     ],
+     "img": "assets/home/menu/cosmelan-dermamelan.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "acnelan",
+     "title": "Acnelan®",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/acnelan",
+     "text": "A clinical program by Mesoestetic for oily, acne-prone skin, combining an in-clinic step and home care.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Acne"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/13-1.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "age-element-facial",
+     "title": "Age Element® Facial",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/age-element-facial",
+     "text": "A clinical facial by Mesoestetic for skin showing early signs of aging, tailored at each visit.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Fine lines",
+      "Dull skin"
+     ],
+     "img": "assets/home/menu/medical-facials.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "microdermabrasion",
+     "title": "Microdermabrasion",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/microdermabrasion",
+     "text": "Gentle mechanical exfoliation for a smoother surface and a fresher look, with no recovery for most.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Texture",
+      "Dull skin"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/20.jpg",
+     "pos": "50% 30%"
+    }
+   ]
+  },
+  {
+   "id": "conditions",
+   "title": "Acne, scars & pigmentation",
+   "intro": "Treatment plans for specific skin conditions, often combining several of the treatments above.",
+   "cards": [
+    {
+     "slug": "acne-treatments",
+     "title": "Acne Treatments",
+     "href": "https://newdermamedlaserclinic.com/skin/medical-dermatology/acne-treatments",
+     "text": "Plans for active breakouts that may combine peels, laser and medical skin care.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Acne"
+     ],
+     "img": "assets/home/menu/laser-acne-treatment.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "acne-scar",
+     "title": "Acne Scar",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/acne-scar",
+     "text": "Resurfacing and collagen-building plans for rolling, boxcar and icepick acne scars.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Acne scars"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/28.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "scar-removal",
+     "title": "Scar Removal",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/scar-removal",
+     "text": "Options that can soften the look of acne, surgical and other scars over a series of sessions.",
+     "areas": [
+      "skin",
+      "body"
+     ],
+     "concerns": [
+      "Scars"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/18.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "hyperpigmentation",
+     "title": "Hyperpigmentation",
+     "href": "https://newdermamedlaserclinic.com/skin/medical-dermatology/hyperpigmentation",
+     "text": "Plans for sun spots, post-acne marks and uneven tone, set for your skin type.",
+     "areas": [
+      "skin"
+     ],
+     "concerns": [
+      "Pigmentation",
+      "Sun spots"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/24.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "melasma",
+     "title": "Melasma",
+     "href": "https://newdermamedlaserclinic.com/skin/medical-dermatology/melasma",
+     "text": "A careful, long-term approach to melasma, combining in-clinic treatment and home care.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Melasma"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/23.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "rosacea",
+     "title": "Rosacea",
+     "href": "https://newdermamedlaserclinic.com/skin/medical-dermatology/rosacea",
+     "text": "Plans that may calm visible redness and flushing, starting with what triggers your flare-ups.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Redness",
+      "Rosacea"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/22.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "dark-circles",
+     "title": "Dark Circles",
+     "href": "https://newdermamedlaserclinic.com/skin/dark-circles",
+     "text": "An assessment of what causes your dark circles, then the options that fit: filler, skin or light.",
+     "areas": [
+      "face"
+     ],
+     "concerns": [
+      "Under-eye hollows"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/17.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "wrinkle-treatments",
+     "title": "Wrinkle Treatments",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/wrinkle-treatments",
+     "text": "A plan for lines and wrinkles that may combine resurfacing, fillers and collagen support.",
+     "areas": [
+      "face",
+      "skin"
+     ],
+     "concerns": [
+      "Fine lines",
+      "Wrinkles"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/16-1.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "mole-removal",
+     "title": "Mole Removal",
+     "href": "https://newdermamedlaserclinic.com/skin/medical-dermatology/mole-removal",
+     "text": "Removal of benign moles and skin lesions after a medical evaluation of each one.",
+     "areas": [
+      "skin",
+      "body"
+     ],
+     "concerns": [
+      "Moles"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/21.jpg",
+     "pos": "50% 30%"
+    }
+   ]
+  },
+  {
+   "id": "body",
+   "title": "Body contouring",
+   "intro": "Non-surgical options for stubborn fat, skin laxity and contour, after an assessment of the area.",
+   "cards": [
+    {
+     "slug": "coolsculpting",
+     "title": "CoolSculpting®",
+     "href": "https://newdermamedlaserclinic.com/body/coolsculpting",
+     "text": "Controlled cooling that can reduce stubborn fat in treated areas, without surgery.",
+     "areas": [
+      "body"
+     ],
+     "concerns": [
+      "Stubborn fat"
+     ],
+     "img": "assets/home/menu/coolsculpting.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "tightsculpting",
+     "title": "TightSculpting®",
+     "href": "https://newdermamedlaserclinic.com/body/tightsculpting",
+     "text": "Fotona laser body contouring that may reduce fat and tighten skin in the same treatment.",
+     "areas": [
+      "body"
+     ],
+     "concerns": [
+      "Stubborn fat",
+      "Skin laxity"
+     ],
+     "img": "assets/home/menu/tightsculpting.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "non-surgical-bbl",
+     "title": "Non-Surgical BBL",
+     "href": "https://newdermamedlaserclinic.com/body/non-surgical-bbl",
+     "text": "Injectable collagen stimulators planned to improve the shape and contour of the buttocks and hips.",
+     "areas": [
+      "body"
+     ],
+     "concerns": [
+      "Contour"
+     ],
+     "img": "assets/home/menu/non-surgical-bbl.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "stretch-marks",
+     "title": "Stretch Marks",
+     "href": "https://newdermamedlaserclinic.com/body/stretch-marks",
+     "text": "Collagen-building treatments that may soften the look of stretch marks over a series of sessions.",
+     "areas": [
+      "body",
+      "skin"
+     ],
+     "concerns": [
+      "Stretch marks"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/43.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "hyperhidrosis",
+     "title": "Hyperhidrosis",
+     "href": "https://newdermamedlaserclinic.com/body/hyperhidrosis",
+     "text": "Medical treatment options for excessive underarm, hand or foot sweating, assessed in person.",
+     "areas": [
+      "body"
+     ],
+     "concerns": [
+      "Excessive sweating"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/44.jpg",
+     "pos": "50% 30%"
+    }
+   ]
+  },
+  {
+   "id": "hair",
+   "title": "Hair restoration",
+   "intro": "Non-surgical options for thinning hair, after a look at the pattern and the likely cause.",
+   "cards": [
+    {
+     "slug": "hair-loss-treatments",
+     "title": "Hair Loss Treatments",
+     "href": "https://newdermamedlaserclinic.com/hair/hair-loss-treatments",
+     "text": "Plans for thinning hair that may include platelet-rich plasma (PRP) from your own blood.",
+     "areas": [
+      "hair"
+     ],
+     "concerns": [
+      "Thinning hair"
+     ],
+     "img": "assets/home/menu/prp-hair-restoration.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "exosome-therapy-for-hair",
+     "title": "Exosome Therapy for Hair",
+     "href": "https://newdermamedlaserclinic.com/hair/exosome-therapy-for-hair",
+     "text": "Exosome treatment for the scalp, offered as part of a plan for thinning hair.",
+     "areas": [
+      "hair"
+     ],
+     "concerns": [
+      "Thinning hair"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/47.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "laser-hair-rejuvenation",
+     "title": "Laser Hair Rejuvenation",
+     "href": "https://newdermamedlaserclinic.com/hair/laser-hair-rejuvenation",
+     "text": "A gentle Fotona laser treatment for the scalp that may support thinning hair, with no needles.",
+     "areas": [
+      "hair"
+     ],
+     "concerns": [
+      "Thinning hair"
+     ],
+     "img": "assets/home/menu/laser-hair-rejuvenation.jpg",
+     "pos": "50% 40%"
+    }
+   ]
+  },
+  {
+   "id": "veins",
+   "title": "Vein treatments",
+   "intro": "From small spider veins to larger varicose veins, chosen after a vascular assessment and, where needed, an ultrasound.",
+   "cards": [
+    {
+     "slug": "spider-vein-removal",
+     "title": "Spider Vein Removal",
+     "href": "https://newdermamedlaserclinic.com/veins/spider-vein-removal",
+     "text": "Laser and injection options for small visible veins on the face and legs.",
+     "areas": [
+      "veins",
+      "face"
+     ],
+     "concerns": [
+      "Spider veins"
+     ],
+     "img": "assets/home/menu/laser-vein-removal.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "sclerotherapy",
+     "title": "Sclerotherapy",
+     "href": "https://newdermamedlaserclinic.com/veins/sclerotherapy",
+     "text": "Injections that close small spider and reticular veins on the legs, after a vascular assessment.",
+     "areas": [
+      "veins"
+     ],
+     "concerns": [
+      "Spider veins"
+     ],
+     "img": "assets/home/menu/sclerotherapy.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "varicose-vein-treatment",
+     "title": "Varicose Vein Treatment",
+     "href": "https://newdermamedlaserclinic.com/veins/varicose-vein-treatment",
+     "text": "An overview of the options for varicose veins, and how the right one is chosen for you.",
+     "areas": [
+      "veins"
+     ],
+     "concerns": [
+      "Varicose veins"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/52.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "venaseal",
+     "title": "VenaSeal™",
+     "href": "https://newdermamedlaserclinic.com/veins/venaseal",
+     "text": "A minimally invasive treatment that closes larger varicose veins with a medical adhesive.",
+     "areas": [
+      "veins"
+     ],
+     "concerns": [
+      "Varicose veins"
+     ],
+     "img": "assets/home/menu/venaseal.jpg",
+     "pos": "50% 40%"
+    },
+    {
+     "slug": "endovenous-laser-evlt",
+     "title": "Endovenous Laser (EVLT)",
+     "href": "https://newdermamedlaserclinic.com/veins/endovenous-laser-evlt",
+     "text": "Endovenous laser treatment that closes a diseased vein from the inside, under local anaesthetic.",
+     "areas": [
+      "veins"
+     ],
+     "concerns": [
+      "Varicose veins"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/53.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "radiofrequency-ablation-rfa",
+     "title": "Radiofrequency Ablation (RFA)",
+     "href": "https://newdermamedlaserclinic.com/veins/radiofrequency-ablation-rfa",
+     "text": "Radiofrequency energy that closes a diseased vein from the inside, decided after an ultrasound.",
+     "areas": [
+      "veins"
+     ],
+     "concerns": [
+      "Varicose veins"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/31.jpg",
+     "pos": "50% 30%"
+    }
+   ]
+  },
+  {
+   "id": "wellness",
+   "title": "Laser wellness treatments",
+   "intro": "Non-cosmetic laser treatments offered at the clinic, each after a medical assessment.",
+   "cards": [
+    {
+     "slug": "snoring-treatment",
+     "title": "Snoring Treatment",
+     "href": "https://newdermamedlaserclinic.com/body/snoring-treatment",
+     "text": "NightLase®, a non-invasive laser treatment that may reduce snoring for some people.",
+     "areas": [
+      "face"
+     ],
+     "concerns": [
+      "Snoring"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/42.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "vaginal-tightening",
+     "title": "Vaginal Tightening",
+     "href": "https://newdermamedlaserclinic.com/body/vaginal-tightening",
+     "text": "A non-surgical laser treatment for vaginal laxity and mild stress urinary incontinence.",
+     "areas": [
+      "body"
+     ],
+     "concerns": [
+      "Intimate health"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/40.jpg",
+     "pos": "50% 30%"
+    },
+    {
+     "slug": "nail-fungus-treatment",
+     "title": "Nail Fungus Treatment",
+     "href": "https://newdermamedlaserclinic.com/body/nail-fungus-treatment",
+     "text": "A laser treatment for nail fungus, usually planned as a short series of sessions.",
+     "areas": [
+      "body"
+     ],
+     "concerns": [
+      "Nail fungus"
+     ],
+     "img": "https://newdermamedlaserclinic.com/react/wp-content/uploads/2026/11/41.jpg",
+     "pos": "50% 30%"
+    }
+   ]
+  },
+  {
+   "id": "more",
+   "title": "More treatments",
+   "intro": "Other treatments offered at our clinics.",
+   "cards": [
+    {
+     "slug": "medical-dermatology",
+     "title": "Medical Dermatology",
+     "href": "https://newdermamedlaserclinic.com/skin/medical-dermatology",
+     "text": "Read what the treatment involves and whether it may suit you.",
+     "areas": [],
+     "concerns": [],
+     "img": "",
+     "pos": "50% 50%"
+    }
+   ]
+  }
+ ],
+ "areas": [
+  [
+   "face",
+   "Face"
+  ],
+  [
+   "skin",
+   "Skin"
+  ],
+  [
+   "body",
+   "Body"
+  ],
+  [
+   "hair",
+   "Hair"
+  ],
+  [
+   "veins",
+   "Legs & veins"
+  ]
+ ],
+ "concerns": [
+  {
+   "title": "Face",
+   "items": [
+    {
+     "title": "Wrinkles & Fine Lines",
+     "href": "wrinkles-fine-lines.html"
+    },
+    {
+     "title": "Volume Loss",
+     "href": "https://newdermamedlaserclinic.com/concerns/volume-loss"
+    },
+    {
+     "title": "Sagging Skin & Jowls",
+     "href": "https://newdermamedlaserclinic.com/concerns/sagging-skin-jowls"
+    },
+    {
+     "title": "Under-Eye Hollows & Dark Circles",
+     "href": "https://newdermamedlaserclinic.com/concerns/under-eye-hollows-dark-circles"
+    },
+    {
+     "title": "Thin Lips",
+     "href": "https://newdermamedlaserclinic.com/concerns/thin-lips"
+    },
+    {
+     "title": "Double Chin",
+     "href": "https://newdermamedlaserclinic.com/concerns/double-chin"
+    }
+   ]
+  },
+  {
+   "title": "Skin",
+   "items": [
+    {
+     "title": "Acne & Breakouts",
+     "href": "https://newdermamedlaserclinic.com/concerns/acne-breakouts"
+    },
+    {
+     "title": "Acne Scars",
+     "href": "https://newdermamedlaserclinic.com/concerns/acne-scars"
+    },
+    {
+     "title": "Hyperpigmentation & Sun Spots",
+     "href": "https://newdermamedlaserclinic.com/concerns/hyperpigmentation-sun-spots"
+    },
+    {
+     "title": "Melasma",
+     "href": "https://newdermamedlaserclinic.com/concerns/melasma-concern"
+    },
+    {
+     "title": "Rosacea & Redness",
+     "href": "https://newdermamedlaserclinic.com/concerns/rosacea-redness"
+    },
+    {
+     "title": "Uneven Texture & Pores",
+     "href": "https://newdermamedlaserclinic.com/concerns/uneven-texture-pores"
+    },
+    {
+     "title": "Moles & Skin Lesions",
+     "href": "https://newdermamedlaserclinic.com/concerns/moles-skin-lesions"
+    }
+   ]
+  },
+  {
+   "title": "Body",
+   "items": [
+    {
+     "title": "Stubborn Fat",
+     "href": "https://newdermamedlaserclinic.com/concerns/stubborn-fat"
+    },
+    {
+     "title": "Cellulite",
+     "href": "https://newdermamedlaserclinic.com/concerns/cellulite"
+    },
+    {
+     "title": "Loose Skin",
+     "href": "https://newdermamedlaserclinic.com/concerns/loose-skin"
+    },
+    {
+     "title": "Stretch Marks",
+     "href": "https://newdermamedlaserclinic.com/concerns/stretch-marks-concern"
+    },
+    {
+     "title": "Excessive Sweating",
+     "href": "https://newdermamedlaserclinic.com/concerns/excessive-sweating"
+    },
+    {
+     "title": "Spider & Varicose Veins",
+     "href": "https://newdermamedlaserclinic.com/concerns/spider-varicose-veins"
+    }
+   ]
+  },
+  {
+   "title": "Hair",
+   "items": [
+    {
+     "title": "Unwanted Hair",
+     "href": "https://newdermamedlaserclinic.com/concerns/unwanted-hair"
+    },
+    {
+     "title": "Thinning Hair",
+     "href": "https://newdermamedlaserclinic.com/concerns/thinning-hair"
+    },
+    {
+     "title": "Hair Loss",
+     "href": "https://newdermamedlaserclinic.com/concerns/hair-loss"
+    }
+   ]
+  }
+ ],
+ "compare": [
+  {
+   "id": "texture",
+   "title": "Texture, lines & scars",
+   "question": "Three common ways to improve skin texture, fine lines and acne scarring.",
+   "cols": [
+    {
+     "title": "Microneedling",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/microneedling"
+    },
+    {
+     "title": "Laser Skin Resurfacing",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/laser-skin-resurfacing"
+    },
+    {
+     "title": "Chemical Peels",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/chemical-peels"
+    }
+   ],
+   "rows": [
+    [
+     "How it works",
+     [
+      "Fine needles create controlled micro-channels that prompt your skin to build collagen.",
+      "Laser energy removes or heats thin layers of skin, prompting renewal and new collagen.",
+      "A professional acid solution exfoliates the skin at a chosen depth."
+     ]
+    ],
+    [
+     "Often chosen for",
+     [
+      "Acne scars, enlarged pores, fine lines and overall texture.",
+      "Fine lines, uneven texture, sun damage and scarring.",
+      "Dullness, uneven tone, mild pigmentation and acne-prone skin."
+     ]
+    ],
+    [
+     "Sessions",
+     [
+      "Usually a series, a few weeks apart.",
+      "One to several, depending on the depth chosen.",
+      "Usually a series; deeper peels are done less often."
+     ]
+    ],
+    [
+     "Recovery",
+     [
+      "Redness for a short time is common.",
+      "From little to several days, depending on the setting.",
+      "From mild flaking to a week of peeling, by depth."
+     ]
+    ],
+    [
+     "Good to know",
+     [
+      "Can be combined with PRP or exosomes.",
+      "Settings depend on your skin type and tone.",
+      "Sun protection before and after matters."
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "volume",
+   "title": "Volume & lift",
+   "question": "How fillers, collagen stimulators and threads differ when the goal is volume or lift.",
+   "cols": [
+    {
+     "title": "Dermal Fillers",
+     "href": "https://newdermamedlaserclinic.com/injectables/dermal-fillers"
+    },
+    {
+     "title": "Sculptra®",
+     "href": "https://newdermamedlaserclinic.com/injectables/sculptra"
+    },
+    {
+     "title": "Aptos Thread Lift",
+     "href": "aptos-thread-lift.html"
+    }
+   ],
+   "rows": [
+    [
+     "How it works",
+     [
+      "Hyaluronic acid gel adds volume where it is placed.",
+      "A biostimulator prompts your own collagen over the following months.",
+      "Absorbable threads placed under the skin lift and support it."
+     ]
+    ],
+    [
+     "Often chosen for",
+     [
+      "Lost volume, folds, lips and under-eye hollows.",
+      "Gradual, overall volume and skin quality.",
+      "Mild to moderate sagging of the mid face, jowls and neck."
+     ]
+    ],
+    [
+     "When results show",
+     [
+      "Right after treatment, settling over about two weeks.",
+      "Gradually, over several weeks to months.",
+      "A lift right away that continues as collagen builds."
+     ]
+    ],
+    [
+     "Sessions",
+     [
+      "Often one, with touch-ups over time.",
+      "Usually a few sessions, weeks apart.",
+      "One session for most plans."
+     ]
+    ],
+    [
+     "Good to know",
+     [
+      "Hyaluronic acid fillers can be dissolved if needed.",
+      "Results build slowly by design.",
+      "Often combined with fillers or biostimulators."
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "body",
+   "title": "Body contouring",
+   "question": "Two non-surgical approaches to stubborn fat, compared.",
+   "cols": [
+    {
+     "title": "CoolSculpting®",
+     "href": "https://newdermamedlaserclinic.com/body/coolsculpting"
+    },
+    {
+     "title": "TightSculpting®",
+     "href": "https://newdermamedlaserclinic.com/body/tightsculpting"
+    }
+   ],
+   "rows": [
+    [
+     "How it works",
+     [
+      "Controlled cooling of fat cells in the treated area.",
+      "Laser energy that heats fat and tightens the skin above it."
+     ]
+    ],
+    [
+     "Often chosen for",
+     [
+      "Pinchable fat on the abdomen, flanks, thighs or under the chin.",
+      "Fat reduction together with mild skin laxity."
+     ]
+    ],
+    [
+     "Sessions",
+     [
+      "One or more per area, depending on the plan.",
+      "Usually a short series."
+     ]
+    ],
+    [
+     "Good to know",
+     [
+      "Not a weight-loss treatment; best near a stable weight.",
+      "Not a weight-loss treatment; results build over weeks."
+     ]
+    ]
+   ]
+  }
+ ],
+ "tech": [
+  {
+   "name": "VISIA® skin analysis",
+   "what": "Imaging that measures spots, wrinkles, texture, pores and redness, so a plan starts from what your skin shows.",
+   "links": [
+    {
+     "title": "VISIA® Skin Analysis",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/visia-skin-analysis"
+    }
+   ]
+  },
+  {
+   "name": "Fotona lasers",
+   "what": "Laser platforms used for body contouring, scalp treatments and NightLase® snoring treatment at the clinic.",
+   "links": [
+    {
+     "title": "TightSculpting®",
+     "href": "https://newdermamedlaserclinic.com/body/tightsculpting"
+    },
+    {
+     "title": "Laser Hair Rejuvenation",
+     "href": "https://newdermamedlaserclinic.com/hair/laser-hair-rejuvenation"
+    },
+    {
+     "title": "Snoring Treatment",
+     "href": "https://newdermamedlaserclinic.com/body/snoring-treatment"
+    }
+   ]
+  },
+  {
+   "name": "Cutera Limelight IPL",
+   "what": "Intense pulsed light for the look of sun damage, redness and uneven tone.",
+   "links": [
+    {
+     "title": "Photo Rejuvenation",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/photo-rejuvenation"
+    }
+   ]
+  },
+  {
+   "name": "CoolSculpting®",
+   "what": "Controlled cooling for non-surgical fat reduction in treated areas.",
+   "links": [
+    {
+     "title": "CoolSculpting®",
+     "href": "https://newdermamedlaserclinic.com/body/coolsculpting"
+    }
+   ]
+  },
+  {
+   "name": "Dermapen 4",
+   "what": "A microneedling pen for collagen induction, with PRP or exosomes as options.",
+   "links": [
+    {
+     "title": "Microneedling",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/microneedling"
+    }
+   ]
+  },
+  {
+   "name": "APTOS threads",
+   "what": "Absorbable lifting threads for a non-surgical lift of the face and neck.",
+   "links": [
+    {
+     "title": "Aptos Thread Lift",
+     "href": "aptos-thread-lift.html"
+    }
+   ]
+  },
+  {
+   "name": "Mesoestetic",
+   "what": "Professional protocols for pigmentation, acne and aging skin, including Dermamelan® and Acnelan®.",
+   "links": [
+    {
+     "title": "Dermamelan®",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/dermamelan"
+    },
+    {
+     "title": "Acnelan®",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/acnelan"
+    },
+    {
+     "title": "Age Element® Facial",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/age-element-facial"
+    },
+    {
+     "title": "Chemical Peels",
+     "href": "https://newdermamedlaserclinic.com/skin/aesthetic/chemical-peels"
+    }
+   ]
+  }
+ ],
+ "steps": [
+  [
+   "Free consultation",
+   "You meet a member of our medical team at the Uptown or Downtown clinic. There is no charge and no obligation."
+  ],
+  [
+   "Assessment & skin analysis",
+   "We look at your skin, features and health history, and include a VISIA® skin analysis where it helps."
+  ],
+  [
+   "Your options, explained",
+   "You hear which treatments may suit you, what each involves, the likely number of sessions, risks and costs."
+  ],
+  [
+   "Preparation & consent",
+   "If you go ahead, you get clear preparation steps and sign an informed consent before treatment."
+  ],
+  [
+   "Treatment & aftercare",
+   "Your treatment is carried out by a trained provider, with written aftercare and a way to reach us."
+  ],
+  [
+   "Follow-up",
+   "Where it is useful, we review your progress and adjust the plan. Individual results may vary."
+  ]
+ ],
+ "faqs": [
+  [
+   "Which cosmetic treatments does NewDermaMed offer?",
+   "Around 50 treatments at our two Toronto clinics: injectables and fillers, collagen stimulators and the APTOS thread lift, laser and light treatments, skin treatments and medical facials, body contouring, hair restoration and vein treatments. Each one has its own page with what it involves."
+  ],
+  [
+   "How do I know which treatment is right for me?",
+   "Start with a free consultation. A member of our medical team assesses your skin and goals, often with a VISIA® skin analysis, and explains which options may suit you, what to expect, and the risks and costs. Suitability is always decided in person."
+  ],
+  [
+   "Do I need a consultation before treatment?",
+   "Yes. Every treatment begins with a consultation, which is free. It is where your provider checks that a treatment is safe and suitable for you and answers your questions before you decide."
+  ],
+  [
+   "Which treatments have little or no downtime?",
+   "Many skin treatments, such as microdermabrasion, light peels and most injectable appointments, let people return to their day soon after, though redness, swelling or bruising can occur. Deeper laser resurfacing and peels need more recovery. Your provider gives you a realistic timeline for your plan."
+  ],
+  [
+   "Are laser treatments suitable for all skin types?",
+   "Many are, with the right device and settings, but some lasers carry a higher risk of pigment changes on darker skin tones. Your skin type and history are assessed at your consultation, and settings are chosen for you, or a different option is suggested."
+  ],
+  [
+   "What affects the cost of a treatment?",
+   "The treatment, the area, the amount of product and the number of sessions. Current prices and packages are on our pricing page, and your provider confirms the cost of your plan at the consultation before anything is booked."
+  ],
+  [
+   "Are your treatments non-surgical?",
+   "Yes. Every treatment at NewDermaMed is non-surgical or minimally invasive, from injectables and lasers to the APTOS thread lift and vein treatments."
+  ],
+  [
+   "Where are your clinics?",
+   "Uptown at 4763 Yonge Street, North York, near Sheppard-Yonge Station, and Downtown at 790 Bay Street, Suite 900, near College Station. Both are open Monday to Friday, 10am to 7pm, and Saturday, 10am to 5pm."
+  ],
+  [
+   "How do I book a consultation?",
+   "Book online from any page with the Book Free Consultation button, or call Uptown at 416-224-8800 or Downtown at 416-671-9766."
+  ]
+ ],
+ "clinics": [
+  {
+   "id": "uptown",
+   "name": "Uptown",
+   "near": "Yonge & Sheppard",
+   "note": "Near Sheppard-Yonge Station",
+   "address": "4763 Yonge Street, North York, ON M2N 5M5",
+   "phone": "416-224-8800",
+   "map": "https://maps.app.goo.gl/Gm8Wg4B1Q3yHGnkE7"
+  },
+  {
+   "id": "downtown",
+   "name": "Downtown",
+   "near": "Bay & College",
+   "note": "Near College Station",
+   "address": "790 Bay Street, Suite 900, Toronto, ON M5G 1N8",
+   "phone": "416-671-9766",
+   "map": "https://maps.app.goo.gl/McaiszUJaKqPem5R7"
+  }
+ ],
+ "hours": [
+  [
+   "Monday – Friday",
+   "10am – 7pm"
+  ],
+  [
+   "Saturday",
+   "10am – 5pm"
+  ],
+  [
+   "Sunday",
+   "Closed"
+  ]
+ ],
+ "count": 51,
+ "concernCount": 22
+}
