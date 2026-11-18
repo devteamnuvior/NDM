@@ -231,7 +231,7 @@ function ndm_pricing_rest_order( $request ) {
 	$gateway = $card && function_exists( 'ndm_pricing_card_gateway' ) ? ndm_pricing_card_gateway() : null;
 
 	if ( $card && ! $gateway ) {
-		return ndm_pricing_invalid( 'Card payment is not available right now. Please choose to pay at your appointment.' );
+		return ndm_pricing_invalid( 'Card payment is not available right now. Please try again later, or call the clinic.' );
 	}
 
 	$order = wc_create_order(

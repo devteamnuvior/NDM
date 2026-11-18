@@ -86,30 +86,34 @@ test("the cart is corrected from WooCommerce, and the order request becomes a Wo
   await page.getByRole("button", { name: "Continue to review" }).click();
   await expect(main).toContainText("2 in your cart, $1478.04 estimated"); /* (2 x 648 + 12) + 13% */
   await page.getByRole("checkbox", { name: /I accept/ }).check();
-  await page.getByRole("button", { name: /Place order request/ }).click();
+  /* every order is paid online by card (user, 2026-11-18): there is no "pay at your appointment" */
+  await expect(main).not.toContainText(/Pay at your appointment|Place order request/);
+  await page.getByRole("button", { name: /Continue to card payment/ }).click();
 
-  /* confirmation, with WooCommerce's own order number */
-  await page.waitForURL(`${NEXT_URL}/order-confirmed`);
-  await expect(page.locator("h1:visible")).toContainText("Thank you, Sam,");
-  const no = (await main.locator("b.tabular-nums").first().innerText()).trim();
-  expect(no).toMatch(/^\d+$/);
+  /* WooCommerce's pay page for the order; its number is kept in the browser's receipt */
+  await page.waitForURL(/order-pay\/\d+/);
+  const no = /order-pay\/(\d+)/.exec(page.url())![1];
   placed.push(no);
-  await expect(main).toContainText("Nothing has been charged");
+
+  /* back on the site before paying: the confirmation says the payment is not completed */
+  await page.goto(`${NEXT_URL}/order-confirmed`);
+  await expect(page.locator("h1:visible")).toContainText("Thank you, Sam,");
+  await expect(main).toContainText("Your card payment was not completed");
+  await expect(main.getByRole("link", { name: "Complete card payment" })).toBeVisible();
   await expect(main.getByText("Botox Cosmetic").first()).toBeVisible();
 
-  /* the order is in WooCommerce: on hold, unpaid, at WooCommerce's prices */
+  /* the order is in WooCommerce: pending until it is paid, at WooCommerce's prices */
   const order = JSON.parse(
-    wp("eval", `$o = wc_get_order(${Number(no)}); echo wp_json_encode(array('status' => $o->get_status(), 'total' => (float) $o->get_total(), 'via' => $o->get_created_via(), 'pay' => $o->get_payment_method_title(), 'email' => $o->get_billing_email(), 'postcode' => $o->get_billing_postcode(), 'clinic' => $o->get_meta('_ndm_clinic'), 'when' => $o->get_meta('_ndm_preferred_time'), 'items' => array_values(array_map(fn($i) => array($i->get_variation_id(), $i->get_quantity(), (float) $i->get_total()), $o->get_items()))));`),
+    wp("eval", `$o = wc_get_order(${Number(no)}); echo wp_json_encode(array('status' => $o->get_status(), 'total' => (float) $o->get_total(), 'via' => $o->get_created_via(), 'email' => $o->get_billing_email(), 'postcode' => $o->get_billing_postcode(), 'clinic' => $o->get_meta('_ndm_clinic'), 'when' => $o->get_meta('_ndm_preferred_time'), 'items' => array_values(array_map(fn($i) => array($i->get_variation_id(), $i->get_quantity(), (float) $i->get_total()), $o->get_items()))));`),
   ) as Record<string, unknown>;
   expect(order).toEqual({
-    status: "on-hold",
+    status: "pending",
     total: 1308,
     via: "ndm-site",
-    pay: "Pay at the clinic",
     email: "sam.tester@example.test",
     postcode: "M2N 5M5",
     clinic: "NewDermaMed Uptown",
-    when: "2026-12-01, morning",
+    when: "",
     items: [
       [20, 2, 1296],
       [19, 1, 12],

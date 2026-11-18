@@ -8,12 +8,12 @@ import { getPaymentOptions } from "@/lib/wordpress";
 
 export const metadata: Metadata = {
   title: "Checkout, NewDermaMed Toronto",
-  description: "Place your order request. Pay online by card or at the clinic.",
+  description: "Place your order and pay online by card.",
   robots: { index: false, follow: false },
 };
 
-/** The suggestions carry WooCommerce's current prices, and card payment is offered only while the
- * gateway is switched on in WooCommerce: both are read on the server, on every visit. */
+/** The suggestions carry WooCommerce's current prices, and an order can be placed only while the
+ * card gateway is switched on in WooCommerce: both are read on the server, on every visit. */
 async function Content() {
   const [pairs, payments] = await Promise.all([getCartPairs(), getPaymentOptions()]);
   return <CheckoutPage pairs={pairs} card={payments.card} />;
