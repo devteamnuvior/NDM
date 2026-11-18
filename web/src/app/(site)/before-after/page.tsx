@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { Gallery } from "@/components/before-after/gallery";
 import { GalleryNotice } from "@/components/before-after/gallery-notice";
 import { Saying } from "@/components/home/saying";
+import { ProcAnalysis } from "@/components/treatment/proc-analysis";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { GALLERY } from "@/config/gallery";
 import { getGallery } from "@/lib/gallery";
@@ -31,18 +32,19 @@ async function GallerySection() {
     return <GalleryNotice state="error" />;
   }
   if (!view.cases.length) return <GalleryNotice state="empty" />;
-  return <Gallery eyebrow={GALLERY.eyebrow} lead={GALLERY.lead} strong={GALLERY.strong} note={GALLERY.note} {...view} />;
+  return <Gallery labels={view.labels} cases={view.cases} pages={view.pages} />;
 }
 
-/** Before & after: the gallery of cases, then the testimonials. */
+/** Before & after: the photo header and the gallery of cases, then the testimonials and Start your journey (redesign, 2026-11-18). */
 export default function BeforeAfterPage() {
   return (
-    <main id="main" data-shell="inner">
-      <Breadcrumb items={["Before & after"]} />
+    <main id="main" data-shell="inner" data-page="before-after">
+      <Breadcrumb items={["Before & after"]} dark />
       <Suspense fallback={<GalleryNotice state="loading" />}>
         <GallerySection />
       </Suspense>
       <Saying />
+      <ProcAnalysis />
     </main>
   );
 }
