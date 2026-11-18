@@ -171,7 +171,9 @@ function fromWordPress(wp: WPProcedure, prices: SitePrices | null): ProcedureVie
       ...S.overview,
       lead: c.about_lead,
       strong: c.about_strong,
-      tabs: c.tabs.map((t) => ({ label: t.label, stat: [t.figure, t.figure_label], text: t.text, link: t.link ? [t.link, t.link_label || t.link] : undefined })),
+      /* no procedure shows a "Pricing" tab under About (user, 2026-11-18): prices have their own section. The tab
+         stays in WordPress, so nothing an editor wrote is lost. */
+      tabs: c.tabs.filter((t) => !/^pric(ing|es?)$/i.test(t.label.trim())).map((t) => ({ label: t.label, stat: [t.figure, t.figure_label], text: t.text, link: t.link ? [t.link, t.link_label || t.link] : undefined })),
     },
     choose: {
       ...S.choose,
