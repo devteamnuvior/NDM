@@ -257,10 +257,13 @@ function useTopPacks(view: SaleView, packs: Pack[]): { p: Pack; title: string; s
     const best = [...priced].sort((a, b) => b.pct - a.pct || a.pay - b.pay)[0];
     const out: { p: Pack; title: string; sub: string }[] = [];
     if (best) {
+      /* a product named after its category ("Microneedling-Face", "LHR - Lip (Upper)") shows the category with the
+         rest as its area; another keeps its own name, cut at its last " - " */
+      const cat = best.d.c.name;
+      const rest = bfsShort(best.it[0], cat);
       const cut = best.it[0].lastIndexOf(" - ");
-      /* a name that opens with a short code ("LHR - Lip (Upper)") takes its category's name instead: "Laser Hair Removal" */
-      const lead = cut > 0 ? best.it[0].slice(0, cut) : best.it[0];
-      out.push({ p: best, title: cut > 0 && lead.length < 5 ? best.d.c.name : lead, sub: [cut > 0 ? best.it[0].slice(cut + 3) : "", best.o[0]].filter(Boolean).join(" · ") });
+      const [title, area] = rest !== best.it[0] ? [cat, cap(rest)] : cut > 0 ? [best.it[0].slice(0, cut), best.it[0].slice(cut + 3)] : [best.it[0], ""];
+      out.push({ p: best, title, sub: [area, best.o[0]].filter(Boolean).join(" · ") });
     }
     const cards = view.cards.filter((c) => !c.drug && c.cat && c.regular > c.price);
     for (const c of [...cards.filter((x) => /^(lip filler|skin booster)$/i.test(x.title)), ...cards]) {

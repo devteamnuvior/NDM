@@ -56,6 +56,7 @@
     { "category": "hair-loss", "products": "^PRP Scalp", "options": ["Package of 6"], "off": 30 }
   ],
   "fixed": [
+    { "product": "Microneedling-Face", "option": "Package of 6", "regular": 2940, "price": 882, "label": "70% OFF" },
     { "product": ["Botox Cosmetic", "Botox"], "option": "60 units", "regular": null, "price": 504, "label": "30% OFF" },
     { "product": ["Botox Cosmetic", "Botox"], "option": "120 units", "regular": null, "price": 1008, "label": "30% OFF" },
     { "product": ["Botox Cosmetic", "Botox"], "option": "180 units", "regular": null, "price": 1512, "label": "30% OFF" },
