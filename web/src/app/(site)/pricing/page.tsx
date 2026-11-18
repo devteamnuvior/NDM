@@ -8,6 +8,7 @@ import { Team } from "@/components/home/team";
 import { PriceList, type PriceListSale } from "@/components/pricing/price-list";
 import { PriceSpecials } from "@/components/pricing/price-specials";
 import { PricingHero } from "@/components/pricing/pricing-hero";
+import { PriceCountdown } from "@/components/pricing/price-countdown";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Faq } from "@/components/ui/faq";
 import { PRICE_FAQS, PRICE_SPECIALS } from "@/config/pricing";
@@ -100,6 +101,7 @@ async function PriceSections() {
   return (
     <>
       <PricingHero total={view.total} />
+      <PriceCountdown />
       {specials.length > 0 && <PriceSpecials specials={specials} sub={PRICE_SPECIALS.sub} note={PRICE_SPECIALS.note} />}
       <PriceList categories={view.categories} total={view.total} sale={sale} />
     </>

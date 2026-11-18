@@ -7,7 +7,7 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { IconSearch } from "@/components/ui/icons";
 import { TwoTone } from "@/components/ui/two-tone";
 import { useReveal } from "@/hooks/use-reveal";
-import { cartKey } from "@/lib/cart";
+import { cartKey, money } from "@/lib/cart";
 import { type PriceCategoryView, type PriceItemView } from "@/lib/pricing-view";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
@@ -280,6 +280,31 @@ export function PriceList({ categories, total, sale = null }: { categories: Pric
             </div>
           )}
           {results && !hitCount && <p className="font-inter text-[15px] text-ndm-muted">Try another name, or ask our team at your free consultation.</p>}
+          {/* the categories as a menu above the list (user, 2026-11-18): a tap opens that category and scrolls to it */}
+          {!results && (
+            <nav aria-label="Price list categories" className="pcm rv">
+              <p className="pcm-label">Jump to a treatment</p>
+              <ul className="pcm-list" role="list">
+                {categories.map((c) => (
+                  <li key={c.id}>
+                    <a
+                      href={`#pg-${c.id}-h`}
+                      onClick={(e) => {
+                        if (jumpToPriceGroup(`pg-${c.id}-h`)) e.preventDefault();
+                      }}
+                      className="pcm-chip"
+                    >
+                      <span className="pcm-name">{c.name}</span>
+                      <span className="pcm-from">
+                        From {money(c.from)}
+                        {c.fromUnit}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
           <ul className="pr-groups" role="list">
             {groups.map(({ c, hits }) => (
               <PriceGroup

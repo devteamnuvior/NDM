@@ -236,7 +236,7 @@ export function SpecialsWheel({ offers, level: Heading, offersHref, children }: 
                         <DealPill deal={s.deal} small={tight} className="shrink-0" style={{ marginTop: tight ? 10 : 0, marginBottom: tight ? 6 * k : 12 }} />
                       )}
                       <span className={`sw-muted font-inter text-[11px] tracking-[.18em] uppercase ${tight ? "leading-none" : ""}`}>From</span>
-                      <span className={`sw-price font-aeonik leading-none ${tight ? "" : "mt-1"} tracking-[-0.035em] whitespace-nowrap`} style={{ fontSize: 40 * k }}>
+                      <span className={`sw-price font-aeonik leading-none ${tight ? "" : "mt-1"} tracking-[-0.035em] whitespace-nowrap`} style={{ fontSize: 30 * k }}>
                         <span className="sw-cur">$</span>
                         {s.price}
                       </span>

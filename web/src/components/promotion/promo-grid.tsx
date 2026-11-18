@@ -114,7 +114,7 @@ export function PromoGrid({ offers }: { offers: Offer[] }) {
               <div className="relative mt-auto flex items-end justify-between gap-3 px-3 pt-7">
                 <span>
                   <span className="block font-inter text-[11px] tracking-[.18em] text-ndm-muted uppercase">From</span>
-                  <span className="mt-1 block font-aeonik text-[38px] leading-none tracking-[-0.035em] whitespace-nowrap text-ndm-deep">
+                  <span className="mt-1 block font-aeonik text-[28px] leading-none tracking-[-0.035em] whitespace-nowrap text-ndm-deep">
                     <span className="sw-cur">$</span>
                     {s.price}
                   </span>

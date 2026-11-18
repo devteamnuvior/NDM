@@ -110,7 +110,7 @@
 .pr-opt2-was{font-family:Manrope,sans-serif;font-size:13px;color:#A3A9B1}
 .pr-opt2-was s{text-decoration-thickness:1px}
 .pr-opt2-was s+s{margin-left:8px}
-.pr-opt2-now{margin:2px 0;font-family:Fraunces,Georgia,serif;font-size:28px;line-height:1.1;letter-spacing:-.01em;color:#0B5F93}
+.pr-opt2-now{margin:2px 0;font-family:Fraunces,Georgia,serif;font-size:22px;line-height:1.1;letter-spacing:-.01em;color:#0B5F93}
 .pr-opt2-now[data-look="vip"],.pr-opt2-now[data-look="bf"]{color:#9A7A3A}
 .pr-opt2-now[data-look="holiday"]{color:#1E5A3E}
 .pr-opt2-price.is-single .pr-opt2-now{font-size:22px;color:#1B242B}
@@ -127,7 +127,7 @@
   .pr-opt2-save{flex-basis:100%}
   .pr-opt2-with>span:not(.pr-opt2-save){white-space:nowrap}
   .pr-opt2-act{align-self:end}
-  .pr-opt2-now{font-size:27px}
+  .pr-opt2-now{font-size:22px}
   .pr-opt2:not(.is-featured) .pr-opt2-info,.pr-opt2:not(.is-featured) .pr-opt2-price{grid-column:1}
   .pr-opt2:not(.is-featured) .pr-opt2-act{grid-column:2;grid-row:1 / span 2;align-self:center}
 }
@@ -137,3 +137,45 @@
 
 /* the blue dot beside the price the category's "from" price is read from (the same dot as the note under it) */
 .pr-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:999px;background:#209ED9;box-shadow:0 0 0 3px rgba(32,158,217,.18);vertical-align:middle;transform:translateY(-2px)}
+
+/* Black Friday countdown under the Pricing header (user, 2026-11-18): black, gold edge circling like the VIP Sale banner */
+.pcd-wrap{padding-top:clamp(28px,3.4vw,48px)}
+@property --pcd-a{syntax:"<angle>";initial-value:0deg;inherits:false}
+.pcd{position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:clamp(18px,3vw,40px);padding:clamp(20px,2.4vw,30px) clamp(20px,2.8vw,34px);border-radius:22px;color:#fff;background:radial-gradient(120% 160% at 0% 0%,rgba(212,181,116,.16),transparent 55%),#0B0B0C;box-shadow:0 22px 50px -34px rgba(11,11,12,.75)}
+.pcd::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;padding:1px;pointer-events:none;background:conic-gradient(from var(--pcd-a),transparent 0deg,rgba(242,214,150,.95) 28deg,transparent 70deg,transparent 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:pcdEdge 6s linear infinite}
+.pcd::after{content:"";position:absolute;inset:0;z-index:-2;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(212,181,116,.22);pointer-events:none}
+@keyframes pcdEdge{to{--pcd-a:360deg}}
+.pcd-tag{display:inline-flex;align-items:center;gap:8px;font:600 11px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#E8D3A0}
+.pcd-tag i{width:7px;height:7px;border-radius:999px;background:#EE3A45;box-shadow:0 0 0 0 rgba(238,58,69,.7);animation:pcdPulse 1.8s ease-out infinite}
+@keyframes pcdPulse{70%{box-shadow:0 0 0 8px rgba(238,58,69,0)}100%{box-shadow:0 0 0 0 rgba(238,58,69,0)}}
+.pcd-title{margin-top:10px;font-size:clamp(26px,2.6vw,36px);line-height:1.05;letter-spacing:-.03em;font-weight:400}
+.pcd-title .tt-strong{color:#E8D3A0}
+.pcd-text{margin-top:8px;font:400 14px/1.5 Manrope,"Helvetica Neue",Arial,sans-serif;color:rgba(255,255,255,.72)}
+.pcd-time{display:flex;align-items:flex-start;gap:clamp(4px,.7vw,8px)}
+.pcd-cell{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:clamp(56px,5.6vw,70px);padding:10px 6px 9px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));box-shadow:inset 0 0 0 1px rgba(212,181,116,.22)}
+.pcd-num{font-size:clamp(28px,2.8vw,38px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:#fff}
+.pcd-lab{font:600 9.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:rgba(232,211,160,.75)}
+.pcd-sep{padding-top:14px;font-size:clamp(22px,2vw,28px);line-height:1;color:#D4B574;animation:pcdBlink 1s steps(1) infinite}
+@keyframes pcdBlink{50%{opacity:.3}}
+.pcd .pcd-btn{height:46px;padding:0 22px;border-radius:999px;background:#fff;color:#0B0B0C;font:600 14.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;transition:background .2s,color .2s}
+.pcd .pcd-btn:is(:hover,:focus-visible){background:#D4B574;color:#0B0B0C}
+@media (max-width:1023px){.pcd{grid-template-columns:minmax(0,1fr) auto}.pcd .pcd-btn{grid-column:1 / -1;justify-self:start}}
+@media (max-width:639px){.pcd{grid-template-columns:minmax(0,1fr);gap:16px}.pcd-time{justify-content:space-between}.pcd-cell{flex:1;min-width:0}.pcd .pcd-btn{width:100%}}
+@media (prefers-reduced-motion:reduce){.pcd::before,.pcd-tag i,.pcd-sep{animation:none}}
+
+/* the categories as a menu above the price list (user, 2026-11-18): a tap opens that category and scrolls to it */
+.pcm{margin-bottom:clamp(28px,3vw,40px)}
+.pcm-label{margin-bottom:12px;text-align:center;font:600 11px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#5A646C}
+.pcm-list{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.pcm-chip{display:inline-flex;align-items:baseline;gap:8px;padding:9px 14px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px rgba(27,36,43,.1);text-decoration:none;white-space:nowrap;transition:box-shadow .2s,background .2s}
+.pcm-chip:hover{box-shadow:inset 0 0 0 1px rgba(15,128,195,.55)}
+.pcm-chip:focus-visible{outline:3px solid rgba(32,158,217,.35);outline-offset:2px}
+.pcm-name{font:500 14px/1.2 Manrope,"Helvetica Neue",Arial,sans-serif;color:#1B242B}
+.pcm-from{font:500 12px/1.2 Manrope,"Helvetica Neue",Arial,sans-serif;color:#5A646C}
+/* phones: one row that scrolls sideways, edge to edge */
+@media (max-width:639px){
+  .pcm-label{text-align:left}
+  .pcm-list{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;margin-inline:calc(var(--gx) * -1);padding:2px var(--gx) 6px;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,transparent,#000 var(--gx),#000 calc(100% - var(--gx)),transparent);mask:linear-gradient(90deg,transparent,#000 var(--gx),#000 calc(100% - var(--gx)),transparent)}
+  .pcm-list::-webkit-scrollbar{display:none}
+  .pcm-list>li{flex:none}
+}
