@@ -8,6 +8,7 @@ import { ORDER_STORAGE_KEY, PROVINCES } from "@/config/checkout";
 import { CLINICS } from "@/config/site";
 import { useCart } from "@/hooks/use-cart";
 import { checkCart, clearCart, type CartLine } from "@/lib/cart";
+import { pushLead } from "@/lib/lead-event";
 import { pagePath } from "@/lib/routes";
 import { CO_CARD, CO_WRAP, CartPairs, CoAlert, CoHead, CoSelect, CodeField, FIELD, IconLock, OrderSummary, RemovedNotice, money2, totalsOf, useCartTax, useInBrowser, useSaleCode } from "./shared";
 import { withBase } from "@/lib/base-path";
@@ -91,12 +92,13 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
       /* storage blocked: the confirmation shows a general message */
     }
     clearCart();
-    /* WooCommerce's pay page takes the card, then sends the visitor back to the confirmation */
-    if (result.order.payUrl) {
-      window.location.assign(result.order.payUrl);
-      return;
-    }
-    router.push(pagePath("orderConfirmed"));
+    /* the lead event for Tag Manager (lib/lead-event.ts), sent before the page changes: no order details */
+    const payUrl = result.order.payUrl;
+    pushLead("checkout", { orderMethod: payUrl ? "card" : "clinic" }, () => {
+      /* WooCommerce's pay page takes the card, then sends the visitor back to the confirmation */
+      if (payUrl) window.location.assign(payUrl);
+      else router.push(pagePath("orderConfirmed"));
+    });
   };
 
   const next = (e: FormEvent<HTMLFormElement>) => {

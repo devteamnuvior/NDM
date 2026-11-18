@@ -16,6 +16,7 @@ import {
 import { CLINICS } from "@/config/site";
 import { tel } from "@/lib/routes";
 import { withBase } from "@/lib/base-path";
+import { pushLead } from "@/lib/lead-event";
 
 /* Note on borders: the prototype writes "border-ndm-ink/12" and "border-white/12" on a few elements, an
    opacity step its Tailwind 3 does not have, so those classes did nothing there and the borders took the
@@ -152,18 +153,6 @@ interface BookFormProps {
  * "Book a time now" then opens the clinic's own online booking calendar (BookOnline), where the clinic,
  * day and time are chosen; a call request shows its thank-you only once it was saved. No payment is taken.
  */
-/**
- * Tells Google Tag Manager that a consultation request was saved: the same `popupFormSubmit` event the old
- * WordPress site's forms pushed (plugins ndm-forms and ndm-popup-subscribe), which the container's
- * "form_lead_submission" tag waits for. Only after WordPress saved the request, and never anything the
- * visitor typed (PHIPA): which form, and whether they chose to book online or be called.
- */
-function leadSaved(formId: string, path: BookPath) {
-  const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
-  w.dataLayer = w.dataLayer || [];
-  w.dataLayer.push({ event: "popupFormSubmit", formId, formType: "ajax", status: "success", bookPath: path === "book" ? "online" : "call" });
-}
-
 export function BookForm({ thanksId, summary = false, compact = false }: BookFormProps) {
   const box = useRef<HTMLFormElement>(null);
   const [step, setStep] = useState(0);
@@ -280,7 +269,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
         }),
       });
       const result = (await answer.json().catch(() => null)) as { ok?: boolean; reason?: string; message?: string } | null;
-      if (answer.ok && result?.ok === true) leadSaved(compact ? "lead-page" : thanksId ? "lead-popup" : "lead-section", p);
+      if (answer.ok && result?.ok === true) pushLead(compact ? "lead-page" : thanksId ? "lead-popup" : "lead-section", { bookPath: p === "book" ? "online" : "call" });
       if ((answer.ok && result?.ok === true) || (p === "book" && result?.reason !== "invalid")) {
         done();
         return;
