@@ -212,9 +212,10 @@ export function CoHead({ at, lead, strong, text, onStep }: { at: number; lead: s
   return (
     <div className="co-head border-b border-ndm-ink/10 pb-[clamp(28px,3.4vw,48px)]">
       <CheckoutSteps at={at} onStep={onStep} />
-      <div className="mt-7 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-        <TwoTone as="h1" id="co-title" className="sm:whitespace-nowrap" size="text-[clamp(40px,4.6vw,68px)]" lead={lead} strong={strong} />
-        {text && <p className="max-w-[44ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted lg:pb-2">{text}</p>}
+      {/* the help line sits on the heading's own baseline (its last line when it wraps); smaller heading: user, 2026-11-18 */}
+      <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:[align-items:last_baseline] lg:justify-between lg:gap-10">
+        <TwoTone as="h1" id="co-title" className="sm:whitespace-nowrap" size="text-[clamp(30px,3.2vw,46px)]" lead={lead} strong={strong} />
+        {text && <p className="max-w-[44ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted lg:text-right">{text}</p>}
       </div>
     </div>
   );

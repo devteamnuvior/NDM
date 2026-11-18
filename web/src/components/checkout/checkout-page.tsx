@@ -22,6 +22,8 @@ const legend = "font-aeonik text-[20px] font-normal leading-[1.2] tracking-[-0.0
 const label = "mb-1 block font-inter text-[12.5px] font-medium text-ndm-ink/80";
 const fld = `${FIELD} co-fld`;
 const block = "co-fs";
+/** The small tag on a way to pay. */
+const payTag = "rounded-full bg-ndm-deep/8 px-2.5 py-1 font-inter text-[11.5px] leading-none font-semibold whitespace-nowrap text-ndm-deep";
 
 /** The payment step's heading text while card payment is offered. */
 const PAY_HEAD_CARD = "Pay online by card now, or at the clinic once your provider confirms your plan.";
@@ -242,60 +244,74 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
               </fieldset>
             </div>
 
-            <div data-step="1" className={step === 1 ? "grid gap-5" : "hidden"}>
+            <div data-step="1" className={step === 1 ? "grid gap-6" : "hidden"}>
               <fieldset className={block}>
-                <legend className={legend}>Payment</legend>
-                <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
-                  <label className={`co-opt ${!byCard ? "is-on" : ""}`}>
-                    <input type="radio" name="pay" value="clinic" checked={!byCard} onChange={() => setPay("clinic")} className="mt-1 size-4 shrink-0 accent-[#0F80C3]" />
-                    <span>
-                      <span className="block font-inter text-[14.5px] font-semibold text-ndm-ink">Pay at your appointment</span>
-                      <span className="mt-0.5 block font-inter text-[12.5px] leading-[1.45] text-ndm-muted">Nothing is charged online. You pay at the clinic once your provider confirms your plan.</span>
+                <legend className={legend}>Payment method</legend>
+                <p className="mt-0.5 font-inter text-[13px] text-ndm-muted">Choose how you would like to pay.</p>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <label className={`co-opt p-4! ${!byCard ? "is-on" : ""}`}>
+                    <input type="radio" name="pay" value="clinic" checked={!byCard} onChange={() => setPay("clinic")} className="mt-0.5 size-[18px] shrink-0 accent-[#0F80C3]" />
+                    <span className="min-w-0 flex-1">
+                      <span className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
+                        <span className="font-inter text-[15px] font-semibold text-ndm-ink">Pay at your appointment</span>
+                        <span className={payTag}>No charge today</span>
+                      </span>
+                      <span className="mt-1.5 block font-inter text-[13px] leading-[1.5] text-ndm-muted">At the clinic, once your provider confirms your plan.</span>
                     </span>
                   </label>
                   {card ? (
-                    <label className={`co-opt ${byCard ? "is-on" : ""}`}>
-                      <input type="radio" name="pay" value="card" checked={byCard} onChange={() => setPay("card")} className="mt-1 size-4 shrink-0 accent-[#0F80C3]" />
-                      <span>
-                        <span className="block font-inter text-[14.5px] font-semibold text-ndm-ink">Card payment online</span>
-                        <span className="mt-0.5 block font-inter text-[12.5px] leading-[1.45] text-ndm-muted">Pay now with Visa or Mastercard on our secure payment page, processed by Bambora.</span>
+                    <label className={`co-opt p-4! ${byCard ? "is-on" : ""}`}>
+                      <input type="radio" name="pay" value="card" checked={byCard} onChange={() => setPay("card")} className="mt-0.5 size-[18px] shrink-0 accent-[#0F80C3]" />
+                      <span className="min-w-0 flex-1">
+                        <span className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
+                          <span className="font-inter text-[15px] font-semibold text-ndm-ink">Card payment online</span>
+                          <span className={payTag}>Visa · Mastercard</span>
+                        </span>
+                        <span className="mt-1.5 block font-inter text-[13px] leading-[1.5] text-ndm-muted">Pay now on our secure payment page, processed by Bambora.</span>
                       </span>
                     </label>
                   ) : (
-                    <div className="co-opt is-off" aria-disabled="true">
-                      <span aria-hidden="true" className="mt-1 size-4 shrink-0 rounded-full border border-ndm-ink/25" />
-                      <span>
+                    <div className="co-opt is-off p-4!" aria-disabled="true">
+                      <span aria-hidden="true" className="mt-0.5 size-[18px] shrink-0 rounded-full border border-ndm-ink/25" />
+                      <span className="min-w-0 flex-1">
                         <span className="block font-inter text-[15px] font-semibold text-ndm-muted">Card payment online</span>
-                        <span className="mt-0.5 block font-inter text-[12.5px] leading-[1.45] text-ndm-muted">Not available online.</span>
+                        <span className="mt-1.5 block font-inter text-[13px] leading-[1.5] text-ndm-muted">Not available online.</span>
                       </span>
                     </div>
                   )}
                 </div>
+                {/* what the chosen way to pay means, right under the choice */}
+                <CoAlert tone="ok" className="mt-3">
+                  {byCard
+                    ? "Next you go to our secure payment page to enter your card. Your order is charged there, by Bambora."
+                    : "Nothing is charged online. You pay at the clinic once your provider confirms your plan."}
+                </CoAlert>
               </fieldset>
+
               <fieldset className={block}>
                 <legend className={legend}>Additional information</legend>
                 <label className="mt-3 block">
                   <span className={label}>
                     Note for our team <span className="font-normal text-ndm-muted">(optional)</span>
                   </span>
-                  <textarea name="note" rows={2} maxLength={500} className={`${fld} h-auto resize-none py-2.5`} />
+                  <textarea name="note" rows={3} maxLength={500} className={`${fld} h-auto resize-none py-2.5`} />
                 </label>
-                <p className="mt-2.5 rounded-[12px] bg-ndm-mist px-3.5 py-2.5 font-inter text-[12.5px] leading-[1.5] text-ndm-muted">Please don’t include medical details here. Your provider reviews your health history in person at your consultation.</p>
+                <p className="mt-2 font-inter text-[12.5px] leading-[1.5] text-ndm-muted">Please don’t include medical details here. Your provider reviews your health history in person at your consultation.</p>
               </fieldset>
 
-              <label className="flex items-start gap-2.5 font-inter text-[13.5px] leading-[1.5] text-ndm-ink">
-                <input type="checkbox" required name="agree" className="mt-0.5 size-4 shrink-0 accent-[#0F80C3]" />
+              <label className="flex cursor-pointer items-start gap-3 rounded-[14px] border border-ndm-ink/12 bg-ndm-paper px-4 py-3.5 font-inter text-[13.5px] leading-[1.5] text-ndm-ink">
+                <input type="checkbox" required name="agree" className="mt-0.5 size-[18px] shrink-0 accent-[#0F80C3]" />
                 <span>
                   I accept the{" "}
-                  <a href={withBase(pagePath("terms"))} className="text-ndm-deep underline-offset-4 hover:underline">
+                  <a href={withBase(pagePath("terms"))} className="font-medium text-ndm-deep underline-offset-4 hover:underline">
                     Terms of Service
                   </a>
                   , the{" "}
-                  <a href={withBase(pagePath("privacy"))} className="text-ndm-deep underline-offset-4 hover:underline">
+                  <a href={withBase(pagePath("privacy"))} className="font-medium text-ndm-deep underline-offset-4 hover:underline">
                     Privacy Policy
                   </a>{" "}
                   and the{" "}
-                  <a href={withBase(pagePath("refunds"))} className="text-ndm-deep underline-offset-4 hover:underline">
+                  <a href={withBase(pagePath("refunds"))} className="font-medium text-ndm-deep underline-offset-4 hover:underline">
                     Refund Policy
                   </a>
                   .
@@ -312,13 +328,6 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
               {failure && (
                 <CoAlert tone="err" title="Your request was not placed">
                   {failure}
-                </CoAlert>
-              )}
-              {step === 1 && (
-                <CoAlert tone="ok">
-                  {byCard
-                    ? "Next you go to our secure payment page to enter your card. Your order is charged there, by Bambora."
-                    : "Nothing is charged online. You pay at the clinic once your provider confirms your plan."}
                 </CoAlert>
               )}
               <p className="font-inter text-[12.5px] text-ndm-muted">Step {step + 1} of 2</p>
