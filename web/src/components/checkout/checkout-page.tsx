@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState, type FormEvent } from "react";
 import { placeOrderAction, type OrderRequestForm } from "@/app/(site)/checkout/actions";
 import { Button } from "@/components/ui/button";
-import { ORDER_STORAGE_KEY, PROVINCES, TIMES_OF_DAY } from "@/config/checkout";
+import { ORDER_STORAGE_KEY, PROVINCES } from "@/config/checkout";
 import { CLINICS } from "@/config/site";
 import { useCart } from "@/hooks/use-cart";
 import { checkCart, clearCart, type CartLine } from "@/lib/cart";
@@ -14,7 +14,6 @@ import { withBase } from "@/lib/base-path";
 
 const STEP_HEAD: [lead: string, strong: string, text: string][] = [
   ["Your", "details", "Your details are used only to arrange your treatment."],
-  ["Your", "appointment", "Pick your clinic and a preferred time. We confirm it by email and text."],
   ["How you", "pay", "Nothing is charged online: you pay at the clinic once your provider confirms your plan."],
   ["Review your", "request", "Check everything, then place your request."],
 ];
@@ -28,7 +27,7 @@ const block = "co-fs";
 const PAY_HEAD_CARD = "Pay online by card now, or at the clinic once your provider confirms your plan.";
 
 /**
- * 2. Checkout: details, appointment, payment, review. Placing the request sends the chosen WooCommerce
+ * 2. Checkout: details (with the clinic), payment, review. The appointment step (preferred day and time) was taken out on the user's request (2026-11-18). Placing the request sends the chosen WooCommerce
  * IDs and quantities with the visitor's details to the server, which creates the order in WooCommerce
  * at WooCommerce's own prices. "Pay at your appointment" charges nothing; "Card" (offered only while
  * WooCommerce's card gateway is on, `card`) sends the visitor to WooCommerce's pay page for the order,
@@ -44,8 +43,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
   const [province, setProvince] = useState("Ontario");
   const [clinic, setClinic] = useState("Uptown");
   const [busy, setBusy] = useState(false);
-  const [step, setStep] = useState(0); /* 0 details, 1 appointment, 2 payment, 3 review */
-  const [when, setWhen] = useState({ day: "", time: "Morning", call: false });
+  const [step, setStep] = useState(0); /* 0 details (with the clinic), 1 payment, 2 review */
   const [seen, setSeen] = useState<Record<string, string>>({});
   const [miss, setMiss] = useState(false);
   const [failure, setFailure] = useState("");
@@ -53,7 +51,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
   const formRef = useRef<HTMLFormElement>(null);
   const empty = cart.lines.length === 0;
   const byCard = card && pay === "card";
-  const head = step === 2 && card ? [STEP_HEAD[2][0], STEP_HEAD[2][1], PAY_HEAD_CARD] : STEP_HEAD[step];
+  const head = step === 1 && card ? [STEP_HEAD[1][0], STEP_HEAD[1][1], PAY_HEAD_CARD] : STEP_HEAD[step];
 
   const place = async () => {
     const form = formRef.current;
@@ -72,9 +70,6 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
       province,
       postal: field("postal"),
       clinic,
-      day: when.call ? "" : when.day,
-      time: when.time,
-      call: when.call,
       note: field("note"),
       agree: fd.get("agree") === "on",
       company: field("company"),
@@ -121,7 +116,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
     }
     setMiss(false);
     if (form) setSeen(Object.fromEntries([...new FormData(form).entries()].map(([k, v]) => [k, String(v)])));
-    if (step < 3) {
+    if (step < 2) {
       setStep(step + 1);
       window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
       return;
@@ -132,9 +127,8 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
   const review: [key: string, value: string, go: number][] = [
     ["Name", `${seen.first ?? ""} ${seen.last ?? ""}`.trim(), 0],
     ["Email", seen.email ?? "", 0],
-    ["Clinic", `NewDermaMed ${clinic}`, 1],
-    ["Preferred time", when.call ? "Call me to find a time" : `${when.day || "Any day"}, ${when.time.toLowerCase()}`, 1],
-    ["Payment", byCard ? "Card, on the next page" : "Pay at your appointment", 2],
+    ["Clinic", `NewDermaMed ${clinic}`, 0],
+    ["Payment", byCard ? "Card, on the next page" : "Pay at your appointment", 1],
     ["Treatments", `${cart.lines.length} in your cart, ${money2(t.total)} estimated`, -1],
   ];
 
@@ -240,9 +234,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
                   </label>
                 </div>
               </fieldset>
-            </div>
 
-            <div data-step="1" className={step === 1 ? "grid gap-5" : "hidden"}>
               <fieldset className={block}>
                 <legend className={legend}>Your clinic</legend>
                 <p className="mt-0.5 font-inter text-[13px] text-ndm-muted">Where you would like your treatment.</p>
@@ -258,34 +250,9 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
                   ))}
                 </div>
               </fieldset>
-
-              <fieldset className={block}>
-                <legend className={legend}>Preferred time</legend>
-                <p className="mt-0.5 font-inter text-[13px] text-ndm-muted">Mondays to Saturdays. We confirm the exact time with you.</p>
-                <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2.5">
-                  <label>
-                    <span className={label}>Preferred day</span>
-                    <input type="date" name="day" required={!when.call} disabled={when.call} value={when.day} onChange={(e) => setWhen({ ...when, day: e.target.value })} className={fld} />
-                  </label>
-                  <label>
-                    <span className={label}>Time of day</span>
-                    <CoSelect name="time" value={when.time} onChange={(time) => setWhen({ ...when, time })} placeholder="Choose">
-                      {TIMES_OF_DAY.map((x) => (
-                        <option key={x} className="text-ndm-ink">
-                          {x}
-                        </option>
-                      ))}
-                    </CoSelect>
-                  </label>
-                  <label className="col-span-2 flex items-center gap-2.5 font-inter text-[14px] text-ndm-ink">
-                    <input type="checkbox" name="call" checked={when.call} onChange={(e) => setWhen({ ...when, call: e.target.checked })} className="size-4 accent-[#0F80C3]" />
-                    Call me to find a time instead
-                  </label>
-                </div>
-              </fieldset>
             </div>
 
-            <div data-step="2" className={step === 2 ? "grid gap-5" : "hidden"}>
+            <div data-step="1" className={step === 1 ? "grid gap-5" : "hidden"}>
               <fieldset className={block}>
                 <legend className={legend}>Payment</legend>
                 <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
@@ -317,7 +284,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
               </fieldset>
             </div>
 
-            <div data-step="3" className={step === 3 ? "grid gap-5" : "hidden"}>
+            <div data-step="2" className={step === 2 ? "grid gap-5" : "hidden"}>
               <fieldset className={block}>
                 <legend className={legend}>Your request</legend>
                 <dl className="mt-3 grid gap-2 rounded-[16px] bg-ndm-mist/70 p-4 font-inter text-[14px]">
@@ -382,15 +349,14 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
                   {failure}
                 </CoAlert>
               )}
-              {step === 1 && <CoAlert tone="warn">Your preferred time is a request. Our team confirms the exact time with you by email and text.</CoAlert>}
-              {step === 2 && (
+              {step === 1 && (
                 <CoAlert tone="ok">
                   {byCard
                     ? "After the review you go to our secure payment page to enter your card. Your order is charged there, by Bambora."
                     : "Nothing is charged online. You pay at the clinic once your provider confirms your plan."}
                 </CoAlert>
               )}
-              <p className="font-inter text-[12.5px] text-ndm-muted">Step {step + 1} of 4</p>
+              <p className="font-inter text-[12.5px] text-ndm-muted">Step {step + 1} of 3</p>
               <div className="flex flex-col-reverse gap-2.5 sm:flex-row sm:items-center">
                 {step > 0 ? (
                   <button
@@ -411,7 +377,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
                 )}
                 <span className="sm:flex-1">
                   <Button as="button" type="submit" v="ink" block disabled={busy}>
-                    {busy ? "Placing your request…" : step < 3 ? `Continue to ${["appointment", "payment", "review"][step]}` : byCard ? `Continue to card payment · ${money2(t.total)}` : `Place order request · ${money2(t.total)}`}
+                    {busy ? "Placing your request…" : step < 2 ? `Continue to ${["payment", "review"][step]}` : byCard ? `Continue to card payment · ${money2(t.total)}` : `Place order request · ${money2(t.total)}`}
                   </Button>
                 </span>
               </div>

@@ -62,7 +62,7 @@ export function ConfirmPage() {
   const payUrl = check && check.ok ? check.payUrl : "";
   return (
     <section aria-labelledby="co-title" className={`co-band ${CO_WRAP}`}>
-      <CheckoutSteps at={5} />
+      <CheckoutSteps at={4} />
       {o === undefined || check === undefined ? null : !o && check && check.ok ? (
         /* back from the pay page in a browser without the receipt: WooCommerce's answer only */
         <div className={`${CO_CARD} mt-10 flex flex-col items-center px-6 py-14 text-center`}>

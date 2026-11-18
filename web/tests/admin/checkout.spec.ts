@@ -68,7 +68,7 @@ test("the cart is corrected from WooCommerce, and the order request becomes a Wo
   await expect(option.getByRole("group", { name: "Quantity, Botox Cosmetic, 60 units" })).toContainText("2"); /* already in the cart */
   await page.locator("#pr-botox-dysport-0 .pr-opt").first().getByRole("button", { name: "Add Botox Cosmetic, Regular to cart" }).click();
 
-  /* checkout: details, appointment, payment, review */
+  /* checkout: details (with the clinic), payment, review */
   await page.goto(`${NEXT_URL}/checkout`);
   await expect(page.locator("h1:visible")).toHaveText(/Your\s*details/);
   await page.getByLabel("First name").fill("Sam");
@@ -77,13 +77,12 @@ test("the cart is corrected from WooCommerce, and the order request becomes a Wo
   await page.getByLabel("Address", { exact: true }).fill("1 Test Street");
   await page.getByLabel("City").fill("Toronto");
   await page.getByLabel("Postal code").fill("123");
-  await page.getByRole("button", { name: "Continue to appointment" }).click();
+  await page.getByRole("button", { name: "Continue to payment" }).click();
   await expect(main.getByRole("alert").filter({ hasText: "A few details are missing" })).toBeVisible(); /* not a postal code */
   await page.getByLabel("Postal code").fill("m2n 5m5");
-  await page.getByRole("button", { name: "Continue to appointment" }).click();
-  await expect(page.locator("h1:visible")).toHaveText(/Your\s*appointment/);
-  await page.getByLabel("Preferred day").fill("2026-12-01");
+  await expect(page.getByLabel("Preferred day")).toHaveCount(0); /* no appointment step for now (user, 2026-11-18) */
   await page.getByRole("button", { name: "Continue to payment" }).click();
+  await expect(page.locator("h1:visible")).toHaveText(/How you\s*pay/);
   await page.getByRole("button", { name: "Continue to review" }).click();
   await expect(main).toContainText("2 in your cart, $1478.04 estimated"); /* (2 x 648 + 12) + 13% */
   await page.getByRole("checkbox", { name: /I accept/ }).check();

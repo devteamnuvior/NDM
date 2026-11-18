@@ -10,7 +10,8 @@ import { saleRuns } from "../price-list";
  * real page says "Nothing is charged online"), its "Not available in this preview" under card payment,
  * and the real form's hidden field that tells people from robots. Also put aside, in both pages: the page
  * head (steps, heading, help line), which the user changed on 2026-11-14 (steps and heading on one line
- * each, the head a block of its own above the cards).
+ * each, the head a block of its own above the cards), and the clinic choice the site's details step
+ * carries since the appointment step was taken out (user, 2026-11-18).
  */
 const LINES = [
   { key: "wc:42:44", cat: "Dermal Fillers", name: "Lip Enhancement", label: "2 Syringes", price: 1125, unit: "", was: 1500, productId: 42, variationId: 44, qty: 1 },
@@ -33,11 +34,16 @@ async function openBoth(browser: Browser, vp: { width: number; height: number },
     await p.evaluate(([cart, order]) => { localStorage.setItem("ndm-cart", JSON.stringify(cart)); localStorage.setItem("ndm-last-order", JSON.stringify(order)); }, [page.cart, ORDER] as const);
     await p.reload();
     await p.waitForSelector(SECTION, { state: "visible", timeout: 60_000 });
-    await p.addStyleTag({ content: `.offer-pop-root{display:none!important} input[name=company]{display:none!important} ${SECTION} > div:first-child:has(#co-title), ol[aria-label="Checkout progress"]{display:none!important}` });
+    await p.addStyleTag({ content: `.offer-pop-root{display:none!important} input[name=company]{display:none!important} [data-step="0"] fieldset:has(input[name=clinic]){display:none!important} ${SECTION} > div:first-child:has(#co-title), ol[aria-label="Checkout progress"]{display:none!important}` });
     await p.evaluate(() => {
       for (const el of Array.from(document.querySelectorAll("main p, main span"))) {
         if (el.children.length <= 1 && /Prototype: nothing is charged or sent/.test(el.textContent ?? "")) el.lastChild!.textContent = "Nothing is charged online";
         if (el.textContent === "Not available in this preview.") el.textContent = "Not available online.";
+      }
+      /* no appointment step for now (user, 2026-11-18): the site has three checkout steps and asks for the clinic with the details */
+      for (const el of Array.from(document.querySelectorAll("main p, main button"))) {
+        if (el.textContent === "Step 1 of 4") el.textContent = "Step 1 of 3";
+        if (el.textContent?.trim() === "Continue to appointment") el.firstChild!.textContent = "Continue to payment";
       }
       window.scrollTo(0, 0);
     });
