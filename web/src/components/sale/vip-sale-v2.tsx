@@ -556,7 +556,7 @@ function PriceList({ view, rows, best, day, inList, toggle }: { view: SaleView; 
             {["All", ...tabs].map((x) => <button key={x} type="button" aria-pressed={tab === x} onClick={() => pick(x)} className="v2-chip">{x}</button>)}
           </div>
         </div>
-        <div ref={panel} className="mt-2 rounded-[22px] bg-white px-4 py-1 shadow-[0_14px_40px_rgba(16,32,48,.08)] sm:px-[26px]">
+        <div ref={panel} className="v2-panel mt-2 rounded-[22px] bg-white px-4 py-1 shadow-[0_14px_40px_rgba(16,32,48,.08)] sm:px-[26px]">
           <ul key={tab} role="list" className={played ? "v2-rows-in" : undefined}>{shown.map((d, i) => <Row key={d.id} d={d} best={best} order={i} inList={inList} toggle={toggle} />)}</ul>
         </div>
         <p className="mx-1 mt-4 font-inter text-[13.5px] leading-[1.55] text-ndm-muted">{VIP2.list.fine}</p>
