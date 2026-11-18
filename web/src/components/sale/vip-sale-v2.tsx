@@ -837,7 +837,8 @@ function ListSheet({ list, remove, close, checkout }: { list: PlanLine[]; remove
 
 /* ------------------------------------------------------------------ chat */
 
-/** Sale and booking questions only: the same answers as the questions block, and the phone numbers for a person. */
+/** Sale and booking questions only: the same answers as the questions block, and the phone numbers for a person.
+ * On phones it sits on the left (user, 2026-11-18), clear of the buttons on the right of the price list. */
 function Chat({ open, setOpen, day, lifted }: { open: boolean; setOpen: (on: boolean) => void; day: string; lifted: "all" | "small" | "" }) {
   const c = VIP2.chat;
   const [log, setLog] = useState<{ me: boolean; text: string }[]>([]);
@@ -845,7 +846,7 @@ function Chat({ open, setOpen, day, lifted }: { open: boolean; setOpen: (on: boo
   useEffect(() => { end.current?.scrollIntoView({ block: "nearest" }); }, [log]);
   const answer = (a: string) => a.replace("{{day}}", day).replace("{{phones}}", `Call ${PHONES_LINE}.`);
   return (
-    <div className={`fixed right-3 z-[55] flex flex-col items-end gap-2.5 sm:right-5 ${lifted === "all" ? "bottom-[calc(80px+env(safe-area-inset-bottom))]" : lifted === "small" ? "bottom-[calc(16px+env(safe-area-inset-bottom))] max-lg:bottom-[calc(80px+env(safe-area-inset-bottom))]" : "bottom-[calc(16px+env(safe-area-inset-bottom))]"}`}>
+    <div className={`fixed left-3 z-[55] flex flex-col items-start gap-2.5 sm:left-auto sm:right-5 sm:items-end ${lifted === "all" ? "bottom-[calc(80px+env(safe-area-inset-bottom))]" : lifted === "small" ? "bottom-[calc(16px+env(safe-area-inset-bottom))] max-lg:bottom-[calc(80px+env(safe-area-inset-bottom))]" : "bottom-[calc(16px+env(safe-area-inset-bottom))]"}`}>
       {open && (
         <div role="dialog" aria-label={c.title} data-lenis-prevent className="w-[min(340px,calc(100vw-24px))] overflow-hidden rounded-[18px] bg-white text-ndm-ink shadow-[0_22px_60px_rgba(8,19,29,.4)] ring-1 ring-black/10">
           <div className="flex items-center justify-between gap-2.5 bg-[#0B1B29] py-3 pl-4 pr-3 text-white"><b className="font-aeonik text-[18px] font-normal">{c.title}</b><button type="button" onClick={() => setOpen(false)} aria-label="Close chat" className="grid size-8 place-items-center rounded-full bg-white/[.14]"><IconClose size={12} /></button></div>
