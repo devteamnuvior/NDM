@@ -47,7 +47,7 @@ export interface OptionRowProps {
  * One option of a treatment, in the stacked-discount layout: its name, how many it covers and the price of
  * one, the offer pill; on the right the earlier prices struck through, the price to pay large, and the saving.
  */
-export function OptionRow({ label, price, was, code, codeName, codePercent, tag, unit, action, data, mark }: OptionRowProps) {
+export function OptionRow({ label, price, was, code, codePercent, tag, unit, action, data, mark }: OptionRowProps) {
   const sale = useSaleTags();
   const coded = !!(sale && code && code < price);
   const final = coded ? (code as number) : price;
@@ -104,7 +104,7 @@ export function OptionRow({ label, price, was, code, codeName, codePercent, tag,
                   &#10003;
                 </span>
                 <span>
-                  Extra {pct}% with {codeName}
+                  Extra {pct}% applied
                 </span>
                 <span className="pr-opt2-sep"> · </span>
               </>

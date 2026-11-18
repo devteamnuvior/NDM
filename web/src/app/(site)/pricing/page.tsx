@@ -41,7 +41,7 @@ function saleOnPriceList(campaign: WooCampaign | null | undefined): PriceListSal
     campaign.phase === "vip" && phase
       ? {
           name: phase.label,
-          text: `up to ${SALE_HEADLINE}%\u00a0off selected packages. Eligible packages take an extra ${campaign.percent}%\u00a0off with code ${campaign.code} at checkout.`,
+          text: `up to ${SALE_HEADLINE}%\u00a0off selected packages. Eligible packages take an extra ${campaign.percent}%\u00a0off, applied at checkout.`,
           cta: `See the ${phase.label}`,
           href: pagePath("vipSale"),
           ends: dateWords(Date.parse(phase.to)),
