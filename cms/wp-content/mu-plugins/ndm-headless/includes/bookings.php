@@ -231,11 +231,17 @@ function ndm_headless_rest_booking( $request ) {
 
 	$path = isset( $params['path'] ) ? $params['path'] : '';
 
-	if ( 'book' !== $path && 'call' !== $path ) {
+	// "online": the visitor goes on to the clinic's own booking calendar, where the clinic, day and time
+	// are chosen. "book" (a day and hour picked on the site) is the form's earlier way, still accepted.
+	if ( 'book' !== $path && 'call' !== $path && 'online' !== $path ) {
 		return $invalid( 'Choose to book a time or to be called.' );
 	}
 
 	$clinic = ndm_headless_booking_text( $params, 'clinic', 40 );
+
+	if ( 'online' === $path ) {
+		$clinic = 'Online calendar';
+	}
 
 	if ( ! $clinic ) {
 		return $invalid( 'A clinic is needed.' );
@@ -271,6 +277,8 @@ function ndm_headless_rest_booking( $request ) {
 		$record['day']  = $day;
 		$record['hour'] = $hour;
 		$summary        = 'Book a time: ' . ndm_headless_booking_when( $day, $hour );
+	} elseif ( 'online' === $path ) {
+		$summary = 'Books online';
 	} else {
 		$call_time = ndm_headless_booking_text( $params, 'callTime', 40 );
 
@@ -366,6 +374,10 @@ function ndm_headless_booking_status( $id ) {
 function ndm_headless_booking_request_line( $record ) {
 	if ( 'book' === $record['path'] ) {
 		return 'Book a time: ' . ndm_headless_booking_when( $record['day'], (int) $record['hour'] );
+	}
+
+	if ( 'online' === $record['path'] ) {
+		return 'Books online: went on to the booking calendar (check the calendar for the time)';
 	}
 
 	return 'Call back: ' . $record['call_time'];

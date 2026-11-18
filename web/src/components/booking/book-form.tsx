@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
+import { useRef, useState, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
+import { BookOnline } from "@/components/booking/book-online";
 import { Button } from "@/components/ui/button";
 import { IconArrow, IconCheckBadge, IconPhone } from "@/components/ui/icons";
 import {
@@ -9,11 +10,7 @@ import {
   BOOK_FLOW,
   BOOK_INTEREST_GROUPS,
   BOOK_NOT_SURE,
-  BOOK_NOTICE,
   BOOK_OTHER,
-  bookDay,
-  bookHour,
-  bookSlots,
   type BookPath,
 } from "@/config/booking";
 import { CLINICS } from "@/config/site";
@@ -127,115 +124,8 @@ function BookPicker({ values, onPick, compact }: { values: string[]; onPick: (t:
   );
 }
 
-interface CalendarProps {
-  day: Date | null;
-  time: number | null;
-  onDay: (d: Date) => void;
-  onTime: (h: number) => void;
-  /** Times under the calendar instead of beside it (the compact form). */
-  stack?: boolean;
-}
-
-/* a month calendar (Sundays and past days closed) and the open request times of the chosen day */
-function BookCalendar({ day, time, onDay, onTime, stack = false }: CalendarProps) {
-  /* Today is only known in the browser. Until it is, the calendar holds its full six-week size with empty
-     cells, so the page the server sends has the same height as the live one. */
-  const [today, setToday] = useState<Date | null>(null);
-  const [view, setView] = useState<Date | null>(null);
-  useEffect(() => {
-    const raf = requestAnimationFrame(() => {
-      const t = new Date();
-      t.setHours(0, 0, 0, 0);
-      setToday(t);
-      setView(new Date(t.getFullYear(), t.getMonth(), 1));
-    });
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  const cells: (Date | null)[] = [];
-  if (view) {
-    const first = (view.getDay() + 6) % 7; /* weeks start on Monday */
-    const days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
-    for (let i = 0; i < first; i++) cells.push(null);
-    for (let i = 1; i <= days; i++) cells.push(new Date(view.getFullYear(), view.getMonth(), i));
-  }
-  while (cells.length < 42) cells.push(null); /* always six weeks, so the card never changes height between months */
-  const canBack = !!view && !!today && view > new Date(today.getFullYear(), today.getMonth(), 1);
-  const nav = "grid size-8 place-items-center rounded-full border text-ndm-ink transition-colors hover:bg-ndm-mist disabled:opacity-30";
-  const shift = (months: number) => view && setView(new Date(view.getFullYear(), view.getMonth() + months, 1));
-
-  return (
-    <div className={`grid gap-4 ${stack ? "" : "md:grid-cols-[minmax(0,1fr)_minmax(0,200px)]"}`}>
-      <div>
-        <div className="flex items-center justify-between">
-          <p className="font-aeonik text-[19px] text-ndm-ink">{view ? view.toLocaleDateString("en-CA", { month: "long", year: "numeric" }) : " "}</p>
-          <span className="flex gap-1.5">
-            <button type="button" disabled={!canBack} onClick={() => shift(-1)} aria-label="Previous month" className={nav}>
-              <IconArrow size={12} className="rotate-180" />
-            </button>
-            <button type="button" onClick={() => shift(1)} aria-label="Next month" className={nav}>
-              <IconArrow size={12} />
-            </button>
-          </span>
-        </div>
-        <div className="mt-2 grid grid-cols-7 gap-1 text-center font-inter text-[11px] tracking-[.08em] text-ndm-muted uppercase" aria-hidden="true">
-          {["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].map((d) => (
-            <span key={d} className="py-1">
-              {d}
-            </span>
-          ))}
-        </div>
-        <div className="grid grid-cols-7 gap-1" role="group" aria-label="Choose a day">
-          {cells.map((d, i) => {
-            if (!d || !today) return <span key={`e${i}`} className={view ? undefined : "h-8"} />;
-            const closed = d < today || !bookSlots(d).length; /* Sundays, past days, and today once its last time has gone */
-            const on = !!day && d.getTime() === day.getTime();
-            return (
-              <button
-                key={d.getDate()}
-                type="button"
-                disabled={closed}
-                onClick={() => onDay(d)}
-                aria-pressed={on}
-                aria-label={`${bookDay(d)}${closed ? ", closed" : ""}`}
-                className={`relative grid h-8 place-items-center rounded-[10px] font-inter text-[13.5px] tabular-nums transition-colors ${on ? "bg-ndm-deep text-white" : closed ? "text-ndm-ink/25" : "bg-white text-ndm-ink ring-1 ring-ndm-ink/10 hover:ring-ndm-deep"}`}
-              >
-                {d.getDate()}
-                {!closed && !on && <i aria-hidden="true" className="absolute bottom-1 size-1 rounded-full bg-ndm-sky" />}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-      <div className="min-h-[176px] md:min-h-0">
-        <p className="font-inter text-[13px] font-semibold text-ndm-ink">{day ? bookDay(day) : "Pick a day"}</p>
-        {day ? (
-          <div className={`mt-2 grid grid-cols-3 gap-1.5 ${stack ? "sm:grid-cols-4" : "md:grid-cols-2"}`} role="group" aria-label="Choose a time">
-            {bookSlots(day).map((h) => (
-              <button
-                key={h}
-                type="button"
-                onClick={() => onTime(h)}
-                aria-pressed={time === h}
-                className={`h-8 rounded-[10px] font-inter text-[13px] tabular-nums transition-colors ${time === h ? "bg-ndm-deep text-white" : "bg-white text-ndm-ink ring-1 ring-ndm-ink/10 hover:ring-ndm-deep"}`}
-              >
-                {bookHour(h)}
-              </button>
-            ))}
-          </div>
-        ) : (
-          <p className="mt-2 font-inter text-[13px] leading-[1.5] text-ndm-muted">Open days are marked with a dot. Sundays are closed.</p>
-        )}
-      </div>
-    </div>
-  );
-}
-
 interface FormState {
   interest: string[];
-  clinic: string;
-  day: Date | null;
-  time: number | null;
   via: string[];
   first: string;
   callTime: string;
@@ -244,7 +134,7 @@ interface FormState {
   visia: boolean;
 }
 
-const EMPTY: FormState = { interest: [], clinic: "Uptown", day: null, time: null, via: ["Call", "Text"], first: "", callTime: "", callClinic: "Either", other: "", visia: true };
+const EMPTY: FormState = { interest: [], via: ["Call", "Text"], first: "", callTime: "", callClinic: "Either", other: "", visia: true };
 
 interface BookFormProps {
   /** id for the confirmation heading, so a dialog can point at it. */
@@ -258,8 +148,9 @@ interface BookFormProps {
 /**
  * Consultation booking, shared by the booking section and the Book Free Consultation pop-up: the concern,
  * then contact details (so every request reaches the team), then a choice: book a time now, or ask us to
- * call. The request goes to POST /api/booking, which saves it in WordPress as a "Consultation" record;
- * the thank-you shows only once it was saved. No payment is taken.
+ * call. The request goes to POST /api/booking, which saves it in WordPress as a "Consultation" record.
+ * "Book a time now" then opens the clinic's own online booking calendar (BookOnline), where the clinic,
+ * day and time are chosen; a call request shows its thank-you only once it was saved. No payment is taken.
  */
 export function BookForm({ thanksId, summary = false, compact = false }: BookFormProps) {
   const box = useRef<HTMLFormElement>(null);
@@ -270,6 +161,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
   const [f, setF] = useState<FormState>(EMPTY);
   const [hold, setHold] = useState(0);
   const [busy, setBusy] = useState(false);
+  const [calendar, setCalendar] = useState(false);
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) => {
     setErr("");
@@ -289,14 +181,14 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
   };
 
   const flow = BOOK_FLOW[path ?? "book"];
-  const keyOf = (n: number, p: BookPath | null) => (n < 3 ? String(n) : `${n}${p === "call" ? "c" : "b"}`);
-  const cur = keyOf(step, path);
-  const go = (n: number, p: BookPath | null = path) => {
+  const keyOf = (n: number) => (n < 3 ? String(n) : "3c");
+  const cur = keyOf(step);
+  const go = (n: number) => {
     setErr("");
     setStep(n);
     /* keeps the new step's question in view on phones */
     setTimeout(() => {
-      const l = box.current?.querySelector<HTMLElement>(`[data-step="${keyOf(n, p)}"] legend`);
+      const l = box.current?.querySelector<HTMLElement>(`[data-step="${keyOf(n)}"] legend`);
       if (l) {
         l.focus({ preventScroll: true });
         l.scrollIntoView({ block: "nearest" });
@@ -318,8 +210,12 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
     return true;
   };
   const choose = (p: BookPath) => {
+    if (p === "book") {
+      void send("book");
+      return;
+    }
     setPath(p);
-    go(3, p);
+    go(3);
   };
   const next = () => {
     if (step === 0 && !f.interest.length) {
@@ -332,36 +228,22 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
       return;
     }
     if (step === 1 && !detailsOk()) return;
-    if (step === 3 && path === "book" && (!f.day || !f.time)) {
-      setErr("Please pick a day and a time.");
-      return;
-    }
     go(step + 1);
   };
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (busy) return;
-    if (step === 2) {
-      setErr("Choose how to continue: book a time now, or have us call you.");
-      return;
-    }
-    if (step < flow.length - 1) {
-      next();
-      return;
-    }
-    if (path === "call" && !f.callTime) {
-      setErr("Please choose a time of day.");
-      return;
-    }
-    if (path === "book" && (!f.day || !f.time)) {
-      setErr("Please pick a day and a time.");
-      return;
-    }
+  /* Saves the request. "book": the details are saved, then the clinic's booking calendar opens; it opens
+     too when they could not be saved (the calendar asks for them itself), unless the form's own checks
+     turned them down. "call": the thank-you shows only once the request was saved. */
+  const send = async (p: BookPath) => {
     const form = box.current;
-    if (!form) return;
+    if (!form || busy) return;
     const field = (name: string) => form.querySelector<HTMLInputElement>(`input[name="${name}"]`)?.value ?? "";
-    const pad = (n: number) => String(n).padStart(2, "0");
     const height = form.offsetHeight;
+    const done = () => {
+      setHold(height);
+      setPath(p);
+      setSent(true);
+      if (p === "book") setCalendar(true);
+    };
     setErr("");
     setBusy(true);
     let problem = `Your request could not be sent right now. Please try again in a moment, or call ${clinicPhone}.`;
@@ -378,39 +260,57 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
           phone: field("phone"),
           email: field("email"),
           via: f.via,
-          path,
-          clinic: path === "call" ? f.callClinic : f.clinic,
-          day: path === "book" && f.day ? `${f.day.getFullYear()}-${pad(f.day.getMonth() + 1)}-${pad(f.day.getDate())}` : undefined,
-          hour: path === "book" ? f.time : undefined,
-          callTime: path === "call" ? f.callTime : undefined,
+          path: p === "book" ? "online" : "call",
+          clinic: p === "call" ? f.callClinic : undefined,
+          callTime: p === "call" ? f.callTime : undefined,
           page: window.location.pathname,
           company: field("company"),
         }),
       });
-      const result = (await answer.json().catch(() => null)) as { ok?: boolean; message?: string } | null;
-      if (answer.ok && result?.ok === true) {
-        setHold(height);
-        setSent(true);
+      const result = (await answer.json().catch(() => null)) as { ok?: boolean; reason?: string; message?: string } | null;
+      if ((answer.ok && result?.ok === true) || (p === "book" && result?.reason !== "invalid")) {
+        done();
         return;
       }
       if (typeof result?.message === "string" && result.message) problem = result.message;
     } catch {
-      /* no connection: the message above */
+      /* no connection: the message above, or on to the calendar */
+      if (p === "book") {
+        done();
+        return;
+      }
     } finally {
       setBusy(false);
     }
     setErr(problem);
   };
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    if (busy) return;
+    if (step === 2) {
+      setErr("Choose how to continue: book a time now, or have us call you.");
+      return;
+    }
+    if (step < flow.length - 1) {
+      next();
+      return;
+    }
+    if (!f.callTime) {
+      setErr("Please choose a time of day.");
+      return;
+    }
+    void send("call");
+  };
   const reset = () => {
     setSent(false);
+    setCalendar(false);
     setPath(null);
-    setF((o) => ({ ...o, interest: [], other: "", visia: true, day: null, time: null, callTime: "" }));
-    go(0, null);
+    setF((o) => ({ ...o, interest: [], other: "", visia: true, callTime: "" }));
+    go(0);
   };
 
-  const when = f.day && f.time ? `${bookDay(f.day)}, ${bookHour(f.time)}` : null;
   const clinicName = (v: string) => (v === "Either" ? "Either clinic" : (BOOK_CLINIC_OPTIONS.find(([x]) => x === v)?.[1] ?? v));
-  const clinicPhone = (CLINICS.find((c) => c.name === f.clinic) ?? CLINICS[0]).phone;
+  const clinicPhone = CLINICS[0].phone;
   const legend = `scroll-mt-24 font-aeonik ${compact ? "text-[20px]" : "text-[clamp(21px,1.9vw,26px)]"} font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink outline-hidden`;
   const label = "mb-1.5 block font-inter text-[13px] font-semibold text-ndm-ink";
   /* The prototype also puts "items-start" on the two choice tiles, but its Tailwind 3 lets "items-center"
@@ -421,7 +321,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
   const rows: [string, string | null][] =
     path === "call"
       ? [["Concerns", concern], visiaRow, ["Next step", "We call you"], ["Best time", f.callTime], ["Clinic", clinicName(f.callClinic)]]
-      : [["Concerns", concern], visiaRow, ["Clinic", clinicName(f.clinic)], ["Day and time", when]];
+      : [["Concerns", concern], visiaRow, ["Next step", null]];
   const stepClass = (k: string) => `book-step ${cur === k ? "" : "is-off"}`;
   const stepAttr = (k: string) => ({ "aria-hidden": cur !== k || undefined, inert: cur !== k });
 
@@ -434,18 +334,22 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
         {path === "book" ? (
           <>
             <p id={thanksId} className="font-aeonik text-[clamp(24px,2.2vw,30px)] leading-[1.15] tracking-[-0.02em] text-ndm-ink">
-              You’re booked{f.first ? `, ${f.first}` : ""}.
+              One last step{f.first ? `, ${f.first}` : ""}.
             </p>
             <p className="max-w-[46ch] font-inter text-[14.5px] leading-[1.55] text-ndm-muted">
-              Your free consultation{f.visia ? ", with your VISIA® skin analysis," : ""} is on <b className="font-semibold text-ndm-ink">{when}</b> at our {f.clinic} clinic. Our team will contact you to confirm it.
+              Choose your clinic, day and time in our booking calendar. Your free consultation{f.visia ? ", with your VISIA® skin analysis," : ""} is booked once the calendar confirms it.
             </p>
+            <Button as="button" type="button" v="ink" onClick={() => setCalendar(true)}>
+              Open the booking calendar
+            </Button>
             <p className="font-inter text-[13px] leading-[1.5] text-ndm-muted">
-              Need to change it? Call{" "}
+              Prefer to talk? Call{" "}
               <a href={withBase(tel(clinicPhone))} className="font-semibold text-ndm-ink hover:underline">
                 {clinicPhone}
-              </a>{" "}
-              at least {BOOK_NOTICE} before.
+              </a>
+              .
             </p>
+            <BookOnline open={calendar} onClose={() => setCalendar(false)} />
           </>
         ) : (
           <>
@@ -566,7 +470,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
           </legend>
           <p className="mt-2 font-inter text-[14px] leading-[1.5] text-ndm-muted">Book a time yourself, or let us call you to find one.</p>
           <div className={`mt-5 grid gap-3 ${compact ? "" : "sm:grid-cols-2"}`}>
-            <button type="button" onClick={() => choose("book")} className={`${tile} min-h-[96px] border-ndm-deep bg-ndm-deep text-white hover:border-[#0A4F7A] hover:bg-[#0A4F7A]`}>
+            <button type="button" disabled={busy} aria-busy={busy || undefined} onClick={() => choose("book")} className={`${tile} min-h-[96px] border-ndm-deep bg-ndm-deep text-white hover:border-[#0A4F7A] hover:bg-[#0A4F7A]`}>
               <span aria-hidden="true" className="mt-0.5 grid size-10 shrink-0 place-items-center rounded-full bg-white/15 text-white">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
@@ -579,7 +483,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
               </span>
               <IconArrow size={15} className="mt-2 shrink-0" />
             </button>
-            <button type="button" onClick={() => choose("call")} className={`${tile} min-h-[96px] border-ndm-ink/15 bg-white text-ndm-ink hover:border-ndm-ink/40`}>
+            <button type="button" disabled={busy} onClick={() => choose("call")} className={`${tile} min-h-[96px] border-ndm-ink/15 bg-white text-ndm-ink hover:border-ndm-ink/40`}>
               <span aria-hidden="true" className="mt-0.5 grid size-10 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep">
                 <IconPhone size={18} />
               </span>
@@ -590,23 +494,6 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
               <IconArrow size={15} className="mt-2 shrink-0 text-ndm-deep" />
             </button>
           </div>
-        </fieldset>
-
-        <fieldset data-step="3b" className={stepClass("3b")} {...stepAttr("3b")}>
-          <legend tabIndex={-1} className={legend}>
-            Where and when?
-          </legend>
-          <div className="mt-4 flex flex-wrap gap-1.5" role="group" aria-label="Clinic">
-            {BOOK_CLINIC_OPTIONS.map(([v, t]) => (
-              <BookChip key={v} name="clinic" value={v} checked={f.clinic === v} onChange={() => set("clinic", v)}>
-                {t}
-              </BookChip>
-            ))}
-          </div>
-          <div className="mt-4">
-            <BookCalendar day={f.day} time={f.time} stack={compact} onDay={(d) => setF((o) => ({ ...o, day: d, time: null }))} onTime={(h) => set("time", h)} />
-          </div>
-          <p className="mt-3 font-inter text-[12px] text-ndm-muted">Our team will contact you to confirm your time.</p>
         </fieldset>
 
         <fieldset data-step="3c" className={stepClass("3c")} {...stepAttr("3c")}>
@@ -645,10 +532,6 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
         {step === 2 ? null : step < flow.length - 1 ? (
           <Button key="next" as="button" type="button" v="ink" sm onClick={next}>
             Continue
-          </Button>
-        ) : path === "book" ? (
-          <Button key="pay" as="button" type="submit" v="ink" disabled={busy} aria-busy={busy || undefined} className="min-w-0 flex-1 sm:flex-none">
-            Book this time
           </Button>
         ) : (
           <Button key="call" as="button" type="submit" v="ink" disabled={busy} aria-busy={busy || undefined} className="min-w-0 flex-1 sm:flex-none">

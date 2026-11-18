@@ -49,7 +49,7 @@ test("the site's route refuses other sites, robots and anything that is not on t
   expect(saved()).toEqual([]);
 });
 
-test("a call request from the pop-up and a booked time from the Botox form are saved in WordPress", async ({ page }) => {
+test("a call request from the pop-up and the online booking from the Botox form are saved in WordPress", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(String(e)));
 
@@ -88,12 +88,12 @@ test("a call request from the pop-up and a booked time from the Botox form are s
   await form.locator('input[name="phone"]').fill("(416) 555-0100");
   await form.locator('input[name="email"]').fill(EMAIL);
   await form.getByRole("button", { name: "Continue" }).click();
+  /* the clinic's booking calendar is another company's page: answered here */
+  await page.route("https://www.myaestheticspro.com/**", (route) => route.fulfill({ contentType: "text/html", body: "<p>calendar</p>" }));
   await form.getByRole("button", { name: /Book a time now/ }).click();
-  await form.getByRole("button", { name: "Next month" }).click();
-  await form.getByRole("group", { name: "Choose a day" }).locator("button:not([disabled])").nth(3).click();
-  await form.getByRole("group", { name: "Choose a time" }).locator("button").first().click();
-  await form.getByRole("button", { name: "Book this time" }).click();
-  await expect(page.locator(".proc-form:visible").getByRole("status")).toContainText("You’re booked, Sam.");
+  await expect(page.getByRole("dialog", { name: "Choose your time" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".proc-form:visible").getByRole("status")).toContainText("One last step, Sam.");
 
   const rows = saved();
   expect(rows).toHaveLength(2);
@@ -103,9 +103,8 @@ test("a call request from the pop-up and a booked time from the Botox form are s
   expect(call.title).toBe("Sam Popup, Call back: Afternoon, Downtown");
   expect(call.record).toEqual({ first: "Sam", last: "Popup", phone: "416 555 0100", email: EMAIL, via: ["Call", "Text", "Email"], interests: ["Volume loss", "Something else"], other: "neck lines", visia: true, path: "call", clinic: "Downtown", day: "", hour: 0, call_time: "Afternoon", page: "/" });
   expect(book.post).toBe("private");
-  expect(book.title).toMatch(/^Sam Botox, Book a time: (Mon|Tue|Wed|Thu|Fri|Sat), \w{3} \d{1,2}, \d{4}, (9|10):00 am, Uptown$/);
-  expect(book.record).toMatchObject({ last: "Botox", phone: "(416) 555-0100", interests: ["Wrinkles & fine lines"], visia: false, path: "book", clinic: "Uptown", call_time: "", page: "/injectables/botox" });
-  expect(String(book.record.day)).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  expect(book.title).toBe("Sam Botox, Books online, Online calendar");
+  expect(book.record).toMatchObject({ last: "Botox", phone: "(416) 555-0100", interests: ["Wrinkles & fine lines"], visia: false, path: "online", clinic: "Online calendar", day: "", call_time: "", page: "/injectables/botox" });
 
   /* nothing about the visitor stays in the browser */
   const kept = await page.evaluate(() => JSON.stringify([{ ...localStorage }, { ...sessionStorage }, document.cookie]));

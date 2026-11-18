@@ -1,4 +1,4 @@
-import { BOOK_CALL_TIMES, BOOK_CLINIC_OPTIONS, BOOK_INTEREST_GROUPS, BOOK_NOT_SURE, BOOK_OTHER, bookHours } from "@/config/booking";
+import { BOOK_CALL_TIMES, BOOK_CLINIC_OPTIONS, BOOK_INTEREST_GROUPS, BOOK_NOT_SURE, BOOK_OTHER } from "@/config/booking";
 import { WordPressError, isWordPressConfigured, saveBookingRequest, type BookingRequestInput } from "@/lib/wordpress";
 
 /**
@@ -34,28 +34,6 @@ function tooMany(address: string): boolean {
 const text = (value: unknown, max: number): string | null => (typeof value === "string" && value.trim().length <= max ? value.trim() : null);
 const list = (value: unknown, allowed: (item: string) => boolean, max: number): string[] | null =>
   Array.isArray(value) && value.length <= max && value.every((item) => typeof item === "string" && allowed(item)) ? [...new Set(value as string[])] : null;
-
-/** Today's date and hour at the clinics (Toronto), whatever clock this server runs on. */
-function clinicNow(): { day: string; hour: number } {
-  const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Toronto", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", hourCycle: "h23" }).formatToParts(new Date());
-  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
-  return { day: `${get("year")}-${get("month")}-${get("day")}`, hour: Number(get("hour")) };
-}
-
-/** A pickable request time: a real day that is not closed, an hour the clinic offers, still ahead, within a year. */
-function slotProblem(day: unknown, hour: unknown): string | null {
-  if (typeof day !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(day) || typeof hour !== "number" || !Number.isInteger(hour)) return "Please pick a day and a time.";
-  const date = new Date(`${day}T00:00:00Z`);
-  if (Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== day) return "Please pick a day and a time.";
-  const hours = bookHours(date.getUTCDay());
-  if (!hours || hour < hours[0] || hour > hours[1]) return "That time is not open. Please pick another day or time.";
-  const now = clinicNow();
-  if (day < now.day || (day === now.day && hour <= now.hour)) return "That time has passed. Please pick another day or time.";
-  const limit = new Date(`${now.day}T00:00:00Z`);
-  limit.setUTCFullYear(limit.getUTCFullYear() + 1);
-  if (date > limit) return "Please pick a day within the next twelve months.";
-  return null;
-}
 
 export async function POST(request: Request) {
   /* only this site's own pages may send the form */
@@ -116,11 +94,9 @@ export async function POST(request: Request) {
     page: page && /^\/[\w\-./]*$/.test(page) ? page : "",
   };
 
-  if (form.path === "book") {
-    if (typeof form.clinic !== "string" || !CLINICS.includes(form.clinic)) return invalid("Please choose a clinic.");
-    const problem = slotProblem(form.day, form.hour);
-    if (problem) return invalid(problem);
-    Object.assign(input, { path: "book", clinic: form.clinic, day: form.day, hour: form.hour });
+  if (form.path === "online") {
+    /* the clinic, day and time are chosen in the clinic's own booking calendar, which opens next */
+    Object.assign(input, { path: "online" });
   } else if (form.path === "call") {
     if (typeof form.callTime !== "string" || !BOOK_CALL_TIMES.includes(form.callTime)) return invalid("Please choose a time of day.");
     if (typeof form.clinic !== "string" || (form.clinic !== "Either" && !CLINICS.includes(form.clinic))) return invalid("Please choose a clinic.");
@@ -137,7 +113,8 @@ export async function POST(request: Request) {
     return reply({ ok: true }, 201);
   } catch (error) {
     if (!(error instanceof WordPressError)) throw error;
-    if (error.kind === "http" && error.status === 400) return invalid("Please check your details and try again.");
+    /* "online": the visitor goes on to the booking calendar either way, so only the form's own checks above hold them back */
+    if (error.kind === "http" && error.status === 400 && input.path !== "online") return invalid("Please check your details and try again.");
     /* the kind of failure only: never the visitor's details */
     console.error("[booking] the consultation request could not be saved:", error.kind, error.status ?? "");
     return unreachable();

@@ -850,8 +850,10 @@ WordPress. The team reads them in wp-admin under **Consultation**.
   not searchable, not exported. No route returns a request. Editors, shop managers and administrators
   see the list; nobody can add one by hand.
 - A request holds the name, mobile number, email, how to be reached, the chosen concerns, the VISIA
-  choice, and either a clinic with a day and hour ("Book a time") or a time of day and clinic ("Call
-  back"), plus the page it was sent from (post meta `_ndm_booking`).
+  choice, and either "Books online" (the visitor went on to the clinic's AestheticsPro booking calendar,
+  where the clinic, day and time are chosen: look there for the appointment) or a time of day and clinic
+  ("Call back"), plus the page it was sent from (post meta `_ndm_booking`). Requests made before
+  2026-11-17 may hold a clinic with a day and hour ("Book a time"), the form's earlier way.
 - Status (post meta `_ndm_booking_status`): New, Contacted, Booked, Closed, set by hand on the request's
   screen. The menu shows how many are still New. The title and visibility cannot be changed.
 - The site checks the form first (`web/src/app/api/booking/route.ts`): only the options the form

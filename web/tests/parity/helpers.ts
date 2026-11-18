@@ -38,6 +38,8 @@ const HOME: PagePaths = { legacy: "/index.html", next: "/" };
  *   - the About page's team is three cards in three columns (2026-11-16);
  *   - procedure pages show the clinic film after Why NewDermaMed (2026-11-16);
  *   - the booking form lists Aptos Thread Lift under the Thread lift tab only (2026-11-14);
+ *   - "Book a time now" opens the clinic's own booking calendar, so the form has no clinic, day and time of
+ *     its own and its summary card has no such rows (2026-11-17);
  *   - phones, home hero (2026-11-17): no pause button, the first two proof points, the brand band as a strip
  *     under the first screen, and the chat and search buttons away until the hero has scrolled past.
  */
@@ -57,6 +59,8 @@ export function prototypeNow(html: string, phase: string | null): string {
     /* Aptos Thread Lift is listed under the Thread lift tab only (2026-11-14) */
     .replaceAll("'Skin boosters', 'Aptos Thread Lift', ", "'Skin boosters', ")
     .replaceAll("'Bio-stimulator · Aptos Thread Lift', ", "")
+    /* the clinic, day and time are chosen in the clinic's booking calendar: the summary card has no rows for them (2026-11-17) */
+    .replaceAll("['Clinic', clinicName(f.clinic)], ['Day and time', when]]", "['Next step', null]]")
     /* procedure pages: the clinic film follows Why NewDermaMed, in the page and in the section bar (2026-11-16) */
     .replace("['film', 'The clinic'], ['prices', 'Prices'], ['guide', 'Good to know'], ['why', 'Why NewDermaMed'],", "['prices', 'Prices'], ['guide', 'Good to know'], ['why', 'Why NewDermaMed'], ['film', 'The clinic'],")
     .replace(/(<TxFilm p=\{PROC\} \/>)(\s*)(<ProcPrices p=\{PROC\} \/>\s*<ProcGuide p=\{PROC\} \/>\s*<TxWhy p=\{PROC\} \/>)/, "$3$2$1")

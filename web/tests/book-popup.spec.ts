@@ -85,8 +85,11 @@ test("the form: validation at each step, the call-back path, and a fresh form ea
   await expect(dialog.getByRole("checkbox", { name: "Something else" })).not.toBeChecked();
 });
 
-test("the calendar closes Sundays and past days, and a booked time is confirmed", async ({ page }) => {
-  const sent = await answerBooking(page);
+/** The clinic's booking calendar is another company's page: answered here, so no test reaches it. */
+const answerCalendar = (page: Page) => page.route("https://www.myaestheticspro.com/**", (route) => route.fulfill({ contentType: "text/html", body: "<p>calendar</p>" }));
+
+/** Fills the pop-up as far as the book-or-call choice. */
+async function toChoice(page: Page) {
   await page.goto(NEXT_URL);
   await page.waitForTimeout(800);
   await page.locator("header").getByRole("link", { name: "Book Free Consultation" }).click();
@@ -98,26 +101,45 @@ test("the calendar closes Sundays and past days, and a booked time is confirmed"
   await dialog.locator('input[name="phone"]').fill("416 555 0100");
   await dialog.locator('input[name="email"]').fill("sam@example.com");
   await dialog.getByRole("button", { name: "Continue" }).click();
+  return dialog;
+}
+
+test("Book a time now saves the details and opens the clinic's booking calendar", async ({ page }) => {
+  const sent = await answerBooking(page);
+  await answerCalendar(page);
+  const dialog = await toChoice(page);
   await dialog.getByRole("button", { name: /Book a time now/ }).click();
-  await expect(dialog.getByRole("button", { name: "Previous month" })).toBeDisabled();
-  await dialog.getByRole("button", { name: "Next month" }).click();
-  const days = dialog.getByRole("group", { name: "Choose a day" });
-  expect(await days.locator('button[aria-label*="Sun"]:not([disabled])').count()).toBe(0);
-  expect(await days.locator('button[aria-label*="Sun"][disabled]').count()).toBeGreaterThan(3);
-  await dialog.getByRole("button", { name: "Book this time" }).click();
-  await expect(dialog.getByRole("alert")).toHaveText("Please pick a day and a time.");
-  await days.locator("button:not([disabled])").nth(3).click();
-  const times = dialog.getByRole("group", { name: "Choose a time" }).locator("button");
-  expect(await times.count()).toBeGreaterThanOrEqual(7);
-  await times.first().click();
-  await dialog.getByRole("button", { name: "Book this time" }).click();
-  await expect(dialog.getByRole("status")).toContainText("You’re booked, Sam.");
-  await expect(dialog.getByRole("status")).toContainText("with your VISIA® skin analysis");
-  expect(sent).toHaveLength(1);
-  expect(sent[0]).toMatchObject({ interests: ["Volume loss"], path: "book", clinic: "Uptown", first: "Sam" });
-  expect(sent[0].day).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-  expect(new Date(`${String(sent[0].day)}T00:00:00Z`).getUTCDay()).not.toBe(0);
-  expect(sent[0].hour).toBeGreaterThanOrEqual(9);
+  const calendar = page.getByRole("dialog", { name: "Choose your time" });
+  await expect(calendar).toBeVisible();
+  await expect(calendar.locator("iframe")).toHaveAttribute("src", /^https:\/\/www\.myaestheticspro\.com\/BN\/index\.cfm\?/);
+  expect(sent).toEqual([{ interests: ["Volume loss"], other: "", visia: true, first: "Sam", last: "Tester", phone: "416 555 0100", email: "sam@example.com", via: ["Call", "Text"], path: "online", page: "/", company: "" }]);
+  /* the whole panel is on the screen */
+  const box = await calendar.boundingBox();
+  expect(box && box.x >= 0 && box.y >= 0 && box.x + box.width <= 1440.5 && box.y + box.height <= 900.5).toBe(true);
+  /* Escape closes the calendar only; the pop-up under it stays and can open the calendar again */
+  await page.keyboard.press("Escape");
+  await expect(calendar).toBeHidden();
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("status")).toContainText("One last step, Sam.");
+  expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("hidden");
+  await dialog.getByRole("button", { name: "Open the booking calendar" }).click();
+  await expect(calendar).toBeVisible();
+  await calendar.getByRole("button", { name: "Close booking calendar" }).click();
+  await expect(calendar).toBeHidden();
+});
+
+test("the booking calendar still opens when the details could not be saved, but not when they are turned down", async ({ page }) => {
+  await answerCalendar(page);
+  await answerBooking(page, 400, { ok: false, reason: "invalid", message: "Please add your name, mobile number and a valid email." });
+  const dialog = await toChoice(page);
+  const calendar = page.getByRole("dialog", { name: "Choose your time" });
+  await dialog.getByRole("button", { name: /Book a time now/ }).click();
+  await expect(dialog.getByRole("alert")).toHaveText("Please add your name, mobile number and a valid email.");
+  await expect(calendar).toHaveCount(0);
+  await page.unroute("**/api/booking");
+  await answerBooking(page, 503, { ok: false, reason: "unreachable", message: "Your request could not be sent right now." });
+  await dialog.getByRole("button", { name: /Book a time now/ }).click();
+  await expect(calendar).toBeVisible();
 });
 
 test("a request that could not be saved is not confirmed: the form stays, with the reason", async ({ page }) => {

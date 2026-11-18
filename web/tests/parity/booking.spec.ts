@@ -4,8 +4,9 @@ import { expectSamePixels, open, report, showSection, VIEWPORTS } from "./helper
 
 /**
  * Booking section parity at every window size, step by step: the concern picker, the contact details,
- * the book-or-call choice, the calendar with a day and time picked, and the confirmation. In each state
- * every element is measured on the prototype and on the Next.js build and a screenshot compared.
+ * and the book-or-call choice. In each state every element is measured on the prototype and on the Next.js
+ * build and a screenshot compared. The prototype's own calendar step and its confirmation are not compared:
+ * on the site "Book a time now" opens the clinic's booking calendar instead (tests/book-popup.spec.ts).
  */
 const SECTION = 'section[aria-labelledby="book"]';
 
@@ -92,26 +93,5 @@ for (const vp of VIEWPORTS) {
       await check("choice", testInfo);
     });
 
-    test("step 4: the calendar, with a day and a time picked", async ({}, testInfo) => {
-      await both(async (p) => {
-        await form(p).getByRole("button", { name: /Book a time now/ }).click();
-        await p.waitForTimeout(400);
-        await form(p).getByRole("button", { name: "Next month" }).click();
-        await form(p).getByRole("group", { name: "Choose a day" }).locator("button:not([disabled])").nth(8).click();
-        await form(p).getByRole("group", { name: "Choose a time" }).locator("button").nth(2).click();
-        await p.mouse.move(2, 2);
-        await p.waitForTimeout(600);
-      });
-      await check("calendar", testInfo);
-    });
-
-    test("the confirmation", async ({}, testInfo) => {
-      await both(async (p) => {
-        await form(p).getByRole("button", { name: "Book this time" }).click();
-        await p.mouse.move(2, 2);
-        await p.waitForTimeout(600);
-      });
-      await check("booked", testInfo);
-    });
   });
 }

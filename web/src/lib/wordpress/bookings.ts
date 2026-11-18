@@ -21,8 +21,9 @@ export interface BookingRequestInput {
   /** The visitor's own words for "Something else". */
   other: string;
   visia: boolean;
-  path: "book" | "call";
-  /** "Uptown", "Downtown" or "Either clinic". */
+  /** "online": the visitor goes on to the clinic's booking calendar; "book" is the earlier day-and-hour request. */
+  path: "online" | "book" | "call";
+  /** "Uptown", "Downtown" or "Either clinic"; empty for "online" (chosen in the calendar). */
   clinic: string;
   /** "2026-12-01" and the hour (24 h), when a time was picked. */
   day?: string;
