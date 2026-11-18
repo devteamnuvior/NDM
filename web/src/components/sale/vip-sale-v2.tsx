@@ -485,7 +485,7 @@ function Clinic() {
 
 /* ------------------------------------------------------------------ the price list */
 
-function Row({ d, best, tagged, order, inList, toggle }: { d: Deal; best: number; tagged: boolean; order: number; inList: (key: string) => boolean; toggle: (p: Pack, from: string) => void }) {
+function Row({ d, best, order, inList, toggle }: { d: Deal; best: number; order: number; inList: (key: string) => boolean; toggle: (p: Pack, from: string) => void }) {
   /* the row that carries the headline opens on that package, so its price shows first; the others open on their first */
   const start = useMemo(() => {
     let at: [number, number] = [0, 0];
@@ -503,7 +503,7 @@ function Row({ d, best, tagged, order, inList, toggle }: { d: Deal; best: number
   const areas = d.items.length > 1;
   return (
     <li className={`v2-row ${on ? "is-on" : ""}`} style={{ "--i": Math.min(order, 9) } as CSSProperties}>
-      <h3 className="v2-row-name flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5 font-aeonik text-[20px] font-normal leading-[1.25] text-ndm-ink xl:text-[19px]"><span className="v2-row-title min-w-0">{cat}</span>{tagged && p.pct >= 50 && p.pct === best && <span className="v2-tag">{p.pct}% off</span>}</h3>
+      <h3 className="v2-row-name flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5 font-aeonik text-[20px] font-normal leading-[1.25] text-ndm-ink xl:text-[19px]"><span className="v2-row-title min-w-0">{cat}</span>{/* every row says the saving of the package it shows, worked out from its two prices; a package without a regular price has none */}{p.pct > 0 && <span className="v2-tag">{p.pct}% off</span>}</h3>
       <div className={`v2-row-pick grid gap-2 ${areas ? "grid-cols-[minmax(0,1fr)_minmax(0,var(--v2-pack,148px))]" : "grid-cols-1"}`}>
         {areas && <Dropdown label={`${cat}: treatment or area`} value={ii} options={d.items.map((x) => ({ text: cap(bfsShort(x[0], cat)) }))} onChange={(k) => { setIi(k); setPick(0); }} />}
         {packs.length > 1
@@ -524,8 +524,6 @@ function Row({ d, best, tagged, order, inList, toggle }: { d: Deal; best: number
 function PriceList({ view, rows, best, day, inList, toggle }: { view: SaleView; rows: Deal[]; best: number; day: string; inList: (key: string) => boolean; toggle: (p: Pack, from: string) => void }) {
   const tabs = view.tabs.slice(1);
   const [tab, setTab] = useState("All");
-  /* the offer tag marks one row only: the first on the list that reaches the page's best saving */
-  const head = useMemo(() => rows.find((d) => d.items.some((it) => packsOf(d, it).some((p) => p.pct === best)))?.id, [rows, best]);
   /* the rows play their entrance only once a tab has been chosen, never on the page's first paint */
   const [played, setPlayed] = useState(false);
   const shown = rows.filter((d) => tab === "All" || d.group === tab);
@@ -559,7 +557,7 @@ function PriceList({ view, rows, best, day, inList, toggle }: { view: SaleView; 
           </div>
         </div>
         <div ref={panel} className="mt-2 rounded-[22px] bg-white px-4 py-1 shadow-[0_14px_40px_rgba(16,32,48,.08)] sm:px-[26px]">
-          <ul key={tab} role="list" className={played ? "v2-rows-in" : undefined}>{shown.map((d, i) => <Row key={d.id} d={d} best={best} tagged={d.id === head} order={i} inList={inList} toggle={toggle} />)}</ul>
+          <ul key={tab} role="list" className={played ? "v2-rows-in" : undefined}>{shown.map((d, i) => <Row key={d.id} d={d} best={best} order={i} inList={inList} toggle={toggle} />)}</ul>
         </div>
         <p className="mx-1 mt-4 font-inter text-[13.5px] leading-[1.55] text-ndm-muted">{VIP2.list.fine}</p>
       </div>
