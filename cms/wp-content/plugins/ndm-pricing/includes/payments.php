@@ -300,15 +300,13 @@ add_action( 'woocommerce_before_pay_action', 'ndm_pricing_pay_from_visitor', 5 )
  * Decline Messages" setting must be on; without it the gateway shows one general sentence). The pay page
  * has no address fields: a card refused for its billing address needs a new order with the right one,
  * so the gateway's own "verify the address and try again" would leave the visitor with nothing to change.
+ * The pay page is the only place this gateway takes a payment (WordPress's own checkout is not public).
  *
  * @param string $message    The gateway's message.
  * @param string $message_id What was wrong ("avs_mismatch", "csc_mismatch", "card_declined", ...).
  * @return string
  */
 function ndm_pricing_decline_message( $message, $message_id ) {
-	if ( ! ndm_pricing_is_pay_request() ) {
-		return $message;
-	}
 	switch ( $message_id ) {
 		case 'avs_mismatch':
 			return 'The billing address on this order does not match the address your bank has for this card, so the payment was not taken. Please go back to the checkout and place the order again with the card\'s billing address and postal code, or use another card.';
