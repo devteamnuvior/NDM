@@ -34,7 +34,7 @@ async function openBoth(browser: Browser, vp: { width: number; height: number },
     await p.evaluate(([cart, order]) => { localStorage.setItem("ndm-cart", JSON.stringify(cart)); localStorage.setItem("ndm-last-order", JSON.stringify(order)); }, [page.cart, ORDER] as const);
     await p.reload();
     await p.waitForSelector(SECTION, { state: "visible", timeout: 60_000 });
-    await p.addStyleTag({ content: `.offer-pop-root{display:none!important} input[name=ndm_hp]{display:none!important} [data-step="0"] fieldset:has(input[name=clinic]){display:none!important} ${SECTION} > div:first-child:has(#co-title), ol[aria-label="Checkout progress"]{display:none!important}` });
+    await p.addStyleTag({ content: `.offer-pop-root{display:none!important} [data-step="0"] fieldset:has(input[name=clinic]){display:none!important} ${SECTION} > div:first-child:has(#co-title), ol[aria-label="Checkout progress"]{display:none!important}` });
     await p.evaluate(() => {
       for (const el of Array.from(document.querySelectorAll("main p, main span"))) {
         if (el.children.length <= 1 && /Prototype: nothing is charged or sent/.test(el.textContent ?? "")) el.lastChild!.textContent = "Nothing is charged online";

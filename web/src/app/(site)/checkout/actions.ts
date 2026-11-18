@@ -28,8 +28,6 @@ export interface OrderRequestForm {
   clinic: string;
   note: string;
   agree: boolean;
-  /** Left empty by people; filled in by form-filling robots. */
-  company: string;
   /** The checkout code of a running sale ("PLUS30"), or "". WooCommerce decides what it takes off. */
   code?: string;
   /** "card": pay online by card on WooCommerce's pay page; "clinic": pay at the appointment. */
@@ -82,7 +80,7 @@ const invalid = (message: string): OrderResult => ({ ok: false, reason: "invalid
 
 export async function placeOrderAction(form: OrderRequestForm): Promise<OrderResult> {
   if (typeof form !== "object" || form === null) return invalid("The request could not be read. Please reload the page and try again.");
-  if (form.company) return { ok: false, reason: "busy", message: "The request could not be sent. Please call the clinic." };
+  /* no hidden anti-robot field on the checkout (user, 2026-11-18): the booking, message and sign-up forms keep theirs */
 
   const address = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   if (tooMany(address)) return { ok: false, reason: "busy", message: "Too many requests in a short time. Please wait a few minutes, or call the clinic." };

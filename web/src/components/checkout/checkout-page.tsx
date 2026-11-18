@@ -73,7 +73,6 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
       clinic,
       note: field("note"),
       agree: fd.get("agree") === "on",
-      company: field("ndm_hp"),
       code: code.applied,
       pay: byCard ? "card" : "clinic",
     };
@@ -179,8 +178,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
                     <input required type="tel" name="phone" autoComplete="tel" maxLength={30} pattern="(?:\D*\d){7,}\D*" title="A phone number with at least 7 digits" className={fld} />
                   </label>
                 </div>
-                {/* not for people: left empty, it tells a person from a form-filling robot */}
-                <input type="text" name="ndm_hp" tabIndex={-1} autoComplete="off" data-1p-ignore="" data-lpignore="true" aria-hidden="true" className="sr-only" />
+                {/* no hidden anti-robot field here (user, 2026-11-18): browser autofill filled it and real customers were turned away */}
               </fieldset>
 
               <fieldset className={block}>
