@@ -313,6 +313,10 @@ function ndm_pricing_decline_message( $message, $message_id ) {
 		case 'csc_mismatch':
 		case 'csc_invalid':
 			return 'The security code (CVV) does not match this card, so the payment was not taken. Please check the three digits on the back of the card and try again.';
+		case 'error':
+			// Any code the gateway has no sentence for. Seen so far: Bambora 558, a refusal before the bank is
+			// asked, which came after several declined attempts with one card in a few minutes (2026-11-18).
+			return 'The card processor did not accept this payment, and nothing was charged. If you have tried this card a few times in a row, the processor may be pausing new attempts: please wait a little while before trying again, or use another card. You can also go back to the checkout and choose Pay at your appointment.';
 	}
 	return $message;
 }
