@@ -1662,7 +1662,7 @@ function AboutMenu({ open, onLink }) {
 
 /* ---------------------------------------------------------------- Black Friday (round 24): shared clock and timer, and the bottom tab
    that opens a full-width Black Friday panel. Dates match the black-friday campaign; the badge is the best offer on the landing page. */
-const BF_SALE = { href: 'black-friday-sale.html', start: '2026-11-27T00:00:00-05:00', end: '2026-11-30T23:59:00-05:00', when: 'Nov 27 to 30', badge: 'Up to 60% off' };
+const BF_SALE = { href: 'black-friday-sale.html', start: '2026-11-27T00:00:00-05:00', end: '2026-11-30T23:59:00-05:00', when: 'Nov 27 to 30', badge: 'Up to 70% off' };
 function useBfClock(step = 1000) {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => { const t = setInterval(() => setNow(Date.now()), step); return () => clearInterval(t); }, [step]);
