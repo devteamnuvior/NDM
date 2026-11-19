@@ -1,5 +1,5 @@
 import type { PriceCategory, PriceOption } from "@/config/prices";
-import { createPriceBook, type PriceNames, type PriceSource } from "@/lib/price-book";
+import { createPriceBook, fromValue, type PriceNames, type PriceSource } from "@/lib/price-book";
 import type { WooPricingTree, WooPriceFields } from "@/types/pricing";
 
 /**
@@ -176,7 +176,7 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
       name: c.name,
       blurb: c.blurb,
       offer: bestOffer(all),
-      from: low ? low.value : Math.min(...all.map((o) => o.price)),
+      from: low ? low.value : fromValue(Math.min(...all.map((o) => o.price)), c.perUnit),
       fromUnit: low ? low.unit : "",
       fromSource: low?.source ?? null,
       badge: saleBadge(all),
@@ -189,7 +189,7 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
           name: it.name,
           note: it.note,
           offer: bestOffer(it.options),
-          from: itemLow ? itemLow.value : min,
+          from: itemLow ? itemLow.value : fromValue(min, c.perUnit),
           fromUnit: itemLow ? itemLow.unit : perUnit(it.options.find((o) => o.price === min)?.label ?? ""),
           fromSource: itemLow?.source ?? null,
           badge: saleBadge(it.options),
