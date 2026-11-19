@@ -63,7 +63,7 @@ export function sourceWords(s: PriceSource | null | undefined, withItem: boolean
  * "From $343 / session": during a sale in the sale's colour with the regular price struck through; under it,
  * marked with a small blue dot, where the price is read from ("Microneedling-Face, Package of 3").
  */
-export function FromPrice({ from, unit, source, withItem, big, mark }: { from: number | string; unit?: string; source?: PriceSource | null; withItem?: boolean; big?: boolean; /** the blue dot: this is the price the category's "from" is read from */ mark?: boolean }) {
+export function FromPrice({ from, unit, source, withItem, mark }: { from: number | string; unit?: string; source?: PriceSource | null; withItem?: boolean; /** kept for callers; every "from" price is one size since 2026-11-18 */ big?: boolean; /** the blue dot: this is the price the category's "from" is read from */ mark?: boolean }) {
   const sale = useSaleTags();
   const value = typeof from === "number" ? money(from) : from;
   const cut = sale && source && source.was > 0;
@@ -79,7 +79,7 @@ export function FromPrice({ from, unit, source, withItem, big, mark }: { from: n
             {money(source.was)}
           </s>
         ) : null}
-        <span data-look={sale?.look} className={`pr-from font-aeonik tracking-[-0.02em] ${big ? "text-[22px]" : "text-[20px]"} ${cut ? "is-sale" : "text-ndm-ink"}`}>
+        <span data-look={sale?.look} className={`pr-from font-aeonik tracking-[-0.02em] text-[20px] ${cut ? "is-sale" : "text-ndm-ink"}`}>
           {value}
         </span>
         {unit}

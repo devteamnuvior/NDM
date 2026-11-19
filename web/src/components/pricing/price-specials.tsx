@@ -64,7 +64,7 @@ export function PriceSpecials({ specials, sub, note }: PriceSpecialsProps) {
             )}
             <span className="mt-4 rounded-full bg-ndm-blue/10 px-3 py-1 font-inter text-[11px] font-semibold tracking-[.16em] text-ndm-deep uppercase">From</span>
             <span className="mt-3 flex flex-wrap items-baseline justify-center gap-x-1">
-              <span className="font-aeonik text-[clamp(30px,3vw,44px)] leading-none tracking-[-0.03em] text-ndm-ink">{s.price}</span>
+              <span className="font-aeonik text-[clamp(24px,2.2vw,30px)] leading-none tracking-[-0.03em] text-ndm-ink">{s.price}</span>
               {s.unit && <span className="font-inter text-[13px] whitespace-nowrap text-ndm-muted md:text-[14px]">{s.unit}</span>}
             </span>
             <span className="mt-2.5 block font-inter text-[15px] leading-[1.3] font-medium text-ndm-ink md:text-[16.5px]">{s.name}</span>
