@@ -96,7 +96,7 @@ function FromPrice({ value, unit, src, withItem, big, noWords, mark }) {
   const words = noWords ? '' : sourceWords(src, withItem);
   return (
     <span className="flex flex-col items-start sm:items-end">
-      <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">{mark && <i className="pr-dot" aria-hidden="true" />}From {cut ? <s className="pr-was mr-1"><span className="sr-only">Regular price </span>{pfmt(src.reg)}</s> : null}<span data-look={SALE_LOOK || undefined} className={`pr-from font-aeonik tracking-[-0.02em] ${big ? 'text-[22px]' : 'text-[20px]'} ${SALE_LOOK && cut ? 'is-sale' : 'text-ndm-ink'}`}>{pfmt(value)}</span>{unit}</span>
+      <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">{mark && <i className="pr-dot" aria-hidden="true" />}From {cut ? <s className="pr-was mr-1"><span className="sr-only">Regular price </span>{pfmt(src.reg)}</s> : null}<span data-look={SALE_LOOK || undefined} className={`pr-from font-aeonik tracking-[-0.02em] text-[20px] ${SALE_LOOK && cut ? 'is-sale' : 'text-ndm-ink'}`}>{pfmt(value)}</span>{unit}</span>
       {words && <span className="pr-src mt-1 font-inter text-[11.5px] leading-[1.35] text-ndm-muted"><i aria-hidden="true" /><span className="sr-only">Lowest price, from </span>{words}</span>}
     </span>
   );
@@ -169,7 +169,7 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .pr-opt2-was{font-family:Manrope,sans-serif;font-size:13px;color:#A3A9B1}
 .pr-opt2-was s{text-decoration-thickness:1px}
 .pr-opt2-was s+s{margin-left:8px}
-.pr-opt2-now{margin:2px 0;font-family:Fraunces,Georgia,serif;font-size:28px;line-height:1.1;letter-spacing:-.01em;color:#0B5F93}
+.pr-opt2-now{margin:2px 0;font-family:Fraunces,Georgia,serif;font-size:22px;line-height:1.1;letter-spacing:-.01em;color:#0B5F93}
 .pr-opt2-now[data-look="vip"],.pr-opt2-now[data-look="bf"]{color:#9A7A3A}
 .pr-opt2-now[data-look="holiday"]{color:#1E5A3E}
 .pr-opt2-price.is-single .pr-opt2-now{font-size:22px;color:#1B242B}
@@ -185,7 +185,7 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .pr-opt2-sep{display:none}
 .pr-opt2-save{flex-basis:100%}
 .pr-opt2-act{align-self:end}
-.pr-opt2-now{font-size:27px}
+.pr-opt2-now{font-size:22px}
 .pr-opt2:not(.is-featured) .pr-opt2-info,.pr-opt2:not(.is-featured) .pr-opt2-price{grid-column:1}
 .pr-opt2:not(.is-featured) .pr-opt2-act{grid-column:2;grid-row:1 / span 2;align-self:center}
 }

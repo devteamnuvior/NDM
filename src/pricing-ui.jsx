@@ -188,7 +188,7 @@ function PriceSpecials() {
           <li key={n} className="rv ps-card flex flex-col items-center rounded-[22px] bg-white px-3 pb-5 pt-4 text-center ring-1 ring-ndm-ink/[.06] md:px-5 md:pb-6 md:pt-5" style={{ transitionDelay: `${0.04 * i}s` }}>
             {info && info.offer ? <DealPill deal={info.offer} /> : <span className="dp invisible" aria-hidden="true"><span className="dp-a">OFFER</span></span>}
             <span className="mt-4 rounded-full bg-ndm-blue/10 px-3 py-1 font-inter text-[11px] font-semibold uppercase tracking-[.16em] text-ndm-deep">From</span>
-            <span className="mt-3 flex flex-wrap items-baseline justify-center gap-x-1"><span className="font-aeonik text-[clamp(30px,3vw,44px)] leading-none tracking-[-0.03em] text-ndm-ink">{info ? pfmt(info.value) : ''}</span>{unit && <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted md:text-[14px]">{unit}</span>}</span>
+            <span className="mt-3 flex flex-wrap items-baseline justify-center gap-x-1"><span className="font-aeonik text-[clamp(24px,2.2vw,30px)] leading-none tracking-[-0.03em] text-ndm-ink">{info ? pfmt(info.value) : ''}</span>{unit && <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted md:text-[14px]">{unit}</span>}</span>
             <span className="mt-2.5 block font-inter text-[15px] font-medium leading-[1.3] text-ndm-ink md:text-[16.5px]">{n}</span>
             <span className="mt-auto flex flex-col items-center pt-4"><a href={`#${id}`} onClick={(e) => go(e, id)} className="btn btn-buy h-10 px-6 text-[14px]">Buy</a><span className="mt-2 font-inter text-[12.5px] text-ndm-muted">{sp.note}</span></span>
           </li>
@@ -213,6 +213,102 @@ function PriceSaleBanner() {
       </div>
       <span className="shrink-0"><a href={PR_VIP.href} className="btn pr-sale-btn"><span>{PR_VIP.cta}</span></a></span>
     </aside>
+  );
+}
+
+/* ---------------------------------------------------------------- Black Friday countdown and category menu (user, 2026-11-18)
+   The same pieces as the Next.js Pricing page (PriceCountdown, the .pcm menu); the countdown uses the live site's Black Friday window. */
+const PCD_SALE = { start: '2026-11-20T00:00:00-05:00', end: '2026-12-07T23:59:00-05:00', when: 'Nov 20 to Dec 7', href: 'black-friday-sale.html' };
+if (typeof document !== 'undefined' && !document.getElementById('pcd-css')) {
+  const st = document.createElement('style'); st.id = 'pcd-css';
+  st.textContent = `/* Black Friday countdown under the Pricing header (user, 2026-11-18): black, gold edge circling like the VIP Sale banner */
+.pcd-wrap{padding-top:clamp(28px,3.4vw,48px)}
+@property --pcd-a{syntax:"<angle>";initial-value:0deg;inherits:false}
+.pcd{position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:clamp(18px,3vw,40px);padding:clamp(20px,2.4vw,30px) clamp(20px,2.8vw,34px);border-radius:22px;color:#fff;background:radial-gradient(120% 160% at 0% 0%,rgba(212,181,116,.16),transparent 55%),#0B0B0C;box-shadow:0 22px 50px -34px rgba(11,11,12,.75)}
+.pcd::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;padding:1px;pointer-events:none;background:conic-gradient(from var(--pcd-a),transparent 0deg,rgba(242,214,150,.95) 28deg,transparent 70deg,transparent 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:pcdEdge 6s linear infinite}
+.pcd::after{content:"";position:absolute;inset:0;z-index:-2;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(212,181,116,.22);pointer-events:none}
+@keyframes pcdEdge{to{--pcd-a:360deg}}
+.pcd-tag{display:inline-flex;align-items:center;gap:8px;font:600 11px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#E8D3A0}
+.pcd-tag i{width:7px;height:7px;border-radius:999px;background:#EE3A45;box-shadow:0 0 0 0 rgba(238,58,69,.7);animation:pcdPulse 1.8s ease-out infinite}
+@keyframes pcdPulse{70%{box-shadow:0 0 0 8px rgba(238,58,69,0)}100%{box-shadow:0 0 0 0 rgba(238,58,69,0)}}
+.pcd-title{margin-top:10px;font-size:clamp(26px,2.6vw,36px);line-height:1.05;letter-spacing:-.03em;font-weight:400}
+.pcd-title .tt-strong{color:#E8D3A0}
+.pcd-text{margin-top:8px;font:400 14px/1.5 Manrope,"Helvetica Neue",Arial,sans-serif;color:rgba(255,255,255,.72)}
+.pcd-time{display:flex;align-items:flex-start;gap:clamp(4px,.7vw,8px)}
+.pcd-cell{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:clamp(56px,5.6vw,70px);padding:10px 6px 9px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));box-shadow:inset 0 0 0 1px rgba(212,181,116,.22)}
+.pcd-num{font-size:clamp(28px,2.8vw,38px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:#fff}
+.pcd-lab{font:600 9.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:rgba(232,211,160,.75)}
+.pcd-sep{padding-top:14px;font-size:clamp(22px,2vw,28px);line-height:1;color:#D4B574;animation:pcdBlink 1s steps(1) infinite}
+@keyframes pcdBlink{50%{opacity:.3}}
+.pcd .pcd-btn{height:46px;padding:0 22px;border-radius:999px;background:#fff;color:#0B0B0C;font:600 14.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;transition:background .2s,color .2s}
+.pcd .pcd-btn:is(:hover,:focus-visible){background:#D4B574;color:#0B0B0C}
+@media (max-width:1023px){.pcd{grid-template-columns:minmax(0,1fr) auto}.pcd .pcd-btn{grid-column:1 / -1;justify-self:start}}
+@media (max-width:639px){.pcd{grid-template-columns:minmax(0,1fr);gap:16px}.pcd-time{justify-content:space-between}.pcd-cell{flex:1;min-width:0}.pcd .pcd-btn{width:100%}}
+@media (prefers-reduced-motion:reduce){.pcd::before,.pcd-tag i,.pcd-sep{animation:none}}
+
+/* the categories as a menu above the price list (user, 2026-11-18): a tap opens that category and scrolls to it */
+.pcm{margin-bottom:clamp(28px,3vw,40px)}
+.pcm-label{margin-bottom:12px;text-align:center;font:600 11px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#5A646C}
+.pcm-list{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.pcm-chip{display:inline-flex;align-items:baseline;gap:8px;padding:9px 14px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px rgba(27,36,43,.1);text-decoration:none;white-space:nowrap;transition:box-shadow .2s,background .2s}
+.pcm-chip:hover{box-shadow:inset 0 0 0 1px rgba(15,128,195,.55)}
+.pcm-chip:focus-visible{outline:3px solid rgba(32,158,217,.35);outline-offset:2px}
+.pcm-name{font:500 14px/1.2 Manrope,"Helvetica Neue",Arial,sans-serif;color:#1B242B}
+.pcm-from{font:500 12px/1.2 Manrope,"Helvetica Neue",Arial,sans-serif;color:#5A646C}
+/* phones: one row that scrolls sideways, edge to edge */
+@media (max-width:639px){
+  .pcm-label{text-align:left}
+  .pcm-list{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;margin-inline:calc(var(--gx) * -1);padding:2px var(--gx) 6px;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,transparent,#000 var(--gx),#000 calc(100% - var(--gx)),transparent);mask:linear-gradient(90deg,transparent,#000 var(--gx),#000 calc(100% - var(--gx)),transparent)}
+  .pcm-list::-webkit-scrollbar{display:none}
+  .pcm-list>li{flex:none}
+}
+`;
+  document.head.appendChild(st);
+}
+function PriceCountdown() {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => { const t = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(t); }, []);
+  const start = new Date(PCD_SALE.start).getTime(), end = new Date(PCD_SALE.end).getTime();
+  if (now > end) return null;
+  const live = now >= start, ms = Math.max(0, (live ? end : start) - now);
+  const cells = [[Math.floor(ms / 864e5), 'Days'], [Math.floor((ms % 864e5) / 36e5), 'Hours'], [Math.floor((ms % 36e5) / 6e4), 'Mins'], [Math.floor((ms % 6e4) / 1e3), 'Secs']];
+  return (
+    <section aria-label="Black Friday countdown" className="pcd-wrap relative z-10 bg-ndm-paper px-[var(--gx)]">
+      <div className="pcd mx-auto max-w-[1040px]">
+        <div className="pcd-copy">
+          <p className="pcd-tag"><i aria-hidden="true" />Black Friday {PCD_SALE.when}</p>
+          <p className="pcd-title font-aeonik">Black Friday <span className="tt-strong">{live ? 'ends in' : 'starts in'}</span></p>
+          <p className="pcd-text">{live ? 'Offers end Dec 7 at 11:59 pm, Toronto time.' : 'Plan your treatments now and be ready when it starts.'}</p>
+        </div>
+        <div className="pcd-time" role="timer" aria-label={`${cells[0][0]} days, ${cells[1][0]} hours and ${cells[2][0]} minutes`}>
+          {cells.map(([n, label], k) => (
+            <React.Fragment key={label}>
+              {k > 0 && <span className="pcd-sep font-aeonik" aria-hidden="true">:</span>}
+              <span className="pcd-cell" aria-hidden="true"><span className="pcd-num font-aeonik">{String(n).padStart(2, '0')}</span><span className="pcd-lab">{label}</span></span>
+            </React.Fragment>
+          ))}
+        </div>
+        <a href={PCD_SALE.href} className="btn pcd-btn">See Black Friday offers</a>
+      </div>
+    </section>
+  );
+}
+function PriceMenu() {
+  const go = (e, id) => { const el = document.getElementById(id); if (!el) return; e.preventDefault(); if (el.getAttribute('aria-expanded') !== 'true') el.click(); scrollToY(el.getBoundingClientRect().top + window.scrollY - 150); };
+  return (
+    <nav aria-label="Price list categories" className="pcm rv">
+      <p className="pcm-label">Jump to a treatment</p>
+      <ul className="pcm-list" role="list">
+        {PRICE_CATS.map((c) => { const pf = priceFrom(c.id); return (
+          <li key={c.id}>
+            <a href={`#pg-${c.id}-h`} onClick={(e) => go(e, `pg-${c.id}-h`)} className="pcm-chip">
+              <span className="pcm-name">{c.name}</span>
+              {pf && <span className="pcm-from">From {pfmt(pf.value)}{pf.unit}</span>}
+            </a>
+          </li>
+        ); })}
+      </ul>
+    </nav>
   );
 }
 
@@ -264,6 +360,7 @@ function PriceList() {
             </div>
           )}
           {results && !hitCount && <p className="font-inter text-[15px] text-ndm-muted">Try another name, or ask our team at your free consultation.</p>}
+          {!results && <PriceMenu />}
           <ul className="pr-groups" role="list">
             {groups.map(({ c, hits }) => (
               <PriceGroup key={c.id} c={c} hits={hits}
