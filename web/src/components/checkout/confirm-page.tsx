@@ -12,8 +12,11 @@ import { CO_CARD, CO_WRAP, CheckoutSteps, OrderSummary, money2 } from "./shared"
 const NEXT_STEPS: [title: string, text: string][] = [
   ["We call you", "Within one business day, to find a time for your free consultation and treatment."],
   ["Your consultation", "Your provider confirms your plan in person. Treatments are given only when they suit you."],
+  /* only for receipts kept from before 2026-11-19, when an order could be paid at the appointment */
   ["Pay at the clinic", "You pay at your appointment. Individual results may vary."],
 ];
+/* a card order whose payment has not gone through yet */
+const UNPAID_STEP: [title: string, text: string] = ["Complete your payment", "Your order is confirmed once your card payment is completed online. Individual results may vary."];
 const PAID_STEP: [title: string, text: string] = ["Paid online", "Your card payment is received. Individual results may vary."];
 
 /** A card order's ID and key: from the address WooCommerce sends the visitor back to, else from the receipt. */
@@ -155,7 +158,7 @@ export function ConfirmPage() {
               </dl>
               <h2 className="mt-10 font-aeonik text-[24px] font-normal tracking-[-0.01em] text-ndm-ink">What happens next</h2>
               <ol className="mt-4 grid gap-3" role="list">
-                {(paid ? [NEXT_STEPS[0], NEXT_STEPS[1], PAID_STEP] : NEXT_STEPS).map(([h, d], i) => (
+                {(paid ? [NEXT_STEPS[0], NEXT_STEPS[1], PAID_STEP] : unpaidCard ? [UNPAID_STEP, NEXT_STEPS[0], NEXT_STEPS[1]] : NEXT_STEPS).map(([h, d], i) => (
                   <li key={h} className="flex items-start gap-4 rounded-[16px] bg-ndm-paper px-4 py-3.5">
                     <span className="grid size-8 shrink-0 place-items-center rounded-full bg-ndm-deep/10 font-inter text-[13px] font-semibold text-ndm-deep">{i + 1}</span>
                     <span>

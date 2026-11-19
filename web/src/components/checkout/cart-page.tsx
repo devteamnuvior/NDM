@@ -52,7 +52,7 @@ export function CartPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
   const empty = cart.lines.length === 0;
   return (
     <section aria-labelledby="co-title" className={`co-band ${CO_WRAP}`}>
-      <CoHead at={0} lead="Your" strong="cart" text={empty ? null : "Check your treatments, then continue to checkout. Nothing is charged online: you pay at the clinic."} />
+      <CoHead at={0} lead="Your" strong="cart" text={empty ? null : "Check your treatments, then continue to checkout, where you pay online by card."} />
       <RemovedNotice />
       {!ready ? null : empty ? (
         <div className={`${CO_CARD} mt-7 flex flex-col items-center px-6 py-14 text-center`}>
@@ -95,7 +95,7 @@ export function CartPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
                 Every treatment starts with an in-person consultation and VISIA® skin analysis, at no charge.
               </CoAlert>
               <CoAlert tone="warn" title="Prices are estimates">
-                HST is estimated. Your provider confirms your plan and final price at the clinic.
+                HST is estimated until checkout. Your provider confirms your plan at your consultation.
               </CoAlert>
             </div>
           </div>
@@ -112,11 +112,11 @@ export function CartPage({ pairs }: { pairs: Omit<CartLine, "qty">[] }) {
               </Button>
               <p className="mt-2.5 flex items-center justify-center gap-2 font-inter text-[12.5px] text-ndm-muted">
                 <IconLock />
-                Nothing is charged online
+                Secure card payment at checkout
               </p>
               <p className="mt-4 flex items-start gap-2 border-t border-ndm-ink/10 pt-4 font-inter text-[12.5px] leading-[1.45] text-ndm-muted">
                 <IconCheckBadge className="mt-0.5 shrink-0 text-ndm-deep" />
-                Every treatment starts with a free, in-person consultation. You pay at the clinic once your plan is confirmed.
+                Every treatment starts with a free, in-person consultation. Payment is made online by card at checkout.
               </p>
             </aside>
             <div className={`${CO_CARD} p-[clamp(18px,2.2vw,24px)]`}>
