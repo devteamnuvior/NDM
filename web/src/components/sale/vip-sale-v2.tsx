@@ -36,6 +36,7 @@ import { useOnScroll } from "@/hooks/use-on-scroll";
 import { withBase } from "@/lib/base-path";
 import { cartKey, checkCart, setCartQty, setTypedCode } from "@/lib/cart";
 import { byId } from "@/lib/dom";
+import { firstShown, flyTo } from "@/lib/fly-to";
 import { optimized, optimizedSrcSet } from "@/lib/optimized-image";
 import { formatPrice as money } from "@/lib/prices";
 import { tel } from "@/lib/routes";
@@ -239,7 +240,7 @@ function Header({ count, day, openList }: { count: number; day: string; openList
               )}
             </div>
             <button type="button" onClick={openList} className="inline-flex h-11 items-center gap-2 whitespace-nowrap rounded-full bg-[#0B1B29] pl-3.5 pr-2 font-inter text-[14px] font-semibold text-white min-[360px]:gap-2.5 min-[360px]:pl-4">
-              <span className="max-[359px]:hidden">{VIP2.name}</span><span className="min-[360px]:hidden">My list</span><b className="vip-off grid h-7 min-w-7 place-items-center rounded-full px-1.5 text-[12.5px] tabular-nums">{count}</b>
+              <span className="max-[359px]:hidden">{VIP2.name}</span><span className="min-[360px]:hidden">My list</span><b id="v2-list-count" className="vip-off fly-vip-ring grid h-7 min-w-7 place-items-center rounded-full px-1.5 text-[12.5px] tabular-nums">{count}</b>
             </button>
           </div>
         </div>
@@ -275,7 +276,7 @@ function useTopPacks(view: SaleView, packs: Pack[]): { p: Pack; title: string; s
   }, [view.cards, packs]);
 }
 
-function Hero({ view, t, day, best, top, inList, toggle }: { view: SaleView; t: Clock; day: string; best: number; top: ReturnType<typeof useTopPacks>; inList: (key: string) => boolean; toggle: (p: Pack, from: string) => void }) {
+function Hero({ view, t, day, best, top, inList, toggle }: { view: SaleView; t: Clock; day: string; best: number; top: ReturnType<typeof useTopPacks>; inList: (key: string) => boolean; toggle: (p: Pack, from: string, el?: HTMLElement, name?: string) => void }) {
   const { photo } = view.copy.hero;
   const left = leftWords(t);
   return (
@@ -317,7 +318,7 @@ function Hero({ view, t, day, best, top, inList, toggle }: { view: SaleView; t: 
                       <span className="mt-0.5 block font-inter text-[13.5px] text-white/55">{sub}</span>
                     </div>
                     <p className="self-end whitespace-nowrap text-right"><b className="font-aeonik text-[clamp(28px,2.5vw,33px)] font-normal leading-none text-white">{money(p.pay)}</b><s className="ml-2 font-inter text-[13.5px] text-white/50">{money(p.reg)}</s></p>
-                    <button type="button" aria-pressed={on} onClick={() => toggle(p, "hero")} className={`v2-mini justify-self-start ${on ? "is-on" : ""}`}>{on ? VIP2.list.added : VIP2.list.add}</button>
+                    <button type="button" aria-pressed={on} onClick={(e) => toggle(p, "hero", e.currentTarget, title)} className={`v2-mini justify-self-start ${on ? "is-on" : ""}`}>{on ? VIP2.list.added : VIP2.list.add}</button>
                     <p className="text-right font-inter text-[13.5px] font-semibold text-[#F0D79B]">Save {money(p.save)}</p>
                   </li>
                 );
@@ -485,7 +486,7 @@ function Clinic() {
 
 /* ------------------------------------------------------------------ the price list */
 
-function Row({ d, best, order, inList, toggle }: { d: Deal; best: number; order: number; inList: (key: string) => boolean; toggle: (p: Pack, from: string) => void }) {
+function Row({ d, best, order, inList, toggle }: { d: Deal; best: number; order: number; inList: (key: string) => boolean; toggle: (p: Pack, from: string, el?: HTMLElement, name?: string) => void }) {
   /* the row that carries the headline opens on that package, so its price shows first; the others open on their first */
   const start = useMemo(() => {
     let at: [number, number] = [0, 0];
@@ -516,12 +517,12 @@ function Row({ d, best, order, inList, toggle }: { d: Deal; best: number; order:
         {p.reg > 0 && <s className="ml-2 font-inter text-[14px] text-[#7D8B9C]">{money(p.reg)}</s>}
         {(p.save > 0 || p.each) && <span className="mt-0.5 block font-inter text-[13.5px] font-semibold text-[#0C72AE]">{p.save > 0 && <>Save {money(p.save)}</>}{p.save > 0 && p.each && <span className="font-normal text-ndm-muted max-[1359px]:hidden"> · </span>}{p.each && <span className="font-normal text-ndm-muted max-[1359px]:block">{p.each}</span>}</span>}
       </p>
-      <button type="button" aria-pressed={on} onClick={() => toggle(p, "list")} className={`v2-add ${on ? "is-on" : ""}`}>{on ? VIP2.list.added : VIP2.list.add}</button>
+      <button type="button" aria-pressed={on} onClick={(e) => toggle(p, "list", e.currentTarget, cat)} className={`v2-add ${on ? "is-on" : ""}`}>{on ? VIP2.list.added : VIP2.list.add}</button>
     </li>
   );
 }
 
-function PriceList({ view, rows, best, day, inList, toggle }: { view: SaleView; rows: Deal[]; best: number; day: string; inList: (key: string) => boolean; toggle: (p: Pack, from: string) => void }) {
+function PriceList({ view, rows, best, day, inList, toggle }: { view: SaleView; rows: Deal[]; best: number; day: string; inList: (key: string) => boolean; toggle: (p: Pack, from: string, el?: HTMLElement, name?: string) => void }) {
   const tabs = view.tabs.slice(1);
   const [tab, setTab] = useState("All");
   /* the rows play their entrance only once a tab has been chosen, never on the page's first paint */
@@ -770,7 +771,7 @@ function ListBar({ list, t, show, openList, checkout, chatOpen, toggleChat }: { 
         {n ? (
           <>
             <button type="button" onClick={openList} aria-live="polite" className="min-w-0 flex-1 overflow-hidden text-left font-inter leading-[1.3]">
-              <b className="block whitespace-nowrap text-[14.5px] font-semibold"><span className="max-sm:hidden">{VIP2.name}: </span>{n} {n === 1 ? "treatment" : "treatments"}<span className="tabular-nums min-[400px]:hidden"> · {money(withCode)}</span> <span className="font-normal text-white/60 underline underline-offset-[5px] max-sm:hidden">View</span></b>
+              <b className="block whitespace-nowrap text-[14.5px] font-semibold"><span className="max-sm:hidden">{VIP2.name}: </span><span id="v2-bar-count" className="inline-block">{n} {n === 1 ? "treatment" : "treatments"}</span><span className="tabular-nums min-[400px]:hidden"> · {money(withCode)}</span> <span className="font-normal text-white/60 underline underline-offset-[5px] max-sm:hidden">View</span></b>
               {saved > 0 && <span className="block text-[13.5px] font-semibold text-[#F0D79B]">You save {money(saved)}</span>}
             </button>
             <span className="flex shrink-0 items-center gap-4">
@@ -925,8 +926,10 @@ export function VipSaleV2({ view }: { view: SaleView }) {
   useOnScroll(() => { const cta = byId("v2-cta"); setPast(!!cta && cta.getBoundingClientRect().bottom < 0); });
 
   const inList = (key: string) => list.some((x) => x.key === key);
-  const toggle = (p: Pack, from: string) => {
+  const toggle = (p: Pack, from: string, el?: HTMLElement, name?: string) => {
     const on = inList(p.key);
+    /* the ticket flies into the bottom bar on phones (it appears with the first item), else into the header's count */
+    if (!on && el) flyTo(el, { name: name || p.it[0], price: money(p.pay), look: "vip", target: () => (window.matchMedia("(max-width: 639px)").matches ? firstShown(byId("v2-bar-count"), byId("v2-list-count")) : firstShown(byId("v2-list-count"))) });
     if (!on) track("AddToCart", { content_name: `${p.it[0]}, ${p.o[0]}`, content_ids: [String(p.o[6] ?? "")], content_type: "product", value: p.pay, currency: "CAD", from });
     setList((l) => (on ? l.filter((x) => x.key !== p.key) : [...l, line(p)]));
   };

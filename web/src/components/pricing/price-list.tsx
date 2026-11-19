@@ -87,7 +87,7 @@ function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView
                   codePercent={sale?.percent}
                   tag={o.tag}
                   unit={o.unit}
-                  action={<QtyControl line={line} label={`${it.name}, ${o.label}`} />}
+                  action={<QtyControl fly line={line} label={`${it.name}, ${o.label}`} />}
                 />
               );
             })}

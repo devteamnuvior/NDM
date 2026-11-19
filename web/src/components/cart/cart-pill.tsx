@@ -52,7 +52,7 @@ export function CartPill({ onOpen, hidden }: CartPillProps) {
     >
       <span className="relative grid size-11 shrink-0 place-items-center rounded-full bg-white/10">
         <IconBag size={20} />
-        <span key={seen.bump} className="cart-bump absolute -top-0.5 -right-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ndm-sky px-1 font-inter text-[11px] leading-none font-semibold text-white">
+        <span key={seen.bump} id="cart-pill-count" className="cart-bump absolute -top-0.5 -right-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ndm-sky px-1 font-inter text-[11px] leading-none font-semibold text-white">
           {cart.count}
         </span>
       </span>

@@ -132,3 +132,4 @@ button:hover>.v2-play{transform:scale(1.06)}
 @keyframes v2RowLine{0%{transform:scaleX(0);opacity:0}45%{transform:scaleX(1);opacity:.9}100%{transform:scaleX(1);opacity:0}}
 @media (prefers-reduced-motion:reduce){.v2-rows-in>.v2-row{animation:v2RowFade .2s ease backwards;animation-delay:0s}.v2-rows-in>.v2-row::after{animation:none}}
 @keyframes v2RowFade{from{opacity:0}}
+
