@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState, type CSSProperties, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
-import { BookIcon } from "@/components/booking/book-icons";
 import { BookOnline } from "@/components/booking/book-online";
 import { Button } from "@/components/ui/button";
 import { IconArrow, IconCheckBadge, IconPhone } from "@/components/ui/icons";
@@ -47,7 +46,7 @@ function BookChip({ type = "radio", name, value, checked, onChange, children }: 
   );
 }
 
-/* the organised picker: icon tiles for the categories (concerns, then treatments), the options of the open
+/* the organised picker: text tiles for the categories (concerns, then treatments), the options of the open
    category as check rows, and the two standing options; a number on a tile says how many of its options are chosen */
 function BookPicker({ values, onPick, compact }: { values: string[]; onPick: (t: string) => void; compact: boolean }) {
   const found = BOOK_INTEREST_GROUPS.findIndex(([, xs]) => xs.some((x) => values.includes(x)));
@@ -78,9 +77,6 @@ function BookPicker({ values, onPick, compact }: { values: string[]; onPick: (t:
         onKeyDown={(e) => key(e, i)}
         className={`book-cat font-inter ${i === cat ? "is-on" : ""}`}
       >
-        <span className="book-cat-ic">
-          <BookIcon name={g} size={compact ? 17 : 22} />
-        </span>
         <span className="book-cat-t">{g}</span>
         {n > 0 && (
           <span key={n} className="book-cat-n">
@@ -133,16 +129,10 @@ function BookPicker({ values, onPick, compact }: { values: string[]; onPick: (t:
         ))}
       </div>
       <div className="book-alts">
-        {(
-          [
-            [BOOK_NOT_SURE, "scan"],
-            [BOOK_OTHER, "note"],
-          ] as const
-        ).map(([t, icon]) => (
+        {[BOOK_NOT_SURE, BOOK_OTHER].map((t) => (
           <label key={t} className="relative inline-flex cursor-pointer">
             <input type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)} className="book-in absolute inset-0 m-0 cursor-pointer opacity-0" />
             <span className="book-alt font-inter">
-              <BookIcon name={icon} size={16} />
               {t}
             </span>
           </label>
