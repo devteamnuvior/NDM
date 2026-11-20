@@ -1,5 +1,6 @@
 import type { StartPanel } from "@/config/home-start";
 import type { TreatmentTab } from "@/config/home-treatments";
+import type { BeforeAfterCase } from "@/config/before-after";
 import type { Product } from "@/config/shop";
 import type { WPConcernImage, WPConcernProduct } from "@/types/concern";
 
@@ -64,7 +65,8 @@ export interface HomeCopy {
   };
   space: Head;
   team: Head & { text: string };
-  results: Head & { text: string };
+  /** `cases`: the compare cards picked in WordPress; empty or missing, the built-in cases (`BA_MODELS`). `button`: empty, "See all before & after". */
+  results: Head & { text: string; button?: string; cases?: BeforeAfterCase[] };
   process: Head & { steps: { title: string; text: string; button: string }[] };
   reviews: Head & { note: string };
   visit: Head & { text: string };
@@ -184,6 +186,8 @@ export interface WPHomePage {
     results_lead: string;
     results_strong: string;
     results_text: string;
+    results_button?: string;
+    results_cases?: { before: WPConcernImage | null; after: WPConcernImage | null; name: string; treatment: string; focus: string }[];
     process_tag: string;
     process_lead: string;
     process_strong: string;

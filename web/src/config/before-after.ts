@@ -15,6 +15,8 @@ export interface BeforeAfterCase {
   before: string;
   after: string;
   treat: string;
+  /** The card's caption; empty: "Model" and `id`. */
+  name?: string;
 }
 
 const UPLOADS = "https://newdermamedlaserclinic.com/wp-content/uploads/2025/10/";
