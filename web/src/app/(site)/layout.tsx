@@ -25,7 +25,8 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
     <SiteSettingsProvider value={settings}>
     <SaleTagsProvider value={saleTagsOf(campaign)}>
     <ConcernPathsProvider concerns={concerns} procedures={[...procedures, ...aptos.map((slug) => ({ slug, path: `/${slug}` }))]} articles={articles.map((slug) => ({ slug, path: articlePath(slug) }))}>
-      <div className="site-root">
+      {/* the running sale's look (styles/sale-bf.css): the offer cards' black and gold turn black and signal red */}
+      <div className="site-root" data-sale={saleTagsOf(campaign)?.look}>
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:top-12 focus:left-4 focus:z-[90] focus:rounded-full focus:bg-ndm-amber focus:px-4 focus:py-2 focus:font-mont focus:text-white"
