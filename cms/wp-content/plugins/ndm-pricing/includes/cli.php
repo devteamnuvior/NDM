@@ -413,3 +413,37 @@ function ndm_pricing_cli_promotions( $args, $assoc_args ) {
 	WP_CLI::success( sprintf( '%d offers imported.', $made ) );
 }
 WP_CLI::add_command( 'ndm-pricing promotions', 'ndm_pricing_cli_promotions' );
+
+/**
+ * Write an order email's HTML to the screen without sending it, to preview the NewDermaMed email look.
+ *
+ * ## OPTIONS
+ *
+ * <order-id>
+ * : The order to show.
+ *
+ * [--type=<type>]
+ * : customer (order confirmation) or admin (new order to the clinic).
+ * ---
+ * default: customer
+ * ---
+ *
+ * @param array $args       Positional arguments.
+ * @param array $assoc_args Named arguments.
+ */
+function ndm_pricing_cli_email_preview( $args, $assoc_args ) {
+	$order = wc_get_order( absint( $args[0] ?? 0 ) );
+	if ( ! $order ) {
+		WP_CLI::error( 'No such order.' );
+	}
+	$emails = WC()->mailer()->get_emails();
+	$key    = 'admin' === ( $assoc_args['type'] ?? 'customer' ) ? 'WC_Email_New_Order' : 'WC_Email_Customer_Processing_Order';
+	$email  = $emails[ $key ];
+
+	$email->object                         = $order;
+	$email->placeholders['{order_date}']   = wc_format_datetime( $order->get_date_created() );
+	$email->placeholders['{order_number}'] = $order->get_order_number();
+
+	echo $email->style_inline( $email->get_content_html() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+WP_CLI::add_command( 'ndm-pricing email-preview', 'ndm_pricing_cli_email_preview' );
