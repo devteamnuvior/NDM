@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef, useState, type CSSProperties, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
-import { BookIcon } from "@/components/booking/book-icons";
+import { useRef, useState, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
 import { BookOnline } from "@/components/booking/book-online";
 import { Button } from "@/components/ui/button";
 import { IconArrow, IconCheckBadge, IconPhone } from "@/components/ui/icons";
@@ -10,7 +9,6 @@ import {
   BOOK_CLINIC_OPTIONS,
   BOOK_FLOW,
   BOOK_INTEREST_GROUPS,
-  BOOK_INTEREST_SECTIONS,
   BOOK_NOT_SURE,
   BOOK_OTHER,
   type BookPath,
@@ -47,8 +45,7 @@ function BookChip({ type = "radio", name, value, checked, onChange, children }: 
   );
 }
 
-/* the organised picker: icon tiles for the categories (concerns, then treatments), the options of the open
-   category as check rows, the two standing options, and the choices as chips that can be taken off */
+/* the organised picker: category tabs, the options of the open category, the two standing options */
 function BookPicker({ values, onPick, compact }: { values: string[]; onPick: (t: string) => void; compact: boolean }) {
   const found = BOOK_INTEREST_GROUPS.findIndex(([, xs]) => xs.some((x) => values.includes(x)));
   const [cat, setCat] = useState(found >= 0 ? found : 0);
@@ -61,56 +58,28 @@ function BookPicker({ values, onPick, compact }: { values: string[]; onPick: (t:
     setCat(n);
     tabs.current[n]?.focus();
   };
-  const tab = (i: number) => {
-    const [g, xs] = BOOK_INTEREST_GROUPS[i];
-    const n = xs.filter((x) => values.includes(x)).length;
-    return (
-      <button
-        key={g}
-        ref={(el) => {
-          tabs.current[i] = el;
-        }}
-        type="button"
-        role="tab"
-        aria-selected={i === cat}
-        tabIndex={i === cat ? 0 : -1}
-        onClick={() => setCat(i)}
-        onKeyDown={(e) => key(e, i)}
-        className={`book-cat font-inter ${i === cat ? "is-on" : ""}`}
-      >
-        <span className="book-cat-ic">
-          <BookIcon name={g} size={compact ? 17 : 22} />
-        </span>
-        <span className="book-cat-t">{g}</span>
-        {n > 0 && (
-          <span key={n} className="book-cat-n">
-            {n}
-            <span className="sr-only"> chosen</span>
-          </span>
-        )}
-      </button>
-    );
-  };
-  let from = 0;
   return (
-    <div className={`book-pick ${compact ? "is-compact" : ""}`}>
-      <div role="tablist" aria-label="Type of concern" className={compact ? "book-cats-row no-scrollbar" : "book-cats"}>
-        {compact
-          ? BOOK_INTEREST_GROUPS.map((_, i) => tab(i))
-          : BOOK_INTEREST_SECTIONS.map(([name, count]) => {
-              const start = from;
-              from += count;
-              return (
-                <div key={name} role="presentation">
-                  <p className="book-cats-h font-inter">{name}</p>
-                  <div role="presentation" className="book-cats-g">
-                    {BOOK_INTEREST_GROUPS.slice(start, start + count).map((_, i) => tab(start + i))}
-                  </div>
-                </div>
-              );
-            })}
+    <div className="book-pick">
+      <div role="tablist" aria-label="Type of concern" className={`flex gap-1 ${compact ? "no-scrollbar -mx-1 overflow-x-auto px-1" : "flex-wrap"}`}>
+        {BOOK_INTEREST_GROUPS.map(([g, xs], i) => (
+          <button
+            key={g}
+            ref={(el) => {
+              tabs.current[i] = el;
+            }}
+            type="button"
+            role="tab"
+            aria-selected={i === cat}
+            tabIndex={i === cat ? 0 : -1}
+            onClick={() => setCat(i)}
+            onKeyDown={(e) => key(e, i)}
+            className={`book-tab shrink-0 rounded-full ${compact ? "px-3 py-1.5 text-[13px]" : "px-4 py-2.5 text-[15px]"} font-inter font-semibold transition-colors ${i === cat ? "bg-ndm-ink text-white" : "bg-ndm-mist text-ndm-ink/80 hover:text-ndm-ink"} ${xs.some((x) => values.includes(x)) && i !== cat ? "book-tab-has" : ""}`}
+          >
+            {g}
+          </button>
+        ))}
       </div>
-      <div className={`grid ${compact ? "mt-2.5" : "mt-4"}`}>
+      <div className="mt-2.5 grid">
         {BOOK_INTEREST_GROUPS.map(([g, xs], gi) => (
           <div
             key={g}
@@ -118,13 +87,15 @@ function BookPicker({ values, onPick, compact }: { values: string[]; onPick: (t:
             aria-label={g}
             aria-hidden={gi !== cat || undefined}
             inert={gi !== cat}
-            className={`book-panel grid content-start gap-1.5 [grid-area:1/1] ${gi === cat ? "is-on" : "invisible"} ${compact ? "grid-cols-1 sm:grid-cols-2" : "sm:grid-cols-2"}`}
+            className={`grid content-start gap-1.5 [grid-area:1/1] ${gi === cat ? "" : "invisible"} ${compact ? "grid-cols-1 sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3"}`}
           >
-            {xs.map((t, ti) => (
-              <label key={t} className="relative flex cursor-pointer" style={{ "--i": ti } as CSSProperties}>
-                <input type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)} tabIndex={gi === cat ? undefined : -1} className="book-in absolute inset-0 m-0 cursor-pointer opacity-0" />
-                <span className="book-opt font-inter">
-                  <Tick />
+            {xs.map((t) => (
+              <label key={t} className="relative flex cursor-pointer">
+                <input type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)} tabIndex={gi === cat ? undefined : -1} className="peer absolute inset-0 m-0 cursor-pointer opacity-0" />
+                <span
+                  className={`book-opt flex w-full items-center gap-2.5 rounded-[12px] border bg-white px-3.5 font-inter ${compact ? "min-h-[36px] py-1.5 text-[13px]" : "min-h-[42px] py-2 text-[13.5px]"} leading-[1.3] text-ndm-ink transition-colors peer-checked:border-ndm-deep peer-checked:bg-ndm-deep peer-checked:text-white peer-hover:border-ndm-ink/35 peer-focus-visible:ring-4 peer-focus-visible:ring-ndm-blue/25`}
+                >
+                  <i aria-hidden="true" className={`size-2 shrink-0 rounded-full ${values.includes(t) ? "bg-ndm-amber" : "bg-ndm-ink/15"}`} />
                   {t}
                 </span>
               </label>
@@ -132,53 +103,25 @@ function BookPicker({ values, onPick, compact }: { values: string[]; onPick: (t:
           </div>
         ))}
       </div>
-      <div className="book-alts">
-        {(
-          [
-            [BOOK_NOT_SURE, "scan"],
-            [BOOK_OTHER, "note"],
-          ] as const
-        ).map(([t, icon]) => (
-          <label key={t} className="relative inline-flex cursor-pointer">
-            <input type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)} className="book-in absolute inset-0 m-0 cursor-pointer opacity-0" />
-            <span className="book-alt font-inter">
-              <BookIcon name={icon} size={16} />
-              {t}
-            </span>
-          </label>
+      <div className="mt-2.5 flex flex-wrap gap-1.5">
+        {[BOOK_NOT_SURE, BOOK_OTHER].map((t) => (
+          <BookChip key={t} type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)}>
+            {t}
+          </BookChip>
         ))}
       </div>
-      <div className="book-chosen font-inter" aria-live="polite">
+      <p className={`mt-2.5 flex flex-wrap content-start items-center gap-2 font-inter text-[13px] text-ndm-ink ${compact ? "min-h-[20px]" : "min-h-[40px]"}`} aria-live="polite">
         {values.length ? (
           <>
-            <span className="book-chosen-h">Your choices</span>
-            {values.map((t) => (
-              <span key={t} className="book-chip">
-                {t}
-                <button type="button" onClick={() => onPick(t)} aria-label={`Remove ${t}`}>
-                  <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
-                    <path d="M2 2l6 6M8 2 2 8" />
-                  </svg>
-                </button>
-              </span>
-            ))}
+            <i aria-hidden="true" className="size-2 shrink-0 rounded-full bg-ndm-amber" />
+            <span className="text-ndm-muted">Your choices:</span>
+            <b className="font-semibold">{values.join(", ")}</b>
           </>
         ) : (
           <span className="text-ndm-muted">Pick a category, then one or more things you would like to address.</span>
         )}
-      </div>
+      </p>
     </div>
-  );
-}
-
-/* the check box of an option row: the tick draws itself when the row is chosen */
-function Tick() {
-  return (
-    <i aria-hidden="true" className="book-check">
-      <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path pathLength={1} d="M2.5 6.4 5 8.8l4.5-5.3" />
-      </svg>
-    </i>
   );
 }
 
