@@ -42,3 +42,14 @@
    (<main data-shell="inner">). :where() adds no specificity, so they rank exactly as they did there. */
 :where(body:has(main[data-shell="inner"])) .btn-buy{background:#0F80C3}
 :where(body:has(main[data-shell="inner"])) .btn-buy:hover,:where(body:has(main[data-shell="inner"])) .btn-buy:focus-visible{background:#1B242B}
+
+/* Treatment and concern page header on phones (user, 2026-11-20), like the home hero: the photo fills the top only and fades into
+   solid night colour at its bottom edge; the title and text sit below it on that colour, never over the photo itself
+   (only the title's first line may touch the last of the fade). Differs from the prototype on purpose */
+.phero-fade{display:none}
+@media (max-width:639px){
+  .phero{--ph-pic:clamp(380px,56svh,520px)}
+  .phero .phero-pic{bottom:auto;height:var(--ph-pic)}
+  .phero .phero-fade{display:block;position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(11,15,19,.6) 0%,rgba(11,15,19,.15) 26%,rgba(11,15,19,0) 44%,rgba(11,15,19,.5) 68%,rgba(11,15,19,.9) 86%,#0B0F13 100%)}
+  .phero .phero-in{padding-top:calc(var(--ph-pic) - 56px)}
+}

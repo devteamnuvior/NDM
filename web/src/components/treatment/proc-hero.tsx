@@ -22,8 +22,8 @@ export function ProcHero({ title, sub, hero, where, offer: o }: TxHeroContent) {
     img.style.transform = `translate3d(0,${Math.min(window.scrollY * 0.2, frame.offsetHeight * 0.1).toFixed(1)}px,0)`;
   });
   return (
-    <section ref={section} data-nav="dark" aria-labelledby="proc-title" className="relative isolate overflow-hidden bg-ndm-night text-white">
-      <div aria-hidden="true" className="absolute inset-0 -z-20 overflow-hidden">
+    <section ref={section} data-nav="dark" aria-labelledby="proc-title" className="phero relative isolate overflow-hidden bg-ndm-night text-white">
+      <div aria-hidden="true" className="phero-pic absolute inset-0 -z-20 overflow-hidden">
         {/* a wide photo, and a tall one for phones */}
         {/* a procedure whose page has no photo yet opens on the dark band alone, not on an empty image */}
         {hero.desktop && (
@@ -33,15 +33,17 @@ export function ProcHero({ title, sub, hero, where, offer: o }: TxHeroContent) {
           <img ref={photo} src={withBase(hero.desktop)} alt={hero.alt ?? ""} fetchPriority="high" className="absolute inset-x-0 -top-[10%] h-[120%] w-full object-cover will-change-transform" style={{ objectPosition: hero.position }} />
         </picture>
         )}
+        {/* phones (user, 2026-11-20): the photo's bottom edge fades into the night colour the words sit on */}
+        <div className="phero-fade" />
       </div>
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10 hidden lg:block"
         style={{ background: "linear-gradient(90deg,rgba(11,15,19,.72) 0%,rgba(11,15,19,.38) 50%,rgba(11,15,19,.18) 100%),linear-gradient(180deg,rgba(11,15,19,.55) 0%,rgba(11,15,19,0) 30%,rgba(11,15,19,.35) 100%)" }}
       />
-      {/* phones (user, 2026-11-18): the words cover the whole photo there, so the night colour is stronger behind them; differs from the prototype on purpose */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 max-sm:bg-[linear-gradient(180deg,rgba(11,15,19,.62)_0%,rgba(11,15,19,.58)_30%,rgba(11,15,19,.7)_62%,rgba(11,15,19,.9)_100%)]! lg:hidden" style={{ background: "linear-gradient(180deg,rgba(11,15,19,.55) 0%,rgba(11,15,19,.25) 30%,rgba(11,15,19,.6) 62%,rgba(11,15,19,.88) 100%)" }} />
-      <div className="grid items-end gap-10 px-[var(--gx)] pt-[184px] pb-[clamp(28px,4.5vw,64px)] sm:pt-[170px] lg:min-h-[min(100svh,920px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)] lg:items-center xl:grid-cols-[minmax(0,1fr)_minmax(0,560px)] xl:gap-[clamp(48px,6vw,110px)]">
+      {/* phones (user, 2026-11-20): photo first, words below it on the night colour, so this overlay is off there (see .phero in inner.css) */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 max-sm:hidden lg:hidden" style={{ background: "linear-gradient(180deg,rgba(11,15,19,.55) 0%,rgba(11,15,19,.25) 30%,rgba(11,15,19,.6) 62%,rgba(11,15,19,.88) 100%)" }} />
+      <div className="phero-in grid items-end gap-10 px-[var(--gx)] pt-[184px] pb-[clamp(28px,4.5vw,64px)] sm:pt-[170px] lg:min-h-[min(100svh,920px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)] lg:items-center xl:grid-cols-[minmax(0,1fr)_minmax(0,560px)] xl:gap-[clamp(48px,6vw,110px)]">
         <div className="max-w-[640px]">
           <TwoTone
             as="h1"

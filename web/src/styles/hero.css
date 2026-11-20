@@ -143,22 +143,39 @@
   .hf {
     min-height: 0;
   }
-  .hf-in {
+  /* phones (user, 2026-11-20): the photo first, then the words. The photo fills the top of the hero only and fades into solid
+     night colour at its bottom edge; the words sit below it on that colour (only their first line may touch the last of the fade),
+     never over the photo itself. The fade lives on the photo layer so it moves with the photo's scroll drift. Differs from the prototype on purpose */
+  .hf {
+    --hf-pic: clamp(400px, 60svh, 560px);
+  }
+  .hf-media {
+    inset: 0 0 auto;
+    height: var(--hf-pic);
+  }
+  .hf-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(11, 15, 19, 0.55) 0%, rgba(11, 15, 19, 0) 26%, rgba(11, 15, 19, 0) 48%, rgba(11, 15, 19, 0.55) 70%, rgba(11, 15, 19, 0.9) 86%, #0b0f13 100%);
+  }
+  .hf .hf-in {
     display: flex;
-    min-height: max(620px, 100svh);
     flex-direction: column;
     justify-content: flex-end;
+    padding-top: calc(var(--hf-pic) - 64px);
+    padding-bottom: 44px;
   }
   .hf-band {
     background: #0b0f13;
     border-top: 0;
     padding-left: 0;
   }
-  /* phones (user, 2026-11-18): the words sit on the busiest part of the photos (the lit sign, the windows), so the night colour
-     rises from the bottom behind them and is gone above the words; differs from the prototype on purpose */
+  /* the photo layer carries its own fade (above), so the section's overlay is off on phones */
   .hf::before {
-    background: linear-gradient(180deg, rgba(11, 15, 19, 0.62) 0%, rgba(11, 15, 19, 0.12) 18%, rgba(11, 15, 19, 0.56) 38%, rgba(11, 15, 19, 0.7) 60%, rgba(11, 15, 19, 0.9) 100%),
-      linear-gradient(90deg, rgba(11, 15, 19, 0.5), rgba(11, 15, 19, 0) 62%);
+    display: none;
   }
   /* phones (user, 2026-11-18): the two buttons share one row. To fit, Book Free Consultation has no arrow dot here and both
      take a size that follows the window's width; differs from the prototype on purpose */
