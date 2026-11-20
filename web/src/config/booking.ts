@@ -12,6 +12,12 @@ export const BOOK_INTEREST_GROUPS: [category: string, options: string[]][] = [
   ["Treatments", ["Laser Hair Removal", "Microneedling", "Laser skin resurfacing", "Laser skin tightening", "Photo-rejuvenation (IPL)", "Chemical peels", "CoolSculpting®", "VISIA® skin analysis"]],
 ];
 
+/** How the picker lays the categories out: a heading and how many categories, in order, sit under it. */
+export const BOOK_INTEREST_SECTIONS: [heading: string, categories: number][] = [
+  ["By concern", 4],
+  ["By treatment", 4],
+];
+
 export const BOOK_NOT_SURE = "Not sure, I’d like a skin analysis";
 /** Last concern option: opens a short text box. */
 export const BOOK_OTHER = "Something else";
