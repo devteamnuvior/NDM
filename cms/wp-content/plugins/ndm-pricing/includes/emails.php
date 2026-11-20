@@ -70,7 +70,7 @@ add_action( 'woocommerce_email_header', 'ndm_pricing_email_current', 1, 2 );
 
 /** The logo shown at the top of every email (PNG: email clients do not show SVG). */
 function ndm_pricing_email_logo() {
-	return plugins_url( 'assets/email-logo.png', NDM_PRICING_DIR . '/ndm-pricing.php' );
+	return set_url_scheme( plugins_url( 'assets/email-logo.png', NDM_PRICING_DIR . '/ndm-pricing.php' ), 'https' );
 }
 
 /**
