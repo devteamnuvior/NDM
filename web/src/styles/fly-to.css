@@ -9,8 +9,14 @@
 .fly-vip .fly-card{background:#0B1B29;box-shadow:0 18px 40px -10px rgba(11,27,41,.55),0 0 0 1px rgba(201,162,78,.55)}
 .fly-vip .fly-card i{background:linear-gradient(135deg,#E2C27A,#C9A24E);color:#0B1B29}
 .fly-vip .fly-card small{color:#F0D79B}
+/* Black Friday: true black with a signal-red edge and a red mark */
+.fly-bf .fly-card{background:#0B0B0C;box-shadow:0 18px 40px -10px rgba(0,0,0,.6),0 0 0 1px rgba(211,18,31,.75)}
+.fly-bf .fly-card i{background:linear-gradient(135deg,#EE3A45,#D3121F);color:#fff}
+.fly-bf .fly-card small{color:#FF9AA0}
 .fly-bump{animation:flyBump .55s cubic-bezier(.3,1.6,.5,1)}
 .fly-vip-ring.fly-bump,.fly-ring.fly-bump{animation:flyBump .55s cubic-bezier(.3,1.6,.5,1),flyRing .7s ease-out}
+.fly-bf-ring.fly-bump{animation:flyBump .55s cubic-bezier(.3,1.6,.5,1),flyRingBf .7s ease-out}
 @keyframes flyBump{0%{transform:scale(1)}35%{transform:scale(1.35)}100%{transform:scale(1)}}
+@keyframes flyRingBf{from{box-shadow:0 0 0 0 rgba(238,58,69,.8)}to{box-shadow:0 0 0 12px rgba(238,58,69,0)}}
 @keyframes flyRing{from{box-shadow:0 0 0 0 rgba(226,194,122,.8)}to{box-shadow:0 0 0 12px rgba(226,194,122,0)}}
-@media (prefers-reduced-motion:reduce){.fly-bump,.fly-vip-ring.fly-bump,.fly-ring.fly-bump{animation:flyBump .3s ease}}
+@media (prefers-reduced-motion:reduce){.fly-bump,.fly-vip-ring.fly-bump,.fly-bf-ring.fly-bump,.fly-ring.fly-bump{animation:flyBump .3s ease}}

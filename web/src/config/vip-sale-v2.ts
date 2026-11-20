@@ -26,6 +26,12 @@ export const VIP2 = {
     empty: "Your list is empty. Add a treatment from the VIP price list to see your total and your saving.",
     total: "Your VIP total",
     logo: "/assets/icons/logo-vip.svg",
+    /** Prefix of the tag manager's events ("vip_sale_AddToCart"); the Meta pixel gets it as the parameter `sale`. */
+    event: "vip_sale",
+    /** The bottom bar's button before anything is in the list (it shares the phone's width with the sale's name). */
+    barButton: "See all VIP prices",
+    /** The colours of the ticket that flies into the list (lib/fly-to.ts). */
+    fly: "vip" as "vip" | "bf",
   },
   title: "VIP Sale: Up to {{max}}% Off Treatment Packages | NewDermaMed Toronto",
   description: "The NewDermaMed VIP Sale ends {{day}}: up to {{max}}% off selected treatment packages at our Uptown and Downtown Toronto clinics. New clients welcome.",

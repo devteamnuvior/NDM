@@ -73,11 +73,15 @@ type Fbq = (kind: "track" | "trackCustom", name: string, data?: Record<string, u
  * AddToCart ("Add to my list"), InitiateCheckout ("Check out"), Contact (a call or the chat) and the custom
  * ConsultationClick. The purchase itself is the confirmation page's event. Nothing about the visitor is sent.
  */
+/** The page's event prefix ("vip_sale", "bf_sale"), set by the page from its words once it is on screen. */
+let eventPrefix = VIP_WORDS.page.event;
+
 function track(name: string, data: Record<string, unknown> = {}, custom = false): void {
   const w = window as unknown as { fbq?: Fbq; dataLayer?: Record<string, unknown>[] };
   try {
-    w.fbq?.(custom ? "trackCustom" : "track", name, data);
-    w.dataLayer?.push({ event: `vip_sale_${name}`, ...data });
+    /* the pixel's event names are Meta's own: the sale travels as a parameter */
+    w.fbq?.(custom ? "trackCustom" : "track", name, { ...data, sale: eventPrefix });
+    w.dataLayer?.push({ event: `${eventPrefix}_${name}`, ...data });
   } catch {
     /* a blocked or broken tag never breaks the page */
   }
@@ -247,7 +251,7 @@ function Header({ count, day, openList }: { count: number; day: string; openList
               )}
             </div>
             <button type="button" onClick={openList} className="inline-flex h-11 items-center gap-2 whitespace-nowrap rounded-full bg-[color:var(--v-0B1B29)] pl-3.5 pr-2 font-inter text-[14px] font-semibold text-white min-[360px]:gap-2.5 min-[360px]:pl-4">
-              <span className="max-[359px]:hidden">{VIP2.name}</span><span className="min-[360px]:hidden">My list</span><b id="v2-list-count" className="vip-off fly-vip-ring grid h-7 min-w-7 place-items-center rounded-full px-1.5 text-[12.5px] tabular-nums">{count}</b>
+              <span className="max-[359px]:hidden">{VIP2.name}</span><span className="min-[360px]:hidden">My list</span><b id="v2-list-count" className={`vip-off fly-${VIP2.page.fly}-ring grid h-7 min-w-7 place-items-center rounded-full px-1.5 text-[12.5px] tabular-nums`}>{count}</b>
             </button>
           </div>
         </div>
@@ -801,7 +805,7 @@ function ListBar({ list, t, show, openList, checkout, chatOpen, toggleChat }: { 
         ) : (
           <>
             <span className="min-w-0 flex-1 overflow-hidden whitespace-nowrap font-inter leading-[1.3]"><b className="block text-[14.5px] font-semibold">{VIP2.page.name}</b><span className="block text-[13.5px] text-[color:var(--v-F0D79B)]">{left ? `${left} left` : "Sale prices shown"}</span></span>
-            <a href="#vip-list" onClick={go("vip-list")} className="btn bfd-cta h-12 shrink-0 px-6 font-semibold max-sm:px-5 max-[359px]:px-3.5 max-[359px]:text-[14px]">{VIP2.hero.button}</a>
+            <a href="#vip-list" onClick={go("vip-list")} className="btn bfd-cta h-12 shrink-0 px-6 font-semibold max-sm:px-5 max-[359px]:px-3.5 max-[359px]:text-[14px]">{VIP2.page.barButton}</a>
           </>
         )}
       </div>
@@ -904,6 +908,9 @@ function Chat({ open, setOpen, day, lifted }: { open: boolean; setOpen: (on: boo
 export function VipSaleV2({ view, words = VIP_WORDS }: { view: SaleView; words?: SaleWords }) {
   const { deals, planKey, code } = view;
   const router = useRouter();
+  useEffect(() => {
+    eventPrefix = words.page.event;
+  }, [words]);
   const packs = useMemo(() => allPacks(deals), [deals]);
   /* the headline: the best saving a package on this page really reaches */
   const best = useMemo(() => Math.max(0, ...packs.map((p) => p.pct)), [packs]);
@@ -951,7 +958,7 @@ export function VipSaleV2({ view, words = VIP_WORDS }: { view: SaleView; words?:
   const toggle = (p: Pack, from: string, el?: HTMLElement, name?: string) => {
     const on = inList(p.key);
     /* the ticket flies into the bottom bar on phones (it appears with the first item), else into the header's count */
-    if (!on && el) flyTo(el, { name: name || p.it[0], price: money(p.pay), look: "vip", target: () => (window.matchMedia("(max-width: 639px)").matches ? firstShown(byId("v2-bar-count"), byId("v2-list-count")) : firstShown(byId("v2-list-count"))) });
+    if (!on && el) flyTo(el, { name: name || p.it[0], price: money(p.pay), look: words.page.fly, target: () => (window.matchMedia("(max-width: 639px)").matches ? firstShown(byId("v2-bar-count"), byId("v2-list-count")) : firstShown(byId("v2-list-count"))) });
     if (!on) track("AddToCart", { content_name: `${p.it[0]}, ${p.o[0]}`, content_ids: [String(p.o[6] ?? "")], content_type: "product", value: p.pay, currency: "CAD", from });
     setList((l) => (on ? l.filter((x) => x.key !== p.key) : [...l, line(p)]));
   };

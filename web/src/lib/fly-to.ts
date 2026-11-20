@@ -14,8 +14,8 @@ export interface FlyOptions {
   price: string;
   /** Where to land; null when there is nowhere on screen (then nothing flies). */
   target: () => HTMLElement | null;
-  /** "vip": navy and gold (VIP Sale); default: NewDermaMed blue. */
-  look?: "vip";
+  /** "vip": navy and gold (VIP Sale); "bf": black and signal red (Black Friday); default: NewDermaMed blue. */
+  look?: "vip" | "bf";
 }
 
 const ease = (u: number) => (u < 0.5 ? 4 * u * u * u : 1 - (-2 * u + 2) ** 3 / 2);
