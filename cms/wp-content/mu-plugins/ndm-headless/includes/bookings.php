@@ -239,7 +239,9 @@ function ndm_headless_rest_booking( $request ) {
 
 	$clinic = ndm_headless_booking_text( $params, 'clinic', 40 );
 
-	if ( 'online' === $path ) {
+	// "online": since 2026-11-19 the form asks for the clinic first; a request without one (a page loaded before
+	// that) is still saved, as "Online calendar".
+	if ( 'online' === $path && ! $clinic ) {
 		$clinic = 'Online calendar';
 	}
 

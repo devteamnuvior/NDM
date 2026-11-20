@@ -94,12 +94,15 @@ export async function POST(request: Request) {
     page: page && /^\/[\w\-./]*$/.test(page) ? page : "",
   };
 
+  const clinicOk = typeof form.clinic === "string" && (form.clinic === "Either" || CLINICS.includes(form.clinic));
   if (form.path === "online") {
-    /* the clinic, day and time are chosen in the clinic's own booking calendar, which opens next */
-    Object.assign(input, { path: "online" });
+    /* the day and time are chosen in the clinic's own booking calendar, which opens next; the clinic is chosen on
+       the site (user, 2026-11-19). A page loaded before that sends none: WordPress then says "Online calendar". */
+    if (form.clinic !== undefined && !clinicOk) return invalid("Please choose a clinic.");
+    Object.assign(input, { path: "online", clinic: !clinicOk ? "" : form.clinic === "Either" ? "Either clinic" : form.clinic });
   } else if (form.path === "call") {
     if (typeof form.callTime !== "string" || !BOOK_CALL_TIMES.includes(form.callTime)) return invalid("Please choose a time of day.");
-    if (typeof form.clinic !== "string" || (form.clinic !== "Either" && !CLINICS.includes(form.clinic))) return invalid("Please choose a clinic.");
+    if (!clinicOk) return invalid("Please choose a clinic.");
     Object.assign(input, { clinic: form.clinic === "Either" ? "Either clinic" : form.clinic, callTime: form.callTime });
   } else {
     return invalid("Choose how to continue: book a time now, or have us call you.");
