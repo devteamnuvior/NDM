@@ -14,9 +14,12 @@ export async function HomeTape() {
   const campaign = await getCampaign();
   const phase = campaign && !campaign.over ? campaign.phases.find((p) => p.id === campaign.phase) : undefined;
   if (!phase) return null;
-  const days = `${dateWords(phase.from)} to ${dateWords(phase.to)}`;
+  /* in the VIP Sale's days the tapes already name Black Friday, with its days (user, 2026-11-19) */
+  const later = phase.id === "vip" ? campaign!.phases.filter((p) => p.id !== "vip") : [];
+  const label = later.length ? "Black Friday" : phase.label;
+  const days = later.length ? `${dateWords(later[0].from)} to ${dateWords(later.at(-1)!.to)}` : `${dateWords(phase.from)} to ${dateWords(phase.to)}`;
   const offer = `Up to ${SALE_HEADLINE}% off selected treatments`;
-  const words = [`${phase.label} · ${days}`, offer, "Free consultation and VISIA® skin analysis", "Uptown and Downtown Toronto"];
+  const words = [`${label} · ${days}`, offer, "Free consultation and VISIA® skin analysis", "Uptown and Downtown Toronto"];
   const strip = (tone: "red" | "white", rev?: boolean) => {
     const row = (
       <span>
@@ -41,7 +44,7 @@ export async function HomeTape() {
   };
   return (
     <div className="home-tape">
-      <p className="sr-only">{`${phase.label}, ${days}: ${offer.toLowerCase()}.`}</p>
+      <p className="sr-only">{`${label}, ${days}: ${offer.toLowerCase()}.`}</p>
       <div aria-hidden="true" className="bfs-tapes">
         {strip("red")}
         {strip("white", true)}

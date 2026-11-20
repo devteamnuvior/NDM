@@ -31,9 +31,9 @@ export async function Specials({ level = "h2", offersOnPage = false }: SpecialsP
   }
   if (!wheel.length) return null;
 
-  /* "View all offers": the Promotion page's list; in the VIP Sale's days the sale's own page */
+  /* "View all offers": the Promotion page's list; in the VIP Sale's days the Black Friday page (user, 2026-11-19) */
   const campaign = offersOnPage ? null : await getCampaign();
-  const all = campaign && !campaign.over && campaign.phase === "vip" ? pagePath("vipSale") : `${pagePath("promotion")}#offers`;
+  const all = campaign && !campaign.over && campaign.phase === "vip" ? pagePath("blackFridaySale") : `${pagePath("promotion")}#offers`;
 
   return (
     <SpecialsWheel offers={wheel} level={level} offersHref={offersOnPage ? "#offers" : all}>

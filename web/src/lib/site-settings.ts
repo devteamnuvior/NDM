@@ -138,22 +138,22 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   const settings = read.ok && read.data ? fromWordPress(read.data) : SITE_SETTINGS;
   /* the VIP Sale's days (the campaign's phase "vip"): every link to the offers opens the sale */
   /* every "#/slug" link of the settings opens its page (lib/post-links.ts): the shop, the lists, a treatment */
-  return withRealLinks(campaign && !campaign.over && campaign.phase === "vip" ? withVipSaleLinks(settings) : settings);
+  return withRealLinks(campaign && !campaign.over && campaign.phase === "vip" ? withSaleLinks(settings) : settings);
 }
 
 /** Whether an address is the Promotion page's (with or without the site's folder, a trailing slash or a #part). */
 const isPromotion = (href: string) => /(^|\/)promotion\/?(#.*)?$/.test(href.trim().replace(/^https?:\/\/[^/]+/, ""));
 
 /**
- * The settings during the VIP Sale: the announcement that points to the offers names the sale and opens its
- * page, and so does the footer's Promotion link. The header menu's Promotion item always opens the Promotion
+ * The settings during the VIP Sale: the announcement that points to the offers names Black Friday and opens its
+ * page, and so does the footer's Promotion link (user, 2026-11-19: they named the VIP Sale and opened /vip-sale). The header menu's Promotion item always opens the Promotion
  * page itself (user, 2026-11-15). Nothing is saved: when the phase ends the settings read as
  * they are written in WordPress again (the Black Friday phases set their own links).
  */
-function withVipSaleLinks(settings: SiteSettings): SiteSettings {
-  const sale = pagePath("vipSale");
+function withSaleLinks(settings: SiteSettings): SiteSettings {
+  const sale = pagePath("blackFridaySale");
   const message = (wide: boolean) => (m: Announcement): Announcement =>
-    m.kind === "message" && isPromotion(m.href) ? { ...m, text: wide ? `VIP Sale: up to ${SALE_HEADLINE}%\u00a0off selected packages ` : `VIP Sale: up to ${SALE_HEADLINE}%\u00a0off `, cta: "\u2192", href: sale } : m;
+    m.kind === "message" && isPromotion(m.href) ? { ...m, text: wide ? `Black Friday: up to ${SALE_HEADLINE}%\u00a0off selected packages ` : `Black Friday: up to ${SALE_HEADLINE}%\u00a0off `, cta: "\u2192", href: sale } : m;
   const a = settings.header.announcement;
   return {
     ...settings,

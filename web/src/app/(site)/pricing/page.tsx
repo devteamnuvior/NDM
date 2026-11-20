@@ -33,23 +33,19 @@ export const metadata: Metadata = {
 
 /**
  * What the price list says about the sale while one runs: the checkout code's line under every package it
- * applies to, and, in the VIP Sale's days, the banner above the list (the Black Friday phases bring their own).
+ * applies to, and the Black Friday banner above the list. Since 2026-11-19 (user) the banner and the list's look
+ * are Black Friday's in every phase, the VIP Sale's days included: it ends with the campaign and opens /black-friday.
  */
 function saleOnPriceList(campaign: WooCampaign | null | undefined): PriceListSale | null {
   if (!campaign || campaign.over || !campaign.phase) return null;
-  const phase = campaign.phases.find((p) => p.id === campaign.phase);
-  const banner =
-    campaign.phase === "vip" && phase
-      ? {
-          name: phase.label,
-          text: `up to ${SALE_HEADLINE}%\u00a0off selected packages. Eligible packages take an extra ${campaign.percent}%\u00a0off, applied at checkout.`,
-          cta: `See the ${phase.label}`,
-          href: pagePath("vipSale"),
-          ends: dateWords(Date.parse(phase.to)),
-        }
-      : undefined;
-  /* the VIP Sale keeps the site's red and blue; the Black Friday phases wear black and gold */
-  return { code: campaign.code, percent: campaign.percent, banner, look: campaign.phase === "vip" ? "vip" : "bf" };
+  const banner = {
+    name: "Black Friday",
+    text: `up to ${SALE_HEADLINE}%\u00a0off selected packages. Eligible packages take an extra ${campaign.percent}%\u00a0off, applied at checkout.`,
+    cta: "See the Black Friday deals",
+    href: pagePath("blackFridaySale"),
+    ends: dateWords(Date.parse(campaign.end)),
+  };
+  return { code: campaign.code, percent: campaign.percent, banner, look: "bf" };
 }
 
 /**

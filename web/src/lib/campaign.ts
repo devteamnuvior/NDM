@@ -62,8 +62,11 @@ export async function getCampaign(): Promise<Campaign | null> {
   return read.ok ? toCampaign(read.data.campaign) : null;
 }
 
-/** The look of the offer tags while the campaign runs: the VIP Sale keeps the site's red and blue, the later phases black and gold. Null outside the sale. */
+/**
+ * The look of the offer tags while the campaign runs: Black Friday's black and gold in every phase (user,
+ * 2026-11-19: the VIP Sale's days had the site's red and blue and read "VIP 30% OFF"). Null outside the sale.
+ */
 export function saleTagsOf(c: Campaign | null): { look: "vip" | "bf"; percent: number } | null {
   if (!c || c.over || !c.phase) return null;
-  return { look: c.phase === "vip" ? "vip" : "bf", percent: c.percent };
+  return { look: "bf", percent: c.percent };
 }

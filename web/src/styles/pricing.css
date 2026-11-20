@@ -97,6 +97,22 @@
 #prices[data-sale="vip"] .pr-sale .btn-line{background:#fff;border-color:#fff;color:#0B0B0C}
 #prices[data-sale="vip"] .pr-sale .btn-line:is(:hover,:focus-visible){background:#D4B574;border-color:#D4B574;color:#0B0B0C}
 @media (prefers-reduced-motion:reduce){#prices[data-sale="vip"] .pr-sale::before{animation:none;--pr-sale-a:200deg}}
+/* the Black Friday banner (user, 2026-11-19): the VIP Sale banner's design in the Black Friday colours, true black with
+   one signal-red light circling the edge and a red glow in the corner; red pills, the button a white pill */
+#prices[data-sale="bf"] .pr-sale{position:relative;isolation:isolate;overflow:hidden;color:#fff;
+  background:radial-gradient(70% 140% at 0% 0%,rgba(211,18,31,.26),transparent 60%),radial-gradient(50% 120% at 100% 100%,rgba(211,18,31,.1),transparent 65%),#0B0B0C;
+  box-shadow:0 0 0 1px rgba(238,58,69,.28),0 30px 60px -38px rgba(11,11,12,.7)}
+#prices[data-sale="bf"] .pr-sale::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;padding:1px;pointer-events:none;
+  background:conic-gradient(from var(--pr-sale-a),transparent 0deg,rgba(255,107,115,.95) 28deg,transparent 70deg,transparent 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+  animation:prSaleEdge 7s linear infinite}
+#prices[data-sale="bf"] .pr-sale .sb{--a-bg:#D3121F;--a-fg:#fff;--a-ring:#D3121F;--b-bg:rgba(211,18,31,.16);--b-fg:#FF9AA0}
+#prices[data-sale="bf"] .pr-sale .sb-a{background:var(--a-bg);box-shadow:none}
+#prices[data-sale="bf"] .pr-sale-text{color:rgba(255,255,255,.74)}
+#prices[data-sale="bf"] .pr-sale-text strong{color:#fff}
+#prices[data-sale="bf"] .pr-sale .btn-line{background:#fff;border-color:#fff;color:#0B0B0C}
+#prices[data-sale="bf"] .pr-sale .btn-line:is(:hover,:focus-visible){background:#D3121F;border-color:#D3121F;color:#fff}
+@media (prefers-reduced-motion:reduce){#prices[data-sale="bf"] .pr-sale::before{animation:none;--pr-sale-a:200deg}}
 
 /* option rows in the stacked-discount layout (designer's reference, 2026-11-16): name, count and price of one, the offer pill;
    the earlier prices struck through, the price to pay large, the saving; Add to cart on the right */
