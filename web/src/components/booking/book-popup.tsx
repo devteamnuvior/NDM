@@ -67,7 +67,7 @@ export function BookPopup() {
           aria-modal="true"
           aria-labelledby="book-pop-title"
           data-lenis-prevent=""
-          className="book-card pointer-events-auto relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white px-[clamp(20px,2.4vw,32px)] pt-6 pb-[max(22px,env(safe-area-inset-bottom))] shadow-[0_40px_80px_-30px_rgba(11,15,19,.6)] sm:max-w-[680px] sm:rounded-[20px] sm:pt-[clamp(20px,2.4vw,32px)]"
+          className="book-card pointer-events-auto relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white px-[clamp(20px,2.4vw,32px)] pt-5 pb-[max(22px,env(safe-area-inset-bottom))] shadow-[0_40px_80px_-30px_rgba(11,15,19,.6)] sm:max-w-[680px] sm:rounded-[20px] sm:pt-[clamp(20px,2.4vw,32px)]"
         >
           <span aria-hidden="true" className="absolute top-2.5 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-ndm-ink/15 sm:hidden" />
           <button type="button" onClick={close} aria-label="Close booking form" className="absolute top-3 right-3 z-[1] grid size-10 place-items-center rounded-full text-ndm-ink transition-colors hover:bg-ndm-mist sm:top-4 sm:right-4">
@@ -76,7 +76,7 @@ export function BookPopup() {
           <TwoTone
             id="book-pop-title"
             className="pr-10"
-            size="text-[clamp(24px,2.3vw,31px)]"
+            size="text-[clamp(22px,2.3vw,31px)]"
             lead={
               <>
                 Book a free consultation
@@ -85,7 +85,7 @@ export function BookPopup() {
             }
             strong="in a few short steps"
           />
-          <div className="mt-5 flex">{run > 0 && <BookForm key={run} thanksId="book-pop-title" dock />}</div>
+          <div className="mt-3.5 flex sm:mt-5">{run > 0 && <BookForm key={run} thanksId="book-pop-title" dock />}</div>
         </div>
       </div>
     </div>

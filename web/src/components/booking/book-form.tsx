@@ -427,12 +427,12 @@ export function BookForm({ thanksId, summary = false, compact = false, dock = fa
         </p>
       </div>
 
-      <div className="book-steps mt-4 grid">
+      <div className={`book-steps grid ${dock ? "mt-3 sm:mt-4" : "mt-4"}`}>
         <fieldset data-step="0" className={stepClass("0")} {...stepAttr("0")}>
           <legend tabIndex={-1} className={legend}>
             What would you like to address?
           </legend>
-          <div className="mt-4">
+          <div className={dock ? "mt-3 sm:mt-4" : "mt-4"}>
             <BookPicker values={f.interest} onPick={pick} compact={compact} />
           </div>
           {f.interest.includes(BOOK_OTHER) && (
@@ -455,10 +455,10 @@ export function BookForm({ thanksId, summary = false, compact = false, dock = fa
               />
             </label>
           )}
-          <label className={`flex cursor-pointer items-center gap-3 rounded-[14px] border bg-white px-4 font-inter ${compact ? "mt-3 py-2.5" : dock ? "mt-3 py-3" : "mt-5 py-3"}`}>
+          <label className={`flex cursor-pointer items-center gap-3 rounded-[14px] border bg-white px-4 font-inter ${compact ? "mt-3 py-2.5" : dock ? "mt-3 py-2.5 sm:py-3" : "mt-5 py-3"}`}>
             <span className="min-w-0 flex-1">
               <span className="block text-[14px] font-semibold text-ndm-ink">Include my free VISIA® skin analysis</span>
-              <span className={`mt-0.5 block text-[12.5px] leading-[1.45] text-ndm-muted ${compact ? "hidden" : ""}`}>So you and your provider can see your skin in detail before planning anything.</span>
+              <span className={`mt-0.5 block text-[12.5px] leading-[1.45] text-ndm-muted ${compact ? "hidden" : dock ? "max-sm:hidden" : ""}`}>So you and your provider can see your skin in detail before planning anything.</span>
             </span>
             <input type="checkbox" role="switch" name="visia" checked={f.visia} onChange={(e) => set("visia", e.target.checked)} className="peer sr-only" />
             <span
