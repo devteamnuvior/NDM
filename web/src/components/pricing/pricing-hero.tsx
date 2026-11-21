@@ -39,11 +39,13 @@ export function PricingHero({ total }: { total: number | null }) {
   ];
 
   return (
-    <section ref={section} data-nav="dark" aria-labelledby="pricing-title" className="relative isolate flex min-h-[100svh] flex-col justify-end overflow-hidden bg-ndm-night pt-[150px] text-white md:h-[100svh] md:max-h-[1040px] md:min-h-[640px] md:pt-0">
-      <video ref={film} src={withBase(CLINIC_FILM.src)} poster={withBase(CLINIC_FILM.poster)} muted loop playsInline preload="auto" aria-hidden="true" className="absolute inset-0 -z-20 h-full w-full object-cover" />
+    <section ref={section} data-nav="dark" aria-labelledby="pricing-title" className="prh relative isolate flex min-h-[100svh] flex-col justify-end overflow-hidden bg-ndm-night pt-[150px] text-white md:h-[100svh] md:max-h-[1040px] md:min-h-[640px] md:pt-0">
+      <video ref={film} src={withBase(CLINIC_FILM.src)} poster={withBase(CLINIC_FILM.poster)} muted loop playsInline preload="auto" aria-hidden="true" className="prh-pic absolute inset-0 -z-20 h-full w-full object-cover" />
+      {/* phones (user, 2026-11-20): the film's bottom edge fades into the night colour the words sit on */}
+      <div aria-hidden="true" className="prh-fade" />
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10"
+        className="prh-shade absolute inset-0 -z-10"
         style={{ background: "linear-gradient(90deg,rgba(11,15,19,.5) 0%,rgba(11,15,19,.18) 55%,rgba(11,15,19,.1) 100%),linear-gradient(180deg,rgba(11,15,19,.62) 0%,rgba(11,15,19,.2) 28%,rgba(11,15,19,.26) 50%,rgba(11,15,19,.86) 100%)" }}
       />
       {/* the page carries on below: a quiet "Scroll to prices" line at the right edge (clear of the bottom tab), which also scrolls there */}
@@ -51,7 +53,7 @@ export function PricingHero({ total }: { total: number | null }) {
         <span style={{ writingMode: "vertical-rl" }}>Scroll to prices</span>
         <span aria-hidden="true" className="pr-scroll-line" />
       </a>
-      <div className="px-[var(--gx)] pb-[clamp(84px,8vw,112px)]">
+      <div className="prh-in px-[var(--gx)] pb-[clamp(84px,8vw,112px)]">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="max-w-[760px]">
             <Eyebrow dark className="rv">

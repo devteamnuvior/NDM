@@ -92,3 +92,32 @@
     padding-top: calc(var(--bf-pic) - 64px);
   }
 }
+
+/* Pricing header on phones (user, 2026-11-20): the clinic film fills the top only and fades into night colour, the words below it */
+.prh-fade{display:none}
+@media (max-width: 639px) {
+  main .prh {
+    --pr-pic: clamp(380px, 56svh, 520px);
+    min-height: 0;
+    padding-top: 0;
+  }
+  main .prh .prh-pic {
+    bottom: auto;
+    height: var(--pr-pic);
+  }
+  main .prh .prh-shade {
+    display: none;
+  }
+  main .prh .prh-fade {
+    display: block;
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: -10;
+    height: var(--pr-pic);
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(11, 15, 19, 0.6) 0%, rgba(11, 15, 19, 0.15) 26%, rgba(11, 15, 19, 0) 44%, rgba(11, 15, 19, 0.5) 68%, rgba(11, 15, 19, 0.9) 86%, #0b0f13 100%);
+  }
+  main .prh .prh-in {
+    padding-top: calc(var(--pr-pic) - 56px);
+  }
+}
