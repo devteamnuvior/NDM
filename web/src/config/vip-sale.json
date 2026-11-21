@@ -1,0 +1,218 @@
+{
+  "title": "VIP Sale: Up to {{max}}% Off Treatments | NewDermaMed Toronto",
+  "description": "NewDermaMed VIP Sale, {{dates_long}}: up to {{max}}% off selected treatment packages at our Uptown and Downtown Toronto clinics, for our clients first. Build your plan and check out with code {{code}}.",
+  "noindex": false,
+  "name": "VIP Sale",
+  "starts": "2026-11-14 00:00",
+  "ends": "2026-11-19 23:59",
+  "hero": {
+    "lead": "VIP",
+    "strong": "Sale",
+    "offer": "plus a $200 gift with your purchase",
+    "text": "Selected treatment packages, for our clients first. Use code {{code}} at checkout for your full sale price.",
+    "photo": {
+      "src": "/assets/hero/clinic-exterior.jpg",
+      "width": 1536,
+      "height": 1024
+    }
+  },
+  "gift": "+$200 gift with your purchase · first 20 purchases · given in clinic",
+  "tape": [
+    "VIP Sale",
+    "Up to {{max}}% off",
+    "+$200 gift with your purchase",
+    "Code {{code}} at checkout",
+    "Free consultation and VISIA® skin analysis",
+    "Uptown and Downtown Toronto"
+  ],
+  "how": [
+    {
+      "title": "Choose",
+      "text": "your treatment"
+    },
+    {
+      "title": "Pick",
+      "text": "your package and add it to your plan"
+    },
+    {
+      "title": "Check out",
+      "text": "with code {{code}} for your full sale price"
+    }
+  ],
+  "concerns": {
+    "lead": "What brings you",
+    "strong": "in today?",
+    "text": "Tap a concern and we shortlist the VIP Sale deals for it. Tap it again to see everything.",
+    "items": [
+      {
+        "name": "Unwanted hair",
+        "text": "Choose your area and laser hair removal package.",
+        "categories": [
+          "laser-hair-removal"
+        ]
+      },
+      {
+        "name": "Lines and wrinkles",
+        "text": "Treatments that may soften lines and refresh the skin.",
+        "categories": [
+          "dermal-fillers",
+          "skin-booster-and-bio-stimulators",
+          "microneedling",
+          "laser-skin-resurfacing",
+          "4d-rejuvalift"
+        ]
+      },
+      {
+        "name": "Loose or sagging skin",
+        "text": "Lifting and tightening for the face, neck and body.",
+        "categories": [
+          "aptos-thread-method",
+          "2d-3d-laser-skin-tightening",
+          "4d-rejuvalift",
+          "skin-booster-and-bio-stimulators"
+        ]
+      },
+      {
+        "name": "Volume and contour",
+        "text": "Lips, cheeks, jawline and more.",
+        "categories": [
+          "dermal-fillers",
+          "skin-booster-and-bio-stimulators",
+          "aptos-thread-method"
+        ]
+      },
+      {
+        "name": "Stubborn fat",
+        "text": "Non-invasive body contouring.",
+        "categories": [
+          "coolsculpting-tight-sculpting"
+        ]
+      },
+      {
+        "name": "Acne and scars",
+        "text": "Laser, peels and microneedling.",
+        "categories": [
+          "laser-acne-treatment",
+          "microneedling",
+          "chemical-peel",
+          "laser-skin-resurfacing"
+        ]
+      },
+      {
+        "name": "Spots and pigment",
+        "text": "Options for an uneven skin tone.",
+        "categories": [
+          "photo-rejuvenation",
+          "chemical-peel",
+          "2d-3d-laser-rejuvenation"
+        ]
+      },
+      {
+        "name": "Hair thinning",
+        "text": "PRP scalp treatments.",
+        "categories": [
+          "hair-loss"
+        ]
+      },
+      {
+        "name": "Intimate wellness",
+        "text": "Laser vaginal tightening.",
+        "categories": [
+          "laser-vaginal-tightening"
+        ]
+      }
+    ]
+  },
+  "deals": {
+    "lead": "Build",
+    "strong": "your plan.",
+    "text": "Add any package to your plan and your savings add up below. Then check out with code {{code}}, or book a free consultation first.",
+    "groups": [
+      {
+        "category": "laser-hair-removal",
+        "tab": "Laser"
+      },
+      {
+        "category": "laser-acne-treatment",
+        "tab": "Laser"
+      },
+      {
+        "category": "laser-skin-resurfacing",
+        "tab": "Laser"
+      },
+      {
+        "category": "photo-rejuvenation",
+        "tab": "Laser"
+      },
+      {
+        "category": "4d-rejuvalift",
+        "tab": "Laser"
+      },
+      {
+        "category": "2d-3d-laser-skin-tightening",
+        "tab": "Laser"
+      },
+      {
+        "category": "2d-3d-laser-rejuvenation",
+        "tab": "Laser"
+      },
+      {
+        "category": "microneedling",
+        "tab": "Skin"
+      },
+      {
+        "category": "chemical-peel",
+        "tab": "Skin"
+      },
+      {
+        "category": "botox-dysport",
+        "tab": "Injectables"
+      },
+      {
+        "category": "dermal-fillers",
+        "tab": "Injectables"
+      },
+      {
+        "category": "skin-booster-and-bio-stimulators",
+        "tab": "Injectables"
+      },
+      {
+        "category": "aptos-thread-method",
+        "tab": "Thread lift"
+      },
+      {
+        "category": "coolsculpting-tight-sculpting",
+        "tab": "Body"
+      },
+      {
+        "category": "hair-loss",
+        "tab": "Hair"
+      },
+      {
+        "category": "laser-vaginal-tightening",
+        "tab": "Wellness"
+      }
+    ]
+  },
+  "specials": {
+    "tag": "Fixed sale prices",
+    "lead": "Sale",
+    "strong": "prices",
+    "count": 7
+  },
+  "plan": {
+    "lead": "All your favourites,",
+    "strong": "together.",
+    "note": "Prices in CAD, before tax. Code {{code}} applies to eligible packages. Consultation required before treatment."
+  },
+  "clinics": {
+    "tag": "Two Toronto clinics",
+    "lead": "Find your",
+    "strong": "NewDermaMed."
+  },
+  "footer": {
+    "lead": "The VIP Sale ends",
+    "text": "Book your free consultation and VISIA® skin analysis, or check out with code {{code}}.",
+    "terms": "Selected packages only; single sessions at regular price. Code {{code}} applies to eligible packages. Injectables and Aptos at fixed sale prices. Not included: laser vein, facials, depigmenting, non-surgical butt lift, hip dip, snoring, toenail, Latisse, Dysport, hyperhidrosis, laser hair rejuvenation, filler single syringes, filler 3 and 4 syringes, filler combination packages, Belkyra. Consultation required. Individual results may vary."
+  }
+}

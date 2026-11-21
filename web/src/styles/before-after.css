@@ -1,0 +1,16 @@
+/* Before & after: the drag-to-compare photo card and its row. Copied rule for rule from the prototype. */
+.ba-slide{width:min(64vw,300px)}
+@media (min-width:1024px){.ba-slide{width:calc((100vw - 2 * var(--gx) - 48px) / 4)}}
+.ba-box{touch-action:pan-y;touch-action:pan-y pinch-zoom;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.ba-box *{pointer-events:none}
+.ba-box img{-webkit-user-drag:none}
+.ba-pill{transition:opacity .35s ease}
+.ba-handle{transform:translate(-50%,-50%);transition:transform .5s var(--e-out)}
+@media (hover:hover){.ba-box:hover .ba-handle{transform:translate(-50%,-50%) scale(1.05)}}
+.ba-box.is-drag .ba-handle{transform:translate(-50%,-50%) scale(1.1)}
+.ba-box.is-tween .ba-before{transition:clip-path .45s var(--e-out),-webkit-clip-path .45s var(--e-out)}
+.ba-box.is-tween .ba-line{transition:left .45s var(--e-out)}
+.ba-box.is-tween .ba-handle{transition:transform .5s var(--e-out),left .45s var(--e-out)}
+@media (prefers-reduced-motion: reduce){
+  .ba-pill,.ba-handle,.ba-box.is-tween .ba-before,.ba-box.is-tween .ba-line,.ba-box.is-tween .ba-handle{transition:none}
+}

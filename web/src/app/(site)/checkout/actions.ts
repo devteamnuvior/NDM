@@ -1,0 +1,184 @@
+"use server";
+
+import { headers } from "next/headers";
+import { PROVINCES } from "@/config/checkout";
+import { CLINICS } from "@/config/site";
+import { getAccountSession } from "@/lib/account/session";
+import { CART_MAX, cartKey, type CartLine } from "@/lib/cart";
+import { WordPressError, getOrderPayment, getPaymentOptions, isWordPressConfigured, placeOrderRequest } from "@/lib/wordpress";
+
+/**
+ * Places an order request. The browser sends what was chosen (WooCommerce IDs and quantities) and the
+ * visitor's details; it never sends a price. WooCommerce checks the lines against the price list,
+ * puts its own prices on the order and keeps it pending until it is paid online by card on WooCommerce's
+ * pay page. There is no "pay at your appointment" (user, 2026-11-19).
+ */
+
+export interface OrderRequestForm {
+  lines: { productId: number; variationId: number; qty: number }[];
+  first: string;
+  last: string;
+  email: string;
+  phone: string;
+  address: string;
+  apt: string;
+  city: string;
+  province: string;
+  postal: string;
+  /** "Uptown" or "Downtown". */
+  clinic: string;
+  note: string;
+  agree: boolean;
+  /** The checkout code of a running sale ("PLUS30"), or "". WooCommerce decides what it takes off. */
+  code?: string;
+}
+
+/** What the confirmation page shows and keeps: no email, phone or address. */
+export interface OrderReceipt {
+  no: string;
+  date: string;
+  lines: CartLine[];
+  sub: number;
+  saved: number;
+  tax: number;
+  /** "HST (13%)", as WooCommerce names the order's tax; null when the order has none. */
+  taxLabel?: string | null;
+  total: number;
+  /** The checkout code WooCommerce applied, and what it took off; left out without one. */
+  code?: string;
+  discount?: number;
+  first: string;
+  clinic: string;
+  pay: string;
+  /** "card" orders are paid on WooCommerce's pay page: its address, and the order's ID and key, which
+   * the confirmation page uses to ask WooCommerce whether the payment went through. */
+  /** "clinic" only on receipts kept from before 2026-11-19. */
+  method?: "card" | "clinic";
+  payUrl?: string;
+  orderId?: number;
+  orderKey?: string;
+}
+
+export type OrderResult = { ok: true; order: OrderReceipt } | { ok: false; reason: "invalid" | "unavailable" | "busy" | "unreachable"; message: string };
+
+const text = (value: unknown, max: number): string | null => (typeof value === "string" && value.trim().length <= max ? value.trim() : null);
+
+/* a small brake on repeated requests from one address; a real limiter belongs in front of the site */
+const WINDOW_MS = 10 * 60_000;
+const MAX_IN_WINDOW = 6;
+const recent = new Map<string, number[]>();
+function tooMany(address: string): boolean {
+  const now = Date.now();
+  const times = (recent.get(address) ?? []).filter((t) => now - t < WINDOW_MS);
+  times.push(now);
+  recent.set(address, times);
+  if (recent.size > 5000) recent.clear();
+  return times.length > MAX_IN_WINDOW;
+}
+
+const invalid = (message: string): OrderResult => ({ ok: false, reason: "invalid", message });
+
+export async function placeOrderAction(form: OrderRequestForm): Promise<OrderResult> {
+  if (typeof form !== "object" || form === null) return invalid("The request could not be read. Please reload the page and try again.");
+  /* no hidden anti-robot field on the checkout (user, 2026-11-18): the booking, message and sign-up forms keep theirs */
+
+  const address = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  if (tooMany(address)) return { ok: false, reason: "busy", message: "Too many requests in a short time. Please wait a few minutes, or call the clinic." };
+
+  if (!Array.isArray(form.lines) || !form.lines.length || form.lines.length > 50) return invalid("Your cart is empty.");
+  const lines = form.lines.map((l) => ({ productId: l?.productId, variationId: l?.variationId, qty: l?.qty }));
+  if (lines.some((l) => !Number.isInteger(l.productId) || l.productId <= 0 || !Number.isInteger(l.variationId) || l.variationId < 0 || !Number.isInteger(l.qty) || l.qty < 1 || l.qty > CART_MAX)) {
+    return { ok: false, reason: "unavailable", message: "Something in your cart could not be read. Please review your cart." };
+  }
+
+  const first = text(form.first, 60);
+  const last = text(form.last, 60);
+  const email = text(form.email, 120);
+  const phone = text(form.phone, 30);
+  const street = text(form.address, 120);
+  const apt = text(form.apt, 60);
+  const city = text(form.city, 60);
+  const postal = text(form.postal, 10);
+  const note = text(form.note, 500);
+  if (!first || !last || !email || !phone || !street || apt === null || !city || !postal || note === null) return invalid("Please check your details: something is missing or too long.");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return invalid("Please enter a valid email address.");
+  /* the card processor refuses a payment without a phone number */
+  if (phone.replace(/\D/g, "").length < 7) return invalid("Please enter a phone number.");
+  if (!(PROVINCES as readonly string[]).includes(form.province)) return invalid("Please choose a province.");
+  if (!/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(postal)) return invalid("Please enter a Canadian postal code such as M2N 5M5.");
+  const clinic = CLINICS.find((c) => c.name === form.clinic);
+  if (!clinic) return invalid("Please choose a clinic.");
+  const code = typeof form.code === "string" && /^[A-Za-z0-9]{0,40}$/.test(form.code.trim()) ? form.code.trim().toUpperCase() : null;
+  if (code === null) return invalid("The checkout code could not be read. Please remove it and try again.");
+  if (form.agree !== true) return invalid("Please accept the terms to place your request.");
+
+  if (!isWordPressConfigured()) return { ok: false, reason: "unreachable", message: "Order requests are not available right now. Please call the clinic." };
+
+  /* every order is paid online by card: without the card gateway nothing is placed */
+  const cardOff: OrderResult = { ok: false, reason: "unreachable", message: "Card payment is not available right now, so your order was not placed. Please try again later, or call the clinic." };
+  if (!(await getPaymentOptions()).card) return cardOff;
+
+  /* signed in: the order goes on that customer's account, where "My account" lists it */
+  const customerId = (await getAccountSession())?.id;
+
+  try {
+    const placed = await placeOrderRequest({
+      ...(customerId ? { customerId } : {}),
+      ...(code ? { code } : {}),
+      pay: "card",
+      lines,
+      customer: { first, last, email, phone, address: street, apt, city, province: form.province, postal },
+      clinic: `NewDermaMed ${clinic.name}`,
+      /* no appointment step for now (user, 2026-11-18): the team arranges the visit, WordPress notes "not given" */
+      preferred: "",
+      note,
+    });
+    if (placed.pay !== "card" || !placed.payUrl || !placed.id || !placed.key) return cardOff;
+    /* tax and total are WooCommerce's own: it taxed the order when it created it */
+    const discount = placed.discount ?? 0;
+    return {
+      ok: true,
+      order: {
+        no: placed.number,
+        date: placed.date,
+        lines: placed.lines.map((l) => ({ key: cartKey(l.productId, l.variationId), cat: l.cat, name: l.name, label: l.label, price: l.price, was: l.was || undefined, unit: "", productId: l.productId, variationId: l.variationId, qty: l.qty })),
+        sub: placed.sub,
+        saved: placed.saved,
+        tax: placed.tax,
+        taxLabel: placed.taxLabel || null,
+        total: placed.total,
+        ...(placed.code && discount > 0 ? { code: placed.code, discount } : {}),
+        first,
+        clinic: clinic.name,
+        pay: "Card, paid online",
+        method: "card",
+        payUrl: placed.payUrl,
+        orderId: placed.id,
+        orderKey: placed.key,
+      },
+    };
+  } catch (error) {
+    if (!(error instanceof WordPressError)) throw error;
+    if (error.kind === "http" && error.status === 409) return { ok: false, reason: "unavailable", message: "Something in your cart is no longer on the price list. Please review your cart." };
+    if (error.kind === "http" && error.status === 400) return invalid(error.message);
+    /* the checkout code was refused: not valid, expired, or nothing in the order is an eligible package */
+    if (error.kind === "http" && error.status === 422) return invalid(`${error.message} Remove the code or review your cart, then try again.`);
+    console.error("[checkout] the order request could not be placed:", error.kind, error.status ?? "", error.message);
+    return { ok: false, reason: "unreachable", message: "Your request could not be sent right now. Nothing was placed; please try again in a moment, or call the clinic." };
+  }
+}
+
+/** What the confirmation page shows about a card order: WooCommerce's answer, never the address bar's. */
+export type PaymentCheck = { ok: true; number: string; paid: boolean; payUrl: string } | { ok: false };
+
+export async function checkOrderPaymentAction(orderId: unknown, orderKey: unknown): Promise<PaymentCheck> {
+  if (typeof orderId !== "number" || !Number.isInteger(orderId) || orderId <= 0) return { ok: false };
+  if (typeof orderKey !== "string" || !/^wc_order_[A-Za-z0-9]{6,40}$/.test(orderKey)) return { ok: false };
+  if (!isWordPressConfigured()) return { ok: false };
+  try {
+    const p = await getOrderPayment(orderId, orderKey);
+    return { ok: true, number: String(p.number), paid: p.paid === true, payUrl: typeof p.payUrl === "string" ? p.payUrl : "" };
+  } catch {
+    return { ok: false };
+  }
+}

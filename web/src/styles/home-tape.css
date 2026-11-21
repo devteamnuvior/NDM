@@ -1,0 +1,22 @@
+/* The crossed sale tapes under the home hero (ported 2026-11-17 from the prototype's index.html by script). Every rule is tied to
+   .home-tape with :where() (no added weight, so they rank as in the prototype), because the sale pages draw their own tapes
+   with the same class names; the keyframes have their own name. */
+.home-tape{position:relative;z-index:2;display:block;overflow:hidden;background:#FAFAF8}
+.home-tape .bfs-tape-white{background:#141416;color:#fff}
+.home-tape .bfs-tape-white i{background:#EE3A45!important}
+.home-tape .bfs-tape-red{box-shadow:0 10px 24px -14px rgba(211,18,31,.55)}
+:where(.home-tape) .bfs-tapes{position:relative;height:118px;margin-top:8px}
+:where(.home-tape) .bfs-tape{overflow:hidden;white-space:nowrap;padding:11px 0;font:600 12.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase}
+:where(.home-tape) .bfs-tapes .bfs-tape{position:absolute;left:-5%;width:110%}
+:where(.home-tape) .bfs-tapes .bfs-tape:first-child{top:22px;transform:rotate(-2.2deg);z-index:1}
+:where(.home-tape) .bfs-tapes .bfs-tape:last-child{top:52px;transform:rotate(1.6deg)}
+:where(.home-tape) .bfs-tape-red{background:#D3121F;color:#fff}
+:where(.home-tape) .bfs-tape-white{background:#fff;color:#0B0B0C}
+:where(.home-tape) .bfs-tape-white i{background:#D3121F!important;opacity:1!important}
+:where(.home-tape) .bfs-tick-in.is-rev{animation-direction:reverse}
+:where(.home-tape) .bfs-tick-in{display:inline-flex;animation:homeTapeTick 38s linear infinite}
+:where(.home-tape) .bfs-tick-in span{display:inline-flex;align-items:center;gap:22px;padding-right:22px}
+:where(.home-tape) .bfs-tick-in i{width:5px;height:5px;border-radius:9px;background:#fff;opacity:.7}
+@keyframes homeTapeTick{to{transform:translateX(-50%)}}
+@media (max-width:767px){:where(.home-tape) .bfs-tapes{height:104px}}
+@media (prefers-reduced-motion:reduce){:where(.home-tape) .bfs-tick-in{animation:none}}

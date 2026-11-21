@@ -1,0 +1,2902 @@
+[
+ {
+  "name": "Aptos Thread Method",
+  "items": [
+   {
+    "name": "Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)",
+    "note": "",
+    "options": [
+     {
+      "label": "Nose lift/correction",
+      "regular": 2500.0,
+      "sale": null
+     },
+     {
+      "label": "Fox eyebrow / eyebrow lift",
+      "regular": 2500.0,
+      "sale": null
+     },
+     {
+      "label": "Mid face",
+      "regular": 2500.0,
+      "sale": null
+     },
+     {
+      "label": "Lower face or submental",
+      "regular": 2500.0,
+      "sale": null
+     },
+     {
+      "label": "Face – Mid & Lower",
+      "regular": 4400.0,
+      "sale": 3400.0
+     },
+     {
+      "label": "Neck",
+      "regular": 3900.0,
+      "sale": 2900.0
+     },
+     {
+      "label": "Face + neck",
+      "regular": 6900.0,
+      "sale": 5900.0
+     }
+    ],
+    "was": [
+     "Aptos Excellence Visage Thread Method"
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Botox / Dysport",
+  "items": [
+   {
+    "name": "Botox Cosmetic",
+    "note": "",
+    "options": [
+     {
+      "label": "Regular",
+      "regular": 12.0,
+      "sale": null
+     },
+     {
+      "label": "60 units",
+      "regular": 720.0,
+      "sale": 648.0
+     },
+     {
+      "label": "120 units",
+      "regular": 1440.0,
+      "sale": 1152.0
+     },
+     {
+      "label": "180 units",
+      "regular": 2160.0,
+      "sale": 1512.0
+     },
+     {
+      "label": "220 units",
+      "regular": 2640.0,
+      "sale": 1848.0
+     }
+    ],
+    "was": [
+     "Botox"
+    ]
+   },
+   {
+    "name": "Dysport",
+    "note": "",
+    "options": [
+     {
+      "label": "Regular",
+      "regular": 11.0,
+      "sale": null
+     },
+     {
+      "label": "60 units",
+      "regular": 660.0,
+      "sale": 594.0
+     },
+     {
+      "label": "120 units",
+      "regular": 1320.0,
+      "sale": 1056.0
+     },
+     {
+      "label": "180 units",
+      "regular": 1980.0,
+      "sale": 1386.0
+     },
+     {
+      "label": "220 units",
+      "regular": 2420.0,
+      "sale": 1694.0
+     }
+    ]
+   },
+   {
+    "name": "Hyperhidrosis",
+    "note": "",
+    "options": [
+     {
+      "label": "Regular",
+      "regular": 9.0,
+      "sale": null
+     },
+     {
+      "label": "50 units",
+      "regular": 450.0,
+      "sale": null
+     },
+     {
+      "label": "100 units",
+      "regular": 900.0,
+      "sale": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Laser Vein",
+  "items": [
+   {
+    "name": "Laser Vein Removal One Small Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 240.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 720.0,
+      "sale": 576.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 1440.0,
+      "sale": 1004.0
+     }
+    ]
+   },
+   {
+    "name": "Laser Vein Removal One Large Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1350.0,
+      "sale": 1080.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 2700.0,
+      "sale": 1890.0
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Dermal Fillers",
+  "items": [
+   {
+    "name": "Lip Enhancement",
+    "note": "definition, volume, hydration",
+    "options": [
+     {
+      "label": "1 Syringe",
+      "regular": 750.0,
+      "sale": null
+     },
+     {
+      "label": "2 Syringes",
+      "regular": 1500.0,
+      "sale": 1125.0
+     }
+    ]
+   },
+   {
+    "name": "Standard Contour Areas",
+    "note": "Cheeks (mid-face / cheek enhancement), Smile Lines (Nasolabial folds), Marionette Lines, Pre-jowl sulcus, Temples",
+    "options": [
+     {
+      "label": "1 Syringe",
+      "regular": 800.0,
+      "sale": null
+     },
+     {
+      "label": "2 Syringes",
+      "regular": 1600.0,
+      "sale": 1125.0
+     },
+     {
+      "label": "3 Syringes",
+      "regular": 2400.0,
+      "sale": 1800.0
+     },
+     {
+      "label": "4 Syringes",
+      "regular": 3200.0,
+      "sale": 2400.0
+     }
+    ]
+   },
+   {
+    "name": "Precision / Advanced Areas",
+    "note": "Under-Eye Filler (Tear Trough), Chin Enhancement, Jawline Contouring",
+    "options": [
+     {
+      "label": "1 Syringe",
+      "regular": 850.0,
+      "sale": null
+     },
+     {
+      "label": "2 Syringes",
+      "regular": 1700.0,
+      "sale": null
+     },
+     {
+      "label": "3 Syringes",
+      "regular": 2550.0,
+      "sale": null
+     },
+     {
+      "label": "4 Syringes",
+      "regular": 3400.0,
+      "sale": null
+     }
+    ],
+    "was": [
+     "Premium Fillers"
+    ]
+   },
+   {
+    "name": "Profile Balance Package",
+    "note": "Lip Enhancement + Chin Enhancement",
+    "options": [
+     {
+      "label": "2 Syringes",
+      "regular": 995.0,
+      "sale": null
+     }
+    ],
+    "was": [
+     "Profile Balance"
+    ]
+   },
+   {
+    "name": "Refreshed Eye Package",
+    "note": "Cheeks (mid-face / cheek enhancement) + Under-Eye Filler (Tear Trough)",
+    "options": [
+     {
+      "label": "2 Syringes",
+      "regular": 995.0,
+      "sale": null
+     }
+    ],
+    "was": [
+     "Refreshed Eye"
+    ]
+   },
+   {
+    "name": "Lower Face Contour Package",
+    "note": "Jawline Contouring + Chin Enhancement",
+    "options": [
+     {
+      "label": "2 Syringes",
+      "regular": 1100.0,
+      "sale": null
+     }
+    ],
+    "was": [
+     "Lower Face Contour"
+    ]
+   },
+   {
+    "name": "Midface Lift Package",
+    "note": "Cheeks (mid-face / cheek enhancement) + Smile Lines (Nasolabial folds)",
+    "options": [
+     {
+      "label": "2 Syringes",
+      "regular": 995.0,
+      "sale": null
+     }
+    ],
+    "was": [
+     "Midface Lift"
+    ]
+   },
+   {
+    "name": "Full Midface Rejuvenation",
+    "note": "Cheeks (mid-face / cheek enhancement) + Under-Eye Filler (Tear Trough) + Temples",
+    "options": [
+     {
+      "label": "3 Syringes",
+      "regular": 1658.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Upper Face Support Package",
+    "note": "",
+    "options": [
+     {
+      "label": "2 Syringes",
+      "regular": 995.0,
+      "sale": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Skin Booster and Bio-stimulators",
+  "items": [
+   {
+    "name": "Bio-Stimulator – Above the Knee Tightening",
+    "note": "",
+    "options": [
+     {
+      "label": "1 Syringe",
+      "regular": 599.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Skin Booster – HA (Hyaluronic Acid)",
+    "note": "",
+    "options": [
+     {
+      "label": "1 syringe",
+      "regular": 399.0,
+      "sale": null
+     },
+     {
+      "label": "2 syringe",
+      "regular": 798.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Bio-Stimulator – Radiesse",
+    "note": "",
+    "options": [
+     {
+      "label": "1 Syringe",
+      "regular": 599.0,
+      "sale": null
+     },
+     {
+      "label": "2 Syringes",
+      "regular": 1700.0,
+      "sale": 1198.0
+     }
+    ]
+   },
+   {
+    "name": "Bio-Stimulator – Sculptra Liquid Facelift",
+    "note": "",
+    "options": [
+     {
+      "label": "1 Vial",
+      "regular": 699.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Bio-Stimulator – Sculptra",
+    "note": "",
+    "options": [
+     {
+      "label": "1 Vial",
+      "regular": 699.0,
+      "sale": null
+     },
+     {
+      "label": "2 Vials",
+      "regular": 1398.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Bio-Stimulator – Crepey Arm Rejuvenation with Radiesse",
+    "note": "",
+    "options": [
+     {
+      "label": "Per Syringe",
+      "regular": 599.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Bio-Stimulator – Hand Rejuvenation with Radiesse",
+    "note": "",
+    "options": [
+     {
+      "label": "1 Syringe",
+      "regular": 599.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Bio-Stimulator – Radiesse Collagen Lift",
+    "note": "",
+    "options": [
+     {
+      "label": "1 Syringe",
+      "regular": 599.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Bio-Stimulator – Radiesse Jawline Lift",
+    "note": "",
+    "options": [
+     {
+      "label": "1 Syringe",
+      "regular": 599.0,
+      "sale": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Non-Surgical Butt Lift",
+  "items": [
+   {
+    "name": "Non-Surgical Butt Lift",
+    "note": "",
+    "options": [
+     {
+      "label": "60 mL",
+      "regular": 3999.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Hip Dip Contouring",
+    "note": "",
+    "options": [
+     {
+      "label": "Standard",
+      "regular": 1999.0,
+      "sale": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Microneedling",
+  "items": [
+   {
+    "name": "Microneedling-Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 490.0,
+      "sale": 245.0
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1470.0,
+      "sale": 735.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 2940.0,
+      "sale": 1470.0
+     }
+    ]
+   },
+   {
+    "name": "Microneedling with PRP - Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 590.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1770.0,
+      "sale": 1416.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 3540.0,
+      "sale": 2478.0
+     }
+    ]
+   },
+   {
+    "name": "Microneedling with PDRN (Salmon DNA) - Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 590.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1770.0,
+      "sale": 1416.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 3540.0,
+      "sale": 2478.0
+     }
+    ]
+   },
+   {
+    "name": "Microneedling with Exosomes - Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 590.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1770.0,
+      "sale": 1416.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 3540.0,
+      "sale": 2478.0
+     }
+    ]
+   },
+   {
+    "name": "Microneedling - Neck",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 490.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1470.0,
+      "sale": 1176.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 2940.0,
+      "sale": 2058.0
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Laser Acne Treatment",
+  "items": [
+   {
+    "name": "Laser Acne Full Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 375.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1125.0,
+      "sale": 895.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 2250.0,
+      "sale": 1575.0
+     }
+    ]
+   },
+   {
+    "name": "Laser Acne Upper Back",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 4500.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 2250.0,
+      "sale": 1800.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 4500.0,
+      "sale": 3150.0
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Laser Skin Resurfacing",
+  "items": [
+   {
+    "name": "Laser Skin Resurfacing Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 990.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 2970.0,
+      "sale": 2376.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 5940.0,
+      "sale": 4158.0
+     }
+    ]
+   },
+   {
+    "name": "Laser Skin Resurfacing Face & Neck",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 1800.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 5400.0,
+      "sale": 4320.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 10800.0,
+      "sale": 7560.0
+     }
+    ]
+   },
+   {
+    "name": "Laser Skin Resurfacing Extra Small Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 200.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 600.0,
+      "sale": 480.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 1200.0,
+      "sale": 840.0
+     }
+    ]
+   },
+   {
+    "name": "Laser Skin Resurfacing Small Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 300.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 900.0,
+      "sale": 720.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 1800.0,
+      "sale": 1260.0
+     }
+    ]
+   },
+   {
+    "name": "Laser Skin Resurfacing Medium Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 600.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1800.0,
+      "sale": 1440.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 3600.0,
+      "sale": 2520.0
+     }
+    ]
+   },
+   {
+    "name": "Laser Skin Resurfacing Large Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 990.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 2970.0,
+      "sale": 2376.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 5940.0,
+      "sale": 4158.0
+     }
+    ]
+   },
+   {
+    "name": "Fractional Laser Skin Resurfacing Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 1270.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 3810.0,
+      "sale": 3048.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 7620.0,
+      "sale": 5334.0
+     }
+    ]
+   },
+   {
+    "name": "Fractional Laser Skin Resurfacing Face & Neck",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 2080.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 6240.0,
+      "sale": 4992.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 12480.0,
+      "sale": 8736.0
+     }
+    ]
+   },
+   {
+    "name": "Fractional Laser Skin Resurfacing Extra Small Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 300.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 900.0,
+      "sale": 720.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 1800.0,
+      "sale": 1260.0
+     }
+    ]
+   },
+   {
+    "name": "Fractional Laser Skin Resurfacing Small Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 650.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1950.0,
+      "sale": 1560.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 3900.0,
+      "sale": 2730.0
+     }
+    ]
+   },
+   {
+    "name": "Fractional Laser Skin Resurfacing Medium Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 850.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 2550.0,
+      "sale": 2040.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 5100.0,
+      "sale": 3570.0
+     }
+    ]
+   },
+   {
+    "name": "Fractional Laser Skin Resurfacing Large Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 1270.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 3810.0,
+      "sale": 3048.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 7620.0,
+      "sale": 5334.0
+     }
+    ]
+   },
+   {
+    "name": "Micro Laser Peel Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 679.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 2037.0,
+      "sale": 1629.6
+     },
+     {
+      "label": "Package of 6",
+      "regular": 4074.0,
+      "sale": 2851.8
+     }
+    ]
+   },
+   {
+    "name": "Micro Laser Peel Face + Neck",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 1178.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 3534.0,
+      "sale": 2827.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 7068.0,
+      "sale": 4947.0
+     }
+    ]
+   },
+   {
+    "name": "Micro Laser Peel Extra Small",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 300.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 900.0,
+      "sale": 720.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 1800.0,
+      "sale": 1260.0
+     }
+    ]
+   },
+   {
+    "name": "Micro Laser Peel Small",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 589.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1767.0,
+      "sale": 1413.6
+     },
+     {
+      "label": "Package of 6",
+      "regular": 3534.0,
+      "sale": 2473.8
+     }
+    ]
+   },
+   {
+    "name": "Micro Laser Peel Medium",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 900.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 2700.0,
+      "sale": 2160.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 5400.0,
+      "sale": 3780.0
+     }
+    ]
+   },
+   {
+    "name": "Micro Laser Peel Large",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 1180.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 3540.0,
+      "sale": 2832.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 7080.0,
+      "sale": 4956.0
+     }
+    ]
+   },
+   {
+    "name": "Ultra Laser Peel Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 489.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1467.0,
+      "sale": 1173.6
+     },
+     {
+      "label": "Package of 6",
+      "regular": 2934.0,
+      "sale": 2053.8
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Photo-Rejuvenation",
+  "items": [
+   {
+    "name": "Photo-Rejuvenation Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 395.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1185.0,
+      "sale": 948.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 2370.0,
+      "sale": 1659.0
+     }
+    ]
+   },
+   {
+    "name": "Photo-Rejuvenation Extra Small",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 275.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 825.0,
+      "sale": 660.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 1650.0,
+      "sale": 1155.0
+     }
+    ]
+   },
+   {
+    "name": "Photo-Rejuvenation Small",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 390.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1170.0,
+      "sale": 936.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 2340.0,
+      "sale": 1638.0
+     }
+    ]
+   },
+   {
+    "name": "Photo-Rejuvenation Medium",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 790.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 2370.0,
+      "sale": 1896.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 4740.0,
+      "sale": 3318.0
+     }
+    ]
+   },
+   {
+    "name": "Photo-Rejuvenation Large",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 1185.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 3555.0,
+      "sale": 2844.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 7110.0,
+      "sale": 2844.0
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "4D Rejuvalift",
+  "items": [
+   {
+    "name": "4D Rejuvalift Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 1200.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 3600.0,
+      "sale": 2880.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 7200.0,
+      "sale": 5040.0
+     }
+    ]
+   },
+   {
+    "name": "4D Rejuvalift Large",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 1200.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 3600.0,
+      "sale": 2880.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 7200.0,
+      "sale": 5040.0
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "2D & 3D Laser Skin Tightening",
+  "items": [
+   {
+    "name": "2D Skin Tightening Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 480.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1440.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 6",
+      "regular": 2880.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "2D Skin Tightening Large Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 960.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 2880.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 6",
+      "regular": 5760.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Smooth Eye Tightening",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 600.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1800.0,
+      "sale": 1440.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 3600.0,
+      "sale": 2520.0
+     }
+    ]
+   },
+   {
+    "name": "3D Skin Tightening Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 810.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 2700.0,
+      "sale": 2160.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 5400.0,
+      "sale": 3780.0
+     }
+    ]
+   },
+   {
+    "name": "3D Skin Tightening Large Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 810.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 2700.0,
+      "sale": 2160.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 5400.0,
+      "sale": 3780.0
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "2D & 3D Laser Rejuvenation",
+  "items": [
+   {
+    "name": "2D Skin Rejuvenation Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 600.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1800.0,
+      "sale": 1440.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 3600.0,
+      "sale": 2520.0
+     }
+    ]
+   },
+   {
+    "name": "2D Skin Rejuvenation Large Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 960.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 2880.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 6",
+      "regular": 5760.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "3D Skin Rejuvenation Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 900.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 2700.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 6",
+      "regular": 5400.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "3D Skin Rejuvenation Large Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 1200.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 3600.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 6",
+      "regular": 7200.0,
+      "sale": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Facial",
+  "items": [
+   {
+    "name": "Age Element Facial",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 249.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 747.0,
+      "sale": 597.6
+     },
+     {
+      "label": "Package of 6",
+      "regular": 1494.0,
+      "sale": 1045.8
+     }
+    ]
+   },
+   {
+    "name": "Purifying Acne Relief Facial",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 249.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 747.0,
+      "sale": 597.6
+     },
+     {
+      "label": "Package of 6",
+      "regular": 1494.0,
+      "sale": 1045.8
+     }
+    ]
+   },
+   {
+    "name": "Glass Glow Facial",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 249.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 747.0,
+      "sale": 597.6
+     },
+     {
+      "label": "Package of 6",
+      "regular": 1494.0,
+      "sale": 1045.8
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Chemical Peel",
+  "items": [
+   {
+    "name": "PURIFYING Light Peel",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 149.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 447.0,
+      "sale": 355.6
+     },
+     {
+      "label": "Package of 6",
+      "regular": 894.0,
+      "sale": 625.8
+     }
+    ]
+   },
+   {
+    "name": "BRIGHTENING Medium Peel",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 299.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 897.0,
+      "sale": 717.6
+     },
+     {
+      "label": "Package of 6",
+      "regular": 1794.0,
+      "sale": 1255.8
+     }
+    ]
+   },
+   {
+    "name": "PRO Deep Peel",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 399.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1197.0,
+      "sale": 957.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 2394.0,
+      "sale": 1675.8
+     }
+    ]
+   },
+   {
+    "name": "Acnelan",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 249.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 747.0,
+      "sale": 597.6
+     },
+     {
+      "label": "Package of 6",
+      "regular": 1494.0,
+      "sale": 1045.8
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Depigmenting Treatment",
+  "items": [
+   {
+    "name": "Cosmelan",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 999.0,
+      "sale": 799.2
+     }
+    ]
+   },
+   {
+    "name": "Dermamelan",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 1399.0,
+      "sale": 1119.2
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Hair Loss",
+  "items": [
+   {
+    "name": "PRP Scalp - Small",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 1000.0,
+      "sale": 399.0
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1197.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 6",
+      "regular": 2394.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "PRP Scalp - Medium",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 1500.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 4500.0,
+      "sale": 3600.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 9000.0,
+      "sale": 6300.0
+     }
+    ]
+   },
+   {
+    "name": "PRP Scalp - Full",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 2100.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 6300.0,
+      "sale": 5040.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 12600.0,
+      "sale": 8820.0
+     }
+    ]
+   },
+   {
+    "name": "Laser Hair Rejuvenation",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 350.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1050.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 6",
+      "regular": 2100.0,
+      "sale": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Laser Hair Removal",
+  "items": [
+   {
+    "name": "LHR - Abdomen",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 190.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 570.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 950.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 1520.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Arms (Full)",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 290.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 870.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 1450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 2320.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Arms (Lower)",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 190.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 570.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 950.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 1520.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Arms (Upper)",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 219.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 657.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 1095.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 1752.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Hands & Fingers",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 150.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 750.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 1200.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Back (Full)",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 390.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1170.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 1950.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 3120.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Back (Lower)",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 250.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 750.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 1250.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 2000.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Back (Upper)",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 250.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 750.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 1250.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 2000.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Full Back & Shoulders",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 520.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1560.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 2600.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 4160.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Upper Back & Shoulders",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1350.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 2250.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 3600.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Chest",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 290.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 870.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 1450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 2320.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Chest & Abdomen",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1350.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 2250.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 3600.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Chest, Abdomen & Shoulders",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 550.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1650.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 2750.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 4400.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Legs (Full)",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 490.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1470.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 2450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 3920.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Legs (Upper)",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 290.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 870.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 1450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 2320.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Legs (Lower)",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 290.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 870.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 1450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 2320.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Full Legs & Brazilian",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 650.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1950.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 3250.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 5200.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Full Legs & Bikini",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 620.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1860.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 3100.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 4960.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Brazilian",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 190.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 570.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 950.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 1520.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Bikini",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 150.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 750.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 1200.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Buttocks",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 350.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1050.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 1750.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 2800.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Linea Alba",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 120.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 360.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 600.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 960.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Full face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single Session",
+      "regular": 290.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 870.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 1450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 2320.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Half Face",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 190.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 570.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 950.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 1520.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Chin",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 120.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 360.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 600.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 960.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Chin & Anterior Neck",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 190.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 570.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 950.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 1520.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Lip (Upper & Lower)",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 120.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 360.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 600.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 960.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Lip (Upper)",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 90.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 270.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 720.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Sideburns",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 120.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 360.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 600.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 960.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Eyebrows",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 120.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 360.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 600.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Entire Neck",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 250.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 750.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 1250.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 2000.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Neck (Front)",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 150.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 750.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 1200.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Neck (Back)",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 150.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 750.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 1200.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Areola",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 120.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 360.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 600.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 960.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Feet & Toes",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 150.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 750.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 1200.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Shoulders",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 190.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 570.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 950.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 1520.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "LHR - Underarms",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 150.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 5",
+      "regular": 750.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 8",
+      "regular": 1200.0,
+      "sale": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Laser Vaginal Tightening",
+  "items": [
+   {
+    "name": "Vaginal Tightening",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 1250.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 3750.0,
+      "sale": 3000.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 7500.0,
+      "sale": 5250.0
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Coolsculpting & Tight Sculpting",
+  "items": [
+   {
+    "name": "Regular Treatment Zone",
+    "note": "",
+    "options": [
+     {
+      "label": "Single zone",
+      "regular": 850.0,
+      "sale": null
+     },
+     {
+      "label": "2 zones",
+      "regular": 1700.0,
+      "sale": 1360.0
+     },
+     {
+      "label": "4 zones and more",
+      "regular": 3400.0,
+      "sale": null
+     },
+     {
+      "label": "8 zones",
+      "regular": 6800.0,
+      "sale": 4760.0
+     }
+    ]
+   },
+   {
+    "name": "Coolsculpting Mini",
+    "note": "",
+    "options": [
+     {
+      "label": "Single zone",
+      "regular": 1000.0,
+      "sale": null
+     },
+     {
+      "label": "2 zones",
+      "regular": 2000.0,
+      "sale": 1600.0
+     },
+     {
+      "label": "4 zones and more",
+      "regular": 4000.0,
+      "sale": null
+     },
+     {
+      "label": "8 zones",
+      "regular": 8000.0,
+      "sale": 5600.0
+     }
+    ]
+   },
+   {
+    "name": "Coolsculpting Smooth",
+    "note": "",
+    "options": [
+     {
+      "label": "Single zone",
+      "regular": 1000.0,
+      "sale": null
+     },
+     {
+      "label": "2 zones",
+      "regular": 2000.0,
+      "sale": null
+     },
+     {
+      "label": "4 zones and more",
+      "regular": 4000.0,
+      "sale": null
+     },
+     {
+      "label": "8 zones",
+      "regular": 8000.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Coolsculpting Double",
+    "note": "",
+    "options": [
+     {
+      "label": "Single zone",
+      "regular": 1600.0,
+      "sale": null
+     },
+     {
+      "label": "2 zones",
+      "regular": 3200.0,
+      "sale": 2560.0
+     },
+     {
+      "label": "4 zones and more",
+      "regular": 6400.0,
+      "sale": null
+     },
+     {
+      "label": "8 zones",
+      "regular": 12800.0,
+      "sale": 8960.0
+     }
+    ]
+   },
+   {
+    "name": "Tight Sculpting - Small Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 600.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1800.0,
+      "sale": 1440.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 3600.0,
+      "sale": 2520.0
+     },
+     {
+      "label": "Package of 8",
+      "regular": 4800.0,
+      "sale": null
+     }
+    ]
+   },
+   {
+    "name": "Tight Sculpting - Medium Area",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 800.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 2400.0,
+      "sale": 1920.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 4800.0,
+      "sale": 3360.0
+     },
+     {
+      "label": "Package of 8",
+      "regular": 6400.0,
+      "sale": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Snoring Treatment",
+  "items": [
+   {
+    "name": "Snoring Treatment",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 450.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 1350.0,
+      "sale": 1080.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 2700.0,
+      "sale": 1890.0
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Toenail Fungus Removal",
+  "items": [
+   {
+    "name": "TOENAIL FUNGUS REMOVAL",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 300.0,
+      "sale": null
+     },
+     {
+      "label": "Package of 3",
+      "regular": 900.0,
+      "sale": 719.0
+     },
+     {
+      "label": "Package of 6",
+      "regular": 1800.0,
+      "sale": 1260.0
+     }
+    ],
+    "was": [
+     "Laser Toenail Fungus Removal"
+    ]
+   }
+  ]
+ },
+ {
+  "name": "Latisse",
+  "items": [
+   {
+    "name": "Latisse",
+    "note": "",
+    "options": [
+     {
+      "label": "Single session",
+      "regular": 245.0,
+      "sale": null
+     }
+    ],
+    "was": [
+     "Latisse 5ml"
+    ]
+   }
+  ]
+ }
+]

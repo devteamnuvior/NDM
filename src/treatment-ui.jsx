@@ -169,7 +169,7 @@ function TxIntro({ p }) {
       <TxHead p={p} id={t.id || 'what'} tag={t.tag} hid="intro-title" lead={t.lead} strong={t.strong} />
       <div className={`${TX_WRAP} mt-[clamp(28px,3.4vw,48px)] grid items-center gap-8 lg:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] lg:gap-[clamp(40px,5vw,72px)]`}>
         <div className="rv relative mx-auto w-full max-w-[460px] lg:max-w-none" style={{ transitionDelay: '.1s' }}>
-          <div className={`relative aspect-[5/4] overflow-hidden rounded-[24px] bg-ndm-mist lg:aspect-auto ${t.para ? 'lg:h-[min(50vh,460px)]' : 'lg:h-[min(62vh,560px)]'}`}>
+          <div className={`relative overflow-hidden rounded-[24px] bg-ndm-mist ${t.ratio ? '' : `aspect-[5/4] lg:aspect-auto ${t.para ? 'lg:h-[min(50vh,460px)]' : 'lg:h-[min(62vh,560px)]'}`}`} style={t.ratio ? { aspectRatio: t.ratio } : undefined}>
             <img src={t.img} alt={t.alt || ''} loading="lazy" className={`absolute inset-0 h-full w-full ${t.fit === 'contain' ? 'object-contain' : 'object-cover'}`} style={{ objectPosition: t.pos || '50% 40%', background: t.bg }} />
           </div>
           {t.ring && (
@@ -273,12 +273,48 @@ function TxSafety({ p }) {
   );
 }
 
+/* the 24-month lifeline of the how-long-it-lasts card (Aptos): counter, lift line with six-month marks, HA window over the first six months */
+function TxLifeline({ months, run }) {
+  const [n, setN] = useState(REDUCED ? months : 0);
+  useEffect(() => {
+    if (!run || REDUCED) return;
+    let raf, t0;
+    const tick = (t) => { if (!t0) t0 = t; const k = Math.min(1, (t - t0) / 2600); setN(Math.round(months * (1 - Math.pow(1 - k, 3)))); if (k < 1) raf = requestAnimationFrame(tick); };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [run, months]);
+  const marks = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(months * f));
+  const ha = Math.min(1, 6 / months);
+  return (
+    <div aria-hidden="true" className={`tx-life ${run ? 'in' : ''}`}>
+      <p className="flex items-end gap-3"><span className="tx-life-num font-aeonik tabular-nums leading-[.8] tracking-[-0.04em]">{n}</span><span className="pb-1 font-inter text-[14px] leading-[1.35] text-white/75">months a lift<br />may last</span></p>
+      <div className="tx-thread relative mt-7 h-[96px]">
+        <span className="tx-life-ha absolute bottom-[10%] top-[10%] left-0 rounded-[14px]" style={{ width: `${ha * 100}%` }} />
+        <span className="tx-life-base absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full" />
+        <span className="tx-thread-line tx-life-fill absolute left-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full" />
+        {Array.from({ length: 12 }, (_, i) => (
+          <i key={i} className="tx-bub absolute rounded-full" style={{ left: `${((i * 0.08 + 0.02) * ha * 100).toFixed(1)}%`, top: `${[28, 62, 40, 70, 22, 55, 35, 66, 30, 48, 72, 26][i]}%`, width: `${[10, 6, 12, 8, 11, 5, 9, 12, 6, 10, 7, 9][i]}px`, '--d': `${(i * 0.18).toFixed(2)}s` }} />
+        ))}
+        {marks.map((m, i) => <span key={m} className={`tx-life-mark absolute top-1/2 ${i === 4 ? 'is-end' : ''}`} style={{ left: `${i * 25}%`, '--d': `${(i * 0.62).toFixed(2)}s` }} />)}
+      </div>
+      <div className="relative mt-2 h-4 font-inter text-[11.5px] uppercase tracking-[.12em] text-white/60">
+        {marks.map((m, i) => <span key={m} className={`absolute top-0 whitespace-nowrap ${i === 0 ? '' : i === 4 ? '-translate-x-full text-white' : '-translate-x-1/2'}`} style={{ left: `${i * 25}%` }}>{i === 0 ? 'Day 0' : i === 4 ? `${m} months` : m}</span>)}
+      </div>
+      <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 font-inter text-[13px] text-white/75">
+        <span className="inline-flex items-center gap-2"><i className="tx-life-key is-ha" />HA released, first 6 months</span>
+        <span className="inline-flex items-center gap-2"><i className="tx-life-key" />Lift held by your own collagen</span>
+      </div>
+    </div>
+  );
+}
+
 /* how long it lasts: one wide card (the Aptos one carries NUVIOR's HA release motion); how many sessions now sits with the price */
 function TxLasting({ p }) {
   const ref = useRef(null), box = useRef(null);
   useReveal(ref);
   const run = useInView(box, { threshold: 0.35 });
   const d = p.duration;
+  const lifeMonths = parseInt(String(d.stat).replace(/[^0-9]/g, ''), 10) || 24;
   return (
     <section ref={ref} aria-labelledby="duration-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] py-[clamp(64px,7vw,104px)]">
       <div ref={box} className={TX_WRAP}>
@@ -293,16 +329,10 @@ function TxLasting({ p }) {
               <p className="max-w-[40ch] font-inter text-[13.5px] leading-[1.5] text-white/70"><span className="block text-white/90">{d.label}</span>{d.note}</p>
             </div>
           </div>
-          {/* HA release along the thread (NUVIOR Aptos family motion): capsules drift and open over the months */}
-          <div>
-            <div aria-hidden="true" className={`tx-thread relative h-[150px] ${run ? 'in' : ''}`}>
-              <span className="tx-thread-line absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full" />
-              {Array.from({ length: 18 }, (_, i) => (
-                <i key={i} className="tx-bub absolute rounded-full" style={{ left: `${(i * 5.6 + 2).toFixed(1)}%`, top: `${[28, 62, 40, 70, 22, 55, 35, 66, 30, 48, 72, 26, 58, 38, 64, 44, 30, 56][i]}%`, width: `${[10, 6, 14, 8, 12, 5, 9, 13, 6, 11, 7, 10, 5, 12, 8, 6, 9, 7][i]}px`, '--d': `${(i * 0.14).toFixed(2)}s` }} />
-              ))}
-            </div>
-            <div aria-hidden="true" className="mt-2 flex justify-between font-inter text-[12px] uppercase tracking-[.12em] text-white/65"><span>Day 0</span><span>Months 1 to 3</span><span>Up to 6 months</span></div>
-          </div>
+          {/* round 41 (user, 2026-11-17): the motion now tells the 24 months: a counter climbs to the card's own number, the lift line
+             runs from day 0 to month 24 with a mark every six months, and the HA capsules drift only over the first six months,
+             where the hyaluronic acid is released */}
+          <TxLifeline months={lifeMonths} run={run} />
         </article>
       </div>
     </section>
@@ -584,6 +614,7 @@ function TxPrices({ p }) {
   const unit = (label) => (pr.unitLabel && label === pr.unitLabel ? ' / unit' : '');
   const pct = Math.max(0, ...pr.rows.map((r) => { const m = /^(\d+)% OFF$/.exec(r[3] || ''); return m ? +m[1] : 0; }));
   const from = rowsFrom(pr.rows, !!pr.unitLabel); /* round 31: after the discount, per unit when priced per unit */
+  const psrc = rowsSource(pr.rows, !!pr.unitLabel);
   return (
     <section ref={ref} id="prices" aria-labelledby="prices-title" className="proc-peach relative z-10 scroll-mt-[170px] px-[var(--gx)] py-[clamp(64px,7vw,110px)]">
       <TxHead p={p} id="prices" tag="Price list" hid="prices-title" lead={pr.lead} strong={pr.strong} text={pr.intro} />
@@ -598,32 +629,20 @@ function TxPrices({ p }) {
                   <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{pr.title}</span>
                 </span>
                 <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                  {pct > 0 && <span className="pr-badge">Up to {pct}% off</span>}
-                  <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{pfmt(from)}</span>{pr.unitLabel ? ' / unit' : ''}</span>
+                  <SaleTag offer={pct > 0 ? `Up to ${pct}%\u00a0off` : ""} badge={saleBadge(pr.rows.map((r) => r[3]))} />
+                  <FromPrice value={from} unit={pr.unitLabel ? " / unit" : ""} src={psrc && { ...psrc, label: psrc.label === pr.unitLabel ? "Per unit" : psrc.label }} noWords={pr.rows.length < 2} />
                 </span>
                 <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
               </button>
             </h3>
             <div id="tx-pr" role="region" aria-labelledby="tx-pr-h" className="pr-body" {...(on ? {} : { inert: '' })}>
               <div>
-                <p className="max-w-[60ch] pb-2 font-inter text-[15px] leading-[1.55] text-ndm-muted">{pr.blurb}</p>
+                <p className="pr-gintro max-w-[60ch] pb-2 font-inter text-[15px] leading-[1.55] text-ndm-muted">{pr.blurb}</p>
                 <ul className="pr-sub grid gap-2 py-4" role="list">
                   {pr.rows.map(([label, price, was, tag]) => {
                     const line = { key: `${pr.name}|${label}`, cat: pr.cat, name: pr.name, label, price, was: was || 0, unit: unit(label) };
                     return (
-                      <li key={label} className="pr-opt grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-[14px] py-3 pl-4 pr-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6 sm:pl-5">
-                        <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
-                          <span className="font-inter text-[15px] text-ndm-ink">{label === pr.unitLabel ? 'Per unit' : label}</span>
-                          {tag && <span className="pr-tag">{tag}</span>}
-                        </span>
-                        <span className="col-start-1 row-start-2 flex items-baseline gap-2.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                          {was ? <s className="pr-was"><span className="sr-only">Regular price </span>{money(was)}</s> : null}
-                          <span className={`font-aeonik text-[22px] leading-none tracking-[-0.02em] ${was ? 'text-ndm-deep' : 'text-ndm-ink'}`}>
-                            {was ? <span className="sr-only">now </span> : null}{money(price)}{line.unit && <span className="font-inter text-[13px] tracking-normal text-ndm-muted">{line.unit}</span>}
-                          </span>
-                        </span>
-                        <span className="col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><QtyControl line={line} label={`${pr.name}, ${label}`} /></span>
-                      </li>
+                      <OptionRow key={label} mark={pr.rows.length > 1 && !!psrc && label === psrc.label} label={label === pr.unitLabel ? 'Per unit' : label} price={price} was={was || 0} tag={tag} unit={line.unit} action={<QtyControl line={line} label={`${pr.name}, ${label}`} />} />
                     );
                   })}
                 </ul>

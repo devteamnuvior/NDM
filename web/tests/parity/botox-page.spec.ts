@@ -1,0 +1,52 @@
+import { pageParity } from "./page";
+
+/* Botox page (a post of the WordPress post type "Procedures"; needs WordPress running): every block in page order; the second price group opened. */
+const sec = (id: string) => `main > section#${id}`;
+const by = (id: string) => `main > section[aria-labelledby="${id}"]`;
+
+pageParity({
+  name: "botox",
+  priceSections: ["prices"],
+  paths: { legacy: "/botox.html", next: "/injectables/botox" },
+  sectionCount: 16,
+  sections: [
+    { name: "breadcrumb", selector: "nav.crumbs" },
+    { name: "hero", selector: by("proc-title"), pixelRatio: 0.004 },
+    { name: "glance", selector: ".tx-glance" },
+    { name: "section-bar", selector: "nav.tx-nav" },
+    { name: "benefits", selector: sec("benefits"), pixelRatio: 0.01 },
+    { name: "overview", selector: sec("overview"), pixelRatio: 0.01 },
+    { name: "why-choose", selector: sec("why-choose"), pixelRatio: 0.01 },
+    { name: "watch", selector: sec("watch"), pixelRatio: 0.01 },
+    {
+      name: "results",
+      selector: sec("results"),
+      pixelRatio: 0.01,
+      /* the photos are the gallery's cases now, named by their category ("Botox"); the prototype typed "Botox®" */
+      prepare: (p) =>
+        p.evaluate(() => {
+          for (const el of document.querySelectorAll("#results figcaption span:first-child")) el.textContent = (el.textContent ?? "").replace("®", "");
+        }),
+    },
+    { name: "film", selector: sec("film"), pixelRatio: 0.01 },
+    { name: "prices", selector: sec("prices"), prices: true },
+    {
+      name: "prices-second-open",
+      prices: true,
+      selector: sec("prices"),
+      prepare: async (p) => {
+        await p.locator("#proc-pr-h0").click();
+        await p.locator("#proc-pr-h1").click();
+        await p.waitForTimeout(700);
+      },
+    },
+    { name: "guide", selector: sec("guide"), pixelRatio: 0.01 },
+    { name: "why", selector: sec("why"), pixelRatio: 0.01 },
+    { name: "team", selector: by("team"), pixelRatio: 0.004 },
+    { name: "testimonials", selector: by("testimonials"), pixelRatio: 0.004 },
+    { name: "visit", selector: sec("visit"), pixelRatio: 0.01 },
+    { name: "analysis", selector: by("analysis-title"), pixelRatio: 0.01 },
+    { name: "faq", selector: by("faq") },
+    { name: "footer", selector: "footer", pixelRatio: 0.004 },
+  ],
+});

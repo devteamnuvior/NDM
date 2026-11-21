@@ -1,0 +1,31 @@
+/* Chat assistant: the launcher with the agent photo, the note that pops up, and the panel.
+   Copied rule for rule from the prototype, in its order. */
+.chat-launch{padding:3px;background:linear-gradient(145deg,#26B1E7,#0F80C3 55%,#0A4F7A);box-shadow:0 18px 40px -14px rgba(15,128,195,.8),inset 0 1px 0 rgba(255,255,255,.35)}
+.chat-launch:hover{transform:translateY(-2px)}
+.chat-launch.is-open{background:#0A4F7A}
+.chat-launch-img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid #fff}
+.chat-launch-badge{position:absolute;right:-3px;bottom:-3px;display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:#FFA617;color:#fff;border:2px solid #fff}
+.chat-head{background:radial-gradient(110% 120% at 100% 0%,#26B1E7 0%,rgba(38,177,231,0) 58%),linear-gradient(150deg,#0F80C3,#0A4F7A);transition:padding .35s ease}
+.chat-quick a{display:flex;flex-direction:column;gap:8px;border-radius:16px;background:#fff;padding:11px 11px 12px;font:500 12.5px/1.25 Inter,"Helvetica Neue",Arial,sans-serif;color:#1B242B;box-shadow:0 16px 30px -18px rgba(11,15,19,.5),0 0 0 1px rgba(27,36,43,.06);transition:transform .3s ease,color .2s ease}
+.chat-quick a:hover{transform:translateY(-2px);color:#0F80C3}
+.chat-quick i{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(15,128,195,.1);color:#0F80C3}
+.chat-quick a:first-child i{background:#FFA617;color:#fff}
+.chat-body{background:linear-gradient(180deg,#F3F8FB 0%,#FAFAF8 140px)}
+.chat-btn{transition:opacity .3s ease,transform .3s ease,background-color .3s ease}
+.chat-btn.is-off{opacity:0;transform:scale(.8);pointer-events:none}
+.chat-note{animation:chatNote .5s var(--e-out) both}
+@keyframes chatNote{from{opacity:0;transform:translateY(10px) scale(.96)}}
+.chat-panel{opacity:0;visibility:hidden;transform:translateY(16px) scale(.98);transform-origin:100% 100%;transition:opacity .3s ease,transform .45s var(--e-out),visibility 0s linear .45s}
+.chat-panel.is-on{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.chat-msg{animation:chatNote .35s var(--e-out) both}
+.chat-dot{animation:chatDot 1s ease-in-out infinite}
+@keyframes chatDot{50%{opacity:.25;transform:translateY(-2px)}}
+@media (prefers-reduced-motion:reduce){.chat-note,.chat-msg,.chat-dot{animation:none}.chat-panel{transition:none}}
+.cmp-panel{animation:chatPop .45s var(--e-out) both;transform-origin:0 100%}
+@media print{.cmp-switch{display:none}}
+.chat-pop{animation:chatPop .6s cubic-bezier(.34,1.56,.64,1) both;transform-origin:100% 100%}
+.chat-pop-msg{animation:chatNote .45s var(--e-out) both}
+@keyframes chatPop{from{opacity:0;transform:translateY(14px) scale(.92)}to{opacity:1;transform:none}}
+.chat-btn.has-note::after{content:'';position:absolute;inset:0;border-radius:50%;animation:chatPulse 2.2s ease-out 3;pointer-events:none}
+@keyframes chatPulse{0%{box-shadow:0 0 0 0 rgba(15,128,195,.5)}100%{box-shadow:0 0 0 18px rgba(15,128,195,0)}}
+@media (prefers-reduced-motion:reduce){.chat-pop,.chat-pop-msg,.cmp-panel,.chat-btn.has-note::after{animation:none}}

@@ -1,0 +1,185 @@
+import type { PriceCategory, PriceOption } from "@/config/prices";
+
+/**
+ * Price helpers over any price list: the "from" price, the unit and the offer line are worked out one
+ * way everywhere. This file holds no prices, so it can run on the server and in the browser (the
+ * management screen's preview); `lib/prices.ts` binds it to the site's built-in list.
+ */
+
+/** "$262.50", "$750": cents only when there are any, no thousands separator. */
+export function formatPrice(n: number): string {
+  const cents = Math.round(n * 100) % 100 !== 0;
+  return `$${(Math.round(n * 100) / 100).toLocaleString("en-CA", { useGrouping: false, minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: 2 })}`;
+}
+
+/**
+ * A "from" price as shown: per unit to the cent ($7.70 / unit), anything else up to the next whole dollar
+ * ($167.33 -> $168, user, 2026-11-19), so a "from" price is never below a price that can really be paid.
+ * The option rows of a price table keep their exact prices.
+ */
+export function fromValue(n: number, perUnit = false): number {
+  const cents = Math.round(n * 100) / 100;
+  return perUnit ? cents : Math.ceil(cents);
+}
+
+/** How many units, syringes or sessions an option's label covers ("Package of 3" -> 3). */
+function countIn(label: string): number {
+  const m = /(\d+)\s*(units?|syringes?|sessions?|vials?|treatments?|zones?)\b/i.exec(label) ?? /package of (\d+)/i.exec(label);
+  return m ? Number(m[1]) : 1;
+}
+
+function percentOff(tag: string | undefined): number {
+  /* the price list ties "OFF" to its number with a no-break space, so any white space is accepted; a sale campaign puts its
+     badge before the figure ("SALE 30% OFF", "BLACK FRIDAY 30% OFF"), which is the same offer (user, 2026-11-18) */
+  const m = /(?:^|\s)(\d+)%\s*OFF$/i.exec((tag ?? "").trim());
+  return m ? Number(m[1]) : 0;
+}
+
+const normalise = (s: string | undefined): string =>
+  String(s ?? "")
+    .toLowerCase()
+    .replace(/[®™]/g, "")
+    .replace(/[–-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+type Option = PriceOption & { item: string };
+
+/** Where a lowest price is read from: the treatment, the option, the option's own price and how many units, syringes, zones or sessions it covers (the price divided by it), and its regular price on the same count (0 without a sale). */
+export interface PriceSource {
+  item: string;
+  label: string;
+  was: number;
+  price: number;
+  count: number;
+}
+
+export interface LowestPrice {
+  /** Lowest price after the offer, counted per unit, per syringe, per zone or per session. */
+  value: number;
+  /** " / unit" for categories priced per unit, else "". */
+  unit: string;
+  per: "per unit" | "per syringe" | "per zone" | "per session" | "";
+  /** Largest percentage offer in the category, 0 when there is none. */
+  percent: number;
+  /** The offer in sentence case, e.g. "Up to 30% off", "Buy 1 get 1 free". */
+  offer: string;
+  /** Where the price comes from: the treatment, the option's label, and that option's regular price on the same count (0 without a sale). */
+  source: PriceSource;
+}
+
+/**
+ * The price helpers over one price list. The site's built-in list gets its own set below; the Pricing
+ * page builds a set over the list it reads from WooCommerce, so both are worked out the same way.
+ */
+/** A treatment of a category by its name or a part of it; several when a name on the site covers several lines of the list. */
+export type PriceItemName = string | string[];
+/** A name used somewhere on the site, and where it sits on the price list. */
+export type PriceNames = Record<string, [categoryId: string, item?: PriceItemName]>;
+
+export function createPriceBook(categories: PriceCategory[], names: PriceNames = {}) {
+  const BY_ID = new Map<string, PriceCategory>(categories.map((c) => [c.id, c]));
+
+  /** Every option of a category, or only those of the treatment named `item` when it matches one. */
+  function optionsOf(categoryId: string, item?: PriceItemName): Option[] {
+    const c = BY_ID.get(categoryId);
+    if (!c) return [];
+    const parts = (Array.isArray(item) ? item : item ? [item] : []).map(normalise);
+    const wanted = parts.length ? c.items.filter((it) => parts.some((part) => normalise(it.name).includes(part))) : c.items;
+    return (wanted.length ? wanted : c.items).flatMap((it) => it.options.map((o) => ({ ...o, item: it.name })));
+  }
+
+  /**
+   * `withCode`: count a line's price with the running sale's checkout code where the code applies, so the "from"
+   * price is the lowest price the price tables show (the Pricing page and the treatment pages' tables).
+   * On a tie the bigger package wins (Package of 6 over Package of 3 at the same price per session).
+   */
+  function lowestPrice(categoryId: string, item?: PriceItemName, withCode = false): LowestPrice | null {
+    const c = BY_ID.get(categoryId);
+    const options = optionsOf(categoryId, item);
+    if (!c || !options.length) return null;
+    let best: { value: number; option: Option; count: number; paid: number } | null = null;
+    for (const o of options) {
+      const count = /regular/i.test(o.label) ? 1 : countIn(o.label);
+      const paid = withCode && o.code && o.code < o.price ? o.code : o.price;
+      const value = paid / count;
+      if (!best || value < best.value - 0.001 || (Math.abs(value - best.value) <= 0.001 && count > best.count)) best = { value, option: o, count, paid };
+    }
+    if (!best) return null;
+    const percent = Math.max(0, ...options.map((o) => percentOff(o.tag)));
+    const tags = options.map((o) => o.tag).filter((t): t is string => !!t);
+    /* the offer of the option the price is taken from; when that option has none, the first offer of the list */
+    const shown = best.option.tag || tags[0];
+    const offer = percent
+      ? `Up to ${percent}%\u00a0off` /* no-break space: "off" never wraps away from its number */
+      : shown
+        ? shown
+            .replace(/\bOFF\b/g, "off")
+            .replace(/^BUY 1 GET 1/i, "Buy 1 get 1")
+            .replace(/\bFREE\b/, "free")
+            .replace(/^Save \$(\d+)\sOff$/i, "Save $$$1")
+        : "";
+    const per = c.perUnit ? "per unit" : /syringe/i.test(best.option.label) ? "per syringe" : /zone/i.test(best.option.label) ? "per zone" : best.count > 1 || /session/i.test(best.option.label) ? "per session" : "";
+    const full = best.option.regular && best.option.regular > best.paid ? best.option.regular : best.paid < best.option.price ? best.option.price : 0;
+    const was = full ? (c.perUnit ? Math.round((full / best.count) * 100) / 100 : Math.round(full / best.count)) : 0;
+    return { value: fromValue(best.value, c.perUnit), unit: c.perUnit ? " / unit" : "", per, percent, offer, source: { item: best.option.item, label: best.option.label, was, price: best.paid, count: best.count } };
+  }
+
+  /** [category id, treatment] for a name used anywhere on the site, or null when it is not on the price list. */
+  function locate(name: string): [categoryId: string, item?: PriceItemName] | null {
+    const key = normalise(name).replace(/\s*·\s*/g, " ");
+    if (names[key]) return names[key];
+    const asId = key.replace(/[^a-z0-9]+/g, "-");
+    if (BY_ID.has(asId)) return [asId];
+    const byName = categories.find((c) => normalise(c.name) === key);
+    return byName ? [byName.id] : null;
+  }
+
+  /** The lowest price of a treatment by any name the site uses for it, with the category it sits in; null when it is not on the price list. */
+  function priceLow(name: string): (LowestPrice & { categoryId: string }) | null {
+    const hit = locate(name);
+    const lowest = hit ? lowestPrice(hit[0], hit[1]) : null;
+    return hit && lowest ? { ...lowest, categoryId: hit[0] } : null;
+  }
+
+  /** "From $262.50" for a treatment name, or null when it is not on the price list. */
+  function priceFor(name: string): string | null {
+    const hit = locate(name);
+    if (!hit) return null;
+    const lowest = lowestPrice(hit[0], hit[1]);
+    return lowest ? `From ${formatPrice(lowest.value)}${lowest.unit}` : null;
+  }
+
+  /**
+   * Where a treatment sits on the price list, with its lowest price, unit and offer. Null when it is not on
+   * the list. (Looks names up a little more strictly than `priceFor`, as the prototype's `priceInfo` does.)
+   */
+  function priceInfo(name: string): ({ id: string; item?: PriceItemName } & LowestPrice) | null {
+    const key = normalise(name);
+    const byName = categories.find((c) => normalise(c.name) === key);
+    const hit = names[key] ?? (byName ? ([byName.id] as [string, PriceItemName?]) : null);
+    if (!hit) return null;
+    const lowest = lowestPrice(hit[0], hit[1]);
+    return lowest ? { id: hit[0], item: hit[1], ...lowest } : null;
+  }
+
+  /** The price options of one treatment, for a treatment page's price table (empty when it is not on the list). */
+  function priceRows(categoryId: string, item: string): PriceOption[] {
+    const it = BY_ID.get(categoryId)?.items.find((x) => normalise(x.name).includes(normalise(item)));
+    return it ? it.options : [];
+  }
+
+  return { lowestPrice, priceFor, priceInfo, priceLow, priceRows };
+}
+
+export type PriceBook = ReturnType<typeof createPriceBook>;
+
+/** The lowest price in one price table after its offers; per unit when the table is priced per unit. */
+export function rowsFrom(rows: PriceOption[], perUnit = false): number {
+  return fromValue(Math.min(...rows.map((r) => (perUnit && !/regular/i.test(r.label) ? r.price / countIn(r.label) : r.price))), perUnit);
+}
+
+/** The largest percentage offer in a price table, 0 when there is none. */
+export function rowsPercent(rows: PriceOption[]): number {
+  return Math.max(0, ...rows.map((r) => percentOff(r.tag)));
+}

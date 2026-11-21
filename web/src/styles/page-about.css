@@ -1,0 +1,68 @@
+/* About page. Copied rule for rule from the prototype by scripts/port_page_css.py: do not edit by hand.
+   The prototype adds these rules to this page only, so every selector is tied to <main data-page="about">
+   with :where(), which adds no specificity: the rules rank exactly as they did there. */
+  /* about NewDermaMed: the clinic film opens to full width as it comes into view (as on the home page) */
+  :where(main[data-page="about"]) .cf-frame{--p:0;position:relative;height:min(88svh,880px);margin:0 calc((1 - var(--p)) * var(--gx));border-radius:0;overflow:hidden;background:#0B0F13;color:#fff;transform:translateZ(0)}
+  :where(main[data-page="about"]) .cf-frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(calc(1.12 - .12 * var(--p)))}
+  :where(main[data-page="about"]) .cf-frame::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(11,15,19,.22),rgba(11,15,19,.06) 30%,rgba(11,15,19,.86)),linear-gradient(90deg,rgba(11,15,19,.55),rgba(11,15,19,0) 60%)}
+  @media (prefers-reduced-motion:reduce){:where(main[data-page="about"]) .cf-frame{--p:1!important}}
+  :where(main[data-page="about"]) .cf-frame.is-hero{height:max(620px,min(100svh,960px))}
+  :where(main[data-page="about"]) .cf-frame.is-hero video{transform:none}
+  :where(main[data-page="about"]) .team-card{box-shadow:0 26px 50px -40px rgba(27,36,43,.45)}
+  /* clinic maps: photo pin pops up when the map comes into view, numbered parking pins */
+  :where(main[data-page="about"]) .clinic-map .leaflet-container{font:inherit;background:#F2F2EF}
+  :where(main[data-page="about"]) .map-clinic{display:flex;flex-direction:column;align-items:center}
+  :where(main[data-page="about"]) .map-card{position:relative;width:160px;padding:5px;border-radius:16px;background:#fff;box-shadow:0 22px 44px -20px rgba(11,15,19,.5),0 0 0 1px rgba(27,36,43,.06);transform-origin:50% 100%;transform:translateY(10px) scale(.6);opacity:0;transition:transform .8s var(--e-out),opacity .4s ease}
+  :where(main[data-page="about"]) .clinic-map.is-on .map-card{transform:none;opacity:1}
+  :where(main[data-page="about"]) .map-photo{display:block;height:88px;overflow:hidden;border-radius:11px;background:#E8EBEE}
+  :where(main[data-page="about"]) .map-photo img{display:block;width:100%;height:100%;object-fit:cover}
+  :where(main[data-page="about"]) .map-name{display:block;padding:7px 4px 3px;font:600 12px/1.2 Inter,system-ui,sans-serif;color:#1B242B;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  :where(main[data-page="about"]) .map-card::after{content:"";position:absolute;left:50%;bottom:-7px;margin-left:-7px;border:7px solid transparent;border-bottom:0;border-top-color:#fff;filter:drop-shadow(0 2px 1px rgba(27,36,43,.08))}
+  :where(main[data-page="about"]) .map-stem{display:block;width:2px;height:34px;margin-top:7px;background:linear-gradient(#fff,#0F80C3);border-radius:2px;box-shadow:0 0 0 1px rgba(27,36,43,.06)}
+  :where(main[data-page="about"]) .map-dot{display:block;width:16px;height:16px;margin-top:-2px;border-radius:99px;background:#0F80C3;border:3px solid #fff;box-shadow:0 0 0 6px rgba(32,158,217,.25)}
+  :where(main[data-page="about"]) .clinic-map.is-on .map-dot{animation:mapPulse 2.2s ease-out infinite}
+  @keyframes mapPulse{0%{box-shadow:0 0 0 0 rgba(32,158,217,.45)}100%{box-shadow:0 0 0 18px rgba(32,158,217,0)}}
+  :where(main[data-page="about"]) .map-park span{display:grid;place-items:center;width:30px;height:30px;border-radius:99px;background:#209ED9;color:#fff;font:700 13px/1 Inter,system-ui,sans-serif;border:2px solid #fff;box-shadow:0 8px 18px -8px rgba(15,128,195,.7);cursor:pointer;transition:transform .25s var(--e-out),background-color .25s ease}
+  :where(main[data-page="about"]) .map-park:hover span{transform:scale(1.12);background:#0F80C3}
+  :where(main[data-page="about"]) .map-tip{padding:8px 12px;border:0;border-radius:12px;box-shadow:0 14px 30px -14px rgba(11,15,19,.45);font:13px/1.4 Inter,system-ui,sans-serif;color:#1B242B}
+  :where(main[data-page="about"]) .map-tip strong{font-weight:600}
+  :where(main[data-page="about"]) .map-legend{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;border-radius:99px;background:rgba(255,255,255,.92);box-shadow:0 8px 20px -14px rgba(11,15,19,.5);font:500 12.5px/1 Inter,system-ui,sans-serif;color:#1B242B}
+  :where(main[data-page="about"]) .map-hint-tap{display:none}
+  @media (hover:none){:where(main[data-page="about"]) .map-hint-hover{display:none}:where(main[data-page="about"]) .map-hint-tap{display:inline}}
+  :where(main[data-page="about"]) .clinic-map .leaflet-control-attribution{font-size:10.5px;background:rgba(255,255,255,.8)}
+  :where(main[data-page="about"]) .map-legend-dot{width:12px;height:12px;border-radius:99px;background:#0F80C3;border:2px solid #fff;box-shadow:0 0 0 3px rgba(32,158,217,.25)}
+  :where(main[data-page="about"]) .map-legend-p{display:grid;place-items:center;width:20px;height:20px;border-radius:99px;background:#209ED9;color:#fff;font-style:normal;font-size:10.5px;font-weight:700}
+  :where(main[data-page="about"]) .leaflet-popup-content{font:14px/1.45 Inter,system-ui,sans-serif;color:#1B242B}
+  :where(main[data-page="about"]) .leaflet-popup-content a{color:#0F80C3}
+  :where(main[data-page="about"]) .leaflet-popup-content-wrapper{border-radius:14px}
+  /* gallery mosaic: columns drift slightly apart on scroll, tiles zoom on hover */
+  :where(main[data-page="about"]) .gal-col{will-change:transform}
+  :where(main[data-page="about"]) .gal-tile .gal-photo{transform:scale(1.06);transition:transform 1.4s var(--e-out)}
+  :where(main[data-page="about"]) .gal-tile.in .gal-photo{transform:scale(1)}
+  :where(main[data-page="about"]) .gal-tile:hover .gal-photo{transform:scale(1.07)}
+  :where(main[data-page="about"]) .gal-tile{box-shadow:0 18px 36px -28px rgba(27,36,43,.45)}
+  /* gallery stage and filmstrip */
+  :where(main[data-page="about"]) .gal-stage{animation:galStage .7s var(--e-out) both}
+  @keyframes galStage{from{opacity:0;transform:scale(1.04)}}
+  :where(main[data-page="about"]) .gal-film{opacity:.55;outline:2px solid transparent;outline-offset:2px;transition:opacity .3s ease,outline-color .3s ease}
+  :where(main[data-page="about"]) .gal-film:hover{opacity:.85}
+  :where(main[data-page="about"]) .gal-film.is-on{opacity:1;outline-color:#0F80C3}
+  /* team bios fold open */
+  :where(main[data-page="about"]) .team-more{grid-template-rows:0fr;transition:grid-template-rows .5s var(--e-out)}
+  :where(main[data-page="about"]) .team-more.is-open{grid-template-rows:1fr}
+  @media (prefers-reduced-motion:reduce){:where(main[data-page="about"]) .map-card{transition:none}:where(main[data-page="about"]) .clinic-map.is-on .map-dot,:where(main[data-page="about"]) .gal-stage{animation:none}:where(main[data-page="about"]) .team-more{transition:none}}
+  :where(main[data-page="about"]) .gal-img{animation:galImg .55s var(--e-out) both}
+  :where(main[data-page="about"]) .gal-grid .gal-tile{opacity:0;transform:translate3d(0,26px,0) scale(.985)}
+  :where(main[data-page="about"]) .gal-grid.in .gal-tile{animation:galTile .9s var(--e-out) var(--d,0s) both}
+  @keyframes galTile{from{opacity:0;transform:translate3d(0,26px,0) scale(.985);clip-path:inset(12% 0 0 0 round 18px)}to{opacity:1;transform:none;clip-path:inset(0 0 0 0 round 18px)}}
+  :where(main[data-page="about"]) .gal-photo{transform:scale(1.04);transition:transform 1.2s var(--e-out)}
+  :where(main[data-page="about"]) .gal-tile button:hover .gal-photo{transform:scale(1.09)}
+  @keyframes galImg{from{opacity:0;transform:scale(.97)}}
+  :where(main[data-page="about"]) .gal-view{opacity:0;transform:scale(.96);transition:opacity .35s ease,transform .55s var(--e-out)}
+  :where(main[data-page="about"]) .book-pop.is-on .gal-view{opacity:1;transform:none}
+  :where(main[data-page="about"]) .gal-thumb{opacity:.5;outline:2px solid transparent;outline-offset:2px;transition:opacity .3s ease,outline-color .3s ease}
+  :where(main[data-page="about"]) .gal-thumb:hover{opacity:.85}
+  :where(main[data-page="about"]) .gal-thumb.is-on{opacity:1;outline-color:#fff}
+  @media (prefers-reduced-motion:reduce){:where(main[data-page="about"]) .gal-view,:where(main[data-page="about"]) .gal-thumb{transition:none}:where(main[data-page="about"]) .gal-img,:where(main[data-page="about"]) .gal-grid.in .gal-tile{animation:none}:where(main[data-page="about"]) .gal-grid .gal-tile{opacity:1;transform:none}:where(main[data-page="about"]) .gal-photo{transition:none}}
+/* the pricing page blurs what passes under its open category title; here that title is not sticky */
+:where(main[data-page="about"]) .pr-group.is-open>.pr-ghead{-webkit-backdrop-filter:none;backdrop-filter:none}

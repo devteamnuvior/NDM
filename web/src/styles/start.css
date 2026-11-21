@@ -1,0 +1,45 @@
+/* "Where would you like to start?": expanding photo panels; a concern opens its options in place over
+   the photo. Copied rule for rule from the prototype's <style> block. */
+.st{display:flex;gap:14px;height:clamp(520px,42vw,620px);transition:height .7s var(--e-out)}
+.st-p{position:relative;flex:1 1 0;min-width:0;border-radius:22px;overflow:hidden;background:#0B0F13;isolation:isolate;transition:flex-grow .85s var(--e-out),height .7s var(--e-out)}
+.st-p.is-open{flex-grow:3.3}
+.st-p>img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;object-position:var(--pos,50% 50%);transform:scale(1.04);transition:transform 1.4s var(--e-out),object-position 1s var(--e-out)}
+.st-p.is-open>img{transform:none}
+.st-p.is-sheet>img{object-position:var(--pos-o,var(--pos,50% 50%))}
+.st-p::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(11,15,19,.06) 25%,rgba(11,15,19,.3) 55%,rgba(11,15,19,.84));transition:background-color .6s ease}
+.st-p:not(.is-open)::after{background-color:rgba(11,15,19,.12)}
+.st-h{position:absolute;inset:0;z-index:1;display:flex;align-items:flex-end;padding:clamp(18px,1.8vw,26px);text-align:left;color:#fff;transition:opacity .4s ease}
+.st-t{display:grid;gap:6px;font-size:clamp(24px,2vw,30px);line-height:1.1;letter-spacing:-.02em}
+.st-t small{font-size:13px;line-height:1.2;letter-spacing:0;color:rgba(255,255,255,.78)}
+.st-plus{position:absolute;right:16px;top:16px;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:background-color .3s ease,transform .45s var(--e-out)}
+.st-h:hover .st-plus{background:rgba(255,255,255,.3);transform:rotate(90deg)}
+.st-p.is-open .st-h{opacity:0;pointer-events:none}
+.st-c{position:absolute;inset:auto 0 0 0;z-index:2;padding:clamp(22px,2.2vw,32px);color:#fff;opacity:0;visibility:hidden;transform:translate3d(0,14px,0);transition:opacity .35s ease,transform .5s var(--e-out),visibility 0s .35s}
+.st-p.is-open .st-c{opacity:1;visibility:visible;transform:none;transition:opacity .6s ease .3s,transform .8s var(--e-out) .3s,visibility 0s}
+.st-p.is-sheet .st-c{opacity:0;visibility:hidden;transform:translate3d(0,-10px,0);transition:opacity .25s ease,transform .4s var(--e-out),visibility 0s .25s}
+.st-chips a{display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-size:14px;line-height:1;color:#fff;white-space:nowrap;transition:background-color .25s ease,color .25s ease,border-color .25s ease}
+.st-chips a:hover,.st-chips a:focus-visible{background:#fff;border-color:#fff;color:#1B242B}
+.st-o{position:absolute;left:12px;right:12px;bottom:12px;z-index:3;padding:16px 22px 20px;border-radius:14px;background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(20px) saturate(1.4);backdrop-filter:blur(20px) saturate(1.4);box-shadow:0 30px 60px -28px rgba(11,15,19,.6);color:#1B242B;animation:stIn .75s var(--e-out) .1s both}
+@keyframes stIn{from{opacity:0;transform:translate3d(0,24px,0)}to{opacity:1;transform:none}}
+.st-o h4:focus{outline:0}
+.st-o-list li+li{border-top:1px solid #E2E4E6}
+.st-o-list a:hover b{color:#0F80C3}
+.st-o-list a svg{transition:transform .3s var(--e-out)}
+.st-o-list a:hover svg{transform:translateX(3px)}
+@media (max-width:899px){
+  .st{flex-direction:column;height:auto!important;gap:10px}
+  .st-p{flex:none;height:104px}
+  .st-p.is-open{height:min(480px,118vw)}
+  .st-plus{top:50%;margin-top:-20px}
+  .st-h{align-items:center}
+  .st-t{font-size:26px}
+  .st-o{top:72px;bottom:auto;left:8px;right:8px;padding:14px 18px 18px}
+}
+@media (prefers-reduced-motion:reduce){.st,.st-p,.st-p>img,.st-c,.st-h,.st-o{transition:none;animation:none}}
+
+/* warm light on the panel photos, and the concern chips' final look */
+.st-p>img{filter:sepia(.1) saturate(1.06) brightness(1.02)}
+.st-p::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(110% 80% at 22% 6%,rgba(255,186,148,.6),rgba(255,186,148,0) 60%),radial-gradient(70% 50% at 90% 100%,rgba(255,170,130,.22),rgba(255,170,130,0) 70%);mix-blend-mode:soft-light}
+.st-chips a{gap:8px;background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.5);box-shadow:0 8px 20px -12px rgba(0,0,0,.6);cursor:pointer}
+.st-chips a svg{transition:transform .3s var(--e-out)}
+.st-chips a:hover svg{transform:translateX(3px)}

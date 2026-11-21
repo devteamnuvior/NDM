@@ -1,0 +1,681 @@
+{
+  "header": {
+    "announcement": {
+      "hidden": false,
+      "badge": "New",
+      "seconds": 4.8,
+      "desktop": [
+        {
+          "id": "offers",
+          "kind": "message",
+          "text": "New-patient offers this month, ",
+          "cta": "see current offers →",
+          "href": "/promotion"
+        },
+        {
+          "id": "visia",
+          "kind": "message",
+          "text": "Complimentary VISIA® skin analysis with your consultation, ",
+          "cta": "book yours →",
+          "href": "#/book"
+        },
+        {
+          "id": "plans",
+          "kind": "message",
+          "text": "Flexible payment plans. Start today, pay later, ",
+          "cta": "learn more →",
+          "href": "#/financing"
+        }
+      ],
+      "mobile": [
+        {
+          "id": "offers",
+          "kind": "message",
+          "text": "New-patient offers this month ",
+          "cta": "→",
+          "href": "/promotion"
+        },
+        {
+          "id": "visia",
+          "kind": "message",
+          "text": "Free VISIA® skin analysis, ",
+          "cta": "book →",
+          "href": "#/book"
+        },
+        {
+          "id": "phones",
+          "kind": "phones"
+        },
+        {
+          "id": "plans",
+          "kind": "message",
+          "text": "Payment plans: start today, pay later →",
+          "href": "#/financing"
+        },
+        {
+          "id": "shop",
+          "kind": "message",
+          "text": "Shop skincare online",
+          "href": "#/shop",
+          "external": true
+        }
+      ],
+      "shopLabel": "Shop skincare"
+    },
+    "bookLabel": "Book Free Consultation",
+    "bookShort": "Book",
+    "shopLink": "#/shop"
+  },
+  "footer": {
+    "film": {
+      "src": "https://public.biograph.com/images/membership-footer-video.mp4",
+      "poster": "https://framerusercontent.com/images/HufrBRKF68pdIZICx50VDBCtHw.png?width=1920&height=1080"
+    },
+    "cta": {
+      "lead": "Confidence is your true beauty.",
+      "strong": "It’s time to reveal it.",
+      "text": "Book a free consultation with our medical team and take the first step toward a treatment plan designed around you.",
+      "book": "Book Free Consultation",
+      "second": {
+        "label": "Explore Procedures",
+        "link": "#/procedures"
+      }
+    },
+    "about": "Toronto’s award-winning cosmetic & laser clinic, medical-grade aesthetic and dermatology care, planned around you.",
+    "badges": {
+      "award": "Top Choice Award",
+      "years": "16+ years of care"
+    },
+    "columns": [
+      {
+        "title": "Quick links",
+        "links": [
+          {
+            "label": "Procedures",
+            "link": ""
+          },
+          {
+            "label": "Concerns",
+            "link": ""
+          },
+          {
+            "label": "Pricing",
+            "link": ""
+          },
+          {
+            "label": "Promotion",
+            "link": ""
+          },
+          {
+            "label": "Skincare Shop",
+            "link": ""
+          },
+          {
+            "label": "Blog",
+            "link": ""
+          }
+        ]
+      },
+      {
+        "title": "About",
+        "links": [
+          {
+            "label": "Our Clinics",
+            "link": ""
+          },
+          {
+            "label": "Doctors & Team",
+            "link": ""
+          },
+          {
+            "label": "Awards & Recognition",
+            "link": ""
+          },
+          {
+            "label": "Contact Us",
+            "link": ""
+          },
+          {
+            "label": "Book Online",
+            "link": ""
+          }
+        ]
+      }
+    ],
+    "contactTitle": "Get in touch",
+    "email": "info@newdermamed.com",
+    "copyright": "© 2026 NewDermaMed. Medical treatments by licensed providers.",
+    "social": {
+      "instagram": "https://www.instagram.com/newdermamed/",
+      "facebook": "https://www.facebook.com/NewDermaMed-171490486329211/",
+      "youtube": "https://www.youtube.com/channel/UCEu0ghSIa-ZPqNh087WAY3w",
+      "x": "https://twitter.com/NewDermaMed",
+      "linkedin": "https://www.linkedin.com/company/3636680"
+    }
+  },
+  "menu": {
+    "items": [
+      {
+        "label": "Home",
+        "kind": "link",
+        "link": "/",
+        "newTab": false
+      },
+      {
+        "label": "Procedures",
+        "kind": "procedures",
+        "link": "",
+        "newTab": false
+      },
+      {
+        "label": "Concerns",
+        "kind": "concerns",
+        "link": "",
+        "newTab": false
+      },
+      {
+        "label": "Pricing",
+        "kind": "link",
+        "link": "/pricing",
+        "newTab": false
+      },
+      {
+        "label": "Promotion",
+        "kind": "link",
+        "link": "/promotion",
+        "newTab": false
+      },
+      {
+        "label": "About",
+        "kind": "about",
+        "link": "",
+        "newTab": false
+      },
+      {
+        "label": "Skincare shop",
+        "kind": "shop",
+        "link": "",
+        "newTab": false
+      }
+    ],
+    "procedures": {
+      "categories": [
+        {
+          "id": "aptos",
+          "label": "Aptos Thread Lift",
+          "link": "",
+          "blurb": "Non-surgical lifting with absorbable threads, planned around your facial structure.",
+          "aptos": true,
+          "groups": [
+            {
+              "title": "",
+              "items": [
+                {
+                  "label": "Aptos Thread Lift",
+                  "link": ""
+                },
+                {
+                  "label": "Non-Surgical Facelift (Neck, Jawline, Eyebrow & Nose Lift)",
+                  "link": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "injectables",
+          "label": "Injectables",
+          "link": "",
+          "blurb": "Neuromodulators, fillers and biostimulators, dosed conservatively for a natural-looking finish.",
+          "aptos": false,
+          "groups": [
+            {
+              "title": "",
+              "items": [
+                {
+                  "label": "Botox®",
+                  "link": ""
+                },
+                {
+                  "label": "Juvederm®",
+                  "link": ""
+                },
+                {
+                  "label": "Dermal Fillers",
+                  "link": ""
+                },
+                {
+                  "label": "Belkyra® / Kybella® (Double Chin)",
+                  "link": ""
+                },
+                {
+                  "label": "Lip Augmentation",
+                  "link": ""
+                },
+                {
+                  "label": "Tear Trough Correction",
+                  "link": ""
+                },
+                {
+                  "label": "Soft Lift™",
+                  "link": ""
+                },
+                {
+                  "label": "Radiesse®",
+                  "link": ""
+                },
+                {
+                  "label": "Sculptra®",
+                  "link": ""
+                },
+                {
+                  "label": "Mesotherapy & Skin Boosters",
+                  "link": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "skin",
+          "label": "Skin",
+          "link": "",
+          "blurb": "Aesthetic and medical dermatology, from VISIA® analysis to laser resurfacing.",
+          "aptos": false,
+          "groups": [
+            {
+              "title": "Aesthetic",
+              "items": [
+                {
+                  "label": "VISIA® Skin Analysis",
+                  "link": ""
+                },
+                {
+                  "label": "Microneedling",
+                  "link": ""
+                },
+                {
+                  "label": "Age Element® Facial",
+                  "link": ""
+                },
+                {
+                  "label": "Acnelan®",
+                  "link": ""
+                },
+                {
+                  "label": "Dermamelan®",
+                  "link": ""
+                },
+                {
+                  "label": "Exosome Skin Therapy",
+                  "link": ""
+                },
+                {
+                  "label": "Wrinkle Treatments",
+                  "link": ""
+                },
+                {
+                  "label": "Dark Circles",
+                  "link": ""
+                },
+                {
+                  "label": "Scar Removal",
+                  "link": ""
+                },
+                {
+                  "label": "Acne Scar",
+                  "link": ""
+                },
+                {
+                  "label": "Photo Rejuvenation",
+                  "link": ""
+                },
+                {
+                  "label": "Microdermabrasion",
+                  "link": ""
+                },
+                {
+                  "label": "Chemical Peels",
+                  "link": ""
+                },
+                {
+                  "label": "Micro Laser Peel",
+                  "link": ""
+                },
+                {
+                  "label": "Laser Skin Resurfacing",
+                  "link": ""
+                },
+                {
+                  "label": "Skin Tightening",
+                  "link": ""
+                }
+              ]
+            },
+            {
+              "title": "Medical Dermatology",
+              "items": [
+                {
+                  "label": "Mole Removal",
+                  "link": ""
+                },
+                {
+                  "label": "Rosacea",
+                  "link": ""
+                },
+                {
+                  "label": "Melasma",
+                  "link": ""
+                },
+                {
+                  "label": "Hyperpigmentation",
+                  "link": ""
+                },
+                {
+                  "label": "Acne Treatments",
+                  "link": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lhr",
+          "label": "Laser Hair Removal",
+          "link": "",
+          "blurb": "Long-term hair reduction for face and body, with settings matched to your skin and hair type.",
+          "aptos": false,
+          "groups": [
+            {
+              "title": "",
+              "items": [
+                {
+                  "label": "Laser Hair Removal",
+                  "link": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "body",
+          "label": "Body",
+          "link": "",
+          "blurb": "Non-surgical contouring, tightening and medical body treatments.",
+          "aptos": false,
+          "groups": [
+            {
+              "title": "",
+              "items": [
+                {
+                  "label": "CoolSculpting®",
+                  "link": ""
+                },
+                {
+                  "label": "Non-Surgical BBL",
+                  "link": ""
+                },
+                {
+                  "label": "Cellulite & Fat Reduction",
+                  "link": ""
+                },
+                {
+                  "label": "TightSculpting®",
+                  "link": ""
+                },
+                {
+                  "label": "Vaginal Tightening",
+                  "link": ""
+                },
+                {
+                  "label": "Nail Fungus Treatment",
+                  "link": ""
+                },
+                {
+                  "label": "Snoring Treatment",
+                  "link": ""
+                },
+                {
+                  "label": "Stretch Marks",
+                  "link": ""
+                },
+                {
+                  "label": "Hyperhidrosis",
+                  "link": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "veins",
+          "label": "Veins",
+          "link": "",
+          "blurb": "Assessment and treatment of spider and varicose veins.",
+          "aptos": false,
+          "groups": [
+            {
+              "title": "",
+              "items": [
+                {
+                  "label": "Spider Vein Removal",
+                  "link": ""
+                },
+                {
+                  "label": "Varicose Vein Treatment",
+                  "link": ""
+                },
+                {
+                  "label": "Sclerotherapy",
+                  "link": ""
+                },
+                {
+                  "label": "VenaSeal™",
+                  "link": ""
+                },
+                {
+                  "label": "Endovenous Laser (EVLT)",
+                  "link": ""
+                },
+                {
+                  "label": "Radiofrequency Ablation (RFA)",
+                  "link": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hair",
+          "label": "Hair Loss",
+          "link": "",
+          "blurb": "Options to support thinning hair and scalp health.",
+          "aptos": false,
+          "groups": [
+            {
+              "title": "",
+              "items": [
+                {
+                  "label": "Hair Loss Treatments",
+                  "link": ""
+                },
+                {
+                  "label": "Exosome Therapy for Hair",
+                  "link": ""
+                },
+                {
+                  "label": "Laser Hair Rejuvenation",
+                  "link": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "card": {
+        "tag": "Not sure where to start?",
+        "title": "Free consultation & VISIA® skin analysis",
+        "photo": ""
+      }
+    },
+    "aptos": {
+      "tag": "NAMICA technology",
+      "title": "Biostimulation threads",
+      "subtitle": "P(LA/CL) + HA",
+      "badge": "Licensed by Health Canada",
+      "link": "/aptos-thread-lift"
+    },
+    "concerns": {
+      "title": "Concerns",
+      "text": "Start from what you notice in the mirror, we’ll match you with the options that suit your skin.",
+      "groups": [
+        {
+          "title": "Face & Aging",
+          "items": [
+            {
+              "label": "Wrinkles & Fine Lines",
+              "link": ""
+            },
+            {
+              "label": "Volume Loss",
+              "link": ""
+            },
+            {
+              "label": "Sagging Skin & Jowls",
+              "link": ""
+            },
+            {
+              "label": "Double Chin",
+              "link": ""
+            },
+            {
+              "label": "Thin Lips",
+              "link": ""
+            },
+            {
+              "label": "Under-Eye Hollows & Dark Circles",
+              "link": ""
+            }
+          ]
+        },
+        {
+          "title": "Skin",
+          "items": [
+            {
+              "label": "Acne & Breakouts",
+              "link": ""
+            },
+            {
+              "label": "Acne Scars",
+              "link": ""
+            },
+            {
+              "label": "Rosacea & Redness",
+              "link": ""
+            },
+            {
+              "label": "Melasma",
+              "link": ""
+            },
+            {
+              "label": "Hyperpigmentation & Sun Spots",
+              "link": ""
+            },
+            {
+              "label": "Uneven Texture & Pores",
+              "link": ""
+            },
+            {
+              "label": "Moles & Skin Lesions",
+              "link": ""
+            }
+          ]
+        },
+        {
+          "title": "Body",
+          "items": [
+            {
+              "label": "Stubborn Fat",
+              "link": ""
+            },
+            {
+              "label": "Cellulite",
+              "link": ""
+            },
+            {
+              "label": "Stretch Marks",
+              "link": ""
+            },
+            {
+              "label": "Loose Skin",
+              "link": ""
+            },
+            {
+              "label": "Excessive Sweating",
+              "link": ""
+            },
+            {
+              "label": "Spider & Varicose Veins",
+              "link": ""
+            },
+            {
+              "label": "Unwanted Hair",
+              "link": ""
+            }
+          ]
+        },
+        {
+          "title": "Hair",
+          "items": [
+            {
+              "label": "Thinning Hair",
+              "link": ""
+            },
+            {
+              "label": "Hair Loss",
+              "link": ""
+            }
+          ]
+        }
+      ],
+      "card": {
+        "tag": "Not sure what you need?",
+        "title": "Start with a VISIA® skin analysis",
+        "photo": ""
+      }
+    },
+    "about": {
+      "links": [
+        {
+          "label": "Our Doctors & Team",
+          "link": ""
+        },
+        {
+          "label": "Our Clinics",
+          "link": ""
+        },
+        {
+          "label": "Awards & Recognition",
+          "link": ""
+        },
+        {
+          "label": "Contact Us",
+          "link": ""
+        },
+        {
+          "label": "Blog",
+          "link": ""
+        },
+        {
+          "label": "Policies (Privacy, Terms, Refunds)",
+          "link": ""
+        }
+      ],
+      "photos": {
+        "uptown": "",
+        "downtown": ""
+      },
+      "cardLink": "About the clinic"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+/* the Before & After page (redesign, user 2026-11-18; same design as the prototype's before-after.html). Classes "bag-"
+   (the prototype's own page uses "ba-", which other sections of this site already use for the comparison slider). */
+.bag-shade-wide{background:linear-gradient(90deg,rgba(11,15,19,.8) 0%,rgba(11,15,19,.5) 50%,rgba(11,15,19,.3) 100%),linear-gradient(180deg,rgba(11,15,19,.55) 0%,rgba(11,15,19,0) 30%,rgba(11,15,19,0) 70%,rgba(11,15,19,.45) 100%)}
+.bag-shade-tall{background:linear-gradient(180deg,rgba(11,15,19,.6) 0%,rgba(11,15,19,.4) 30%,rgba(11,15,19,.7) 62%,rgba(11,15,19,.9) 100%)}
+.bag-glass{background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 30px 60px -36px rgba(0,0,0,.6)}
+.bag-card{box-shadow:inset 0 0 0 1px rgba(27,36,43,.06);transition:transform .55s var(--e-out),box-shadow .55s var(--e-out)}
+.bag-card-img{transition:transform 1.2s var(--e-out)}
+.bag-card-shade{background:linear-gradient(180deg,rgba(11,15,19,0) 55%,rgba(11,15,19,.28));opacity:0;transition:opacity .45s ease}
+.bag-zoom{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s var(--e-out)}
+@media (hover:hover){.bag-card:hover{transform:translateY(-4px);box-shadow:inset 0 0 0 1px rgba(15,128,195,.25),0 34px 64px -38px rgba(15,60,95,.5)}.bag-card:hover .bag-card-img{transform:scale(1.04)}.bag-card:hover .bag-card-shade,.bag-card:hover .bag-zoom{opacity:1;transform:none}}
+@media (hover:none){.bag-zoom{opacity:1;transform:none}}
+.bag-note-n{position:absolute;right:18px;top:6px;font-size:84px;line-height:1;letter-spacing:-.04em;color:rgba(15,128,195,.08)}
+.bag-fig{animation:bagIn .45s var(--e-out) both}
+@keyframes bagIn{from{opacity:0;transform:translateY(10px) scale(.985)}}
+@media (prefers-reduced-motion:reduce){.bag-card,.bag-card-img,.bag-zoom,.bag-card-shade{transition:none}.bag-fig{animation:none}}
+.bag-chip{background:#fff;color:rgba(27,36,43,.82);box-shadow:inset 0 0 0 1px rgba(27,36,43,.09)}
+.bag-chip:hover{color:#1B242B;box-shadow:inset 0 0 0 1px rgba(15,128,195,.35)}
+.bag-chip-n{background:rgba(27,36,43,.06);color:#5A646C}
+.bag-chip.is-on{background:#0F80C3;color:#fff;box-shadow:none}
+.bag-chip.is-on .bag-chip-n{background:rgba(255,255,255,.22);color:#fff}
+.bag-viewer{background:rgba(6,9,12,.96);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.bag-v-btn{background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.bag-v-btn:hover{background:#fff;color:#0B0F13}
+.bag-v-about{background:#fff;color:#0B0F13}
+.bag-v-about:hover{background:#26B1E7;color:#0B0F13}
+/* testimonials as on the procedure pages: the words on the 1180px column, the card row edge to edge */
+main:where([data-page="before-after"]){--tx:max(var(--gx),calc((100% - 1180px) / 2))}
+main:where([data-page="before-after"])>section[aria-labelledby="testimonials"]{padding:clamp(64px,7vw,104px) 0!important}
+main:where([data-page="before-after"])>section[aria-labelledby="testimonials"]>div:not(.promo-rev-rows),main:where([data-page="before-after"])>section[aria-labelledby="testimonials"]>p{padding-left:var(--tx)!important;padding-right:var(--tx)!important}
+/* Start your journey on this page (the article page's rules, copied) */
+:where(main[data-page="before-after"]) .jr-card{clip-path:inset(0 50% 0 50% round 32px);transition:clip-path 1.2s cubic-bezier(.7,0,.2,1);box-shadow:0 40px 80px -50px rgba(11,15,19,.6)}
+:where(main[data-page="before-after"]) .jr-card.is-on{clip-path:inset(0 0 0 0 round 32px)}
+:where(main[data-page="before-after"]) .jr-card .jr-pic{transform:scale(1.12);transition:transform 2.2s cubic-bezier(.2,.7,.2,1)}
+:where(main[data-page="before-after"]) .jr-card.is-on .jr-pic{transform:scale(1)}
+:where(main[data-page="before-after"]) .jr-card{background:#0B1B29}
+@media (min-width:768px){:where(main[data-page="before-after"]) .jr-card .jr-pic{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 34%);mask-image:linear-gradient(90deg,transparent 0,#000 34%)}}
+:where(main[data-page="before-after"]) .jr-shade{background:linear-gradient(90deg,rgba(9,22,34,.9) 0%,rgba(9,22,34,.72) 34%,rgba(9,22,34,.18) 66%,rgba(9,22,34,0) 100%),linear-gradient(var(--up,0deg),rgba(10,52,84,.72) 0%,rgba(10,52,84,0) 55%)}
+@media (max-width:767px){:where(main[data-page="before-after"]) .jr-card{clip-path:inset(0 50% 0 50% round 24px)}:where(main[data-page="before-after"]) .jr-card.is-on{clip-path:inset(0 0 0 0 round 24px)}
+  :where(main[data-page="before-after"]) .jr-shade{background:linear-gradient(var(--up,0deg),rgba(9,22,34,.94) 0%,rgba(9,22,34,.8) 42%,rgba(9,22,34,.1) 78%,rgba(9,22,34,0) 100%)}}
+:where(main[data-page="before-after"]) .jr-card .jr-t{opacity:0;filter:blur(14px);transform:translateY(12px);transition:opacity .9s ease,filter 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1)}
+:where(main[data-page="before-after"]) .jr-card.is-on .jr-t{opacity:1;filter:blur(0);transform:none}
+@media (prefers-reduced-motion:reduce){:where(main[data-page="before-after"]) .jr-card,:where(main[data-page="before-after"]) .jr-card .jr-pic,:where(main[data-page="before-after"]) .jr-card .jr-t{clip-path:none;transform:none;filter:none;opacity:1;transition:none}}

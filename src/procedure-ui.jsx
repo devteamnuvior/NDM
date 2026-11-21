@@ -20,7 +20,7 @@ const PROC = {
      what it is, how it works, the areas treated, who it may not suit), in qualified language; the live safety paragraph closes it */
   intro: {
     id: 'benefits', tag: 'Benefits', lead: 'What is Botox® Cosmetic', strong: 'and how does it work?',
-    img: 'assets/botox/why-choose.jpg', fit: 'contain', bg: '#EFEDE7', /* the treatment-area diagram, shown whole */
+    img: 'assets/botox/why-choose.jpg', ratio: '1 / 1', pos: '50% 50%', /* the treatment-area diagram: a square frame, so it fills top to bottom and shows whole */
     alt: 'Treatment areas: forehead lines, frown lines, crow’s feet, jawline slimming, neck bands and hyperhidrosis',
     text: [
       'Botox® Cosmetic is a Health Canada approved prescription neuromodulator. At NewDermaMed it is given only by our licensed medical team, after a free in-person assessment at our Uptown clinic near Yonge and Sheppard or our Downtown clinic near Bay and College.',
@@ -37,7 +37,7 @@ const PROC = {
     chips: ['4763 Yonge St, Uptown', '790 Bay St, Downtown', 'Free consultation', 'VISIA® skin analysis'] },
   /* About (ProcOverview tabs): Ray's five tabs; the key numbers beside them are this page's */
   overview: {
-    tag: 'About', lead: 'What can I expect', strong: 'from Botox® treatment?',
+    tag: 'About', lead: 'What can I expect', strong: 'from Botox® treatment?', dark: true, /* a full-bleed dark band, no card (ProcOverview) */
     tabs: [
       { label: 'Treatment Overview', stat: ['20+', 'years of clinical research'], text: [
         'By momentarily relaxing the underlying muscles that cause expression lines, Botox® Cosmetic is a reliable, non-surgical procedure that reduces wrinkles and fine lines. Botox® is one of the most researched and secure cosmetic procedures in the world, having been used in more than 78 countries and undergoing more than 20 years of clinical research. Our experts at NewDermaMed use precise injections to produce refreshed, natural-looking results without changing your distinctive facial expressions.'] },
@@ -112,9 +112,9 @@ const PROC = {
     doctor: { name: 'Dr. Negin Mastouri', role: 'Medical Director', img: 'assets/team/negin.jpg' },
     /* related treatments as photo cards: [title, link to the treatment's own page, photo, group]; slug() opens the page once it
        exists (PAGE_LINKS) and a #/slug placeholder until then */
-    related: [['Dermal Fillers', slug('Dermal Fillers'), 'assets/home/v3/jawline-720.webp', 'Injectable'], ['Lip Augmentation', slug('Lip Augmentation'), 'assets/home/v3/lips-720.webp', 'Injectable'],
-      ['Skin Boosters', slug('Skin Boosters'), 'assets/home/v3/booster-720.webp', 'Injectable'], ['Aptos Thread Lift', slug('Aptos Thread Lift'), 'assets/aptos/midface-vectors.jpg', 'Bio-stimulator'],
-      ['Sculptra®', slug('Sculptra®'), 'assets/home/v3/sculptra-720.webp', 'Bio-stimulator'], ['Microneedling', slug('Microneedling'), 'assets/home/v3/mneedle-720.webp', 'Skin']],
+    related: [['Dermal Fillers', slug('Dermal Fillers'), 'assets/home/menu/dermal-fillers.jpg', 'Injectable'], ['Lip Augmentation', slug('Lip Augmentation'), 'assets/home/menu/lip-fillers.jpg', 'Injectable'],
+      ['Skin Boosters', slug('Skin Boosters'), 'assets/home/menu/skin-boosters.jpg', 'Injectable'], ['Aptos Thread Lift', slug('Aptos Thread Lift'), 'assets/aptos/midface-vectors.jpg', 'Bio-stimulator'],
+      ['Sculptra®', slug('Sculptra®'), 'assets/home/menu/sculptra.jpg', 'Bio-stimulator'], ['Microneedling', slug('Microneedling'), 'assets/home/menu/microneedling.jpg', 'Skin']],
   },
   faq: { lead: 'FAQ For', strong: 'Botox®', sub: 'Everything you need to know before starting your journey with us.' },
   faqs: [
@@ -143,14 +143,46 @@ const IconTick = (p) => <Svg size={14} vb="0 0 14 14" {...p}><path d="m3 7.3 2.6
 
 /* ---------------------------------------------------------------- booking form (hero card on desktop, its own block on phones) */
 /* the hero and phone form: the shared booking form (BookForm) in its compact layout, after Ray's version (round 12) */
+/* ---------------------------------------------------------------- Black Friday badge on the booking form (user, 2026-11-18)
+   The bottom tab's look, small: the red % mark, "Black Friday Sale" and the tab's offer line (BF_SALE.badge), linking to the
+   sale page; gone after the live site's Black Friday window (Dec 7, Toronto time). */
+const BFB_END = '2026-12-07T23:59:00-05:00';
+if (typeof document !== 'undefined' && !document.getElementById('bfb-css')) {
+  const st = document.createElement('style'); st.id = 'bfb-css';
+  st.textContent = `.bfb{display:inline-flex;align-items:center;gap:9px;padding:6px 12px 6px 6px;border-radius:14px;background:#0B0B0C;color:#fff;text-decoration:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 10px 24px -16px rgba(11,11,12,.6);transition:box-shadow .2s}
+.bfb:hover{box-shadow:inset 0 0 0 1px rgba(238,58,69,.5),0 10px 24px -16px rgba(11,11,12,.6)}
+.bfb-mark{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:9px;background:linear-gradient(150deg,#EE3A45,#A50E18);font-family:Fraunces,Georgia,serif;font-size:17px;line-height:1;color:#fff}
+.bfb-text{display:flex;flex-direction:column;gap:4px}
+.bfb-label{font:500 13px/1 Inter,"Helvetica Neue",Arial,sans-serif;white-space:nowrap}
+.bfb-badge{font:600 11.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;color:#FF6B73;white-space:nowrap}
+.proc-form-head{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:start;gap:12px}
+.proc-form-head .bfb{margin-top:2px}
+@media (max-width:479px){.proc-form-head{grid-template-columns:minmax(0,1fr) auto}.proc-form-head .bfb{grid-column:1 / -1;grid-row:2;justify-self:start;margin-top:0}}`;
+  document.head.appendChild(st);
+}
+function BfFormBadge() {
+  if (Date.now() > new Date(BFB_END).getTime()) return null;
+  const sale = typeof BF_SALE !== 'undefined' ? BF_SALE : { href: 'black-friday-sale.html', badge: 'Up to 70% off' };
+  return (
+    <a href={sale.href} className="bfb" aria-label={`Black Friday Sale, ${sale.badge}. See the offers`}>
+      <span aria-hidden="true" className="bfb-mark">%</span>
+      <span className="bfb-text" aria-hidden="true">
+        <span className="bfb-label">Black Friday Sale</span>
+        <span className="bfb-badge">{sale.badge}</span>
+      </span>
+    </a>
+  );
+}
+
 function ProcForm({ id, className = '' }) {
   const hid = `${id}-title`;
   return (
     <div className={`proc-form book-compact rounded-[22px] bg-white p-[clamp(20px,2.2vw,28px)] text-ndm-ink ${className}`} role="region" aria-labelledby={hid}>
-      <div className="mb-4 flex items-start justify-between gap-3">
+      <div className="proc-form-head mb-4">
         <h2 id={hid} className="font-aeonik text-[clamp(24px,2vw,28px)] font-normal leading-[1.1] tracking-[-0.025em]">
           Book your <br /><span className="tt-strong text-ndm-deep">free consultation</span>
         </h2>
+        <BfFormBadge />
         <span aria-hidden="true" className="book-badge-dot mt-1 grid size-9 shrink-0 place-items-center rounded-full bg-ndm-amber text-white"><IconArrow size={13} /></span>
       </div>
       <div className="flex flex-col"><BookForm compact thanksId={`${id}-thanks`} /></div>
@@ -242,7 +274,7 @@ function ProcGlance({ p, wide }) {
 function ProcOverview({ p }) {
   const ref = useRef(null), tabs = useRef([]);
   useReveal(ref);
-  const o = p.overview;
+  const o = p.overview, dk = !!o.dark;
   const n = txNum(p, 'overview');
   const [act, setAct] = useState(0);
   const key = (e, i) => {
@@ -253,13 +285,13 @@ function ProcOverview({ p }) {
     setAct(m); if (tabs.current[m]) tabs.current[m].focus();
   };
   return (
-    <section ref={ref} id="overview" aria-labelledby="overview-title" className="ov2 relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)] text-ndm-ink">
+    <section ref={ref} id="overview" aria-labelledby="overview-title" data-nav={dk ? 'dark' : undefined} className={`ov2 ${dk ? 'ov2-dark text-white' : 'text-ndm-ink'} relative z-10 overflow-hidden px-[var(--gx)] py-[clamp(44px,5vw,68px)]`}>
       <span aria-hidden="true" className="ov2-orb ov2-orb-a" /><span aria-hidden="true" className="ov2-orb ov2-orb-b" /><span aria-hidden="true" className="ov2-orb ov2-orb-c" />
       <svg aria-hidden="true" viewBox="0 0 400 400" className="ov2-ring"><circle cx="200" cy="200" r="190" /><circle cx="200" cy="200" r="150" /></svg>
       <div className={`${TX_WRAP} relative`}>
         <div className="text-center">
-          <Eyebrow className="rv">{n && <span className="tabular-nums text-ndm-deep">{n}</span>}{o.tag}</Eyebrow>
-          <TwoTone id="overview-title" className="rv mx-auto mt-3" size="text-[clamp(26px,min(2.8vw,4.6vh),40px)]" lead={twoLine(o.lead)} strong={o.strong} style={{ transitionDelay: '.06s' }} />
+          <Eyebrow dark={dk} className="rv">{n && <span className={`tabular-nums ${dk ? 'text-ndm-sky' : 'text-ndm-deep'}`}>{n}</span>}{o.tag}</Eyebrow>
+          <TwoTone id="overview-title" dark={dk} className="rv mx-auto mt-3" size="text-[clamp(26px,min(2.8vw,4.6vh),40px)]" lead={twoLine(o.lead)} strong={o.strong} style={{ transitionDelay: '.06s' }} />
         </div>
         {/* round 31: the tab names sit in one row on top again; the panel below is compact so the section fits one view */}
         <div className="rv ov2-panel relative mt-[clamp(16px,2.6vh,28px)] overflow-hidden rounded-[26px]" style={{ transitionDelay: '.1s' }}>
@@ -344,25 +376,35 @@ function ProcChoose({ p }) {
   const ref = useRef(null);
   useReveal(ref);
   const c = p.choose.cards;
-  const card = ([t, d], i) => (
-    <li key={t} className="rv flex flex-col rounded-[22px] bg-white sm:min-h-[220px] p-[clamp(20px,2vw,28px)] ring-1 ring-ndm-ink/[.06]" style={{ transitionDelay: `${0.06 * i}s` }}>
-      <span aria-hidden="true" className="grid size-10 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconCheckBadge /></span>
-      <h3 className="mt-auto pt-5 font-aeonik text-[22px] sm:pt-8 font-normal leading-[1.2] tracking-[-0.01em] text-ndm-ink">{t}</h3>
-      <p className="mt-2 font-inter text-[14.5px] leading-[1.6] text-ndm-muted">{d}</p>
-    </li>
-  );
   return (
     <section ref={ref} id="why-choose" aria-labelledby="choose-title" className="relative z-10 scroll-mt-[170px] bg-ndm-mist px-[var(--gx)] py-[clamp(72px,8vw,120px)]">
-      <div className="text-center">
-        <Eyebrow className="rv">{txNum(p, 'why-choose') && <span className="tabular-nums text-ndm-deep">{txNum(p, 'why-choose')}</span>}{p.choose.tag || 'Why choose this treatment'}</Eyebrow>
-        <TwoTone id="choose-title" className="rv mx-auto mt-5" lead={twoLine(p.choose.lead || 'Who it may suit,')} strong={p.choose.strong || 'and safety first'} style={{ transitionDelay: '.06s' }} />
-      </div>
-      <div className="mx-auto mt-[clamp(36px,4vw,56px)] grid max-w-[1180px] gap-3 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-4">
-        <div className="rv rv-clip relative min-h-[360px] overflow-hidden rounded-[22px] bg-ndm-line md:col-span-2 lg:order-2 lg:col-span-1 lg:min-h-0" style={{ transitionDelay: '.08s' }}>
-          <img src={p.choose.img} alt={p.choose.alt || 'Close-up of a woman’s face in soft natural light'} loading="lazy" className={`absolute inset-0 h-full w-full ${p.choose.fit === 'contain' ? 'object-contain' : 'object-cover object-[50%_40%]'}`} style={p.choose.bg ? { background: p.choose.bg } : undefined} />
+      <div className="mx-auto grid max-w-[1180px] items-start gap-[clamp(36px,4vw,56px)] lg:grid-cols-[minmax(0,1.12fr)_minmax(0,.88fr)] lg:gap-[clamp(48px,5vw,80px)]">
+        {/* words: left */}
+        <div className="min-w-0">
+          <Eyebrow className="rv">{txNum(p, 'why-choose') && <span className="tabular-nums text-ndm-deep">{txNum(p, 'why-choose')}</span>}{p.choose.tag || 'Why choose this treatment'}</Eyebrow>
+          <TwoTone id="choose-title" className="rv mt-5" lead={twoLine(p.choose.lead || 'Who it may suit,')} strong={p.choose.strong || 'and safety first'} style={{ transitionDelay: '.06s' }} />
+          {p.choose.text && <p className="rv mt-5 max-w-[52ch] font-inter text-[15.5px] leading-[1.6] text-ndm-muted" style={{ transitionDelay: '.1s' }}>{p.choose.text}</p>}
+          <ol className="mt-[clamp(28px,3.2vw,44px)] grid gap-x-[clamp(24px,3vw,44px)] sm:grid-cols-2" role="list">
+            {c.map(([t, d], i) => (
+              <li key={t} className="choose-item rv flex gap-4 border-t border-ndm-ink/10 py-[clamp(18px,2vw,24px)]" style={{ transitionDelay: `${0.05 * i + 0.1}s` }}>
+                <span aria-hidden="true" className="choose-num mt-[3px] grid size-9 shrink-0 place-items-center rounded-full bg-white font-inter text-[12.5px] font-semibold tabular-nums text-ndm-deep ring-1 ring-ndm-blue/15">{String(i + 1).padStart(2, '0')}</span>
+                <div className="min-w-0">
+                  <h3 className="font-aeonik text-[clamp(19px,1.5vw,21px)] font-normal leading-[1.25] tracking-[-0.01em] text-ndm-ink">{t}</h3>
+                  <p className="mt-1.5 font-inter text-[14.5px] leading-[1.6] text-ndm-muted">{d}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
-        <ul className="grid gap-3 lg:order-1 lg:gap-4" role="list">{c.slice(0, Math.ceil(c.length / 2)).map(card)}</ul>
-        <ul className="grid gap-3 lg:order-3 lg:gap-4" role="list">{c.slice(Math.ceil(c.length / 2)).map((x, i) => card(x, i + Math.ceil(c.length / 2)))}</ul>
+        {/* photo: right */}
+        <figure className="rv rv-clip relative m-0 aspect-[4/5] overflow-hidden rounded-[28px] bg-ndm-line lg:sticky lg:top-[170px] lg:aspect-auto lg:h-[min(720px,calc(100vh-200px))] lg:min-h-[560px]" style={{ transitionDelay: '.08s' }}>
+          <img src={p.choose.img} alt={p.choose.alt || 'Close-up of a woman’s face in soft natural light'} loading="lazy" className={`absolute inset-0 h-full w-full ${p.choose.fit === 'contain' ? 'object-contain' : 'object-cover object-[50%_35%]'}`} style={p.choose.bg ? { background: p.choose.bg } : undefined} />
+          <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ndm-night/45 to-transparent" />
+          <figcaption className="absolute inset-x-4 bottom-4 flex items-center gap-3 rounded-[18px] bg-white/85 p-3 pr-4 backdrop-blur-md sm:inset-x-5 sm:bottom-5">
+            <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep"><IconCheckBadge /></span>
+            <span className="font-inter text-[13.5px] leading-[1.4] text-ndm-ink">Every plan starts with a <strong className="font-semibold">free consultation</strong> and VISIA® skin analysis.</span>
+          </figcaption>
+        </figure>
       </div>
     </section>
   );
@@ -389,6 +431,7 @@ function ProcPrices({ p }) {
         <ul className="pr-groups rv mt-[clamp(40px,4.5vw,64px)]" role="list" style={{ transitionDelay: '.14s' }}>
           {groups.map((g, gi) => {
             const on = open[gi], pct = pctOf(g.rows), hid = `proc-pr-h${gi}`, bid = `proc-pr${gi}`;
+            const gsrc = rowsSource(g.rows, true);
             return (
               <li key={g.name} className={`pr-group ${on ? 'is-open' : ''}`}>
                 <h3 className="pr-ghead m-0">
@@ -399,32 +442,20 @@ function ProcPrices({ p }) {
                       <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{g.title}</span>
                     </span>
                     <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                      {pct > 0 && <span className="pr-badge">Up to {pct}% off</span>}
-                      <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">From <span className="font-aeonik text-[20px] tracking-[-0.02em] text-ndm-ink">{pfmt(rowsFrom(g.rows, true))}</span> / unit</span>
+                      <SaleTag offer={pct > 0 ? `Up to ${pct}%\u00a0off` : ""} badge={saleBadge(g.rows.map((r) => r[3]))} />
+                      <FromPrice value={rowsFrom(g.rows, true)} unit=" / unit" src={gsrc} />
                     </span>
                     <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
                   </button>
                 </h3>
                 <div id={bid} role="region" aria-labelledby={hid} className="pr-body" {...(on ? {} : { inert: '' })}>
                   <div>
-                    <p className="max-w-[60ch] pb-2 font-inter text-[15px] leading-[1.55] text-ndm-muted">{g.blurb}</p>
+                    <p className="pr-gintro max-w-[60ch] pb-2 font-inter text-[15px] leading-[1.55] text-ndm-muted">{g.blurb}</p>
                     <ul className="pr-sub grid gap-2 py-4" role="list">
                       {g.rows.map(([label, price, was, tag]) => {
                         const line = { key: `${g.name}|${label}`, cat: pr.cat, name: g.name, label, price, was: was || 0, unit: unit(label) };
                         return (
-                          <li key={label} className="pr-opt grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-[14px] py-3 pl-4 pr-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6 sm:pl-5">
-                            <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
-                              <span className="font-inter text-[15px] text-ndm-ink">{label === 'Regular' ? 'Per unit' : label}</span>
-                              {tag && <span className="pr-tag">{tag}</span>}
-                            </span>
-                            <span className="col-start-1 row-start-2 flex items-baseline gap-2.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-                              {was ? <s className="pr-was"><span className="sr-only">Regular price </span>{money(was)}</s> : null}
-                              <span className={`font-aeonik text-[22px] leading-none tracking-[-0.02em] ${was ? 'text-ndm-deep' : 'text-ndm-ink'}`}>
-                                {was ? <span className="sr-only">now </span> : null}{money(price)}{line.unit && <span className="font-inter text-[13px] tracking-normal text-ndm-muted">{line.unit}</span>}
-                              </span>
-                            </span>
-                            <span className="col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><QtyControl line={line} label={`${g.name}, ${label}`} /></span>
-                          </li>
+                          <OptionRow key={label} mark={g.rows.length > 1 && !!gsrc && label === gsrc.label} label={label === 'Regular' ? 'Per unit' : label} price={price} was={was || 0} tag={tag} unit={line.unit} action={<QtyControl line={line} label={`${g.name}, ${label}`} />} />
                         );
                       })}
                     </ul>

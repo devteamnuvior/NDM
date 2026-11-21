@@ -55,6 +55,8 @@ function App() {
   return (
     <>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:rounded-full focus:bg-[#D3121F] focus:px-4 focus:py-2 focus:font-mont focus:text-white">Skip to content</a>
+      <PromoBar hidden={false} />{/* round 36: the site's announcement bar, in the Black Friday look like every page */}
+      <div aria-hidden="true" className="h-9" />
       <BfsHeader count={plan.length} />
       <main id="main">
         <BfsHero />

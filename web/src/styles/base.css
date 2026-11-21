@@ -1,0 +1,124 @@
+/* Design tokens and page-wide rules, ported 1:1 from the prototype's Tailwind config and <style> block. */
+@theme inline {
+  /* Fraunces headings, Manrope text, Helvetica Neue / Inter for menu, buttons and fields.
+     The three web fonts are loaded by next/font in app/layout.tsx and are named here directly, not through
+     next/font's CSS variables: those append a resized copy of Arial ("Inter Fallback" and so on) that would
+     draw the characters these fonts lack, such as arrows, at a different size than the design. */
+  --font-aeonik: Fraunces, Georgia, "Times New Roman", serif;
+  --font-inter: Manrope, "Helvetica Neue", Arial, sans-serif;
+  --font-mont: "Helvetica Neue", Inter, Arial, sans-serif;
+
+  --color-ndm-blue: #209ed9;
+  --color-ndm-sky: #26b1e7;
+  --color-ndm-deep: #0f80c3;
+  --color-ndm-amber: #ffa617;
+  --color-ndm-red: #ea364b;
+  --color-ndm-ink: #1b242b;
+  --color-ndm-slate: #24303a;
+  --color-ndm-muted: #5a646c;
+  --color-ndm-soft: #b6b6b6;
+  --color-ndm-line: #e2e4e6;
+  --color-ndm-mist: #f2f2ef;
+  --color-ndm-paper: #fafaf8;
+  --color-ndm-night: #0b0f13;
+}
+
+:root {
+  --e-inout: cubic-bezier(0.87, 0, 0.13, 1);
+  --e-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --e-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+  /* side gutter: every section uses px-[var(--gx)] */
+  --gx: clamp(20px, 5vw, 96px);
+  --pad: var(--gx);
+  --hpad: var(--gx);
+}
+
+@layer base {
+  /* Tailwind 3 defaults the prototype was built on (Tailwind 4 changed both). */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: #e5e7eb;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+html,
+body {
+  -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
+}
+/* Smooth scrolling (Lenis) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+body {
+  margin: 0;
+  background: #0b0f13;
+  color: #1b242b;
+  font-family: Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+/* The page surface (the prototype's #root). */
+.site-root {
+  background: #fafaf8;
+}
+:focus-visible {
+  outline: 2px solid #26b1e7;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Font change (the prototype's FONT_CHANGE switch, always on: <html class="font-change">).
+   Selectors are the prototype's own, so they outrank the font utilities exactly as they did there. */
+html.font-change body {
+  font-family: Manrope, "Helvetica Neue", Arial, sans-serif;
+}
+html.font-change .font-aeonik {
+  font-optical-sizing: auto;
+}
+/* Fraunces headings sit a little looser than the tracking classes ask for */
+html.font-change .font-aeonik.tracking-\[-0\.04em\],
+html.font-change .font-aeonik.tracking-\[-0\.035em\],
+html.font-change .font-aeonik.tracking-\[-0\.03em\] {
+  letter-spacing: -0.025em;
+}
+/* the second, coloured half of a two-tone heading */
+html.font-change .tt-strong {
+  font-style: italic;
+  font-weight: 350;
+}
+/* UI font: menu, buttons, labels and form fields use Helvetica Neue / Inter */
+html.font-change .btn,
+html.font-change header nav,
+html.font-change header .font-inter,
+html.font-change input,
+html.font-change select,
+html.font-change textarea {
+  font-family: "Helvetica Neue", Inter, Arial, sans-serif;
+}
+
+/* Reduced motion: animations and transitions finish at once (same rule as the prototype). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

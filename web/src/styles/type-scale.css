@@ -1,0 +1,16 @@
+/* Type scale: the prototype nudges its small text sizes up by half a pixel (design round 15).
+   The rule is kept exactly as it was, so every ported `text-[Npx]` class renders at the size the design
+   was approved at. The selectors are the prototype's own (`html .text-[Npx]`), so they outrank the utility itself and
+   its responsive variants, exactly as they did there. */
+html .text-\[11px\] { font-size: 11.5px; }
+html .text-\[11\.5px\] { font-size: 12px; }
+html .text-\[12px\] { font-size: 12.5px; }
+html .text-\[12\.5px\] { font-size: 13px; }
+html .text-\[13px\] { font-size: 13.5px; }
+html .text-\[13\.5px\] { font-size: 14px; }
+html .text-\[14px\] { font-size: 14.5px; }
+html .text-\[14\.5px\] { font-size: 15px; }
+html .text-\[15px\] { font-size: 15.5px; }
+html .text-\[15\.5px\] { font-size: 16px; }
+html .text-\[16px\] { font-size: 16.5px; }
+html .text-\[17px\] { font-size: 17.5px; }

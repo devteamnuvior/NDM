@@ -27,6 +27,21 @@ rep('<meta name="description" content="NewDermaMed is Toronto\'s award-winning c
 
 # 2. pricing CSS at the end of the main stylesheet
 css = r'''
+  /* VIP Sale banner above the price list (2026-11-18): black, a gold light circling the edge */
+  @property --pr-sale-a{syntax:"<angle>";initial-value:0deg;inherits:false}
+  .pr-sale{position:relative;isolation:isolate;overflow:hidden;color:#fff;background:radial-gradient(70% 140% at 0% 0%,rgba(212,181,116,.18),transparent 60%),radial-gradient(50% 120% at 100% 100%,rgba(212,181,116,.08),transparent 65%),#0B0B0C;box-shadow:0 0 0 1px rgba(212,181,116,.22),0 30px 60px -38px rgba(11,11,12,.7)}
+  .pr-sale::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;padding:1px;pointer-events:none;background:conic-gradient(from var(--pr-sale-a),transparent 0deg,rgba(242,214,150,.95) 28deg,transparent 70deg,transparent 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:prSaleEdge 7s linear infinite}
+  @keyframes prSaleEdge{to{--pr-sale-a:360deg}}
+  .pr-sale-pill{display:inline-flex;border-radius:999px;overflow:hidden;font:700 11px/1 Manrope,sans-serif;letter-spacing:.06em;white-space:nowrap}
+  .pr-sale-pill>span{padding:6px 10px}
+  .pr-sale-pill .a{background:#D4B574;color:#0B0B0C}
+  .pr-sale-pill .b{background:rgba(212,181,116,.12);color:#E8D3A0;box-shadow:inset 0 0 0 1px rgba(212,181,116,.35);border-radius:0 999px 999px 0}
+  .pr-sale-text{color:rgba(255,255,255,.74)}
+  .pr-sale-text strong{color:#E8D3A0}
+  .pr-sale-btn{background:#fff;border-color:#fff;color:#0B0B0C}
+  .pr-sale-btn:hover,.pr-sale-btn:focus-visible{background:#D4B574;border-color:#D4B574;color:#0B0B0C}
+  @media (prefers-reduced-motion:reduce){.pr-sale::before{animation:none;--pr-sale-a:200deg}}
+
   /* pricing page: folding categories, folding treatment rows, sale prices, quantity stepper and cart */
   .pr-group{border-bottom:1px solid rgba(27,36,43,.24)}
   .pr-groups>.pr-group:first-child{border-top:1px solid rgba(27,36,43,.24)}
@@ -116,6 +131,7 @@ app = r'''function App() {
       <main id="main" className="seamless">
         <Breadcrumb items={['Pricing']} dark />
         <PricingHero />
+        <PriceCountdown />
         <PriceSpecials />
         <PriceList />
         <Team />
