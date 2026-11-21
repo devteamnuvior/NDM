@@ -53,7 +53,7 @@ export function AboutFilm({ copy }: { copy: AboutCopy["header"] }) {
         <video ref={video} muted loop playsInline preload="auto" poster={withBase(ABOUT_FILM.poster)} aria-hidden="true">
           <source src={withBase(ABOUT_FILM.src)} type="video/mp4" />
         </video>
-        <div className="absolute inset-x-0 bottom-0 z-[2] grid gap-8 px-[var(--gx)] pb-[clamp(28px,4.5vw,64px)] lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+        <div className="afh-words absolute inset-x-0 bottom-0 z-[2] grid gap-8 px-[var(--gx)] pb-[clamp(28px,4.5vw,64px)] lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div>
             <Eyebrow dark className="rv">
               {copy.tag}

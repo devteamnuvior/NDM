@@ -294,7 +294,7 @@ function Hero({ view, t, day, best, top, inList, toggle }: { view: SaleView; t: 
   return (
     <section aria-labelledby="v2-title" className="vip-hero relative isolate overflow-hidden text-white">
       <img src={optimized(photo.src, 1080)} srcSet={optimizedSrcSet(photo.src, [640, 828, 1080, 1920]) || undefined} sizes="(min-width: 1024px) 60vw, 100vw" width={photo.width} height={photo.height} alt="" fetchPriority="high" className="vip-hero-pic absolute right-0 top-0 -z-10 h-[46%] w-full object-cover object-[58%_50%] lg:h-full lg:w-[60%]" />
-      <div className="mx-auto grid max-w-[1280px] gap-8 px-[var(--gx)] pb-[clamp(34px,4.4vw,60px)] pt-[clamp(26px,4.4vw,60px)] lg:grid-cols-[minmax(0,1.06fr)_minmax(0,.94fr)] lg:items-center lg:gap-12">
+      <div className="vip-hero-in mx-auto grid max-w-[1280px] gap-8 px-[var(--gx)] pb-[clamp(34px,4.4vw,60px)] pt-[clamp(26px,4.4vw,60px)] lg:grid-cols-[minmax(0,1.06fr)_minmax(0,.94fr)] lg:items-center lg:gap-12">
         <div>
           <p className="inline-flex items-center gap-2.5 rounded-full border border-white/[.16] bg-white/[.08] px-3.5 py-2 font-inter text-[11px] font-semibold uppercase leading-[1.2] tracking-[.14em] text-[color:var(--v-E6EDF5)] sm:text-[11.5px] sm:tracking-[.17em]">
             <i aria-hidden="true" className="vip-live shrink-0" />{t.over ? VIP2.page.ended : <>Ends {day}{left && <> · {left} left</>}</>}
