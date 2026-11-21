@@ -64,3 +64,6 @@
 /* with the buttons docked nothing below the options has to hold still, so the pop-up shows only the open
    category's options (no room kept for the longest list) */
 .book-docked .book-panel:not(.is-on){display:none}
+/* phones (user, 2026-11-20): the options are one column there, so the longest category left an empty gap under shorter ones;
+   only the open category takes room (desktop keeps one height across categories) */
+@media (max-width:639px){.book-panel:not(.is-on){display:none}}
