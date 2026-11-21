@@ -189,19 +189,32 @@
 @media (max-width:639px){.pcd{grid-template-columns:minmax(0,1fr);gap:16px}.pcd-time{justify-content:space-between}.pcd-cell{flex:1;min-width:0}.pcd .pcd-btn{width:100%}}
 @media (prefers-reduced-motion:reduce){.pcd::before,.pcd-tag i,.pcd-sep{animation:none}}
 
-/* the categories as a menu above the price list (user, 2026-11-18): a tap opens that category and scrolls to it */
-.pcm{margin-bottom:clamp(28px,3vw,40px)}
-.pcm-label{margin-bottom:12px;text-align:center;font:600 11px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#5A646C}
-.pcm-list{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
-.pcm-chip{display:inline-flex;align-items:baseline;gap:8px;padding:9px 14px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px rgba(27,36,43,.1);text-decoration:none;white-space:nowrap;transition:box-shadow .2s,background .2s}
-.pcm-chip:hover{box-shadow:inset 0 0 0 1px rgba(15,128,195,.55)}
-.pcm-chip:focus-visible{outline:3px solid rgba(32,158,217,.35);outline-offset:2px}
-.pcm-name{font:500 14px/1.2 Manrope,"Helvetica Neue",Arial,sans-serif;color:#1B242B}
-.pcm-from{font:500 12px/1.2 Manrope,"Helvetica Neue",Arial,sans-serif;color:#5A646C}
-/* phones: one row that scrolls sideways, edge to edge */
+/* the categories as a menu above the price list (user, 2026-11-18): a tap opens that category and scrolls to it.
+   Since 2026-11-20 (user): the Black Friday page's filter tabs (white pills with a grey line, the chosen one black, 600 14px Inter),
+   in one row that slides like a carousel, with arrows, on phones and desktop alike */
+.pcm-label{margin-bottom:10px;font:600 11px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#5A646C}
+/* the bar: the row and its arrows, sticky under the header (same top as the site's sub-menu) while the list is on screen.
+   Stuck, it takes the page colour edge to edge (a box-shadow clipped to its height, so nothing widens the page) and a thin line */
+.pcm{position:sticky;top:100px;z-index:30;display:flex;align-items:center;gap:12px;margin-bottom:clamp(28px,3vw,40px);padding:8px 0;transition:box-shadow .25s ease,background-color .25s ease}
+@media (min-width:1280px){.pcm{top:120px}}
+.pcm.is-stuck{background-color:#FAFAF8;box-shadow:0 0 0 100vmax #FAFAF8,0 1px 0 100vmax rgba(27,36,43,.08);clip-path:inset(0 -100vmax -1px)}
+.pcm-arrows{display:flex;gap:8px;flex:none}
+.pcm-arrow{display:grid;place-items:center;width:42px;height:42px;border-radius:999px;border:1px solid #D5D3D3;background:#fff;color:#131211;-webkit-tap-highlight-color:transparent;transition:background-color .25s ease,border-color .25s ease,color .25s ease,opacity .25s ease}
+.pcm-arrow:not(:disabled):is(:hover,:focus-visible){background:#0F0E0D;border-color:#0F0E0D;color:#fff}
+.pcm-arrow:focus-visible{outline:3px solid rgba(32,158,217,.35);outline-offset:2px}
+.pcm-arrow:disabled{opacity:.35;cursor:default}
+.pcm-list{flex:1 1 auto;min-width:0;display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:2px;padding:2px;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask:linear-gradient(90deg,#000 calc(100% - 40px),transparent)}
+.pcm-list::-webkit-scrollbar{display:none}
+.pcm-list>li{flex:none;scroll-snap-align:start}
+.pcm-chip{display:inline-flex;align-items:baseline;gap:8px;padding:12px 17px;border-radius:999px;border:1px solid #D5D3D3;background-color:#fff;color:#131211;text-decoration:none;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:background-color .28s ease,border-color .28s ease,color .28s ease}
+.pcm-chip:hover,.pcm-chip[aria-current]{background-color:#0F0E0D;border-color:#0F0E0D;color:#fff}
+.pcm-chip:focus-visible{outline:3px solid rgba(32,158,217,.35);outline-offset:-3px}
+.pcm-name{font:600 14px/1 Inter,"Helvetica Neue",Arial,sans-serif;color:inherit}
+.pcm-from{font:500 12.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;color:inherit;opacity:.6}
+/* phones (user, 2026-11-20): no arrows, the row is swiped; it runs edge to edge */
 @media (max-width:639px){
-  .pcm-label{text-align:left}
-  .pcm-list{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;margin-inline:calc(var(--gx) * -1);padding:2px var(--gx) 6px;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,transparent,#000 var(--gx),#000 calc(100% - var(--gx)),transparent);mask:linear-gradient(90deg,transparent,#000 var(--gx),#000 calc(100% - var(--gx)),transparent)}
-  .pcm-list::-webkit-scrollbar{display:none}
-  .pcm-list>li{flex:none}
+  .pcm-arrows{display:none}
+  .pcm-list{margin-inline:calc(var(--gx) * -1);padding-inline:var(--gx);scroll-padding-inline:var(--gx);-webkit-mask:linear-gradient(90deg,transparent,#000 var(--gx),#000 calc(100% - var(--gx)),transparent);mask:linear-gradient(90deg,transparent,#000 var(--gx),#000 calc(100% - var(--gx)),transparent)}
+  .pcm-chip{padding:11px 15px}
 }
+@media (prefers-reduced-motion:reduce){.pcm-chip,.pcm-arrow{transition:none}}
