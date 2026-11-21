@@ -73,8 +73,9 @@
 .book-docked .book-cats{gap:10px}
 .book-docked .book-cats-h{margin-bottom:8px;font-size:10.5px}
 .book-docked .book-cat{min-height:38px;padding:4px 6px;border-radius:11px;font-size:12.5px}
-.book-docked .book-panel{grid-template-columns:repeat(2,minmax(0,1fr))}
-.book-docked .book-opt{gap:8px;min-height:40px;padding:6px 9px;border-radius:11px;font-size:12.5px;line-height:1.25}
+.book-docked .book-panel{grid-template-columns:repeat(2,minmax(0,1fr));gap:2.5px}
+.book-docked .book-opt{gap:8px;min-height:40px;padding:6px 9px;border-radius:11px;font-size:.75rem;line-height:1.25}
+.book-docked legend{font-size:17px}
 .book-docked .book-check{width:16px;height:16px;border-radius:5px}
 .book-docked .book-alts{margin-top:10px;padding-top:10px}
 .book-docked .book-alt{min-height:36px;padding:0 13px;font-size:12.5px}
@@ -86,7 +87,6 @@
 .book-docked .book-cats{gap:8px}
 .book-docked .book-cats-h{margin-bottom:6px}
 .book-docked .book-cat{min-height:34px}
-.book-docked .book-panel{gap:5px}
 .book-docked .book-opt{min-height:36px;padding:5px 8px}
 .book-docked .book-alts{margin-top:8px;padding-top:8px}
 .book-docked .book-alt{min-height:34px}

@@ -76,7 +76,7 @@ export function BookPopup() {
           <TwoTone
             id="book-pop-title"
             className="pr-10"
-            size="text-[clamp(22px,2.3vw,31px)]"
+            size="text-[20px] sm:text-[clamp(22px,2.3vw,31px)]"
             lead={
               <>
                 Book a free consultation
