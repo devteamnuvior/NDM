@@ -521,7 +521,7 @@ function Row({ d, best, order, inList, toggle }: { d: Deal; best: number; order:
   const areas = d.items.length > 1;
   return (
     <li className={`v2-row ${on ? "is-on" : ""}`} style={{ "--i": Math.min(order, 9) } as CSSProperties}>
-      <h3 className="v2-row-name flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5 font-aeonik text-[20px] font-normal leading-[1.25] text-ndm-ink xl:text-[19px]"><span className="v2-row-title min-w-0">{cat}</span>{/* every row says the saving of the package it shows, worked out from its two prices; a package without a regular price has none */}{p.pct > 0 && <span className="v2-tag">{p.pct}% off</span>}</h3>
+      <h3 className="v2-row-name flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5 font-aeonik text-[20px] font-normal leading-[1.25] text-ndm-ink xl:text-[19px]"><span className="v2-row-title min-w-0 font-semibold">{cat}</span>{/* every row says the saving of the package it shows, worked out from its two prices; a package without a regular price has none */}{p.pct > 0 && <span className="v2-tag">{p.pct}% off</span>}</h3>
       <div className={`v2-row-pick grid gap-2 ${areas ? "grid-cols-[minmax(0,1fr)_minmax(0,var(--v2-pack,148px))]" : "grid-cols-1"}`}>
         {areas && <Dropdown label={`${cat}: treatment or area`} value={ii} options={d.items.map((x) => ({ text: cap(bfsShort(x[0], cat)) }))} onChange={(k) => { setIi(k); setPick(0); }} />}
         {packs.length > 1
