@@ -105,3 +105,6 @@ html.vbf .v2-call svg{color:#C6111D}
 html.vbf .v2-call:hover{border-color:#E11421;background:#FFFFFF}
 html.vbf .v2-rows-in>.v2-row::after{background-image:linear-gradient(90deg,transparent,#E11421 35%,#EB1E2B 65%,transparent)}
 html.vbf .v2-tag{color:#FFFFFF}
+html.vip.vbf .bfd-cta{color:#FFFFFF}
+html.vip.vbf .bfd-cta:hover,html.vip.vbf .bfd-cta:focus-visible{background:#A50E18;border-color:#A50E18;color:#FFFFFF}
+html.vbf .v2-mini.is-on{color:#FFFFFF}

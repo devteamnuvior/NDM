@@ -168,6 +168,11 @@ def rewrite_tsx() -> None:
 # the saving pill's near-black text on signal red could not be read, so it is white there.
 EXTRA = [
     "html.vbf .v2-tag{color:#FFFFFF}",
+    # the red buttons (Check out, See all prices, the hero button) and a chosen small toggle: white words,
+    # and a darker red on hover instead of the mapped pale pink, which white words could not sit on
+    "html.vip.vbf .bfd-cta{color:#FFFFFF}",
+    "html.vip.vbf .bfd-cta:hover,html.vip.vbf .bfd-cta:focus-visible{background:#A50E18;border-color:#A50E18;color:#FFFFFF}",
+    "html.vbf .v2-mini.is-on{color:#FFFFFF}",
 ]
 
 
