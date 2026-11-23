@@ -788,18 +788,18 @@ function ListBar({ list, t, show, openList, checkout, chatOpen, toggleChat }: { 
   if (!n && !show) return null;
   return (
     <div className={`fixed inset-x-0 bottom-0 z-[60] border-t border-white/[.14] bg-[color:var(--v-09141F)]/95 pb-[env(safe-area-inset-bottom)] text-white shadow-[0_-10px_30px_rgba(0,0,0,.35)] backdrop-blur-[10px] ${n ? "" : "lg:hidden"}`}>
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-2.5 px-[var(--gx)] py-2.5 sm:gap-3">
+      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-2 px-[var(--gx)] py-2.5 sm:gap-3">
         {/* phones: the chat lives in the bar as a small icon, so nothing floats over the price list */}
         <button type="button" aria-expanded={chatOpen} aria-label={VIP2.chat.title} onClick={toggleChat} className="grid size-11 shrink-0 place-items-center rounded-full border border-white/25 bg-white/[.06] sm:hidden"><IconChat /></button>
         {n ? (
           <>
             <button type="button" onClick={openList} aria-live="polite" className="min-w-0 flex-1 overflow-hidden text-left font-inter leading-[1.3]">
-              <b className="block whitespace-nowrap text-[14.5px] font-semibold"><span className="max-sm:hidden">{VIP2.name}: </span><span id="v2-bar-count" className="inline-block">{n} {n === 1 ? "treatment" : "treatments"}</span><span className="tabular-nums min-[400px]:hidden"> · {money(withCode)}</span> <span className="font-normal text-white/60 underline underline-offset-[5px] max-sm:hidden">View</span></b>
+              <b className="block text-[13.5px] sm:whitespace-nowrap font-semibold sm:text-[14.5px]"><span className="max-sm:hidden">{VIP2.name}: </span><span id="v2-bar-count" className="inline-block whitespace-nowrap">{n} {n === 1 ? "treatment" : "treatments"}</span><span className="tabular-nums sm:hidden"> <span className="whitespace-nowrap">· {money(withCode)}</span></span> <span className="font-normal text-white/60 underline underline-offset-[5px] max-sm:hidden">View</span></b>
               {saved > 0 && <span className="block text-[13.5px] font-semibold text-[color:var(--v-F0D79B)]">You save {money(saved)}</span>}
             </button>
             <span className="flex shrink-0 items-center gap-4">
-              <b className="font-aeonik text-[26px] font-normal leading-none tabular-nums max-[399px]:hidden">{money(withCode)}</b>
-              <button type="button" onClick={checkout} className="btn bfd-cta h-12 px-6 font-semibold max-sm:px-5">{VIP2.checkout}</button>
+              <b className="font-aeonik text-[26px] font-normal leading-none tabular-nums max-sm:hidden">{money(withCode)}</b>
+              <button type="button" onClick={checkout} className="btn bfd-cta h-12 px-6 font-semibold max-sm:px-4">{VIP2.checkout}</button>
             </span>
           </>
         ) : (
