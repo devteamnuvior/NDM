@@ -13,6 +13,7 @@ export const PAGE_SECTION: Partial<Record<PageId, NavSectionId>> = {
   botox: "procedures",
   aptos: "procedures",
   wrinkles: "concerns",
+  shop: "shop",
 };
 
 /**

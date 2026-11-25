@@ -184,7 +184,7 @@ export function MobileDrawer({ open, current, onClose }: MobileDrawerProps) {
                 </div>
               );
             }
-            if (itemExternal(item)) {
+            if (itemExternal(item, settings.shopLink)) {
               return (
                 <a key={key} href={withBase(itemLink(item, settings.shopLink).href)} target="_blank" rel="noopener" className={`flex items-center gap-2 py-4 ${TOP_CLASS}`}>
                   {item.label} <IconExternal size={16} />

@@ -3,7 +3,7 @@ import { PROCEDURES_INDEX } from "@/lib/post-links";
 import { ACTIONS } from "@/config/routes";
 import { START_PANELS } from "@/config/home-start";
 import { TREATMENT_TABS } from "@/config/home-treatments";
-import { PRODUCTS, SHOP_URL } from "@/config/shop";
+import { PRODUCTS, SHOP_PAGE } from "@/config/shop";
 import type { HomeCopy } from "@/types/home";
 import copy from "./home-copy.json";
 
@@ -27,7 +27,7 @@ export const HOME_COPY: HomeCopy = {
   ...words,
   start: { ...words.start, panels: START_PANELS },
   treatments: { ...words.treatments, allTab: TREAT_ALL_TAB, tabs: TREATMENT_TABS },
-  shop: { ...words.shop, link: SHOP_URL, products: PRODUCTS },
+  shop: { ...words.shop, link: SHOP_PAGE, products: PRODUCTS },
 };
 
 /** The hero's film, and where its two buttons lead. */

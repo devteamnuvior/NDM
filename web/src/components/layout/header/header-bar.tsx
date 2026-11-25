@@ -151,7 +151,7 @@ export function HeaderBar({ dark, current, top = 36, visible = true, cartCount =
               {site.menu.items.map((n, i) => {
                 const here = !!section && section === itemSection(n, settings.shopLink);
                 const menu = itemPanel(n);
-                const external = itemExternal(n);
+                const external = itemExternal(n, settings.shopLink);
                 return (
                   <li key={`${i}-${n.label}`} className="relative" onMouseEnter={() => (menu ? enter(menu) : leave())}>
                     {menu ? (

@@ -1,5 +1,6 @@
 import "server-only";
 import { HOME_COPY, TREAT_ALL_TAB } from "@/config/home";
+import { toShopPage } from "@/config/shop";
 import { withRealLinks } from "@/lib/site-links";
 import type { TreatmentCard, TreatmentTab } from "@/config/home-treatments";
 import { getHomePage, settle } from "@/lib/wordpress";
@@ -229,10 +230,11 @@ function fromWordPress(wp: WPHomePage): HomeCopy {
       strong: c.shop_strong,
       text: c.shop_text,
       button: c.shop_button,
-      link: c.shop_link || HOME_COPY.shop.link,
+      /* the store's own listing page is this site's /shop now */
+      link: toShopPage(c.shop_link || HOME_COPY.shop.link),
       /* typed in WordPress (not WooCommerce): a product without a name or a photo is left out */
       products: (() => {
-        const link = c.shop_link || HOME_COPY.shop.link;
+        const link = toShopPage(c.shop_link || HOME_COPY.shop.link);
         const list = (c.shop_products ?? []).flatMap((p) => (p.name && p.image ? [{ name: p.name, size: p.size, image: p.image.src, href: p.link || link }] : []));
         return list.length ? list : HOME_COPY.shop.products;
       })(),

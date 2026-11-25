@@ -1,4 +1,4 @@
-import { SHOP_URL } from "@/config/shop";
+import { SHOP_PAGE } from "@/config/shop";
 import { FINANCING_URL } from "@/config/specials";
 import { postNamed, PROCEDURE_FOLDERS, type PostPath } from "@/lib/post-paths";
 
@@ -56,8 +56,8 @@ const FIXED: Readonly<Record<string, string>> = {
   procedures: PROCEDURES_INDEX,
   concerns: CONCERNS_INDEX,
   ...Object.fromEntries(Object.values(PROCEDURE_FOLDERS).filter((f) => f !== "procedures").map((f) => [f, `${PROCEDURES_INDEX}#${f}`])),
-  shop: SHOP_URL,
-  "skincare-shop": SHOP_URL,
+  shop: SHOP_PAGE,
+  "skincare-shop": SHOP_PAGE,
   financing: FINANCING_URL,
   /* "Book Online" in the footer: the booking form */
   "book-online": "#/book",

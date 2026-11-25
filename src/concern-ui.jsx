@@ -308,7 +308,7 @@ function CnHome({ p }) {
         </div>
         <div className="rv lg:pb-1" style={{ transitionDelay: '.1s' }}>
           <p className="max-w-[46ch] font-inter text-[15.5px] leading-[1.65] text-ndm-muted">Medical-grade skincare from our shop supports your treatment at home. Your provider suggests a routine for your skin at your consultation.</p>
-          <div className="mt-5"><Btn href={SHOP_URL} target="_blank" rel="noopener" v="line" sm>Visit the skincare shop<span className="sr-only"> (opens in a new tab)</span></Btn></div>
+          <div className="mt-5"><Btn href="shop.html" v="line" sm>Visit the skincare shop</Btn></div>
         </div>
       </div>
       <ul role="list" className={`${TX_WRAP} mt-[clamp(32px,4vw,52px)] grid gap-4 md:grid-cols-3`}>

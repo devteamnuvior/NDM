@@ -2,6 +2,7 @@ import "server-only";
 import { SALE_HEADLINE } from "@/config/sale";
 import { withRealLinks } from "@/lib/site-links";
 import { SITE_SETTINGS } from "@/config/site-settings";
+import { SHOP_PAGE, toShopPage } from "@/config/shop";
 import { getCampaign } from "@/lib/campaign";
 import { getSiteSettingsRaw, settle } from "@/lib/wordpress";
 import { pagePath, toSlug } from "@/lib/routes";
@@ -105,7 +106,7 @@ function fromWordPress(wp: WPSiteSettings): SiteSettings {
       },
       bookLabel: c.book_label || d.header.bookLabel,
       bookShort: c.book_short || d.header.bookShort,
-      shopLink: c.shop_link || d.header.shopLink,
+      shopLink: toShopPage(c.shop_link || d.header.shopLink),
     },
     footer: {
       film: { src: c.film_video || d.footer.film.src, poster: c.film_poster?.src || d.footer.film.poster },
@@ -138,7 +139,17 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   const settings = read.ok && read.data ? fromWordPress(read.data) : SITE_SETTINGS;
   /* the VIP Sale's days (the campaign's phase "vip"): every link to the offers opens the sale */
   /* every "#/slug" link of the settings opens its page (lib/post-links.ts): the shop, the lists, a treatment */
-  return withRealLinks(campaign && !campaign.over && campaign.phase === "vip" ? withSaleLinks(settings) : settings);
+  return onSiteShop(await withRealLinks(campaign && !campaign.over && campaign.phase === "vip" ? withSaleLinks(settings) : settings));
+}
+
+/**
+ * The shop is a page of this site now (/shop): a message that opens it stays in the same tab, without the
+ * external-link icon, even when WordPress still says "open in a new tab" (it was the store's address then).
+ */
+function onSiteShop(settings: SiteSettings): SiteSettings {
+  const fix = (list: Announcement[]) => list.map((m) => (m.kind === "message" && toShopPage(m.href) === SHOP_PAGE ? { ...m, href: SHOP_PAGE, external: undefined } : m));
+  const a = settings.header.announcement;
+  return { ...settings, header: { ...settings.header, shopLink: toShopPage(settings.header.shopLink), announcement: { ...a, desktop: fix(a.desktop), mobile: fix(a.mobile) } } };
 }
 
 /** Whether an address is the Promotion page's (with or without the site's folder, a trailing slash or a #part). */
