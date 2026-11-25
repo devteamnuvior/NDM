@@ -24,7 +24,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/concerns/[...slug]">): Promise<Metadata> {
   const { slug } = await params;
   const view = await getConcernView(slug[slug.length - 1]);
-  return view ? { title: view.title, description: view.description } : {};
+  return view ? { title: view.title, description: view.description } : { title: "Page not found | NewDermaMed", robots: { index: false } }; /* no page: the 404's own title */
 }
 
 export default async function Concern({ params }: PageProps<"/concerns/[...slug]">) {

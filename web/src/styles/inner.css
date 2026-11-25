@@ -121,3 +121,31 @@
     padding-top: calc(var(--pr-pic) - 56px);
   }
 }
+
+/* The 404 page (user, 2026-11-25: calm and premium, nothing playful): words on the left, a quiet treatment-room photo on
+   the right; a large hairline "404" in the heading font, a numbered list of the pages people look for */
+.nf-hero{padding-top:clamp(132px,13vw,190px);padding-bottom:clamp(64px,7vw,112px)}
+.nf-code{margin:0 0 clamp(14px,1.6vw,22px);font-family:Fraunces,Georgia,serif;font-size:clamp(96px,13vw,184px);font-weight:300;line-height:.82;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:1px rgba(15,128,195,.42);background:linear-gradient(180deg,rgba(15,128,195,.1),rgba(15,128,195,0) 78%);-webkit-background-clip:text;background-clip:text;user-select:none}
+.nf-ways{margin-top:clamp(36px,4vw,52px);border-top:1px solid rgba(27,36,43,.1)}
+.nf-ways ul{margin:0;padding:0;list-style:none}
+.nf-way{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;padding:16px 2px;border-bottom:1px solid rgba(27,36,43,.1);text-decoration:none;color:#1B242B}
+.nf-num{font:500 12px/1 Manrope,"Helvetica Neue",Arial,sans-serif;letter-spacing:.12em;color:#8A949B;font-variant-numeric:tabular-nums}
+.nf-way-words{display:flex;flex-direction:column;gap:4px;min-width:0}
+.nf-way-title{font-family:Fraunces,Georgia,serif;font-size:clamp(19px,1.5vw,22px);line-height:1.15;letter-spacing:-.015em;transition:color .35s ease}
+.nf-way-text{font:400 13.5px/1.4 Manrope,"Helvetica Neue",Arial,sans-serif;color:#5A646C}
+.nf-way-arrow{display:grid;place-items:center;width:36px;height:36px;border-radius:999px;border:1px solid rgba(27,36,43,.18);color:#1B242B;transition:background-color .35s ease,border-color .35s ease,color .35s ease,transform .35s ease}
+.nf-way:hover .nf-way-title,.nf-way:focus-visible .nf-way-title{color:#0F80C3}
+.nf-way:hover .nf-way-arrow,.nf-way:focus-visible .nf-way-arrow{background:#0F80C3;border-color:#0F80C3;color:#fff;transform:translateX(3px)}
+.nf-way:focus-visible{outline:3px solid rgba(32,158,217,.35);outline-offset:2px;border-radius:8px}
+.nf-help{margin-top:22px;font:400 14px/1.6 Manrope,"Helvetica Neue",Arial,sans-serif;color:#5A646C}
+.nf-tel{color:#0F80C3;font-weight:600;text-decoration:none;white-space:nowrap}
+.nf-tel:hover{text-decoration:underline;text-underline-offset:3px}
+.nf-photo{position:relative;margin:0;border-radius:28px;overflow:hidden;aspect-ratio:4/5;background:#F2F2EF;box-shadow:0 40px 80px -48px rgba(11,15,19,.45)}
+.nf-photo::after{content:"";position:absolute;inset:10px;border-radius:20px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);pointer-events:none}
+.nf-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:58% 50%}
+.nf-cap{position:absolute;left:20px;right:20px;bottom:20px;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:16px;background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);font:500 13.5px/1.4 Manrope,"Helvetica Neue",Arial,sans-serif;color:#1B242B;box-shadow:0 18px 40px -26px rgba(11,15,19,.45)}
+.nf-cap-dot{flex:none;width:8px;height:8px;border-radius:999px;background:#209ED9;box-shadow:0 0 0 4px rgba(32,158,217,.16)}
+.nf-bare{position:absolute;top:0;left:0;right:0;z-index:20;padding-top:28px}
+@media (max-width:1023px){.nf-photo{aspect-ratio:16/11;max-width:640px}}
+@media (max-width:639px){.nf-hero{padding-top:156px}.nf-way{gap:14px;padding:14px 0}.nf-photo{aspect-ratio:4/3;border-radius:22px}.nf-photo::after{inset:8px;border-radius:15px}.nf-cap{left:12px;right:12px;bottom:12px;font-size:12.5px}}
+@media (prefers-reduced-motion:reduce){.nf-way-title,.nf-way-arrow{transition:none}}

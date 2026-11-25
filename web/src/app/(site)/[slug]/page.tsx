@@ -25,8 +25,11 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps<"/[slug]">): Promise<Metadata> {
-  const view = await getAptosView((await params).slug);
-  return view ? { title: view.title, description: view.description } : {};
+  const { slug } = await params;
+  const view = await getAptosView(slug);
+  if (view) return { title: view.title, description: view.description };
+  /* an address with no page keeps the 404's own title once the page has streamed in (it would turn into the site's default) */
+  return (await movedTo(slug)) ? {} : { title: "Page not found | NewDermaMed", robots: { index: false } };
 }
 
 /** Where a page that used to have this one-part address lives now, or null. */
