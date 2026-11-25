@@ -6,8 +6,7 @@ import { BLACK_FRIDAY_V2, BLACK_FRIDAY_V2_LIST_KEY } from "@/config/black-friday
 import { BLACK_FRIDAY_COPY } from "@/config/sale";
 import type { CampaignPhase } from "@/lib/campaign";
 import { pagePath } from "@/lib/routes";
-import { redirect } from "next/navigation";
-import { buildSale, saleIsPast } from "@/lib/sale";
+import { buildSale } from "@/lib/sale";
 import { absolute } from "@/lib/seo";
 
 /*
@@ -19,9 +18,7 @@ import { absolute } from "@/lib/seo";
 
 /** Black Friday is every phase of the campaign after the VIP Sale: Black Friday, Cyber Monday, Black Friday Extended. */
 const mine = (phase: CampaignPhase) => phase.id !== "vip";
-/* once the sale has ended (Mon, Dec 7, 11:59 pm Toronto) the page sends visitors to the home page (Black Friday brief, Task 08) */
-const AFTER = "/";
-const view = () => buildSale({ look: "bfs", planKey: BLACK_FRIDAY_V2_LIST_KEY, copy: BLACK_FRIDAY_COPY, mine, after: AFTER });
+const view = () => buildSale({ look: "bfs", planKey: BLACK_FRIDAY_V2_LIST_KEY, copy: BLACK_FRIDAY_COPY, mine, after: "" });
 
 export async function generateMetadata(): Promise<Metadata> {
   const { deals, phases, copy } = await view();
@@ -38,9 +35,7 @@ async function Sale() {
 }
 
 /** It has its own header and footer, so it sits outside the (site) layout. */
-export default async function BlackFridayPage() {
-  /* WooCommerce's answer on the server; the page's own clock does the same in the browser (VipSaleV2) */
-  if (await saleIsPast(mine)) redirect(AFTER);
+export default function BlackFridayPage() {
   return (
     <>
       <VipClass extra="vbf" />

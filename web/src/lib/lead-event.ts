@@ -1,5 +1,3 @@
-import { visitChannel, visitSource } from "@/lib/visit-source";
-
 /**
  * Tells Google Tag Manager that a lead was saved: the same `popupFormSubmit` event the old WordPress site's
  * forms pushed (plugins ndm-forms and ndm-popup-subscribe), which the container's "form_lead_submission"
@@ -9,17 +7,11 @@ import { visitChannel, visitSource } from "@/lib/visit-source";
  * `then` runs once Tag Manager has sent its tags (its `eventCallback`), or after `waitMs` when Tag Manager
  * is not on the page or does not answer, so a page change right after the push does not cut the tag off.
  */
-/** The visit's channel and the link's utm values, for every event (Black Friday brief, Task 07). */
-export function sourceFields(): Record<string, string> {
-  const utm = visitSource();
-  return { channel: visitChannel(), ...Object.fromEntries(Object.entries(utm).map(([k, v]) => [`utm_${k}`, v])) };
-}
-
 export function pushLead(formId: string, extra: Record<string, string> = {}, then?: () => void, waitMs = 1200): void {
   const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
   w.dataLayer = w.dataLayer || [];
   if (!then) {
-    w.dataLayer.push({ event: "popupFormSubmit", formId, formType: "ajax", status: "success", ...sourceFields(), ...extra });
+    w.dataLayer.push({ event: "popupFormSubmit", formId, formType: "ajax", status: "success", ...extra });
     return;
   }
   let done = false;
@@ -28,6 +20,6 @@ export function pushLead(formId: string, extra: Record<string, string> = {}, the
     done = true;
     then();
   };
-  w.dataLayer.push({ event: "popupFormSubmit", formId, formType: "ajax", status: "success", ...sourceFields(), ...extra, eventCallback: go, eventTimeout: waitMs });
+  w.dataLayer.push({ event: "popupFormSubmit", formId, formType: "ajax", status: "success", ...extra, eventCallback: go, eventTimeout: waitMs });
   window.setTimeout(go, waitMs + 200);
 }

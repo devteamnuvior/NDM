@@ -48,8 +48,6 @@ export interface TxPriceGroup {
   /** The offer as the sale pill shows it, and whether the checkout code applies to any row. */
   badge?: string[];
   coded?: boolean;
-  /** The biggest total discount among its rows, in percent. */
-  off?: number;
 }
 
 interface PriceGroupProps {
@@ -85,7 +83,7 @@ export function PriceGroup({ group: g, headId, bodyId, category, startOpen, sing
             <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{g.title}</span>
           </span>
           <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            <OfferTag offer={g.offer || (g.percent > 0 ? `Up to ${g.percent}% off` : "")} badge={g.badge ?? []} coded={!!g.coded} off={g.off} />
+            <OfferTag offer={g.offer || (g.percent > 0 ? `Up to ${g.percent}% off` : "")} badge={g.badge ?? []} coded={!!g.coded} />
             <FromPrice from={g.from} unit={g.fromUnit} source={g.rows.length > 1 ? g.fromSource : g.fromSource && { ...g.fromSource, label: "", count: 1 }} />
           </span>
           <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1">

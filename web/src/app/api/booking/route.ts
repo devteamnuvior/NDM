@@ -32,16 +32,6 @@ function tooMany(address: string): boolean {
 }
 
 const text = (value: unknown, max: number): string | null => (typeof value === "string" && value.trim().length <= max ? value.trim() : null);
-/* the link's utm values kept for the visit: five short plain values at most, anything else is dropped */
-function utmOf(value: unknown): Record<string, string> | undefined {
-  if (!value || typeof value !== "object") return undefined;
-  const out: Record<string, string> = {};
-  for (const k of ["source", "medium", "campaign", "content", "term"]) {
-    const v = text((value as Record<string, unknown>)[k], 100);
-    if (v && /^[\w\-.~+ ]+$/.test(v)) out[k] = v;
-  }
-  return Object.keys(out).length ? out : undefined;
-}
 const list = (value: unknown, allowed: (item: string) => boolean, max: number): string[] | null =>
   Array.isArray(value) && value.length <= max && value.every((item) => typeof item === "string" && allowed(item)) ? [...new Set(value as string[])] : null;
 
@@ -102,7 +92,6 @@ export async function POST(request: Request) {
     path: "call",
     clinic: "",
     page: page && /^\/[\w\-./]*$/.test(page) ? page : "",
-    utm: utmOf(form.utm),
   };
 
   const clinicOk = typeof form.clinic === "string" && (form.clinic === "Either" || CLINICS.includes(form.clinic));

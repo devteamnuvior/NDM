@@ -60,7 +60,7 @@ function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView
             {it.note && <span className="mt-1 block font-inter text-[13.5px] leading-[1.45] text-ndm-muted">{it.note}</span>}
           </span>
           <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            <OfferTag offer={it.offer} badge={it.badge} coded={it.coded} off={it.off} small />
+            <OfferTag offer={it.offer} badge={it.badge} coded={it.coded} small />
             {/* inside a category the prices carry no note of where they come from (only the category's own "from" does) */}
             <FromPrice from={it.from} unit={it.fromUnit} source={it.fromSource && { ...it.fromSource, label: "", count: 1 }} mark={isSource} />
           </span>
@@ -127,13 +127,13 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }: P
           className="group grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 py-[22px] text-left sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6"
         >
           <span className="min-w-0">
-            <span className="pr-gcount block font-inter text-[12.5px] text-ndm-muted tabular-nums">
+            <span className="block font-inter text-[12.5px] text-ndm-muted tabular-nums">
               {count} {hits ? (count === 1 ? "match" : "matches") : count === 1 ? "treatment" : "treatments"}
             </span>
-            <span className="pr-gtitle mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{c.name}</span>
+            <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{c.name}</span>
           </span>
           <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            <OfferTag offer={c.offer} badge={c.badge} coded={c.coded} off={c.off} named />
+            <OfferTag offer={c.offer} badge={c.badge} coded={c.coded} />
             <FromPrice from={c.from} unit={c.fromUnit} big source={c.fromSource} withItem={c.items.length > 1} />
           </span>
           <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1">
@@ -145,7 +145,7 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }: P
       <div id={uid} role="region" aria-labelledby={`${uid}-h`} className="pr-body" inert={!on}>
         <div>
           <div className="pr-gintro flex items-center justify-between gap-x-4 pb-2 sm:gap-x-8">
-            <p className="pr-gblurb max-w-[60ch] min-w-0 font-inter text-[15px] leading-[1.55] text-ndm-muted">{c.blurb}</p>
+            <p className="max-w-[60ch] min-w-0 font-inter text-[15px] leading-[1.55] text-ndm-muted">{c.blurb}</p>
             {count > 1 && (
               <button
                 type="button"

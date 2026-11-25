@@ -30,8 +30,6 @@ export interface BookingRequestInput {
   hour?: number;
   /** "Morning", "Afternoon" or "Early evening", when a call was asked for. */
   callTime?: string;
-  /** The link's utm values kept for the visit (source, medium, campaign, content, term). */
-  utm?: Record<string, string>;
   /** Path of the page the form was sent from. */
   page: string;
 }

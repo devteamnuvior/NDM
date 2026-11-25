@@ -139,32 +139,6 @@ function ndm_headless_booking_text( $params, $key, $max ) {
 }
 
 /**
- * Where the visit came from, from the link's utm values the site kept for the visit ("utm" in the request:
- * source, medium, campaign, content, term), in words: "mailchimp / email / ndm_bf_2026_hold / hold".
- * An empty string when the visit had none. Only short plain values are kept (2026-11-25, Black Friday brief, Task 05).
- *
- * @param array $params The request.
- * @return string
- */
-function ndm_headless_booking_source( $params ) {
-	if ( ! isset( $params['utm'] ) || ! is_array( $params['utm'] ) ) {
-		return '';
-	}
-
-	$parts = array();
-
-	foreach ( array( 'source', 'medium', 'campaign', 'content', 'term' ) as $key ) {
-		$value = ndm_headless_booking_text( $params['utm'], $key, 100 );
-
-		if ( $value && preg_match( '/^[\w\-.~+ ]+$/u', $value ) ) {
-			$parts[] = $value;
-		}
-	}
-
-	return implode( ' / ', $parts );
-}
-
-/**
  * A list of short texts from the request (at most $count of them).
  *
  * @param array  $params Request body.
@@ -234,7 +208,6 @@ function ndm_headless_rest_booking( $request ) {
 	$phone = ndm_headless_booking_text( $params, 'phone', 30 );
 	$other = ndm_headless_booking_text( $params, 'other', 80 );
 	$page  = ndm_headless_booking_text( $params, 'page', 200 );
-	$source = ndm_headless_booking_source( $params );
 	$email = isset( $params['email'] ) && is_string( $params['email'] ) ? sanitize_email( $params['email'] ) : '';
 
 	if ( ! $first || ! $last || ! $phone || ! preg_match( '/\d.*\d.*\d.*\d.*\d.*\d.*\d/', $phone ) ) {
@@ -291,7 +264,6 @@ function ndm_headless_rest_booking( $request ) {
 		'hour'      => 0,
 		'call_time' => '',
 		'page'      => (string) $page,
-		'source'    => $source,
 	);
 
 	if ( 'book' === $path ) {
@@ -379,7 +351,6 @@ function ndm_headless_booking_record( $id ) {
 			'hour'      => 0,
 			'call_time' => '',
 			'page'      => '',
-			'source'    => '',
 		)
 	);
 }
@@ -458,7 +429,6 @@ function ndm_headless_booking_notify( $id ) {
 		'Asked for'           => ndm_headless_booking_request_line( $record ),
 		'Clinic'              => $record['clinic'],
 		'Sent from page'      => ndm_headless_booking_page_label( $record['page'] ) . ( '/' === $record['page'] ? ' (/)' : '' ),
-		'Came from'           => $record['source'],
 		'Received'            => get_the_date( 'D, M j, Y, g:i a', $id ),
 	);
 	$lines  = array( 'A new consultation request came in from the website.', '' );
@@ -598,7 +568,6 @@ function ndm_headless_booking_details_box( $post ) {
 		'Asked for'            => ndm_headless_booking_request_line( $record ),
 		'Clinic'               => $record['clinic'],
 		'Sent from page'       => ndm_headless_booking_page_label( $record['page'] ) . ( '/' === $record['page'] ? ' (/)' : '' ),
-		'Came from'            => $record['source'],
 		'Received'             => get_the_date( 'D, M j, Y, g:i a', $post ),
 	);
 

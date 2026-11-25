@@ -14,8 +14,6 @@ export interface SaleTagsValue {
   look: SaleLook;
   percent: number;
 }
-/** The sale's name on a category's badge. */
-const SALE_NAMES: Record<SaleLook, string> = { vip: "VIP SALE", bf: "BLACK FRIDAY", holiday: "HOLIDAY SALE", newyear: "NEW YEAR SALE" };
 const SaleTagsContext = createContext<SaleTagsValue | null>(null);
 
 export function SaleTagsProvider({ value, children }: { value: SaleTagsValue | null; children: ReactNode }) {
@@ -28,20 +26,9 @@ export const useSaleTags = () => useContext(SaleTagsContext);
  * sale it is the pill in the sale's look, in two halves when the offer has two parts
  * ("30% OFF" | "+ EXTRA 30%", "BUY 1" | "GET 1 FREE").
  */
-export function OfferTag({ offer, badge, coded, small, plain = "pr-badge", off = 0, named }: { offer: string; badge: string[]; coded: boolean; small?: boolean; plain?: string; /** the biggest total discount underneath, in percent */ off?: number; /** a category: the sale's name before the discount */ named?: boolean }) {
+export function OfferTag({ offer, badge, coded, small, plain = "pr-badge" }: { offer: string; badge: string[]; coded: boolean; small?: boolean; plain?: string }) {
   const sale = useSaleTags();
   if (!sale) return offer ? <span className={plain}>{offer}</span> : null;
-  /* one badge with the total discount (Black Friday brief, 2026-11-25, Task 02): the regular price against the price
-     to pay, the checkout code included; no "+ EXTRA" half. A clinic offer that is not a percentage keeps its words. */
-  const percentOffer = !badge.length || badge.some((t) => /%\s*OFF$/i.test(t));
-  if (off > 0 && percentOffer) {
-    const name = named ? SALE_NAMES[sale.look] : "";
-    return (
-      <span data-look={sale.look} className={`sb ${small ? "sb-sm" : ""}`}>
-        <span className="sb-a">{name ? `${name} · ` : ""}UP TO {off}% OFF</span>
-      </span>
-    );
-  }
   const parts =
     badge.length === 1 && coded && /%\s*OFF$/.test(badge[0])
       ? [badge[0], `+ EXTRA ${sale.percent}%`]

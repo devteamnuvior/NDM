@@ -46,9 +46,6 @@ export const VIP2 = {
     link: "Not ready to buy? Book a free consultation and keep your VIP price",
     card: "Top VIP prices",
     cardFoot: "left at these prices",
-    /** The card's three prices, when they are set: [product name, option, title, line under it]. The price is read
-        from the page's own list; a pick the list does not have is left out and the card fills up on its own. */
-    picks: [] as [string, string, string, string][],
   },
   strip: {
     award: "Top Choice Award",

@@ -18,7 +18,6 @@ import { CLINICS } from "@/config/site";
 import { tel } from "@/lib/routes";
 import { withBase } from "@/lib/base-path";
 import { pushLead } from "@/lib/lead-event";
-import { visitSource } from "@/lib/visit-source";
 
 /* Note on borders: the prototype writes "border-ndm-ink/12" and "border-white/12" on a few elements, an
    opacity step its Tailwind 3 does not have, so those classes did nothing there and the borders took the
@@ -302,7 +301,6 @@ export function BookForm({ thanksId, summary = false, compact = false, dock = fa
           clinic: f.clinic,
           callTime: p === "call" ? f.callTime : undefined,
           page: window.location.pathname,
-          utm: visitSource(),
           company: field("ndm_hp"),
         }),
       });

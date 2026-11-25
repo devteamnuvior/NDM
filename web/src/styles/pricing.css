@@ -218,14 +218,3 @@
   .pcm-chip{padding:11px 15px}
 }
 @media (prefers-reduced-motion:reduce){.pcm-chip,.pcm-arrow{transition:none}}
-/* phones (Black Friday brief, 2026-11-25, Task 01): a category's block is its title, one discount badge and the
-   From line only, so the first package is on the first screen; the count, the line saying where the lowest price
-   comes from and the category's text are left out there */
-@media (max-width:639px){
-  .pr-ghead>button{padding-block:14px;row-gap:8px}
-  .pr-ghead .pr-gcount,.pr-ghead .pr-src,.pr-gintro .pr-gblurb{display:none}
-  .pr-ghead .pr-gtitle{margin-top:0;font-size:23px}
-  .pr-gintro{padding-bottom:4px;justify-content:flex-end}
-  .pr-gintro:has(.pr-gblurb:only-child){display:none}
-  .pr-item .pr-head{padding-block:14px}
-}

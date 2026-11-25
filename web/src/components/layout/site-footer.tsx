@@ -49,7 +49,7 @@ export function SiteFooter() {
   });
 
   return (
-    <footer className="site-footer relative z-10 bg-ndm-paper px-[var(--gx)] pb-[clamp(12px,2vw,24px)]">
+    <footer className="relative z-10 bg-ndm-paper px-[var(--gx)] pb-[clamp(12px,2vw,24px)]">
       <div ref={panel} data-nav="dark" className="relative overflow-hidden rounded-[26px] bg-ndm-slate">
         <video ref={film} muted loop playsInline preload="metadata" aria-hidden="true" poster={withBase(s.film.poster)} src={withBase(s.film.src)} className="absolute inset-0 h-full w-full object-cover will-change-transform" style={{ transformOrigin: "50% 40%" }} />
         <div className="absolute inset-0" style={{ background: "linear-gradient(90deg,rgba(18,14,11,.55) 0%,rgba(18,14,11,.15) 50%,rgba(18,14,11,0) 75%)" }} />
