@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { sourceFields } from "@/lib/lead-event";
 import { checkOrderPaymentAction, type OrderReceipt, type PaymentCheck } from "@/app/(site)/checkout/actions";
 import { Button } from "@/components/ui/button";
 import { TwoTone } from "@/components/ui/two-tone";
@@ -58,6 +59,24 @@ export function ConfirmPage() {
       cancelAnimationFrame(id);
     };
   }, []);
+  /* a paid card order: one purchase event, with its amount in CAD and the visit's channel (Black Friday brief, Task 07).
+     Only the order number and amounts travel, never anything about the visitor; sent once per order in this browser. */
+  const paidNow = !!check && check.ok && check.paid;
+  useEffect(() => {
+    if (!paidNow || !o) return;
+    try {
+      const key = `ndm-purchase-sent-${o.no}`;
+      if (window.localStorage.getItem(key)) return;
+      window.localStorage.setItem(key, "1");
+    } catch {
+      /* storage blocked: sent with every visit of this page, which Analytics counts once by transaction_id */
+    }
+    const w = window as unknown as { dataLayer?: Record<string, unknown>[]; fbq?: (...a: unknown[]) => void };
+    w.dataLayer = w.dataLayer || [];
+    w.dataLayer.push({ ecommerce: null });
+    w.dataLayer.push({ event: "purchase", ...sourceFields(), ecommerce: { transaction_id: o.no, value: o.total, tax: o.tax, currency: "CAD", items: o.lines.map((l) => ({ item_name: `${l.name}, ${l.label}`, price: l.price, quantity: l.qty })) } });
+    w.fbq?.("track", "Purchase", { value: o.total, currency: "CAD" });
+  }, [paidNow, o]);
   const date = o ? new Date(o.date).toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" }) : "";
   const clinic = o ? CLINICS.find((c) => c.name === o.clinic) : undefined;
   const paid = !!check && check.ok && check.paid;

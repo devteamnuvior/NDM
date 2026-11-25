@@ -6,6 +6,7 @@ import { IconClose } from "@/components/ui/icons";
 import { TwoTone } from "@/components/ui/two-tone";
 import { ACTIONS } from "@/config/routes";
 import { lockScroll } from "@/lib/scroll-lock";
+import { rememberVisitSource } from "@/lib/visit-source";
 
 /* the form's code is fetched the first time the pop-up opens (the home page already has it for its booking section) */
 const BookForm = dynamic(() => import("@/components/booking/book-form").then((m) => m.BookForm), { ssr: false });
@@ -23,6 +24,8 @@ export function BookPopup() {
 
   const close = useCallback(() => {
     setOpen(false);
+    /* opened from a #/book link: drop the #/book, so a reload or Back does not open the form again */
+    if (window.location.hash === ACTIONS.book) window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search);
     const b = opener.current;
     requestAnimationFrame(() => {
       if (b && b.isConnected) b.focus({ preventScroll: true });
@@ -39,7 +42,22 @@ export function BookPopup() {
       setOpen(true);
     };
     document.addEventListener("click", onClick);
-    return () => document.removeEventListener("click", onClick);
+    /* a link from an email or a text that ends in #/book (Black Friday brief, Task 05) opens the page with the form
+       already open; so does #/book typed or followed later. The link's utm values are kept for the visit first. */
+    rememberVisitSource();
+    const fromHash = () => {
+      if (window.location.hash !== ACTIONS.book) return;
+      opener.current = null;
+      setRun((x) => x + 1);
+      setOpen(true);
+    };
+    const first = window.setTimeout(fromHash, 400);
+    window.addEventListener("hashchange", fromHash);
+    return () => {
+      document.removeEventListener("click", onClick);
+      window.removeEventListener("hashchange", fromHash);
+      window.clearTimeout(first);
+    };
   }, []);
 
   useEffect(() => {
