@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { money } from "@/lib/cart";
 import { useSaleTags } from "@/components/pricing/sale-tags";
+import { totalOff } from "@/lib/pricing-view";
 
 /** How many units, syringes, zones or sessions an option's label covers, and what one is called ("Package of 3" -> 3 sessions). */
 function countOf(label: string): { n: number; one: string; many: string } | null {
@@ -52,11 +53,16 @@ export function OptionRow({ label, price, was, code, codePercent, tag, unit, act
   const coded = !!(sale && code && code < price);
   const final = coded ? (code as number) : price;
   const cnt = countOf(label);
-  const struck = [was > final ? was : 0, coded ? price : 0].filter((v, i, a) => v > 0 && a.indexOf(v) === i);
-  const save = Math.round(((was || price) - final) * 100) / 100;
-  const pct = codePercent ?? sale?.percent;
-  const pill = tag && sale ? pillWords(tag, sale.look) : [];
-  if (pill.length === 1 && coded && pct) pill.push(`+ EXTRA ${pct}%`);
+  /* one struck price, the regular one, then the price to pay; a line without its own regular price counts its price
+     before the code as regular (Black Friday brief, 2026-11-25, Task 02: no intermediate price, no "Extra 30% applied") */
+  const regular = was > final ? was : coded ? price : 0;
+  const struck = regular ? [regular] : [];
+  const save = Math.round(((regular || price) - final) * 100) / 100;
+  const off = regular ? totalOff(regular, final) : 0;
+  void codePercent;
+  /* the pill: the total discount when the offer is a percentage, else the clinic's own words ("SAVE $1,000", "BUY 1 | GET 1 FREE") */
+  const words = tag && sale ? pillWords(tag, sale.look) : [];
+  const pill = sale && off > 0 && (!words.length || words.some((t) => /%\s*OFF$/.test(t))) ? [`${off}% OFF`] : words;
   return (
     <li {...data} className={`pr-opt pr-opt2 ${struck.length || tag ? "is-featured" : ""}`}>
       <span className="pr-opt2-info">
@@ -66,7 +72,7 @@ export function OptionRow({ label, price, was, code, codePercent, tag, unit, act
             {cnt.n} {cnt.many} · {money(Math.round((final / cnt.n) * 100) / 100)} per {cnt.one}
           </span>
         )}
-        {tag &&
+        {(tag || pill.length > 0) &&
           (sale ? (
             <span data-look={sale.look} className={`sb sb-sm pr-opt2-offer ${pill.length > 1 ? "sb-split" : ""}`}>
               {pill.map((t, i) => (
@@ -96,20 +102,9 @@ export function OptionRow({ label, price, was, code, codePercent, tag, unit, act
           {money(final)}
           {unit && <span className="pr-opt2-unit">{unit}</span>}
         </span>
-        {struck.length > 0 && (
+        {struck.length > 0 && save > 0 && (
           <span className="pr-opt2-with">
-            {coded && (
-              <>
-                <span className="pr-opt2-tick" aria-hidden="true">
-                  &#10003;
-                </span>
-                <span>
-                  Extra {pct}% applied
-                </span>
-                <span className="pr-opt2-sep"> · </span>
-              </>
-            )}
-            {save > 0 && <span className="pr-opt2-save">You save {money(save)}</span>}
+            <span className="pr-opt2-save">You save {money(save)}</span>
           </span>
         )}
       </span>

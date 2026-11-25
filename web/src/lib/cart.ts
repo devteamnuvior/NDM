@@ -184,6 +184,9 @@ export async function checkCart(): Promise<void> {
       sale = body.sale ?? null;
       emit();
     }
+    /* the sale's own code applies by itself while the sale runs: every price table shows the price after it, so the
+       cart charges what was shown (Black Friday brief, 2026-11-25, Task 02). A code the visitor typed is left alone. */
+    if (sale && sale.live && sale.code && !getTypedCode()) setTypedCode(sale.code);
   } catch {
     return;
   }

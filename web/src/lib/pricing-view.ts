@@ -39,6 +39,8 @@ export interface PriceItemView {
   badge: string[];
   /** Whether the checkout code applies to any of its options. */
   coded: boolean;
+  /** The biggest total discount among its options, in percent (0: none). */
+  off: number;
   options: PriceOptionView[];
 }
 
@@ -56,6 +58,8 @@ export interface PriceCategoryView {
   fromSource: PriceSource | null;
   badge: string[];
   coded: boolean;
+  /** The biggest total discount in the category, in percent (0: none). */
+  off: number;
   items: PriceItemView[];
 }
 
@@ -126,6 +130,20 @@ export function badgeCoded(options: PriceOption[]): boolean {
   return !![...tagged].sort((a, b) => pct(b) - pct(a))[0].code;
 }
 
+/**
+ * The biggest total discount among options, in whole percent: the regular price against the price to pay, with the
+ * checkout code where it applies (a line without its own regular price counts its price before the code as regular).
+ * 0 when no option is discounted. "One total discount" (Black Friday brief, 2026-11-25, Task 02).
+ */
+export function topOff(options: PriceOption[]): number {
+  return Math.max(0, ...options.map((o) => totalOff(o.regular || 0, o.price, o.code)));
+}
+export function totalOff(regular: number, price: number, code?: number): number {
+  const pay = code && code < price ? code : price;
+  const was = regular > pay ? regular : code && code < price ? price : 0;
+  return was > 0 ? Math.round((1 - pay / was) * 100) : 0;
+}
+
 /** One WooCommerce price as the price list's option: the price to pay, and the regular price while a sale runs. */
 function option(fields: WooPriceFields & { campaign?: { code: boolean; codePrice: string } }, label: string, tag: string | undefined, productId: number, variationId: number, by?: { code: string; percent: number } | null): Option {
   const price = Number(fields.price);
@@ -181,6 +199,7 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
       fromSource: low?.source ?? null,
       badge: saleBadge(all),
       coded: badgeCoded(all),
+      off: topOff(all),
       items: c.items.map((it) => {
         const itemLow = book.lowestPrice(c.id, it.name, true);
         const min = Math.min(...it.options.map((o) => o.price));
@@ -194,6 +213,7 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
           fromSource: itemLow?.source ?? null,
           badge: saleBadge(it.options),
           coded: badgeCoded(it.options),
+          off: topOff(it.options),
           options: it.options.map((o) => ({ label: o.label, price: o.price, was: o.regular || 0, tag: o.tag, unit: perUnit(o.label), productId: o.productId, variationId: o.variationId, ...(o.code ? { code: o.code } : {}) })),
         };
       }),
