@@ -71,6 +71,12 @@ export interface PriceSpecialView {
   offer: string;
   /** id of the category's heading button in the price list. */
   target: string;
+  /** The price list's own pill for the same treatment or category ("30% OFF", "BUY 1" | "GET 1 FREE") and whether the
+   *  checkout code sits beside it ("+ EXTRA 30%"), so the card wears the list's pill (user, 2026-11-25). */
+  badge: string[];
+  coded: boolean;
+  /** The regular price on the same count, struck through beside the price; 0 without a sale. */
+  was: number;
 }
 
 export interface PricingView {

@@ -1,5 +1,5 @@
 import { createPriceBook } from "@/lib/price-book";
-import { toCategories, type PriceSpecialView } from "@/lib/pricing-view";
+import { badgeCoded, saleBadge, toCategories, type PriceSpecialView } from "@/lib/pricing-view";
 import type { WooPricingTree, WooSpecial } from "@/types/pricing";
 import type { PromoScope } from "@/types/promotions";
 
@@ -14,6 +14,10 @@ export interface OfferPrice {
   price: string;
   unit: string;
   deal: string;
+  /** The regular price on the same count (0 without a sale), and the price list's own pill for the same rows. */
+  was: number;
+  badge: string[];
+  coded: boolean;
 }
 
 /** A treatment's place on the public price list, with what its card would show under each price setting. */
@@ -33,14 +37,16 @@ export interface OfferPriceChoice {
 export function offerPriceChoices(tree: WooPricingTree): Map<number, OfferPriceChoice> {
   const categories = toCategories(tree);
   const whole = createPriceBook(categories);
-  const show = (low: ReturnType<typeof whole.lowestPrice>): OfferPrice | null => (low ? { price: low.value % 1 ? low.value.toFixed(2) : String(low.value), unit: low.per, deal: low.offer } : null);
+  type Opts = (typeof categories)[number]["items"][number]["options"];
+  const show = (low: ReturnType<typeof whole.lowestPrice>, options: Opts): OfferPrice | null =>
+    low ? { price: low.value % 1 ? low.value.toFixed(2) : String(low.value), unit: low.per, deal: low.offer, was: low.source.was, badge: saleBadge(options), coded: badgeCoded(options) } : null;
   const choices = new Map<number, OfferPriceChoice>();
   for (const category of categories) {
-    const all = show(whole.lowestPrice(category.id));
+    const all = show(whole.lowestPrice(category.id), category.items.flatMap((it) => it.options));
     for (const item of category.items) {
       if (choices.has(item.id)) continue;
       /* a price list of this one treatment, so nothing with a similar name is counted in */
-      const own = show(createPriceBook([{ ...category, items: [item] }]).lowestPrice(category.id));
+      const own = show(createPriceBook([{ ...category, items: [item] }]).lowestPrice(category.id), item.options);
       choices.set(item.id, { slug: category.id, tag: category.name, product: own, category: all });
     }
   }
@@ -59,7 +65,7 @@ export function offerOptionPrice(tree: WooPricingTree, productId: number, option
     const one = item?.options.find((o) => same(o.label));
     if (!item || !one) continue;
     const low = createPriceBook([{ ...category, items: [{ ...item, options: [one] }] }]).lowestPrice(category.id);
-    return low ? { price: low.value % 1 ? low.value.toFixed(2) : String(low.value), unit: low.per, deal: low.offer } : null;
+    return low ? { price: low.value % 1 ? low.value.toFixed(2) : String(low.value), unit: low.per, deal: low.offer, was: low.source.was, badge: saleBadge([one]), coded: badgeCoded([one]) } : null;
   }
   return null;
 }
@@ -98,6 +104,6 @@ export function priceSpecials(tree: WooPricingTree, specials: readonly WooSpecia
     if (!choice) return [];
     const shown = cardPrice(choice, s);
     if (!shown) return [];
-    return [{ id: s.productId, name: s.name || s.productName, price: "$" + shown.price, unit: shown.unit ? " / " + shown.unit.replace(/^per /, "") : "", offer: shown.deal, target: `pg-${choice.slug}` }];
+    return [{ id: s.productId, name: s.name || s.productName, price: "$" + shown.price, unit: shown.unit ? " / " + shown.unit.replace(/^per /, "") : "", offer: shown.deal, target: `pg-${choice.slug}`, badge: shown.badge, coded: shown.coded, was: shown.was }];
   });
 }

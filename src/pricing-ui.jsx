@@ -200,16 +200,25 @@ function PriceSpecials() {
       {/* round 34: centred cards after the designer's reference: From chip, large price with its unit, name, Buy and the note; the red deal tag on top */}
       <ul role="list" className="mx-auto mt-[clamp(28px,3.4vw,44px)] grid w-full max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
         {sp.items.map(([n, id, item], i) => {
-          /* the card's treatment (or its whole category) as the price list's own rows show it, with the sale's code (2026-11-25) */
-          const info = priceFrom(id.replace(/^pg-/, ''), item, true);
+          /* the card's treatment (or its whole category) as the price list's own rows show it, with the sale's code (2026-11-25),
+             in the list's theme: its pill (black and red, red halves on fire), the sale price in red, the regular struck */
+          const cid = id.replace(/^pg-/, ''); const cat = PRICE_BY_ID[cid];
+          const info = priceFrom(cid, item, true);
+          const its = cat ? (item ? cat.items.filter((it) => pNorm(it[0]) === pNorm(item)) : cat.items) : [];
+          const opts = its.flatMap((it) => it[2]);
           const unit = info ? (info.unit || (info.per ? ' / ' + info.per.replace(/^per /, '') : '')) : '';
+          const cut = !!SALE_LOOK && !!info && info.src.reg > 0;
           return (
-          <li key={n} className="rv ps-card flex flex-col items-center rounded-[22px] bg-white px-3 pb-5 pt-4 text-center ring-1 ring-ndm-ink/[.06] md:px-5 md:pb-6 md:pt-5" style={{ transitionDelay: `${0.04 * i}s` }}>
-            {info && info.offer ? <DealPill deal={info.offer} /> : <span className="dp invisible" aria-hidden="true"><span className="dp-a">OFFER</span></span>}
-            <span className="mt-4 rounded-full bg-ndm-blue/10 px-3 py-1 font-inter text-[11px] font-semibold uppercase tracking-[.16em] text-ndm-deep">From</span>
-            <span className="mt-3 flex flex-wrap items-baseline justify-center gap-x-1"><span className="font-aeonik text-[clamp(24px,2.2vw,30px)] leading-none tracking-[-0.03em] text-ndm-ink">{info ? pfmt(info.value) : ''}</span>{unit && <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted md:text-[14px]">{unit}</span>}</span>
-            <span className="mt-2.5 block font-inter text-[15px] font-medium leading-[1.3] text-ndm-ink md:text-[16.5px]">{n}</span>
-            <span className="mt-auto flex flex-col items-center pt-4"><a href={`#${id}`} onClick={(e) => go(e, id)} className="btn btn-buy h-10 px-6 text-[14px]">Buy</a><span className="mt-2 font-inter text-[12.5px] text-ndm-muted">{sp.note}</span></span>
+          <li key={n} className="rv psx" style={{ transitionDelay: `${0.04 * i}s` }}>
+            <span className="psx-tag"><SaleTag offer={info ? info.offer : ''} badge={saleBadge(opts.map((o) => o[3]))} coded={badgeCoded(opts)} small /></span>
+            <span className="psx-from">From</span>
+            <span className="psx-price">
+              {cut && <s className="psx-was"><span className="sr-only">Regular price </span>{pfmt(info.src.reg)}</s>}
+              <span data-look={SALE_LOOK || undefined} className={`psx-now ${cut ? 'is-sale' : ''}`}>{cut && <span className="sr-only">now </span>}{info ? pfmt(info.value) : ''}</span>
+              {unit && <span className="psx-unit">{unit}</span>}
+            </span>
+            <span className="psx-name">{n}</span>
+            <span className="psx-act"><a href={`#${id}`} onClick={(e) => go(e, id)} className="btn btn-buy h-10 px-6 text-[14px]">Buy</a><span className="psx-note">{sp.note}</span></span>
           </li>
           );
         })}
@@ -314,6 +323,32 @@ if (typeof document !== 'undefined' && !document.getElementById('pcd-css')) {
   .pr-ghead .pr-gmeta .sb>span{padding:6px 10px}
   .pr-ghead .pr-gmeta .pr-src{display:none}
   .pr-ghead .pr-gmeta .pr-from{font-size:17px}
+  .pr-ghead .pr-gmeta>span:last-child{align-items:flex-end}
+}
+/* the Monthly specials in the price list's own theme (user, 2026-11-25): white cards like the list's panels, the list's pill
+   (black and red, red halves on fire), the price in the sale's red with the regular price struck through */
+#specials .psx{display:flex;flex-direction:column;align-items:center;text-align:center;padding:18px 12px 20px;border-radius:22px;background:#fff;box-shadow:0 0 0 1px rgba(27,36,43,.08),0 18px 40px -32px rgba(15,60,95,.35);transition:transform .5s var(--e-out),box-shadow .5s ease}
+@media (hover:hover){#specials .psx:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(27,36,43,.12),0 28px 50px -32px rgba(15,60,95,.45)}}
+#specials .psx-tag{display:flex;justify-content:center;min-height:23px}
+#specials .psx-tag .sb-split{flex-wrap:wrap;justify-content:center}
+#specials .psx-from{margin-top:16px;font:600 11px/1 Manrope,"Helvetica Neue",Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#5A646C}
+#specials .psx-price{margin-top:8px;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;column-gap:6px;row-gap:2px}
+#specials .psx-was{font:400 14px/1 Manrope,"Helvetica Neue",Arial,sans-serif;color:#A3A9B1;text-decoration-thickness:1px}
+#specials .psx-now{font:400 clamp(26px,2.4vw,32px)/1 Fraunces,Georgia,serif;letter-spacing:-.03em;color:#1B242B}
+#specials .psx-now.is-sale{color:var(--now,#C8101C)}
+#specials .psx-now[data-look="bf"]{--now:#C8101C}
+#specials .psx-unit{font:400 13px/1 Manrope,"Helvetica Neue",Arial,sans-serif;color:#6B7480;white-space:nowrap}
+#specials .psx-name{margin-top:10px;font:500 15px/1.3 Manrope,"Helvetica Neue",Arial,sans-serif;color:#1B242B}
+#specials .psx-act{margin-top:auto;padding-top:16px;display:flex;flex-direction:column;align-items:center}
+#specials .psx-note{margin-top:8px;font:400 12.5px/1.3 Manrope,"Helvetica Neue",Arial,sans-serif;color:#5A646C}
+@media (min-width:768px){#specials .psx{padding:22px 20px 24px}#specials .psx-name{font-size:16.5px}}
+@media (prefers-reduced-motion:reduce){#specials .psx{transition:none}}
+/* tablets (2026-11-25): the category title keeps its own row, the pill and the "from" price share the row under it, so a
+   wide pill never runs over the title */
+@media (min-width:640px) and (max-width:1023px){
+  .pr-ghead>button{grid-template-columns:minmax(0,1fr) auto;column-gap:16px;row-gap:10px}
+  .pr-ghead .pr-gplus{grid-row:1;grid-column:2;align-self:center}
+  .pr-ghead .pr-gmeta{grid-column:1 / -1;grid-row:2;flex-wrap:nowrap;justify-content:space-between}
   .pr-ghead .pr-gmeta>span:last-child{align-items:flex-end}
 }
 /* an open category's title sticks under the bar, never behind it (user, 2026-11-25) */
