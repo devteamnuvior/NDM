@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Appointment } from "@/components/home/appointment";
-import { BeforeAfter } from "@/components/home/before-after";
+import { BeforeAfterSection } from "@/components/home/before-after-section";
 import { Process } from "@/components/home/process";
 import { Saying } from "@/components/home/saying";
 import { Social } from "@/components/home/social";
@@ -55,7 +55,7 @@ export default function PromotionPage() {
       </Suspense>
       <Team inner />
       <Process />
-      <BeforeAfter tight />
+      <BeforeAfterSection tight />
       <Saying />
       <Faq items={PROMO_FAQS} eyebrow="FAQ" lead="Your top questions," strong="answered" intro="Everything you need to know before starting your journey with us." />
       <Appointment />
