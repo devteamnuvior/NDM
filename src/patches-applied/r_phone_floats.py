@@ -38,3 +38,5 @@ for name in ["index.html", "promotion.html"]:
         "  @media (max-width:767px){body:has(.cart-pill:not(.is-off)) .bfd-tab.is-on{transform:translate(-50%,110%);pointer-events:none}}\n")
     f.write_text(s, encoding="utf-8")
     print("patched", name)
+# 2026-11-25, later (user): a smaller Black Friday tab on phones; the rule was written into both shells' styles directly
+# (after "@media (max-width:420px){.bfd-badge{display:none}}"), the same as web/src/styles/black-friday.css.
