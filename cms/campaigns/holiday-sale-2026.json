@@ -57,9 +57,6 @@
   ],
   "fixed": [
     { "product": "Microneedling-Face", "option": "Package of 6", "regular": 2940, "price": 882, "label": "70% OFF" },
-    { "product": "PRP Scalp - Small", "option": "Package of 6", "regular": 6000, "price": 1800, "label": "70% OFF" },
-    { "product": "PRP Scalp - Medium", "option": "Package of 6", "regular": 9000, "price": 2700, "label": "70% OFF" },
-    { "product": "PRP Scalp - Full", "option": "Package of 6", "regular": 12600, "price": 3780, "label": "70% OFF" },
     { "product": ["Botox Cosmetic", "Botox"], "option": "60 units", "regular": null, "price": 504, "label": "30% OFF" },
     { "product": ["Botox Cosmetic", "Botox"], "option": "120 units", "regular": null, "price": 1008, "label": "30% OFF" },
     { "product": ["Botox Cosmetic", "Botox"], "option": "180 units", "regular": null, "price": 1512, "label": "30% OFF" },

@@ -6,12 +6,18 @@
  * Changes those three lines only: each becomes a fixed line at the brief's price (label "70% OFF") and leaves the
  * checkout code's list, so the code cannot come off it a second time. Every other line, label and price is left
  * as it is (Package of 3 stays $3,000 -> $1,680). A line whose regular price in WooCommerce is not the brief's is
- * refused, not guessed. The same lines are in holiday-sale-2026.json.
+ * refused, not guessed. Since the undo these lines are not in holiday-sale-2026.json.
  *
  *   wp eval-file cms/campaigns/prp-hair-70.php          (dry run)
  *   wp eval-file cms/campaigns/prp-hair-70.php apply
+ *
+ * Undone the same day (user: the revised brief dropped this task): "undo" puts the three lines back as they were,
+ * 30% off the regular price with the checkout code on top, no label, and back on the code's list.
+ *   wp eval-file cms/campaigns/prp-hair-70.php undo          (dry run)
+ *   wp eval-file cms/campaigns/prp-hair-70.php undo apply
  */
 $apply = in_array( 'apply', $args ?? array(), true );
+$undo  = in_array( 'undo', $args ?? array(), true );
 $mine  = ndm_campaign();
 if ( ! $mine ) {
 	WP_CLI::error( 'No campaign is stored.' );
@@ -43,18 +49,27 @@ foreach ( $wanted as $product => $prices ) {
 	if ( abs( $have - $regular ) > 0.001 ) {
 		WP_CLI::error( sprintf( '%s / Package of 6: the regular price in WooCommerce is %s, the brief says %s. Nothing was changed.', $product, $have, $regular ) );
 	}
-	$new = array(
-		'campaign' => $mine['id'],
-		'regular'  => (float) $regular,
-		'price'    => (float) $price,
-		'off'      => 0,
-		'code'     => false,
-		'label'    => '70% OFF',
-	);
+	$new = $undo
+		? array(
+			'campaign' => $mine['id'],
+			'regular'  => (float) $regular,
+			'price'    => round( $regular * 0.7, 2 ),
+			'off'      => 30,
+			'code'     => true,
+			'label'    => '',
+		)
+		: array(
+			'campaign' => $mine['id'],
+			'regular'  => (float) $regular,
+			'price'    => (float) $price,
+			'off'      => 0,
+			'code'     => false,
+			'label'    => '70% OFF',
+		);
 	WP_CLI::log( sprintf( '%s / %s (variation %d)', $line['product']->get_name(), $line['label'], $id ) );
 	WP_CLI::log( '  Now:  ' . wp_json_encode( get_post_meta( $id, NDM_CAMPAIGN_META, true ) ) );
 	WP_CLI::log( '  Then: ' . wp_json_encode( $new ) );
-	WP_CLI::log( '  Code ' . $mine['code'] . ': ' . ( in_array( $id, $ids, true ) ? 'this line leaves the list' : 'this line is not on the list' ) );
+	WP_CLI::log( '  Code ' . $mine['code'] . ': ' . ( in_array( $id, $ids, true ) ? ( $undo ? 'already on the list' : 'this line leaves the list' ) : ( $undo ? 'this line goes back on the list' : 'this line is not on the list' ) ) );
 	$plan[ $id ] = $new;
 }
 
@@ -67,8 +82,8 @@ foreach ( $plan as $id => $new ) {
 	update_post_meta( $id, NDM_CAMPAIGN_META, $new );
 }
 if ( $coupon->get_id() ) {
-	$coupon->set_product_ids( array_values( array_diff( $ids, array_keys( $plan ) ) ) );
+	$coupon->set_product_ids( array_values( $undo ? array_unique( array_merge( $ids, array_keys( $plan ) ) ) : array_diff( $ids, array_keys( $plan ) ) ) );
 	$coupon->save();
 }
 ndm_campaign_changed();
-WP_CLI::success( sprintf( 'Stored %d lines at 70%% off. The price list was cleared.', count( $plan ) ) );
+WP_CLI::success( sprintf( $undo ? 'Put back %d lines at 30%% off with the code. The price list was cleared.' : 'Stored %d lines at 70%% off. The price list was cleared.', count( $plan ) ) );
