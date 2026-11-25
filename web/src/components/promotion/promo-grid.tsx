@@ -89,9 +89,9 @@ export function PromoGrid({ offers }: { offers: Offer[] }) {
           </div>
         </div>
       </div>
-      <ul key={pick} role="list" className="mt-10 grid gap-4 sm:grid-cols-2 md:mt-14 lg:grid-cols-3">
+      <ul key={pick} role="list" className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:mt-14 lg:grid-cols-3">
         {list.map((s, i) => (
-          <li key={s.id} className="promo-in" style={{ animationDelay: `${0.05 * i}s` }}>
+          <li key={s.id} className="promo-in min-w-0" style={{ animationDelay: `${0.05 * i}s` }}>
             <article className="promo-card group relative flex h-full flex-col overflow-hidden rounded-[22px] p-3 pb-6">
               <span aria-hidden="true" className="sw-ring pointer-events-none absolute -right-20 -bottom-20 size-48 rounded-full" />
               <div className="relative aspect-[16/10] overflow-hidden rounded-[16px] bg-ndm-mist">

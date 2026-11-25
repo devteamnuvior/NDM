@@ -8,30 +8,30 @@ import { ORDER_STORAGE_KEY, PROVINCES } from "@/config/checkout";
 import { CLINICS } from "@/config/site";
 import { useCart } from "@/hooks/use-cart";
 import { checkCart, clearCart, type CartLine } from "@/lib/cart";
+import { pushLead } from "@/lib/lead-event";
 import { pagePath } from "@/lib/routes";
 import { CO_CARD, CO_WRAP, CartPairs, CoAlert, CoHead, CoSelect, CodeField, FIELD, IconLock, OrderSummary, RemovedNotice, money2, totalsOf, useCartTax, useInBrowser, useSaleCode } from "./shared";
 import { withBase } from "@/lib/base-path";
 
 const STEP_HEAD: [lead: string, strong: string, text: string][] = [
   ["Your", "details", "Your details are used only to arrange your treatment."],
-  ["How you", "pay", "Nothing is charged online: you pay at the clinic once your provider confirms your plan."],
-  ["Review your", "request", "Check everything, then place your request."],
+  ["How you", "pay", "Pay online by card on our secure payment page."],
 ];
 
 const legend = "font-aeonik text-[20px] font-normal leading-[1.2] tracking-[-0.01em] text-ndm-ink";
 const label = "mb-1 block font-inter text-[12.5px] font-medium text-ndm-ink/80";
 const fld = `${FIELD} co-fld`;
 const block = "co-fs";
-
-/** The payment step's heading text while card payment is offered. */
-const PAY_HEAD_CARD = "Pay online by card now, or at the clinic once your provider confirms your plan.";
+/** The small tag on a way to pay. */
+const payTag = "rounded-full bg-ndm-deep/8 px-2.5 py-1 font-inter text-[11.5px] leading-none font-semibold whitespace-nowrap text-ndm-deep";
 
 /**
- * 2. Checkout: details (with the clinic), payment, review. The appointment step (preferred day and time) was taken out on the user's request (2026-11-18). Placing the request sends the chosen WooCommerce
+ * 2. Checkout: details (with the clinic), then payment with the note and the terms. The appointment step (preferred day and time) and the review step were taken out on the user's request (2026-11-18). Placing the request sends the chosen WooCommerce
  * IDs and quantities with the visitor's details to the server, which creates the order in WooCommerce
- * at WooCommerce's own prices. "Pay at your appointment" charges nothing; "Card" (offered only while
- * WooCommerce's card gateway is on, `card`) sends the visitor to WooCommerce's pay page for the order,
- * where the card is taken. Card details never reach this site.
+ * at WooCommerce's own prices, then sends the visitor to WooCommerce's pay page for the order, where the
+ * card is taken. Card is the only way to pay ("Pay at your appointment" was removed on the user's request,
+ * 2026-11-19); while WooCommerce's card gateway is off (`card` false) no order can be placed.
+ * Card details never reach this site.
  */
 export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; card: boolean }) {
   const cart = useCart();
@@ -43,15 +43,12 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
   const [province, setProvince] = useState("Ontario");
   const [clinic, setClinic] = useState("Uptown");
   const [busy, setBusy] = useState(false);
-  const [step, setStep] = useState(0); /* 0 details (with the clinic), 1 payment, 2 review */
-  const [seen, setSeen] = useState<Record<string, string>>({});
+  const [step, setStep] = useState(0); /* 0 details (with the clinic), 1 payment */
   const [miss, setMiss] = useState(false);
   const [failure, setFailure] = useState("");
-  const [pay, setPay] = useState<"clinic" | "card">("clinic");
   const formRef = useRef<HTMLFormElement>(null);
   const empty = cart.lines.length === 0;
-  const byCard = card && pay === "card";
-  const head = step === 1 && card ? [STEP_HEAD[1][0], STEP_HEAD[1][1], PAY_HEAD_CARD] : STEP_HEAD[step];
+  const head = STEP_HEAD[step];
 
   const place = async () => {
     const form = formRef.current;
@@ -72,9 +69,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
       clinic,
       note: field("note"),
       agree: fd.get("agree") === "on",
-      company: field("company"),
       code: code.applied,
-      pay: byCard ? "card" : "clinic",
     };
     setBusy(true);
     setFailure("");
@@ -96,12 +91,13 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
       /* storage blocked: the confirmation shows a general message */
     }
     clearCart();
-    /* card: WooCommerce's pay page takes the card, then sends the visitor back to the confirmation */
-    if (result.order.method === "card" && result.order.payUrl) {
-      window.location.assign(result.order.payUrl);
-      return;
-    }
-    router.push(pagePath("orderConfirmed"));
+    /* the lead event for Tag Manager (lib/lead-event.ts), sent before the page changes: no order details */
+    const payUrl = result.order.method === "card" ? result.order.payUrl : undefined;
+    pushLead("checkout", { orderMethod: payUrl ? "card" : "clinic" }, () => {
+      /* card: WooCommerce's pay page takes the card, then sends the visitor back to the confirmation */
+      if (payUrl) window.location.assign(payUrl);
+      else router.push(pagePath("orderConfirmed"));
+    });
   };
 
   const next = (e: FormEvent<HTMLFormElement>) => {
@@ -115,8 +111,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
       return;
     }
     setMiss(false);
-    if (form) setSeen(Object.fromEntries([...new FormData(form).entries()].map(([k, v]) => [k, String(v)])));
-    if (step < 2) {
+    if (step < 1) {
       setStep(step + 1);
       window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
       return;
@@ -124,20 +119,12 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
     void place();
   };
 
-  const review: [key: string, value: string, go: number][] = [
-    ["Name", `${seen.first ?? ""} ${seen.last ?? ""}`.trim(), 0],
-    ["Email", seen.email ?? "", 0],
-    ["Clinic", `NewDermaMed ${clinic}`, 0],
-    ["Payment", byCard ? "Card, on the next page" : "Pay at your appointment", 1],
-    ["Treatments", `${cart.lines.length} in your cart, ${money2(t.total)} estimated`, -1],
-  ];
-
   return (
     <section aria-labelledby="co-title" className={`co-band ${CO_WRAP}`}>
       <CoHead at={1 + step} lead={head[0]} strong={head[1]} text={head[2]} onStep={(i) => setStep(Math.min(step, i))} />
       <RemovedNotice />
       {!ready ? null : empty ? (
-        <div className={`${CO_CARD} mt-10 flex flex-col items-center px-6 py-14 text-center`}>
+        <div className={`${CO_CARD} mt-7 flex flex-col items-center px-6 py-14 text-center`}>
           <h2 className="font-aeonik text-[clamp(26px,2.6vw,34px)] leading-[1.15] font-normal text-ndm-ink">There is nothing to check out yet</h2>
           <p className="mt-3 max-w-[42ch] font-inter text-[15px] text-ndm-muted">Add a treatment from the price list first.</p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
@@ -150,7 +137,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
           </div>
         </div>
       ) : (
-        <div className="mt-10 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)] lg:items-start">
+        <div className="mt-7 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)] lg:items-start">
           {/* phones: the order summary folds above the form */}
           <details className={`co-sum ${CO_CARD} px-5 py-4 lg:hidden`}>
             <summary className="flex cursor-pointer items-center justify-between gap-4 font-inter text-[14.5px] font-medium text-ndm-deep">
@@ -181,14 +168,12 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
                     <input required type="email" name="email" autoComplete="email" maxLength={120} className={fld} />
                   </label>
                   <label className="col-span-2 sm:col-span-1">
-                    <span className={label}>
-                      Phone <span className="font-normal text-ndm-muted">(optional)</span>
-                    </span>
-                    <input type="tel" name="phone" autoComplete="tel" maxLength={30} className={fld} />
+                    {/* required: the card processor refuses a payment without a phone number (Bambora 314, 2026-11-18) */}
+                    <span className={label}>Phone</span>
+                    <input required type="tel" name="phone" autoComplete="tel" maxLength={30} pattern="(?:\D*\d){7,}\D*" title="A phone number with at least 7 digits" className={fld} />
                   </label>
                 </div>
-                {/* not for people: left empty, it tells a person from a form-filling robot */}
-                <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="sr-only" />
+                {/* no hidden anti-robot field here (user, 2026-11-18): browser autofill filled it and real customers were turned away */}
               </fieldset>
 
               <fieldset className={block}>
@@ -252,85 +237,59 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
               </fieldset>
             </div>
 
-            <div data-step="1" className={step === 1 ? "grid gap-5" : "hidden"}>
+            <div data-step="1" className={step === 1 ? "grid gap-6" : "hidden"}>
               <fieldset className={block}>
-                <legend className={legend}>Payment</legend>
-                <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
-                  <label className={`co-opt ${!byCard ? "is-on" : ""}`}>
-                    <input type="radio" name="pay" value="clinic" checked={!byCard} onChange={() => setPay("clinic")} className="mt-1 size-4 shrink-0 accent-[#0F80C3]" />
-                    <span>
-                      <span className="block font-inter text-[14.5px] font-semibold text-ndm-ink">Pay at your appointment</span>
-                      <span className="mt-0.5 block font-inter text-[12.5px] leading-[1.45] text-ndm-muted">Nothing is charged online. You pay at the clinic once your provider confirms your plan.</span>
-                    </span>
-                  </label>
-                  {card ? (
-                    <label className={`co-opt ${byCard ? "is-on" : ""}`}>
-                      <input type="radio" name="pay" value="card" checked={byCard} onChange={() => setPay("card")} className="mt-1 size-4 shrink-0 accent-[#0F80C3]" />
-                      <span>
-                        <span className="block font-inter text-[14.5px] font-semibold text-ndm-ink">Card payment online</span>
-                        <span className="mt-0.5 block font-inter text-[12.5px] leading-[1.45] text-ndm-muted">Pay now with Visa or Mastercard on our secure payment page, processed by Bambora.</span>
-                      </span>
-                    </label>
-                  ) : (
-                    <div className="co-opt is-off" aria-disabled="true">
-                      <span aria-hidden="true" className="mt-1 size-4 shrink-0 rounded-full border border-ndm-ink/25" />
-                      <span>
-                        <span className="block font-inter text-[15px] font-semibold text-ndm-muted">Card payment online</span>
-                        <span className="mt-0.5 block font-inter text-[12.5px] leading-[1.45] text-ndm-muted">Not available online.</span>
-                      </span>
+                <legend className={legend}>Payment method</legend>
+                <p className="mt-0.5 font-inter text-[13px] text-ndm-muted">Every order is paid online by card.</p>
+                {card ? (
+                  <>
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                      <label className="co-opt is-on p-4!">
+                        <input type="radio" name="pay" value="card" checked readOnly className="mt-0.5 size-[18px] shrink-0 accent-[#0F80C3]" />
+                        <span className="min-w-0 flex-1">
+                          <span className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
+                            <span className="font-inter text-[15px] font-semibold text-ndm-ink">Card payment online</span>
+                            <span className={payTag}>Visa · Mastercard</span>
+                          </span>
+                          <span className="mt-1.5 block font-inter text-[13px] leading-[1.5] text-ndm-muted">Pay now on our secure payment page, processed by Bambora.</span>
+                        </span>
+                      </label>
                     </div>
-                  )}
-                </div>
+                    <CoAlert tone="ok" className="mt-3">
+                      Next you go to our secure payment page to enter your card. Your order is charged there, by Bambora.
+                    </CoAlert>
+                  </>
+                ) : (
+                  <CoAlert tone="err" className="mt-4" title="Card payment is not available right now">
+                    Your order cannot be placed online at the moment. Please try again later, or call the clinic.
+                  </CoAlert>
+                )}
               </fieldset>
-            </div>
 
-            <div data-step="2" className={step === 2 ? "grid gap-5" : "hidden"}>
-              <fieldset className={block}>
-                <legend className={legend}>Your request</legend>
-                <dl className="mt-3 grid gap-2 rounded-[16px] bg-ndm-mist/70 p-4 font-inter text-[14px]">
-                  {review.map(([k, v, go]) => (
-                    <div key={k} className="flex items-baseline justify-between gap-4">
-                      <dt className="text-ndm-muted">{k}</dt>
-                      <dd className="flex items-baseline gap-3 text-right text-ndm-ink">
-                        {v || "-"}
-                        {go >= 0 ? (
-                          <button type="button" onClick={() => setStep(go)} className="font-medium text-ndm-deep hover:underline">
-                            Edit
-                          </button>
-                        ) : (
-                          <a href={withBase(pagePath("cart"))} className="font-medium text-ndm-deep hover:underline">
-                            Edit
-                          </a>
-                        )}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </fieldset>
               <fieldset className={block}>
                 <legend className={legend}>Additional information</legend>
                 <label className="mt-3 block">
                   <span className={label}>
                     Note for our team <span className="font-normal text-ndm-muted">(optional)</span>
                   </span>
-                  <textarea name="note" rows={2} maxLength={500} className={`${fld} h-auto resize-none py-2.5`} />
+                  <textarea name="note" rows={3} maxLength={500} className={`${fld} h-auto resize-none py-2.5`} />
                 </label>
-                <p className="mt-2.5 rounded-[12px] bg-ndm-mist px-3.5 py-2.5 font-inter text-[12.5px] leading-[1.5] text-ndm-muted">Please don’t include medical details here. Your provider reviews your health history in person at your consultation.</p>
+                <p className="mt-2 font-inter text-[12.5px] leading-[1.5] text-ndm-muted">Please don’t include medical details here. Your provider reviews your health history in person at your consultation.</p>
               </fieldset>
 
-              <label className="flex items-start gap-2.5 font-inter text-[13.5px] leading-[1.5] text-ndm-ink">
-                <input type="checkbox" required name="agree" className="mt-0.5 size-4 shrink-0 accent-[#0F80C3]" />
+              <label className="flex cursor-pointer items-start gap-3 rounded-[14px] border border-ndm-ink/12 bg-ndm-paper px-4 py-3.5 font-inter text-[13.5px] leading-[1.5] text-ndm-ink">
+                <input type="checkbox" required name="agree" className="mt-0.5 size-[18px] shrink-0 accent-[#0F80C3]" />
                 <span>
                   I accept the{" "}
-                  <a href={withBase(pagePath("terms"))} className="text-ndm-deep underline-offset-4 hover:underline">
+                  <a href={withBase(pagePath("terms"))} className="font-medium text-ndm-deep underline-offset-4 hover:underline">
                     Terms of Service
                   </a>
                   , the{" "}
-                  <a href={withBase(pagePath("privacy"))} className="text-ndm-deep underline-offset-4 hover:underline">
+                  <a href={withBase(pagePath("privacy"))} className="font-medium text-ndm-deep underline-offset-4 hover:underline">
                     Privacy Policy
                   </a>{" "}
                   and the{" "}
-                  <a href={withBase(pagePath("refunds"))} className="text-ndm-deep underline-offset-4 hover:underline">
+                  <a href={withBase(pagePath("refunds"))} className="font-medium text-ndm-deep underline-offset-4 hover:underline">
                     Refund Policy
                   </a>
                   .
@@ -349,14 +308,7 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
                   {failure}
                 </CoAlert>
               )}
-              {step === 1 && (
-                <CoAlert tone="ok">
-                  {byCard
-                    ? "After the review you go to our secure payment page to enter your card. Your order is charged there, by Bambora."
-                    : "Nothing is charged online. You pay at the clinic once your provider confirms your plan."}
-                </CoAlert>
-              )}
-              <p className="font-inter text-[12.5px] text-ndm-muted">Step {step + 1} of 3</p>
+              <p className="font-inter text-[12.5px] text-ndm-muted">Step {step + 1} of 2</p>
               <div className="flex flex-col-reverse gap-2.5 sm:flex-row sm:items-center">
                 {step > 0 ? (
                   <button
@@ -376,14 +328,14 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
                   </a>
                 )}
                 <span className="sm:flex-1">
-                  <Button as="button" type="submit" v="ink" block disabled={busy}>
-                    {busy ? "Placing your request…" : step < 2 ? `Continue to ${["payment", "review"][step]}` : byCard ? `Continue to card payment · ${money2(t.total)}` : `Place order request · ${money2(t.total)}`}
+                  <Button as="button" type="submit" v="ink" block disabled={busy || (step === 1 && !card)}>
+                    {busy ? "Placing your order…" : step < 1 ? "Continue to payment" : `Continue to card payment · ${money2(t.total)}`}
                   </Button>
                 </span>
               </div>
               <p className="flex items-center justify-center gap-2 font-inter text-[12.5px] text-ndm-muted">
                 <IconLock />
-                {byCard ? "Your card is entered on our secure payment page" : "Nothing is charged online"}
+                Your card is entered on our secure payment page
               </p>
             </div>
           </form>

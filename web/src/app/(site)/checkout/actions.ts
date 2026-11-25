@@ -1,16 +1,17 @@
 "use server";
 
 import { headers } from "next/headers";
-import { CHECKOUT_STEPS, PROVINCES } from "@/config/checkout";
+import { PROVINCES } from "@/config/checkout";
 import { CLINICS } from "@/config/site";
 import { getAccountSession } from "@/lib/account/session";
 import { CART_MAX, cartKey, type CartLine } from "@/lib/cart";
-import { WordPressError, getOrderPayment, isWordPressConfigured, placeOrderRequest } from "@/lib/wordpress";
+import { WordPressError, getOrderPayment, getPaymentOptions, isWordPressConfigured, placeOrderRequest } from "@/lib/wordpress";
 
 /**
  * Places an order request. The browser sends what was chosen (WooCommerce IDs and quantities) and the
  * visitor's details; it never sends a price. WooCommerce checks the lines against the price list,
- * puts its own prices on the order and keeps it on hold, unpaid: payment is taken at the clinic.
+ * puts its own prices on the order and keeps it pending until it is paid online by card on WooCommerce's
+ * pay page. There is no "pay at your appointment" (user, 2026-11-19).
  */
 
 export interface OrderRequestForm {
@@ -28,12 +29,8 @@ export interface OrderRequestForm {
   clinic: string;
   note: string;
   agree: boolean;
-  /** Left empty by people; filled in by form-filling robots. */
-  company: string;
   /** The checkout code of a running sale ("PLUS30"), or "". WooCommerce decides what it takes off. */
   code?: string;
-  /** "card": pay online by card on WooCommerce's pay page; "clinic": pay at the appointment. */
-  pay?: "card" | "clinic";
 }
 
 /** What the confirmation page shows and keeps: no email, phone or address. */
@@ -55,6 +52,7 @@ export interface OrderReceipt {
   pay: string;
   /** "card" orders are paid on WooCommerce's pay page: its address, and the order's ID and key, which
    * the confirmation page uses to ask WooCommerce whether the payment went through. */
+  /** "clinic" only on receipts kept from before 2026-11-19. */
   method?: "card" | "clinic";
   payUrl?: string;
   orderId?: number;
@@ -82,7 +80,7 @@ const invalid = (message: string): OrderResult => ({ ok: false, reason: "invalid
 
 export async function placeOrderAction(form: OrderRequestForm): Promise<OrderResult> {
   if (typeof form !== "object" || form === null) return invalid("The request could not be read. Please reload the page and try again.");
-  if (form.company) return { ok: false, reason: "busy", message: "The request could not be sent. Please call the clinic." };
+  /* no hidden anti-robot field on the checkout (user, 2026-11-18): the booking, message and sign-up forms keep theirs */
 
   const address = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   if (tooMany(address)) return { ok: false, reason: "busy", message: "Too many requests in a short time. Please wait a few minutes, or call the clinic." };
@@ -102,18 +100,23 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
   const city = text(form.city, 60);
   const postal = text(form.postal, 10);
   const note = text(form.note, 500);
-  if (!first || !last || !email || phone === null || !street || apt === null || !city || !postal || note === null) return invalid("Please check your details: something is missing or too long.");
+  if (!first || !last || !email || !phone || !street || apt === null || !city || !postal || note === null) return invalid("Please check your details: something is missing or too long.");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return invalid("Please enter a valid email address.");
+  /* the card processor refuses a payment without a phone number */
+  if (phone.replace(/\D/g, "").length < 7) return invalid("Please enter a phone number.");
   if (!(PROVINCES as readonly string[]).includes(form.province)) return invalid("Please choose a province.");
   if (!/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(postal)) return invalid("Please enter a Canadian postal code such as M2N 5M5.");
   const clinic = CLINICS.find((c) => c.name === form.clinic);
   if (!clinic) return invalid("Please choose a clinic.");
   const code = typeof form.code === "string" && /^[A-Za-z0-9]{0,40}$/.test(form.code.trim()) ? form.code.trim().toUpperCase() : null;
   if (code === null) return invalid("The checkout code could not be read. Please remove it and try again.");
-  const pay = form.pay === "card" ? "card" : "clinic";
-  if (form.agree !== true) return invalid(`Please accept the terms to place your request (step ${CHECKOUT_STEPS.indexOf("Review")}).`);
+  if (form.agree !== true) return invalid("Please accept the terms to place your request.");
 
   if (!isWordPressConfigured()) return { ok: false, reason: "unreachable", message: "Order requests are not available right now. Please call the clinic." };
+
+  /* every order is paid online by card: without the card gateway nothing is placed */
+  const cardOff: OrderResult = { ok: false, reason: "unreachable", message: "Card payment is not available right now, so your order was not placed. Please try again later, or call the clinic." };
+  if (!(await getPaymentOptions()).card) return cardOff;
 
   /* signed in: the order goes on that customer's account, where "My account" lists it */
   const customerId = (await getAccountSession())?.id;
@@ -122,7 +125,7 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
     const placed = await placeOrderRequest({
       ...(customerId ? { customerId } : {}),
       ...(code ? { code } : {}),
-      pay,
+      pay: "card",
       lines,
       customer: { first, last, email, phone, address: street, apt, city, province: form.province, postal },
       clinic: `NewDermaMed ${clinic.name}`,
@@ -130,6 +133,7 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
       preferred: "",
       note,
     });
+    if (placed.pay !== "card" || !placed.payUrl || !placed.id || !placed.key) return cardOff;
     /* tax and total are WooCommerce's own: it taxed the order when it created it */
     const discount = placed.discount ?? 0;
     return {
@@ -146,9 +150,11 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
         ...(placed.code && discount > 0 ? { code: placed.code, discount } : {}),
         first,
         clinic: clinic.name,
-        ...(placed.pay === "card" && placed.payUrl && placed.id && placed.key
-          ? { pay: "Card, paid online", method: "card" as const, payUrl: placed.payUrl, orderId: placed.id, orderKey: placed.key }
-          : { pay: "Pay at your appointment", method: "clinic" as const }),
+        pay: "Card, paid online",
+        method: "card",
+        payUrl: placed.payUrl,
+        orderId: placed.id,
+        orderKey: placed.key,
       },
     };
   } catch (error) {

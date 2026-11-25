@@ -8,7 +8,7 @@ import { getPaymentOptions } from "@/lib/wordpress";
 
 export const metadata: Metadata = {
   title: "Checkout, NewDermaMed Toronto",
-  description: "Place your order request. Pay online by card or at the clinic.",
+  description: "Place your order and pay online by card.",
   robots: { index: false, follow: false },
 };
 

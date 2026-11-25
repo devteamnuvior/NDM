@@ -3,9 +3,11 @@
  * Offers, dates and terms are placeholders until Raymond approves them.
  */
 export const BF_SALE = {
-  start: "2026-11-20T00:00:00-05:00",
+  /* counted from the campaign's first day (user, 2026-11-19): the countdowns (bottom tab, pricing page) show Black
+     Friday's time left to Dec 7 now, not the time to its official start on Nov 20, which was the VIP Sale's end */
+  start: "2026-11-14T00:00:00-05:00",
   end: "2026-12-07T23:59:00-05:00",
-  when: "Nov 20 to Dec 7",
+  when: "Until Dec 7",
   badge: "Up to 70% off",
 };
 

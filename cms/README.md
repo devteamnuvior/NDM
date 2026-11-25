@@ -881,6 +881,10 @@ WordPress. The team reads them in wp-admin under **Consultation**.
   the database in Canada, before production.
 - Test: `web/tests/admin/booking.spec.ts` (`npm run test:admin`; makes two records and deletes them).
 
+## Website messages ("Send us a message")
+
+The About page's contact form (`web/src/components/about/about-contact.tsx`) sends to `POST /api/contact` (`web/src/app/api/contact/route.ts`: same-site only, hidden anti-robot field `company`, per-address limit), which calls `ndm/v1/messages` (`mu-plugins/ndm-headless/includes/messages.php`, same shared secret header as the consultation requests). Each message is a private post of the post type `ndm_message`, shown in wp-admin as "Messages", with a hand-set status (New, Replied, Closed), and is emailed once to the consultation requests' addresses (`NDM_BOOKING_NOTIFY`, default `info@newdermamed.com`) with Reply-To set to the visitor. The thank-you shows only after WordPress saved the message; the browser then pushes the Tag Manager lead event (`popupFormSubmit`, `formId: "contact"`, `web/src/lib/lead-event.ts`). Before 2026-11-18 this form saved nothing.
+
 ## Site Settings (header and footer)
 
 General settings of the Next.js site, the same on every page, on one screen: wp-admin > **Site

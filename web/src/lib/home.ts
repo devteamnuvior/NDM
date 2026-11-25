@@ -178,6 +178,24 @@ function fromWordPress(wp: WPHomePage): HomeCopy {
       lead: c.results_lead,
       strong: c.results_strong,
       text: c.results_text,
+      button: c.results_button ?? "",
+      cases: (c.results_cases ?? [])
+        .flatMap((r) => (r.before && r.after ? [r] : []))
+        .map((r, i) => {
+          const fx = Number.parseFloat(r.focus ?? "");
+          const n = i + 1;
+          const id = String(n).padStart(2, "0");
+          return {
+            n,
+            id,
+            name: (r.name ?? "").trim() || `Model ${id}`,
+            view: "",
+            fx: Number.isFinite(fx) ? Math.min(100, Math.max(0, fx)) : 50,
+            before: r.before!.src,
+            after: r.after!.src,
+            treat: (r.treatment ?? "").trim(),
+          };
+        }),
     },
     process: {
       tag: c.process_tag,

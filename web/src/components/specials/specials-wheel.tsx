@@ -164,7 +164,8 @@ export function SpecialsWheel({ offers, level: Heading, offersHref, children }: 
               <Eyebrow>Monthly specials</Eyebrow>
             </div>
           )}
-          <Heading id="specials" className="rv sw-title mx-auto px-4 text-center font-aeonik text-[clamp(23px,4.2vw,60px)] leading-[1.06] font-normal tracking-[-0.035em] whitespace-nowrap">
+          {/* as a page header (Promotion) the title keeps clear of the breadcrumb above it (user, 2026-11-20) */}
+          <Heading id="specials" className={`rv sw-title mx-auto px-4 ${Heading === "h1" ? "mt-[clamp(36px,7vh,72px)]" : ""} text-center font-aeonik text-[clamp(23px,4.2vw,60px)] leading-[1.06] font-normal tracking-[-0.035em] whitespace-nowrap`}>
             <span className="text-ndm-ink">Exclusive monthly</span> <span className="tt-strong text-ndm-deep">specials</span>
           </Heading>
 

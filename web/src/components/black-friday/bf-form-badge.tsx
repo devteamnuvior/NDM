@@ -6,8 +6,8 @@ import { withBase } from "@/lib/base-path";
 
 const noop = () => () => {};
 
-/** The offer line on this badge (user, 2026-11-18: "Up to 60% off" on the form, in both the prototype and the site; the bottom tab keeps BF_SALE.badge). */
-const BADGE = "Up to 60% off";
+/** The offer line on this badge: the sale's own headline, the same as the bottom tab (user, 2026-11-19; was a typed "Up to 60% off"). */
+const BADGE = BF_SALE.badge;
 
 /**
  * The Black Friday sale as a small badge on the treatment pages' booking form (user, 2026-11-18): the bottom

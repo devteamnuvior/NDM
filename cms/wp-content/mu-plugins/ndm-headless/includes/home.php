@@ -15,7 +15,7 @@
  *   edit screen compares them box by box, and restoring a revision restores them.
  * - What the page shares with the rest of the site, or reads from elsewhere, lives in the site's code:
  *   the films, every price (WooCommerce), the
- *   team members, the before and after cases, the photos and links of How it works, the monthly
+ *   team members, the photos and links of How it works, the monthly
  *   specials (WooCommerce), the reviews and awards, the two clinics, the booking form, the journal
  *   posts and the reels.
  * - `GET ndm/v1/home-page` gives the published home page; it answers 404 with the reason when no page
@@ -391,8 +391,29 @@ function ndm_headless_home_schema() {
 		array(
 			'id'     => 'results',
 			'title'  => 'Before And After',
-			'help'   => 'The words above the compare cards. The cases and the "Individual results may vary" line are the site\'s.' . $only,
-			'fields' => array_merge( $head( 'results' ), array( array( 'key' => 'results_text' ) + $text ) ),
+			'help'   => 'The words above the compare cards and the cards themselves. The "Individual results may vary" line is the site\'s and always shows.' . $only,
+			'fields' => array_merge(
+				$head( 'results' ),
+				array(
+					array( 'key' => 'results_text' ) + $text,
+					array( 'key' => 'results_button', 'label' => 'Button words', 'type' => 'text', 'help' => 'The button to the full gallery. Empty: "See all before & after".' ),
+					array(
+						'key'    => 'results_cases',
+						'label'  => 'Compare cards',
+						'type'   => 'repeater',
+						'add'    => 'Add a card',
+						'title'  => 'name',
+						'help'   => 'One card per case, in this order; the visitor drags across it to compare. Four show at a time on wide screens, the rest are reached with the arrows. A card without both photos is left out. With no card, the site\'s own cases show. Use only photos of patients who agreed to be shown, and never a prescription drug\'s name as the treatment.',
+						'fields' => array(
+							array( 'key' => 'before', 'label' => 'Before photo', 'type' => 'image', 'help' => 'A portrait photo, about 750 x 690 or taller. Before and after should be taken from the same angle.' ),
+							array( 'key' => 'after', 'label' => 'After photo', 'type' => 'image', 'help' => 'Same size and angle as the before photo.' ),
+							array( 'key' => 'name', 'label' => 'Name on the card', 'type' => 'text', 'help' => 'For example "Model 01". Never a patient\'s name. Empty: "Model" and the card\'s number.' ),
+							array( 'key' => 'treatment', 'label' => 'Treatment', 'type' => 'text', 'help' => 'For example "Aptos thread lift".' ),
+							array( 'key' => 'focus', 'label' => 'Photo focus', 'type' => 'text', 'help' => 'Where the face sits across the photo, from 0 (left edge) to 100 (right edge), so it stays in the frame. Empty: 50, the middle.' ),
+						),
+					),
+				)
+			),
 		),
 		array(
 			'id'     => 'process',
@@ -665,7 +686,7 @@ function ndm_headless_home_intro( $post ) {
 		$from = ndm_headless_home_previous_page( $post->ID );
 		echo '<p><strong>No home page words are saved on this page yet</strong>, so the site shows its built-in copy. ' . ( $from ? 'The boxes below start from the words of "' . esc_html( get_the_title( $from ) ) . '", the page that held them before; Update' : 'Update' ) . ' saves them to this page.</p>';
 	}
-	echo '<p>Filled in by the site, not typed here: the films, every price (WooCommerce), the team members, the before and after cases, the monthly specials (WooCommerce), the reviews and awards, the two clinics, the booking form, the journal posts and the reels. The words of a section that other pages also show (Our Team, Before And After, How It Works, Testimonials, Booking, Social) change on the home page only.</p>';
+	echo '<p>Filled in by the site, not typed here: the films, every price (WooCommerce), the team members, the monthly specials (WooCommerce), the reviews and awards, the two clinics, the booking form, the journal posts and the reels. The words of a section that other pages also show (Our Team, Before And After, How It Works, Testimonials, Booking, Social) change on the home page only.</p>';
 	echo '</div>';
 }
 add_action( 'edit_form_after_title', 'ndm_headless_home_intro' );

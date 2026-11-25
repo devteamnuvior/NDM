@@ -12,6 +12,16 @@ export function formatPrice(n: number): string {
   return `$${(Math.round(n * 100) / 100).toLocaleString("en-CA", { useGrouping: false, minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: 2 })}`;
 }
 
+/**
+ * A "from" price as shown: per unit to the cent ($7.70 / unit), anything else up to the next whole dollar
+ * ($167.33 -> $168, user, 2026-11-19), so a "from" price is never below a price that can really be paid.
+ * The option rows of a price table keep their exact prices.
+ */
+export function fromValue(n: number, perUnit = false): number {
+  const cents = Math.round(n * 100) / 100;
+  return perUnit ? cents : Math.ceil(cents);
+}
+
 /** How many units, syringes or sessions an option's label covers ("Package of 3" -> 3). */
 function countIn(label: string): number {
   const m = /(\d+)\s*(units?|syringes?|sessions?|vials?|treatments?|zones?)\b/i.exec(label) ?? /package of (\d+)/i.exec(label);
@@ -111,8 +121,8 @@ export function createPriceBook(categories: PriceCategory[], names: PriceNames =
         : "";
     const per = c.perUnit ? "per unit" : /syringe/i.test(best.option.label) ? "per syringe" : /zone/i.test(best.option.label) ? "per zone" : best.count > 1 || /session/i.test(best.option.label) ? "per session" : "";
     const full = best.option.regular && best.option.regular > best.paid ? best.option.regular : best.paid < best.option.price ? best.option.price : 0;
-    const was = full ? Math.round((full / best.count) * 100) / 100 : 0;
-    return { value: Math.round(best.value * 100) / 100, unit: c.perUnit ? " / unit" : "", per, percent, offer, source: { item: best.option.item, label: best.option.label, was, price: best.paid, count: best.count } };
+    const was = full ? (c.perUnit ? Math.round((full / best.count) * 100) / 100 : Math.round(full / best.count)) : 0;
+    return { value: fromValue(best.value, c.perUnit), unit: c.perUnit ? " / unit" : "", per, percent, offer, source: { item: best.option.item, label: best.option.label, was, price: best.paid, count: best.count } };
   }
 
   /** [category id, treatment] for a name used anywhere on the site, or null when it is not on the price list. */
@@ -166,7 +176,7 @@ export type PriceBook = ReturnType<typeof createPriceBook>;
 
 /** The lowest price in one price table after its offers; per unit when the table is priced per unit. */
 export function rowsFrom(rows: PriceOption[], perUnit = false): number {
-  return Math.round(Math.min(...rows.map((r) => (perUnit && !/regular/i.test(r.label) ? r.price / countIn(r.label) : r.price))) * 100) / 100;
+  return fromValue(Math.min(...rows.map((r) => (perUnit && !/regular/i.test(r.label) ? r.price / countIn(r.label) : r.price))), perUnit);
 }
 
 /** The largest percentage offer in a price table, 0 when there is none. */

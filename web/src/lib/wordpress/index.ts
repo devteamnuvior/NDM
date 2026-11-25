@@ -28,6 +28,7 @@ export { getAptosPage } from "./aptos";
 export { getBeforeAfter } from "./before-after";
 export { getBlogList, getBlogPost } from "./blog";
 export { saveBookingRequest, type BookingRequestInput } from "./bookings";
+export { saveContactMessage, type ContactMessageInput } from "./messages";
 export { getConcern, getConcernList } from "./concerns";
 export { isWordPressConfigured } from "./config";
 export { settle, WordPressError, type Settled, type WordPressErrorKind } from "./errors";

@@ -1,40 +1,48 @@
 import type { Metadata } from "next";
-import { BfsClass } from "@/components/bf-sale/bfs-class";
-import { SalePage } from "@/components/sale/sale-page";
+import { bfsMax } from "@/components/bf-sale/data";
+import { VipSaleV2 } from "@/components/sale/vip-sale-v2";
+import { VipClass } from "@/components/vip-sale/vip-class";
+import { BLACK_FRIDAY_V2, BLACK_FRIDAY_V2_LIST_KEY } from "@/config/black-friday-v2";
 import { BLACK_FRIDAY_COPY } from "@/config/sale";
 import type { CampaignPhase } from "@/lib/campaign";
 import { pagePath } from "@/lib/routes";
 import { buildSale } from "@/lib/sale";
 import { absolute } from "@/lib/seo";
 
+/*
+ * The Black Friday page (user, 2026-11-19): the VIP Sale page's layout (components/sale/vip-sale-v2.tsx) with its
+ * own words (config/black-friday-v2.ts) in the Black Friday colours (class "vbf" on <html>,
+ * styles/page-black-friday-v2.css). Deals, prices and the campaign are WooCommerce's. The earlier Black Friday
+ * page is kept at /black-friday-2.
+ */
+
 /** Black Friday is every phase of the campaign after the VIP Sale: Black Friday, Cyber Monday, Black Friday Extended. */
 const mine = (phase: CampaignPhase) => phase.id !== "vip";
-const view = () => buildSale({ look: "bfs", planKey: "ndm-bf-plan", copy: BLACK_FRIDAY_COPY, mine, after: "" });
+const view = () => buildSale({ look: "bfs", planKey: BLACK_FRIDAY_V2_LIST_KEY, copy: BLACK_FRIDAY_COPY, mine, after: "" });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { copy } = await view();
-  const { title, description } = copy;
+  const { deals, phases, copy } = await view();
+  const fill = (text: string) => text.replaceAll("{{max}}", String(bfsMax(deals))).replaceAll("{{day}}", phases.at(-1)?.day ?? "");
+  const title = fill(BLACK_FRIDAY_V2.title);
+  const description = fill(BLACK_FRIDAY_V2.description);
   const path = pagePath("blackFridaySale");
   return { title, description, alternates: { canonical: absolute(path) }, openGraph: { title, description, url: absolute(path), images: [absolute(copy.hero.photo.src)] } };
 }
 
-/** The page with its deals and prices, both from WooCommerce; without them (WooCommerce unreachable) those sections are empty. */
+/** The page with its deals and prices, both from WooCommerce. */
 async function Sale() {
-  return <SalePage view={await view()} />;
+  return <VipSaleV2 view={await view()} words={BLACK_FRIDAY_V2} />;
 }
 
-/** The Black Friday page. It has its own header and footer, so it sits outside the (site) layout. */
+/** It has its own header and footer, so it sits outside the (site) layout. */
 export default function BlackFridayPage() {
   return (
     <>
-      <BfsClass />
-      {/* no Suspense around it: everything it reads is cached, so the page's content is in the first HTML and
-          paints at once (inside a boundary it arrives hidden and is only shown by a script, after the photos and fonts) */}
+      <VipClass extra="vbf" />
+      {/* no Suspense around it: everything it reads is cached, so the page's content is in the first HTML */}
       <Sale />
-      {/* the page's look hangs on a class on <html>: set before the first paint. An inline script waits for the
-          stylesheet, and the browser reads nothing below it meanwhile, so it comes after the page's content:
-          placed above it, the first paint was empty and the content only showed after the scripts had run */}
-      <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("bfs")' }} />
+      {/* the page's look hangs on classes on <html>, set by a script placed after the content */}
+      <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("vip","vbf")' }} />
     </>
   );
 }

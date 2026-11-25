@@ -1,0 +1,16 @@
+/* NewDermaMed order emails (includes/emails.php). Most styles are inline in the templates; these undo
+   WooCommerce's own rules that would otherwise reach our markup, and fit the email to phones. */
+body.ndm-body { background-color: #F2F2EF; margin: 0; padding: 0; }
+#body_content_inner { font-family: Helvetica, Arial, sans-serif; font-size: 15px; line-height: 23px; color: #1B242B; }
+#body_content_inner p { margin-top: 0; }
+#body_content_inner a { color: #0F80C3; }
+#body_content_inner address { font-style: normal; padding: 0; border: 0; }
+.ndm-items th, .ndm-items td, .ndm-totals td { border-left: 0; border-right: 0; }
+@media screen and (max-width: 620px) {
+	.ndm-wrap { width: 100% !important; }
+	.ndm-band { padding: 24px 22px 22px !important; }
+	.ndm-content { padding: 24px 22px 28px !important; }
+	.ndm-h1 { font-size: 24px !important; line-height: 30px !important; }
+	.ndm-fact { padding-left: 16px !important; padding-right: 12px !important; }
+	.ndm-foot-col { display: block !important; width: 100% !important; padding: 0 0 18px !important; }
+}

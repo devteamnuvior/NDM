@@ -217,7 +217,7 @@ export function HeaderBar({ dark, current, top = 36, visible = true, cartCount =
               <button type="button" onClick={onCart} aria-label={`Cart, ${cartCount} ${cartCount === 1 ? "item" : "items"}`} className={`relative ${icon}`}>
                 <IconBag size={21} />
                 {cartCount > 0 && (
-                  <span className="absolute top-0.5 right-0.5 grid h-[17px] min-w-[17px] place-items-center rounded-full bg-ndm-blue px-1 font-inter text-[10.5px] leading-none font-semibold text-white">
+                  <span id="cart-head-count" className="absolute top-0.5 right-0.5 grid h-[17px] min-w-[17px] place-items-center rounded-full bg-ndm-blue px-1 font-inter text-[10.5px] leading-none font-semibold text-white">
                     {cartCount}
                   </span>
                 )}

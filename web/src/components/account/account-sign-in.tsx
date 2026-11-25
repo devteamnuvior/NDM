@@ -58,7 +58,7 @@ export function AccountSignIn({ ready }: { ready: boolean }) {
         mode === "signin"
           ? await signInAction({ email: v("email"), password: v("password") })
           : mode === "register"
-            ? await registerAction({ first: v("first"), last: v("last"), email: v("email"), password: v("password"), agree: f.get("agree") === "on", company: v("company") })
+            ? await registerAction({ first: v("first"), last: v("last"), email: v("email"), password: v("password"), agree: f.get("agree") === "on", company: v("ndm_hp") })
             : await requestResetAction({ email: v("email") });
       setResult(answer);
       if (answer.ok && mode !== "forgot") router.refresh();
@@ -130,7 +130,7 @@ export function AccountSignIn({ ready }: { ready: boolean }) {
             {mode === "register" && (
               <>
                 {/* left empty by people; filled in by form-filling robots */}
-                <input name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 opacity-0" />
+                <input name="ndm_hp" tabIndex={-1} autoComplete="off" data-1p-ignore="" data-lpignore="true" aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 opacity-0" />
                 <label className="mt-1 flex items-start gap-2.5 font-inter text-[13.5px] leading-[1.5] text-ndm-muted">
                   <input name="agree" type="checkbox" required className="mt-0.5 size-4 shrink-0 accent-[#0F80C3]" />
                   <span>

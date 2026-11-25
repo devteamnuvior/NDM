@@ -24,6 +24,8 @@ export function BeforeAfter({ copy = HOME_COPY.results, tight = false }: { copy?
   useReveal(section);
   const [edge, setEdge] = useState<[atStart: boolean, atEnd: boolean]>([true, false]);
 
+  const cases = copy.cases?.length ? copy.cases : CASES;
+
   const sync = () => {
     const r = rail.current;
     if (!r) return;
@@ -64,18 +66,18 @@ export function BeforeAfter({ copy = HOME_COPY.results, tight = false }: { copy?
         </div>
         <div className="rv" style={{ transitionDelay: ".12s" }}>
           <Button href={pagePath("beforeAfter")} v="line">
-            See all before &amp; after
+            {copy.button || "See all before & after"}
           </Button>
         </div>
       </div>
       <div className="side-rail relative mt-[clamp(32px,4vw,52px)]">
         <ul ref={rail} onScroll={sync} role="list" className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-[var(--gx)] pb-2" style={{ scrollPaddingInline: "var(--gx)" }}>
-          {CASES.map((c, i) => (
+          {cases.map((c, i) => (
             <li key={c.id} className="ba-slide shrink-0 snap-start">
               <figure className="m-0">
                 <BaCompare c={c} i={i} nudge={i < 2} />
                 <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
-                  <span className="font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">{`Model ${c.id}`}</span>
+                  <span className="font-aeonik text-[18px] leading-[1.2] tracking-[-0.01em] text-ndm-ink">{c.name || `Model ${c.id}`}</span>
                   <span className="font-inter text-[13px] text-ndm-muted">{c.treat}</span>
                 </figcaption>
               </figure>

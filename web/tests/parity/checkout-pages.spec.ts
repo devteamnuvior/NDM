@@ -34,15 +34,25 @@ async function openBoth(browser: Browser, vp: { width: number; height: number },
     await p.evaluate(([cart, order]) => { localStorage.setItem("ndm-cart", JSON.stringify(cart)); localStorage.setItem("ndm-last-order", JSON.stringify(order)); }, [page.cart, ORDER] as const);
     await p.reload();
     await p.waitForSelector(SECTION, { state: "visible", timeout: 60_000 });
-    await p.addStyleTag({ content: `.offer-pop-root{display:none!important} input[name=company]{display:none!important} [data-step="0"] fieldset:has(input[name=clinic]){display:none!important} ${SECTION} > div:first-child:has(#co-title), ol[aria-label="Checkout progress"]{display:none!important}` });
+    await p.addStyleTag({ content: `.offer-pop-root{display:none!important} [data-step="0"] fieldset:has(input[name=clinic]){display:none!important} ${SECTION} > div:first-child:has(#co-title), ol[aria-label="Checkout progress"]{display:none!important}` });
     await p.evaluate(() => {
       for (const el of Array.from(document.querySelectorAll("main p, main span"))) {
-        if (el.children.length <= 1 && /Prototype: nothing is charged or sent/.test(el.textContent ?? "")) el.lastChild!.textContent = "Nothing is charged online";
+        if (el.children.length <= 1 && /Prototype: nothing is charged or sent/.test(el.textContent ?? "")) el.lastChild!.textContent = "Secure card payment at checkout";
+        /* every order is paid online by card (user, 2026-11-19): the prototype's pay-at-the-clinic sentences get the site's words */
+        if (el.children.length <= 1 && el.textContent?.trim() === "Nothing is charged online") el.lastChild!.textContent = "Secure card payment at checkout";
+        if (el.children.length <= 1 && /You pay at the clinic once your plan is confirmed\.$/.test(el.textContent ?? "")) el.lastChild!.textContent = "Every treatment starts with a free, in-person consultation. Payment is made online by card at checkout.";
+        if (el.textContent === "HST is estimated. Your provider confirms your plan and final price at the clinic.") el.textContent = "HST is estimated until checkout. Your provider confirms your plan at your consultation.";
         if (el.textContent === "Not available in this preview.") el.textContent = "Not available online.";
       }
-      /* no appointment step for now (user, 2026-11-18): the site has three checkout steps and asks for the clinic with the details */
+      /* no appointment step for now (user, 2026-11-18): the site has two checkout steps (no review step either) and asks for the clinic with the details */
       for (const el of Array.from(document.querySelectorAll("main p, main button"))) {
-        if (el.textContent === "Step 1 of 4") el.textContent = "Step 1 of 3";
+        if (el.textContent === "Step 1 of 4") el.textContent = "Step 1 of 2";
+      }
+      /* the phone is required (the card processor refuses a payment without one): no "(optional)" beside it */
+      for (const el of Array.from(document.querySelectorAll("main label span span"))) {
+        if (el.textContent === "(optional)" && el.parentElement?.textContent?.trim().startsWith("Phone")) el.remove();
+      }
+      for (const el of Array.from(document.querySelectorAll("main p, main button"))) {
         if (el.textContent?.trim() === "Continue to appointment") el.firstChild!.textContent = "Continue to payment";
       }
       window.scrollTo(0, 0);

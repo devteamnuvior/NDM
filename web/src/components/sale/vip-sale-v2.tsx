@@ -16,7 +16,7 @@
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import { bfsShort, planPrice, planTotals, type Deal, type Item, type Opt, type PlanLine } from "@/components/bf-sale/data";
 import { AWARD_BADGES } from "@/components/reviews/award-badges";
 import e2019 from "@/assets/images/awards/even/top-choice-2019.png";
@@ -31,11 +31,12 @@ import { Button } from "@/components/ui/button";
 import { IconClose, IconPhone, IconPin } from "@/components/ui/icons";
 import { CLINICS, HOURS } from "@/config/site";
 import { FINANCING_URL } from "@/config/specials";
-import { VIP2 } from "@/config/vip-sale-v2";
+import { VIP2 as VIP_WORDS, type SaleWords } from "@/config/vip-sale-v2";
 import { useOnScroll } from "@/hooks/use-on-scroll";
 import { withBase } from "@/lib/base-path";
 import { cartKey, checkCart, setCartQty, setTypedCode } from "@/lib/cart";
 import { byId } from "@/lib/dom";
+import { firstShown, flyTo } from "@/lib/fly-to";
 import { optimized, optimizedSrcSet } from "@/lib/optimized-image";
 import { formatPrice as money } from "@/lib/prices";
 import { tel } from "@/lib/routes";
@@ -57,6 +58,12 @@ const go = (id: string) => (e?: MouseEvent) => {
   scrollToY(el.getBoundingClientRect().top + window.scrollY - 76);
 };
 
+/* ------------------------------------------------------------------ words */
+
+/** The page's words: the VIP Sale's, or Black Friday's on /black-friday (same layout, its own colours). */
+const Words = createContext<SaleWords>(VIP_WORDS);
+const useWords = () => useContext(Words);
+
 /* ------------------------------------------------------------------ tracking */
 
 type Fbq = (kind: "track" | "trackCustom", name: string, data?: Record<string, unknown>) => void;
@@ -66,11 +73,15 @@ type Fbq = (kind: "track" | "trackCustom", name: string, data?: Record<string, u
  * AddToCart ("Add to my list"), InitiateCheckout ("Check out"), Contact (a call or the chat) and the custom
  * ConsultationClick. The purchase itself is the confirmation page's event. Nothing about the visitor is sent.
  */
+/** The page's event prefix ("vip_sale", "bf_sale"), set by the page from its words once it is on screen. */
+let eventPrefix = VIP_WORDS.page.event;
+
 function track(name: string, data: Record<string, unknown> = {}, custom = false): void {
   const w = window as unknown as { fbq?: Fbq; dataLayer?: Record<string, unknown>[] };
   try {
-    w.fbq?.(custom ? "trackCustom" : "track", name, data);
-    w.dataLayer?.push({ event: `vip_sale_${name}`, ...data });
+    /* the pixel's event names are Meta's own: the sale travels as a parameter */
+    w.fbq?.(custom ? "trackCustom" : "track", name, { ...data, sale: eventPrefix });
+    w.dataLayer?.push({ event: `${eventPrefix}_${name}`, ...data });
   } catch {
     /* a blocked or broken tag never breaks the page */
   }
@@ -132,12 +143,12 @@ const leftWords = (t: Clock): string => {
 /* ------------------------------------------------------------------ small pieces */
 
 const Tag = ({ children, dark = false }: { children: ReactNode; dark?: boolean }) => (
-  <p className={`flex items-center gap-2.5 font-inter text-[11.5px] font-semibold uppercase tracking-[.17em] ${dark ? "text-[#F0D79B]" : "text-[#7A5A16]"}`}><i aria-hidden="true" className="size-[7px] rounded-full bg-[#C9A24E]" />{children}</p>
+  <p className={`flex items-center gap-2.5 font-inter text-[11.5px] font-semibold uppercase tracking-[.17em] ${dark ? "text-[color:var(--v-F0D79B)]" : "text-[color:var(--v-7A5A16)]"}`}><i aria-hidden="true" className="size-[7px] rounded-full bg-[color:var(--v-C9A24E)]" />{children}</p>
 );
 
 /** Every h2: two colours, the second on its own line. */
 const Title = ({ id, lead, strong, dark = false }: { id: string; lead: string; strong: string; dark?: boolean }) => (
-  <h2 id={id} className={`mt-3 font-aeonik text-[clamp(31px,3.6vw,50px)] font-normal leading-[1.06] tracking-[-0.03em] ${dark ? "text-white" : "text-ndm-ink"}`}>{lead}<br /><span className={`tt-strong ${dark ? "text-[#E2C27A]" : "text-[#0C72AE]"}`}>{strong}</span></h2>
+  <h2 id={id} className={`mt-3 font-aeonik text-[clamp(31px,3.6vw,50px)] font-normal leading-[1.06] tracking-[-0.03em] ${dark ? "text-white" : "text-ndm-ink"}`}>{lead}<br /><span className={`tt-strong ${dark ? "text-[color:var(--v-E2C27A)]" : "text-[color:var(--v-0C72AE)]"}`}>{strong}</span></h2>
 );
 
 const Photo = ({ src, alt, widths, sizes, className, lazy = true }: { src: string; alt: string; widths: number[]; sizes: string; className: string; lazy?: boolean }) => (
@@ -202,6 +213,7 @@ function Dropdown({ label, value, options, onChange, wide = false }: { label: st
 /* ------------------------------------------------------------------ header */
 
 function Header({ count, day, openList }: { count: number; day: string; openList: () => void }) {
+  const VIP2 = useWords();
   const [calls, setCalls] = useState(false);
   return (
     <>
@@ -213,9 +225,9 @@ function Header({ count, day, openList }: { count: number; day: string; openList
       <header className="sticky top-0 z-50 border-b border-black/[.07] bg-white/95 backdrop-blur-[14px]">
         <div className="relative mx-auto flex h-[64px] max-w-[1280px] items-center justify-between gap-3 px-[var(--gx)]">
           <div className="flex shrink-0 items-center gap-10 xl:gap-14">
-            <Link href="/" prefetch={false} className="shrink-0" aria-label="NewDermaMed home"><img src={withBase("/assets/icons/logo-vip.svg")} alt="NewDermaMed" width="317" height="62" className="h-[24px] w-auto min-[360px]:h-[30px] sm:h-[38px]" /></Link>
-          <nav aria-label="VIP Sale page" className="hidden items-center gap-5 font-inter text-[14.5px] font-medium text-ndm-ink lg:flex xl:gap-7">
-            <a href="#vip-list" onClick={go("vip-list")} className="v2-nav"><span className="v2-roll"><span>VIP Sales</span><span aria-hidden="true">VIP Sales</span></span></a>
+            <Link href="/" prefetch={false} className="shrink-0" aria-label="NewDermaMed home"><img src={withBase(VIP2.page.logo)} alt="NewDermaMed" width="317" height="62" className="h-[24px] w-auto min-[360px]:h-[30px] sm:h-[38px]" /></Link>
+          <nav aria-label={VIP2.page.navLabel} className="hidden items-center gap-5 font-inter text-[14.5px] font-medium text-ndm-ink lg:flex xl:gap-7">
+            <a href="#vip-list" onClick={go("vip-list")} className="v2-nav"><span className="v2-roll"><span>{VIP2.page.nav}</span><span aria-hidden="true">{VIP2.page.nav}</span></span></a>
             <a href="#clinic" onClick={go("clinic")} className="v2-nav"><span className="v2-roll"><span>The Clinics</span><span aria-hidden="true">The Clinics</span></span></a>
           </nav>
           </div>
@@ -224,7 +236,7 @@ function Header({ count, day, openList }: { count: number; day: string; openList
               <span aria-hidden="true" className="v2-phone"><IconMobile /></span>
               <span className="grid gap-0.5">
                 {CLINICS.map((c) => (
-                  <a key={c.id} href={tel(c.phone)} onClick={() => track("Contact", { method: "phone", clinic: c.name, from: "header" })} className="flex items-baseline gap-2 whitespace-nowrap text-[14px] font-semibold leading-[1.25] tabular-nums hover:text-[#0C72AE]"><small className="w-[68px] text-[12.5px] font-normal text-ndm-muted">{c.name}</small>{c.phone}</a>
+                  <a key={c.id} href={tel(c.phone)} onClick={() => track("Contact", { method: "phone", clinic: c.name, from: "header" })} className="flex items-baseline gap-2 whitespace-nowrap text-[14px] font-semibold leading-[1.25] tabular-nums hover:text-[color:var(--v-0C72AE)]"><small className="w-[68px] text-[12.5px] font-normal text-ndm-muted">{c.name}</small>{c.phone}</a>
                 ))}
               </span>
             </p>
@@ -238,8 +250,8 @@ function Header({ count, day, openList }: { count: number; day: string; openList
                 </ul>
               )}
             </div>
-            <button type="button" onClick={openList} className="inline-flex h-11 items-center gap-2 whitespace-nowrap rounded-full bg-[#0B1B29] pl-3.5 pr-2 font-inter text-[14px] font-semibold text-white min-[360px]:gap-2.5 min-[360px]:pl-4">
-              <span className="max-[359px]:hidden">{VIP2.name}</span><span className="min-[360px]:hidden">My list</span><b className="vip-off grid h-7 min-w-7 place-items-center rounded-full px-1.5 text-[12.5px] tabular-nums">{count}</b>
+            <button type="button" onClick={openList} className="inline-flex h-11 items-center gap-2 whitespace-nowrap rounded-full bg-[color:var(--v-0B1B29)] pl-3.5 pr-2 font-inter text-[14px] font-semibold text-white min-[360px]:gap-2.5 min-[360px]:pl-4">
+              <span className="max-[359px]:hidden">{VIP2.name}</span><span className="min-[360px]:hidden">My list</span><b id="v2-list-count" className={`vip-off fly-${VIP2.page.fly}-ring grid h-7 min-w-7 place-items-center rounded-full px-1.5 text-[12.5px] tabular-nums`}>{count}</b>
             </button>
           </div>
         </div>
@@ -275,36 +287,37 @@ function useTopPacks(view: SaleView, packs: Pack[]): { p: Pack; title: string; s
   }, [view.cards, packs]);
 }
 
-function Hero({ view, t, day, best, top, inList, toggle }: { view: SaleView; t: Clock; day: string; best: number; top: ReturnType<typeof useTopPacks>; inList: (key: string) => boolean; toggle: (p: Pack, from: string) => void }) {
+function Hero({ view, t, day, best, top, inList, toggle }: { view: SaleView; t: Clock; day: string; best: number; top: ReturnType<typeof useTopPacks>; inList: (key: string) => boolean; toggle: (p: Pack, from: string, el?: HTMLElement, name?: string) => void }) {
+  const VIP2 = useWords();
   const { photo } = view.copy.hero;
   const left = leftWords(t);
   return (
     <section aria-labelledby="v2-title" className="vip-hero relative isolate overflow-hidden text-white">
       <img src={optimized(photo.src, 1080)} srcSet={optimizedSrcSet(photo.src, [640, 828, 1080, 1920]) || undefined} sizes="(min-width: 1024px) 60vw, 100vw" width={photo.width} height={photo.height} alt="" fetchPriority="high" className="vip-hero-pic absolute right-0 top-0 -z-10 h-[46%] w-full object-cover object-[58%_50%] lg:h-full lg:w-[60%]" />
-      <div className="mx-auto grid max-w-[1280px] gap-8 px-[var(--gx)] pb-[clamp(34px,4.4vw,60px)] pt-[clamp(26px,4.4vw,60px)] lg:grid-cols-[minmax(0,1.06fr)_minmax(0,.94fr)] lg:items-center lg:gap-12">
+      <div className="vip-hero-in mx-auto grid max-w-[1280px] gap-8 px-[var(--gx)] pb-[clamp(34px,4.4vw,60px)] pt-[clamp(26px,4.4vw,60px)] lg:grid-cols-[minmax(0,1.06fr)_minmax(0,.94fr)] lg:items-center lg:gap-12">
         <div>
-          <p className="inline-flex items-center gap-2.5 rounded-full border border-white/[.16] bg-white/[.08] px-3.5 py-2 font-inter text-[11px] font-semibold uppercase leading-[1.2] tracking-[.14em] text-[#E6EDF5] sm:text-[11.5px] sm:tracking-[.17em]">
-            <i aria-hidden="true" className="vip-live shrink-0" />{t.over ? "The VIP Sale has ended" : <>Ends {day}{left && <> · {left} left</>}</>}
+          <p className="inline-flex items-center gap-2.5 rounded-full border border-white/[.16] bg-white/[.08] px-3.5 py-2 font-inter text-[11px] font-semibold uppercase leading-[1.2] tracking-[.14em] text-[color:var(--v-E6EDF5)] sm:text-[11.5px] sm:tracking-[.17em]">
+            <i aria-hidden="true" className="vip-live shrink-0" />{t.over ? VIP2.page.ended : <>Ends {day}{left && <> · {left} left</>}</>}
           </p>
           <h1 id="v2-title" className="mt-5 font-aeonik font-normal text-white">
-            <span className="block text-[clamp(46px,5.6vw,76px)] leading-none tracking-[-0.02em]">VIP <span className="tt-strong v2-shine">Sale</span></span>
+            <span className="block text-[clamp(46px,5.6vw,76px)] leading-none tracking-[-0.02em]">{VIP2.page.heading[0]} <span className="tt-strong v2-shine">{VIP2.page.heading[1]}</span></span>
             {best > 0 && (
               <span className="mt-1 flex flex-wrap items-baseline gap-x-3 leading-none">
-                <small className="font-inter text-[12px] font-semibold uppercase tracking-[.3em] text-[#D5DEE8]">Up to</small>
+                <small className="font-inter text-[12px] font-semibold uppercase tracking-[.3em] text-[color:var(--v-D5DEE8)]">Up to</small>
                 <b className="v2-gold text-[clamp(96px,11.5vw,156px)] font-normal leading-[.98] tracking-[-0.03em]">{best}%</b>
                 <span className="tt-strong text-[clamp(40px,4.6vw,62px)] text-white">off</span>
               </span>
             )}
           </h1>
-          <p className="mt-3 max-w-[44ch] font-inter text-[16px] leading-[1.6] text-[#C4CEDA] sm:text-[17px]">{VIP2.hero.sub} <strong className="font-semibold text-white">{VIP2.hero.gift}</strong>. {VIP2.hero.welcome}</p>
+          <p className="mt-3 max-w-[44ch] font-inter text-[16px] leading-[1.6] text-[color:var(--v-C4CEDA)] sm:text-[17px]">{VIP2.hero.sub} <strong className="font-semibold text-white">{VIP2.hero.gift}</strong>. {VIP2.hero.welcome}</p>
           <div id="v2-cta" className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3.5">
             <a href="#vip-list" onClick={go("vip-list")} className="btn bfd-cta h-[54px] px-8 text-[16.5px] font-semibold max-sm:w-full">{VIP2.hero.button}</a>
-            <a href="#/book" onClick={() => track("ConsultationClick", { from: "hero" }, true)} className="font-inter text-[14.5px] leading-[1.45] text-[#F0D79B] underline decoration-[#F0D79B]/50 underline-offset-[5px] max-sm:w-full max-sm:text-center">{VIP2.hero.link}</a>
+            <a href="#/book" onClick={() => track("ConsultationClick", { from: "hero" }, true)} className="font-inter text-[14.5px] leading-[1.45] text-[color:var(--v-F0D79B)] underline decoration-[color:var(--v-F0D79B)]/50 underline-offset-[5px] max-sm:w-full max-sm:text-center">{VIP2.hero.link}</a>
           </div>
         </div>
         {top.length > 0 && (
           <div className="vip-cd rounded-[22px] px-5 pb-5 pt-1.5 shadow-[0_30px_70px_rgba(0,0,0,.45)] sm:px-[26px]">
-            <p className="flex items-center justify-between gap-3 py-4 font-inter text-[11.5px] font-semibold uppercase tracking-[.17em] text-[#DCE4EC]"><span className="inline-flex items-center gap-2.5"><i aria-hidden="true" className="size-[7px] rounded-full bg-[#C9A24E]" />{VIP2.hero.card}</span><span className="text-white/50">{day}</span></p>
+            <p className="flex items-center justify-between gap-3 py-4 font-inter text-[11.5px] font-semibold uppercase tracking-[.17em] text-[color:var(--v-DCE4EC)]"><span className="inline-flex items-center gap-2.5"><i aria-hidden="true" className="size-[7px] rounded-full bg-[color:var(--v-C9A24E)]" />{VIP2.hero.card}</span><span className="whitespace-nowrap text-white/50">{day}</span></p>
             <ul role="list">
               {top.map(({ p, title, sub }) => {
                 const on = inList(p.key);
@@ -317,8 +330,8 @@ function Hero({ view, t, day, best, top, inList, toggle }: { view: SaleView; t: 
                       <span className="mt-0.5 block font-inter text-[13.5px] text-white/55">{sub}</span>
                     </div>
                     <p className="self-end whitespace-nowrap text-right"><b className="font-aeonik text-[clamp(28px,2.5vw,33px)] font-normal leading-none text-white">{money(p.pay)}</b><s className="ml-2 font-inter text-[13.5px] text-white/50">{money(p.reg)}</s></p>
-                    <button type="button" aria-pressed={on} onClick={() => toggle(p, "hero")} className={`v2-mini justify-self-start ${on ? "is-on" : ""}`}>{on ? VIP2.list.added : VIP2.list.add}</button>
-                    <p className="text-right font-inter text-[13.5px] font-semibold text-[#F0D79B]">Save {money(p.save)}</p>
+                    <button type="button" aria-pressed={on} onClick={(e) => toggle(p, "hero", e.currentTarget, title)} className={`v2-mini justify-self-start ${on ? "is-on" : ""}`}>{on ? VIP2.list.added : VIP2.list.add}</button>
+                    <p className="text-right font-inter text-[13.5px] font-semibold text-[color:var(--v-F0D79B)]">Save {money(p.save)}</p>
                   </li>
                 );
               })}
@@ -334,13 +347,14 @@ function Hero({ view, t, day, best, top, inList, toggle }: { view: SaleView; t: 
 
 /** Who the clinic is, in one line under the hero: the award, the years, the free first visit, both locations. */
 function Strip() {
+  const VIP2 = useWords();
   const s = VIP2.strip;
   return (
-    <ul role="list" aria-label="About NewDermaMed" className="grid grid-cols-2 bg-[#0A1722] font-inter text-[13.5px] leading-[1.4] text-[#C4CEDA] lg:grid-cols-[1.15fr_.8fr_1.2fr_1.1fr]">
+    <ul role="list" aria-label="About NewDermaMed" className="grid grid-cols-2 bg-[color:var(--v-0A1722)] font-inter text-[13.5px] leading-[1.4] text-[color:var(--v-C4CEDA)] lg:grid-cols-[1.15fr_.8fr_1.2fr_1.1fr]">
       <li className="v2-cell"><Image src={AWARD_BADGES[2026]} alt="" width={34} height={34} className="size-[34px] shrink-0 object-contain" /><span><b>{s.award}</b> {s.awardYears}</span></li>
-      <li className="v2-cell"><span aria-hidden="true" className="grid size-[34px] shrink-0 place-items-center rounded-full border-[1.5px] border-[#E2C27A] font-inter text-[14px] font-bold leading-none tracking-[-0.02em] text-[#E2C27A] tabular-nums">16</span><span><b>{s.years}</b> {s.yearsIn}</span></li>
+      <li className="v2-cell"><span aria-hidden="true" className="grid size-[34px] shrink-0 place-items-center rounded-full border-[1.5px] border-[color:var(--v-E2C27A)] font-inter text-[14px] font-bold leading-none tracking-[-0.02em] text-[color:var(--v-E2C27A)] tabular-nums">16</span><span><b>{s.years}</b> {s.yearsIn}</span></li>
       <li className="v2-cell"><span>{s.visit}</span></li>
-      <li className="v2-cell"><IconPin className="shrink-0 text-[#E2C27A]" /><span><b>2 clinics</b> {CLINICS.map((c) => c.near).join(" · ")}</span></li>
+      <li className="v2-cell"><IconPin className="shrink-0 text-[color:var(--v-E2C27A)]" /><span><b>2 clinics</b> {CLINICS.map((c) => c.near).join(" · ")}</span></li>
     </ul>
   );
 }
@@ -349,11 +363,12 @@ function Strip() {
 
 /** The clinic film: a still until it is asked for, so a phone on mobile data downloads nothing it will not watch. */
 function Film() {
+  const VIP2 = useWords();
   const [on, setOn] = useState(false);
   return (
-    <div className="relative aspect-video overflow-hidden rounded-[22px] bg-[#EDEBE6]">
+    <div className="relative aspect-video overflow-hidden rounded-[22px] bg-[color:var(--v-EDEBE6)]">
       {on
-        ? <video src={withBase(FILM.src)} poster={withBase(FILM.poster)} controls autoPlay playsInline className="absolute inset-0 h-full w-full bg-[#EDEBE6] object-cover" />
+        ? <video src={withBase(FILM.src)} poster={withBase(FILM.poster)} controls autoPlay playsInline className="absolute inset-0 h-full w-full bg-[color:var(--v-EDEBE6)] object-cover" />
         : (
           <button type="button" onClick={() => { setOn(true); track("ClinicFilmPlay", {}, true); }} aria-label={VIP2.clinic.videoLabel} className="group absolute inset-0 grid place-items-center">
             <Photo src={FILM.poster} alt="" widths={[640, 828, 1080]} sizes="(min-width: 1024px) 640px, 100vw" className="absolute inset-0 h-full w-full object-cover" />
@@ -373,6 +388,7 @@ const BADGES: [year: number, badge: StaticImageData][] = [[2019, e2019], [2020, 
  * lands last with a gold shine and two rings.
  */
 function Awards() {
+  const VIP2 = useWords();
   const c = VIP2.clinic;
   const total = BADGES.length;
   const box = useRef<HTMLDivElement>(null);
@@ -393,7 +409,7 @@ function Awards() {
     return () => { cancelAnimationFrame(raf); io.disconnect(); clearInterval(timer); };
   }, [total]);
   return (
-    <div ref={box} className="mt-8 grid gap-6 rounded-[22px] bg-[#FAFAF8] p-5 ring-1 ring-black/[.07] sm:p-7 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center xl:gap-10">
+    <div ref={box} className="mt-8 grid gap-6 rounded-[22px] bg-[color:var(--v-FAFAF8)] p-5 ring-1 ring-black/[.07] sm:p-7 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center xl:gap-10">
       <div>
         <p className="font-aeonik text-[clamp(22px,2.2vw,28px)] leading-[1.2] text-ndm-ink">{c.awardLead}</p>
         <p className="mt-1 font-inter text-[14.5px] text-ndm-muted">{c.awardText}</p>
@@ -439,6 +455,7 @@ function Awards() {
 }
 
 function Clinic() {
+  const VIP2 = useWords();
   const c = VIP2.clinic;
   return (
     <section id="clinic" aria-labelledby="v2-clinic-title" className="scroll-mt-[64px] bg-white px-[var(--gx)] pb-[clamp(68px,8.6vw,128px)] pt-[clamp(44px,6vw,84px)] text-ndm-ink">
@@ -453,23 +470,23 @@ function Clinic() {
               {c.photos.map((p) => (
                 <li key={p.src} className="relative aspect-[4/3] w-[136px] shrink-0 overflow-hidden rounded-[14px] sm:w-auto">
                   <Photo src={p.src} alt={p.alt} widths={[256, 384]} sizes="(min-width: 640px) 150px, 136px" className="absolute inset-0 h-full w-full object-cover" />
-                  <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0B1B29]/45 to-transparent px-2.5 pb-2 pt-7 [text-shadow:0_1px_3px_rgba(11,27,41,.55)] font-inter text-[10.5px] font-semibold uppercase tracking-[.1em] text-white/90">{p.label}</span>
+                  <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[color:var(--v-0B1B29)]/45 to-transparent px-2.5 pb-2 pt-7 [text-shadow:0_1px_3px_rgba(11,27,41,.55)] font-inter text-[10.5px] font-semibold uppercase tracking-[.1em] text-white/90">{p.label}</span>
                 </li>
               ))}
             </ul>
           </div>
           <ul role="list" className="grid min-w-0 gap-3.5">
             {CLINICS.map((k) => (
-              <li key={k.id} className="grid grid-cols-[88px_minmax(0,1fr)] content-center items-start gap-4 rounded-[20px] bg-[#FAFAF8] p-4 ring-1 ring-black/[.07] sm:grid-cols-[112px_minmax(0,1fr)] sm:gap-[18px]">
+              <li key={k.id} className="grid grid-cols-[88px_minmax(0,1fr)] content-center items-start gap-4 rounded-[20px] bg-[color:var(--v-FAFAF8)] p-4 ring-1 ring-black/[.07] sm:grid-cols-[112px_minmax(0,1fr)] sm:gap-[18px]">
                 <div className="relative aspect-square overflow-hidden rounded-[14px]"><Photo src={CLINIC_PHOTOS[k.id]} alt={`The NewDermaMed ${k.name} clinic`} widths={[256]} sizes="112px" className="absolute inset-0 h-full w-full object-cover" /></div>
                 <div className="min-w-0">
-                  <p className="font-inter text-[10.5px] font-semibold uppercase tracking-[.14em] text-[#7A5A16]">{k.near}</p>
+                  <p className="font-inter text-[10.5px] font-semibold uppercase tracking-[.14em] text-[color:var(--v-7A5A16)]">{k.near}</p>
                   <h3 className="mt-1 font-aeonik text-[23px] font-normal leading-[1.15] text-ndm-ink">{k.name}</h3>
                   <p className="mt-1.5 font-inter text-[13.5px] leading-[1.5] text-ndm-ink">{k.address}</p>
                   <p className="mt-1 font-inter text-[13px] leading-[1.5] text-ndm-muted">{k.directions}</p>
                   <p className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 font-inter">
                     <a href={tel(k.phone)} onClick={() => track("Contact", { method: "phone", clinic: k.name, from: "clinic" })} className="inline-flex items-center gap-1.5 text-[16px] font-semibold text-ndm-ink"><IconPhone />{k.phone}</a>
-                    <a href={mapLink(k.address)} target="_blank" rel="noopener" className="text-[13.5px] font-semibold text-[#0C72AE] underline decoration-[#0C72AE]/40 underline-offset-[5px]">Directions</a>
+                    <a href={mapLink(k.address)} target="_blank" rel="noopener" className="text-[13.5px] font-semibold text-[color:var(--v-0C72AE)] underline decoration-[color:var(--v-0C72AE)]/40 underline-offset-[5px]">Directions</a>
                   </p>
                 </div>
               </li>
@@ -485,7 +502,8 @@ function Clinic() {
 
 /* ------------------------------------------------------------------ the price list */
 
-function Row({ d, best, order, inList, toggle }: { d: Deal; best: number; order: number; inList: (key: string) => boolean; toggle: (p: Pack, from: string) => void }) {
+function Row({ d, best, order, inList, toggle }: { d: Deal; best: number; order: number; inList: (key: string) => boolean; toggle: (p: Pack, from: string, el?: HTMLElement, name?: string) => void }) {
+  const VIP2 = useWords();
   /* the row that carries the headline opens on that package, so its price shows first; the others open on their first */
   const start = useMemo(() => {
     let at: [number, number] = [0, 0];
@@ -503,7 +521,7 @@ function Row({ d, best, order, inList, toggle }: { d: Deal; best: number; order:
   const areas = d.items.length > 1;
   return (
     <li className={`v2-row ${on ? "is-on" : ""}`} style={{ "--i": Math.min(order, 9) } as CSSProperties}>
-      <h3 className="v2-row-name flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5 font-aeonik text-[20px] font-normal leading-[1.25] text-ndm-ink xl:text-[19px]"><span className="v2-row-title min-w-0">{cat}</span>{/* every row says the saving of the package it shows, worked out from its two prices; a package without a regular price has none */}{p.pct > 0 && <span className="v2-tag">{p.pct}% off</span>}</h3>
+      <h3 className="v2-row-name flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5 font-aeonik text-[20px] font-normal leading-[1.25] text-ndm-ink xl:text-[19px]"><span className="v2-row-title min-w-0 font-semibold">{cat}</span>{/* every row says the saving of the package it shows, worked out from its two prices; a package without a regular price has none */}{p.pct > 0 && <span className="v2-tag">{p.pct}% off</span>}</h3>
       <div className={`v2-row-pick grid gap-2 ${areas ? "grid-cols-[minmax(0,1fr)_minmax(0,var(--v2-pack,148px))]" : "grid-cols-1"}`}>
         {areas && <Dropdown label={`${cat}: treatment or area`} value={ii} options={d.items.map((x) => ({ text: cap(bfsShort(x[0], cat)) }))} onChange={(k) => { setIi(k); setPick(0); }} />}
         {packs.length > 1
@@ -513,15 +531,16 @@ function Row({ d, best, order, inList, toggle }: { d: Deal; best: number; order:
       </div>
       <p className="v2-row-price whitespace-nowrap">
         <b className="font-aeonik text-[28px] font-normal leading-[1.1] text-ndm-ink tabular-nums">{money(p.pay)}</b>
-        {p.reg > 0 && <s className="ml-2 font-inter text-[14px] text-[#7D8B9C]">{money(p.reg)}</s>}
-        {(p.save > 0 || p.each) && <span className="mt-0.5 block font-inter text-[13.5px] font-semibold text-[#0C72AE]">{p.save > 0 && <>Save {money(p.save)}</>}{p.save > 0 && p.each && <span className="font-normal text-ndm-muted max-[1359px]:hidden"> · </span>}{p.each && <span className="font-normal text-ndm-muted max-[1359px]:block">{p.each}</span>}</span>}
+        {p.reg > 0 && <s className="ml-2 font-inter text-[14px] text-[color:var(--v-7D8B9C)]">{money(p.reg)}</s>}
+        {(p.save > 0 || p.each) && <span className="mt-0.5 block font-inter text-[13.5px] font-semibold text-[color:var(--v-0C72AE)]">{p.save > 0 && <>Save {money(p.save)}</>}{p.save > 0 && p.each && <span className="font-normal text-ndm-muted max-[1359px]:hidden"> · </span>}{p.each && <span className="font-normal text-ndm-muted max-[1359px]:block">{p.each}</span>}</span>}
       </p>
-      <button type="button" aria-pressed={on} onClick={() => toggle(p, "list")} className={`v2-add ${on ? "is-on" : ""}`}>{on ? VIP2.list.added : VIP2.list.add}</button>
+      <button type="button" aria-pressed={on} onClick={(e) => toggle(p, "list", e.currentTarget, cat)} className={`v2-add ${on ? "is-on" : ""}`}>{on ? VIP2.list.added : VIP2.list.add}</button>
     </li>
   );
 }
 
-function PriceList({ view, rows, best, day, inList, toggle }: { view: SaleView; rows: Deal[]; best: number; day: string; inList: (key: string) => boolean; toggle: (p: Pack, from: string) => void }) {
+function PriceList({ view, rows, best, day, inList, toggle }: { view: SaleView; rows: Deal[]; best: number; day: string; inList: (key: string) => boolean; toggle: (p: Pack, from: string, el?: HTMLElement, name?: string) => void }) {
+  const VIP2 = useWords();
   const tabs = view.tabs.slice(1);
   const [tab, setTab] = useState("All");
   /* the rows play their entrance only once a tab has been chosen, never on the page's first paint */
@@ -568,6 +587,7 @@ function PriceList({ view, rows, best, day, inList, toggle }: { view: SaleView; 
 /* ------------------------------------------------------------------ after the list */
 
 function Next({ day, openChat }: { day: string; openChat: () => void }) {
+  const VIP2 = useWords();
   const n = VIP2.next;
   return (
     <section aria-labelledby="v2-next-title" className="px-[var(--gx)] pb-[clamp(44px,6vw,84px)]">
@@ -577,7 +597,7 @@ function Next({ day, openChat }: { day: string; openChat: () => void }) {
         <ol role="list" className="mt-7 grid rounded-[22px] bg-white px-5 shadow-[0_14px_40px_rgba(16,32,48,.08)] sm:px-[26px] md:grid-cols-3 md:px-0">
           {n.steps.map((s, i) => (
             <li key={s.title} className={`grid grid-cols-[44px_minmax(0,1fr)] gap-x-3 py-5 md:block md:px-[30px] md:py-[30px] ${i ? "border-t border-black/[.08] md:border-l md:border-t-0" : ""}`}>
-              <span aria-hidden="true" className="font-aeonik text-[30px] leading-none text-[#A9812E] tabular-nums md:text-[34px]">0{i + 1}</span>
+              <span aria-hidden="true" className="font-aeonik text-[30px] leading-none text-[color:var(--v-A9812E)] tabular-nums md:text-[34px]">0{i + 1}</span>
               <div className="min-w-0">
                 <h3 className="font-aeonik text-[21px] font-normal leading-[1.2] text-ndm-ink md:mt-[18px] md:text-[23px]">{s.title}</h3>
                 <p className="mt-1.5 font-inter text-[15px] leading-[1.6] text-ndm-muted">{s.text}</p>
@@ -589,7 +609,7 @@ function Next({ day, openChat }: { day: string; openChat: () => void }) {
           <div className="min-w-0">
             <Tag dark>{n.keep.tag}</Tag>
             <h3 className="mt-3 font-aeonik text-[clamp(25px,2.4vw,31px)] font-normal leading-[1.15]">{n.keep.title}</h3>
-            <p className="mt-2 max-w-[46ch] font-inter text-[15.5px] leading-[1.6] text-[#C4CEDA]">{n.keep.text.replace("{{day}}", day)}</p>
+            <p className="mt-2 max-w-[46ch] font-inter text-[15.5px] leading-[1.6] text-[color:var(--v-C4CEDA)]">{n.keep.text.replace("{{day}}", day)}</p>
           </div>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-3">
@@ -610,6 +630,7 @@ function Next({ day, openChat }: { day: string; openChat: () => void }) {
 }
 
 function Questions({ day }: { day: string }) {
+  const VIP2 = useWords();
   const f = VIP2.faq;
   return (
     <section aria-labelledby="v2-faq-title" className="bg-white px-[var(--gx)] py-[clamp(88px,11.5vw,176px)]">
@@ -620,11 +641,11 @@ function Questions({ day }: { day: string }) {
           {f.items.map(([q, a], i) => (
             <details key={q} open={i === 0} className="v2-q border-b border-black/10">
               <summary className="flex cursor-pointer items-center justify-between gap-4 px-1 py-4 font-inter text-[16px] font-semibold text-ndm-ink">{q}</summary>
-              <p className="max-w-[70ch] px-1 pb-[18px] font-inter text-[15.5px] leading-[1.6] text-ndm-muted">{a.replace("{{day}}", day)}{/pay over time/i.test(q) && <> <a href={FINANCING_URL} target="_blank" rel="noopener" className="font-semibold text-[#0C72AE] underline underline-offset-[5px]">See financing</a></>}</p>
+              <p className="max-w-[70ch] px-1 pb-[18px] font-inter text-[15.5px] leading-[1.6] text-ndm-muted">{a.replace("{{day}}", day)}{/pay over time/i.test(q) && <> <a href={FINANCING_URL} target="_blank" rel="noopener" className="font-semibold text-[color:var(--v-0C72AE)] underline underline-offset-[5px]">See financing</a></>}</p>
             </details>
           ))}
         </div>
-        <p className="mx-1 mt-6 font-inter text-[14.5px] text-ndm-muted"><Link href="/before-after" prefetch={false} className="font-semibold text-[#0C72AE] underline underline-offset-[5px]">{f.gallery}</Link> · {f.galleryNote}</p>
+        <p className="mx-1 mt-6 font-inter text-[14.5px] text-ndm-muted"><Link href="/before-after" prefetch={false} className="font-semibold text-[color:var(--v-0C72AE)] underline underline-offset-[5px]">{f.gallery}</Link> · {f.galleryNote}</p>
       </div>
     </section>
   );
@@ -633,14 +654,15 @@ function Questions({ day }: { day: string }) {
 /* The closing band, after dermahub.ca's: a light ground with wide rings, a small tag, one large two-line heading,
    a sentence, the button and a call pill for each clinic, then the hours and both intersections on one line. */
 function Final({ t, day }: { t: Clock; day: string }) {
+  const VIP2 = useWords();
   const left = leftWords(t);
   const f = VIP2.final;
   return (
     <section aria-labelledby="v2-final-title" className="v2-final relative isolate overflow-hidden px-[var(--gx)] pb-[clamp(36px,4.4vw,60px)] pt-[clamp(48px,5.6vw,80px)] text-center text-ndm-ink">
       <span aria-hidden="true" className="v2-rings" />
       <div className="relative mx-auto max-w-[900px]">
-        <p className="inline-flex items-center gap-3 font-inter text-[12px] font-semibold uppercase tracking-[.2em] text-[#7A5A16]"><i aria-hidden="true" className="h-px w-9 bg-[#C9A24E]" />{left ? `${left} left` : f.tag}</p>
-        <h2 id="v2-final-title" className="mt-5 font-aeonik text-[clamp(34px,4vw,54px)] font-normal leading-[1.08] tracking-[-0.03em]">{f.lead}<br className="lg:hidden" /> <span className="tt-strong text-[#A9812E]">{day}.</span></h2>
+        <p className="inline-flex items-center gap-3 font-inter text-[12px] font-semibold uppercase tracking-[.2em] text-[color:var(--v-7A5A16)]"><i aria-hidden="true" className="h-px w-9 bg-[color:var(--v-C9A24E)]" />{left ? `${left} left` : f.tag}</p>
+        <h2 id="v2-final-title" className="mt-5 font-aeonik text-[clamp(34px,4vw,54px)] font-normal leading-[1.08] tracking-[-0.03em]">{f.lead}<br className="lg:hidden" /> <span className="tt-strong text-[color:var(--v-A9812E)]">{day}.</span></h2>
         <p className="mx-auto mt-5 max-w-[54ch] font-inter text-[clamp(16px,1.3vw,18px)] leading-[1.65] text-ndm-muted [text-wrap:balance] lg:max-w-[78ch]">{f.text}</p>
         <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
           <a href="#vip-list" onClick={go("vip-list")} className="btn bfd-cta h-[56px] px-9 text-[16.5px] font-semibold max-sm:w-full">{VIP2.hero.button}</a>
@@ -699,6 +721,7 @@ function useOpenNow(): { open: boolean; text: string } | null {
    cards), kept to what a visitor from an ad needs: both clinics with a number to call, the hours, one button back
    to the prices, and the sale's terms. */
 function Footer() {
+  const VIP2 = useWords();
   const f = VIP2.footer;
   const now = useOpenNow();
   return (
@@ -707,7 +730,7 @@ function Footer() {
       <div className="relative mx-auto max-w-[1180px]">
         <div className="flex flex-col gap-6 py-10 md:flex-row md:items-center md:justify-between md:py-12">
           <div className="flex items-center gap-5">
-            <Link href="/" prefetch={false} aria-label="NewDermaMed home"><img src={withBase("/assets/icons/logo-vip.svg")} alt="NewDermaMed" width="317" height="62" loading="lazy" className="h-[46px] w-auto md:h-[58px]" /></Link>
+            <Link href="/" prefetch={false} aria-label="NewDermaMed home"><img src={withBase(VIP2.page.logo)} alt="NewDermaMed" width="317" height="62" loading="lazy" className="h-[46px] w-auto md:h-[58px]" /></Link>
             <span aria-hidden="true" className="hidden h-9 w-px bg-black/15 lg:block" />
             <p className="hidden max-w-[26ch] font-aeonik text-[17px] italic leading-[1.35] text-ndm-muted lg:block">{f.line}</p>
           </div>
@@ -715,22 +738,22 @@ function Footer() {
             {now && <span className="inline-flex items-center gap-2.5 rounded-full border border-black/[.12] bg-white/70 px-4 py-2.5 font-inter text-[13.5px] text-ndm-muted"><i aria-hidden="true" className={`v2-dot ${now.open ? "is-open" : ""}`} />{now.text}</span>}
           </div>
         </div>
-        <span aria-hidden="true" className="block h-px w-full bg-gradient-to-r from-[#C9A24E] via-black/15 to-transparent" />
+        <span aria-hidden="true" className="block h-px w-full bg-gradient-to-r from-[color:var(--v-C9A24E)] via-black/15 to-transparent" />
         <div className="grid gap-4 py-10 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,.8fr)] lg:gap-5 lg:py-12">
           {CLINICS.map((k) => (
             <section key={k.id} aria-label={`${k.name} clinic`} className="rounded-[26px] border border-black/[.08] bg-white/60 p-6 backdrop-blur-sm sm:p-7">
-              <p className="font-inter text-[11px] font-semibold uppercase tracking-[.16em] text-[#7A5A16]">{k.near}</p>
+              <p className="font-inter text-[11px] font-semibold uppercase tracking-[.16em] text-[color:var(--v-7A5A16)]">{k.near}</p>
               <h2 className="mt-1.5 font-aeonik text-[28px] font-normal leading-[1.1] text-ndm-ink">{k.name}</h2>
               <address className="mt-3 font-inter text-[15px] not-italic leading-[1.6] text-ndm-ink">{k.address}</address>
               <p className="mt-1 font-inter text-[13px] leading-[1.5] text-ndm-muted">{k.note}</p>
               <a href={tel(k.phone)} onClick={() => track("Contact", { method: "phone", clinic: k.name, from: "footer" })} className="group mt-5 flex items-center gap-3.5 font-inter text-[19px] font-semibold tabular-nums text-ndm-ink">
                 <span aria-hidden="true" className="v2-phone size-11 transition-transform duration-300 group-hover:scale-105"><IconMobile /></span>{k.phone}
               </a>
-              <a href={mapLink(k.address)} target="_blank" rel="noopener" className="mt-4 inline-block font-inter text-[13.5px] font-semibold text-[#0C72AE] underline decoration-[#0C72AE]/40 underline-offset-[5px]">Directions</a>
+              <a href={mapLink(k.address)} target="_blank" rel="noopener" className="mt-4 inline-block font-inter text-[13.5px] font-semibold text-[color:var(--v-0C72AE)] underline decoration-[color:var(--v-0C72AE)]/40 underline-offset-[5px]">Directions</a>
             </section>
           ))}
           <section aria-label="Hours" className="rounded-[26px] border border-black/[.08] bg-white/45 p-6 sm:p-7 md:col-span-2 lg:col-span-1">
-            <p className="font-inter text-[11px] font-semibold uppercase tracking-[.16em] text-[#7A5A16]">{f.hoursTag}</p>
+            <p className="font-inter text-[11px] font-semibold uppercase tracking-[.16em] text-[color:var(--v-7A5A16)]">{f.hoursTag}</p>
             <h2 className="mt-1.5 font-aeonik text-[28px] font-normal leading-[1.1] text-ndm-ink">{f.hours}</h2>
             <ul role="list" className="mt-4 font-inter text-[14.5px]">
               {HOURS.map(([d, h]) => <li key={d} className="flex items-center justify-between gap-4 border-b border-black/[.09] py-3 first:border-t"><span className="text-ndm-muted">{d.replace(" – ", " to ")}</span><span className="whitespace-nowrap font-semibold tabular-nums">{h.replace(" – ", " to ")}</span></li>)}
@@ -754,34 +777,35 @@ function Footer() {
 
 /** The chat mark: a speech bubble in the page's gold. */
 const IconChat = ({ size = 18 }: { size?: number }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="#E2C27A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" /></svg>
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" className="text-[color:var(--v-E2C27A)]" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" /></svg>
 );
 
 function ListBar({ list, t, show, openList, checkout, chatOpen, toggleChat }: { list: PlanLine[]; t: Clock; show: boolean; openList: () => void; checkout: () => void; chatOpen: boolean; toggleChat: () => void }) {
+  const VIP2 = useWords();
   const { withCode, saved } = planTotals(list);
   const n = list.length;
   const left = leftWords(t);
   if (!n && !show) return null;
   return (
-    <div className={`fixed inset-x-0 bottom-0 z-[60] border-t border-white/[.14] bg-[#09141F]/95 pb-[env(safe-area-inset-bottom)] text-white shadow-[0_-10px_30px_rgba(0,0,0,.35)] backdrop-blur-[10px] ${n ? "" : "lg:hidden"}`}>
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-2.5 px-[var(--gx)] py-2.5 sm:gap-3">
+    <div className={`fixed inset-x-0 bottom-0 z-[60] border-t border-white/[.14] bg-[color:var(--v-09141F)]/95 pb-[env(safe-area-inset-bottom)] text-white shadow-[0_-10px_30px_rgba(0,0,0,.35)] backdrop-blur-[10px] ${n ? "" : "lg:hidden"}`}>
+      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-2 px-[var(--gx)] py-2.5 sm:gap-3">
         {/* phones: the chat lives in the bar as a small icon, so nothing floats over the price list */}
         <button type="button" aria-expanded={chatOpen} aria-label={VIP2.chat.title} onClick={toggleChat} className="grid size-11 shrink-0 place-items-center rounded-full border border-white/25 bg-white/[.06] sm:hidden"><IconChat /></button>
         {n ? (
           <>
             <button type="button" onClick={openList} aria-live="polite" className="min-w-0 flex-1 overflow-hidden text-left font-inter leading-[1.3]">
-              <b className="block whitespace-nowrap text-[14.5px] font-semibold"><span className="max-sm:hidden">{VIP2.name}: </span>{n} {n === 1 ? "treatment" : "treatments"}<span className="tabular-nums min-[400px]:hidden"> · {money(withCode)}</span> <span className="font-normal text-white/60 underline underline-offset-[5px] max-sm:hidden">View</span></b>
-              {saved > 0 && <span className="block text-[13.5px] font-semibold text-[#F0D79B]">You save {money(saved)}</span>}
+              <b className="block text-[13.5px] sm:whitespace-nowrap font-semibold sm:text-[14.5px]"><span className="max-sm:hidden">{VIP2.name}: </span><span id="v2-bar-count" className="inline-block whitespace-nowrap">{n} {n === 1 ? "treatment" : "treatments"}</span><span className="tabular-nums sm:hidden"> <span className="whitespace-nowrap">· {money(withCode)}</span></span> <span className="font-normal text-white/60 underline underline-offset-[5px] max-sm:hidden">View</span></b>
+              {saved > 0 && <span className="block text-[13.5px] font-semibold text-[color:var(--v-F0D79B)]">You save {money(saved)}</span>}
             </button>
             <span className="flex shrink-0 items-center gap-4">
-              <b className="font-aeonik text-[26px] font-normal leading-none tabular-nums max-[399px]:hidden">{money(withCode)}</b>
-              <button type="button" onClick={checkout} className="btn bfd-cta h-12 px-6 font-semibold max-sm:px-5">{VIP2.checkout}</button>
+              <b className="font-aeonik text-[26px] font-normal leading-none tabular-nums max-sm:hidden">{money(withCode)}</b>
+              <button type="button" onClick={checkout} className="btn bfd-cta h-12 px-6 font-semibold max-sm:px-4">{VIP2.checkout}</button>
             </span>
           </>
         ) : (
           <>
-            <span className="min-w-0 flex-1 overflow-hidden whitespace-nowrap font-inter leading-[1.3]"><b className="block text-[14.5px] font-semibold">VIP Sale</b><span className="block text-[13.5px] text-[#F0D79B]">{left ? `${left} left` : "Sale prices shown"}</span></span>
-            <a href="#vip-list" onClick={go("vip-list")} className="btn bfd-cta h-12 shrink-0 px-6 font-semibold max-sm:px-5 max-[359px]:px-3.5 max-[359px]:text-[14px]">{VIP2.hero.button}</a>
+            <span className="min-w-0 flex-1 overflow-hidden whitespace-nowrap font-inter leading-[1.3]"><b className="block text-[14.5px] font-semibold">{VIP2.page.name}</b><span className="block text-[13.5px] text-[color:var(--v-F0D79B)]">{left ? `${left} left` : "Sale prices shown"}</span></span>
+            <a href="#vip-list" onClick={go("vip-list")} className="btn bfd-cta h-12 shrink-0 px-6 font-semibold max-sm:px-5 max-[359px]:px-3.5 max-[359px]:text-[14px]">{VIP2.page.barButton}</a>
           </>
         )}
       </div>
@@ -790,6 +814,7 @@ function ListBar({ list, t, show, openList, checkout, chatOpen, toggleChat }: { 
 }
 
 function ListSheet({ list, remove, close, checkout }: { list: PlanLine[]; remove: (key: string) => void; close: () => void; checkout: () => void }) {
+  const VIP2 = useWords();
   const { withCode, saved } = planTotals(list);
   const regular = withCode + saved;
   const panel = useRef<HTMLDivElement>(null);
@@ -800,7 +825,7 @@ function ListSheet({ list, remove, close, checkout }: { list: PlanLine[]; remove
     return () => window.removeEventListener("keydown", key);
   }, [close]);
   return (
-    <div className="fixed inset-0 z-[80] flex items-end justify-center bg-[#08131D]/60 backdrop-blur-[3px] sm:items-center sm:p-6" onClick={close}>
+    <div className="fixed inset-0 z-[80] flex items-end justify-center bg-[color:var(--v-08131D)]/60 backdrop-blur-[3px] sm:items-center sm:p-6" onClick={close}>
       <div ref={panel} role="dialog" aria-modal="true" aria-labelledby="v2-sheet-title" tabIndex={-1} data-lenis-prevent onClick={(e) => e.stopPropagation()} className="flex max-h-[88dvh] w-full flex-col overflow-hidden rounded-t-[26px] bg-white text-ndm-ink outline-hidden sm:max-w-[520px] sm:rounded-[26px]">
         <div className="flex items-center justify-between gap-4 border-b border-black/[.08] px-5 py-4">
           <h2 id="v2-sheet-title" className="font-aeonik text-[24px] font-normal leading-none">{VIP2.name}</h2>
@@ -822,14 +847,14 @@ function ListSheet({ list, remove, close, checkout }: { list: PlanLine[]; remove
                 </li>
               ))}
             </ul>
-          ) : <p className="py-8 font-inter text-[15.5px] leading-[1.6] text-ndm-muted">Your list is empty. Add a treatment from the VIP price list to see your total and your saving.</p>}
+          ) : <p className="py-8 font-inter text-[15.5px] leading-[1.6] text-ndm-muted">{VIP2.page.empty}</p>}
         </div>
-        <div className="border-t border-black/[.08] bg-[#FAFAF8] px-5 pb-[calc(16px+env(safe-area-inset-bottom))] pt-4">
+        <div className="border-t border-black/[.08] bg-[color:var(--v-FAFAF8)] px-5 pb-[calc(16px+env(safe-area-inset-bottom))] pt-4">
           {list.length > 0 && (
             <dl className="mb-3.5 grid grid-cols-[1fr_auto] gap-y-1 font-inter text-[14.5px]">
               {saved > 0 && <><dt className="text-ndm-muted">Regular price</dt><dd className="text-right tabular-nums text-ndm-muted"><s>{money(regular)}</s></dd></>}
-              {saved > 0 && <><dt className="font-semibold text-[#0C72AE]">You save</dt><dd className="text-right font-semibold tabular-nums text-[#0C72AE]">{money(saved)}</dd></>}
-              <dt className="self-end font-semibold">Your VIP total</dt><dd className="text-right font-aeonik text-[30px] leading-none tabular-nums">{money(withCode)}</dd>
+              {saved > 0 && <><dt className="font-semibold text-[color:var(--v-0C72AE)]">You save</dt><dd className="text-right font-semibold tabular-nums text-[color:var(--v-0C72AE)]">{money(saved)}</dd></>}
+              <dt className="self-end font-semibold">{VIP2.page.total}</dt><dd className="text-right font-aeonik text-[30px] leading-none tabular-nums">{money(withCode)}</dd>
             </dl>
           )}
           {list.length > 0
@@ -848,6 +873,7 @@ function ListSheet({ list, remove, close, checkout }: { list: PlanLine[]; remove
  * On phones its panel opens from the left, and once the bottom bar shows, the launcher is the bar's own small icon
  * (user, 2026-11-18), so nothing floats over the price list. */
 function Chat({ open, setOpen, day, lifted }: { open: boolean; setOpen: (on: boolean) => void; day: string; lifted: "all" | "small" | "" }) {
+  const VIP2 = useWords();
   const c = VIP2.chat;
   const [log, setLog] = useState<{ me: boolean; text: string }[]>([]);
   const end = useRef<HTMLDivElement>(null);
@@ -857,19 +883,19 @@ function Chat({ open, setOpen, day, lifted }: { open: boolean; setOpen: (on: boo
     <div className={`fixed left-3 z-[55] flex flex-col items-start gap-2.5 sm:left-auto sm:right-5 sm:items-end ${lifted === "all" ? "bottom-[calc(80px+env(safe-area-inset-bottom))]" : lifted === "small" ? "bottom-[calc(16px+env(safe-area-inset-bottom))] max-lg:bottom-[calc(80px+env(safe-area-inset-bottom))]" : "bottom-[calc(16px+env(safe-area-inset-bottom))]"}`}>
       {open && (
         <div role="dialog" aria-label={c.title} data-lenis-prevent className="w-[min(340px,calc(100vw-24px))] overflow-hidden rounded-[18px] bg-white text-ndm-ink shadow-[0_22px_60px_rgba(8,19,29,.4)] ring-1 ring-black/10">
-          <div className="flex items-center justify-between gap-2.5 bg-[#0B1B29] py-3 pl-4 pr-3 text-white"><b className="font-aeonik text-[18px] font-normal">{c.title}</b><button type="button" onClick={() => setOpen(false)} aria-label="Close chat" className="grid size-8 place-items-center rounded-full bg-white/[.14]"><IconClose size={12} /></button></div>
+          <div className="flex items-center justify-between gap-2.5 bg-[color:var(--v-0B1B29)] py-3 pl-4 pr-3 text-white"><b className="font-aeonik text-[18px] font-normal">{c.title}</b><button type="button" onClick={() => setOpen(false)} aria-label="Close chat" className="grid size-8 place-items-center rounded-full bg-white/[.14]"><IconClose size={12} /></button></div>
           <div aria-live="polite" className="flex max-h-[230px] flex-col gap-2 overflow-y-auto overscroll-contain px-3.5 pb-1 pt-3.5 font-inter text-[14.5px] leading-[1.45]">
-            <p className="max-w-[88%] self-start rounded-[14px] rounded-bl-[4px] bg-[#EEF2F6] px-3 py-2">{c.hello}</p>
-            {log.map((m, i) => <p key={i} className={`max-w-[88%] rounded-[14px] px-3 py-2 ${m.me ? "self-end rounded-br-[4px] bg-[#0B1B29] text-white" : "self-start rounded-bl-[4px] bg-[#EEF2F6]"}`}>{m.text}</p>)}
+            <p className="max-w-[88%] self-start rounded-[14px] rounded-bl-[4px] bg-[color:var(--v-EEF2F6)] px-3 py-2">{c.hello}</p>
+            {log.map((m, i) => <p key={i} className={`max-w-[88%] rounded-[14px] px-3 py-2 ${m.me ? "self-end rounded-br-[4px] bg-[color:var(--v-0B1B29)] text-white" : "self-start rounded-bl-[4px] bg-[color:var(--v-EEF2F6)]"}`}>{m.text}</p>)}
             <div ref={end} />
           </div>
           <div className="flex flex-wrap gap-1.5 px-3.5 pb-3 pt-2.5">
-            {c.replies.map(([q, a]) => <button key={q} type="button" onClick={() => { setLog((l) => [...l, { me: true, text: q }, { me: false, text: answer(a) }]); if (a.includes("{{phones}}")) track("Contact", { method: "chat-to-phone", from: "chat" }); }} className="rounded-full border border-[#CBD3DD] bg-white px-3 py-2 font-inter text-[13px] font-semibold">{q}</button>)}
+            {c.replies.map(([q, a]) => <button key={q} type="button" onClick={() => { setLog((l) => [...l, { me: true, text: q }, { me: false, text: answer(a) }]); if (a.includes("{{phones}}")) track("Contact", { method: "chat-to-phone", from: "chat" }); }} className="rounded-full border border-[color:var(--v-CBD3DD)] bg-white px-3 py-2 font-inter text-[13px] font-semibold">{q}</button>)}
           </div>
           <p className="border-t border-black/[.08] px-3.5 py-2.5 font-inter text-[12px] leading-[1.4] text-ndm-muted">{c.foot}<span className="mt-1 block"><Calls dark={false} from="chat" /></span></p>
         </div>
       )}
-      <button type="button" aria-expanded={open} onClick={() => { setOpen(!open); if (!open) track("Contact", { method: "chat", from: "launcher" }); }} className={`${lifted ? "max-sm:hidden" : ""} inline-flex h-12 items-center gap-2 rounded-full border border-white/25 bg-[#0B1B29] pl-3.5 pr-[18px] font-inter text-[14.5px] font-semibold text-white shadow-[0_10px_26px_rgba(0,0,0,.4)]`}>
+      <button type="button" aria-expanded={open} onClick={() => { setOpen(!open); if (!open) track("Contact", { method: "chat", from: "launcher" }); }} className={`${lifted ? "max-sm:hidden" : ""} inline-flex h-12 items-center gap-2 rounded-full border border-white/25 bg-[color:var(--v-0B1B29)] pl-3.5 pr-[18px] font-inter text-[14.5px] font-semibold text-white shadow-[0_10px_26px_rgba(0,0,0,.4)]`}>
         <IconChat />{c.button}
       </button>
     </div>
@@ -878,9 +904,13 @@ function Chat({ open, setOpen, day, lifted }: { open: boolean; setOpen: (on: boo
 
 /* ------------------------------------------------------------------ the page */
 
-export function VipSaleV2({ view }: { view: SaleView }) {
+/** The page; `words` are the VIP Sale's unless given (Black Friday passes its own, with the class "vbf" on <html> for its colours). */
+export function VipSaleV2({ view, words = VIP_WORDS }: { view: SaleView; words?: SaleWords }) {
   const { deals, planKey, code } = view;
   const router = useRouter();
+  useEffect(() => {
+    eventPrefix = words.page.event;
+  }, [words]);
   const packs = useMemo(() => allPacks(deals), [deals]);
   /* the headline: the best saving a package on this page really reaches */
   const best = useMemo(() => Math.max(0, ...packs.map((p) => p.pct)), [packs]);
@@ -925,8 +955,10 @@ export function VipSaleV2({ view }: { view: SaleView }) {
   useOnScroll(() => { const cta = byId("v2-cta"); setPast(!!cta && cta.getBoundingClientRect().bottom < 0); });
 
   const inList = (key: string) => list.some((x) => x.key === key);
-  const toggle = (p: Pack, from: string) => {
+  const toggle = (p: Pack, from: string, el?: HTMLElement, name?: string) => {
     const on = inList(p.key);
+    /* the ticket flies into the bottom bar on phones (it appears with the first item), else into the header's count */
+    if (!on && el) flyTo(el, { name: name || p.it[0], price: money(p.pay), look: words.page.fly, target: () => (window.matchMedia("(max-width: 639px)").matches ? firstShown(byId("v2-bar-count"), byId("v2-list-count")) : firstShown(byId("v2-list-count"))) });
     if (!on) track("AddToCart", { content_name: `${p.it[0]}, ${p.o[0]}`, content_ids: [String(p.o[6] ?? "")], content_type: "product", value: p.pay, currency: "CAD", from });
     setList((l) => (on ? l.filter((x) => x.key !== p.key) : [...l, line(p)]));
   };
@@ -943,7 +975,7 @@ export function VipSaleV2({ view }: { view: SaleView }) {
   };
 
   return (
-    <>
+    <Words.Provider value={words}>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[90] focus:rounded-full focus:bg-ndm-deep focus:px-4 focus:py-2 focus:text-white">Skip to content</a>
       <Header count={list.length} day={day} openList={() => setSheet(true)} />
       <main id="main" data-page="vip2-sale">
@@ -960,6 +992,6 @@ export function VipSaleV2({ view }: { view: SaleView }) {
       <Chat open={chat} setOpen={setChat} day={day} lifted={list.length > 0 ? "all" : past ? "small" : ""} />
       <ListBar list={list} t={t} show={past} openList={() => setSheet(true)} checkout={checkout} chatOpen={chat} toggleChat={() => { if (!chat) track("Contact", { method: "chat", from: "bar" }); setChat(!chat); }} />
       {sheet && <ListSheet list={list} remove={(key) => setList((l) => l.filter((x) => x.key !== key))} close={() => setSheet(false)} checkout={checkout} />}
-    </>
+    </Words.Provider>
   );
 }

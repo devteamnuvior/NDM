@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
+import { useRef, useState, type CSSProperties, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
 import { BookOnline } from "@/components/booking/book-online";
 import { Button } from "@/components/ui/button";
 import { IconArrow, IconCheckBadge, IconPhone } from "@/components/ui/icons";
@@ -9,6 +9,7 @@ import {
   BOOK_CLINIC_OPTIONS,
   BOOK_FLOW,
   BOOK_INTEREST_GROUPS,
+  BOOK_INTEREST_SECTIONS,
   BOOK_NOT_SURE,
   BOOK_OTHER,
   type BookPath,
@@ -16,6 +17,7 @@ import {
 import { CLINICS } from "@/config/site";
 import { tel } from "@/lib/routes";
 import { withBase } from "@/lib/base-path";
+import { pushLead } from "@/lib/lead-event";
 
 /* Note on borders: the prototype writes "border-ndm-ink/12" and "border-white/12" on a few elements, an
    opacity step its Tailwind 3 does not have, so those classes did nothing there and the borders took the
@@ -44,7 +46,8 @@ function BookChip({ type = "radio", name, value, checked, onChange, children }: 
   );
 }
 
-/* the organised picker: category tabs, the options of the open category, the two standing options */
+/* the organised picker: text tiles for the categories (concerns, then treatments), the options of the open
+   category as check rows, and the two standing options; a number on a tile says how many of its options are chosen */
 function BookPicker({ values, onPick, compact }: { values: string[]; onPick: (t: string) => void; compact: boolean }) {
   const found = BOOK_INTEREST_GROUPS.findIndex(([, xs]) => xs.some((x) => values.includes(x)));
   const [cat, setCat] = useState(found >= 0 ? found : 0);
@@ -57,28 +60,53 @@ function BookPicker({ values, onPick, compact }: { values: string[]; onPick: (t:
     setCat(n);
     tabs.current[n]?.focus();
   };
+  const tab = (i: number) => {
+    const [g, xs] = BOOK_INTEREST_GROUPS[i];
+    const n = xs.filter((x) => values.includes(x)).length;
+    return (
+      <button
+        key={g}
+        ref={(el) => {
+          tabs.current[i] = el;
+        }}
+        type="button"
+        role="tab"
+        aria-selected={i === cat}
+        tabIndex={i === cat ? 0 : -1}
+        onClick={() => setCat(i)}
+        onKeyDown={(e) => key(e, i)}
+        className={`book-cat font-inter ${i === cat ? "is-on" : ""}`}
+      >
+        <span className="book-cat-t">{g}</span>
+        {n > 0 && (
+          <span key={n} className="book-cat-n">
+            {n}
+            <span className="sr-only"> chosen</span>
+          </span>
+        )}
+      </button>
+    );
+  };
+  let from = 0;
   return (
-    <div className="book-pick">
-      <div role="tablist" aria-label="Type of concern" className={`flex gap-1 ${compact ? "no-scrollbar -mx-1 overflow-x-auto px-1" : "flex-wrap"}`}>
-        {BOOK_INTEREST_GROUPS.map(([g, xs], i) => (
-          <button
-            key={g}
-            ref={(el) => {
-              tabs.current[i] = el;
-            }}
-            type="button"
-            role="tab"
-            aria-selected={i === cat}
-            tabIndex={i === cat ? 0 : -1}
-            onClick={() => setCat(i)}
-            onKeyDown={(e) => key(e, i)}
-            className={`book-tab shrink-0 rounded-full ${compact ? "px-3 py-1.5 text-[13px]" : "px-4 py-2.5 text-[15px]"} font-inter font-semibold transition-colors ${i === cat ? "bg-ndm-ink text-white" : "bg-ndm-mist text-ndm-ink/80 hover:text-ndm-ink"} ${xs.some((x) => values.includes(x)) && i !== cat ? "book-tab-has" : ""}`}
-          >
-            {g}
-          </button>
-        ))}
+    <div className={`book-pick ${compact ? "is-compact" : ""}`}>
+      <div role="tablist" aria-label="Type of concern" className={compact ? "book-cats-row no-scrollbar" : "book-cats"}>
+        {compact
+          ? BOOK_INTEREST_GROUPS.map((_, i) => tab(i))
+          : BOOK_INTEREST_SECTIONS.map(([name, count]) => {
+              const start = from;
+              from += count;
+              return (
+                <div key={name} role="presentation">
+                  <p className="book-cats-h font-inter">{name}</p>
+                  <div role="presentation" className="book-cats-g">
+                    {BOOK_INTEREST_GROUPS.slice(start, start + count).map((_, i) => tab(start + i))}
+                  </div>
+                </div>
+              );
+            })}
       </div>
-      <div className="mt-2.5 grid">
+      <div className={`grid ${compact ? "mt-2.5" : "mt-4"}`}>
         {BOOK_INTEREST_GROUPS.map(([g, xs], gi) => (
           <div
             key={g}
@@ -86,15 +114,13 @@ function BookPicker({ values, onPick, compact }: { values: string[]; onPick: (t:
             aria-label={g}
             aria-hidden={gi !== cat || undefined}
             inert={gi !== cat}
-            className={`grid content-start gap-1.5 [grid-area:1/1] ${gi === cat ? "" : "invisible"} ${compact ? "grid-cols-1 sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3"}`}
+            className={`book-panel grid content-start gap-1.5 [grid-area:1/1] ${gi === cat ? "is-on" : "invisible"} ${compact ? "grid-cols-1 sm:grid-cols-2" : "sm:grid-cols-2"}`}
           >
-            {xs.map((t) => (
-              <label key={t} className="relative flex cursor-pointer">
-                <input type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)} tabIndex={gi === cat ? undefined : -1} className="peer absolute inset-0 m-0 cursor-pointer opacity-0" />
-                <span
-                  className={`book-opt flex w-full items-center gap-2.5 rounded-[12px] border bg-white px-3.5 font-inter ${compact ? "min-h-[36px] py-1.5 text-[13px]" : "min-h-[42px] py-2 text-[13.5px]"} leading-[1.3] text-ndm-ink transition-colors peer-checked:border-ndm-deep peer-checked:bg-ndm-deep peer-checked:text-white peer-hover:border-ndm-ink/35 peer-focus-visible:ring-4 peer-focus-visible:ring-ndm-blue/25`}
-                >
-                  <i aria-hidden="true" className={`size-2 shrink-0 rounded-full ${values.includes(t) ? "bg-ndm-amber" : "bg-ndm-ink/15"}`} />
+            {xs.map((t, ti) => (
+              <label key={t} className="relative flex cursor-pointer" style={{ "--i": ti } as CSSProperties}>
+                <input type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)} tabIndex={gi === cat ? undefined : -1} className="book-in absolute inset-0 m-0 cursor-pointer opacity-0" />
+                <span className="book-opt font-inter">
+                  <Tick />
                   {t}
                 </span>
               </label>
@@ -102,25 +128,28 @@ function BookPicker({ values, onPick, compact }: { values: string[]; onPick: (t:
           </div>
         ))}
       </div>
-      <div className="mt-2.5 flex flex-wrap gap-1.5">
+      <div className="book-alts">
         {[BOOK_NOT_SURE, BOOK_OTHER].map((t) => (
-          <BookChip key={t} type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)}>
-            {t}
-          </BookChip>
+          <label key={t} className="relative inline-flex cursor-pointer">
+            <input type="checkbox" name="interest" value={t} checked={values.includes(t)} onChange={() => onPick(t)} className="book-in absolute inset-0 m-0 cursor-pointer opacity-0" />
+            <span className="book-alt font-inter">
+              {t}
+            </span>
+          </label>
         ))}
       </div>
-      <p className={`mt-2.5 flex flex-wrap content-start items-center gap-2 font-inter text-[13px] text-ndm-ink ${compact ? "min-h-[20px]" : "min-h-[40px]"}`} aria-live="polite">
-        {values.length ? (
-          <>
-            <i aria-hidden="true" className="size-2 shrink-0 rounded-full bg-ndm-amber" />
-            <span className="text-ndm-muted">Your choices:</span>
-            <b className="font-semibold">{values.join(", ")}</b>
-          </>
-        ) : (
-          <span className="text-ndm-muted">Pick a category, then one or more things you would like to address.</span>
-        )}
-      </p>
     </div>
+  );
+}
+
+/* the check box of an option row: the tick draws itself when the row is chosen */
+function Tick() {
+  return (
+    <i aria-hidden="true" className="book-check">
+      <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path pathLength={1} d="M2.5 6.4 5 8.8l4.5-5.3" />
+      </svg>
+    </i>
   );
 }
 
@@ -129,12 +158,12 @@ interface FormState {
   via: string[];
   first: string;
   callTime: string;
-  callClinic: string;
+  clinic: string;
   other: string;
   visia: boolean;
 }
 
-const EMPTY: FormState = { interest: [], via: ["Call", "Text"], first: "", callTime: "", callClinic: "Either", other: "", visia: true };
+const EMPTY: FormState = { interest: [], via: ["Call", "Text"], first: "", callTime: "", clinic: "", other: "", visia: true };
 
 interface BookFormProps {
   /** id for the confirmation heading, so a dialog can point at it. */
@@ -143,28 +172,19 @@ interface BookFormProps {
   summary?: boolean;
   /** The smaller form used in treatment page heroes. */
   compact?: boolean;
+  /** In the pop-up: Back and Continue stay at the bottom of the dialog, centred, at full size. */
+  dock?: boolean;
 }
 
 /**
  * Consultation booking, shared by the booking section and the Book Free Consultation pop-up: the concern,
  * then contact details (so every request reaches the team), then a choice: book a time now, or ask us to
  * call. The request goes to POST /api/booking, which saves it in WordPress as a "Consultation" record.
- * "Book a time now" then opens the clinic's own online booking calendar (BookOnline), where the clinic,
- * day and time are chosen; a call request shows its thank-you only once it was saved. No payment is taken.
+ * "Book a time now" then opens the clinic's own online booking calendar (BookOnline), where the day and
+ * time are chosen; a call request shows its thank-you only once it was saved. No payment is taken. The clinic is
+ * chosen on the site for both (user, 2026-11-19), so the request and its email say which one.
  */
-/**
- * Tells Google Tag Manager that a consultation request was saved: the same `popupFormSubmit` event the old
- * WordPress site's forms pushed (plugins ndm-forms and ndm-popup-subscribe), which the container's
- * "form_lead_submission" tag waits for. Only after WordPress saved the request, and never anything the
- * visitor typed (PHIPA): which form, and whether they chose to book online or be called.
- */
-function leadSaved(formId: string, path: BookPath) {
-  const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
-  w.dataLayer = w.dataLayer || [];
-  w.dataLayer.push({ event: "popupFormSubmit", formId, formType: "ajax", status: "success", bookPath: path === "book" ? "online" : "call" });
-}
-
-export function BookForm({ thanksId, summary = false, compact = false }: BookFormProps) {
+export function BookForm({ thanksId, summary = false, compact = false, dock = false }: BookFormProps) {
   const box = useRef<HTMLFormElement>(null);
   const [step, setStep] = useState(0);
   const [path, setPath] = useState<BookPath | null>(null);
@@ -222,6 +242,11 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
     return true;
   };
   const choose = (p: BookPath) => {
+    if (!f.clinic) {
+      setErr("Please choose a clinic.");
+      box.current?.querySelector<HTMLInputElement>('input[name="clinic"]')?.focus();
+      return;
+    }
     if (p === "book") {
       void send("book");
       return;
@@ -273,14 +298,14 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
           email: field("email"),
           via: f.via,
           path: p === "book" ? "online" : "call",
-          clinic: p === "call" ? f.callClinic : undefined,
+          clinic: f.clinic,
           callTime: p === "call" ? f.callTime : undefined,
           page: window.location.pathname,
-          company: field("company"),
+          company: field("ndm_hp"),
         }),
       });
       const result = (await answer.json().catch(() => null)) as { ok?: boolean; reason?: string; message?: string } | null;
-      if (answer.ok && result?.ok === true) leadSaved(compact ? "lead-page" : thanksId ? "lead-popup" : "lead-section", p);
+      if (answer.ok && result?.ok === true) pushLead(compact ? "lead-page" : thanksId ? "lead-popup" : "lead-section", { bookPath: p === "book" ? "online" : "call" });
       if ((answer.ok && result?.ok === true) || (p === "book" && result?.reason !== "invalid")) {
         done();
         return;
@@ -318,13 +343,13 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
     setSent(false);
     setCalendar(false);
     setPath(null);
-    setF((o) => ({ ...o, interest: [], other: "", visia: true, callTime: "" }));
+    setF((o) => ({ ...o, interest: [], other: "", visia: true, callTime: "", clinic: "" }));
     go(0);
   };
 
   const clinicName = (v: string) => (v === "Either" ? "Either clinic" : (BOOK_CLINIC_OPTIONS.find(([x]) => x === v)?.[1] ?? v));
   const clinicPhone = CLINICS[0].phone;
-  const legend = `scroll-mt-24 font-aeonik ${compact ? "text-[20px]" : "text-[clamp(21px,1.9vw,26px)]"} font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink outline-hidden`;
+  const legend = `scroll-mt-24 font-aeonik ${compact ? "text-[20px]" : "text-[clamp(19px,1.6vw,22px)]"} font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink outline-hidden`;
   const label = "mb-1.5 block font-inter text-[13px] font-semibold text-ndm-ink";
   /* The prototype also puts "items-start" on the two choice tiles, but its Tailwind 3 lets "items-center"
      win when both are present, so the tiles are centred; "items-start" is left out to keep them that way. */
@@ -333,8 +358,8 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
   const visiaRow: [string, string | null] = ["VISIA® skin analysis", f.visia ? "Included, free" : "Not added"];
   const rows: [string, string | null][] =
     path === "call"
-      ? [["Concerns", concern], visiaRow, ["Next step", "We call you"], ["Best time", f.callTime], ["Clinic", clinicName(f.callClinic)]]
-      : [["Concerns", concern], visiaRow, ["Next step", null]];
+      ? [["Concerns", concern], visiaRow, ["Next step", "We call you"], ["Best time", f.callTime], ["Clinic", clinicName(f.clinic)]]
+      : [["Concerns", concern], visiaRow, ["Clinic", f.clinic ? clinicName(f.clinic) : null], ["Next step", null]];
   const stepClass = (k: string) => `book-step ${cur === k ? "" : "is-off"}`;
   const stepAttr = (k: string) => ({ "aria-hidden": cur !== k || undefined, inert: cur !== k });
 
@@ -350,7 +375,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
               One last step{f.first ? `, ${f.first}` : ""}.
             </p>
             <p className="max-w-[46ch] font-inter text-[14.5px] leading-[1.55] text-ndm-muted">
-              Choose your clinic, day and time in our booking calendar. Your free consultation{f.visia ? ", with your VISIA® skin analysis," : ""} is booked once the calendar confirms it.
+              {f.clinic && f.clinic !== "Either" ? `Choose ${clinicName(f.clinic).split(",")[0]}, then your day and time in our booking calendar.` : "Choose your clinic, day and time in our booking calendar."} Your free consultation{f.visia ? ", with your VISIA® skin analysis," : ""} is booked once the calendar confirms it.
             </p>
             <Button as="button" type="button" v="ink" onClick={() => setCalendar(true)}>
               Open the booking calendar
@@ -381,32 +406,33 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
     );
   }
 
+  const alert = (
+    <p role="alert" className={dock ? "mb-2.5 text-center font-inter text-[13px] leading-[19px] text-[#B4351F]" : "mt-3 min-h-[19px] font-inter text-[13px] leading-[19px] text-[#B4351F]"}>
+      {err}
+    </p>
+  );
   const body = (
-    <form ref={box} onSubmit={submit} noValidate className="flex min-w-0 flex-1 flex-col">
-      {!compact && (
-        <span className="book-badge mb-3 inline-flex items-center gap-2 self-start rounded-full px-3 py-1.5 font-inter text-[12px] font-semibold text-[#8A5A12]">
-          <i aria-hidden="true" className="book-badge-dot grid size-4 place-items-center rounded-full bg-ndm-amber text-white">
-            <IconArrow size={8} />
-          </i>
-          Free consultation · VISIA® skin analysis included
-        </span>
-      )}
-      <div className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${flow.length},minmax(0,1fr))` }} aria-hidden="true">
-        {flow.map((s, i) => (
-          <span key={s} className={`h-1 rounded-full transition-colors duration-500 ${i <= step ? "bg-ndm-amber" : "bg-ndm-ink/10"}`} />
-        ))}
+    <form ref={box} onSubmit={submit} noValidate className={`flex min-w-0 flex-1 flex-col ${dock ? "book-docked" : ""}`}>
+      <div className="flex items-center gap-3">
+        <div className="grid flex-1 gap-1.5" style={{ gridTemplateColumns: `repeat(${flow.length},minmax(0,1fr))` }} aria-hidden="true">
+          {flow.map((s, i) => (
+            <span key={s} className={`h-1 rounded-full transition-colors duration-500 ${i <= step ? "bg-ndm-amber" : "bg-ndm-ink/10"}`} />
+          ))}
+        </div>
+        {/* the step's name is said by the question under it: here it is for screen readers only */}
+        <p className="shrink-0 font-inter text-[12.5px] leading-none text-ndm-muted">
+          <span className="sr-only">Step </span>
+          <span className="text-ndm-ink">{step + 1}</span> of {flow.length}
+          <span className="sr-only"> · {flow[step]}</span>
+        </p>
       </div>
-      <p className="mt-2 font-inter text-[12.5px] text-ndm-muted">
-        Step {step + 1} of {flow.length} · <span className="text-ndm-ink">{flow[step]}</span>
-      </p>
 
-      <div className="book-steps mt-5 grid">
+      <div className={`book-steps grid ${dock ? "mt-3 sm:mt-4" : "mt-4"}`}>
         <fieldset data-step="0" className={stepClass("0")} {...stepAttr("0")}>
           <legend tabIndex={-1} className={legend}>
             What would you like to address?
           </legend>
-          <p className={`mt-2 font-inter text-[13.5px] leading-[1.5] text-ndm-muted ${compact ? "hidden" : ""}`}>Choose any that apply, you can pick more than one.</p>
-          <div className="mt-4">
+          <div className={dock ? "mt-3 sm:mt-4" : "mt-4"}>
             <BookPicker values={f.interest} onPick={pick} compact={compact} />
           </div>
           {f.interest.includes(BOOK_OTHER) && (
@@ -429,10 +455,10 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
               />
             </label>
           )}
-          <label className={`flex cursor-pointer items-center gap-3 rounded-[14px] border bg-white px-4 font-inter ${compact ? "mt-3 py-2.5" : "mt-5 py-3"}`}>
+          <label className={`flex cursor-pointer items-center gap-3 rounded-[14px] border bg-white px-4 font-inter ${compact ? "mt-3 py-2.5" : dock ? "mt-3 py-2.5 sm:py-3" : "mt-5 py-3"}`}>
             <span className="min-w-0 flex-1">
               <span className="block text-[14px] font-semibold text-ndm-ink">Include my free VISIA® skin analysis</span>
-              <span className={`mt-0.5 block text-[12.5px] leading-[1.45] text-ndm-muted ${compact ? "hidden" : ""}`}>So you and your provider can see your skin in detail before planning anything.</span>
+              <span className={`mt-0.5 block text-[12.5px] leading-[1.45] text-ndm-muted ${compact ? "hidden" : dock ? "max-sm:hidden" : ""}`}>So you and your provider can see your skin in detail before planning anything.</span>
             </span>
             <input type="checkbox" role="switch" name="visia" checked={f.visia} onChange={(e) => set("visia", e.target.checked)} className="peer sr-only" />
             <span
@@ -474,7 +500,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
           </div>
           <p className="mt-3 font-inter text-[12px] text-ndm-muted">Please don’t include medical details. We use your details only to arrange your visit.</p>
           {/* left empty by people, filled in by form-filling robots */}
-          <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+          <input type="text" name="ndm_hp" tabIndex={-1} autoComplete="off" data-1p-ignore="" data-lpignore="true" aria-hidden="true" className="hidden" />
         </fieldset>
 
         <fieldset data-step="2" className={stepClass("2")} {...stepAttr("2")}>
@@ -482,7 +508,15 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
             How would you like to continue?
           </legend>
           <p className="mt-2 font-inter text-[14px] leading-[1.5] text-ndm-muted">Book a time yourself, or let us call you to find one.</p>
-          <div className={`mt-5 grid gap-3 ${compact ? "" : "sm:grid-cols-2"}`}>
+          <p className="mt-4 font-inter text-[13px] font-semibold text-ndm-ink">Which clinic?</p>
+          <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Which clinic">
+            {[...BOOK_CLINIC_OPTIONS, ["Either", "Either clinic"] as [string, string]].map(([v, t]) => (
+              <BookChip key={v} name="clinic" value={v} checked={f.clinic === v} onChange={() => set("clinic", v)}>
+                {t}
+              </BookChip>
+            ))}
+          </div>
+          <div className={`mt-4 grid gap-3 ${compact ? "" : "sm:grid-cols-2"}`}>
             <button type="button" disabled={busy} aria-busy={busy || undefined} onClick={() => choose("book")} className={`${tile} min-h-[96px] border-ndm-deep bg-ndm-deep text-white hover:border-[#0A4F7A] hover:bg-[#0A4F7A]`}>
               <span aria-hidden="true" className="mt-0.5 grid size-10 shrink-0 place-items-center rounded-full bg-white/15 text-white">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
@@ -492,7 +526,7 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block font-aeonik text-[clamp(20px,1.6vw,23px)] leading-[1.15] tracking-[-0.01em]">Book a time now</span>
-                <span className="mt-1.5 block text-[14px] leading-[1.45] text-white/85">Choose a clinic, day and time.</span>
+                <span className="mt-1.5 block text-[14px] leading-[1.45] text-white/85">Choose a day and time.</span>
               </span>
               <IconArrow size={15} className="mt-2 shrink-0" />
             </button>
@@ -520,37 +554,30 @@ export function BookForm({ thanksId, summary = false, compact = false }: BookFor
               </BookChip>
             ))}
           </div>
-          <p className="mt-5 font-inter text-[13px] font-semibold text-ndm-ink">Preferred clinic</p>
-          <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Preferred clinic">
-            {[["Either", "Either clinic"] as [string, string], ...BOOK_CLINIC_OPTIONS].map(([v, t]) => (
-              <BookChip key={v} name="callclinic" value={v} checked={f.callClinic === v} onChange={() => set("callClinic", v)}>
-                {t}
-              </BookChip>
-            ))}
-          </div>
           <p className="mt-3 font-inter text-[12px] text-ndm-muted">No payment needed. Our team calls to find a time that suits you.</p>
         </fieldset>
       </div>
 
-      <p role="alert" className="mt-3 min-h-[19px] font-inter text-[13px] leading-[19px] text-[#B4351F]">
-        {err}
-      </p>
-      <div className="mt-auto flex min-h-[60px] items-center gap-2.5 pt-3 sm:flex-wrap">
-        {step > 0 && (
-          <Button as="button" type="button" v="line" sm disabled={busy} onClick={() => go(step - 1)}>
-            Back
-          </Button>
-        )}
-        {/* own keys, so Continue is never reused as the submit button (that would submit the step it just opened) */}
-        {step === 2 ? null : step < flow.length - 1 ? (
-          <Button key="next" as="button" type="button" v="ink" sm onClick={next}>
-            Continue
-          </Button>
-        ) : (
-          <Button key="call" as="button" type="submit" v="ink" disabled={busy} aria-busy={busy || undefined} className="min-w-0 flex-1 sm:flex-none">
-            Request a call
-          </Button>
-        )}
+      {!dock && alert}
+      <div className={dock ? "book-dock" : "mt-auto flex min-h-[60px] items-center gap-2.5 pt-3 sm:flex-wrap"}>
+        {dock && err ? alert : null}
+        <div className={dock ? "flex items-center justify-center gap-2.5" : "contents"}>
+          {step > 0 && (
+            <Button as="button" type="button" v="line" sm={!dock} disabled={busy} onClick={() => go(step - 1)}>
+              Back
+            </Button>
+          )}
+          {/* own keys, so Continue is never reused as the submit button (that would submit the step it just opened) */}
+          {step === 2 ? null : step < flow.length - 1 ? (
+            <Button key="next" as="button" type="button" v="ink" sm={!dock} onClick={next} className={dock ? "book-dock-go" : undefined}>
+              Continue
+            </Button>
+          ) : (
+            <Button key="call" as="button" type="submit" v="ink" disabled={busy} aria-busy={busy || undefined} className={dock ? "book-dock-go" : "min-w-0 flex-1 sm:flex-none"}>
+              Request a call
+            </Button>
+          )}
+        </div>
       </div>
     </form>
   );

@@ -4,7 +4,7 @@
 /* the same gold on a light ground */
 .v2-gold-d{background:linear-gradient(180deg,#C9A24E 0%,#A9812E 55%,#7A5A16 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .v2-shine{background:linear-gradient(90deg,#fff 0%,#F4E6BD 55%,#E3C47E 100%);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.1em}
-.v2-tag{display:inline-block;background:linear-gradient(118deg,#C99A2E,#F3D57F 45%,#DDB045);color:#1B1403;font:700 10.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:5px 9px;border-radius:999px;white-space:nowrap}
+.v2-tag{display:inline-block;background:linear-gradient(118deg,#C99A2E,#F3D57F 45%,#DDB045);color:#1B1403;font:700 12px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:5px 9px;border-radius:999px;white-space:nowrap}
 /* header: the menu links and the phone mark */
 .v2-nav{display:flex;align-items:center;padding:8px 0}
 /* the label rolls up and out while its gold copy rolls in from below (after dermahub.ca's menu) */
@@ -132,3 +132,4 @@ button:hover>.v2-play{transform:scale(1.06)}
 @keyframes v2RowLine{0%{transform:scaleX(0);opacity:0}45%{transform:scaleX(1);opacity:.9}100%{transform:scaleX(1);opacity:0}}
 @media (prefers-reduced-motion:reduce){.v2-rows-in>.v2-row{animation:v2RowFade .2s ease backwards;animation-delay:0s}.v2-rows-in>.v2-row::after{animation:none}}
 @keyframes v2RowFade{from{opacity:0}}
+

@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Eyebrow } from "@/components/ui/eyebrow";
 import { IconClose } from "@/components/ui/icons";
 import { TwoTone } from "@/components/ui/two-tone";
 import { ACTIONS } from "@/config/routes";
@@ -68,18 +67,16 @@ export function BookPopup() {
           aria-modal="true"
           aria-labelledby="book-pop-title"
           data-lenis-prevent=""
-          className="book-card pointer-events-auto relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white px-[clamp(20px,2.4vw,32px)] pt-6 pb-[max(22px,env(safe-area-inset-bottom))] shadow-[0_40px_80px_-30px_rgba(11,15,19,.6)] sm:max-w-[680px] sm:rounded-[20px] sm:pt-[clamp(20px,2.4vw,32px)]"
+          className="book-card pointer-events-auto relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white px-[clamp(20px,2.4vw,32px)] pt-5 pb-[max(22px,env(safe-area-inset-bottom))] shadow-[0_40px_80px_-30px_rgba(11,15,19,.6)] sm:max-w-[680px] sm:rounded-[20px] sm:pt-[clamp(20px,2.4vw,32px)]"
         >
           <span aria-hidden="true" className="absolute top-2.5 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-ndm-ink/15 sm:hidden" />
-          {/* above the tag line, which on a phone is wide enough to lie over this button (in the prototype it swallowed the tap) */}
           <button type="button" onClick={close} aria-label="Close booking form" className="absolute top-3 right-3 z-[1] grid size-10 place-items-center rounded-full text-ndm-ink transition-colors hover:bg-ndm-mist sm:top-4 sm:right-4">
             <IconClose />
           </button>
-          <Eyebrow amber>Book now at our two Toronto locations</Eyebrow>
           <TwoTone
             id="book-pop-title"
-            className="mt-4 pr-8"
-            size="text-[clamp(26px,2.6vw,36px)]"
+            className="pr-10"
+            size="text-[20px] sm:text-[clamp(22px,2.3vw,31px)]"
             lead={
               <>
                 Book a free consultation
@@ -88,7 +85,7 @@ export function BookPopup() {
             }
             strong="in a few short steps"
           />
-          <div className="mt-6 flex">{run > 0 && <BookForm key={run} thanksId="book-pop-title" />}</div>
+          <div className="mt-3.5 flex sm:mt-5">{run > 0 && <BookForm key={run} thanksId="book-pop-title" dock />}</div>
         </div>
       </div>
     </div>

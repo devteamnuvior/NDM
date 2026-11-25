@@ -270,3 +270,54 @@ function ndm_pricing_attach_paid_order( $order_id, $from, $to, $order ) {
 	}
 }
 add_action( 'woocommerce_order_status_changed', 'ndm_pricing_attach_paid_order', 20, 4 );
+
+/**
+ * A website order is created by the site's own server, so WooCommerce records the server's address as
+ * the customer's. The card gateway sends that address to Bambora with the payment, and every payment
+ * sent with the server's own address was declined (2026-11-18). The pay page is opened by the visitor's
+ * own browser: when the payment is sent, the order takes the address and browser of that request.
+ *
+ * @param WC_Order $order The order about to be paid.
+ */
+function ndm_pricing_pay_from_visitor( $order ) {
+	if ( ! $order instanceof WC_Order || ! ndm_pricing_is_site_order( $order ) ) {
+		return;
+	}
+	$ip = class_exists( 'WC_Geolocation' ) ? (string) WC_Geolocation::get_ip_address() : '';
+	if ( '' === $ip || ! filter_var( $ip, FILTER_VALIDATE_IP ) || $ip === $order->get_customer_ip_address() ) {
+		return;
+	}
+	$order->set_customer_ip_address( $ip );
+	if ( function_exists( 'wc_get_user_agent' ) ) {
+		$order->set_customer_user_agent( wc_get_user_agent() );
+	}
+	$order->save();
+}
+add_action( 'woocommerce_before_pay_action', 'ndm_pricing_pay_from_visitor', 5 );
+
+/**
+ * What the pay page tells the visitor when the card processor refuses a card (the gateway's "Detailed
+ * Decline Messages" setting must be on; without it the gateway shows one general sentence). The pay page
+ * has no address fields: a card refused for its billing address needs a new order with the right one,
+ * so the gateway's own "verify the address and try again" would leave the visitor with nothing to change.
+ * The pay page is the only place this gateway takes a payment (WordPress's own checkout is not public).
+ *
+ * @param string $message    The gateway's message.
+ * @param string $message_id What was wrong ("avs_mismatch", "csc_mismatch", "card_declined", ...).
+ * @return string
+ */
+function ndm_pricing_decline_message( $message, $message_id ) {
+	switch ( $message_id ) {
+		case 'avs_mismatch':
+			return 'The billing address on this order does not match the address your bank has for this card, so the payment was not taken. Please go back to the checkout and place the order again with the card\'s billing address and postal code, or use another card.';
+		case 'csc_mismatch':
+		case 'csc_invalid':
+			return 'The security code (CVV) does not match this card, so the payment was not taken. Please check the three digits on the back of the card and try again.';
+		case 'error':
+			// Any code the gateway has no sentence for. Seen so far: Bambora 558, a refusal before the bank is
+			// asked, which came after several declined attempts with one card in a few minutes (2026-11-18).
+			return 'The card processor did not accept this payment, and nothing was charged. If you have tried this card a few times in a row, the processor may be pausing new attempts: please wait a little while before trying again, or use another card. You can also go back to the checkout and choose Pay at your appointment.';
+	}
+	return $message;
+}
+add_filter( 'wc_payment_gateway_transaction_response_user_message', 'ndm_pricing_decline_message', 10, 2 );

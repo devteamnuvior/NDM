@@ -162,7 +162,7 @@ if (typeof document !== 'undefined' && !document.getElementById('bfb-css')) {
 }
 function BfFormBadge() {
   if (Date.now() > new Date(BFB_END).getTime()) return null;
-  const sale = typeof BF_SALE !== 'undefined' ? BF_SALE : { href: 'black-friday-sale.html', badge: 'Up to 60% off' };
+  const sale = typeof BF_SALE !== 'undefined' ? BF_SALE : { href: 'black-friday-sale.html', badge: 'Up to 70% off' };
   return (
     <a href={sale.href} className="bfb" aria-label={`Black Friday Sale, ${sale.badge}. See the offers`}>
       <span aria-hidden="true" className="bfb-mark">%</span>

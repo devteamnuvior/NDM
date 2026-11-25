@@ -71,7 +71,9 @@ const nextConfig: NextConfig = {
       { source: "/blog.html", destination: "/blog", permanent: false },
       { source: "/black-friday-sale.html", destination: "/black-friday", permanent: false },
       { source: "/black-friday-sale", destination: "/black-friday", permanent: false },
-      { source: "/vip-sale.html", destination: "/vip-sale", permanent: false },
+      /* the VIP Sale hands over to Black Friday (user, 2026-11-19, before its last day ended) */
+      { source: "/vip-sale.html", destination: "/black-friday", permanent: false },
+      { source: "/vip-sale", destination: "/black-friday", permanent: false },
       { source: "/privacy.html", destination: "/privacy", permanent: false },
       { source: "/terms.html", destination: "/terms", permanent: false },
       { source: "/refunds.html", destination: "/refunds", permanent: false },
