@@ -12,7 +12,7 @@ import { type PriceCategoryView, type PriceItemView } from "@/lib/pricing-view";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
 import { jumpToPriceGroup, PRICE_GROUP_HASH } from "@/lib/price-jump";
-import { FromPrice, OfferTag, type SaleLook } from "@/components/pricing/sale-tags";
+import { FromPrice, OfferTag, SaleNameProvider, type SaleLook } from "@/components/pricing/sale-tags";
 import { OptionRow } from "@/components/pricing/option-row";
 import { JumpMenu } from "@/components/pricing/jump-menu";
 
@@ -230,6 +230,7 @@ export function PriceList({ categories, total, sale = null }: { categories: Pric
 
   return (
     <SaleContext value={sale}>
+      <SaleNameProvider shown={false}>
       <section ref={section} id="prices" data-sale={sale?.look} aria-labelledby="prices-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(64px,7vw,110px)] pb-[clamp(64px,7vw,110px)]">
       <div className="mx-auto max-w-[1040px]">
         {sale?.banner && (
@@ -310,6 +311,7 @@ export function PriceList({ categories, total, sale = null }: { categories: Pric
         </div>
       </div>
       </section>
+      </SaleNameProvider>
     </SaleContext>
   );
 }

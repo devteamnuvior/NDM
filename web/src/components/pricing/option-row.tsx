@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { money } from "@/lib/cart";
-import { useSaleTags } from "@/components/pricing/sale-tags";
+import { useSaleTags, useSaleWords } from "@/components/pricing/sale-tags";
 
 /** How many units, syringes, zones or sessions an option's label covers, and what one is called ("Package of 3" -> 3 sessions). */
 function countOf(label: string): { n: number; one: string; many: string } | null {
@@ -49,6 +49,7 @@ export interface OptionRowProps {
  */
 export function OptionRow({ label, price, was, code, codePercent, tag, unit, action, data, mark }: OptionRowProps) {
   const sale = useSaleTags();
+  const words = useSaleWords();
   const coded = !!(sale && code && code < price);
   const final = coded ? (code as number) : price;
   const cnt = countOf(label);
@@ -71,7 +72,7 @@ export function OptionRow({ label, price, was, code, codePercent, tag, unit, act
             <span data-look={sale.look} className={`sb sb-sm pr-opt2-offer ${pill.length > 1 ? "sb-split" : ""}`}>
               {pill.map((t, i) => (
                 <span key={i} className={i ? "sb-b" : "sb-a"}>
-                  {t}
+                  {words(t)}
                 </span>
               ))}
             </span>

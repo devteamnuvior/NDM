@@ -22,12 +22,27 @@ export function SaleTagsProvider({ value, children }: { value: SaleTagsValue | n
 export const useSaleTags = () => useContext(SaleTagsContext);
 
 /**
+ * Whether the offer pills name the sale ("BLACK FRIDAY 30% OFF") or give the offer only ("30% OFF"). The Pricing
+ * page's list gives the offer only (user, 2026-11-25); the treatment pages' tables keep the name.
+ */
+const SaleNameContext = createContext(true);
+export function SaleNameProvider({ shown, children }: { shown: boolean; children: ReactNode }) {
+  return <SaleNameContext value={shown}>{children}</SaleNameContext>;
+}
+/** A pill's words without the sale's name in front, when the list says so. */
+export function useSaleWords(): (text: string) => string {
+  const shown = useContext(SaleNameContext);
+  return (text) => (shown ? text : text.replace(/^\s*BLACK\s+FRIDAY\s+/i, ""));
+}
+
+/**
  * The offer tag of a price table row. Outside a sale it is the plain red tag ("Up to 30% off"); during a
  * sale it is the pill in the sale's look, in two halves when the offer has two parts
  * ("30% OFF" | "+ EXTRA 30%", "BUY 1" | "GET 1 FREE").
  */
 export function OfferTag({ offer, badge, coded, small, plain = "pr-badge" }: { offer: string; badge: string[]; coded: boolean; small?: boolean; plain?: string }) {
   const sale = useSaleTags();
+  const words = useSaleWords();
   if (!sale) return offer ? <span className={plain}>{offer}</span> : null;
   const parts =
     badge.length === 1 && coded && /%\s*OFF$/.test(badge[0])
@@ -42,7 +57,7 @@ export function OfferTag({ offer, badge, coded, small, plain = "pr-badge" }: { o
     <span data-look={sale.look} className={`sb ${small ? "sb-sm" : ""} ${parts.length > 1 ? "sb-split" : ""}`}>
       {parts.map((t, i) => (
         <span key={i} className={i ? "sb-b" : "sb-a"}>
-          {t}
+          {words(t)}
         </span>
       ))}
     </span>
