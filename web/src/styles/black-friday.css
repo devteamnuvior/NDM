@@ -50,3 +50,5 @@
 .proc-form-head{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:start;gap:12px}
 .proc-form-head .bfb{margin-top:2px}
 @media (max-width:479px){.proc-form-head{grid-template-columns:minmax(0,1fr) auto}.proc-form-head .bfb{grid-column:1 / -1;grid-row:2;justify-self:start;margin-top:0}}
+/* phones (user, 2026-11-25): while the cart bar shows, the Black Friday tab steps out of its way instead of sitting on it */
+@media (max-width:767px){body:has(.cart-pill:not(.is-off)) .bfd-tab.is-on{transform:translate(-50%,110%);pointer-events:none}}
