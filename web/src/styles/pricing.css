@@ -9,8 +9,10 @@
 /* room either side of the clipping fold so the panel's outline and shadow are not cut off */
 .pr-group>.pr-body>div{margin:0 -16px;padding:0 16px}
 /* the open category title stays under the header without a paper band of its own: rows passing under it are blurred away */
-.pr-group.is-open>.pr-ghead{position:sticky;top:100px;z-index:5;background:transparent;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
-@media (min-width:1280px){.pr-group.is-open>.pr-ghead{top:120px}}
+.pr-group.is-open>.pr-ghead{position:sticky;top:calc(100px + var(--pcm-h, 0px));z-index:5;background:transparent;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+@media (min-width:1280px){.pr-group.is-open>.pr-ghead{top:calc(120px + var(--pcm-h, 0px))}}
+/* --pcm-h: the height of the sticky "Jump to a treatment" bar above the list (jump-menu.tsx), so an open category's title
+   sticks under the bar instead of behind it (user, 2026-11-25) */
 .pr-gplus{width:44px;height:44px}
 .pr-ghead button:hover .pr-gplus{border-color:#1B242B}
 .pr-group.is-open>.pr-ghead .pr-gplus{background:#0F80C3;border-color:#0F80C3;color:#fff}
@@ -70,12 +72,42 @@
   .sb-split{flex-wrap:wrap;gap:5px;max-width:100%;overflow:visible;border-radius:0}
   .sb-split .sb-a,.sb-split .sb-b{border-radius:999px}
   .sb-split .sb-a{box-shadow:inset 0 0 0 1.5px var(--a-ring)}
+  /* the Pricing page's list keeps its two halves joined on phones too, as on wide screens (user, 2026-11-25): its pills are
+     short (no sale name), so they fit */
+  #prices .sb-split{flex-wrap:nowrap;gap:0;overflow:hidden;border-radius:999px}
+  #prices .sb-split .sb-a{border-radius:999px 0 0 999px;box-shadow:inset 1.5px 0 0 var(--a-ring),inset 0 1.5px 0 var(--a-ring),inset 0 -1.5px 0 var(--a-ring)}
+  #prices .sb-split .sb-b{border-radius:0 999px 999px 0}
+  /* a category's title on phones (user, 2026-11-25: it took too much height): the count and name small on the left with a
+     smaller + on the right; under them in one row the offer pill on the left and the "from" price on the right, without the
+     "Lowest price, from" line */
+  .pr-ghead>button{padding-block:14px;column-gap:12px;row-gap:8px}
+  .pr-ghead .pr-gcount{font-size:11.5px;line-height:1.2}
+  .pr-ghead .pr-gname{margin-top:2px;font-size:20px;line-height:1.15}
+  .pr-ghead .pr-gplus{grid-row:1;grid-column:2;align-self:center;width:34px;height:34px}
+  .pr-ghead .pr-gmeta{grid-column:1 / -1;grid-row:2;flex-wrap:wrap;justify-content:space-between;column-gap:10px;row-gap:6px}
+  .pr-ghead .pr-gmeta .sb{font-size:11px}
+  .pr-ghead .pr-gmeta .sb>span{padding:6px 10px}
+  .pr-ghead .pr-gmeta .pr-src{display:none}
+  .pr-ghead .pr-gmeta .pr-from{font-size:17px}
+  .pr-ghead .pr-gmeta>span:last-child{align-items:flex-end}
 }
 .pr-from.is-sale{color:var(--now,#0F80C3)}
 .sb,.pr-from[data-look]{--now:#0F80C3}
 .sb[data-look="vip"],.pr-from[data-look="vip"],#prices[data-sale="vip"] .sb{--a-bg:#0B0F13;--a-fg:#fff;--a-ring:#0B0F13;--b-bg:#D4B574;--b-fg:#0B0F13;--now:#9A7A3A}
 /* Black Friday (user, 2026-11-19): black and signal red, was black and gold */
 .sb[data-look="bf"],.pr-from[data-look="bf"],#prices[data-sale="bf"] .sb{--a-bg:#0B0B0C;--a-fg:#fff;--a-ring:#0B0B0C;--b-bg:#D3121F;--b-fg:#fff;--now:#C8101C}
+/* "BEST DEAL" beside an offer that is a percentage only (user, 2026-11-25): a red half that looks like a fire seen through
+   frosted glass, blurred flame tongues rising and swaying behind a pane with a soft sheen; the warmth shows, the flames stay
+   soft. Same size as any other pill half. */
+.sb-fire{position:relative;isolation:isolate;overflow:hidden;background:#7E0A12;color:#fff;text-shadow:0 1px 3px rgba(60,0,4,.7)}
+.sb-flames{position:absolute;inset:0;z-index:-1;pointer-events:none;filter:blur(2.6px) saturate(1.3)}
+.sb-flames::before,.sb-flames::after{content:"";position:absolute;left:-20%;right:-20%;top:-10%;bottom:-35%}
+.sb-flames::before{background:radial-gradient(9% 62% at 12% 100%,#FFD36A 0%,#FF7A1E 35%,rgba(232,20,31,.6) 62%,transparent 80%),radial-gradient(11% 78% at 33% 100%,#FFC04A 0%,#FF5A16 38%,rgba(232,20,31,.55) 64%,transparent 82%),radial-gradient(9% 58% at 55% 100%,#FFE08A 0%,#FF8A24 34%,rgba(232,20,31,.55) 60%,transparent 80%),radial-gradient(12% 82% at 77% 100%,#FFB23E 0%,#FF4E14 40%,rgba(232,20,31,.55) 66%,transparent 84%),radial-gradient(60% 45% at 50% 100%,#E8141F 0%,transparent 80%);transform-origin:50% 100%;animation:sbFlameA 1.8s ease-in-out infinite alternate}
+.sb-flames::after{background:radial-gradient(7% 66% at 22% 100%,#FFE7A0 0%,#FF9A2E 36%,transparent 74%),radial-gradient(8% 72% at 46% 100%,#FFD36A 0%,#FF6A1F 40%,transparent 76%),radial-gradient(7% 60% at 66% 100%,#FFE7A0 0%,#FF9A2E 36%,transparent 74%),radial-gradient(8% 70% at 90% 100%,#FFC04A 0%,#FF5A16 40%,transparent 76%);mix-blend-mode:screen;opacity:.85;transform-origin:50% 100%;animation:sbFlameB 1.3s ease-in-out infinite alternate}
+.sb-fire::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.26) 0%,rgba(255,255,255,.08) 40%,rgba(255,255,255,0) 55%,rgba(255,255,255,.05) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(255,255,255,.12)}
+@keyframes sbFlameA{0%{transform:translate3d(-5%,6%,0) scale(1,.82)}35%{transform:translate3d(3%,-3%,0) scale(1.04,1.12)}70%{transform:translate3d(-2%,2%,0) scale(.97,.94)}100%{transform:translate3d(4%,-5%,0) scale(1.02,1.18)}}
+@keyframes sbFlameB{0%{transform:translate3d(6%,4%,0) scale(1.05,.9)}40%{transform:translate3d(-4%,-8%,0) scale(.95,1.25)}100%{transform:translate3d(2%,1%,0) scale(1.02,.86)}}
+@media (prefers-reduced-motion:reduce){.sb-flames::before,.sb-flames::after{animation:none}}
 .sb[data-look="holiday"],.pr-from[data-look="holiday"],#prices[data-sale="holiday"] .sb{--a-bg:#173D2C;--a-fg:#fff;--a-ring:#173D2C;--b-bg:#D4B574;--b-fg:#173D2C;--now:#1E5A3E}
 .sb[data-look="newyear"],.pr-from[data-look="newyear"],#prices[data-sale="newyear"] .sb{--a-bg:#fff;--a-fg:#1B242B;--a-ring:rgba(27,36,43,.25);--b-bg:#4A5763;--b-fg:#fff;--now:#0F80C3}
 
@@ -218,3 +250,12 @@
   .pcm-chip{padding:11px 15px}
 }
 @media (prefers-reduced-motion:reduce){.pcm-chip,.pcm-arrow{transition:none}}
+/* phones (user, 2026-11-25): a search button at the start of the bar, in place of the floating one, takes you to the list's search box */
+.pcm-find{display:none}
+@media (max-width:639px){
+  .pcm-find{display:grid;place-items:center;flex:none;width:42px;height:42px;border-radius:999px;border:0;background:#0F80C3;color:#fff;-webkit-tap-highlight-color:transparent;transition:background-color .25s ease}
+  .pcm-find:is(:hover,:focus-visible){background:#0A4F7A}
+  .pcm-find:focus-visible{outline:3px solid rgba(32,158,217,.35);outline-offset:2px}
+  .pcm{gap:8px}
+  .pcm-find+.pcm-list{margin-left:0;padding-left:2px;scroll-padding-left:2px;-webkit-mask:linear-gradient(90deg,#000 calc(100% - var(--gx)),transparent);mask:linear-gradient(90deg,#000 calc(100% - var(--gx)),transparent)}
+}

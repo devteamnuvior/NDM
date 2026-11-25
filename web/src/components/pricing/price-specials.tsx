@@ -5,9 +5,8 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { TwoTone } from "@/components/ui/two-tone";
 import { useReveal } from "@/hooks/use-reveal";
 import type { PriceSpecialView } from "@/lib/pricing-view";
-import { scrollToY } from "@/lib/smooth-scroll";
-import { byId } from "@/lib/dom";
 import { withBase } from "@/lib/base-path";
+import { jumpToPriceGroup } from "@/lib/price-jump";
 import { DealPill } from "@/components/specials/deal-pill";
 
 interface PriceSpecialsProps {
@@ -22,11 +21,7 @@ export function PriceSpecials({ specials, sub, note }: PriceSpecialsProps) {
   useReveal(section);
 
   const go = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
-    const el = byId(`${id}-h`);
-    if (!el) return;
-    e.preventDefault();
-    if (el.getAttribute("aria-expanded") !== "true") el.click();
-    scrollToY(el.getBoundingClientRect().top + window.scrollY - 150);
+    if (jumpToPriceGroup(`${id}-h`)) e.preventDefault();
   };
 
   return (

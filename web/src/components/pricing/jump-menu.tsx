@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { IconArrow } from "@/components/ui/icons";
+import { IconArrow, IconSearch } from "@/components/ui/icons";
+import { byId } from "@/lib/dom";
+import { scrollToY } from "@/lib/smooth-scroll";
 import { useOnScroll } from "@/hooks/use-on-scroll";
 import { money } from "@/lib/cart";
-import { jumpToPriceGroup } from "@/lib/price-jump";
+import { jumpToPriceGroup, priceJumpOffset } from "@/lib/price-jump";
 import type { PriceCategoryView } from "@/lib/pricing-view";
 
 /**
@@ -41,6 +43,22 @@ export function JumpMenu({ categories }: { categories: PriceCategoryView[] }) {
     };
   }, [measure]);
 
+  /* the bar's height, handed to the list as --pcm-h: an open category's title sticks under the bar, never behind it
+     (user, 2026-11-25: on phones the title slid under the bar while its category was scrolled) */
+  useEffect(() => {
+    const el = bar.current;
+    const box = el?.parentElement;
+    if (!el || !box) return;
+    const put = () => box.style.setProperty("--pcm-h", `${el.offsetHeight}px`);
+    put();
+    const ro = new ResizeObserver(put);
+    ro.observe(el);
+    return () => {
+      ro.disconnect();
+      box.style.removeProperty("--pcm-h");
+    };
+  }, []);
+
   /* the bar gets its background and line only while it is stuck under the header */
   useOnScroll(() => {
     const el = bar.current;
@@ -50,11 +68,14 @@ export function JumpMenu({ categories }: { categories: PriceCategoryView[] }) {
     setStuck(Math.abs(el.getBoundingClientRect().top - top) < 1.5);
   });
 
-  /* room kept above a category's heading: the header (the bar's sticky top), the bar itself, a little air */
-  const offset = () => {
-    const el = bar.current;
-    if (!el) return 150;
-    return (parseFloat(getComputedStyle(el).top) || 100) + el.offsetHeight + 18;
+
+  /* phones (user, 2026-11-25): the floating search button is gone from this page, so the bar carries one; it brings the
+     price list's own search box into view and puts the cursor in it */
+  const find = () => {
+    const input = byId("prices-search") as HTMLInputElement | null;
+    if (!input) return;
+    scrollToY(input.getBoundingClientRect().top + window.scrollY - 140);
+    window.setTimeout(() => input.focus({ preventScroll: true }), 650);
   };
 
   const slide = (dir: 1 | -1) => {
@@ -68,6 +89,9 @@ export function JumpMenu({ categories }: { categories: PriceCategoryView[] }) {
     <>
       <p className="pcm-label rv">Jump to a treatment</p>
       <nav ref={bar} aria-label="Price list categories" className={`pcm ${stuck ? "is-stuck" : ""}`}>
+        <button type="button" className="pcm-find" onClick={find} aria-label="Search treatments">
+          <IconSearch size={18} />
+        </button>
         <ul ref={row} className="pcm-list" role="list" data-lenis-prevent-horizontal="">
           {categories.map((c) => (
             <li key={c.id}>
@@ -76,7 +100,7 @@ export function JumpMenu({ categories }: { categories: PriceCategoryView[] }) {
                 aria-current={picked === c.id || undefined}
                 onClick={(e) => {
                   setPicked(c.id);
-                  if (jumpToPriceGroup(`pg-${c.id}-h`, false, offset())) e.preventDefault();
+                  if (jumpToPriceGroup(`pg-${c.id}-h`, false, priceJumpOffset())) e.preventDefault();
                 }}
                 className="pcm-chip"
               >

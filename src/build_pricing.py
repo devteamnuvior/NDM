@@ -27,19 +27,20 @@ rep('<meta name="description" content="NewDermaMed is Toronto\'s award-winning c
 
 # 2. pricing CSS at the end of the main stylesheet
 css = r'''
-  /* VIP Sale banner above the price list (2026-11-18): black, a gold light circling the edge */
+  /* sale banner above the price list: Black Friday (site, 2026-11-19), true black with one signal-red light circling the edge */
   @property --pr-sale-a{syntax:"<angle>";initial-value:0deg;inherits:false}
-  .pr-sale{position:relative;isolation:isolate;overflow:hidden;color:#fff;background:radial-gradient(70% 140% at 0% 0%,rgba(212,181,116,.18),transparent 60%),radial-gradient(50% 120% at 100% 100%,rgba(212,181,116,.08),transparent 65%),#0B0B0C;box-shadow:0 0 0 1px rgba(212,181,116,.22),0 30px 60px -38px rgba(11,11,12,.7)}
-  .pr-sale::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;padding:1px;pointer-events:none;background:conic-gradient(from var(--pr-sale-a),transparent 0deg,rgba(242,214,150,.95) 28deg,transparent 70deg,transparent 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:prSaleEdge 7s linear infinite}
+
+  .pr-sale{position:relative;isolation:isolate;overflow:hidden;color:#fff;background:radial-gradient(70% 140% at 0% 0%,rgba(211,18,31,.26),transparent 60%),radial-gradient(50% 120% at 100% 100%,rgba(211,18,31,.1),transparent 65%),#0B0B0C;box-shadow:0 0 0 1px rgba(238,58,69,.28),0 30px 60px -38px rgba(11,11,12,.7)}
+  .pr-sale::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;padding:1px;pointer-events:none;background:conic-gradient(from var(--pr-sale-a),transparent 0deg,rgba(255,107,115,.95) 28deg,transparent 70deg,transparent 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:prSaleEdge 7s linear infinite}
   @keyframes prSaleEdge{to{--pr-sale-a:360deg}}
   .pr-sale-pill{display:inline-flex;border-radius:999px;overflow:hidden;font:700 11px/1 Manrope,sans-serif;letter-spacing:.06em;white-space:nowrap}
   .pr-sale-pill>span{padding:6px 10px}
-  .pr-sale-pill .a{background:#D4B574;color:#0B0B0C}
-  .pr-sale-pill .b{background:rgba(212,181,116,.12);color:#E8D3A0;box-shadow:inset 0 0 0 1px rgba(212,181,116,.35);border-radius:0 999px 999px 0}
+  .pr-sale-pill .a{background:#D3121F;color:#fff}
+  .pr-sale-pill .b{background:rgba(211,18,31,.16);color:#FF9AA0;border-radius:0 999px 999px 0}
   .pr-sale-text{color:rgba(255,255,255,.74)}
-  .pr-sale-text strong{color:#E8D3A0}
+  .pr-sale-text strong{color:#fff}
   .pr-sale-btn{background:#fff;border-color:#fff;color:#0B0B0C}
-  .pr-sale-btn:hover,.pr-sale-btn:focus-visible{background:#D4B574;border-color:#D4B574;color:#0B0B0C}
+  .pr-sale-btn:hover,.pr-sale-btn:focus-visible{background:#D3121F;border-color:#D3121F;color:#fff}
   @media (prefers-reduced-motion:reduce){.pr-sale::before{animation:none;--pr-sale-a:200deg}}
 
   /* pricing page: folding categories, folding treatment rows, sale prices, quantity stepper and cart */
@@ -98,6 +99,9 @@ ui = (scratch / 'pricing-ui.jsx').read_text()
 helper = "/* laser hair removal: every package carries the site's BUY 1 GET 1 FREE badge */\nconst lhrB = (a, b, c, d) => [['Single session', a, 0], ['Package of 3', b, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', c, 0, 'BUY 1 GET 1 FREE'], ...(d ? [['Package of 8', d, 0, 'BUY 1 GET 1 FREE']] : [])];\n"
 # round 29: PRICE_CATS and lhrB already live in the shell (src/sync_prices.py); keep only the rest of the data file
 _i = data.index('const PRICE_CATS = ['); _j = data.index('\n];\n', _i) + 4
+_m = re.match(r'(?:/\*[^\n]*\*/\n)?const PRICE_SALE = [^\n]*\n', data[_j:])  # the running sale lives in the shell too
+if _m:
+    _j += _m.end()
 data = data[:_i] + data[_j:]
 
 a = s.index('function App() {')
@@ -147,7 +151,7 @@ app = r'''function App() {
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} onBrowse={toPrices} />
       <SearchOverlay open={search} onClose={() => setSearch(false)} />
       <Drawer open={drawer} onClose={() => setDrawer(false)} />
-      <FloatSearch onOpen={() => setSearch(true)} hidden={search || drawer || cartOpen} />
+      <FloatSearch onOpen={() => setSearch(true)} hidden={search || drawer || cartOpen || true} />{/* phones: no floating search here, the page has its own search box (user, 2026-11-25) */}
       <OfferPopup ready />
       <ChatBot ready hidden={cartOpen || drawer || search} />
     </CartCtx.Provider>
