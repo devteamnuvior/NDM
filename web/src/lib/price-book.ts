@@ -94,7 +94,9 @@ export function createPriceBook(categories: PriceCategory[], names: PriceNames =
    * price is the lowest price the price tables show (the Pricing page and the treatment pages' tables).
    * On a tie the bigger package wins (Package of 6 over Package of 3 at the same price per session).
    */
-  function lowestPrice(categoryId: string, item?: PriceItemName, withCode = false): LowestPrice | null {
+  /* withCode (the default since 2026-11-25, user: every price on the site is the Pricing page's): while a sale runs, the
+     price with its checkout code where the code applies, exactly as the Pricing page's "from" prices */
+  function lowestPrice(categoryId: string, item?: PriceItemName, withCode = true): LowestPrice | null {
     const c = BY_ID.get(categoryId);
     const options = optionsOf(categoryId, item);
     if (!c || !options.length) return null;

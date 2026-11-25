@@ -75,12 +75,12 @@ export interface SpecialOffer {
 }
 
 /**
- * The price a card of one of the lists (Monthly specials, the offers carousel) shows: the offer's own
- * figures when the treatment is also an offer, else its own lowest price or its category's, as the card is set.
+ * The price a card of one of the lists (Monthly specials, the offers carousel) shows: its treatment's or its category's
+ * "from" price exactly as the Pricing page's list shows it (user, 2026-11-25: every price on the site is read from the
+ * Pricing page and agrees with it), as the card is set. An offer's own option or price setting no longer changes it.
  */
-export function cardPrice(tree: WooPricingTree, choice: OfferPriceChoice, card: Pick<WooSpecial, "productId" | "scope">, offer: SpecialOffer | undefined): OfferPrice | null {
-  if (!offer) return offerPrice(choice, card.scope);
-  return (offer.option ? offerOptionPrice(tree, card.productId, offer.option) : null) ?? offerPrice(choice, offer.scope);
+export function cardPrice(choice: OfferPriceChoice, card: Pick<WooSpecial, "productId" | "scope">): OfferPrice | null {
+  return offerPrice(choice, card.scope);
 }
 
 /**
@@ -92,11 +92,11 @@ export function cardPrice(tree: WooPricingTree, choice: OfferPriceChoice, card: 
  */
 export function priceSpecials(tree: WooPricingTree, specials: readonly WooSpecial[], offers: readonly SpecialOffer[]): PriceSpecialView[] {
   const choices = offerPriceChoices(tree);
-  const offerOf = new Map(offers.map((o) => [o.productId, o]));
+  void offers; /* kept for callers: an offer no longer changes a card's price (user, 2026-11-25) */
   return specials.flatMap((s): PriceSpecialView[] => {
     const choice = choices.get(s.productId);
     if (!choice) return [];
-    const shown = cardPrice(tree, choice, s, offerOf.get(s.productId));
+    const shown = cardPrice(choice, s);
     if (!shown) return [];
     return [{ id: s.productId, name: s.name || s.productName, price: "$" + shown.price, unit: shown.unit ? " / " + shown.unit.replace(/^per /, "") : "", offer: shown.deal, target: `pg-${choice.slug}` }];
   });
