@@ -966,7 +966,7 @@ export function VipSaleV2({ view, words = VIP_WORDS }: { view: SaleView; words?:
     const sendable = list.filter((p) => p.pid !== undefined && p.vid !== undefined);
     if (!sendable.length) return;
     track("InitiateCheckout", { value: planTotals(list).withCode, currency: "CAD", num_items: sendable.length, content_ids: sendable.map((p) => String(p.vid)) });
-    sendable.forEach((p) => setCartQty({ key: cartKey(p.pid!, p.vid!), cat: p.cat, name: p.name ?? p.item, label: p.opt, price: p.price, was: p.reg || undefined, productId: p.pid, variationId: p.vid }, 1));
+    sendable.forEach((p) => setCartQty({ key: cartKey(p.pid!, p.vid!), cat: p.cat, name: p.name ?? p.item, label: p.opt, price: p.price, was: p.reg || undefined, productId: p.pid, variationId: p.vid }, 1, true));
     /* the page shows final prices and no code: where the campaign still takes its code for that price, it goes along unseen */
     if (code) setTypedCode(code);
     setList([]);

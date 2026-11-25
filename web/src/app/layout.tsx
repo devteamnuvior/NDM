@@ -4,7 +4,7 @@ import { BookPopup } from "@/components/booking/book-popup";
 import { VisitSourceKeeper } from "@/components/layout/visit-source-keeper";
 import { EarlyReveal } from "@/components/layout/early-reveal";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
-import { TagManager, TagManagerNoScript } from "@/components/layout/tag-manager";
+import { MetaPixel, TagManager, TagManagerNoScript } from "@/components/layout/tag-manager";
 import "./globals.css";
 
 /* Fraunces: headings. Manrope: text. Inter: the fallback behind Helvetica Neue for menus, buttons and fields.
@@ -52,6 +52,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <VisitSourceKeeper />
         <EarlyReveal />
         <TagManager />
+        <MetaPixel />
       </body>
     </html>
   );

@@ -1,3 +1,5 @@
+import { metaTrack } from "@/lib/meta-pixel";
+
 /**
  * Tells Google Tag Manager that a lead was saved: the same `popupFormSubmit` event the old WordPress site's
  * forms pushed (plugins ndm-forms and ndm-popup-subscribe), which the container's "form_lead_submission"
@@ -8,6 +10,8 @@
  * is not on the page or does not answer, so a page change right after the push does not cut the tag off.
  */
 export function pushLead(formId: string, extra: Record<string, string> = {}, then?: () => void, waitMs = 1200): void {
+  /* the Meta pixel's Lead for a consultation request or a message: which form only */
+  if (formId !== "checkout") metaTrack("Lead", { form: formId });
   const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
   w.dataLayer = w.dataLayer || [];
   if (!then) {

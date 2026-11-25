@@ -1,4 +1,6 @@
 import Script from "next/script";
+import { META_PIXEL_ID } from "@/lib/meta-pixel";
+import { MetaPageView } from "./meta-pageview";
 
 /** The clinic's Google Tag Manager container (marketing team, 2026-11-18). */
 const GTM_ID = "GTM-TMLTWS56";
@@ -36,5 +38,23 @@ export function TagManagerNoScript() {
         style={{ display: "none", visibility: "hidden" }}
       />
     </noscript>
+  );
+}
+
+/** Meta's pixel snippet (pixel "NewDermaMed"), live site only, loaded like Tag Manager after the page can be used. */
+export function MetaPixel() {
+  if (!tagManagerOn()) return null;
+  return (
+    <>
+      <Script id="meta-pixel" strategy="afterInteractive">
+        {`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','${META_PIXEL_ID}');fbq('track','PageView');`}
+      </Script>
+      <MetaPageView />
+    </>
   );
 }

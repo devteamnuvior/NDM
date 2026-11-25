@@ -1,6 +1,7 @@
 import { SALE_CODE_KEY } from "@/components/sale/code";
 import { CART_STORAGE_KEY } from "@/config/site";
 import { withBase } from "@/lib/base-path";
+import { metaTrack } from "@/lib/meta-pixel";
 
 /**
  * The cart. It is kept in this browser (localStorage), and it only remembers what was chosen: every
@@ -238,10 +239,12 @@ export function clearCart(): void {
 
 export const getServerCartLines = (): CartLine[] => EMPTY;
 
-/** Sets how many of a line the cart holds; zero removes it. */
-export function setCartQty(line: Omit<CartLine, "qty">, qty: number): void {
+/** Sets how many of a line the cart holds; zero removes it. `quiet`: the caller already sent the pixel's AddToCart. */
+export function setCartQty(line: Omit<CartLine, "qty">, qty: number, quiet = false): void {
   const current = getCartLines();
   const i = current.findIndex((l) => l.key === line.key);
+  const added = qty - (i < 0 ? 0 : current[i].qty);
+  if (added > 0 && !quiet) metaTrack("AddToCart", { content_ids: [line.key], content_type: "product", value: line.price * added, currency: "CAD" });
   if (qty <= 0) lines = current.filter((l) => l.key !== line.key);
   else if (i < 0) lines = [...current, { ...line, qty }];
   else lines = current.map((l, k) => (k === i ? { ...l, qty } : l));

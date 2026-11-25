@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { metaTrack } from "@/lib/meta-pixel";
 import { visitChannel } from "@/lib/visit-source";
 import { checkOrderPaymentAction, type OrderReceipt, type PaymentCheck } from "@/app/(site)/checkout/actions";
 import { Button } from "@/components/ui/button";
@@ -80,6 +81,8 @@ export function ConfirmPage() {
       channel: visitChannel(),
       ecommerce: { transaction_id: o.no, value: o.total, tax: o.tax, currency: "CAD", ...(o.code ? { coupon: o.code } : {}), items: o.lines.map((l) => ({ item_name: `${l.name}, ${l.label}`, item_category: l.cat, price: l.price, quantity: l.qty })) },
     });
+    /* the Meta pixel's Purchase: amount and product keys only, the order number as the event's ID */
+    metaTrack("Purchase", { value: o.total, currency: "CAD", content_type: "product", num_items: o.lines.reduce((n, l) => n + l.qty, 0) }, `order-${o.no}`);
   }, [paidNow, o]);
   const date = o ? new Date(o.date).toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" }) : "";
   const clinic = o ? CLINICS.find((c) => c.name === o.clinic) : undefined;
