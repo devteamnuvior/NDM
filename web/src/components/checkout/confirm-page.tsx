@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { visitChannel } from "@/lib/visit-source";
 import { checkOrderPaymentAction, type OrderReceipt, type PaymentCheck } from "@/app/(site)/checkout/actions";
 import { Button } from "@/components/ui/button";
 import { TwoTone } from "@/components/ui/two-tone";
@@ -58,6 +59,28 @@ export function ConfirmPage() {
       cancelAnimationFrame(id);
     };
   }, []);
+  /* a paid card order: one GA4 "purchase" event with the amount in CAD, so Analytics shows revenue per channel
+     (user, 2026-11-25). Only the order number, amounts and treatment names travel, never anything about the buyer;
+     sent once per order in this browser (Analytics also counts a transaction_id once). */
+  const paidNow = !!check && check.ok && check.paid;
+  useEffect(() => {
+    if (!paidNow || !o) return;
+    try {
+      const key = `ndm-purchase-sent-${o.no}`;
+      if (window.localStorage.getItem(key)) return;
+      window.localStorage.setItem(key, "1");
+    } catch {
+      /* storage blocked: Analytics still counts the transaction once */
+    }
+    const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
+    w.dataLayer = w.dataLayer || [];
+    w.dataLayer.push({ ecommerce: null });
+    w.dataLayer.push({
+      event: "purchase",
+      channel: visitChannel(),
+      ecommerce: { transaction_id: o.no, value: o.total, tax: o.tax, currency: "CAD", ...(o.code ? { coupon: o.code } : {}), items: o.lines.map((l) => ({ item_name: `${l.name}, ${l.label}`, item_category: l.cat, price: l.price, quantity: l.qty })) },
+    });
+  }, [paidNow, o]);
   const date = o ? new Date(o.date).toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" }) : "";
   const clinic = o ? CLINICS.find((c) => c.name === o.clinic) : undefined;
   const paid = !!check && check.ok && check.paid;

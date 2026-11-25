@@ -12,6 +12,7 @@ import { pushLead } from "@/lib/lead-event";
 import { pagePath } from "@/lib/routes";
 import { CO_CARD, CO_WRAP, CartPairs, CoAlert, CoHead, CoSelect, CodeField, FIELD, IconLock, OrderSummary, RemovedNotice, money2, totalsOf, useCartTax, useInBrowser, useSaleCode } from "./shared";
 import { withBase } from "@/lib/base-path";
+import { visitSource } from "@/lib/visit-source";
 
 const STEP_HEAD: [lead: string, strong: string, text: string][] = [
   ["Your", "details", "Your details are used only to arrange your treatment."],
@@ -70,6 +71,8 @@ export function CheckoutPage({ pairs, card }: { pairs: Omit<CartLine, "qty">[]; 
       note: field("note"),
       agree: fd.get("agree") === "on",
       code: code.applied,
+      /* where the buyer came from, saved on the WooCommerce order (its Origin column) */
+      source: visitSource(),
     };
     setBusy(true);
     setFailure("");
