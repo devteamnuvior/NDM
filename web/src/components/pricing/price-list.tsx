@@ -38,12 +38,17 @@ export interface PriceListSale {
 }
 const SaleContext = createContext<PriceListSale | null>(null);
 
-function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView; it: PriceItemView; uid: string; open: boolean; onToggle: () => void }) {
+/**
+ * One treatment of a category. `flat`: the category holds this treatment only, so its options show at once under the
+ * category's own heading, with no treatment row to open a second time (user, 2026-11-25).
+ */
+function TreatmentRow({ cat, it, uid, open, onToggle, flat = false }: { cat: PriceCategoryView; it: PriceItemView; uid: string; open: boolean; onToggle: () => void; flat?: boolean }) {
   /* the treatment (and below, its option) the category's "from" price is read from: marked with the blue dot */
   const isSource = cat.items.length > 1 ? it.name === cat.fromSource?.item : it.options.length > 1;
   const sale = useContext(SaleContext);
   return (
-    <li className={`pr-item ${open ? "is-open" : ""}`}>
+    <li className={`pr-item ${open || flat ? "is-open" : ""} ${flat ? "pr-item-flat" : ""}`}>
+      {!flat && (
       <h4 className="m-0">
         <button
           type="button"
@@ -70,7 +75,8 @@ function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView
           </span>
         </button>
       </h4>
-      <div id={uid} role="region" aria-labelledby={`${uid}-h`} className="pr-body">
+      )}
+      <div id={uid} role={flat ? undefined : "region"} aria-labelledby={flat ? undefined : `${uid}-h`} aria-label={flat ? it.name : undefined} className="pr-body">
         <div>
           <ul className="grid gap-2 pb-5" role="list">
             {it.options.map((o) => {
@@ -160,7 +166,7 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }: P
           {/* treatments sit on their own white panel, flush with the category title, so they read as part of the category */}
           <ul className="pr-sub" role="list">
             {shown.map(([it, i]) => (
-              <TreatmentRow key={i} cat={c} it={it} uid={`pr-${c.id}-${i}`} open={openItem(i)} onToggle={() => toggleItem(i)} />
+              <TreatmentRow key={i} cat={c} it={it} uid={`pr-${c.id}-${i}`} open={openItem(i)} onToggle={() => toggleItem(i)} flat={c.items.length === 1} />
             ))}
           </ul>
         </div>

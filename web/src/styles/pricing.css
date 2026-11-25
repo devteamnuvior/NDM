@@ -6,6 +6,8 @@
 .pr-sub .pr-opt{background:#FAFAF8}
 /* more air between treatments inside a category; option rows keep their spacing */
 .pr-sub>.pr-item{padding-block:10px}
+/* a category with one treatment: its options straight under the category heading (no treatment row) */
+.pr-sub>.pr-item-flat{padding-top:18px}
 /* room either side of the clipping fold so the panel's outline and shadow are not cut off */
 .pr-group>.pr-body>div{margin:0 -16px;padding:0 16px}
 /* the open category title stays under the header without a paper band of its own: rows passing under it are blurred away */
