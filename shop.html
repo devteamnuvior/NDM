@@ -1598,8 +1598,8 @@ const BEST_DEAL = 'BEST DEAL';
 const withBestDeal = (parts) => (BEST_DEAL_SHOWN && parts.length === 1 ? [parts[0], BEST_DEAL] : parts);
 /* style "A · Flames inside" (user, 2026-11-25): eight flame tongues and four sparks inside the red half, and a small flame icon */
 const FireLayer = () => <><i aria-hidden="true" className="sb-flames"><b /><b /><b /><b /><b /><b /><b /><b /><u /><u /><u /><u /></i><svg aria-hidden="true" className="sb-fire-ico" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg></>;
-/* where the list shows it, every red half ("BEST DEAL", "+ EXTRA 30%", "GET 1 FREE") carries the fire (user, 2026-11-25) */
-const PillPart = ({ text, second }) => second && BEST_DEAL_SHOWN
+/* every red half ("BEST DEAL", "+ EXTRA 30%", "GET 1 FREE") carries the fire, on every page (user, 2026-11-25) */
+const PillPart = ({ text, second }) => second
   ? <span className="sb-b sb-fire"><FireLayer />{saleWords(text)}</span>
   : <span className={second ? 'sb-b' : 'sb-a'}>{saleWords(text)}</span>;
 /* the lowest row of one price table and how it is counted (per unit when the table is priced per unit) */
@@ -1639,7 +1639,8 @@ const dealParts = (d) => { const t = tagWords(d); const m = /^(UP TO|BUY \d+)\s+
 function DealPill({ deal, className = '' }) {
   const p = dealParts(deal);
   if (!p.length) return null;
-  return <span className={`dp ${p.length > 1 ? 'dp-split' : ''} ${className}`}>{p.map((t, i) => <span key={i} className={i ? 'dp-b' : 'dp-a'}>{t}</span>)}</span>;
+  /* while a sale runs the second half carries the price tables' fire (user, 2026-11-25: the same fire everywhere) */
+  return <span className={`dp ${p.length > 1 ? 'dp-split' : ''} ${className}`}>{p.map((t, i) => (i && SALE_LOOK ? <span key={i} className="dp-b dp-fire"><FireLayer />{t}</span> : <span key={i} className={i ? 'dp-b' : 'dp-a'}>{t}</span>))}</span>;
 }
 /* where a lowest price is read from: "Skin Booster, 2 Syringes" (withItem puts the treatment first) */
 const sourceWords = (s, withItem) => {
@@ -1720,6 +1721,9 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .dp-a{background:#0B0F13;color:#E2C88A;border-radius:999px}
 .dp-split .dp-a{border-radius:999px 0 0 999px}
 .dp-b{background:#D4B574;color:#0B0F13;border-radius:0 999px 999px 0}
+.dp>.dp-fire{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;gap:.36em;background:linear-gradient(0deg,#F97316 0%,#DC2F0E 30%,#A51A0A 68%,#7F1206 100%);color:#fff;font-weight:800;text-shadow:0 1px 0 rgba(110,14,2,.55),0 0 .36em rgba(110,14,2,.5)}
+.dp:has(>.dp-fire){box-shadow:.4em .3em 1.1em -.35em rgba(249,115,22,.6);animation:sbGlow 2.4s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.dp:has(>.dp-fire){animation:none}}
 .pr-from.is-sale{color:var(--now,#0F80C3)}.pr-from[data-look]{--now:#0F80C3}
 .sb[data-look="vip"],.pr-from[data-look="vip"]{--a-bg:#0B0F13;--a-fg:#fff;--a-ring:#0B0F13;--b-bg:#D4B574;--b-fg:#0B0F13;--now:#9A7A3A}
 .sb[data-look="bf"],.pr-from[data-look="bf"]{--a-bg:#0B0B0C;--a-fg:#fff;--a-ring:#0B0B0C;--b-bg:#D3121F;--b-fg:#fff;--now:#C8101C}
