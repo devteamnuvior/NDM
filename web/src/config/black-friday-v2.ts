@@ -34,6 +34,12 @@ export const BLACK_FRIDAY_V2: SaleWords = {
     button: "See all Black Friday prices",
     link: "Not ready to buy? Book a free consultation and keep your Black Friday price",
     card: "Top Black Friday prices",
+    /* the brief "NUVIOR NewDermaMed Black Friday Website" (2026-11-25), Task 04 */
+    picks: [
+      ["PRP Scalp - Small", "Package of 6", "PRP for hair", "Small area · Package of 6"],
+      ["LHR - Lip (Upper)", "Package of 3", "Laser hair removal", "Lip (Upper) · Package of 3"],
+      ["Lip Enhancement", "2 Syringes", "Lip filler", "2 syringes"],
+    ],
   },
   list: { ...VIP2.list, lead: "The Black Friday", text: "Sale prices shown. No code needed. Until {{day}}." },
   name: "My list",

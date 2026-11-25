@@ -17,6 +17,7 @@ import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent, type ReactNode } from "react";
+import { sourceFields } from "@/lib/lead-event";
 import { bfsShort, planPrice, planTotals, type Deal, type Item, type Opt, type PlanLine } from "@/components/bf-sale/data";
 import { AWARD_BADGES } from "@/components/reviews/award-badges";
 import e2019 from "@/assets/images/awards/even/top-choice-2019.png";
@@ -80,8 +81,9 @@ function track(name: string, data: Record<string, unknown> = {}, custom = false)
   const w = window as unknown as { fbq?: Fbq; dataLayer?: Record<string, unknown>[] };
   try {
     /* the pixel's event names are Meta's own: the sale travels as a parameter */
-    w.fbq?.(custom ? "trackCustom" : "track", name, { ...data, sale: eventPrefix });
-    w.dataLayer?.push({ event: `${eventPrefix}_${name}`, ...data });
+    const from = sourceFields();
+    w.fbq?.(custom ? "trackCustom" : "track", name, { ...data, sale: eventPrefix, channel: from.channel });
+    w.dataLayer?.push({ event: `${eventPrefix}_${name}`, ...from, ...data });
   } catch {
     /* a blocked or broken tag never breaks the page */
   }
@@ -263,11 +265,18 @@ function Header({ count, day, openList }: { count: number; day: string; openList
 /* ------------------------------------------------------------------ hero */
 
 /** The three prices beside the offer: the package with the best saving first, then the page's sale price cards. */
-function useTopPacks(view: SaleView, packs: Pack[]): { p: Pack; title: string; sub: string }[] {
+function useTopPacks(view: SaleView, packs: Pack[], picks: [string, string, string, string][]): { p: Pack; title: string; sub: string }[] {
   return useMemo(() => {
     const priced = packs.filter((p) => p.reg > 0);
-    const best = [...priced].sort((a, b) => b.pct - a.pct || a.pay - b.pay)[0];
     const out: { p: Pack; title: string; sub: string }[] = [];
+    /* the page's own picks first, in their order, matched by product and option without regard to case */
+    const same = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
+    for (const [product, option, title, sub] of picks) {
+      const p = priced.find((x) => same(x.it[0], product) && same(x.o[0], option));
+      if (p && out.length < 3 && !out.some((x) => x.p.key === p.key)) out.push({ p, title, sub });
+    }
+    if (out.length >= 3) return out;
+    const best = out.length ? null : [...priced].sort((a, b) => b.pct - a.pct || a.pay - b.pay)[0];
     if (best) {
       /* a product named after its category ("Microneedling-Face", "LHR - Lip (Upper)") shows the category with the
          rest as its area; another keeps its own name, cut at its last " - " */
@@ -284,7 +293,7 @@ function useTopPacks(view: SaleView, packs: Pack[]): { p: Pack; title: string; s
       if (p && !out.some((x) => x.p.key === p.key || x.p.it[0] === p.it[0])) out.push({ p, title: c.title, sub: c.qty });
     }
     return out;
-  }, [view.cards, packs]);
+  }, [view.cards, packs, picks]);
 }
 
 function Hero({ view, t, day, best, top, inList, toggle }: { view: SaleView; t: Clock; day: string; best: number; top: ReturnType<typeof useTopPacks>; inList: (key: string) => boolean; toggle: (p: Pack, from: string, el?: HTMLElement, name?: string) => void }) {
@@ -922,8 +931,12 @@ export function VipSaleV2({ view, words = VIP_WORDS }: { view: SaleView; words?:
     const rest = deals.filter((d) => top(d) !== best);
     return [...deals.filter((d) => top(d) === best), ...rest.filter((d) => d.id === first), ...rest.filter((d) => d.id !== first)];
   }, [deals, best, view.copy.deals.groups]);
-  const top = useTopPacks(view, packs);
+  const top = useTopPacks(view, packs, words.hero.picks);
   const t = useClock(view.start, view.end);
+  /* the window has closed while the page is open (or WooCommerce's answer was stored before the end): on to the page's next stop */
+  useEffect(() => {
+    if (t.ready && t.over && view.after) router.replace(view.after);
+  }, [t.ready, t.over, view.after, router]);
   const day = view.phases.at(-1)?.day ?? "";
 
   const [list, setList] = useState<PlanLine[]>([]);
