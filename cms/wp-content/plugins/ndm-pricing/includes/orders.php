@@ -162,6 +162,44 @@ function ndm_pricing_clean_customer( $customer ) {
 }
 
 /**
+ * Where the buyer came from, as WooCommerce's own order attribution keeps it (user, 2026-11-25: "did this buyer come
+ * from Meta Ads?"), so the Orders list's Origin column and the order's "Order attribution" box show it: "Source: meta",
+ * "Organic: google", "Referral: instagram.com", "Direct". The site sends a type and a few short plain values (the
+ * utm values, a search engine's or other site's host, the first page of that visit); nothing about the visitor.
+ *
+ * @param WC_Order   $order  The order.
+ * @param array|null $source The request's "source".
+ */
+function ndm_pricing_order_source( $order, $source ) {
+	$source = is_array( $source ) ? $source : array();
+	$type   = isset( $source['type'] ) && in_array( $source['type'], array( 'utm', 'organic', 'referral', 'typein' ), true ) ? $source['type'] : 'typein';
+	$word   = static function ( $key, $max = 100 ) use ( $source ) {
+		$value = isset( $source[ $key ] ) && is_string( $source[ $key ] ) ? trim( sanitize_text_field( $source[ $key ] ) ) : '';
+		return '' !== $value && strlen( $value ) <= $max && preg_match( '#^[\w\-.~+ /]+$#u', $value ) ? $value : '';
+	};
+	$order->update_meta_data( '_wc_order_attribution_source_type', $type );
+	if ( 'typein' === $type ) {
+		$order->update_meta_data( '_wc_order_attribution_utm_source', '(direct)' );
+	} else {
+		foreach ( array( 'source', 'medium', 'campaign', 'content', 'term' ) as $key ) {
+			$value = $word( $key );
+			if ( '' !== $value ) {
+				$order->update_meta_data( '_wc_order_attribution_utm_' . $key, $value );
+			}
+		}
+		$referrer = $word( 'referrer' );
+		if ( '' !== $referrer ) {
+			$order->update_meta_data( '_wc_order_attribution_referrer', 'https://' . $referrer . '/' );
+		}
+	}
+	$entry = $word( 'entry', 200 );
+	$site  = defined( 'NDM_FRONTEND_URL' ) ? rtrim( (string) NDM_FRONTEND_URL, '/' ) : '';
+	if ( '' !== $entry && '/' === $entry[0] && '' !== $site ) {
+		$order->update_meta_data( '_wc_order_attribution_session_entry', $site . $entry );
+	}
+}
+
+/**
  * POST /orders: checks the request as a whole, then creates the order.
  *
  * @param WP_REST_Request $request Request.
@@ -314,6 +352,7 @@ function ndm_pricing_rest_order( $request ) {
 	$order->set_customer_note( $extras['note'] );
 	$order->update_meta_data( '_ndm_clinic', $extras['clinic'] );
 	$order->update_meta_data( '_ndm_preferred_time', $extras['preferred'] );
+	ndm_pricing_order_source( $order, isset( $body['source'] ) ? $body['source'] : null );
 	$order->calculate_totals();
 	$when = '' !== $extras['preferred'] ? $extras['preferred'] : 'not given';
 	if ( $card ) {

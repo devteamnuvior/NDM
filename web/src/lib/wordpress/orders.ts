@@ -22,6 +22,22 @@ export interface OrderRequestInput {
   code?: string;
   /** "card": paid online on WooCommerce's pay page; left out or "clinic": paid at the appointment. */
   pay?: "card" | "clinic";
+  /** Where the buyer came from: saved as WooCommerce's order attribution (the Orders list's Origin column). */
+  source?: OrderSource;
+}
+
+/** WooCommerce's order attribution: "utm" (a tagged link), "organic" (a search engine), "referral" (another site), "typein" (direct). */
+export interface OrderSource {
+  type: "utm" | "organic" | "referral" | "typein";
+  source?: string;
+  medium?: string;
+  campaign?: string;
+  content?: string;
+  term?: string;
+  /** The search engine's or other site's host. */
+  referrer?: string;
+  /** The first page of that visit ("/black-friday"). */
+  entry?: string;
 }
 
 export interface PlacedOrder {

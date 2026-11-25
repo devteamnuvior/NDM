@@ -5,7 +5,7 @@ import { PROVINCES } from "@/config/checkout";
 import { CLINICS } from "@/config/site";
 import { getAccountSession } from "@/lib/account/session";
 import { CART_MAX, cartKey, type CartLine } from "@/lib/cart";
-import { WordPressError, getOrderPayment, getPaymentOptions, isWordPressConfigured, placeOrderRequest } from "@/lib/wordpress";
+import { WordPressError, getOrderPayment, getPaymentOptions, isWordPressConfigured, placeOrderRequest, type OrderSource } from "@/lib/wordpress";
 
 /**
  * Places an order request. The browser sends what was chosen (WooCommerce IDs and quantities) and the
@@ -31,6 +31,8 @@ export interface OrderRequestForm {
   agree: boolean;
   /** The checkout code of a running sale ("PLUS30"), or "". WooCommerce decides what it takes off. */
   code?: string;
+  /** Where the buyer came from (lib/visit-source.ts); checked below, anything unexpected is dropped. */
+  source?: unknown;
 }
 
 /** What the confirmation page shows and keeps: no email, phone or address. */
@@ -77,6 +79,22 @@ function tooMany(address: string): boolean {
 }
 
 const invalid = (message: string): OrderResult => ({ ok: false, reason: "invalid", message });
+
+/** The buyer's source as WooCommerce's order attribution keeps it: a type and a few short plain values, nothing else. */
+function sourceOf(value: unknown): OrderSource {
+  const v = (value && typeof value === "object" ? value : {}) as Record<string, unknown>;
+  const word = (x: unknown, max = 100) => (typeof x === "string" && x.trim() && x.trim().length <= max && /^[\w\-.~+ /]+$/.test(x.trim()) ? x.trim() : undefined);
+  const type = v.type === "utm" || v.type === "organic" || v.type === "referral" ? v.type : "typein";
+  if (type === "typein") return { type };
+  const out: OrderSource = { type };
+  for (const k of ["source", "medium", "campaign", "content", "term", "referrer"] as const) {
+    const w = word(v[k]);
+    if (w) out[k] = w;
+  }
+  const entry = word(v.entry, 200);
+  if (entry && entry.startsWith("/")) out.entry = entry;
+  return out;
+}
 
 export async function placeOrderAction(form: OrderRequestForm): Promise<OrderResult> {
   if (typeof form !== "object" || form === null) return invalid("The request could not be read. Please reload the page and try again.");
@@ -125,6 +143,7 @@ export async function placeOrderAction(form: OrderRequestForm): Promise<OrderRes
     const placed = await placeOrderRequest({
       ...(customerId ? { customerId } : {}),
       ...(code ? { code } : {}),
+      source: sourceOf(form.source),
       pay: "card",
       lines,
       customer: { first, last, email, phone, address: street, apt, city, province: form.province, postal },

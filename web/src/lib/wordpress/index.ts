@@ -38,7 +38,7 @@ export { getPageBySlug, getPages, type PagesQuery, type WPPageSummary } from "./
 export { getPricingAdminTree, getPricingAdminUser, getPricingTree, savePricing, searchPricingProducts } from "./pricing";
 export { getProcedure, getProcedureList } from "./procedures";
 export { getAdminPromotions, getPromotions, savePromotions, uploadPromotionPhoto } from "./promotions";
-export { getOrderPayment, getPaymentOptions, placeOrderRequest, type OrderPayment, type OrderRequestInput, type PaymentOptions, type PlacedOrder } from "./orders";
+export { getOrderPayment, getPaymentOptions, placeOrderRequest, type OrderPayment, type OrderRequestInput, type OrderSource, type PaymentOptions, type PlacedOrder } from "./orders";
 export { getPostBySlug, getPosts, type PostsQuery, type WPPostSummary } from "./posts";
 export { getSiteSettingsRaw } from "./site-settings";
 export { getPopularSearchTerms, logSearchTerm } from "./search";
