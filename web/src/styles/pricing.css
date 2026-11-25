@@ -305,3 +305,12 @@
 #specials .psx-note{margin-top:8px;font:400 12.5px/1.3 Manrope,"Helvetica Neue",Arial,sans-serif;color:#5A646C}
 @media (min-width:768px){#specials .psx{padding:22px 20px 24px}#specials .psx-name{font-size:16.5px}}
 @media (prefers-reduced-motion:reduce){#specials .psx{transition:none}}
+
+/* the offer pills' second half on fire while a sale runs, as every red half of the price tables (user, 2026-11-25: the same
+   fire everywhere); after the sale the pill is black and gold again and the fire's pieces are hidden */
+.dp-fire .sb-flames,.dp-fire .sb-fire-ico{display:none}
+.site-root[data-sale] .dp>.dp-fire{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;gap:.36em;background:linear-gradient(0deg,#F97316 0%,#DC2F0E 30%,#A51A0A 68%,#7F1206 100%);color:#fff;font-weight:800;text-shadow:0 1px 0 rgba(110,14,2,.55),0 0 .36em rgba(110,14,2,.5)}
+.site-root[data-sale] .dp>.dp-fire .sb-flames{display:block}
+.site-root[data-sale] .dp>.dp-fire .sb-fire-ico{display:inline-block}
+.site-root[data-sale] .dp:has(>.dp-fire){box-shadow:.4em .3em 1.1em -.35em rgba(249,115,22,.6);animation:sbGlow 2.4s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.site-root[data-sale] .dp:has(>.dp-fire){animation:none}}

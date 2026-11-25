@@ -51,7 +51,7 @@ export function useWithBestDeal(): (parts: string[]) => string[] {
   return (parts) => (shown && parts.length === 1 ? [parts[0], BEST_DEAL] : parts);
 }
 /** Style "A · Flames inside" (user, 2026-11-25): eight flame tongues and four sparks inside the red half, and a small flame icon. */
-function FireLayer() {
+export function FireLayer() {
   return (
     <>
       <i aria-hidden="true" className="sb-flames">
@@ -75,8 +75,8 @@ function FireLayer() {
 
 /** One half of a pill. Where the list shows "BEST DEAL", every red half ("BEST DEAL", "+ EXTRA 30%", "GET 1 FREE") carries the fire (user, 2026-11-25). */
 export function PillPart({ text, second, words }: { text: string; second: boolean; words: (t: string) => string }) {
-  const fire = useContext(BestDealContext);
-  if (second && fire)
+  /* every red half burns, wherever a price table shows a pill (user, 2026-11-25: the same fire everywhere) */
+  if (second)
     return (
       <span className="sb-b sb-fire">
         <FireLayer />
