@@ -131,6 +131,11 @@
 @keyframes sbBurn2{0%,100%{transform:translateY(0) rotate(47deg) scale(1);opacity:.9}33%{transform:translateY(.23em) rotate(43deg) scale(.8);opacity:.7}66%{transform:translateY(-.14em) rotate(46deg) scale(1.12);opacity:1}}
 @keyframes sbSpark{0%{transform:translate(0,0) scale(1);opacity:0}15%{opacity:1}100%{transform:translate(.27em,-2em) scale(.3);opacity:0}}
 @keyframes sbGlow{0%,100%{box-shadow:.4em .3em 1.1em -.35em rgba(249,115,22,.45)}50%{box-shadow:.4em .3em 1.2em -.3em rgba(249,115,22,.75)}}
+/* the Pricing page's list (user, 2026-11-26): a red half is plain red with the small flame icon; a half with the icon alone
+   (an offer of one part) is a little narrower */
+.sb-ico{gap:.36em}
+.sb-ico .sb-fire-ico{filter:none}
+.sb>.sb-only{padding-left:.85em;padding-right:1em}
 @media (prefers-reduced-motion:reduce){.sb-flames b,.sb-flames u,.sb:has(>.sb-fire){animation:none}}
 /* phones: a pill whose halves wrap onto two lines has no shape of its own to glow around (it drew a pale box), so each red
    half glows by itself; the price list's pills stay joined and keep the pill's glow */

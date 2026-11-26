@@ -1,6 +1,12 @@
 const PRICE_TOTAL = PRICE_CATS.reduce((n, c) => n + c.items.length, 0);
 SALE_NAME_SHOWN = false;
-BEST_DEAL_SHOWN = true; /* "30% OFF | BEST DEAL" with the fire half on percentage-only offers (user, 2026-11-25) */ /* the pricing page's pills give the offer only ("30% OFF"), as the site's list (user, 2026-11-25) */
+BEST_DEAL_SHOWN = true; /* "30% OFF | BEST DEAL" with the fire half on percentage-only offers (user, 2026-11-25); since 2026-11-26 the Monthly specials cards only, the list passes `fire` */
+/* the treatments and categories of the price list whose pills keep the fire (user, 2026-11-26; site: PRICE_FIRE in
+   web/src/config/pricing.ts); every other pill of the list has a plain red half with the flame icon, and no "BEST DEAL" */
+const PRICE_FIRE = ['Bio-Stimulator – Radiesse', 'Bio-Stimulator – Sculptra', 'Lip Enhancement', 'Microneedling with PRP - Face', 'PRP Hair Restoration', 'Standard Contour Areas', 'Chemical Peel', 'Laser Hair Removal', 'PRP Scalp'];
+const fireKey = (s) => String(s).toLowerCase().replace(/[\u2010-\u2015-]/g, '-').replace(/\s*-\s*/g, '-').replace(/\s+/g, ' ').trim();
+const FIRE_KEYS = new Set(PRICE_FIRE.map(fireKey));
+const fireOf = (...names) => (names.some((n) => n && FIRE_KEYS.has(fireKey(n))) ? 'hot' : 'icon'); /* the pricing page's pills give the offer only ("30% OFF"), as the site's list (user, 2026-11-25) */
 const PRICE_FAQS = [
   ['How do I check the price of a treatment?', 'Open a category in the price list, then any treatment with the + button. Each one shows its sessions, packages and current offers.'],
   ['Are the prices the same at all locations?', 'Yes. The listed prices and promotions apply across all our clinic locations unless otherwise noted.'],
@@ -20,6 +26,7 @@ const perUnit = (cat, label) => (cat.unit && label === 'Regular' ? ' / unit' : '
 
 /* the options of one treatment, each with Add to cart; the blue dot on the one the category's "from" price is read from */
 function OptionList({ cat, it, mark, className = 'grid gap-2 pb-5' }) {
+  const fire = fireOf(cat.name, it[0]);
   const [name, , opts] = it;
   const catPf = priceFrom(cat.id, undefined, true);
   return (
@@ -27,7 +34,7 @@ function OptionList({ cat, it, mark, className = 'grid gap-2 pb-5' }) {
       {opts.map(([label, p, was, tag, code]) => {
         const line = { key: `${name}|${label}`, cat: cat.name, name, label, price: code && code < p ? code : p, was: was || 0, unit: perUnit(cat, label) };
         return (
-          <OptionRow key={label} mark={mark && !!catPf && label === catPf.src.label} label={label} price={p} was={was || 0} code={code} tag={tag} unit={line.unit} action={<QtyControl line={line} label={`${name}, ${label}`} />} />
+          <OptionRow key={label} mark={mark && !!catPf && label === catPf.src.label} label={label} price={p} was={was || 0} code={code} tag={tag} unit={line.unit} fire={fire} action={<QtyControl line={line} label={`${name}, ${label}`} />} />
         );
       })}
     </ul>
@@ -55,7 +62,7 @@ function TreatmentRow({ cat, it, uid, open, onToggle }) {
             {note && <span className="mt-1 block font-inter text-[13.5px] leading-[1.45] text-ndm-muted">{note}</span>}
           </span>
           <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            <SaleTag offer={offer} badge={saleBadge(opts.map((o) => o[3]))} coded={badgeCoded(opts)} small />
+            <SaleTag offer={offer} badge={saleBadge(opts.map((o) => o[3]))} coded={badgeCoded(opts)} small fire={fireOf(cat.name, name)} />
             <FromPrice value={from} unit={fromUnit} src={pf && pf.src} noWords mark={isSource} />
           </span>
           <span aria-hidden="true" className="pr-plus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
@@ -156,7 +163,8 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }) {
             <span className="pr-gname mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{c.name}</span>
           </span>
           <span className="pr-gmeta col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            <SaleTag offer={offer} badge={saleBadge(opts.map((o) => o[3]))} coded={badgeCoded(opts)} />
+            {/* the category's pill burns when the category, or the treatment its "from" is read from, is on the fire list */}
+            <SaleTag offer={offer} badge={saleBadge(opts.map((o) => o[3]))} coded={badgeCoded(opts)} fire={fireOf(c.name, pf && pf.src && pf.src.item)} />
             <FromPrice value={from} unit={fromUnit} src={pf && pf.src} withItem={c.items.length > 1} big />
           </span>
           <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>

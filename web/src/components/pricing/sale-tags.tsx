@@ -40,16 +40,36 @@ export function useSaleWords(): (text: string) => string {
  * frosted glass (`.sb-fire` in pricing.css). Shown in the Pricing page's list (user, 2026-11-25).
  */
 export const BEST_DEAL = "BEST DEAL";
-const BestDealContext = createContext(false);
-export function BestDealProvider({ shown, children }: { shown: boolean; children: ReactNode }) {
-  return <BestDealContext value={shown}>{children}</BestDealContext>;
+const BestDealContext = createContext<string | null>(null);
+/** `word` is the second half's words: "BEST DEAL" (Monthly specials cards), or "" for a half with the flame icon only
+ *  (the Pricing page's list, user, 2026-11-26: every pill there is two halves). */
+export function BestDealProvider({ shown, word = BEST_DEAL, children }: { shown: boolean; word?: string; children: ReactNode }) {
+  return <BestDealContext value={shown ? word : null}>{children}</BestDealContext>;
 }
-/** The pill's parts with "BEST DEAL" added when the list shows it and the offer has one part only ("30% OFF", and since
- *  2026-11-25 "SAVE $1,000" too, user). */
+/** The pill's parts with the second half added when the offer has one part only ("30% OFF", and since 2026-11-25
+ *  "SAVE $1,000" too, user). */
 export function useWithBestDeal(): (parts: string[]) => string[] {
-  const shown = useContext(BestDealContext);
-  return (parts) => (shown && parts.length === 1 ? [parts[0], BEST_DEAL] : parts);
+  const word = useContext(BestDealContext);
+  return (parts) => (word !== null && parts.length === 1 ? [parts[0], word] : parts);
 }
+/** The small flame icon of a red half. */
+export function FireIcon() {
+  return (
+    <svg aria-hidden="true" className="sb-fire-ico" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>
+  );
+}
+
+/**
+ * How a pill's red half looks. "fire" (everywhere by default, user, 2026-11-25): the red half burns. The Pricing page's
+ * list (user, 2026-11-26) sets "icon" (plain red with the flame icon) and "hot" for the treatments on its fire list
+ * (`PRICE_FIRE`): the red half burns.
+ */
+export type FireMode = "fire" | "icon" | "hot";
+const FireContext = createContext<FireMode>("fire");
+export function FireProvider({ mode, children }: { mode: FireMode; children: ReactNode }) {
+  return <FireContext value={mode}>{children}</FireContext>;
+}
+
 /** Style "A · Flames inside" (user, 2026-11-25): eight flame tongues and four sparks inside the red half, and a small flame icon. */
 export function FireLayer() {
   return (
@@ -68,22 +88,29 @@ export function FireLayer() {
         <u />
         <u />
       </i>
-      <svg aria-hidden="true" className="sb-fire-ico" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>
+      <FireIcon />
     </>
   );
 }
 
-/** One half of a pill. Where the list shows "BEST DEAL", every red half ("BEST DEAL", "+ EXTRA 30%", "GET 1 FREE") carries the fire (user, 2026-11-25). */
+/** One half of a pill: the red half ("+ EXTRA 30%", "GET 1 FREE", or the flame icon alone) as `FireProvider` says. */
 export function PillPart({ text, second, words }: { text: string; second: boolean; words: (t: string) => string }) {
-  /* every red half burns, wherever a price table shows a pill (user, 2026-11-25: the same fire everywhere) */
-  if (second)
+  const mode = useContext(FireContext);
+  if (!second) return <span className="sb-a">{words(text)}</span>;
+  const only = text ? "" : " sb-only";
+  if (mode === "icon")
     return (
-      <span className="sb-b sb-fire">
-        <FireLayer />
+      <span className={`sb-b sb-ico${only}`}>
+        <FireIcon />
         {words(text)}
       </span>
     );
-  return <span className={second ? "sb-b" : "sb-a"}>{words(text)}</span>;
+  return (
+    <span className={`sb-b sb-fire${only}`}>
+      <FireLayer />
+      {words(text)}
+    </span>
+  );
 }
 
 /**
