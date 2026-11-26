@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { money } from "@/lib/cart";
-import { useSaleTags, useSaleWords } from "@/components/pricing/sale-tags";
+import { PillPart, useSaleTags, useSaleWords, useWithBestDeal } from "@/components/pricing/sale-tags";
 
 /** How many units, syringes, zones or sessions an option's label covers, and what one is called ("Package of 3" -> 3 sessions). */
 function countOf(label: string): { n: number; one: string; many: string } | null {
@@ -50,14 +50,16 @@ export interface OptionRowProps {
 export function OptionRow({ label, price, was, code, codePercent, tag, unit, action, data, mark }: OptionRowProps) {
   const sale = useSaleTags();
   const words = useSaleWords();
+  const withBest = useWithBestDeal();
   const coded = !!(sale && code && code < price);
   const final = coded ? (code as number) : price;
   const cnt = countOf(label);
   const struck = [was > final ? was : 0, coded ? price : 0].filter((v, i, a) => v > 0 && a.indexOf(v) === i);
   const save = Math.round(((was || price) - final) * 100) / 100;
   const pct = codePercent ?? sale?.percent;
-  const pill = tag && sale ? pillWords(tag, sale.look) : [];
-  if (pill.length === 1 && coded && pct) pill.push(`+ EXTRA ${pct}%`);
+  const found = tag && sale ? pillWords(tag, sale.look) : [];
+  if (found.length === 1 && coded && pct) found.push(`+ EXTRA ${pct}%`);
+  const pill = withBest(found);
   return (
     <li {...data} className={`pr-opt pr-opt2 ${struck.length || tag ? "is-featured" : ""}`}>
       <span className="pr-opt2-info">
@@ -71,9 +73,7 @@ export function OptionRow({ label, price, was, code, codePercent, tag, unit, act
           (sale ? (
             <span data-look={sale.look} className={`sb sb-sm pr-opt2-offer ${pill.length > 1 ? "sb-split" : ""}`}>
               {pill.map((t, i) => (
-                <span key={i} className={i ? "sb-b" : "sb-a"}>
-                  {words(t)}
-                </span>
+                <PillPart key={i} text={t} second={i > 0} words={words} />
               ))}
             </span>
           ) : (

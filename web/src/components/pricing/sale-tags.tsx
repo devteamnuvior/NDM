@@ -36,6 +36,57 @@ export function useSaleWords(): (text: string) => string {
 }
 
 /**
+ * "BEST DEAL" beside an offer that is a percentage only ("30% OFF" | "BEST DEAL"), its half a red fire seen through
+ * frosted glass (`.sb-fire` in pricing.css). Shown in the Pricing page's list (user, 2026-11-25).
+ */
+export const BEST_DEAL = "BEST DEAL";
+const BestDealContext = createContext(false);
+export function BestDealProvider({ shown, children }: { shown: boolean; children: ReactNode }) {
+  return <BestDealContext value={shown}>{children}</BestDealContext>;
+}
+/** The pill's parts with "BEST DEAL" added when the list shows it and the offer has one part only ("30% OFF", and since
+ *  2026-11-25 "SAVE $1,000" too, user). */
+export function useWithBestDeal(): (parts: string[]) => string[] {
+  const shown = useContext(BestDealContext);
+  return (parts) => (shown && parts.length === 1 ? [parts[0], BEST_DEAL] : parts);
+}
+/** Style "A · Flames inside" (user, 2026-11-25): eight flame tongues and four sparks inside the red half, and a small flame icon. */
+export function FireLayer() {
+  return (
+    <>
+      <i aria-hidden="true" className="sb-flames">
+        <b />
+        <b />
+        <b />
+        <b />
+        <b />
+        <b />
+        <b />
+        <b />
+        <u />
+        <u />
+        <u />
+        <u />
+      </i>
+      <svg aria-hidden="true" className="sb-fire-ico" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>
+    </>
+  );
+}
+
+/** One half of a pill. Where the list shows "BEST DEAL", every red half ("BEST DEAL", "+ EXTRA 30%", "GET 1 FREE") carries the fire (user, 2026-11-25). */
+export function PillPart({ text, second, words }: { text: string; second: boolean; words: (t: string) => string }) {
+  /* every red half burns, wherever a price table shows a pill (user, 2026-11-25: the same fire everywhere) */
+  if (second)
+    return (
+      <span className="sb-b sb-fire">
+        <FireLayer />
+        {words(text)}
+      </span>
+    );
+  return <span className={second ? "sb-b" : "sb-a"}>{words(text)}</span>;
+}
+
+/**
  * The offer tag of a price table row. Outside a sale it is the plain red tag ("Up to 30% off"); during a
  * sale it is the pill in the sale's look, in two halves when the offer has two parts
  * ("30% OFF" | "+ EXTRA 30%", "BUY 1" | "GET 1 FREE").
@@ -43,8 +94,9 @@ export function useSaleWords(): (text: string) => string {
 export function OfferTag({ offer, badge, coded, small, plain = "pr-badge" }: { offer: string; badge: string[]; coded: boolean; small?: boolean; plain?: string }) {
   const sale = useSaleTags();
   const words = useSaleWords();
+  const withBest = useWithBestDeal();
   if (!sale) return offer ? <span className={plain}>{offer}</span> : null;
-  const parts =
+  const found =
     badge.length === 1 && coded && /%\s*OFF$/.test(badge[0])
       ? [badge[0], `+ EXTRA ${sale.percent}%`]
       : badge.length
@@ -52,13 +104,12 @@ export function OfferTag({ offer, badge, coded, small, plain = "pr-badge" }: { o
         : coded
           ? [`+ EXTRA ${sale.percent}%`]
           : [];
-  if (!parts.length) return null;
+  if (!found.length) return null;
+  const parts = withBest(found);
   return (
     <span data-look={sale.look} className={`sb ${small ? "sb-sm" : ""} ${parts.length > 1 ? "sb-split" : ""}`}>
       {parts.map((t, i) => (
-        <span key={i} className={i ? "sb-b" : "sb-a"}>
-          {words(t)}
-        </span>
+        <PillPart key={i} text={t} second={i > 0} words={words} />
       ))}
     </span>
   );

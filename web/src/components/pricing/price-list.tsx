@@ -12,7 +12,7 @@ import { type PriceCategoryView, type PriceItemView } from "@/lib/pricing-view";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
 import { jumpToPriceGroup, PRICE_GROUP_HASH } from "@/lib/price-jump";
-import { FromPrice, OfferTag, SaleNameProvider, type SaleLook } from "@/components/pricing/sale-tags";
+import { BestDealProvider, FromPrice, OfferTag, SaleNameProvider, type SaleLook } from "@/components/pricing/sale-tags";
 import { OptionRow } from "@/components/pricing/option-row";
 import { JumpMenu } from "@/components/pricing/jump-menu";
 
@@ -132,13 +132,13 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }: P
           onClick={onToggle}
           className="group grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 py-[22px] text-left sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-6"
         >
-          <span className="min-w-0">
-            <span className="block font-inter text-[12.5px] text-ndm-muted tabular-nums">
+          <span className="pr-gtop min-w-0">
+            <span className="pr-gcount block font-inter text-[12.5px] text-ndm-muted tabular-nums">
               {count} {hits ? (count === 1 ? "match" : "matches") : count === 1 ? "treatment" : "treatments"}
             </span>
-            <span className="mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{c.name}</span>
+            <span className="pr-gname mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{c.name}</span>
           </span>
-          <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
+          <span className="pr-gmeta col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
             <OfferTag offer={c.offer} badge={c.badge} coded={c.coded} />
             <FromPrice from={c.from} unit={c.fromUnit} big source={c.fromSource} withItem={c.items.length > 1} />
           </span>
@@ -237,6 +237,7 @@ export function PriceList({ categories, total, sale = null }: { categories: Pric
   return (
     <SaleContext value={sale}>
       <SaleNameProvider shown={false}>
+      <BestDealProvider shown>
       <section ref={section} id="prices" data-sale={sale?.look} aria-labelledby="prices-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(64px,7vw,110px)] pb-[clamp(64px,7vw,110px)]">
       <div className="mx-auto max-w-[1040px]">
         {sale?.banner && (
@@ -317,6 +318,7 @@ export function PriceList({ categories, total, sale = null }: { categories: Pric
         </div>
       </div>
       </section>
+      </BestDealProvider>
       </SaleNameProvider>
     </SaleContext>
   );

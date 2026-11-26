@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { tagWords } from "@/lib/pricing-view";
+import { FireLayer } from "@/components/pricing/sale-tags";
 
 /** An offer in the pill's words, in one or two parts: "Up to 30% off" -> UP TO | 30% OFF, "Buy 1 get 1 free" -> BUY 1 | GET 1 FREE. */
 export function dealParts(deal: string): string[] {
@@ -17,11 +18,19 @@ export function DealPill({ deal, className = "", small, style }: { deal: string;
   if (!parts.length) return null;
   return (
     <span className={`dp ${parts.length > 1 ? "dp-split" : ""} ${small ? "dp-sm" : ""} ${className}`} style={style}>
-      {parts.map((t, i) => (
-        <span key={i} className={i ? "dp-b" : "dp-a"}>
-          {t}
-        </span>
-      ))}
+      {/* the second half carries the price tables' fire, shown while a sale runs (.site-root[data-sale], offer-cards.css) */}
+      {parts.map((t, i) =>
+        i ? (
+          <span key={i} className="dp-b dp-fire">
+            <FireLayer />
+            {t}
+          </span>
+        ) : (
+          <span key={i} className="dp-a">
+            {t}
+          </span>
+        ),
+      )}
     </span>
   );
 }
