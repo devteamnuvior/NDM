@@ -66,7 +66,11 @@ export function OptionRow({ label, price, was, code, codePercent, tag, unit, act
         <span className="pr-opt2-name">{label}</span>
         {cnt && cnt.n > 1 && (
           <span className="pr-opt2-meta">
-            {cnt.n} {cnt.many} · {money(Math.round((final / cnt.n) * 100) / 100)} per {cnt.one}
+            {cnt.n} {cnt.many} ·{" "}
+            {/* the price of one stands out in bold (user, 2026-11-25) */}
+            <b className="pr-opt2-per">
+              {money(Math.round((final / cnt.n) * 100) / 100)} per {cnt.one}
+            </b>
           </span>
         )}
         {tag &&

@@ -143,6 +143,7 @@
 .pr-opt2-now[data-look="bf"]{color:#C8101C}
 .pr-opt2-now[data-look="holiday"]{color:#1E5A3E}
 .pr-opt2-price.is-single .pr-opt2-now{font-size:22px;color:#1B242B}
+.pr-opt2-per{font-weight:700}
 .pr-opt2-unit{margin-left:2px;font-family:Manrope,sans-serif;font-size:13px;letter-spacing:0;color:#6B7480}
 .pr-opt2-with{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:6px;font-family:Manrope,sans-serif;font-size:12px;color:#6B7480}
 .pr-opt2-tick{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#EEF6FC;color:#0F80C3;font-size:9px;font-weight:700}
