@@ -107,7 +107,7 @@ async function PriceSections() {
 /** Pricing: the film header, the monthly specials, the full price list, then the shared closing sections. */
 export default function PricingPage() {
   return (
-    <main id="main" data-shell="inner" className="seamless">
+    <main id="main" data-shell="inner" data-float-off="" className="seamless">
       <Breadcrumb items={["Pricing"]} dark />
       <Suspense
         fallback={

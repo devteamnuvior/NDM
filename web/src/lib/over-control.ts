@@ -4,11 +4,20 @@
  * looked at, `dx` and `dy` in from its edges. The floating pieces themselves are never counted. Browser only.
  */
 /**
- * Phones: whether the floating chat and search buttons wait their turn. While the opening screen of a page
+ * Whether the floating chat and search buttons wait their turn. Phones: While the opening screen of a page
  * marked `data-float-hold` (the home hero) still fills more than half of the window they stay away, so the
- * first screen is not crowded (user, 2026-11-17); they come in once it has scrolled past. Browser only.
+ * first screen is not crowded (user, 2026-11-17); they come in once it has scrolled past. On a page marked
+ * `data-float-off` they stay away for the whole page. Browser only.
  */
+/** A page marked `data-float-off` (Pricing, user, 2026-11-25) does not show them at all, on any screen size, for now.
+ *  A page the framework keeps hidden after a navigation has no boxes and does not count. Browser only. */
+export function floatOff(): boolean {
+  for (const off of document.querySelectorAll("[data-float-off]")) if (off.getClientRects().length) return true;
+  return false;
+}
+
 export function floatHeld(): boolean {
+  if (floatOff()) return true;
   if (window.innerWidth >= 640) return false;
   const el = document.querySelector("[data-float-hold]");
   return !!el && el.getBoundingClientRect().bottom > window.innerHeight * 0.5;

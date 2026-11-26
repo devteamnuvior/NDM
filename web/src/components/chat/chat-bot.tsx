@@ -10,7 +10,7 @@ import { useOnScroll } from "@/hooks/use-on-scroll";
 import { armChime, playChime } from "@/lib/chime";
 import { tel } from "@/lib/routes";
 import { withBase } from "@/lib/base-path";
-import { floatHeld, overControl } from "@/lib/over-control";
+import { floatHeld, floatOff, overControl } from "@/lib/over-control";
 
 /* the agent's photo is a small local file, shown at its own size */
 /* eslint-disable @next/next/no-img-element */
@@ -58,6 +58,7 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
   const [avoid, setAvoid] = useState(0);
   const pop = useRef<HTMLDivElement>(null);
   const [covers, setCovers] = useState(false); /* phones: true while the note lies over a button or link of the page, so it never blocks one */
+  const [gone, setGone] = useState(false); /* a page that shows no chat button at all (Pricing) */
   const [btnCovers, setBtnCovers] = useState(false); /* phones: the same for the chat button itself */
   const [clear, setClear] = useState(false); /* phones: true once nothing marked data-pill-avoid sits mid-screen, so the note never covers it */
   const list = useRef<HTMLDivElement>(null);
@@ -109,6 +110,7 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
     });
     setAvoid(top < vh ? vh - top + 12 : 0);
     /* phones: what lies under the note and under the chat button (each stays in place, unseen, while it steps aside) */
+    setGone(floatOff());
     const held = floatHeld(); /* phones, home page: not before the hero has scrolled past */
     setCovers(held || (vw < 768 && overControl(pop.current, 8, 6)));
     setBtnCovers(held || (vw < 768 && overControl(btn.current, 10, 10)));
@@ -188,7 +190,7 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
   /* wide screens: sits above the cart bar when it shows (same corner) */
   const bottom = small ? Math.max(16, avoid) + 64 : Math.max(24, avoid);
   /* out of the way while another overlay is open, or (phones) while the button lies over a button of the page */
-  const off = (hidden || (small && btnCovers)) && !open;
+  const off = (hidden || gone || (small && btnCovers)) && !open;
 
   return (
     <>
