@@ -999,11 +999,19 @@ const BEST_DEAL = 'BEST DEAL';
 /* any one-part offer: "30% OFF", and since 2026-11-25 "SAVE $1,000" too (user) */
 const withBestDeal = (parts) => (BEST_DEAL_SHOWN && parts.length === 1 ? [parts[0], BEST_DEAL] : parts);
 /* style "A · Flames inside" (user, 2026-11-25): eight flame tongues and four sparks inside the red half, and a small flame icon */
-const FireLayer = () => <><i aria-hidden="true" className="sb-flames"><b /><b /><b /><b /><b /><b /><b /><b /><u /><u /><u /><u /></i><svg aria-hidden="true" className="sb-fire-ico" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg></>;
-/* every red half ("BEST DEAL", "+ EXTRA 30%", "GET 1 FREE") carries the fire, on every page (user, 2026-11-25) */
-const PillPart = ({ text, second }) => second
-  ? <span className="sb-b sb-fire"><FireLayer />{saleWords(text)}</span>
-  : <span className={second ? 'sb-b' : 'sb-a'}>{saleWords(text)}</span>;
+const FireIcon = () => <svg aria-hidden="true" className="sb-fire-ico" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>;
+const FireLayer = () => <><i aria-hidden="true" className="sb-flames"><b /><b /><b /><b /><b /><b /><b /><b /><u /><u /><u /><u /></i><FireIcon /></>;
+/* how a pill's red half looks (site: FireProvider): undefined = "fire", every red half burns, on every page (user, 2026-11-25);
+   the Pricing page's list (user, 2026-11-26) passes "icon" (plain red with the flame icon) and "hot" for the treatments on its
+   fire list (PRICE_FIRE in pricing-ui.jsx), and every pill there is two halves: an offer of one part gets a red half with the
+   flame icon alone (listTwo) */
+const PillPart = ({ text, second, fire }) => {
+  if (!second) return <span className="sb-a">{saleWords(text)}</span>;
+  const only = text ? '' : ' sb-only';
+  if (fire === 'icon') return <span className={`sb-b sb-ico${only}`}><FireIcon />{saleWords(text)}</span>;
+  return <span className={`sb-b sb-fire${only}`}><FireLayer />{saleWords(text)}</span>;
+};
+const listTwo = (parts) => (parts.length === 1 ? [parts[0], ''] : parts);
 /* the lowest row of one price table and how it is counted (per unit when the table is priced per unit) */
 const rowsSource = (rows, perUnit) => {
   let best = null;
@@ -1027,13 +1035,13 @@ const badgeCoded = (opts) => {
 };
 /* the offer tag: the plain red tag, or in a sale's look the pill, in two halves when the offer has two parts
    ("30% OFF" | "+ EXTRA 30%", "BUY 1" | "GET 1 FREE"), as the site's OfferTag */
-function SaleTag({ offer, badge, coded, small, plain = 'pr-badge' }) {
+function SaleTag({ offer, badge, coded, small, plain = 'pr-badge', fire }) {
   if (!SALE_LOOK) return offer ? <span className={plain}>{offer}</span> : null;
   const b = badge || [];
   const found = b.length === 1 && coded && /%\s*OFF$/.test(b[0]) ? [b[0], `+ EXTRA ${SALE_PCT}%`] : b.length ? b : coded ? [`+ EXTRA ${SALE_PCT}%`] : [];
   if (!found.length) return null;
-  const parts = withBestDeal(found);
-  return <span data-look={SALE_LOOK} className={`sb ${small ? 'sb-sm' : ''} ${parts.length > 1 ? 'sb-split' : ''}`}>{parts.map((t, i) => <PillPart key={i} text={t} second={i > 0} />)}</span>;
+  const parts = fire ? listTwo(found) : withBestDeal(found);
+  return <span data-look={SALE_LOOK} className={`sb ${small ? 'sb-sm' : ''} ${parts.length > 1 ? 'sb-split' : ''}`}>{parts.map((t, i) => <PillPart key={i} text={t} second={i > 0} fire={fire} />)}</span>;
 }
 /* the offer of a specials card (wheel, Promotion cards, Pricing specials) as a pill in the pricing tags' pattern, in the site's
    own navy and sky (round 37): "Up to 30% off" -> UP TO | 30% OFF, "Buy 1 get 1 free" -> BUY 1 | GET 1 FREE, "Save $1000" -> SAVE $1,000 */
@@ -1078,7 +1086,7 @@ const optCount = (label) => {
 };
 /* code: the price with the running sale's checkout code (site: OptionRow): both earlier prices struck, the price to pay,
    "Extra 30% applied" and the saving */
-function OptionRow({ label, price, was, code, tag, unit, action, mark }) {
+function OptionRow({ label, price, was, code, tag, unit, action, mark, fire }) {
   const cnt = optCount(label);
   const coded = !!(SALE_LOOK && code && code < price);
   const final = coded ? code : price;
@@ -1087,14 +1095,14 @@ function OptionRow({ label, price, was, code, tag, unit, action, mark }) {
   const save = Math.round(((was || price) - final) * 100) / 100;
   const found = tag && SALE_LOOK ? optPill(tag) : [];
   if (found.length === 1 && coded && SALE_PCT) found.push(`+ EXTRA ${SALE_PCT}%`);
-  const pill = withBestDeal(found);
+  const pill = fire ? listTwo(found) : withBestDeal(found);
   return (
     <li className={`pr-opt pr-opt2 ${cut || tag ? 'is-featured' : ''}`}>
       <span className="pr-opt2-info">
         <span className="pr-opt2-name">{label}</span>
         {cnt && cnt.n > 1 && <span className="pr-opt2-meta">{cnt.n} {cnt.many} · {pfmt(Math.round((final / cnt.n) * 100) / 100)} per {cnt.one}</span>}
         {tag && (SALE_LOOK
-          ? <span data-look={SALE_LOOK} className={`sb sb-sm pr-opt2-offer ${pill.length > 1 ? 'sb-split' : ''}`}>{pill.map((t, i) => <PillPart key={i} text={t} second={i > 0} />)}</span>
+          ? <span data-look={SALE_LOOK} className={`sb sb-sm pr-opt2-offer ${pill.length > 1 ? 'sb-split' : ''}`}>{pill.map((t, i) => <PillPart key={i} text={t} second={i > 0} fire={fire} />)}</span>
           : <span className="pr-tag pr-opt2-offer">{tag}</span>)}
       </span>
       <span className={`pr-opt2-price ${cut ? '' : 'is-single'}`}>
@@ -1150,6 +1158,11 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .sb-flames u:nth-of-type(3){left:74%;width:.1em;height:.1em;animation:sbSpark 1.6s linear -.9s infinite}
 .sb-flames u:nth-of-type(4){left:88%;bottom:.41em;animation:sbSpark 2s linear -.1s infinite}
 .sb-fire-ico{position:relative;flex:none;width:.95em;height:.95em;filter:drop-shadow(0 1px 1px rgba(110,14,2,.5))}
+/* the Pricing page's list (user, 2026-11-26): a red half is plain red with the small flame icon; a half with the icon alone
+   (an offer of one part) is a little narrower */
+.sb-ico{gap:.36em}
+.sb-ico .sb-fire-ico{filter:none}
+.sb>.sb-only{padding-left:.85em;padding-right:1em}
 @keyframes sbBurn1{0%,100%{transform:translateY(.18em) rotate(45deg) scale(.82);opacity:.8}25%{transform:translateY(-.09em) rotate(41deg) scale(1.05);opacity:1}50%{transform:translateY(.09em) rotate(48deg) scale(.9);opacity:.85}75%{transform:translateY(-.18em) rotate(44deg) scale(1.1);opacity:.95}}
 @keyframes sbBurn2{0%,100%{transform:translateY(0) rotate(47deg) scale(1);opacity:.9}33%{transform:translateY(.23em) rotate(43deg) scale(.8);opacity:.7}66%{transform:translateY(-.14em) rotate(46deg) scale(1.12);opacity:1}}
 @keyframes sbSpark{0%{transform:translate(0,0) scale(1);opacity:0}15%{opacity:1}100%{transform:translate(.27em,-2em) scale(.3);opacity:0}}
