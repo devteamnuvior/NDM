@@ -1,12 +1,6 @@
 const PRICE_TOTAL = PRICE_CATS.reduce((n, c) => n + c.items.length, 0);
 SALE_NAME_SHOWN = false;
-BEST_DEAL_SHOWN = true; /* "30% OFF | BEST DEAL" with the fire half on percentage-only offers (user, 2026-11-25); since 2026-11-26 the Monthly specials cards only, the list passes `fire` */
-/* the treatments and categories of the price list whose pills keep the fire (user, 2026-11-26; site: PRICE_FIRE in
-   web/src/config/pricing.ts); every other pill of the list has a plain red half with the flame icon, and no "BEST DEAL" */
-const PRICE_FIRE = ['Bio-Stimulator – Radiesse', 'Bio-Stimulator – Sculptra', 'Lip Enhancement', 'Microneedling with PRP - Face', 'PRP Hair Restoration', 'Standard Contour Areas', 'Chemical Peel', 'Laser Hair Removal', 'PRP Scalp'];
-const fireKey = (s) => String(s).toLowerCase().replace(/[\u2010-\u2015-]/g, '-').replace(/\s*-\s*/g, '-').replace(/\s+/g, ' ').trim();
-const FIRE_KEYS = new Set(PRICE_FIRE.map(fireKey));
-const fireOf = (...names) => (names.some((n) => n && FIRE_KEYS.has(fireKey(n))) ? 'hot' : 'icon'); /* the pricing page's pills give the offer only ("30% OFF"), as the site's list (user, 2026-11-25) */
+ICON_HALF_SHOWN = true; /* a one-part offer gets a red half of the flame icon alone, in the list and the Monthly specials cards (user, 2026-11-26) */ /* the pricing page's pills give the offer only ("30% OFF"), as the site's list (user, 2026-11-25) */
 const PRICE_FAQS = [
   ['How do I check the price of a treatment?', 'Open a category in the price list, then any treatment with the + button. Each one shows its sessions, packages and current offers.'],
   ['Are the prices the same at all locations?', 'Yes. The listed prices and promotions apply across all our clinic locations unless otherwise noted.'],
@@ -26,7 +20,6 @@ const perUnit = (cat, label) => (cat.unit && label === 'Regular' ? ' / unit' : '
 
 /* the options of one treatment, each with Add to cart; the blue dot on the one the category's "from" price is read from */
 function OptionList({ cat, it, mark, className = 'grid gap-2 pb-5' }) {
-  const fire = fireOf(cat.name, it[0]);
   const [name, , opts] = it;
   const catPf = priceFrom(cat.id, undefined, true);
   return (
@@ -34,7 +27,7 @@ function OptionList({ cat, it, mark, className = 'grid gap-2 pb-5' }) {
       {opts.map(([label, p, was, tag, code]) => {
         const line = { key: `${name}|${label}`, cat: cat.name, name, label, price: code && code < p ? code : p, was: was || 0, unit: perUnit(cat, label) };
         return (
-          <OptionRow key={label} mark={mark && !!catPf && label === catPf.src.label} label={label} price={p} was={was || 0} code={code} tag={tag} unit={line.unit} fire={fire} action={<QtyControl line={line} label={`${name}, ${label}`} />} />
+          <OptionRow key={label} mark={mark && !!catPf && label === catPf.src.label} label={label} price={p} was={was || 0} code={code} tag={tag} unit={line.unit} action={<QtyControl line={line} label={`${name}, ${label}`} />} />
         );
       })}
     </ul>
@@ -62,7 +55,7 @@ function TreatmentRow({ cat, it, uid, open, onToggle }) {
             {note && <span className="mt-1 block font-inter text-[13.5px] leading-[1.45] text-ndm-muted">{note}</span>}
           </span>
           <span className="col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            <SaleTag offer={offer} badge={saleBadge(opts.map((o) => o[3]))} coded={badgeCoded(opts)} small fire={fireOf(cat.name, name)} />
+            <SaleTag offer={offer} badge={saleBadge(opts.map((o) => o[3]))} coded={badgeCoded(opts)} small />
             <FromPrice value={from} unit={fromUnit} src={pf && pf.src} noWords mark={isSource} />
           </span>
           <span aria-hidden="true" className="pr-plus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
@@ -163,8 +156,9 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }) {
             <span className="pr-gname mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{c.name}</span>
           </span>
           <span className="pr-gmeta col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            {/* the category's pill burns when the category, or the treatment its "from" is read from, is on the fire list */}
-            <SaleTag offer={offer} badge={saleBadge(opts.map((o) => o[3]))} coded={badgeCoded(opts)} fire={fireOf(c.name, pf && pf.src && pf.src.item)} />
+            {/* the large category pill is plain: no flames, no flame icon, no added half (user, 2026-11-26: the small pills
+                carry the flame, the large ones do not) */}
+            <SaleTag offer={offer} badge={saleBadge(opts.map((o) => o[3]))} coded={badgeCoded(opts)} />
             <FromPrice value={from} unit={fromUnit} src={pf && pf.src} withItem={c.items.length > 1} big />
           </span>
           <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1"><i /><i /></span>
@@ -209,7 +203,7 @@ function PriceSpecials() {
       <ul role="list" className="mx-auto mt-[clamp(28px,3.4vw,44px)] grid w-full max-w-[1180px] grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
         {sp.items.map(([n, id, item], i) => {
           /* the card's treatment (or its whole category) as the price list's own rows show it, with the sale's code (2026-11-25),
-             in the list's theme: its pill (black and red, red halves on fire), the sale price in red, the regular struck */
+             in the list's theme: its pill (black and plain red, the flame icon beside a one-part offer), the sale price in red, the regular struck */
           const cid = id.replace(/^pg-/, ''); const cat = PRICE_BY_ID[cid];
           const info = priceFrom(cid, item, true);
           const its = cat ? (item ? cat.items.filter((it) => pNorm(it[0]) === pNorm(item)) : cat.items) : [];
@@ -334,7 +328,7 @@ if (typeof document !== 'undefined' && !document.getElementById('pcd-css')) {
   .pr-ghead .pr-gmeta>span:last-child{align-items:flex-end}
 }
 /* the Monthly specials in the price list's own theme (user, 2026-11-25): white cards like the list's panels, the list's pill
-   (black and red, red halves on fire), the price in the sale's red with the regular price struck through */
+   (black and plain red, the flame icon beside a one-part offer), the price in the sale's red with the regular price struck through */
 #specials .psx{display:flex;flex-direction:column;align-items:center;text-align:center;padding:18px 12px 20px;border-radius:22px;background:#fff;box-shadow:0 0 0 1px rgba(27,36,43,.08),0 18px 40px -32px rgba(15,60,95,.35);transition:transform .5s var(--e-out),box-shadow .5s ease}
 @media (hover:hover){#specials .psx:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(27,36,43,.12),0 28px 50px -32px rgba(15,60,95,.45)}}
 #specials .psx-tag{display:flex;justify-content:center;min-height:23px}

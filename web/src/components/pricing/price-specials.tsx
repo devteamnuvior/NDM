@@ -7,7 +7,7 @@ import { useReveal } from "@/hooks/use-reveal";
 import type { PriceSpecialView } from "@/lib/pricing-view";
 import { withBase } from "@/lib/base-path";
 import { jumpToPriceGroup } from "@/lib/price-jump";
-import { BestDealProvider, OfferTag, SaleNameProvider, useSaleTags } from "@/components/pricing/sale-tags";
+import { IconHalfProvider, OfferTag, SaleNameProvider, useSaleTags } from "@/components/pricing/sale-tags";
 import { money } from "@/lib/cart";
 
 interface PriceSpecialsProps {
@@ -19,15 +19,15 @@ interface PriceSpecialsProps {
 /**
  * Exclusive monthly specials: centred cards; Buy opens that category in the price list below and scrolls to it.
  * Since 2026-11-25 (user) they wear the price list's own theme: white cards like its panels, the list's pill for the same
- * treatment or category (the sale's black and red, the red halves on fire, "BEST DEAL" beside a one-part offer), and the
+ * treatment or category (the sale's black and plain red, the flame icon beside a one-part offer), and the
  * price in the sale's red with the regular price struck through.
  */
 export function PriceSpecials(props: PriceSpecialsProps) {
   return (
     <SaleNameProvider shown={false}>
-      <BestDealProvider shown>
+      <IconHalfProvider shown>
         <SpecialsSection {...props} />
-      </BestDealProvider>
+      </IconHalfProvider>
     </SaleNameProvider>
   );
 }

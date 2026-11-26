@@ -12,8 +12,7 @@ import { type PriceCategoryView, type PriceItemView } from "@/lib/pricing-view";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
 import { jumpToPriceGroup, PRICE_GROUP_HASH } from "@/lib/price-jump";
-import { BestDealProvider, FireProvider, FromPrice, OfferTag, SaleNameProvider, type SaleLook } from "@/components/pricing/sale-tags";
-import { isFiery } from "@/config/pricing";
+import { FromPrice, IconHalfProvider, OfferTag, SaleNameProvider, type SaleLook } from "@/components/pricing/sale-tags";
 import { OptionRow } from "@/components/pricing/option-row";
 import { JumpMenu } from "@/components/pricing/jump-menu";
 
@@ -71,7 +70,6 @@ function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView
   /* the treatment (and below, its option) the category's "from" price is read from: marked with the blue dot */
   const isSource = cat.items.length > 1 ? it.name === cat.fromSource?.item : it.options.length > 1;
   return (
-    <FireProvider mode={isFiery(cat.name, it.name) ? "hot" : "icon"}>
     <li className={`pr-item ${open ? "is-open" : ""}`}>
       <h4 className="m-0">
         <button
@@ -105,7 +103,6 @@ function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView
         </div>
       </div>
     </li>
-    </FireProvider>
   );
 }
 
@@ -145,10 +142,7 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }: P
             <span className="pr-gname mt-1.5 block font-aeonik text-[clamp(24px,2.2vw,32px)] leading-[1.1] tracking-[-0.025em] text-ndm-ink transition-colors group-hover:text-ndm-deep">{c.name}</span>
           </span>
           <span className="pr-gmeta col-start-1 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:col-start-2 sm:row-start-1 sm:justify-end">
-            {/* the category's pill burns when the category, or the treatment its "from" is read from, is on the fire list */}
-            <FireProvider mode={isFiery(c.name, c.fromSource?.item) ? "hot" : "icon"}>
-              <OfferTag offer={c.offer} badge={c.badge} coded={c.coded} />
-            </FireProvider>
+            <OfferTag offer={c.offer} badge={c.badge} coded={c.coded} />
             <FromPrice from={c.from} unit={c.fromUnit} big source={c.fromSource} withItem={c.items.length > 1} />
           </span>
           <span aria-hidden="true" className="pr-plus pr-gplus col-start-2 row-span-2 row-start-1 sm:col-start-3 sm:row-span-1">
@@ -175,9 +169,7 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }: P
           {/* treatments sit on their own white panel, flush with the category title, so they read as part of the category */}
           {single ? (
             <div className="pr-sub">
-              <FireProvider mode={isFiery(c.name, c.items[0].name) ? "hot" : "icon"}>
-                <OptionList cat={c} it={c.items[0]} mark={c.items[0].options.length > 1} className="grid gap-2 py-[18px]" />
-              </FireProvider>
+              <OptionList cat={c} it={c.items[0]} mark={c.items[0].options.length > 1} className="grid gap-2 py-[18px]" />
             </div>
           ) : (
             <ul className="pr-sub" role="list">
@@ -254,10 +246,9 @@ export function PriceList({ categories, total, sale = null }: { categories: Pric
   return (
     <SaleContext value={sale}>
       <SaleNameProvider shown={false}>
-      {/* every pill is two halves: the offer, then a red half ("+ EXTRA 30%", or the flame icon alone where the offer has one
-          part), plain red with the flame icon; the fire list's treatments burn (user, 2026-11-26) */}
-      <BestDealProvider shown word="">
-      <FireProvider mode="icon">
+      {/* every pill is two halves, black and plain red (user, 2026-11-26): an offer of one part gets a red half with the flame
+          icon alone */}
+      <IconHalfProvider shown>
       <section ref={section} id="prices" data-sale={sale?.look} aria-labelledby="prices-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(64px,7vw,110px)] pb-[clamp(64px,7vw,110px)]">
       <div className="mx-auto max-w-[1040px]">
         {sale?.banner && (
@@ -339,8 +330,7 @@ export function PriceList({ categories, total, sale = null }: { categories: Pric
         </div>
       </div>
       </section>
-      </FireProvider>
-      </BestDealProvider>
+      </IconHalfProvider>
       </SaleNameProvider>
     </SaleContext>
   );
