@@ -978,26 +978,16 @@ const SALE_PCT = PRICE_SALE ? PRICE_SALE.percent : 0;
    the offer only (user, 2026-11-25, as the site); the treatment pages' tables keep the name. pricing-ui.jsx sets it to false. */
 let SALE_NAME_SHOWN = true;
 const saleWords = (t) => (SALE_NAME_SHOWN ? t : String(t).replace(/^\s*BLACK\s+FRIDAY\s+/i, ''));
-/* "BEST DEAL" beside an offer that is a percentage only ("30% OFF" | "BEST DEAL"), its half a red fire seen through frosted
-   glass (.sb-fire); the pricing page's list shows it (user, 2026-11-25), pricing-ui.jsx sets it to true */
-let BEST_DEAL_SHOWN = false;
-const BEST_DEAL = 'BEST DEAL';
-/* any one-part offer: "30% OFF", and since 2026-11-25 "SAVE $1,000" too (user) */
-const withBestDeal = (parts) => (BEST_DEAL_SHOWN && parts.length === 1 ? [parts[0], BEST_DEAL] : parts);
-/* style "A · Flames inside" (user, 2026-11-25): eight flame tongues and four sparks inside the red half, and a small flame icon */
+/* a red half of the flame icon alone beside an offer of one part ("30% OFF" | flame, "SAVE $1,000" | flame): the pricing page's
+   list and Monthly specials cards (user, 2026-11-26; it replaced the words "BEST DEAL"), pricing-ui.jsx sets it to true */
+let ICON_HALF_SHOWN = false;
+const withIconHalf = (parts) => (ICON_HALF_SHOWN && parts.length === 1 ? [parts[0], ''] : parts);
 const FireIcon = () => <svg aria-hidden="true" className="sb-fire-ico" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>;
-const FireLayer = () => <><i aria-hidden="true" className="sb-flames"><b /><b /><b /><b /><b /><b /><b /><b /><u /><u /><u /><u /></i><FireIcon /></>;
-/* how a pill's red half looks (site: FireProvider): undefined = "fire", every red half burns, on every page (user, 2026-11-25);
-   the Pricing page's list (user, 2026-11-26) passes "icon" (plain red with the flame icon) and "hot" for the treatments on its
-   fire list (PRICE_FIRE in pricing-ui.jsx), and every pill there is two halves: an offer of one part gets a red half with the
-   flame icon alone (listTwo) */
-const PillPart = ({ text, second, fire }) => {
-  if (!second) return <span className="sb-a">{saleWords(text)}</span>;
-  const only = text ? '' : ' sb-only';
-  if (fire === 'icon') return <span className={`sb-b sb-ico${only}`}><FireIcon />{saleWords(text)}</span>;
-  return <span className={`sb-b sb-fire${only}`}><FireLayer />{saleWords(text)}</span>;
-};
-const listTwo = (parts) => (parts.length === 1 ? [parts[0], ''] : parts);
+/* one half of a pill: the red half is plain red everywhere (user, 2026-11-26: no fire; site: PillPart), with the flame icon
+   alone when it has no words */
+const PillPart = ({ text, second }) => (!second
+  ? <span className="sb-a">{saleWords(text)}</span>
+  : <span className={`sb-b${text ? '' : ' sb-only'}`}>{text ? saleWords(text) : <FireIcon />}</span>);
 /* the lowest row of one price table and how it is counted (per unit when the table is priced per unit) */
 const rowsSource = (rows, perUnit) => {
   let best = null;
@@ -1021,13 +1011,13 @@ const badgeCoded = (opts) => {
 };
 /* the offer tag: the plain red tag, or in a sale's look the pill, in two halves when the offer has two parts
    ("30% OFF" | "+ EXTRA 30%", "BUY 1" | "GET 1 FREE"), as the site's OfferTag */
-function SaleTag({ offer, badge, coded, small, plain = 'pr-badge', fire }) {
+function SaleTag({ offer, badge, coded, small, plain = 'pr-badge' }) {
   if (!SALE_LOOK) return offer ? <span className={plain}>{offer}</span> : null;
   const b = badge || [];
   const found = b.length === 1 && coded && /%\s*OFF$/.test(b[0]) ? [b[0], `+ EXTRA ${SALE_PCT}%`] : b.length ? b : coded ? [`+ EXTRA ${SALE_PCT}%`] : [];
   if (!found.length) return null;
-  const parts = fire ? listTwo(found) : withBestDeal(found);
-  return <span data-look={SALE_LOOK} className={`sb ${small ? 'sb-sm' : ''} ${parts.length > 1 ? 'sb-split' : ''}`}>{parts.map((t, i) => <PillPart key={i} text={t} second={i > 0} fire={fire} />)}</span>;
+  const parts = withIconHalf(found);
+  return <span data-look={SALE_LOOK} className={`sb ${small ? 'sb-sm' : ''} ${parts.length > 1 ? 'sb-split' : ''}`}>{parts.map((t, i) => <PillPart key={i} text={t} second={i > 0} />)}</span>;
 }
 /* the offer of a specials card (wheel, Promotion cards, Pricing specials) as a pill in the pricing tags' pattern, in the site's
    own navy and sky (round 37): "Up to 30% off" -> UP TO | 30% OFF, "Buy 1 get 1 free" -> BUY 1 | GET 1 FREE, "Save $1000" -> SAVE $1,000 */
@@ -1035,8 +1025,8 @@ const dealParts = (d) => { const t = tagWords(d); const m = /^(UP TO|BUY \d+)\s+
 function DealPill({ deal, className = '' }) {
   const p = dealParts(deal);
   if (!p.length) return null;
-  /* while a sale runs the second half carries the price tables' fire (user, 2026-11-25: the same fire everywhere) */
-  return <span className={`dp ${p.length > 1 ? 'dp-split' : ''} ${className}`}>{p.map((t, i) => (i && SALE_LOOK ? <span key={i} className="dp-b dp-fire"><FireLayer />{t}</span> : <span key={i} className={i ? 'dp-b' : 'dp-a'}>{t}</span>))}</span>;
+  /* during the Black Friday sale black and plain red, as the site (web/src/styles/sale-bf.css, user, 2026-11-26: no fire) */
+  return <span data-look={SALE_LOOK || undefined} className={`dp ${p.length > 1 ? 'dp-split' : ''} ${className}`}>{p.map((t, i) => <span key={i} className={i ? 'dp-b' : 'dp-a'}>{t}</span>)}</span>;
 }
 /* where a lowest price is read from: "Skin Booster, 2 Syringes" (withItem puts the treatment first) */
 const sourceWords = (s, withItem) => {
@@ -1072,7 +1062,7 @@ const optCount = (label) => {
 };
 /* code: the price with the running sale's checkout code (site: OptionRow): both earlier prices struck, the price to pay,
    "Extra 30% applied" and the saving */
-function OptionRow({ label, price, was, code, tag, unit, action, mark, fire }) {
+function OptionRow({ label, price, was, code, tag, unit, action, mark }) {
   const cnt = optCount(label);
   const coded = !!(SALE_LOOK && code && code < price);
   const final = coded ? code : price;
@@ -1081,14 +1071,14 @@ function OptionRow({ label, price, was, code, tag, unit, action, mark, fire }) {
   const save = Math.round(((was || price) - final) * 100) / 100;
   const found = tag && SALE_LOOK ? optPill(tag) : [];
   if (found.length === 1 && coded && SALE_PCT) found.push(`+ EXTRA ${SALE_PCT}%`);
-  const pill = fire ? listTwo(found) : withBestDeal(found);
+  const pill = withIconHalf(found);
   return (
     <li className={`pr-opt pr-opt2 ${cut || tag ? 'is-featured' : ''}`}>
       <span className="pr-opt2-info">
         <span className="pr-opt2-name">{label}</span>
         {cnt && cnt.n > 1 && <span className="pr-opt2-meta">{cnt.n} {cnt.many} · {pfmt(Math.round((final / cnt.n) * 100) / 100)} per {cnt.one}</span>}
         {tag && (SALE_LOOK
-          ? <span data-look={SALE_LOOK} className={`sb sb-sm pr-opt2-offer ${pill.length > 1 ? 'sb-split' : ''}`}>{pill.map((t, i) => <PillPart key={i} text={t} second={i > 0} fire={fire} />)}</span>
+          ? <span data-look={SALE_LOOK} className={`sb sb-sm pr-opt2-offer ${pill.length > 1 ? 'sb-split' : ''}`}>{pill.map((t, i) => <PillPart key={i} text={t} second={i > 0} />)}</span>
           : <span className="pr-tag pr-opt2-offer">{tag}</span>)}
       </span>
       <span className={`pr-opt2-price ${cut ? '' : 'is-single'}`}>
@@ -1117,46 +1107,14 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .dp-a{background:#0B0F13;color:#E2C88A;border-radius:999px}
 .dp-split .dp-a{border-radius:999px 0 0 999px}
 .dp-b{background:#D4B574;color:#0B0F13;border-radius:0 999px 999px 0}
-.dp>.dp-fire{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;gap:.36em;background:linear-gradient(0deg,#F97316 0%,#DC2F0E 30%,#A51A0A 68%,#7F1206 100%);color:#fff;font-weight:800;text-shadow:0 1px 0 rgba(110,14,2,.55),0 0 .36em rgba(110,14,2,.5)}
-.dp:has(>.dp-fire){box-shadow:.4em .3em 1.1em -.35em rgba(249,115,22,.6);animation:sbGlow 2.4s ease-in-out infinite}
-@media (prefers-reduced-motion:reduce){.dp:has(>.dp-fire){animation:none}}
+.dp[data-look="bf"] .dp-a{background:#0B0B0C;color:#fff}.dp[data-look="bf"] .dp-b{background:#D3121F;color:#fff}
 .pr-from.is-sale{color:var(--now,#0F80C3)}.pr-from[data-look]{--now:#0F80C3}
 .sb[data-look="vip"],.pr-from[data-look="vip"]{--a-bg:#0B0F13;--a-fg:#fff;--a-ring:#0B0F13;--b-bg:#D4B574;--b-fg:#0B0F13;--now:#9A7A3A}
 .sb[data-look="bf"],.pr-from[data-look="bf"]{--a-bg:#0B0B0C;--a-fg:#fff;--a-ring:#0B0B0C;--b-bg:#D3121F;--b-fg:#fff;--now:#C8101C}
-/* The red half of a pill on fire (user, 2026-11-25: style "A · Flames inside" of the 70% Off Fire Badge canvas): a deep
-   red to orange half with blurred flame tongues rising and flickering inside it, a few sparks, a small flame icon and a
-   soft warm glow behind it. Sizes are in em, so it follows the pill's own size. */
-.sb-fire{position:relative;isolation:isolate;overflow:hidden;gap:.36em;background:linear-gradient(0deg,#F97316 0%,#DC2F0E 30%,#A51A0A 68%,#7F1206 100%);color:#fff;font-weight:800;text-shadow:0 1px 0 rgba(110,14,2,.55),0 0 .36em rgba(110,14,2,.5)}
-.sb:has(>.sb-fire){box-shadow:.4em .3em 1.1em -.35em rgba(249,115,22,.6);animation:sbGlow 2.4s ease-in-out infinite}
-.sb-flames{position:absolute;inset:0;z-index:-1;pointer-events:none}
-.sb-flames b{position:absolute;bottom:-.55em;width:1.55em;height:1.55em;border-radius:0 55% 50% 55%;background:radial-gradient(circle at 70% 70%,#FFE9A8 0%,#FFB627 25%,#FF6B00 55%,rgba(226,48,12,.85) 85%,rgba(226,48,12,.5) 100%);filter:blur(1px);mix-blend-mode:screen;transform:rotate(45deg)}
-.sb-flames b:nth-child(1){left:-2%;animation:sbBurn1 1.5s ease-in-out -.3s infinite}
-.sb-flames b:nth-child(2){left:12%;bottom:-.45em;width:1.18em;height:1.18em;animation:sbBurn2 1.2s ease-in-out -.7s infinite}
-.sb-flames b:nth-child(3){left:24%;bottom:-.64em;width:1.73em;height:1.73em;animation:sbBurn1 1.7s ease-in-out -1.1s infinite}
-.sb-flames b:nth-child(4){left:40%;bottom:-.5em;width:1.27em;height:1.27em;animation:sbBurn2 1.35s ease-in-out -.2s infinite}
-.sb-flames b:nth-child(5){left:53%;bottom:-.64em;width:1.64em;height:1.64em;animation:sbBurn1 1.45s ease-in-out -.9s infinite}
-.sb-flames b:nth-child(6){left:68%;bottom:-.45em;width:1.18em;height:1.18em;animation:sbBurn2 1.6s ease-in-out -.5s infinite}
-.sb-flames b:nth-child(7){left:80%;bottom:-.59em;width:1.55em;height:1.55em;animation:sbBurn1 1.25s ease-in-out -1.3s infinite}
-.sb-flames b:nth-child(8){left:92%;bottom:-.41em;width:1.09em;height:1.09em;animation:sbBurn2 1.5s ease-in-out infinite}
-.sb-flames u{position:absolute;bottom:.55em;width:.14em;height:.14em;border-radius:50%;background:#FFD166;box-shadow:0 0 .18em #FF9A1F;opacity:0;text-decoration:none}
-.sb-flames u:nth-of-type(1){left:18%;animation:sbSpark 1.8s linear -.4s infinite}
-.sb-flames u:nth-of-type(2){left:47%;bottom:.45em;animation:sbSpark 2.2s linear -1.2s infinite}
-.sb-flames u:nth-of-type(3){left:74%;width:.1em;height:.1em;animation:sbSpark 1.6s linear -.9s infinite}
-.sb-flames u:nth-of-type(4){left:88%;bottom:.41em;animation:sbSpark 2s linear -.1s infinite}
-.sb-fire-ico{position:relative;flex:none;width:.95em;height:.95em;filter:drop-shadow(0 1px 1px rgba(110,14,2,.5))}
-/* the Pricing page's list (user, 2026-11-26): a red half is plain red with the small flame icon; a half with the icon alone
-   (an offer of one part) is a little narrower */
-.sb-ico{gap:.36em}
-.sb-ico .sb-fire-ico{filter:none}
+/* the small flame icon of a red half with no words (an offer of one part, user, 2026-11-26), which is a little narrower;
+   the red halves are plain red everywhere (the moving fire of 2026-11-25 was removed the same day) */
+.sb-fire-ico{position:relative;flex:none;width:.95em;height:.95em}
 .sb>.sb-only{padding-left:.85em;padding-right:1em}
-@keyframes sbBurn1{0%,100%{transform:translateY(.18em) rotate(45deg) scale(.82);opacity:.8}25%{transform:translateY(-.09em) rotate(41deg) scale(1.05);opacity:1}50%{transform:translateY(.09em) rotate(48deg) scale(.9);opacity:.85}75%{transform:translateY(-.18em) rotate(44deg) scale(1.1);opacity:.95}}
-@keyframes sbBurn2{0%,100%{transform:translateY(0) rotate(47deg) scale(1);opacity:.9}33%{transform:translateY(.23em) rotate(43deg) scale(.8);opacity:.7}66%{transform:translateY(-.14em) rotate(46deg) scale(1.12);opacity:1}}
-@keyframes sbSpark{0%{transform:translate(0,0) scale(1);opacity:0}15%{opacity:1}100%{transform:translate(.27em,-2em) scale(.3);opacity:0}}
-@keyframes sbGlow{0%,100%{box-shadow:.4em .3em 1.1em -.35em rgba(249,115,22,.45)}50%{box-shadow:.4em .3em 1.2em -.3em rgba(249,115,22,.75)}}
-@media (prefers-reduced-motion:reduce){.sb-flames b,.sb-flames u,.sb:has(>.sb-fire){animation:none}}
-/* phones: a pill whose halves wrap onto two lines has no shape of its own to glow around (it drew a pale box), so each red
-   half glows by itself; the price list's pills stay joined and keep the pill's glow */
-@media (max-width:639px){.sb-split:has(>.sb-fire){box-shadow:none;animation:none}.sb-split>.sb-fire{box-shadow:0 .25em .9em -.3em rgba(249,115,22,.65)}#prices .sb-split:has(>.sb-fire){box-shadow:.4em .3em 1.1em -.35em rgba(249,115,22,.6);animation:sbGlow 2.4s ease-in-out infinite}#prices .sb-split>.sb-fire{box-shadow:none}}
 @media (max-width:639px){.sb-split{flex-wrap:wrap;gap:5px;max-width:100%;overflow:visible;border-radius:0}.sb-split .sb-a,.sb-split .sb-b{border-radius:999px}.sb-split .sb-a{box-shadow:inset 0 0 0 1.5px var(--a-ring)}}
 .sb[data-look="holiday"],.pr-from[data-look="holiday"]{--a-bg:#173D2C;--a-fg:#fff;--a-ring:#173D2C;--b-bg:#D4B574;--b-fg:#173D2C;--now:#1E5A3E}
 .sb[data-look="newyear"],.pr-from[data-look="newyear"]{--a-bg:#fff;--a-fg:#1B242B;--a-ring:rgba(27,36,43,.25);--b-bg:#4A5763;--b-fg:#fff;--now:#0F80C3}
