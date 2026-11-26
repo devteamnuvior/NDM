@@ -11,8 +11,9 @@
 /* room either side of the clipping fold so the panel's outline and shadow are not cut off */
 .pr-group>.pr-body>div{margin:0 -16px;padding:0 16px}
 /* the open category title stays under the header without a paper band of its own: rows passing under it are blurred away */
-.pr-group.is-open>.pr-ghead{position:sticky;top:100px;z-index:5;background:transparent;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
-@media (min-width:1280px){.pr-group.is-open>.pr-ghead{top:120px}}
+/* it stops below the "Jump to a treatment" bar, which is sticky at the same top (--pcm-h: the bar's height, set by JumpMenu) */
+.pr-group.is-open>.pr-ghead{position:sticky;top:calc(100px + var(--pcm-h,0px));z-index:5;background:transparent;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+@media (min-width:1280px){.pr-group.is-open>.pr-ghead{top:calc(120px + var(--pcm-h,0px))}}
 .pr-gplus{width:44px;height:44px}
 .pr-ghead button:hover .pr-gplus{border-color:#1B242B}
 .pr-group.is-open>.pr-ghead .pr-gplus{background:#0F80C3;border-color:#0F80C3;color:#fff}

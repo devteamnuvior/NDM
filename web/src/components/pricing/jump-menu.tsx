@@ -41,6 +41,21 @@ export function JumpMenu({ categories }: { categories: PriceCategoryView[] }) {
     };
   }, [measure]);
 
+  /* the open category's own sticky heading sits under this bar, not behind it: the list's container is told the bar's height */
+  useEffect(() => {
+    const el = bar.current;
+    const box = el?.parentElement;
+    if (!el || !box) return;
+    const tell = () => box.style.setProperty("--pcm-h", `${el.offsetHeight}px`);
+    tell();
+    const ro = new ResizeObserver(tell);
+    ro.observe(el);
+    return () => {
+      ro.disconnect();
+      box.style.removeProperty("--pcm-h");
+    };
+  }, []);
+
   /* the bar gets its background and line only while it is stuck under the header */
   useOnScroll(() => {
     const el = bar.current;
