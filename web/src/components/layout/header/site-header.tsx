@@ -88,7 +88,8 @@ export function SiteHeader() {
       {used.cart && <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />}
       <CartPill onOpen={openCart} hidden={cartOpen || drawer || search} />
       {/* not on the checkout: there it would sit over the form's fields on a phone */}
-      <FloatSearch onOpen={openSearch} hidden={search || drawer || cartOpen || current === "checkout"} />
+      {/* not on the Pricing page, which has its own search box (user, 2026-11-25: the phone's floating buttons were too many) */}
+      <FloatSearch onOpen={openSearch} hidden={search || drawer || cartOpen || current === "checkout" || current === "pricing"} />
       <ChatBot hidden={cartOpen || drawer || search} />
       <BfDock />
     </>

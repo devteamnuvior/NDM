@@ -2,6 +2,7 @@ import Image, { type StaticImageData } from "next/image";
 import { PAGE_SECTION } from "@/config/navigation";
 import type { PageId } from "@/config/routes";
 import { withBase } from "@/lib/base-path";
+import { isOffSite } from "@/config/shop";
 import { contentLink, pageLink, resolveLabel } from "@/lib/routes";
 import type { NavMenuId, NavSectionId, ResolvedLink } from "@/types/navigation";
 import type { MenuCategory, MenuItem } from "@/types/site-settings";
@@ -18,9 +19,9 @@ export function itemLink(item: MenuItem, shopLink: string): ResolvedLink {
   return item.link ? contentLink(item.link) : resolveLabel(item.label);
 }
 
-/** Whether a top-level item opens in a new tab with the external-link icon. */
-export function itemExternal(item: MenuItem): boolean {
-  return item.kind === "shop" || (item.kind === "link" && item.newTab);
+/** Whether a top-level item opens in a new tab with the external-link icon (the shop only when its link leaves the site). */
+export function itemExternal(item: MenuItem, shopLink: string): boolean {
+  return (item.kind === "shop" && isOffSite(shopLink)) || (item.kind === "link" && item.newTab);
 }
 
 /** The section of the site an item stands for: the header marks it while one of its pages is open. */

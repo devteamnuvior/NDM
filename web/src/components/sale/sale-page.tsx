@@ -20,7 +20,7 @@ import type { BfClock } from "@/components/black-friday/bf-timer";
 import { bfsShort, bfsTag, planPrice, planTotals, type Deal, type Opt, type PlanLine } from "@/components/bf-sale/data";
 import { Button } from "@/components/ui/button";
 import { IconArrow, IconClose, IconPhone } from "@/components/ui/icons";
-import { SHOP_URL } from "@/config/shop";
+import { SHOP_PAGE } from "@/config/shop";
 import { CLINICS as SITE_CLINICS, HOURS } from "@/config/site";
 import { useOnScroll } from "@/hooks/use-on-scroll";
 import { useReveal } from "@/hooks/use-reveal";
@@ -672,7 +672,7 @@ function Footer({ t }: { t: SaleClock }) {
           <Link href="/" prefetch={false}><img src={withBase("/assets/icons/logo-white.svg")} alt="NewDermaMed" width="208" height="40" className="h-10 w-auto" /></Link>
           <p className="font-inter text-[13.5px] text-white/60">{CLINICS.map((c) => `${c.name} ${c.phone}`).join(' · ')} · <a href={`mailto:${EMAIL}`} className="hover:text-white">{EMAIL}</a></p>
           <p className="flex flex-wrap gap-x-5 gap-y-2 font-inter text-[13.5px] text-white/60">
-            <Link href="/" prefetch={false} className="hover:text-white">Main site</Link><Link href="/pricing" prefetch={false} className="hover:text-white">Full price list</Link><a href={SHOP_URL} target="_blank" rel="noopener" className="hover:text-white">Skincare shop ↗</a>
+            <Link href="/" prefetch={false} className="hover:text-white">Main site</Link><Link href="/pricing" prefetch={false} className="hover:text-white">Full price list</Link><Link href={SHOP_PAGE} prefetch={false} className="hover:text-white">Skincare shop</Link>
           </p>
         </div>
         <div className="mt-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-10">

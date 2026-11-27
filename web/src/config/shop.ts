@@ -1,6 +1,26 @@
 /** The clinic's online skincare shop: its address and the products shown on the home page. */
 
-export const SHOP_URL = "https://shop.newdermamedlaserclinic.com/shop/";
+/** The online store itself (a WooCommerce site of its own): its listing page and its cart, where checkout happens. */
+export const SHOP_ORIGIN = "https://shop.newdermamedlaserclinic.com";
+export const SHOP_URL = `${SHOP_ORIGIN}/shop/`;
+export const SHOP_CART_URL = `${SHOP_ORIGIN}/cart/`;
+
+/** This site's own shop page (/shop): every "Skincare shop" link opens it. */
+export const SHOP_PAGE = "/shop";
+
+/** A product's page on this site. */
+export const productPath = (slug: string): string => `${SHOP_PAGE}/${slug}`;
+
+/** The store's cart (or checkout) with a product and a quantity added: WooCommerce's own `?add-to-cart=` link. */
+export const storeAdd = (id: number, qty = 1, to: "cart" | "checkout" = "cart"): string => `${SHOP_ORIGIN}/${to}/?add-to-cart=${id}${qty > 1 ? `&quantity=${qty}` : ""}`;
+
+/** A link to the store's listing page (or its home) as this site's shop page; any other link as it is. */
+export function toShopPage(href: string): string {
+  return /^https?:\/\/shop\.newdermamedlaserclinic\.com\/?(shop\/?)?$/i.test(href.trim()) ? SHOP_PAGE : href;
+}
+
+/** Whether a link leaves this site (opens in a new tab with the external-link icon). */
+export const isOffSite = (href: string): boolean => /^https?:\/\//i.test(href.trim());
 
 export interface Product {
   name: string;

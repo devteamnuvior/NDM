@@ -627,7 +627,7 @@ function BfsFooter() {
           <a href="index.html"><img src="assets/icons/logo-white.svg" alt="NewDermaMed" className="h-10 w-auto" /></a>
           <p className="font-inter text-[13.5px] text-white/60">{CLINICS.map((c) => `${c.name} ${c.phone}`).join(' · ')}</p>
           <p className="flex flex-wrap gap-x-5 gap-y-2 font-inter text-[13.5px] text-white/60">
-            <a href="index.html" className="hover:text-white">Main site</a><a href="pricing.html" className="hover:text-white">Full price list</a><a href={SHOP_URL} target="_blank" rel="noopener" className="hover:text-white">Skincare shop ↗</a>
+            <a href="index.html" className="hover:text-white">Main site</a><a href="pricing.html" className="hover:text-white">Full price list</a><a href="shop.html" className="hover:text-white">Skincare shop</a>
           </p>
         </div>
         <div className="mt-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-10">

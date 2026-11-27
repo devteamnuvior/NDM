@@ -61,6 +61,7 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
   const [gone, setGone] = useState(false); /* a page that shows no chat button at all (Pricing) */
   const [btnCovers, setBtnCovers] = useState(false); /* phones: the same for the chat button itself */
   const [clear, setClear] = useState(false); /* phones: true once nothing marked data-pill-avoid sits mid-screen, so the note never covers it */
+  const [searchOn, setSearchOn] = useState(true); /* phones: the floating search button is showing */
   const list = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const btn = useRef<HTMLButtonElement>(null);
@@ -109,6 +110,9 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
       if (r.width && r.top < vh && r.bottom > vh - 120 && r.right > vw - 90) top = Math.min(top, r.top);
     });
     setAvoid(top < vh ? vh - top + 12 : 0);
+    /* phones: whether the floating search button is showing (the chat button sits above it, else in its place) */
+    const fs = document.querySelector<HTMLElement>(".float-search");
+    setSearchOn(!!fs && !fs.classList.contains("is-off") && getComputedStyle(fs).display !== "none");
     /* phones: what lies under the note and under the chat button (each stays in place, unseen, while it steps aside) */
     setGone(floatOff());
     const held = floatHeld(); /* phones, home page: not before the hero has scrolled past */
@@ -187,14 +191,16 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
 
   const asked = new Set(msgs.filter((m) => m.me).map((m) => m.text));
   const left = CHAT_PRESETS.filter(([q]) => !asked.has(q));
-  /* wide screens: sits above the cart bar when it shows (same corner) */
-  const bottom = small ? Math.max(16, avoid) + 64 : Math.max(24, avoid);
+  /* wide screens: sits above the cart bar when it shows (same corner). Phones: above the floating search button when
+     it is there, else in its place */
+  const bottom = small ? Math.max(16, avoid) + (searchOn ? 60 : 0) : Math.max(24, avoid);
   /* out of the way while another overlay is open, or (phones) while the button lies over a button of the page */
   const off = (hidden || gone || (small && btnCovers)) && !open;
 
   return (
     <>
-      {note && !open && !off && (!small || clear) && (
+      {/* the note never opens on phones (user, 2026-11-25: it crowded the bottom of the screen) */}
+      {note && !open && !off && !small && (!small || clear) && (
         <div
           ref={pop}
           role="status"
@@ -227,7 +233,7 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
         aria-controls="chat-panel"
         aria-label={open ? "Close chat" : "Chat with NewDermaMed"}
         tabIndex={off ? -1 : 0}
-        className={`chat-btn chat-launch fixed z-[61] grid size-[56px] place-items-center rounded-full text-white md:size-[62px] ${off ? "is-off" : ""} ${note && !open ? "has-note" : ""} ${open ? "is-open" : ""}`}
+        className={`chat-btn chat-launch fixed z-[61] grid size-[48px] place-items-center rounded-full text-white md:size-[62px] ${off ? "is-off" : ""} ${note && !open && !small ? "has-note" : ""} ${open ? "is-open" : ""}`}
         style={{ right: small ? 16 : 24, bottom: `calc(${bottom}px + env(safe-area-inset-bottom))` }}
       >
         {open ? (
@@ -240,7 +246,7 @@ export function ChatBot({ hidden }: { hidden: boolean }) {
             </span>
           </>
         )}
-        {note && !open && (
+        {note && !open && !small && (
           <i aria-hidden="true" className="absolute -top-1 -right-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#E5484D] px-1 font-inter text-[11px] leading-none font-semibold text-white not-italic ring-2 ring-white">
             1
           </i>

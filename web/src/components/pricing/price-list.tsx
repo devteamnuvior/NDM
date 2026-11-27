@@ -12,7 +12,7 @@ import { type PriceCategoryView, type PriceItemView } from "@/lib/pricing-view";
 import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
 import { jumpToPriceGroup, PRICE_GROUP_HASH } from "@/lib/price-jump";
-import { BestDealProvider, FromPrice, OfferTag, SaleNameProvider, type SaleLook } from "@/components/pricing/sale-tags";
+import { FromPrice, IconHalfProvider, OfferTag, SaleNameProvider, type SaleLook } from "@/components/pricing/sale-tags";
 import { OptionRow } from "@/components/pricing/option-row";
 import { JumpMenu } from "@/components/pricing/jump-menu";
 
@@ -38,17 +38,39 @@ export interface PriceListSale {
 }
 const SaleContext = createContext<PriceListSale | null>(null);
 
-/**
- * One treatment of a category. `flat`: the category holds this treatment only, so its options show at once under the
- * category's own heading, with no treatment row to open a second time (user, 2026-11-25).
- */
-function TreatmentRow({ cat, it, uid, open, onToggle, flat = false }: { cat: PriceCategoryView; it: PriceItemView; uid: string; open: boolean; onToggle: () => void; flat?: boolean }) {
-  /* the treatment (and below, its option) the category's "from" price is read from: marked with the blue dot */
-  const isSource = cat.items.length > 1 ? it.name === cat.fromSource?.item : it.options.length > 1;
+/** The options of one treatment, each with Add to cart; the blue dot on the one the category's "from" price is read from. */
+function OptionList({ cat, it, mark, className = "grid gap-2 pb-5" }: { cat: PriceCategoryView; it: PriceItemView; mark: boolean; className?: string }) {
   const sale = useContext(SaleContext);
   return (
-    <li className={`pr-item ${open || flat ? "is-open" : ""} ${flat ? "pr-item-flat" : ""}`}>
-      {!flat && (
+    <ul className={className} role="list">
+      {it.options.map((o) => {
+        const line = { key: cartKey(o.productId, o.variationId), cat: cat.name, name: it.name, label: o.label, price: o.price, was: o.was, unit: o.unit, productId: o.productId, variationId: o.variationId };
+        return (
+          <OptionRow
+            key={o.variationId || o.label}
+            data={{ "data-product": o.productId, "data-variation": o.variationId || undefined }}
+            label={o.label}
+            price={o.price}
+            was={o.was}
+            code={sale ? o.code : undefined}
+            mark={mark && o.label === cat.fromSource?.label}
+            codeName={sale?.code}
+            codePercent={sale?.percent}
+            tag={o.tag}
+            unit={o.unit}
+            action={<QtyControl fly line={line} label={`${it.name}, ${o.label}`} />}
+          />
+        );
+      })}
+    </ul>
+  );
+}
+
+function TreatmentRow({ cat, it, uid, open, onToggle }: { cat: PriceCategoryView; it: PriceItemView; uid: string; open: boolean; onToggle: () => void }) {
+  /* the treatment (and below, its option) the category's "from" price is read from: marked with the blue dot */
+  const isSource = cat.items.length > 1 ? it.name === cat.fromSource?.item : it.options.length > 1;
+  return (
+    <li className={`pr-item ${open ? "is-open" : ""}`}>
       <h4 className="m-0">
         <button
           type="button"
@@ -75,30 +97,9 @@ function TreatmentRow({ cat, it, uid, open, onToggle, flat = false }: { cat: Pri
           </span>
         </button>
       </h4>
-      )}
-      <div id={uid} role={flat ? undefined : "region"} aria-labelledby={flat ? undefined : `${uid}-h`} aria-label={flat ? it.name : undefined} className="pr-body">
+      <div id={uid} role="region" aria-labelledby={`${uid}-h`} className="pr-body">
         <div>
-          <ul className="grid gap-2 pb-5" role="list">
-            {it.options.map((o) => {
-              const line = { key: cartKey(o.productId, o.variationId), cat: cat.name, name: it.name, label: o.label, price: o.price, was: o.was, unit: o.unit, productId: o.productId, variationId: o.variationId };
-              return (
-                <OptionRow
-                  key={o.variationId || o.label}
-                  data={{ "data-product": o.productId, "data-variation": o.variationId || undefined }}
-                  label={o.label}
-                  price={o.price}
-                  was={o.was}
-                  code={sale ? o.code : undefined}
-                  mark={isSource && o.label === cat.fromSource?.label}
-                  codeName={sale?.code}
-                  codePercent={sale?.percent}
-                  tag={o.tag}
-                  unit={o.unit}
-                  action={<QtyControl fly line={line} label={`${it.name}, ${o.label}`} />}
-                />
-              );
-            })}
-          </ul>
+          <OptionList cat={cat} it={it} mark={isSource} />
         </div>
       </div>
     </li>
@@ -121,6 +122,8 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }: P
   const allOpen = shown.every(([, i]) => openItem(i));
   const uid = `pg-${c.id}`;
   const count = shown.length;
+  /* one treatment only (e.g. Aptos): no treatment row to open, its options straight under the category (user, 2026-11-25) */
+  const single = c.items.length === 1;
   return (
     <li className={`pr-group ${on ? "is-open" : ""}`}>
       <h3 className="pr-ghead m-0">
@@ -152,7 +155,7 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }: P
         <div>
           <div className="pr-gintro flex items-center justify-between gap-x-4 pb-2 sm:gap-x-8">
             <p className="max-w-[60ch] min-w-0 font-inter text-[15px] leading-[1.55] text-ndm-muted">{c.blurb}</p>
-            {count > 1 && (
+            {!single && count > 1 && (
               <button
                 type="button"
                 onClick={() => setItems(shown.map(([, i]) => i), !allOpen)}
@@ -164,11 +167,17 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }: P
             )}
           </div>
           {/* treatments sit on their own white panel, flush with the category title, so they read as part of the category */}
-          <ul className="pr-sub" role="list">
-            {shown.map(([it, i]) => (
-              <TreatmentRow key={i} cat={c} it={it} uid={`pr-${c.id}-${i}`} open={openItem(i)} onToggle={() => toggleItem(i)} flat={c.items.length === 1} />
-            ))}
-          </ul>
+          {single ? (
+            <div className="pr-sub">
+              <OptionList cat={c} it={c.items[0]} mark={c.items[0].options.length > 1} className="grid gap-2 py-[18px]" />
+            </div>
+          ) : (
+            <ul className="pr-sub" role="list">
+              {shown.map(([it, i]) => (
+                <TreatmentRow key={i} cat={c} it={it} uid={`pr-${c.id}-${i}`} open={openItem(i)} onToggle={() => toggleItem(i)} />
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </li>
@@ -237,7 +246,9 @@ export function PriceList({ categories, total, sale = null }: { categories: Pric
   return (
     <SaleContext value={sale}>
       <SaleNameProvider shown={false}>
-      <BestDealProvider shown>
+      {/* every pill is two halves, black and plain red (user, 2026-11-26): an offer of one part gets a red half with the flame
+          icon alone */}
+      <IconHalfProvider shown>
       <section ref={section} id="prices" data-sale={sale?.look} aria-labelledby="prices-title" className="relative z-10 bg-ndm-paper px-[var(--gx)] pt-[clamp(64px,7vw,110px)] pb-[clamp(64px,7vw,110px)]">
       <div className="mx-auto max-w-[1040px]">
         {sale?.banner && (
@@ -268,6 +279,7 @@ export function PriceList({ categories, total, sale = null }: { categories: Pric
             <span className="sr-only">Search treatments</span>
             <IconSearch size={20} className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-ndm-muted" />
             <input
+              id="prices-search"
               type="search"
               value={query}
               onChange={(e) => search(e.target.value)}
@@ -318,7 +330,7 @@ export function PriceList({ categories, total, sale = null }: { categories: Pric
         </div>
       </div>
       </section>
-      </BestDealProvider>
+      </IconHalfProvider>
       </SaleNameProvider>
     </SaleContext>
   );

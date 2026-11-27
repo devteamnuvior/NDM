@@ -50,6 +50,8 @@ export function pageLink(page: PageId): ResolvedLink {
 export function pageFromPathname(pathname: string): PageId | undefined {
   const clean = pathname.replace(/\/+$/, "").replace(/\.html$/, "").toLowerCase();
   if (clean === "" || clean === "/index") return "home";
+  /* a product page of the shop belongs to the shop (the header marks "Skincare shop") */
+  if (/^\/shop\/[^/]+$/.test(clean)) return "shop";
   return (Object.keys(PAGES) as PageId[]).find((id) => PAGES[id].path.replace(/\.html$/, "") === clean);
 }
 

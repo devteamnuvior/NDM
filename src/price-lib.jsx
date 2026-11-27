@@ -7,21 +7,29 @@
 const PRICE_BY_ID = Object.fromEntries(PRICE_CATS.map((c) => [c.id, c]));
 const pfmt = (n) => '$' + (Math.round(n * 100) / 100).toLocaleString('en-CA', { useGrouping: false, minimumFractionDigits: Math.round(n * 100) % 100 ? 2 : 0, maximumFractionDigits: 2 });
 const pCount = (label) => { const m = /(\d+)\s*(units?|syringes?|sessions?|vials?|treatments?|zones?)\b/i.exec(label) || /package of (\d+)/i.exec(label); return m ? +m[1] : 1; };
-const pPct = (tag) => { const m = /^(\d+)% OFF$/i.exec(tag || ''); return m ? +m[1] : 0; };
+/* a percentage offer, also with the sale's name in front ("BLACK FRIDAY 30% OFF"), as the site reads it (price-book.ts percentOff) */
+const pPct = (tag) => { const m = /(?:^|\s)(\d+)%\s*OFF$/i.exec(String(tag || '').trim()); return m ? +m[1] : 0; };
+/* a "from" price as shown: per unit to the cent, anything else up to the next whole dollar ($167.33 -> $168), as the site (fromValue) */
+const fromValue = (n, perUnit) => { const c = Math.round(n * 100) / 100; return perUnit ? c : Math.ceil(c); };
 const pNorm = (s) => String(s || '').toLowerCase().replace(/[®™]/g, '').replace(/[–-]/g, ' ').replace(/\s+/g, ' ').trim();
 function priceOptions(id, item) {
   const c = PRICE_BY_ID[id]; if (!c) return [];
   const its = item ? c.items.filter((it) => pNorm(it[0]) === pNorm(item) || pNorm(it[0]).includes(pNorm(item))) : c.items;
-  return (its.length ? its : c.items).flatMap((it) => it[2].map((o) => ({ item: it[0], label: o[0], price: o[1], reg: o[2], tag: o[3] || '' })));
+  return (its.length ? its : c.items).flatMap((it) => it[2].map((o) => ({ item: it[0], label: o[0], price: o[1], reg: o[2], tag: o[3] || '', code: o[4] || 0 })));
 }
-function priceFrom(id, item) {
+/* withCode: the price with the running sale's checkout code where it applies. On by default since 2026-11-25 (user: every
+   price on the site is the Pricing page's), so every page shows the same "from" price as the price list's own rows */
+function priceFrom(id, item, withCode = true) {
   const c = PRICE_BY_ID[id]; const os = priceOptions(id, item); if (!c || !os.length) return null;
   let best = null;
-  os.forEach((o) => { const n = /regular/i.test(o.label) ? 1 : pCount(o.label); const v = o.price / n; if (!best || v < best.v - 0.001 || (Math.abs(v - best.v) <= 0.001 && n > best.n)) best = { v, o, n }; });
+  os.forEach((o) => { const n = /regular/i.test(o.label) ? 1 : pCount(o.label); const paid = withCode && o.code && o.code < o.price ? o.code : o.price; const v = paid / n; if (!best || v < best.v - 0.001 || (Math.abs(v - best.v) <= 0.001 && n > best.n)) best = { v, o, n, paid }; });
   const pct = Math.max(0, ...os.map((o) => pPct(o.tag)));
   const tags = os.map((o) => o.tag).filter(Boolean);
   const offer = pct ? `Up to ${pct}% off` : (tags[0] ? tags[0].replace(/\bOFF\b/g, 'off').replace(/^BUY 1 GET 1/i, 'Buy 1 get 1').replace(/\bFREE\b/, 'free').replace(/^Save \$(\d+)\sOff$/i, 'Save $$$1') : '');
-  return { src: { item: best.o.item, label: best.o.label, price: best.o.price, count: best.n, reg: best.o.reg ? Math.round((best.o.reg / best.n) * 100) / 100 : 0 }, value: Math.round(best.v * 100) / 100, unit: c.unit ? ' / unit' : '', per: c.unit ? 'per unit' : /syringe/i.test(best.o.label) ? 'per syringe' : /zone/i.test(best.o.label) ? 'per zone' : best.n > 1 || /session/i.test(best.o.label) ? 'per session' : '', pct, offer };
+  /* the struck price beside it: the regular price, else (a code-only line) the price before the code, on the same count */
+  const full = best.o.reg && best.o.reg > best.paid ? best.o.reg : best.paid < best.o.price ? best.o.price : 0;
+  const reg = full ? (c.unit ? Math.round((full / best.n) * 100) / 100 : Math.round(full / best.n)) : 0;
+  return { src: { item: best.o.item, label: best.o.label, price: best.paid, count: best.n, reg }, value: fromValue(best.v, c.unit), unit: c.unit ? ' / unit' : '', per: c.unit ? 'per unit' : /syringe/i.test(best.o.label) ? 'per syringe' : /zone/i.test(best.o.label) ? 'per zone' : best.n > 1 || /session/i.test(best.o.label) ? 'per session' : '', pct, offer };
 }
 const priceLabel = (id, item) => { const f = priceFrom(id, item); return f ? `From ${pfmt(f.value)}${f.unit}` : null; };
 /* names used on the site's cards and menus, mapped to the price list: [category id, treatment] */
@@ -55,7 +63,23 @@ const rowsFrom = (rows, perUnit) => Math.round(Math.min(...rows.map((r) => (perU
 /* ---------------------------------------------------------------- sale tags and where a "from" price comes from (2026-11-16)
    SALE_LOOK: the look of the offer tags while a promotion runs: 'vip' and 'bf' (black and gold, like VIP Early Access + Black Friday), 'holiday' (green and gold),
    'newyear' (slate), or '' for the plain red tags. Every price table (pricing, Botox, Aptos) reads it. */
-const SALE_LOOK = 'vip';
+const SALE_LOOK = PRICE_SALE ? 'bf' : '';
+/* the checkout code's percentage ("+ EXTRA 30%") while the sale runs */
+const SALE_PCT = PRICE_SALE ? PRICE_SALE.percent : 0;
+/* whether the pills name the sale ("BLACK FRIDAY 30% OFF") or give the offer only ("30% OFF"): the pricing page's list gives
+   the offer only (user, 2026-11-25, as the site); the treatment pages' tables keep the name. pricing-ui.jsx sets it to false. */
+let SALE_NAME_SHOWN = true;
+const saleWords = (t) => (SALE_NAME_SHOWN ? t : String(t).replace(/^\s*BLACK\s+FRIDAY\s+/i, ''));
+/* a red half of the flame icon alone beside an offer of one part ("30% OFF" | flame, "SAVE $1,000" | flame): the pricing page's
+   list and Monthly specials cards (user, 2026-11-26; it replaced the words "BEST DEAL"), pricing-ui.jsx sets it to true */
+let ICON_HALF_SHOWN = false;
+const withIconHalf = (parts) => (ICON_HALF_SHOWN && parts.length === 1 ? [parts[0], ''] : parts);
+const FireIcon = () => <svg aria-hidden="true" className="sb-fire-ico" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>;
+/* one half of a pill: the red half is plain red everywhere (user, 2026-11-26: no fire; site: PillPart), with the flame icon
+   alone when it has no words */
+const PillPart = ({ text, second }) => (!second
+  ? <span className="sb-a">{saleWords(text)}</span>
+  : <span className={`sb-b${text ? '' : ' sb-only'}`}>{text ? saleWords(text) : <FireIcon />}</span>);
 /* the lowest row of one price table and how it is counted (per unit when the table is priced per unit) */
 const rowsSource = (rows, perUnit) => {
   let best = null;
@@ -65,16 +89,27 @@ const rowsSource = (rows, perUnit) => {
 /* a clinic tag in the pill's words: "Save $1000 Off" -> "SAVE $1,000" */
 const tagWords = (t) => String(t || '').trim().toUpperCase().replace(/\s+/g, ' ').replace(/^SALE\s+/, '').replace(/^SAVE \$(\d+)(?: OFF)?$/, (_, n) => 'SAVE $' + Number(n).toLocaleString('en-CA'));
 /* the offer of a list of tags as the pill shows it: the biggest percentage, else the first tag, split after "BUY 1" */
+const strictPct = (t) => { const m = /^(\d+)%\s*OFF$/i.exec(t || ''); return m ? +m[1] : 0; };
 const saleBadge = (tags) => {
   const ts = tags.filter(Boolean).map(tagWords); if (!ts.length) return [];
-  const t = ts.sort((a, b) => pPct(b) - pPct(a))[0]; const m = /^(BUY \d+)\s+(GET .+)$/.exec(t);
+  const t = ts.sort((a, b) => strictPct(b) - strictPct(a))[0]; const m = /^(BUY \d+)\s+(GET .+)$/.exec(t);
   return m ? [m[1], m[2]] : [t];
 };
-/* the offer tag: the plain red tag, or in a sale's look the pill, in two halves when the offer has two parts */
-function SaleTag({ offer, badge, small, plain = 'pr-badge' }) {
+/* whether the checkout code belongs beside the badge: only when the option the badge is read from takes the code (site: badgeCoded) */
+const badgeCoded = (opts) => {
+  const tagged = opts.filter((o) => o[3] && tagWords(o[3]));
+  if (!tagged.length) return opts.some((o) => !!o[4]);
+  return !![...tagged].sort((a, b) => strictPct(tagWords(b[3])) - strictPct(tagWords(a[3])))[0][4];
+};
+/* the offer tag: the plain red tag, or in a sale's look the pill, in two halves when the offer has two parts
+   ("30% OFF" | "+ EXTRA 30%", "BUY 1" | "GET 1 FREE"), as the site's OfferTag */
+function SaleTag({ offer, badge, coded, small, plain = 'pr-badge' }) {
   if (!SALE_LOOK) return offer ? <span className={plain}>{offer}</span> : null;
-  if (!badge || !badge.length) return null;
-  return <span data-look={SALE_LOOK} className={`sb ${small ? 'sb-sm' : ''} ${badge.length > 1 ? 'sb-split' : ''}`}>{badge.map((t, i) => <span key={i} className={i ? 'sb-b' : 'sb-a'}>{t}</span>)}</span>;
+  const b = badge || [];
+  const found = b.length === 1 && coded && /%\s*OFF$/.test(b[0]) ? [b[0], `+ EXTRA ${SALE_PCT}%`] : b.length ? b : coded ? [`+ EXTRA ${SALE_PCT}%`] : [];
+  if (!found.length) return null;
+  const parts = withIconHalf(found);
+  return <span data-look={SALE_LOOK} className={`sb ${small ? 'sb-sm' : ''} ${parts.length > 1 ? 'sb-split' : ''}`}>{parts.map((t, i) => <PillPart key={i} text={t} second={i > 0} />)}</span>;
 }
 /* the offer of a specials card (wheel, Promotion cards, Pricing specials) as a pill in the pricing tags' pattern, in the site's
    own navy and sky (round 37): "Up to 30% off" -> UP TO | 30% OFF, "Buy 1 get 1 free" -> BUY 1 | GET 1 FREE, "Save $1000" -> SAVE $1,000 */
@@ -82,7 +117,8 @@ const dealParts = (d) => { const t = tagWords(d); const m = /^(UP TO|BUY \d+)\s+
 function DealPill({ deal, className = '' }) {
   const p = dealParts(deal);
   if (!p.length) return null;
-  return <span className={`dp ${p.length > 1 ? 'dp-split' : ''} ${className}`}>{p.map((t, i) => <span key={i} className={i ? 'dp-b' : 'dp-a'}>{t}</span>)}</span>;
+  /* during the Black Friday sale black and plain red, as the site (web/src/styles/sale-bf.css, user, 2026-11-26: no fire) */
+  return <span data-look={SALE_LOOK || undefined} className={`dp ${p.length > 1 ? 'dp-split' : ''} ${className}`}>{p.map((t, i) => <span key={i} className={i ? 'dp-b' : 'dp-a'}>{t}</span>)}</span>;
 }
 /* where a lowest price is read from: "Skin Booster, 2 Syringes" (withItem puts the treatment first) */
 const sourceWords = (s, withItem) => {
@@ -92,7 +128,7 @@ const sourceWords = (s, withItem) => {
 };
 /* "From $343 / session": in the sale's colour with the regular price struck through, and under it, marked with a blue dot, where it comes from */
 function FromPrice({ value, unit, src, withItem, big, noWords, mark }) {
-  const cut = SALE_LOOK && src && src.reg > value;
+  const cut = SALE_LOOK && src && src.reg > 0;
   const words = noWords ? '' : sourceWords(src, withItem);
   return (
     <span className="flex flex-col items-start sm:items-end">
@@ -104,30 +140,43 @@ function FromPrice({ value, unit, src, withItem, big, noWords, mark }) {
 const SrcMark = ({ children }) => <span className="pr-src-tag"><i aria-hidden="true" />{children}</span>;
 /* one option of a treatment in the stacked-discount layout (designer's reference, 2026-11-16): name, count and price of one,
    the offer pill; the regular price struck through, the price to pay large, the saving; Add to cart on the right */
+/* an option's tag in the pill's words, as the site's pillWords: "Save $1000 Off" -> SAVE $1,000, BUY 1 | GET 1 FREE */
+const optPill = (tag) => {
+  const t = String(tag).trim().toUpperCase().replace(/\s+/g, ' ').replace(/^SALE\s+/, '').replace(/^SAVE \$(\d+)(?: OFF)?$/, (_, n) => 'SAVE $' + Number(n).toLocaleString('en-CA'));
+  const m = /^(BUY \d+)\s+(GET .+)$/.exec(t);
+  return m ? [m[1], m[2]] : [t];
+};
 const optCount = (label) => {
   const m = /(\d+)\s*(unit|syringe|session|vial|treatment|zone)s?\b/i.exec(label);
   if (m) return { n: +m[1], one: m[2].toLowerCase(), many: m[2].toLowerCase() + 's' };
   const p = /package of (\d+)/i.exec(label);
   return p ? { n: +p[1], one: 'session', many: 'sessions' } : null;
 };
-function OptionRow({ label, price, was, tag, unit, action, mark }) {
+/* code: the price with the running sale's checkout code (site: OptionRow): both earlier prices struck, the price to pay,
+   "Extra 30% applied" and the saving */
+function OptionRow({ label, price, was, code, tag, unit, action, mark }) {
   const cnt = optCount(label);
-  const cut = was > price;
-  const save = Math.round(((was || price) - price) * 100) / 100;
-  const pill = tag && SALE_LOOK ? saleBadge([tag]) : [];
+  const coded = !!(SALE_LOOK && code && code < price);
+  const final = coded ? code : price;
+  const struck = [was > final ? was : 0, coded ? price : 0].filter((v, i, a) => v > 0 && a.indexOf(v) === i);
+  const cut = struck.length > 0;
+  const save = Math.round(((was || price) - final) * 100) / 100;
+  const found = tag && SALE_LOOK ? optPill(tag) : [];
+  if (found.length === 1 && coded && SALE_PCT) found.push(`+ EXTRA ${SALE_PCT}%`);
+  const pill = withIconHalf(found);
   return (
     <li className={`pr-opt pr-opt2 ${cut || tag ? 'is-featured' : ''}`}>
       <span className="pr-opt2-info">
         <span className="pr-opt2-name">{label}</span>
-        {cnt && cnt.n > 1 && <span className="pr-opt2-meta">{cnt.n} {cnt.many} · {pfmt(Math.round((price / cnt.n) * 100) / 100)} per {cnt.one}</span>}
+        {cnt && cnt.n > 1 && <span className="pr-opt2-meta">{cnt.n} {cnt.many} · {pfmt(Math.round((final / cnt.n) * 100) / 100)} per {cnt.one}</span>}
         {tag && (SALE_LOOK
-          ? <span data-look={SALE_LOOK} className={`sb sb-sm pr-opt2-offer ${pill.length > 1 ? 'sb-split' : ''}`}>{pill.map((t, i) => <span key={i} className={i ? 'sb-b' : 'sb-a'}>{t}</span>)}</span>
+          ? <span data-look={SALE_LOOK} className={`sb sb-sm pr-opt2-offer ${pill.length > 1 ? 'sb-split' : ''}`}>{pill.map((t, i) => <PillPart key={i} text={t} second={i > 0} />)}</span>
           : <span className="pr-tag pr-opt2-offer">{tag}</span>)}
       </span>
       <span className={`pr-opt2-price ${cut ? '' : 'is-single'}`}>
-        {cut && <span className="pr-opt2-was"><s><span className="sr-only">Regular price </span>{pfmt(was)}</s></span>}
-        <span data-look={SALE_LOOK || undefined} className="pr-opt2-now">{mark && <i className="pr-dot" aria-hidden="true" />}{cut ? <span className="sr-only">now </span> : null}{pfmt(price)}{unit && <span className="pr-opt2-unit">{unit}</span>}</span>
-        {cut && save > 0 && <span className="pr-opt2-with"><span className="pr-opt2-save">You save {pfmt(save)}</span></span>}
+        {cut && <span className="pr-opt2-was">{struck.map((v, i) => <s key={i}><span className="sr-only">{i ? 'Sale price ' : 'Regular price '}</span>{pfmt(v)}</s>)}</span>}
+        <span data-look={SALE_LOOK || undefined} className="pr-opt2-now">{mark && <i className="pr-dot" aria-hidden="true" />}{cut ? <span className="sr-only">now </span> : null}{pfmt(final)}{unit && <span className="pr-opt2-unit">{unit}</span>}</span>
+        {cut && <span className="pr-opt2-with">{coded && <><span className="pr-opt2-tick" aria-hidden="true">&#10003;</span><span>Extra {SALE_PCT}% applied</span><span className="pr-opt2-sep"> · </span></>}{save > 0 && <span className="pr-opt2-save">You save {pfmt(save)}</span>}</span>}
       </span>
       <span className="pr-opt2-act">{action}</span>
     </li>
@@ -150,8 +199,15 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .dp-a{background:#0B0F13;color:#E2C88A;border-radius:999px}
 .dp-split .dp-a{border-radius:999px 0 0 999px}
 .dp-b{background:#D4B574;color:#0B0F13;border-radius:0 999px 999px 0}
+.dp[data-look="bf"] .dp-a{background:#0B0B0C;color:#fff}.dp[data-look="bf"] .dp-b{background:#D3121F;color:#fff}
 .pr-from.is-sale{color:var(--now,#0F80C3)}.pr-from[data-look]{--now:#0F80C3}
-.sb[data-look="vip"],.pr-from[data-look="vip"],.sb[data-look="bf"],.pr-from[data-look="bf"]{--a-bg:#0B0F13;--a-fg:#fff;--a-ring:#0B0F13;--b-bg:#D4B574;--b-fg:#0B0F13;--now:#9A7A3A}
+.sb[data-look="vip"],.pr-from[data-look="vip"]{--a-bg:#0B0F13;--a-fg:#fff;--a-ring:#0B0F13;--b-bg:#D4B574;--b-fg:#0B0F13;--now:#9A7A3A}
+.sb[data-look="bf"],.pr-from[data-look="bf"]{--a-bg:#0B0B0C;--a-fg:#fff;--a-ring:#0B0B0C;--b-bg:#D3121F;--b-fg:#fff;--now:#C8101C}
+/* the small flame icon of a red half with no words (an offer of one part, user, 2026-11-26), which is a little narrower;
+   the red halves are plain red everywhere (the moving fire of 2026-11-25 was removed the same day) */
+.sb-fire-ico{position:relative;flex:none;width:.95em;height:.95em}
+.sb>.sb-only{padding-left:.85em;padding-right:1em}
+@media (max-width:639px){.sb-split{flex-wrap:wrap;gap:5px;max-width:100%;overflow:visible;border-radius:0}.sb-split .sb-a,.sb-split .sb-b{border-radius:999px}.sb-split .sb-a{box-shadow:inset 0 0 0 1.5px var(--a-ring)}}
 .sb[data-look="holiday"],.pr-from[data-look="holiday"]{--a-bg:#173D2C;--a-fg:#fff;--a-ring:#173D2C;--b-bg:#D4B574;--b-fg:#173D2C;--now:#1E5A3E}
 .sb[data-look="newyear"],.pr-from[data-look="newyear"]{--a-bg:#fff;--a-fg:#1B242B;--a-ring:rgba(27,36,43,.25);--b-bg:#4A5763;--b-fg:#fff;--now:#0F80C3}
 .pr-opt.pr-opt2{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:28px;padding:15px 13px 15px 21px;border:1px solid transparent;border-radius:14px;background:#FAFAF8;box-shadow:none!important}
@@ -170,7 +226,8 @@ if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')
 .pr-opt2-was s{text-decoration-thickness:1px}
 .pr-opt2-was s+s{margin-left:8px}
 .pr-opt2-now{margin:2px 0;font-family:Fraunces,Georgia,serif;font-size:22px;line-height:1.1;letter-spacing:-.01em;color:#0B5F93}
-.pr-opt2-now[data-look="vip"],.pr-opt2-now[data-look="bf"]{color:#9A7A3A}
+.pr-opt2-now[data-look="vip"]{color:#9A7A3A}
+.pr-opt2-now[data-look="bf"]{color:#C8101C}
 .pr-opt2-now[data-look="holiday"]{color:#1E5A3E}
 .pr-opt2-price.is-single .pr-opt2-now{font-size:22px;color:#1B242B}
 .pr-opt2-unit{margin-left:2px;font-family:Manrope,sans-serif;font-size:13px;letter-spacing:0;color:#6B7480}

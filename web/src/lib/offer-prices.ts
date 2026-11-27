@@ -1,5 +1,5 @@
 import { createPriceBook } from "@/lib/price-book";
-import { toCategories, type PriceSpecialView } from "@/lib/pricing-view";
+import { badgeCoded, saleBadge, toCategories, type PriceSpecialView } from "@/lib/pricing-view";
 import type { WooPricingTree, WooSpecial } from "@/types/pricing";
 import type { PromoScope } from "@/types/promotions";
 
@@ -14,6 +14,10 @@ export interface OfferPrice {
   price: string;
   unit: string;
   deal: string;
+  /** The regular price on the same count (0 without a sale), and the price list's own pill for the same rows. */
+  was: number;
+  badge: string[];
+  coded: boolean;
 }
 
 /** A treatment's place on the public price list, with what its card would show under each price setting. */
@@ -33,14 +37,16 @@ export interface OfferPriceChoice {
 export function offerPriceChoices(tree: WooPricingTree): Map<number, OfferPriceChoice> {
   const categories = toCategories(tree);
   const whole = createPriceBook(categories);
-  const show = (low: ReturnType<typeof whole.lowestPrice>): OfferPrice | null => (low ? { price: low.value % 1 ? low.value.toFixed(2) : String(low.value), unit: low.per, deal: low.offer } : null);
+  type Opts = (typeof categories)[number]["items"][number]["options"];
+  const show = (low: ReturnType<typeof whole.lowestPrice>, options: Opts): OfferPrice | null =>
+    low ? { price: low.value % 1 ? low.value.toFixed(2) : String(low.value), unit: low.per, deal: low.offer, was: low.source.was, badge: saleBadge(options), coded: badgeCoded(options) } : null;
   const choices = new Map<number, OfferPriceChoice>();
   for (const category of categories) {
-    const all = show(whole.lowestPrice(category.id));
+    const all = show(whole.lowestPrice(category.id), category.items.flatMap((it) => it.options));
     for (const item of category.items) {
       if (choices.has(item.id)) continue;
       /* a price list of this one treatment, so nothing with a similar name is counted in */
-      const own = show(createPriceBook([{ ...category, items: [item] }]).lowestPrice(category.id));
+      const own = show(createPriceBook([{ ...category, items: [item] }]).lowestPrice(category.id), item.options);
       choices.set(item.id, { slug: category.id, tag: category.name, product: own, category: all });
     }
   }
@@ -59,7 +65,7 @@ export function offerOptionPrice(tree: WooPricingTree, productId: number, option
     const one = item?.options.find((o) => same(o.label));
     if (!item || !one) continue;
     const low = createPriceBook([{ ...category, items: [{ ...item, options: [one] }] }]).lowestPrice(category.id);
-    return low ? { price: low.value % 1 ? low.value.toFixed(2) : String(low.value), unit: low.per, deal: low.offer } : null;
+    return low ? { price: low.value % 1 ? low.value.toFixed(2) : String(low.value), unit: low.per, deal: low.offer, was: low.source.was, badge: saleBadge([one]), coded: badgeCoded([one]) } : null;
   }
   return null;
 }
@@ -75,12 +81,12 @@ export interface SpecialOffer {
 }
 
 /**
- * The price a card of one of the lists (Monthly specials, the offers carousel) shows: the offer's own
- * figures when the treatment is also an offer, else its own lowest price or its category's, as the card is set.
+ * The price a card of one of the lists (Monthly specials, the offers carousel) shows: its treatment's or its category's
+ * "from" price exactly as the Pricing page's list shows it (user, 2026-11-25: every price on the site is read from the
+ * Pricing page and agrees with it), as the card is set. An offer's own option or price setting no longer changes it.
  */
-export function cardPrice(tree: WooPricingTree, choice: OfferPriceChoice, card: Pick<WooSpecial, "productId" | "scope">, offer: SpecialOffer | undefined): OfferPrice | null {
-  if (!offer) return offerPrice(choice, card.scope);
-  return (offer.option ? offerOptionPrice(tree, card.productId, offer.option) : null) ?? offerPrice(choice, offer.scope);
+export function cardPrice(choice: OfferPriceChoice, card: Pick<WooSpecial, "productId" | "scope">): OfferPrice | null {
+  return offerPrice(choice, card.scope);
 }
 
 /**
@@ -92,12 +98,12 @@ export function cardPrice(tree: WooPricingTree, choice: OfferPriceChoice, card: 
  */
 export function priceSpecials(tree: WooPricingTree, specials: readonly WooSpecial[], offers: readonly SpecialOffer[]): PriceSpecialView[] {
   const choices = offerPriceChoices(tree);
-  const offerOf = new Map(offers.map((o) => [o.productId, o]));
+  void offers; /* kept for callers: an offer no longer changes a card's price (user, 2026-11-25) */
   return specials.flatMap((s): PriceSpecialView[] => {
     const choice = choices.get(s.productId);
     if (!choice) return [];
-    const shown = cardPrice(tree, choice, s, offerOf.get(s.productId));
+    const shown = cardPrice(choice, s);
     if (!shown) return [];
-    return [{ id: s.productId, name: s.name || s.productName, price: "$" + shown.price, unit: shown.unit ? " / " + shown.unit.replace(/^per /, "") : "", offer: shown.deal, target: `pg-${choice.slug}` }];
+    return [{ id: s.productId, name: s.name || s.productName, price: "$" + shown.price, unit: shown.unit ? " / " + shown.unit.replace(/^per /, "") : "", offer: shown.deal, target: `pg-${choice.slug}`, badge: shown.badge, coded: shown.coded, was: shown.was }];
   });
 }

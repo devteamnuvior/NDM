@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { RevealSection } from "@/components/ui/reveal-section";
 import { TwoTone } from "@/components/ui/two-tone";
-import { SHOP_ORBIT_TILES, type Product } from "@/config/shop";
+import { isOffSite, SHOP_ORBIT_TILES, type Product } from "@/config/shop";
 import type { HomeCopy } from "@/types/home";
 import { withBase } from "@/lib/base-path";
 
@@ -51,10 +51,16 @@ export function Shop({ copy }: { copy: HomeCopy["shop"] }) {
             {copy.text}
           </p>
           <div className="rv mt-6 flex justify-center" style={{ transitionDelay: ".14s" }}>
-            <Button href={copy.link} target="_blank" rel="noopener" v="ink">
-              {copy.button}
-              <span className="sr-only"> (opens in a new tab)</span>
-            </Button>
+            {isOffSite(copy.link) ? (
+              <Button href={copy.link} target="_blank" rel="noopener" v="ink">
+                {copy.button}
+                <span className="sr-only"> (opens in a new tab)</span>
+              </Button>
+            ) : (
+              <Button href={copy.link} v="ink">
+                {copy.button}
+              </Button>
+            )}
           </div>
         </div>
       </div>

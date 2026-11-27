@@ -34,7 +34,8 @@ async function viewAt(folder: string, post: string[]) {
 export async function generateMetadata({ params }: PageProps<"/[slug]/[...post]">): Promise<Metadata> {
   const { slug, post } = await params;
   const view = await viewAt(slug, post);
-  return view ? { title: view.title, description: view.description } : {};
+  /* no page here: the 404's own title, not the site's default */
+  return view ? { title: view.title, description: view.description } : { title: "Page not found | NewDermaMed", robots: { index: false } };
 }
 
 export default async function Procedure({ params }: PageProps<"/[slug]/[...post]">) {

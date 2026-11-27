@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { IconArrow } from "@/components/ui/icons";
 import { RevealSection } from "@/components/ui/reveal-section";
 import { TwoTone } from "@/components/ui/two-tone";
-import { SHOP_URL } from "@/config/shop";
+import { SHOP_PAGE } from "@/config/shop";
 import type { ConcernPage } from "@/types/concern";
 import { withBase } from "@/lib/base-path";
 
@@ -35,8 +35,8 @@ export function CnHome({ home, number }: { home: ConcernPage["home"]; number: st
         <div className="rv lg:pb-1" style={{ transitionDelay: ".1s" }}>
           <p className="max-w-[46ch] font-inter text-[15.5px] leading-[1.65] text-ndm-muted">Medical-grade skincare from our shop supports your treatment at home. Your provider suggests a routine for your skin at your consultation.</p>
           <div className="mt-5">
-            <Button href={SHOP_URL} target="_blank" rel="noopener" v="line" sm>
-              Visit the skincare shop<span className="sr-only"> (opens in a new tab)</span>
+            <Button href={SHOP_PAGE} v="line" sm>
+              Visit the skincare shop
             </Button>
           </div>
         </div>

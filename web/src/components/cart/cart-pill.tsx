@@ -48,9 +48,9 @@ export function CartPill({ onOpen, hidden }: CartPillProps) {
         if (e.propertyName === "transform") window.dispatchEvent(new Event("scroll"));
       }}
       aria-label={`View cart, ${cart.count} ${cart.count === 1 ? "item" : "items"}, ${money(cart.total)}`}
-      className={`cart-pill fixed inset-x-4 bottom-4 z-[60] flex items-center gap-3 rounded-full bg-ndm-deep py-2 pr-2 pl-2 text-left text-white shadow-[0_24px_50px_-20px_rgba(11,15,19,.6)] sm:inset-x-auto sm:right-6 sm:bottom-6 ${show ? "" : "is-off"}`}
+      className={`cart-pill fixed inset-x-4 bottom-4 z-[60] flex items-center gap-3 rounded-full bg-ndm-deep py-1.5 pr-1.5 pl-1.5 sm:py-2 sm:pr-2 sm:pl-2 text-left text-white shadow-[0_24px_50px_-20px_rgba(11,15,19,.6)] sm:inset-x-auto sm:right-6 sm:bottom-6 ${show ? "" : "is-off"}`}
     >
-      <span className="relative grid size-11 shrink-0 place-items-center rounded-full bg-white/10">
+      <span className="relative grid size-10 shrink-0 place-items-center rounded-full bg-white/10 sm:size-11">
         <IconBag size={20} />
         <span key={seen.bump} id="cart-pill-count" className="cart-bump absolute -top-0.5 -right-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ndm-sky px-1 font-inter text-[11px] leading-none font-semibold text-white">
           {cart.count}
@@ -62,7 +62,7 @@ export function CartPill({ onOpen, hidden }: CartPillProps) {
         </span>
         <span className="mt-1 block font-inter text-[16px] leading-none font-semibold tabular-nums">{money(cart.total)}</span>
       </span>
-      <span className="ml-1 rounded-full bg-white px-4 py-2.5 font-inter text-[14px] font-medium text-ndm-ink">View cart</span>
+      <span className="ml-1 rounded-full bg-white px-4 py-2 font-inter text-[14px] font-medium text-ndm-ink sm:py-2.5">View cart</span>
     </button>
   );
 }

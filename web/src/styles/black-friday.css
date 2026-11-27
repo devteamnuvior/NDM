@@ -25,6 +25,8 @@
 .bfd-label{font:500 15.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;white-space:nowrap}
 .bfd-badge{border-radius:999px;background:#fff;padding:6px 11px;font:600 13px/1 Inter,"Helvetica Neue",Arial,sans-serif;color:#C8101D;white-space:nowrap}
 @media (max-width:420px){.bfd-badge{display:none}}
+/* phones (user, 2026-11-25): a smaller, quieter tab: a 24px mark, the words in small spaced capitals, no badge or arrow */
+@media (max-width:639px){.bfd-tab{gap:8px;padding:6px 12px 6px 6px;border-radius:14px 14px 0 0}.bfd-tab::before,.bfd-tab::after{width:14px;height:14px}.bfd-tab::before{left:-14px;background:radial-gradient(circle at 0 0,transparent 13.5px,#0B0B0C 14px)}.bfd-tab::after{right:-14px;background:radial-gradient(circle at 100% 0,transparent 13.5px,#0B0B0C 14px)}.bfd-mark{width:24px;height:24px;border-radius:7px;font-size:14px}.bfd-label{font:600 11.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase}.bfd-badge,.bfd-tab>svg{display:none}}
 .bfd-scrim{position:fixed;inset:0;z-index:84;background:rgba(11,11,12,.45);opacity:0;pointer-events:none;transition:opacity .4s ease}
 .bfd-scrim.is-on{opacity:1;pointer-events:auto}
 .bfd-panel{position:fixed;left:0;right:0;bottom:0;z-index:85;max-height:92svh;overflow:auto;border-radius:28px 28px 0 0;color:#fff;transform:translateY(105%);transition:transform .7s cubic-bezier(.2,.8,.2,1);background:radial-gradient(60% 90% at 90% 0%,rgba(211,18,29,.38),transparent 60%),radial-gradient(40% 60% at 0% 100%,rgba(211,18,29,.18),transparent 70%),#0B0B0C;box-shadow:0 -40px 80px -40px rgba(0,0,0,.7)}
@@ -50,3 +52,5 @@
 .proc-form-head{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:start;gap:12px}
 .proc-form-head .bfb{margin-top:2px}
 @media (max-width:479px){.proc-form-head{grid-template-columns:minmax(0,1fr) auto}.proc-form-head .bfb{grid-column:1 / -1;grid-row:2;justify-self:start;margin-top:0}}
+/* phones (user, 2026-11-25): while the cart bar shows, the Black Friday tab steps out of its way instead of sitting on it */
+@media (max-width:767px){body:has(.cart-pill:not(.is-off)) .bfd-tab.is-on{transform:translate(-50%,110%);pointer-events:none}}

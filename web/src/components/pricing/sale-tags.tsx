@@ -36,54 +36,29 @@ export function useSaleWords(): (text: string) => string {
 }
 
 /**
- * "BEST DEAL" beside an offer that is a percentage only ("30% OFF" | "BEST DEAL"), its half a red fire seen through
- * frosted glass (`.sb-fire` in pricing.css). Shown in the Pricing page's list (user, 2026-11-25).
+ * A red half of the flame icon alone beside an offer of one part ("30% OFF" | flame, "SAVE $1,000" | flame): the Pricing
+ * page's list and its Monthly specials cards (user, 2026-11-26; it replaced the words "BEST DEAL").
  */
-export const BEST_DEAL = "BEST DEAL";
-const BestDealContext = createContext(false);
-export function BestDealProvider({ shown, children }: { shown: boolean; children: ReactNode }) {
-  return <BestDealContext value={shown}>{children}</BestDealContext>;
+const IconHalfContext = createContext(false);
+export function IconHalfProvider({ shown, children }: { shown: boolean; children: ReactNode }) {
+  return <IconHalfContext value={shown}>{children}</IconHalfContext>;
 }
-/** The pill's parts with "BEST DEAL" added when the list shows it and the offer has one part only ("30% OFF", and since
- *  2026-11-25 "SAVE $1,000" too, user). */
-export function useWithBestDeal(): (parts: string[]) => string[] {
-  const shown = useContext(BestDealContext);
-  return (parts) => (shown && parts.length === 1 ? [parts[0], BEST_DEAL] : parts);
+/** The pill's parts with the icon half (an empty part) added when the offer has one part only. */
+export function useWithIconHalf(): (parts: string[]) => string[] {
+  const shown = useContext(IconHalfContext);
+  return (parts) => (shown && parts.length === 1 ? [parts[0], ""] : parts);
 }
-/** Style "A · Flames inside" (user, 2026-11-25): eight flame tongues and four sparks inside the red half, and a small flame icon. */
-export function FireLayer() {
+/** The small flame icon of a red half. */
+export function FireIcon() {
   return (
-    <>
-      <i aria-hidden="true" className="sb-flames">
-        <b />
-        <b />
-        <b />
-        <b />
-        <b />
-        <b />
-        <b />
-        <b />
-        <u />
-        <u />
-        <u />
-        <u />
-      </i>
-      <svg aria-hidden="true" className="sb-fire-ico" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>
-    </>
+    <svg aria-hidden="true" className="sb-fire-ico" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>
   );
 }
 
-/** One half of a pill. Where the list shows "BEST DEAL", every red half ("BEST DEAL", "+ EXTRA 30%", "GET 1 FREE") carries the fire (user, 2026-11-25). */
+/** One half of a pill. The red half is plain red everywhere (user, 2026-11-26: no fire), with the flame icon alone when it has no words. */
 export function PillPart({ text, second, words }: { text: string; second: boolean; words: (t: string) => string }) {
-  /* every red half burns, wherever a price table shows a pill (user, 2026-11-25: the same fire everywhere) */
-  if (second)
-    return (
-      <span className="sb-b sb-fire">
-        <FireLayer />
-        {words(text)}
-      </span>
-    );
-  return <span className={second ? "sb-b" : "sb-a"}>{words(text)}</span>;
+  if (!second) return <span className="sb-a">{words(text)}</span>;
+  return <span className={`sb-b${text ? "" : " sb-only"}`}>{text ? words(text) : <FireIcon />}</span>;
 }
 
 /**
@@ -94,7 +69,7 @@ export function PillPart({ text, second, words }: { text: string; second: boolea
 export function OfferTag({ offer, badge, coded, small, plain = "pr-badge" }: { offer: string; badge: string[]; coded: boolean; small?: boolean; plain?: string }) {
   const sale = useSaleTags();
   const words = useSaleWords();
-  const withBest = useWithBestDeal();
+  const withBest = useWithIconHalf();
   if (!sale) return offer ? <span className={plain}>{offer}</span> : null;
   const found =
     badge.length === 1 && coded && /%\s*OFF$/.test(badge[0])

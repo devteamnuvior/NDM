@@ -57,7 +57,7 @@ function articleMetadata({ story: p }: ArticleView): Metadata {
 
 export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): Promise<Metadata> {
   const article = await getArticleView((await params).slug);
-  return article ? articleMetadata(article) : {};
+  return article ? articleMetadata(article) : { title: "Page not found | NewDermaMed", robots: { index: false } }; /* no page: the 404's own title */
 }
 
 export default async function BlogArticle({ params }: PageProps<"/blog/[slug]">) {

@@ -1,7 +1,7 @@
 import "server-only";
 import type { Offer } from "@/components/specials/offers";
 import type { WheelOffer } from "@/components/specials/specials-wheel";
-import { cardPrice, offerOptionPrice, offerPrice, offerPriceChoices } from "@/lib/offer-prices";
+import { cardPrice, offerPrice, offerPriceChoices } from "@/lib/offer-prices";
 import { pagePath } from "@/lib/routes";
 import { getPricingTree, getPromotions } from "@/lib/wordpress";
 
@@ -23,7 +23,8 @@ export async function getOffers(): Promise<Offer[]> {
   return promotions.flatMap((p): Offer[] => {
     const choice = choices.get(p.productId);
     /* an offer may name the one option its price is read from; an option that has left the list falls back to the lowest */
-    const shown = (p.option ? offerOptionPrice(tree, p.productId, p.option) : null) ?? offerPrice(choice, p.scope);
+    /* the Pricing page's own figure for this treatment or its category (user, 2026-11-25), never an option of its own */
+    const shown = offerPrice(choice, p.scope);
     if (!choice || !shown) return [];
     return [
       {
@@ -61,7 +62,7 @@ export async function getCarousel(): Promise<WheelOffer[]> {
     const choice = choices.get(s.productId);
     if (!choice) return [];
     const offer = offerOf.get(s.productId);
-    const shown = cardPrice(tree, choice, s, offer);
+    const shown = cardPrice(choice, s);
     if (!shown) return [];
     const image = offer?.image ?? images.get(s.productId) ?? null;
     return [

@@ -25,6 +25,7 @@ export const PAGES = {
   privacy: { path: "/privacy", migrated: true },
   terms: { path: "/terms", migrated: true },
   refunds: { path: "/refunds", migrated: true },
+  shop: { path: "/shop", migrated: true },
 } as const satisfies Record<string, { path: string; migrated: boolean }>;
 
 export type PageId = keyof typeof PAGES;
@@ -46,6 +47,9 @@ export const SLUG_TO_PAGE: Record<string, PageId> = {
   "non-surgical-facelift-neck-jawline-eyebrow-nose-lift": "aptos",
   pricing: "pricing",
   promotion: "promotion",
+  shop: "shop",
+  "skincare-shop": "shop",
+  "shop-skincare": "shop",
   about: "about",
   "about-us": "about",
   "our-doctors-team": "about",

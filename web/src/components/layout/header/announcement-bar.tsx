@@ -1,5 +1,6 @@
 "use client";
 
+import { isOffSite } from "@/config/shop";
 import { useEffect, useState } from "react";
 import { IconExternal, IconPhone } from "@/components/ui/icons";
 import { useSiteSettings } from "@/components/layout/site-settings";
@@ -132,8 +133,8 @@ export function AnnouncementBar() {
         </div>
         <div className="hidden items-center justify-end gap-4 lg:flex">
           {bar.shopLabel && (
-            <a href={withBase(settings.shopLink)} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 font-medium underline-offset-4 hover:underline">
-              {bar.shopLabel} <IconExternal />
+            <a href={withBase(settings.shopLink)} {...(isOffSite(settings.shopLink) ? { target: "_blank", rel: "noopener" } : {})} className="inline-flex items-center gap-1.5 font-medium underline-offset-4 hover:underline">
+              {bar.shopLabel} {isOffSite(settings.shopLink) && <IconExternal />}
             </a>
           )}
         </div>
