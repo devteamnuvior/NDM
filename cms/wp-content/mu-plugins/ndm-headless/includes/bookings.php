@@ -506,6 +506,7 @@ function ndm_headless_booking_columns( $columns ) {
 		'ndm_contact'  => 'Contact',
 		'ndm_concerns' => 'Concerns',
 		'ndm_clinic'   => 'Clinic',
+		'ndm_online'   => 'Clicked "Book a time now"',
 		'ndm_status'   => 'Status',
 		'date'         => 'Received',
 	);
@@ -536,6 +537,9 @@ function ndm_headless_booking_column( $column, $id ) {
 		}
 	} elseif ( 'ndm_clinic' === $column ) {
 		echo esc_html( $record['clinic'] );
+	} elseif ( 'ndm_online' === $column ) {
+		// Yes: the visitor chose "Book a time now" (and went on to the booking calendar); No: asked for a call.
+		echo in_array( $record['path'], array( 'online', 'book' ), true ) ? '<strong>Yes</strong>' : 'No';
 	} elseif ( 'ndm_status' === $column ) {
 		$status = ndm_headless_booking_status( $id );
 
