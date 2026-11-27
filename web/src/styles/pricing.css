@@ -281,4 +281,8 @@
 #specials .psx-note{margin-top:8px;font:400 12.5px/1.3 Manrope,"Helvetica Neue",Arial,sans-serif;color:#5A646C}
 @media (min-width:768px){#specials .psx{padding:22px 20px 24px}#specials .psx-name{font-size:16.5px}}
 @media (prefers-reduced-motion:reduce){#specials .psx{transition:none}}
-
+/* a special line under a category's options (user, 2026-11-27: the Aptos model call assessment): tinted card, small blue tag, note */
+.pr-opt.pr-opt2.pr-extra{background:#F2F8FC;border-color:#CFE3F1}
+.pr-extra-tag{display:inline-flex;align-items:center;margin-bottom:8px;padding:5px 10px;border-radius:999px;background:#0F80C3;color:#fff;font-family:Manrope,sans-serif;font-size:10.5px;font-weight:700;line-height:1;letter-spacing:.08em;text-transform:uppercase}
+.pr-extra-note{margin-top:5px;max-width:56ch;font-family:Manrope,sans-serif;font-size:13.5px;line-height:1.5;color:#5A646C}
+@media (max-width:639px){.pr-opt.pr-opt2.pr-extra .pr-opt2-info{grid-column:1 / -1;grid-row:1}.pr-opt.pr-opt2.pr-extra .pr-opt2-price{grid-column:1;grid-row:2;align-self:center}.pr-opt.pr-opt2.pr-extra .pr-opt2-act{grid-column:2;grid-row:2}}

@@ -122,3 +122,27 @@ export function OptionRow({ label, price, was, code, codePercent, tag, unit, act
     </li>
   );
 }
+
+/**
+ * A special line under a category's options (user, 2026-11-27: the Aptos model call assessment): a tinted card with
+ * its small tag, name and note (the WooCommerce product's label and short description), its price and Add to cart.
+ * Never a sale pill or a struck price: it is a fee, not an offer.
+ */
+export function ExtraRow({ tag, name, label, note, price, action, data }: { tag: string; name: string; label: string; note: string; price: number; action: ReactNode; data?: Record<string, string | number | undefined> }) {
+  return (
+    <li {...data} className="pr-opt pr-opt2 pr-extra">
+      <span className="pr-opt2-info">
+        {tag && <span className="pr-extra-tag">{tag}</span>}
+        <span className="pr-opt2-name">
+          {name}
+          {label && label !== "Price" ? `, ${label}` : ""}
+        </span>
+        {note && <span className="pr-extra-note">{note}</span>}
+      </span>
+      <span className="pr-opt2-price is-single">
+        <span className="pr-opt2-now">{money(price)}</span>
+      </span>
+      <span className="pr-opt2-act">{action}</span>
+    </li>
+  );
+}

@@ -1,7 +1,7 @@
 /* ---------------------------------------------------------------- pricing page data, the live price list of newdermamedlaserclinic.com/pricing (CAD, read 2026-11-25) */
-/* item: [name, note, [[option, price, regular price or 0, badge, price with the checkout code], ...]]; read from the live price list by src/price_data_from_live.py */
+/* item: [name, note, [[option, price, regular price or 0, badge, price with the checkout code], ...]]; extras (special lines under the options, never in a "from" price): [[name, note, price, tag], ...]; read from the live price list by src/price_data_from_live.py */
 const PRICE_CATS = [
-  { id: 'aptos-thread-method', name: 'Aptos Thread Method', blurb: '', items: [
+  { id: 'aptos-thread-method', name: 'Aptos Thread Method', blurb: '', extras: [['Aptos Model Call Assessment', 'Our team will email you your appointment date. The fee is fully refunded once you attend your appointment.', 150, 'Model call']], items: [
     ['Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)', '', [['Nose lift/correction', 2500, 0, ''], ['Fox eyebrow / eyebrow lift', 2500, 0, ''], ['Mid face', 2500, 0, ''], ['Lower face or submental', 2500, 0, ''], ['Face – Mid & Lower', 3400, 4400, 'Save $1000 Off'], ['Neck', 2900, 3900, 'Save $1000 Off'], ['Face + neck', 5900, 6900, 'Save $1000 Off']]],
   ] },
   { id: 'botox-dysport', name: 'Botox / Dysport', unit: true, blurb: '', items: [

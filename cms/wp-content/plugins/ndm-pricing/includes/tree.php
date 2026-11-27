@@ -74,6 +74,11 @@ function ndm_pricing_product_data( $product, $admin ) {
 		'variations' => array(),
 	) + ndm_pricing_price_fields( $product );
 
+	// A special line under the category's options, not a treatment (meta.php, NDM_PRICING_EXTRA).
+	if ( ndm_pricing_is_extra( $product ) ) {
+		$data['extra'] = true;
+	}
+
 	// The product's own photo, for the cards that show a treatment by name (the sale pages' price cards).
 	$photo = $admin ? null : ndm_promo_image( $product );
 	if ( $photo ) {

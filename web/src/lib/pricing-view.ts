@@ -1,6 +1,6 @@
 import type { PriceCategory, PriceOption } from "@/config/prices";
 import { createPriceBook, fromValue, type PriceNames, type PriceSource } from "@/lib/price-book";
-import type { WooPricingTree, WooPriceFields } from "@/types/pricing";
+import type { WooPricingTree, WooPriceFields, WooProduct } from "@/types/pricing";
 
 /**
  * The pricing page's view of the price list in WooCommerce: every "from" price, unit and offer line
@@ -42,6 +42,20 @@ export interface PriceItemView {
   options: PriceOptionView[];
 }
 
+/**
+ * A special line under a category's options (WooCommerce product flagged `extra`, user 2026-11-27: the Aptos
+ * model call assessment): its name, its short description as the note, its label as the small tag, and its
+ * price(s). It is left out of every "from" price, offer, monthly special and search.
+ */
+export interface PriceExtraView {
+  id: number;
+  name: string;
+  note: string;
+  /** The product's promotional label, shown as a small tag ("Model call"); "" for none. */
+  tag: string;
+  options: PriceOptionView[];
+}
+
 export interface PriceCategoryView {
   /** The WooCommerce category's slug: stable when the category is renamed, so links to it keep working. */
   id: string;
@@ -57,6 +71,8 @@ export interface PriceCategoryView {
   badge: string[];
   coded: boolean;
   items: PriceItemView[];
+  /** Special lines shown under the category's options; empty for most categories. */
+  extras: PriceExtraView[];
 }
 
 export interface PriceSpecialView {
@@ -141,7 +157,19 @@ function option(fields: WooPriceFields & { campaign?: { code: boolean; codePrice
   return { label, price, regular: fields.onSale && regular > price ? regular : 0, tag, productId, variationId, ...sale };
 }
 
-/** The WooCommerce list in the shape the price helpers read, leaving out anything without a usable price. */
+/** A WooCommerce product as the price list's options: its variations, or its own price as one option. */
+function productOptions(p: WooProduct, by: { code: string; percent: number } | null): Option[] {
+  const tag = p.label?.enabled && p.label.text ? p.label.text : undefined;
+  const options = p.variations.length
+    ? p.variations.map((v) => option(v, v.label, v.promo?.enabled && v.promo.text ? v.promo.text : tag, p.id, v.id, by))
+    : [option(p, SINGLE_LABEL, tag, p.id, 0, by)];
+  return options.filter((o) => Number.isFinite(o.price) && o.price >= 0);
+}
+
+/**
+ * The WooCommerce list in the shape the price helpers read, leaving out anything without a usable price and the
+ * special lines (`extra` products), which no "from" price, offer or search counts.
+ */
 export function toCategories(tree: WooPricingTree): Category[] {
   const by = tree.campaign ? { code: tree.campaign.code, percent: tree.campaign.percent } : null;
   return tree.categories
@@ -152,13 +180,8 @@ export function toCategories(tree: WooPricingTree): Category[] {
       perUnit: c.perUnit,
       blurb: c.description,
       items: c.products
-        .map((p) => {
-          const tag = p.label?.enabled && p.label.text ? p.label.text : undefined;
-          const options = p.variations.length
-            ? p.variations.map((v) => option(v, v.label, v.promo?.enabled && v.promo.text ? v.promo.text : tag, p.id, v.id, by))
-            : [option(p, SINGLE_LABEL, tag, p.id, 0, by)];
-          return { id: p.id, name: p.name, note: p.note, options: options.filter((o) => Number.isFinite(o.price) && o.price >= 0) };
-        })
+        .filter((p) => !p.extra)
+        .map((p) => ({ id: p.id, name: p.name, note: p.note, options: productOptions(p, by) }))
         .filter((it) => it.options.length),
     }))
     .filter((c) => c.items.length);
@@ -171,6 +194,23 @@ export function toCategories(tree: WooPricingTree): Category[] {
 export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): PricingView {
   const list = toCategories(tree);
   const book = createPriceBook(list, names);
+  const by = tree.campaign ? { code: tree.campaign.code, percent: tree.campaign.percent } : null;
+  /* the special lines of each category, by its slug, in the category's order */
+  const extras = new Map<string, PriceExtraView[]>(
+    tree.categories.map((c) => [
+      c.slug,
+      c.products
+        .filter((p) => p.extra)
+        .map((p) => ({
+          id: p.id,
+          name: p.name,
+          note: p.note,
+          tag: p.label?.enabled && p.label.text ? p.label.text : "",
+          options: productOptions(p, by).map((o) => ({ label: o.label, price: o.price, was: o.regular || 0, unit: "", productId: o.productId, variationId: o.variationId })),
+        }))
+        .filter((x) => x.options.length),
+    ]),
+  );
 
   const categories = list.map((c): PriceCategoryView => {
     const perUnit = (label: string) => (c.perUnit && label === "Regular" ? " / unit" : "");
@@ -203,6 +243,7 @@ export function buildPricingView(tree: WooPricingTree, names: PriceNames = {}): 
           options: it.options.map((o) => ({ label: o.label, price: o.price, was: o.regular || 0, tag: o.tag, unit: perUnit(o.label), productId: o.productId, variationId: o.variationId, ...(o.code ? { code: o.code } : {}) })),
         };
       }),
+      extras: extras.get(c.id) ?? [],
     };
   });
 

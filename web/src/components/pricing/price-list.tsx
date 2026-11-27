@@ -13,7 +13,7 @@ import { scrollToY } from "@/lib/smooth-scroll";
 import { byId } from "@/lib/dom";
 import { jumpToPriceGroup, PRICE_GROUP_HASH } from "@/lib/price-jump";
 import { FromPrice, IconHalfProvider, OfferTag, SaleNameProvider, type SaleLook } from "@/components/pricing/sale-tags";
-import { OptionRow } from "@/components/pricing/option-row";
+import { ExtraRow, OptionRow } from "@/components/pricing/option-row";
 import { JumpMenu } from "@/components/pricing/jump-menu";
 
 const Stroke = ({ d }: { d: string }) => (
@@ -62,6 +62,32 @@ function OptionList({ cat, it, mark, className = "grid gap-2 pb-5" }: { cat: Pri
           />
         );
       })}
+    </ul>
+  );
+}
+
+/** The category's special lines (the Aptos model call assessment), under its options, each with Add to cart. */
+function ExtraList({ cat }: { cat: PriceCategoryView }) {
+  if (!cat.extras.length) return null;
+  return (
+    <ul className="pr-extras grid gap-2 pb-[18px]" role="list">
+      {cat.extras.flatMap((x) =>
+        x.options.map((o) => {
+          const line = { key: cartKey(o.productId, o.variationId), cat: cat.name, name: x.name, label: o.label, price: o.price, was: 0, unit: "", productId: o.productId, variationId: o.variationId };
+          return (
+            <ExtraRow
+              key={`${x.id}:${o.variationId || o.label}`}
+              data={{ "data-product": o.productId, "data-variation": o.variationId || undefined }}
+              tag={x.tag}
+              name={x.name}
+              label={x.options.length > 1 ? o.label : ""}
+              note={x.note}
+              price={o.price}
+              action={<QtyControl fly line={line} label={x.options.length > 1 ? `${x.name}, ${o.label}` : x.name} />}
+            />
+          );
+        }),
+      )}
     </ul>
   );
 }
@@ -170,13 +196,21 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }: P
           {single ? (
             <div className="pr-sub">
               <OptionList cat={c} it={c.items[0]} mark={c.items[0].options.length > 1} className="grid gap-2 py-[18px]" />
+              {!hits && <ExtraList cat={c} />}
             </div>
           ) : (
-            <ul className="pr-sub" role="list">
-              {shown.map(([it, i]) => (
-                <TreatmentRow key={i} cat={c} it={it} uid={`pr-${c.id}-${i}`} open={openItem(i)} onToggle={() => toggleItem(i)} />
-              ))}
-            </ul>
+            <>
+              <ul className="pr-sub" role="list">
+                {shown.map(([it, i]) => (
+                  <TreatmentRow key={i} cat={c} it={it} uid={`pr-${c.id}-${i}`} open={openItem(i)} onToggle={() => toggleItem(i)} />
+                ))}
+              </ul>
+              {!hits && c.extras.length > 0 && (
+                <div className="pr-sub pt-[18px]">
+                  <ExtraList cat={c} />
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

@@ -182,6 +182,21 @@ function OptionRow({ label, price, was, code, tag, unit, action, mark }) {
     </li>
   );
 }
+/* a special line under a category's options (user, 2026-11-27: the Aptos model call assessment; site: ExtraRow): its tag,
+   name and note, its price and Add to cart; never a sale pill or a struck price, it is a fee, not an offer */
+function ExtraRow({ tag, name, note, price, action }) {
+  return (
+    <li className="pr-opt pr-opt2 pr-extra">
+      <span className="pr-opt2-info">
+        {tag && <span className="pr-extra-tag">{tag}</span>}
+        <span className="pr-opt2-name">{name}</span>
+        {note && <span className="pr-extra-note">{note}</span>}
+      </span>
+      <span className="pr-opt2-price is-single"><span className="pr-opt2-now">{pfmt(price)}</span></span>
+      <span className="pr-opt2-act">{action}</span>
+    </li>
+  );
+}
 /* the styles of the pieces above, added once to any page that loads this list */
 if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')) {
   const st = document.createElement('style'); st.id = 'sale-tags-css';
@@ -271,6 +286,11 @@ article.promo-card .promo-badge{background:rgba(255,255,255,.75);color:#0B0F13;b
 html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .btn-line{background:rgba(255,255,255,.5);border-color:rgba(11,15,19,.16);color:#0B0F13}
 html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .btn-line:is(:hover,:focus-visible){background:#0B0F13;border-color:#0B0F13;color:#fff}
 li.ps-card > span:nth-child(2){background:rgba(255,255,255,.6);color:#0B0F13;box-shadow:inset 0 0 0 1px rgba(212,181,116,.45)}
-@media (prefers-reduced-transparency:reduce){:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card){background:#fff}}`;
+@media (prefers-reduced-transparency:reduce){:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card){background:#fff}}
+/* a special line under a category's options (user, 2026-11-27: the Aptos model call assessment): tinted card, small blue tag, note */
+.pr-opt.pr-opt2.pr-extra{background:#F2F8FC;border-color:#CFE3F1}
+.pr-extra-tag{display:inline-flex;align-items:center;margin-bottom:8px;padding:5px 10px;border-radius:999px;background:#0F80C3;color:#fff;font-family:Manrope,sans-serif;font-size:10.5px;font-weight:700;line-height:1;letter-spacing:.08em;text-transform:uppercase}
+.pr-extra-note{margin-top:5px;max-width:56ch;font-family:Manrope,sans-serif;font-size:13.5px;line-height:1.5;color:#5A646C}
+@media (max-width:639px){.pr-opt.pr-opt2.pr-extra .pr-opt2-info{grid-column:1 / -1;grid-row:1}.pr-opt.pr-opt2.pr-extra .pr-opt2-price{grid-column:1;grid-row:2;align-self:center}.pr-opt.pr-opt2.pr-extra .pr-opt2-act{grid-column:2;grid-row:2}}`;
   document.head.appendChild(st);
 }
