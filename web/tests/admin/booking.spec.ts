@@ -103,7 +103,7 @@ test("a call request from the pop-up and the online booking from the Botox form 
   expect(call.title).toBe("Sam Popup, Call back: Afternoon, Downtown");
   expect(call.record).toEqual({ first: "Sam", last: "Popup", phone: "416 555 0100", email: EMAIL, via: ["Call", "Text", "Email"], interests: ["Volume loss", "Something else"], other: "neck lines", visia: true, path: "call", clinic: "Downtown", day: "", hour: 0, call_time: "Afternoon", page: "/" });
   expect(book.post).toBe("private");
-  expect(book.title).toBe("Sam Botox, Books online, Online calendar");
+  expect(book.title).toBe("Sam Botox, Clicked Book a time now, Online calendar");
   expect(book.record).toMatchObject({ last: "Botox", phone: "(416) 555-0100", interests: ["Wrinkles & fine lines"], visia: false, path: "online", clinic: "Online calendar", day: "", call_time: "", page: "/injectables/botox" });
 
   /* nothing about the visitor stays in the browser */

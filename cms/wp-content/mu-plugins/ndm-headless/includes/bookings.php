@@ -280,7 +280,7 @@ function ndm_headless_rest_booking( $request ) {
 		$record['hour'] = $hour;
 		$summary        = 'Book a time: ' . ndm_headless_booking_when( $day, $hour );
 	} elseif ( 'online' === $path ) {
-		$summary = 'Books online';
+		$summary = 'Clicked Book a time now';
 	} else {
 		$call_time = ndm_headless_booking_text( $params, 'callTime', 40 );
 
@@ -379,7 +379,7 @@ function ndm_headless_booking_request_line( $record ) {
 	}
 
 	if ( 'online' === $record['path'] ) {
-		return 'Books online: went on to the booking calendar (check the calendar for the time)';
+		return 'Clicked "Book a time now": sent on to the online booking calendar (not confirmed, check the calendar)';
 	}
 
 	return 'Call back: ' . $record['call_time'];
@@ -443,7 +443,12 @@ function ndm_headless_booking_notify( $id ) {
 	$lines[] = 'Open it in WordPress to set its status:';
 	$lines[] = admin_url( 'post.php?post=' . (int) $id . '&action=edit' );
 	$lines[] = '';
-	$lines[] = 'A time picked on the website is a request: confirm it with the visitor and put it in the clinic calendar.';
+
+	if ( 'online' === $record['path'] ) {
+		$lines[] = 'This visitor clicked "Book a time now" and was sent on to the online booking calendar. The website cannot see whether a time was booked there: look for the appointment in the booking calendar, and if there is none, contact the visitor to arrange it.';
+	} else {
+		$lines[] = 'A time picked on the website is a request: confirm it with the visitor and put it in the clinic calendar.';
+	}
 
 	// The name is already one line of plain text; the subject carries no contact details.
 	$subject = 'New consultation request #' . (int) $id . ': ' . ndm_headless_booking_request_line( $record ) . ', ' . $record['clinic'];
@@ -582,7 +587,12 @@ function ndm_headless_booking_details_box( $post ) {
 	}
 
 	echo '</tbody></table>';
-	echo '<p class="description">A time picked on the website is a request: confirm it with the visitor and put it in the clinic calendar.</p>';
+
+	if ( 'online' === $record['path'] ) {
+		echo '<p class="description">This visitor clicked "Book a time now" and was sent on to the online booking calendar. The website cannot see whether a time was booked there: look for the appointment in the booking calendar, and if there is none, contact the visitor to arrange it.</p>';
+	} else {
+		echo '<p class="description">A time picked on the website is a request: confirm it with the visitor and put it in the clinic calendar.</p>';
+	}
 }
 
 /**

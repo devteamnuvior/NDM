@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type CSSProperties, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
+import { useId, useRef, useState, type CSSProperties, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
 import { BookOnline } from "@/components/booking/book-online";
 import { Button } from "@/components/ui/button";
 import { IconArrow, IconCheckBadge, IconPhone } from "@/components/ui/icons";
@@ -43,6 +43,38 @@ function BookChip({ type = "radio", name, value, checked, onChange, children }: 
         {children}
       </span>
     </label>
+  );
+}
+
+/* a small check box pill ("Reach me by"): ticked or not, the box says which */
+function BookTick({ name, value, checked, onChange, children }: Omit<ChipProps, "type">) {
+  return (
+    <label className="relative inline-flex cursor-pointer">
+      <input type="checkbox" name={name} value={value} checked={checked} onChange={onChange} className="book-in absolute inset-0 m-0 cursor-pointer opacity-0" />
+      <span className="book-opt book-opt-pill font-inter">
+        <Tick />
+        {children}
+      </span>
+    </label>
+  );
+}
+
+/* the small numbered heading of a choice inside a step: the number turns into a tick once the choice is made */
+function BookNum({ n, done = false, off = false, children }: { n: number; done?: boolean; off?: boolean; children: ReactNode }) {
+  return (
+    <p className={`book-num font-inter ${done ? "is-done" : ""} ${off ? "is-off" : ""}`}>
+      <span aria-hidden="true" className="book-num-n">
+        {done ? (
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2.5 6.4 5 8.8l4.5-5.3" />
+          </svg>
+        ) : (
+          n
+        )}
+      </span>
+      <span className="sr-only">{n}. </span>
+      {children}
+    </p>
   );
 }
 
@@ -163,7 +195,7 @@ interface FormState {
   visia: boolean;
 }
 
-const EMPTY: FormState = { interest: [], via: ["Call", "Text"], first: "", callTime: "", clinic: "", other: "", visia: true };
+const EMPTY: FormState = { interest: [], via: ["Call", "Text", "Email"], first: "", callTime: "", clinic: "", other: "", visia: true };
 
 interface BookFormProps {
   /** id for the confirmation heading, so a dialog can point at it. */
@@ -194,6 +226,7 @@ export function BookForm({ thanksId, summary = false, compact = false, dock = fa
   const [hold, setHold] = useState(0);
   const [busy, setBusy] = useState(false);
   const [calendar, setCalendar] = useState(false);
+  const uid = useId();
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) => {
     setErr("");
@@ -243,7 +276,7 @@ export function BookForm({ thanksId, summary = false, compact = false, dock = fa
   };
   const choose = (p: BookPath) => {
     if (!f.clinic) {
-      setErr("Please choose a clinic.");
+      setErr("Please choose a clinic first.");
       box.current?.querySelector<HTMLInputElement>('input[name="clinic"]')?.focus();
       return;
     }
@@ -347,6 +380,11 @@ export function BookForm({ thanksId, summary = false, compact = false, dock = fa
     go(0);
   };
 
+  /* the clinic step's cards: the name, and the intersection under it */
+  const BOOK_CLINIC_CHOICES: [string, string, string][] = [
+    ...BOOK_CLINIC_OPTIONS.map(([v, t]): [string, string, string] => [v, t.split(", ")[0], t.split(", ")[1] ?? ""]),
+    ["Either", "Either clinic", "No preference"],
+  ];
   const clinicName = (v: string) => (v === "Either" ? "Either clinic" : (BOOK_CLINIC_OPTIONS.find(([x]) => x === v)?.[1] ?? v));
   const clinicPhone = CLINICS[0].phone;
   const legend = `scroll-mt-24 font-aeonik ${compact ? "text-[20px]" : "text-[clamp(19px,1.6vw,22px)]"} font-normal leading-[1.15] tracking-[-0.02em] text-ndm-ink outline-hidden`;
@@ -490,13 +528,17 @@ export function BookForm({ thanksId, summary = false, compact = false, dock = fa
               <input required type="email" name="email" autoComplete="email" className={`${FIELD} h-11!`} />
             </label>
           </div>
-          <div role="group" aria-label="Best way to reach you, choose any" className="mt-4 flex flex-wrap items-center gap-1.5">
-            <span className="mr-1.5 font-inter text-[13px] font-semibold text-ndm-ink">Reach me by</span>
-            {["Call", "Text", "Email"].map((t) => (
-              <BookChip key={t} type="checkbox" name="via" value={t} checked={f.via.includes(t)} onChange={() => toggleVia(t)}>
-                {t}
-              </BookChip>
-            ))}
+          <div role="group" aria-labelledby={`${uid}-via`} className="mt-4">
+            <p id={`${uid}-via`} className="font-inter text-[13px] font-semibold text-ndm-ink">
+              Reach me by <span className="font-normal text-ndm-muted">(untick any you’d rather we didn’t use)</span>
+            </p>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {["Call", "Text", "Email"].map((t) => (
+                <BookTick key={t} name="via" value={t} checked={f.via.includes(t)} onChange={() => toggleVia(t)}>
+                  {t}
+                </BookTick>
+              ))}
+            </div>
           </div>
           <p className="mt-3 font-inter text-[12px] text-ndm-muted">Please don’t include medical details. We use your details only to arrange your visit.</p>
           {/* left empty by people, filled in by form-filling robots */}
@@ -505,19 +547,31 @@ export function BookForm({ thanksId, summary = false, compact = false, dock = fa
 
         <fieldset data-step="2" className={stepClass("2")} {...stepAttr("2")}>
           <legend tabIndex={-1} className={legend}>
-            How would you like to continue?
+            Choose your clinic, then how to book
           </legend>
-          <p className="mt-2 font-inter text-[14px] leading-[1.5] text-ndm-muted">Book a time yourself, or let us call you to find one.</p>
-          <p className="mt-4 font-inter text-[13px] font-semibold text-ndm-ink">Which clinic?</p>
-          <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Which clinic">
-            {[...BOOK_CLINIC_OPTIONS, ["Either", "Either clinic"] as [string, string]].map(([v, t]) => (
-              <BookChip key={v} name="clinic" value={v} checked={f.clinic === v} onChange={() => set("clinic", v)}>
-                {t}
-              </BookChip>
+          <BookNum n={1} done={!!f.clinic}>
+            Which clinic would you like to visit?
+          </BookNum>
+          <div className={`mt-2.5 grid gap-1.5 ${compact ? "" : "sm:grid-cols-3"}`} role="radiogroup" aria-label="Which clinic would you like to visit?">
+            {BOOK_CLINIC_CHOICES.map(([v, name, where]) => (
+              <label key={v} className="relative flex cursor-pointer">
+                <input type="radio" name="clinic" value={v} checked={f.clinic === v} onChange={() => set("clinic", v)} className="book-in absolute inset-0 m-0 cursor-pointer opacity-0" />
+                <span className="book-opt book-opt-clinic font-inter">
+                  <i aria-hidden="true" className="book-radio" />
+                  <span className="min-w-0">
+                    <span className="block font-semibold">{name}</span>
+                    <span className="block text-[12px] text-ndm-muted">{where}</span>
+                  </span>
+                </span>
+              </label>
             ))}
           </div>
-          <div className={`mt-4 grid gap-3 ${compact ? "" : "sm:grid-cols-2"}`}>
-            <button type="button" disabled={busy} aria-busy={busy || undefined} onClick={() => choose("book")} className={`${tile} min-h-[96px] border-ndm-deep bg-ndm-deep text-white hover:border-[#0A4F7A] hover:bg-[#0A4F7A]`}>
+          <BookNum n={2} off={!f.clinic}>
+            How would you like to book?
+            {!f.clinic && <span className="font-normal text-ndm-muted"> Choose a clinic first.</span>}
+          </BookNum>
+          <div className={`book-ways mt-2.5 grid gap-3 ${f.clinic ? "" : "is-waiting"} ${compact ? "" : "sm:grid-cols-2"}`}>
+            <button type="button" disabled={busy} aria-busy={busy || undefined} onClick={() => choose("book")} className={`${tile} min-h-[88px] sm:min-h-[96px] border-ndm-deep bg-ndm-deep text-white hover:border-[#0A4F7A] hover:bg-[#0A4F7A]`}>
               <span aria-hidden="true" className="mt-0.5 grid size-10 shrink-0 place-items-center rounded-full bg-white/15 text-white">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
@@ -530,7 +584,7 @@ export function BookForm({ thanksId, summary = false, compact = false, dock = fa
               </span>
               <IconArrow size={15} className="mt-2 shrink-0" />
             </button>
-            <button type="button" disabled={busy} onClick={() => choose("call")} className={`${tile} min-h-[96px] border-ndm-ink/15 bg-white text-ndm-ink hover:border-ndm-ink/40`}>
+            <button type="button" disabled={busy} onClick={() => choose("call")} className={`${tile} min-h-[88px] sm:min-h-[96px] border-ndm-ink/15 bg-white text-ndm-ink hover:border-ndm-ink/40`}>
               <span aria-hidden="true" className="mt-0.5 grid size-10 shrink-0 place-items-center rounded-full bg-ndm-blue/10 text-ndm-deep">
                 <IconPhone size={18} />
               </span>
