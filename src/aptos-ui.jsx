@@ -8,7 +8,7 @@ const APT = {
   sub: 'A lift, without the surgery. Bioabsorbable threads placed beneath the skin to gently reposition early sagging of the midface and support collagen, with a short recovery.',
   hero: { d: `${NDM}/wp-content/uploads/2025/09/1-1.jpg`, m: `${NDM}/wp-content/uploads/2025/09/1.1-1.jpg`, pos: '50% 30%' },
   offer: null,
-  facts: [['Treatment type', 'Minimally invasive'], ['Duration', '60 minutes'], ['Recovery time', 'Up to 2 weeks'], ['May last', 'Up to 24 months']],
+  facts: [['Treatment type', 'Minimally invasive'], ['Duration', '60 minutes'], ['Sessions', 'One for most plans'], ['May last', 'Up to 24 months']],
   glance: 'Planned at a free, in-person consultation and placed by our trained medical team.',
   /* the reference's ten topics, in its order; shown as a sticky row of links */
   nav: [['what', 'What it is'], ['how', 'How it works'], ['safety', 'Is it safe'], ['duration', 'How long it lasts'], ['candidate', 'Good candidates'], ['expect', 'What to expect'], ['results', 'Results'], ['care', 'Pre & post care'], ['combinations', 'Elevate your results'], ['visit', 'Visit us']],
@@ -95,9 +95,9 @@ const APT = {
     text: 'Your provider may suggest pairing your thread lift with other treatments. Some can be done at the same visit, if suitable; others are usually planned a few weeks later, once the area has settled.',
     groups: [['At the same visit, if suitable', ['Neuromodulators', 'Hyaluronic acid dermal fillers', 'Skin boosters']], ['A few weeks later', ['Sculptra®', 'Radiesse®', 'Microneedling', 'Medical-grade facials and peels']]],
     links: [
-      ['Dermal fillers', slug('Dermal Fillers'), 'Injectables', 'assets/home/v3/lips-1000.webp', 'Hyaluronic acid gel for volume and contour.'],
-      ['Sculptra®', slug('Sculptra®'), 'Bio-stimulator', 'assets/home/v3/sculptra-1000.webp', 'A collagen stimulator, planned over a few visits.'],
-      ['Skin boosters', slug('Mesotherapy & Skin Boosters'), 'Injectables', 'assets/home/v3/booster-1000.webp', 'Fine injections that may improve skin hydration.'],
+      ['Dermal fillers', slug('Dermal Fillers'), 'Injectables', 'assets/home/menu/dermal-fillers.jpg', 'Hyaluronic acid gel for volume and contour.'],
+      ['Sculptra®', slug('Sculptra®'), 'Bio-stimulator', 'assets/home/menu/sculptra.jpg', 'A collagen stimulator, planned over a few visits.'],
+      ['Skin boosters', slug('Mesotherapy & Skin Boosters'), 'Injectables', 'assets/home/menu/skin-boosters.jpg', 'Fine injections that may improve skin hydration.'],
     ],
   },
   why: {

@@ -1,0 +1,45 @@
+/* Blog article page. Copied rule for rule from the prototype by scripts/port_page_css.py: do not edit by hand.
+   The prototype adds these rules to this page only, so every selector is tied to <main data-page="article">
+   with :where(), which adds no specificity: the rules rank exactly as they did there. */
+  /* blog + article motion */
+  :where(main[data-page="article"]) .rv.bw-wrap{opacity:1;transform:none;filter:none}
+  :where(main[data-page="article"]) .bw{display:inline-block;opacity:0;filter:blur(12px);transform:translate3d(0,42%,0);transition:opacity .9s var(--e-out),filter 1s var(--e-out),transform 1.15s var(--e-out);transition-delay:var(--d,0s)}
+  :where(main[data-page="article"]) .bw-wrap.in .bw{opacity:1;filter:none;transform:none}
+  :where(main[data-page="article"]) .story-img{transform:scale(1.1);transition:transform 1.4s var(--e-out)}
+  :where(main[data-page="article"]) .story-card.in .story-img{transform:scale(1)}
+  :where(main[data-page="article"]) .story-card article:hover .story-img{transform:scale(1.05)}
+  /* article cards: plain white, neutral shadow, a small lift on hover */
+  :where(main[data-page="article"]) .story-box{background:#fff;border:1px solid #E3E9EF;box-shadow:0 22px 44px -36px rgba(27,36,43,.28);transition:transform .6s var(--e-out),box-shadow .6s ease}
+  @media (hover:hover){:where(main[data-page="article"]) .story-box:hover{transform:translateY(-4px);box-shadow:0 30px 56px -38px rgba(27,36,43,.34)}}
+  /* white cards in the promotion-card look */
+  :where(main[data-page="article"]) .lead-card,:where(main[data-page="article"]) .take-card{background:#fff;border:1px solid #E3E9EF;box-shadow:0 26px 50px -34px rgba(15,60,95,.3)}
+  :where(main[data-page="article"]) .take-pic img{transform:scale(1.14);transition:transform 1.8s var(--e-out) .1s}
+  :where(main[data-page="article"]) .take-pic.in img{transform:scale(1)}
+  /* phones: related articles swipe sideways */
+  @media (max-width:639px){:where(main[data-page="article"]) .related-row>li{flex:0 0 min(84vw,340px);scroll-snap-align:start}}
+  /* article text column */
+  :where(main[data-page="article"]) .article-prose h2{margin-top:clamp(48px,5vw,72px);font-size:clamp(28px,2.6vw,38px);line-height:1.12;letter-spacing:-.025em;color:#1B242B}
+  :where(main[data-page="article"]) .article-prose h3{margin-top:clamp(28px,3vw,40px);font-size:clamp(20px,1.6vw,24px);line-height:1.25;letter-spacing:-.01em;color:#1B242B}
+  :where(main[data-page="article"]) .article-prose h2,:where(main[data-page="article"]) .article-prose h3{font-weight:400}
+  :where(main[data-page="article"]) .article-prose p{margin-top:14px;font-size:16.5px;line-height:1.75;color:rgba(27,36,43,.8)}
+  :where(main[data-page="article"]) .article-prose ul{margin-top:16px;display:grid;gap:10px}
+  :where(main[data-page="article"]) .article-prose ul li{position:relative;padding-left:22px;font-size:16.5px;line-height:1.6;color:rgba(27,36,43,.8)}
+  :where(main[data-page="article"]) .article-prose ul li::before{content:"";position:absolute;left:4px;top:.62em;width:7px;height:7px;border-radius:99px;background:#209ED9}
+  :where(main[data-page="article"]) .article-prose figure{margin-top:clamp(28px,3vw,40px)}
+  @media (prefers-reduced-motion:reduce){:where(main[data-page="article"]) .bw,:where(main[data-page="article"]) .story-img{transition:none;opacity:1;filter:none;transform:none}}
+/* the pricing page blurs what passes under its open category title; here that title is not sticky */
+:where(main[data-page="article"]) .pr-group.is-open>.pr-ghead{-webkit-backdrop-filter:none;backdrop-filter:none}
+/* start your journey */
+:where(main[data-page="article"]) .jr-card{clip-path:inset(0 50% 0 50% round 32px);transition:clip-path 1.2s cubic-bezier(.7,0,.2,1);box-shadow:0 40px 80px -50px rgba(11,15,19,.6)}
+:where(main[data-page="article"]) .jr-card.is-on{clip-path:inset(0 0 0 0 round 32px)}
+:where(main[data-page="article"]) .jr-card .jr-pic{transform:scale(1.12);transition:transform 2.2s cubic-bezier(.2,.7,.2,1)}
+:where(main[data-page="article"]) .jr-card.is-on .jr-pic{transform:scale(1)}
+/* desktop: the photo fills the right two thirds and fades into the navy card, so the face sits right of the words; phones: face centred */
+:where(main[data-page="article"]) .jr-card{background:#0B1B29}
+@media (min-width:768px){:where(main[data-page="article"]) .jr-card .jr-pic{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 34%);mask-image:linear-gradient(90deg,transparent 0,#000 34%)}}
+:where(main[data-page="article"]) .jr-shade{background:linear-gradient(90deg,rgba(9,22,34,.9) 0%,rgba(9,22,34,.72) 34%,rgba(9,22,34,.18) 66%,rgba(9,22,34,0) 100%),linear-gradient(var(--up,0deg),rgba(10,52,84,.72) 0%,rgba(10,52,84,0) 55%)}
+@media (max-width:767px){:where(main[data-page="article"]) .jr-card{clip-path:inset(0 50% 0 50% round 24px)}:where(main[data-page="article"]) .jr-card.is-on{clip-path:inset(0 0 0 0 round 24px)}
+  :where(main[data-page="article"]) .jr-shade{background:linear-gradient(var(--up,0deg),rgba(9,22,34,.94) 0%,rgba(9,22,34,.8) 42%,rgba(9,22,34,.1) 78%,rgba(9,22,34,0) 100%)}}
+:where(main[data-page="article"]) .jr-card .jr-t{opacity:0;filter:blur(14px);transform:translateY(12px);transition:opacity .9s ease,filter 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1)}
+:where(main[data-page="article"]) .jr-card.is-on .jr-t{opacity:1;filter:blur(0);transform:none}
+@media (prefers-reduced-motion:reduce){:where(main[data-page="article"]) .jr-card,:where(main[data-page="article"]) .jr-card .jr-pic,:where(main[data-page="article"]) .jr-card .jr-t{clip-path:none;transform:none;filter:none;opacity:1;transition:none}}

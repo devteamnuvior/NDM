@@ -7,66 +7,6 @@
  ],
  "cases": [
   {
-   "src": "assets/before-after/Belkyra-e1762378989683.webp",
-   "label": "Belkyra"
-  },
-  {
-   "src": "assets/before-after/Chemical-peel-e1762379012340.webp",
-   "label": "Chemical peel"
-  },
-  {
-   "src": "assets/before-after/Dermamelan-e1762379032294.webp",
-   "label": "Dermamelan"
-  },
-  {
-   "src": "assets/before-after/Fractional-skin-resurfacing-e1762379059693.webp",
-   "label": "Fractional skin resurfacing"
-  },
-  {
-   "src": "assets/before-after/Tear-Troughs-e1762379100415.webp",
-   "label": "Tear Troughs"
-  },
-  {
-   "src": "assets/before-after/Stretch-Marks-e1762379118697.webp",
-   "label": "Stretch Marks"
-  },
-  {
-   "src": "assets/before-after/PRP-Hair-e1762378844487.webp",
-   "label": "PRP Hair"
-  },
-  {
-   "src": "assets/before-after/Nasolabial-folds-e1762379135637.webp",
-   "label": "Nasolabial folds"
-  },
-  {
-   "src": "assets/before-after/Mole-removal-e1762379153611.webp",
-   "label": "Mole removal"
-  },
-  {
-   "src": "assets/before-after/Microneedling-e1762379172601.webp",
-   "label": "Microneedling"
-  },
-  {
-   "src": "assets/before-after/Lip-fillers-e1762379193364.png",
-   "label": "Lip fillers"
-  },
-  {
-   "src": "assets/before-after/Fractional-1-e1762379214539.webp",
-   "label": "Fractional"
-  },
-  {
-   "src": "assets/before-after/Laser-acne-Chemical-peels-e1762379230703.webp",
-   "label": "Laser acne Chemical peels"
-  },
-  {
-   "src": "assets/before-after/Laser-Acne-e1762379249376.webp",
-   "label": "Laser Acne"
-  },
-  {
-   "src": "assets/before-after/Botox-e1762379266837.webp",
-   "label": "Botox"
-  },
-  {
    "src": "assets/before-after/Belkyra-56068-e1762377630364.webp",
    "label": "Belkyra"
   },
@@ -209,21 +149,18 @@
  ],
  "labels": [
   "Belkyra",
+  "Botox",
   "Chemical peel",
   "Dermamelan",
   "Fractional skin resurfacing",
-  "Tear Troughs",
-  "Stretch Marks",
-  "PRP Hair",
-  "Nasolabial folds",
-  "Mole removal",
-  "Microneedling",
-  "Lip fillers",
-  "Fractional",
   "Laser acne Chemical peels",
-  "Laser Acne",
-  "Botox",
-  "Laser acne"
+  "Laser acne",
+  "Lip fillers",
+  "Microneedling",
+  "Mole removal",
+  "Tear Troughs",
+  "PRP Hair",
+  "Stretch Marks"
  ],
  "seoTitle": "Before After"
 }

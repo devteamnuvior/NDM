@@ -1,0 +1,13 @@
+/* How it works: each step on a white card. Copied rule for rule from the prototype (the later .proc-card
+   rule there replaces the first one's shadow; both are kept, in order). */
+.proc-card{box-shadow:0 22px 44px -36px rgba(27,36,43,.45)}
+.proc-card{border:1px solid rgba(27,36,43,.08);box-shadow:0 1px 2px rgba(27,36,43,0),0 22px 48px -30px rgba(27,36,43,0);transition:border-color .5s ease,box-shadow .7s var(--e-out)}
+.proc-card.is-on{border-color:rgba(27,36,43,.15);box-shadow:0 1px 2px rgba(27,36,43,.04),0 22px 48px -30px rgba(27,36,43,.3)}
+.proc-dot{background:#fff;border:1px solid rgba(27,36,43,.15);color:#1B242B;transition:background-color .5s ease,border-color .5s ease,color .5s ease}
+.proc-card.is-on .proc-dot{background:#1B242B;border-color:#1B242B;color:#fff}
+.proc-card.is-cur{border-color:rgba(15,128,195,.35)}
+.proc-bar{position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,#0F80C3,#26B1E7);transform:scaleX(0);transform-origin:0 50%;pointer-events:none}
+@media (prefers-reduced-motion: reduce){
+  .proc-bar{transform:scaleX(1) !important}
+  .proc-pic img{transform:none !important}
+}

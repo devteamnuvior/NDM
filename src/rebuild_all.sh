@@ -2,7 +2,7 @@
 # Rebuild every generated page in order, check each one, refresh the crawler copies (round 29).
 cd "$(dirname "$0")/.." || exit 1
 python3 src/sync_prices.py . src >/dev/null || exit 1
-for b in build_pricing build_about build_blog build_article build_procedure build_aptos build_cart build_before_after build_concern build_bf_sale build_account build_legal; do
+for b in build_pricing build_about build_blog build_article build_procedure build_aptos build_cart build_before_after build_concern build_bf_sale build_account build_legal build_procedures build_shop build_404; do
   [ -f src/$b.py ] || continue
   python3 src/$b.py . src >/dev/null 2>&1 || { echo "FAIL $b"; python3 src/$b.py . src 2>&1 | tail -3; }
 done

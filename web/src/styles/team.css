@@ -1,0 +1,43 @@
+/* Team: staggered portraits that wipe up and drift, the line art behind them, and the profile dialog.
+   Copied rule for rule from the prototype. */
+.team-port{transform:translateY(var(--ty,0));transition:transform .9s var(--e-out)}
+.team-lines path,.team-lines circle:not([stroke-dasharray]){stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 2.6s var(--e-inout) .2s}
+.team-lines.in path,.team-lines.in circle{stroke-dashoffset:0}
+@media (prefers-reduced-motion: reduce){.team-lines path,.team-lines circle{stroke-dashoffset:0;transition:none}}
+.team-port-0{--ty:0px}
+.team-port-1{--ty:clamp(28px,3.4vw,56px)}
+.team-port-2{--ty:clamp(8px,1vw,16px)}
+.team-port-3{--ty:clamp(36px,4.2vw,68px)}
+.team-port-pic{clip-path:inset(100% 0 0 0 round 22px);transform:translateY(70px);transition:clip-path 1.2s var(--e-inout) calc(var(--i) * .16s),transform 1.4s var(--e-out) calc(var(--i) * .16s)}
+.team-port-img{transform:scale(1.28);transition:transform 1.8s var(--e-out) calc(var(--i) * .16s)}
+.team-port-cap{opacity:0;transform:translateY(10px);transition:opacity .6s ease calc(.55s + var(--i) * .16s),transform .8s var(--e-out) calc(.55s + var(--i) * .16s)}
+.team-ports.in .team-port-pic{clip-path:inset(0 0 0 0 round 22px);transform:none}
+.team-ports.in .team-port-img{transform:scale(1.06)}
+.team-ports.in .team-port-cap{opacity:1;transform:none}
+.team-port-shade,.team-port-more{opacity:0;transition:opacity .45s ease,transform .5s var(--e-out)}
+.team-port-more{transform:translateY(6px)}
+.team-port button:focus-visible{outline:2px solid #26B1E7;outline-offset:6px;border-radius:24px}
+@media (hover:hover){
+  .team-port:hover{transform:translateY(calc(var(--ty,0px) - 10px))}
+  .team-ports.in .team-port:hover .team-port-img{transform:scale(1.12);transition-delay:0s}
+  .team-port:hover .team-port-shade,.team-port:hover .team-port-more{opacity:1;transform:none}
+}
+.team-port:has(:focus-visible) .team-port-shade,.team-port:has(:focus-visible) .team-port-more{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){
+  .team-port,.team-port:hover{transform:none}
+  .team-port-pic{clip-path:none;transform:none}
+  .team-port-img{transform:scale(1.06)}
+  .team-port-cap{opacity:1;transform:none}
+}
+/* profile dialog: bottom sheet on phones, centred card from 640px */
+.team-pop-scrim{background:rgba(11,15,19,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;transition:opacity .4s ease}
+.team-pop-card{opacity:0;transform:translateY(100%);transition:transform .6s var(--e-out),opacity .3s ease}
+@media (min-width:640px){.team-pop-card{transform:translateY(28px) scale(.97)}}
+.team-pop.is-on .team-pop-scrim{opacity:1}
+.team-pop.is-on .team-pop-card{opacity:1;transform:none}
+@supports (height:100dvh){
+  .team-pop .team-pop-scroll{max-height:90dvh}
+  @media (min-width:640px){.team-pop .team-pop-scroll{max-height:88dvh}}
+}
+@media (min-width:768px) and (min-height:700px){.team-pop-aside{position:sticky;top:40px}}
+@media (prefers-reduced-motion: reduce){.team-pop-card{transform:none}}

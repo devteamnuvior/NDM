@@ -1,0 +1,72 @@
+/* /procedures, the treatments hub (2026-11-18). Written for this page (not ported from the prototype). */
+
+main[data-page="procedures"] .ph-glass {
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+    0 24px 50px -30px rgba(11, 15, 19, 0.45);
+}
+
+main[data-page="procedures"] .ph-card {
+  transition:
+    box-shadow 0.5s var(--e-out),
+    transform 0.5s var(--e-out);
+}
+main[data-page="procedures"] .ph-card-img {
+  transition: transform 1.2s var(--e-out);
+}
+@media (hover: hover) {
+  main[data-page="procedures"] .ph-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 30px 56px -36px rgba(27, 36, 43, 0.45);
+  }
+  main[data-page="procedures"] .ph-card:hover .ph-card-img {
+    transform: scale(1.04);
+  }
+}
+main[data-page="procedures"] .ph-card:focus-visible {
+  outline: 2px solid #0f80c3;
+  outline-offset: 3px;
+}
+/* a treatment without a photo: the brand's paper and mist, with the logo mark */
+main[data-page="procedures"] .ph-card-blank {
+  background:
+    url("/assets/icons/logo-mark.svg") center / 44px no-repeat,
+    radial-gradient(80% 90% at 20% 0%, rgba(38, 177, 231, 0.12), transparent 60%),
+    linear-gradient(160deg, #f5f9fc, #eceff1);
+  opacity: 0.9;
+}
+
+main[data-page="procedures"] .ph-trust {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(27, 36, 43, 0.06);
+  transition: box-shadow 0.4s ease;
+}
+@media (hover: hover) {
+  main[data-page="procedures"] .ph-trust:hover {
+    box-shadow:
+      inset 0 0 0 1px rgba(15, 128, 195, 0.35),
+      0 26px 50px -36px rgba(15, 80, 130, 0.45);
+  }
+}
+
+main[data-page="procedures"] .ph-book {
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(38, 177, 231, 0.35) 0%, rgba(38, 177, 231, 0) 55%),
+    linear-gradient(155deg, #0f5e92 0%, #0a3d60 55%, #0b2234 100%);
+}
+
+main[data-page="procedures"] .ph-book-img {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 45%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 45%);
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main[data-page="procedures"] .ph-card,
+  main[data-page="procedures"] .ph-card-img {
+    transition: none;
+  }
+}

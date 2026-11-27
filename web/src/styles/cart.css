@@ -1,0 +1,18 @@
+/* Cart: the price strike, Add to cart turning into a quantity stepper, and the floating cart bar.
+   Copied rule for rule from the prototype. */
+/* cart: price strike, Add to cart, quantity stepper (shared by every page) */
+.pr-was{font-size:14px;color:#8A949B;text-decoration:line-through;text-decoration-color:rgba(234,54,75,.85);text-decoration-thickness:1.5px;font-variant-numeric:tabular-nums}
+.pr-add{width:132px}
+.pr-qty{display:inline-grid;grid-template-columns:40px 1fr 40px;align-items:center;width:132px;height:40px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px rgba(27,36,43,.18);animation:prQty .35s var(--e-out)}
+.pr-qty button{display:grid;place-items:center;width:40px;height:40px;border-radius:999px;color:#1B242B;transition:background-color .25s ease,color .25s ease}
+.pr-qty button:hover{background:#F2F2EF}
+.pr-qty button:disabled{opacity:.35}
+.pr-qty output{text-align:center;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+@keyframes prQty{from{opacity:0;transform:scale(.94)}}
+@media (max-width:639px){.pr-add,.pr-qty{width:116px}.pr-qty{grid-template-columns:36px 1fr 36px}.pr-qty button{width:36px;height:36px}.pr-add{padding:0 12px}}
+@media (prefers-reduced-motion:reduce){.pr-qty{animation:none}}
+/* floating cart bar */
+.cart-pill{transition:transform .6s var(--e-out),opacity .4s ease}
+.cart-pill.is-off{transform:translateY(140%);opacity:0;pointer-events:none}
+.cart-bump{animation:cartBump .5s var(--e-out)}
+@media (prefers-reduced-motion:reduce){.cart-pill{transition:none}.cart-bump{animation:none}}

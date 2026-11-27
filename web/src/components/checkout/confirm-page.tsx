@@ -1,0 +1,231 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { metaTrack } from "@/lib/meta-pixel";
+import { visitChannel } from "@/lib/visit-source";
+import { checkOrderPaymentAction, type OrderReceipt, type PaymentCheck } from "@/app/(site)/checkout/actions";
+import { Button } from "@/components/ui/button";
+import { TwoTone } from "@/components/ui/two-tone";
+import { ORDER_STORAGE_KEY } from "@/config/checkout";
+import { CLINICS } from "@/config/site";
+import { pagePath, tel } from "@/lib/routes";
+import { CO_CARD, CO_WRAP, CheckoutSteps, OrderSummary, money2 } from "./shared";
+
+const NEXT_STEPS: [title: string, text: string][] = [
+  ["We call you", "Within one business day, to find a time for your free consultation and treatment."],
+  ["Your consultation", "Your provider confirms your plan in person. Treatments are given only when they suit you."],
+  /* only for receipts kept from before 2026-11-19, when an order could be paid at the appointment */
+  ["Pay at the clinic", "You pay at your appointment. Individual results may vary."],
+];
+/* a card order whose payment has not gone through yet */
+const UNPAID_STEP: [title: string, text: string] = ["Complete your payment", "Your order is confirmed once your card payment is completed online. Individual results may vary."];
+const PAID_STEP: [title: string, text: string] = ["Paid online", "Your card payment is received. Individual results may vary."];
+
+/** A card order's ID and key: from the address WooCommerce sends the visitor back to, else from the receipt. */
+function cardOrder(o: OrderReceipt | null): { id: number; key: string } | null {
+  const q = new URLSearchParams(window.location.search);
+  const id = Number(q.get("order") ?? o?.orderId ?? 0);
+  const key = q.get("key") ?? o?.orderKey ?? "";
+  return Number.isInteger(id) && id > 0 && key ? { id, key } : null;
+}
+
+/** The last order request, as this browser kept it (order number, lines, totals, first name and clinic only). */
+function readOrder(): OrderReceipt | null {
+  try {
+    const o = JSON.parse(window.localStorage.getItem(ORDER_STORAGE_KEY) ?? "null") as OrderReceipt | null;
+    return o && typeof o.no === "string" && Array.isArray(o.lines) ? o : null;
+  } catch {
+    return null;
+  }
+}
+
+/** 3. Confirmation: the order request WooCommerce accepted, with its real order number. */
+export function ConfirmPage() {
+  /* undefined until the browser has looked: the order lives in this browser, not on the server */
+  const [o, setO] = useState<OrderReceipt | null | undefined>(undefined);
+  /* a card order: what WooCommerce says about its payment (undefined while asking) */
+  const [check, setCheck] = useState<PaymentCheck | null | undefined>(undefined);
+  useEffect(() => {
+    let live = true;
+    const id = requestAnimationFrame(() => {
+      const receipt = readOrder();
+      const card = cardOrder(receipt);
+      /* the receipt in this browser is for another order than the one WooCommerce sent back: leave it out */
+      setO(receipt && (!card || !receipt.orderId || receipt.orderId === card.id) ? receipt : null);
+      if (!card) return setCheck(null);
+      void checkOrderPaymentAction(card.id, card.key).then((r) => live && setCheck(r));
+    });
+    return () => {
+      live = false;
+      cancelAnimationFrame(id);
+    };
+  }, []);
+  /* a paid card order: one GA4 "purchase" event with the amount in CAD, so Analytics shows revenue per channel
+     (user, 2026-11-25). Only the order number, amounts and treatment names travel, never anything about the buyer;
+     sent once per order in this browser (Analytics also counts a transaction_id once). */
+  const paidNow = !!check && check.ok && check.paid;
+  useEffect(() => {
+    if (!paidNow || !o) return;
+    try {
+      const key = `ndm-purchase-sent-${o.no}`;
+      if (window.localStorage.getItem(key)) return;
+      window.localStorage.setItem(key, "1");
+    } catch {
+      /* storage blocked: Analytics still counts the transaction once */
+    }
+    const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
+    w.dataLayer = w.dataLayer || [];
+    w.dataLayer.push({ ecommerce: null });
+    w.dataLayer.push({
+      event: "purchase",
+      channel: visitChannel(),
+      ecommerce: { transaction_id: o.no, value: o.total, tax: o.tax, currency: "CAD", ...(o.code ? { coupon: o.code } : {}), items: o.lines.map((l) => ({ item_name: `${l.name}, ${l.label}`, item_category: l.cat, price: l.price, quantity: l.qty })) },
+    });
+    /* the Meta pixel's Purchase: amount and product keys only, the order number as the event's ID */
+    metaTrack("Purchase", { value: o.total, currency: "CAD", content_type: "product", num_items: o.lines.reduce((n, l) => n + l.qty, 0) }, `order-${o.no}`);
+  }, [paidNow, o]);
+  const date = o ? new Date(o.date).toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" }) : "";
+  const clinic = o ? CLINICS.find((c) => c.name === o.clinic) : undefined;
+  const paid = !!check && check.ok && check.paid;
+  const unpaidCard = !!check && check.ok && !check.paid;
+  const payUrl = check && check.ok ? check.payUrl : "";
+  return (
+    <section aria-labelledby="co-title" className={`co-band ${CO_WRAP}`}>
+      <CheckoutSteps at={3} />
+      {o === undefined || check === undefined ? null : !o && check && check.ok ? (
+        /* back from the pay page in a browser without the receipt: WooCommerce's answer only */
+        <div className={`${CO_CARD} mt-10 flex flex-col items-center px-6 py-14 text-center`}>
+          <h1 id="co-title" className="font-aeonik text-[clamp(30px,3vw,42px)] leading-[1.1] font-normal text-ndm-ink">
+            {check.paid ? "Thank you, your payment is received" : "Your card payment was not completed"}
+          </h1>
+          <p className="mt-3 max-w-[48ch] font-inter text-[15px] text-ndm-muted">
+            Order number <b className="text-ndm-ink tabular-nums">{check.number}</b>. {check.paid ? "Our team contacts you within one business day to book your visit." : "Nothing has been charged."}
+          </p>
+          <div className="mt-7 flex flex-wrap justify-center gap-3">
+            {!check.paid && check.payUrl ? (
+              <Button href={check.payUrl} v="ink">
+                Complete card payment
+              </Button>
+            ) : null}
+            <Button href={pagePath("home")} v="line">
+              Back to home
+            </Button>
+          </div>
+        </div>
+      ) : !o ? (
+        <div className={`${CO_CARD} mt-10 flex flex-col items-center px-6 py-14 text-center`}>
+          <h1 id="co-title" className="font-aeonik text-[clamp(30px,3vw,42px)] leading-[1.1] font-normal text-ndm-ink">
+            No recent order request
+          </h1>
+          <p className="mt-3 max-w-[44ch] font-inter text-[15px] text-ndm-muted">Your order requests show here right after you place them.</p>
+          <div className="mt-7 flex flex-wrap justify-center gap-3">
+            <Button href={`${pagePath("pricing")}#prices`} v="ink">
+              Browse prices
+            </Button>
+            <Button href={pagePath("home")} v="line">
+              Back to home
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div className="mt-8 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)] lg:items-start">
+          <div className={`${CO_CARD} overflow-hidden`}>
+            {/* a calm, celebratory head: the tick draws itself inside soft rings */}
+            <div className="co-thanks relative px-[clamp(22px,3vw,44px)] pt-[clamp(28px,3.4vw,48px)] pb-8 text-white">
+              <span aria-hidden="true" className="co-ring co-ring-a" />
+              <span aria-hidden="true" className="co-ring co-ring-b" />
+              <span aria-hidden="true" className="relative grid size-[76px] place-items-center rounded-full bg-white text-ndm-deep shadow-[0_18px_40px_-16px_rgba(0,0,0,.45)]">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <path className="co-tick-path" d="m5 12.5 4.5 4.5L19 7.5" />
+                </svg>
+              </span>
+              <TwoTone
+                as="h1"
+                id="co-title"
+                dark
+                className="relative mt-6"
+                size="text-[clamp(34px,3.6vw,54px)]"
+                lead={
+                  <>
+                    Thank you{o.first ? `, ${o.first}` : ""},
+                    <br />
+                  </>
+                }
+                strong={paid ? "your order is paid" : unpaidCard ? "your request is saved" : "your request is in"}
+              />
+              <p className="relative mt-3 max-w-[52ch] font-inter text-[16px] leading-[1.6] text-white/85">
+                {unpaidCard
+                  ? "Your card payment was not completed, so nothing has been charged. You can finish it now, or call the clinic."
+                  : `Our team contacts you within one business day to book your visit${clinic ? ` at NewDermaMed ${clinic.name}` : ""}.${paid ? " Your card payment is received." : " Nothing has been charged."}`}
+              </p>
+              {unpaidCard && payUrl ? (
+                <div className="relative mt-5">
+                  <Button href={payUrl} v="light">
+                    Complete card payment
+                  </Button>
+                </div>
+              ) : null}
+              <span className="relative mt-5 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 font-inter text-[13.5px] ring-1 ring-white/25">
+                Order number <b className="font-semibold tabular-nums">{o.no}</b>
+              </span>
+            </div>
+            <div className="p-[clamp(22px,3vw,44px)] pt-6">
+              <dl className="grid grid-cols-3 [gap:1px] overflow-hidden rounded-[18px] border border-ndm-line bg-ndm-line">
+                {[
+                  ["Date", date],
+                  [paid ? "Total paid" : "Estimated total", money2(o.total)],
+                  ["Payment", paid ? "Paid by card" : unpaidCard ? "Card, not completed" : "At the clinic"],
+                ].map(([k, v]) => (
+                  <div key={k} className="bg-white px-4 py-3.5">
+                    <dt className="font-inter text-[12px] text-ndm-muted">{k}</dt>
+                    <dd className="mt-1 font-inter text-[14.5px] leading-[1.35] font-medium text-ndm-ink">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+              <h2 className="mt-10 font-aeonik text-[24px] font-normal tracking-[-0.01em] text-ndm-ink">What happens next</h2>
+              <ol className="mt-4 grid gap-3" role="list">
+                {(paid ? [NEXT_STEPS[0], NEXT_STEPS[1], PAID_STEP] : unpaidCard ? [UNPAID_STEP, NEXT_STEPS[0], NEXT_STEPS[1]] : NEXT_STEPS).map(([h, d], i) => (
+                  <li key={h} className="flex items-start gap-4 rounded-[16px] bg-ndm-paper px-4 py-3.5">
+                    <span className="grid size-8 shrink-0 place-items-center rounded-full bg-ndm-deep/10 font-inter text-[13px] font-semibold text-ndm-deep">{i + 1}</span>
+                    <span>
+                      <span className="block font-inter text-[15px] font-semibold text-ndm-ink">{h}</span>
+                      <span className="mt-0.5 block font-inter text-[14px] leading-[1.5] text-ndm-muted">{d}</span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Button href={`${pagePath("account")}#plans`} v="ink">
+                  See it in my account
+                </Button>
+                <Button href={pagePath("home")} v="line">
+                  Back to home
+                </Button>
+              </div>
+            </div>
+          </div>
+          <aside className="grid gap-4 lg:sticky lg:top-[140px]">
+            <div className={`${CO_CARD} p-[clamp(20px,2.4vw,28px)]`}>
+              <h2 className="font-aeonik text-[24px] font-normal tracking-[-0.01em] text-ndm-ink">Order details</h2>
+              <div className="mt-3">
+                <OrderSummary t={o} lines={o.lines} />
+              </div>
+            </div>
+            {clinic && (
+              <div className={`${CO_CARD} p-[clamp(20px,2.4vw,28px)]`}>
+                <p className="font-inter text-[12px] font-semibold tracking-[.14em] text-ndm-deep uppercase">Your clinic</p>
+                <p className="mt-2 font-aeonik text-[21px] leading-[1.2] text-ndm-ink">NewDermaMed {clinic.name}</p>
+                <p className="mt-1 font-inter text-[14px] leading-[1.5] text-ndm-muted">{clinic.address}</p>
+                <div className="mt-4">
+                  <Button href={tel(clinic.phone)} v="line" sm>
+                    Call {clinic.phone}
+                  </Button>
+                </div>
+              </div>
+            )}
+          </aside>
+        </div>
+      )}
+    </section>
+  );
+}

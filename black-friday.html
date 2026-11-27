@@ -274,6 +274,12 @@
   /* announcement bar attention */
   .promo-attn{background:linear-gradient(90deg,#C8101D,#DC1A27 30%,#EE3A45 50%,#DC1A27 70%,#C8101D);background-size:200% 100%;animation:promoFlow 9s linear infinite}
   @keyframes promoFlow{to{background-position:-200% 0}}
+  /* Black Friday look of the bar (round 36): the sale page's black with its red glow, a red NEW pill; on every page until the sale is over */
+  .promo-attn.is-bf{background:radial-gradient(55% 300% at 100% 0%,rgba(211,18,29,.42),transparent 62%),radial-gradient(45% 300% at 0% 100%,rgba(211,18,29,.22),transparent 70%),#0B0B0C;animation:none;box-shadow:inset 0 -1px 0 rgba(255,255,255,.1)}
+  .promo-attn.is-bf .promo-shine{display:none}
+  .promo-attn.is-bf .promo-new{background:#D3121F;color:#fff}
+  .promo-attn.is-bf .promo-ping{background:#fff}
+  .promo-attn.is-bf svg{color:#EE3A45}
   .promo-shine{background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:250% 100%;background-repeat:no-repeat;background-position:150% 0;mix-blend-mode:soft-light;animation:promoShine 5.5s cubic-bezier(.45,0,.25,1) 1.4s infinite}
   @keyframes promoShine{0%{background-position:150% 0}35%,100%{background-position:-60% 0}}
   .promo-ping::after{content:"";position:absolute;inset:0;border-radius:999px;background:#DC1A27;animation:promoPing 1.6s ease-out infinite}
@@ -288,6 +294,27 @@
   .hf{position:relative;min-height:max(620px,100svh);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;background:#0B0B0C;color:#fff;isolation:isolate}
   .hf-media{position:absolute;inset:-6% 0 0;z-index:-3;will-change:transform}
   .hf-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  /* round 42: the photo slides, each with one of the film's slow camera moves chosen at random (round 43: no light effects) */
+  .hs-slide{position:absolute;inset:0;overflow:hidden;opacity:0;transition:opacity 1.6s ease;background:#0B0B0C}
+  .hs-slide.is-on{opacity:1;z-index:1}
+  .hs-slide::after{content:"";position:absolute;inset:0;background:rgba(11,11,12,var(--hs-dim));pointer-events:none}
+  .hs-pic,.hs-pic img{position:absolute;inset:0;width:100%;height:100%}
+  .hs-pic img{object-fit:cover}
+  .hs-pic{transform-origin:50% 50%;animation:none 8.2s cubic-bezier(.33,0,.2,1) both}
+  .hs-pic.mv-push{animation-name:hsPush}.hs-pic.mv-pull{animation-name:hsPull}.hs-pic.mv-pan-l{animation-name:hsPanL}.hs-pic.mv-pan-r{animation-name:hsPanR}.hs-pic.mv-rise{animation-name:hsRise}
+  @keyframes hsPush{from{transform:scale(1.02)}to{transform:scale(1.14)}}
+  @keyframes hsPull{from{transform:scale(1.15)}to{transform:scale(1.03)}}
+  @keyframes hsPanL{from{transform:scale(1.12) translate3d(2.4%,0,0)}to{transform:scale(1.12) translate3d(-2.4%,0,0)}}
+  @keyframes hsPanR{from{transform:scale(1.12) translate3d(-2.4%,0,0)}to{transform:scale(1.12) translate3d(2.4%,0,0)}}
+  @keyframes hsRise{from{transform:scale(1.12) translate3d(0,2.2%,0)}to{transform:scale(1.12) translate3d(0,-2.2%,0)}}
+  .hs-paused .hs-pic,.hs-paused .hs-dot i{animation-play-state:paused}
+  .hs-dots{display:flex;flex-shrink:0;gap:6px}
+  .hs-dot{position:relative;width:34px;height:20px;padding:0}
+  .hs-dot::before,.hs-dot i{content:"";position:absolute;left:0;right:0;top:9px;height:2px;border-radius:2px;background:rgba(255,255,255,.28)}
+  .hs-dot i{right:auto;width:0;background:#fff}
+  .hs-dot.is-on i{animation:hsDot linear both}
+  @keyframes hsDot{to{width:100%}}
+  @media (prefers-reduced-motion:reduce){.hs-pic,.hs-slide,.hs-dot.is-on i{animation:none!important}.hs-dot.is-on i{width:100%}}
   .hf-tint{position:absolute;inset:0;z-index:-2}
   .hf::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(11,11,12,.62) 0%,rgba(11,11,12,.1) 30%,rgba(11,11,12,.18) 55%,rgba(11,11,12,.86) 100%),linear-gradient(90deg,rgba(11,11,12,.5),rgba(11,11,12,0) 62%)}
   .hf-in>*{animation:hfIn 1.1s var(--e-out) both}
@@ -303,6 +330,35 @@
   .hf-toggle{display:grid;flex-shrink:0;place-items:center;width:40px;height:40px;border-radius:999px;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:background-color .3s ease,color .3s ease}
   .hf-toggle:hover,.hf-toggle:focus-visible{background:#fff;color:#141414}
   @media (prefers-reduced-motion:reduce){.hf-in>*{animation:none}.hf-marq{animation:none}}
+  /* phones (user, 2026-11-17): a calmer hero; the brand band and pause button are left out, the red tape follows the hero,
+     and the chat and search buttons wait until the hero is half scrolled past */
+  @media (max-width:639px){
+    .hf-band{display:none}
+    .hf-in{padding-bottom:40px}
+    .float-search,.chat-pop,.chat-launch{transition:opacity .35s ease,visibility .35s ease}
+    html.hero-hold .float-search,html.hero-hold .chat-pop,html.hero-hold .chat-launch{opacity:0;visibility:hidden;pointer-events:none}
+  }
+  /* the Black Friday page's crossed tapes (bfs-tapes: red over a second tape), on the page's own paper; not a link (user, 2026-11-17).
+     On the light paper the second tape is ink with white words and red dots instead of white */
+  .home-tape{position:relative;z-index:2;display:block;overflow:hidden;background:#FAFAF8}
+  .home-tape .bfs-tape-white{background:#141416;color:#fff}
+  .home-tape .bfs-tape-white i{background:#EE3A45!important}
+  .home-tape .bfs-tape-red{box-shadow:0 10px 24px -14px rgba(211,18,31,.55)}
+  .bfs-tapes{position:relative;height:118px;margin-top:8px}
+  .bfs-tape{overflow:hidden;white-space:nowrap;padding:11px 0;font:600 12.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase}
+  .bfs-tapes .bfs-tape{position:absolute;left:-5%;width:110%}
+  .bfs-tapes .bfs-tape:first-child{top:22px;transform:rotate(-2.2deg);z-index:1}
+  .bfs-tapes .bfs-tape:last-child{top:52px;transform:rotate(1.6deg)}
+  .bfs-tape-red{background:#D3121F;color:#fff}
+  .bfs-tape-white{background:#fff;color:#0B0B0C}
+  .bfs-tape-white i{background:#D3121F!important;opacity:1!important}
+  .bfs-tick-in.is-rev{animation-direction:reverse}
+  .bfs-tick-in{display:inline-flex;animation:bfsTick 38s linear infinite}
+  .bfs-tick-in span{display:inline-flex;align-items:center;gap:22px;padding-right:22px}
+  .bfs-tick-in i{width:5px;height:5px;border-radius:9px;background:#fff;opacity:.7}
+  @keyframes bfsTick{to{transform:translateX(-50%)}}
+  @media (max-width:767px){.bfs-tapes{height:104px}}
+  @media (prefers-reduced-motion:reduce){.bfs-tick-in{animation:none}}
 
   /* where would you like to start: expanding photo panels; a concern opens its options in place */
   .st{display:flex;gap:14px;height:clamp(520px,42vw,620px);transition:height .7s var(--e-out)}
@@ -433,6 +489,8 @@
   .bfd-label{font:500 15.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;white-space:nowrap}
   .bfd-badge{border-radius:999px;background:#fff;padding:6px 11px;font:600 13px/1 Inter,"Helvetica Neue",Arial,sans-serif;color:#C8101D;white-space:nowrap}
   @media (max-width:420px){.bfd-badge{display:none}}
+  /* phones (user, 2026-11-25): a smaller, quieter tab: a 24px mark, the words in small spaced capitals, no badge or arrow */
+  @media (max-width:639px){.bfd-tab{gap:8px;padding:6px 12px 6px 6px;border-radius:14px 14px 0 0}.bfd-tab::before,.bfd-tab::after{width:14px;height:14px}.bfd-tab::before{left:-14px;background:radial-gradient(circle at 0 0,transparent 13.5px,#0B0B0C 14px)}.bfd-tab::after{right:-14px;background:radial-gradient(circle at 100% 0,transparent 13.5px,#0B0B0C 14px)}.bfd-mark{width:24px;height:24px;border-radius:7px;font-size:14px}.bfd-label{font:600 11.5px/1 Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase}.bfd-badge,.bfd-tab>svg{display:none}}
   .bfd-scrim{position:fixed;inset:0;z-index:84;background:rgba(11,11,12,.45);opacity:0;pointer-events:none;transition:opacity .4s ease}
   .bfd-scrim.is-on{opacity:1;pointer-events:auto}
   .bfd-panel{position:fixed;left:0;right:0;bottom:0;z-index:85;max-height:92svh;overflow:auto;border-radius:28px 28px 0 0;color:#fff;transform:translateY(105%);transition:transform .7s cubic-bezier(.2,.8,.2,1);background:radial-gradient(60% 90% at 90% 0%,rgba(211,18,29,.38),transparent 60%),radial-gradient(40% 60% at 0% 100%,rgba(211,18,29,.18),transparent 70%),#0B0B0C;box-shadow:0 -40px 80px -40px rgba(0,0,0,.7)}
@@ -778,6 +836,8 @@
   /* chat pop-up: an incoming message a few seconds after the page settles */
   .chat-pop{animation:chatPop .6s cubic-bezier(.34,1.56,.64,1) both;transform-origin:100% 100%}
   .chat-pop-msg{animation:chatNote .45s var(--e-out) both}
+  /* phones (user, 2026-11-25): while the cart bar shows, the Black Friday tab steps out of its way instead of sitting on it */
+  @media (max-width:767px){body:has(.cart-pill:not(.is-off)) .bfd-tab.is-on{transform:translate(-50%,110%);pointer-events:none}}
   @keyframes chatPop{from{opacity:0;transform:translateY(14px) scale(.92)}to{opacity:1;transform:none}}
   .chat-btn.has-note::after{content:'';position:absolute;inset:0;border-radius:50%;animation:chatPulse 2.2s ease-out 3;pointer-events:none}
   @keyframes chatPulse{0%{box-shadow:0 0 0 0 rgba(200,16,29,.5)}100%{box-shadow:0 0 0 18px rgba(200,16,29,0)}}
@@ -791,7 +851,8 @@
   .nav-here.is-left{left:0;margin-left:0;bottom:-9px}
   @keyframes navHere{from{transform:scaleX(0);opacity:0}to{transform:none;opacity:1}}
   .menu-item[aria-current="page"],.menu-item-m[aria-current="page"]{color:#C8101D;font-weight:600}
-  .menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{content:'';flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#DC1A27;box-shadow:0 0 0 3px rgba(220,26,39,.18)}
+  .menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{content:'';flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#DC1A27;box-shadow:0 0 0 3px rgba(220,26,39,.18);animation:ndmBeat 1.6s ease-out infinite}
+  @media (prefers-reduced-motion: reduce){.menu-item[aria-current="page"]::before,.menu-item-m[aria-current="page"]::before{animation:none}}
   /* section tag: brand-mark chip + label in a pill with a fine blue-to-amber edge and a slow light sweep */
   .eyebrow{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;gap:10px;padding:4px 18px 4px 4px;border:1px solid transparent;border-radius:999px;font-size:15px;font-weight:500;line-height:1.2;letter-spacing:-.005em;color:#141414;
     background:linear-gradient(180deg,#fff,#FAF8F7) padding-box,linear-gradient(115deg,rgba(238,58,69,.6),rgba(20,20,20,.10) 42%,rgba(20,20,20,.10) 62%,rgba(220,26,39,.55)) border-box;
@@ -1013,186 +1074,163 @@ function useMedia(q) {
 }
 
 /* ---------------------------------------------------------------- content */
-const PAGE_LINKS = { 'policies-privacy-terms-refunds': 'privacy.html', 'privacy-policy': 'privacy.html', privacy: 'privacy.html', terms: 'terms.html', 'terms-of-service': 'terms.html', refunds: 'refunds.html', 'refund-policy': 'refunds.html', account: 'account.html', 'my-account': 'account.html', 'wrinkles-fine-lines': 'wrinkles-fine-lines.html', 'aptos-thread-lift': 'aptos-thread-lift.html', 'non-surgical-facelift-neck-jawline-eyebrow-nose-lift': 'aptos-thread-lift.html', pricing: 'pricing.html', promotion: 'promotion.html', about: 'about.html', 'about-us': 'about.html', 'our-doctors-team': 'about.html', 'our-clinics': 'about.html', 'doctors-team': 'about.html', 'awards-recognition': 'about.html', 'contact-us': 'about.html', blog: 'blog.html', botox: 'botox.html', 'uptown-clinic': 'about.html', 'downtown-clinic': 'about.html' };
+const PAGE_LINKS = { shop: 'shop.html', 'skincare-shop': 'shop.html', 'policies-privacy-terms-refunds': 'privacy.html', 'privacy-policy': 'privacy.html', privacy: 'privacy.html', terms: 'terms.html', 'terms-of-service': 'terms.html', refunds: 'refunds.html', 'refund-policy': 'refunds.html', account: 'account.html', 'my-account': 'account.html', 'wrinkles-fine-lines': 'wrinkles-fine-lines.html', 'aptos-thread-lift': 'aptos-thread-lift.html', 'non-surgical-facelift-neck-jawline-eyebrow-nose-lift': 'aptos-thread-lift.html', pricing: 'pricing.html', promotion: 'promotion.html', about: 'about.html', 'about-us': 'about.html', 'our-doctors-team': 'about.html', 'our-clinics': 'about.html', 'doctors-team': 'about.html', 'awards-recognition': 'about.html', 'contact-us': 'about.html', blog: 'blog.html', botox: 'botox.html', 'uptown-clinic': 'about.html', 'downtown-clinic': 'about.html' };
 const slug = (s) => { const k = s.toLowerCase().replace(/[®™]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''); return PAGE_LINKS[k] || '#/' + k; };
 /* PRICES:BEGIN (generated by src/sync_prices.py from src/pricing-data.jsx and src/price-lib.jsx, do not edit here) */
 const lhrB = (a, b, c, d) => [['Single session', a, 0], ['Package of 3', b, 0, 'BUY 1 GET 1 FREE'], ['Package of 5', c, 0, 'BUY 1 GET 1 FREE'], ...(d ? [['Package of 8', d, 0, 'BUY 1 GET 1 FREE']] : [])];
 const PRICE_CATS = [
-  { id: 'aptos-thread-method', name: 'Aptos Thread Method', blurb: 'Bioabsorbable PLA/PCL threads that can lift and support facial tissue, placed without surgery.', items: [
-    ['Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)', '', [['Nose lift/correction', 2500, 0], ['Fox eyebrow / eyebrow lift', 2500, 0], ['Mid face', 2500, 0], ['Lower face or submental', 2500, 0], ['Face – Mid & Lower', 2900, 3900, 'Save $1000 Off'], ['Neck', 2900, 3900, 'Save $1000 Off'], ['Face + neck', 5900, 6900, 'Save $1000 Off']]],
+  { id: 'aptos-thread-method', name: 'Aptos Thread Method', blurb: '', extras: [['Aptos Model Call Assessment', 'Our team will email you your appointment date. The fee is fully refunded once you attend your appointment.', 150, 'Model call']], items: [
+    ['Aptos Excellence Visage Method EV PLA/PCL (up to 24 months)', '', [['Nose lift/correction', 2500, 0, ''], ['Fox eyebrow / eyebrow lift', 2500, 0, ''], ['Mid face', 2500, 0, ''], ['Lower face or submental', 2500, 0, ''], ['Face – Mid & Lower', 3400, 4400, 'Save $1000 Off'], ['Neck', 2900, 3900, 'Save $1000 Off'], ['Face + neck', 5900, 6900, 'Save $1000 Off']]],
   ] },
-  { id: 'botox-dysport', name: 'Botox / Dysport', unit: true, blurb: 'Prescription products priced per unit, given only after an in-person medical assessment.', items: [
-    ['Botox Cosmetic', '', [['Regular', 12, 0], ['60 units', 648, 720, '10% OFF'], ['120 units', 1152, 1440, '20% OFF'], ['180 units', 1512, 2160, '30% OFF'], ['220 units', 1848, 2640, '30% OFF']]],
-    ['Dysport', '', [['Regular', 11, 0], ['60 units', 594, 660, '10% OFF'], ['120 units', 1056, 1320, '20% OFF'], ['180 units', 1386, 1980, '30% OFF'], ['220 units', 1694, 2420, '30% OFF']]],
-    ['Hyperhidrosis', '', [['Regular', 9, 0], ['50 units', 450, 0], ['100 units', 900, 0]]],
+  { id: 'botox-dysport', name: 'Botox / Dysport', unit: true, blurb: '', items: [
+    ['Botox Cosmetic', '', [['Regular', 12, 0, ''], ['60 units', 504, 0, '30% OFF'], ['120 units', 1008, 0, '30% OFF'], ['180 units', 1512, 0, '30% OFF'], ['220 units', 1848, 2640, '30% OFF']]],
+    ['Dysport', '', [['Regular', 11, 0, ''], ['60 units', 594, 660, '10% OFF'], ['120 units', 1056, 1320, '20% OFF'], ['180 units', 1386, 1980, '30% OFF'], ['220 units', 1694, 2420, '30% OFF']]],
+    ['Hyperhidrosis', '', [['Regular', 9, 0, ''], ['50 units', 420, 0, ''], ['100 units', 840, 0, '']]],
   ] },
-  { id: 'laser-vein', name: 'Laser Vein', blurb: 'Laser treatment for visible veins, priced by area size.', items: [
-    ['Laser Vein Removal One Small Area', '', [['Single session', 240, 0], ['Package of 3', 576, 720, '20% OFF'], ['Package of 6', 1004, 1440, '30% OFF']]],
-    ['Laser Vein Removal One Large Area', '', [['Single session', 450, 0], ['Package of 3', 1080, 1350, '20% OFF'], ['Package of 6', 1890, 2700, '30% OFF']]],
+  { id: 'laser-vein', name: 'Laser Vein', blurb: '', items: [
+    ['Laser Vein Removal One Small Area', '', [['Single session', 240, 0, ''], ['Package of 3', 576, 720, '20% OFF'], ['Package of 6', 1004, 1440, '30% OFF']]],
+    ['Laser Vein Removal One Large Area', '', [['Single session', 450, 0, ''], ['Package of 3', 1080, 1350, '20% OFF'], ['Package of 6', 1890, 2700, '30% OFF']]],
   ] },
-  { id: 'dermal-fillers', name: 'Dermal Fillers', blurb: 'Hyaluronic acid fillers priced per syringe, with combination packages for common areas.', items: [
-    ['Lip Enhancement', 'definition, volume, hydration', [['1 Syringe', 750, 0], ['2 Syringes', 1125, 1500, 'BUY 1 GET 1 50% OFF']]],
-    ['Standard Contour Areas', 'Cheeks (mid-face / cheek enhancement), Smile Lines (Nasolabial folds), Marionette Lines, Pre-jowl sulcus, Temples', [['1 Syringe', 800, 0], ['2 Syringes', 1125, 1600, 'BUY 1 GET 1 50% OFF'], ['3 Syringes', 1800, 2400, 'BUY 1 GET 1 50% OFF'], ['4 Syringes', 2400, 3200, 'BUY 1 GET 1 50% OFF']]],
-    ['Precision / Advanced Areas', 'Under-Eye Filler (Tear Trough), Chin Enhancement, Jawline Contouring', [['1 Syringe', 850, 0], ['2 Syringes', 1700, 0, 'BUY 1 GET 1 50% OFF'], ['3 Syringes', 2550, 0, 'BUY 1 GET 1 50% OFF'], ['4 Syringes', 3400, 0, 'BUY 1 GET 1 50% OFF']]],
-    ['Profile Balance Package', 'Lip Enhancement + Chin Enhancement', [['2 Syringes', 995, 0]]],
-    ['Refreshed Eye Package', 'Cheeks (mid-face / cheek enhancement) + Under-Eye Filler (Tear Trough)', [['2 Syringes', 995, 0]]],
-    ['Lower Face Contour Package', 'Jawline Contouring + Chin Enhancement', [['2 Syringes', 1100, 0]]],
-    ['Midface Lift Package', 'Cheeks (mid-face / cheek enhancement) + Smile Lines (Nasolabial folds)', [['2 Syringes', 995, 0]]],
-    ['Full Midface Rejuvenation', 'Cheeks (mid-face / cheek enhancement) + Under-Eye Filler (Tear Trough) + Temples', [['3 Syringes', 1658, 0]]],
-    ['Upper Face Support Package', '', [['2 Syringes', 995, 0]]],
+  { id: 'dermal-fillers', name: 'Dermal Fillers', blurb: '', items: [
+    ['Lip Enhancement', 'definition, volume, hydration', [['1 Syringe', 750, 0, ''], ['2 Syringes', 900, 1500, '40% OFF']]],
+    ['Standard Contour Areas', 'Cheeks (mid-face / cheek enhancement), Smile Lines (Nasolabial folds), Marionette Lines, Pre-jowl sulcus, Temples', [['1 Syringe', 800, 0, ''], ['2 Syringes', 960, 1600, '40% OFF'], ['3 Syringes', 1800, 2400, '25% OFF'], ['4 Syringes', 2400, 3200, '25% OFF']]],
   ] },
-  { id: 'skin-booster-and-bio-stimulators', name: 'Skin Booster and Bio-stimulators', blurb: 'Hyaluronic acid skin boosters and collagen bio-stimulators, priced per syringe or vial.', items: [
-    ['Bio-Stimulator – Above the Knee Tightening', '', [['1 Syringe', 599, 0]]],
-    ['Skin Booster – HA (Hyaluronic Acid)', '', [['1 syringe', 399, 0], ['2 syringe', 798, 0, 'BUY 1 GET 1 50% OFF']]],
-    ['Bio-Stimulator – Radiesse', '', [['1 Syringe', 599, 0], ['2 Syringes', 1198, 1700, 'BUY 1 GET 1 50% OFF']]],
-    ['Bio-Stimulator – Sculptra Liquid Facelift', '', [['1 Vial', 699, 0]]],
-    ['Bio-Stimulator – Sculptra', '', [['1 Vial', 699, 0], ['2 Vials', 1398, 0, 'BUY 1 GET 1 50% OFF']]],
-    ['Bio-Stimulator – Crepey Arm Rejuvenation with Radiesse', '', [['Per Syringe', 599, 0]]],
-    ['Bio-Stimulator – Hand Rejuvenation with Radiesse', '', [['1 Syringe', 599, 0]]],
-    ['Bio-Stimulator – Radiesse Collagen Lift', '', [['1 Syringe', 599, 0]]],
-    ['Bio-Stimulator – Radiesse Jawline Lift', '', [['1 Syringe', 599, 0]]],
+  { id: 'skin-booster-and-bio-stimulators', name: 'Skin Booster and Bio-stimulators', blurb: '', items: [
+    ['Skin Booster – HA (Hyaluronic Acid)', '', [['1 syringe', 399, 750, '47% OFF'], ['2 Syringes', 798, 1500, '47% OFF']]],
+    ['Bio-Stimulator – Radiesse', '', [['1 Syringe', 599, 900, '33% OFF'], ['2 Syringes', 1198, 1800, '33% OFF']]],
+    ['Bio-Stimulator – Sculptra', '', [['1 Vial', 599, 900, '33% OFF'], ['2 Vials', 1198, 1800, '33% OFF']]],
+    ['Bio-Stimulator – Hand Rejuvenation with Radiesse', '', [['1 Syringe', 599, 900, '33% OFF'], ['2 Syringes', 1198, 1800, '33% OFF']]],
   ] },
-  { id: 'non-surgical-butt-lift', name: 'Non-Surgical Butt Lift', blurb: 'Non-surgical contouring for the buttocks and hips, planned at your consultation.', items: [
-    ['Non-Surgical Butt Lift', '', [['60 mL', 3999, 0]]],
-    ['Hip Dip Contouring', '', [['Standard', 1999, 0]]],
+  { id: 'non-surgical-butt-lift', name: 'Non-Surgical Butt Lift', blurb: '', items: [
+    ['Non-Surgical Butt Lift', '', [['60 mL', 3999, 0, '']]],
+    ['Hip Dip Contouring', '', [['Standard', 1999, 0, '']]],
   ] },
-  { id: 'microneedling', name: 'Microneedling', blurb: 'Collagen induction for the face and neck, with optional PRP, PDRN or exosomes.', items: [
-    ['Microneedling-Face', '', [['Single session', 245, 490, '50% OFF'], ['Package of 3', 735, 1470, '50% OFF'], ['Package of 6', 1470, 2940, '50% OFF']]],
-    ['Microneedling with PRP - Face', '', [['Single session', 590, 0], ['Package of 3', 1416, 1770, '20% OFF'], ['Package of 6', 2478, 3540, '30% OFF']]],
-    ['Microneedling with PDRN (Salmon DNA) - Face', '', [['Single session', 590, 0], ['Package of 3', 1416, 1770, '20% OFF'], ['Package of 6', 2478, 3540, '30% OFF']]],
-    ['Microneedling with Exosomes - Face', '', [['Single session', 590, 0], ['Package of 3', 1416, 1770, '20% OFF'], ['Package of 6', 2478, 3540, '30% OFF']]],
-    ['Microneedling - Neck', '', [['Single session', 490, 0], ['Package of 3', 1176, 1470, '20% OFF'], ['Package of 6', 2058, 2940, '30% OFF']]],
+  { id: 'microneedling', name: 'Microneedling', blurb: '', items: [
+    ['Microneedling-Face', '', [['Single session', 490, 0, ''], ['Package of 3', 1029, 1470, 'BLACK FRIDAY 30% OFF', 720.3], ['Package of 6', 2058, 2940, 'BLACK FRIDAY 30% OFF', 1440.6]]],
+    ['Microneedling with PRP - Face', '', [['Single session', 1000, 0, ''], ['Package of 3', 2100, 3000, 'BLACK FRIDAY 30% OFF', 1470], ['Package of 6', 1800, 6000, '70% OFF']]],
+    ['Microneedling with PDRN (Salmon DNA) - Face', '', [['Single session', 590, 0, ''], ['Package of 3', 1239, 1770, 'BLACK FRIDAY 30% OFF', 867.3], ['Package of 6', 2478, 3540, 'BLACK FRIDAY 30% OFF', 1734.6]]],
+    ['Microneedling with Exosomes - Face', '', [['Single session', 590, 0, ''], ['Package of 3', 1239, 1770, 'BLACK FRIDAY 30% OFF', 867.3], ['Package of 6', 2478, 3540, 'BLACK FRIDAY 30% OFF', 1734.6]]],
+    ['Microneedling - Neck', '', [['Single session', 490, 0, ''], ['Package of 3', 1029, 1470, 'BLACK FRIDAY 30% OFF', 720.3], ['Package of 6', 2058, 2940, 'BLACK FRIDAY 30% OFF', 1440.6]]],
   ] },
-  { id: 'laser-acne-treatment', name: 'Laser Acne Treatment', blurb: 'Laser sessions for acne on the face or upper back.', items: [
-    ['Laser Acne Full Face', '', [['Single session', 375, 0], ['Package of 3', 895, 1125, '20% OFF'], ['Package of 6', 1575, 2250, '30% OFF']]],
-    ['Laser Acne Upper Back', '', [['Single session', 4500, 0], ['Package of 3', 1800, 2250, '20% OFF'], ['Package of 6', 3150, 4500, '30% OFF']]],
+  { id: 'laser-acne-treatment', name: 'Laser Acne Treatment', blurb: '', items: [
+    ['Laser Acne Full Face', '', [['Single session', 395, 0, ''], ['Package of 3', 787.5, 1125, 'BLACK FRIDAY 30% OFF', 551.25], ['Package of 6', 1575, 2250, 'BLACK FRIDAY 30% OFF', 1102.5]]],
+    ['Laser Acne Upper Back', '', [['Single session', 750, 0, ''], ['Package of 3', 1575, 2250, 'BLACK FRIDAY 30% OFF', 1102.5], ['Package of 6', 3150, 4500, 'BLACK FRIDAY 30% OFF', 2205]]],
   ] },
-  { id: 'laser-skin-resurfacing', name: 'Laser Skin Resurfacing', blurb: 'Ablative, fractional and laser peel options, priced by treatment area.', items: [
-    ['Laser Skin Resurfacing Face', '', [['Single session', 990, 0], ['Package of 3', 2376, 2970, '20% OFF'], ['Package of 6', 4158, 5940, '30% OFF']]],
-    ['Laser Skin Resurfacing Face & Neck', '', [['Single session', 1800, 0], ['Package of 3', 4320, 5400, '20% OFF'], ['Package of 6', 7560, 10800, '30% OFF']]],
-    ['Laser Skin Resurfacing Extra Small Area', '', [['Single session', 200, 0], ['Package of 3', 480, 600, '20% OFF'], ['Package of 6', 840, 1200, '30% OFF']]],
-    ['Laser Skin Resurfacing Small Area', '', [['Single session', 300, 0], ['Package of 3', 720, 900, '20% OFF'], ['Package of 6', 1260, 1800, '30% OFF']]],
-    ['Laser Skin Resurfacing Medium Area', '', [['Single session', 600, 0], ['Package of 3', 1440, 1800, '20% OFF'], ['Package of 6', 2520, 3600, '30% OFF']]],
-    ['Laser Skin Resurfacing Large Area', '', [['Single session', 990, 0], ['Package of 3', 2376, 2970, '20% OFF'], ['Package of 6', 4158, 5940, '30% OFF']]],
-    ['Fractional Laser Skin Resurfacing Face', '', [['Single session', 1270, 0], ['Package of 3', 3048, 3810, '20% OFF'], ['Package of 6', 5334, 7620, '30% OFF']]],
-    ['Fractional Laser Skin Resurfacing Face & Neck', '', [['Single session', 2080, 0], ['Package of 3', 4992, 6240, '20% OFF'], ['Package of 6', 8736, 12480, '30% OFF']]],
-    ['Fractional Laser Skin Resurfacing Extra Small Area', '', [['Single session', 300, 0], ['Package of 3', 720, 900, '20% OFF'], ['Package of 6', 1260, 1800, '30% OFF']]],
-    ['Fractional Laser Skin Resurfacing Small Area', '', [['Single session', 650, 0], ['Package of 3', 1560, 1950, '20% OFF'], ['Package of 6', 2730, 3900, '30% OFF']]],
-    ['Fractional Laser Skin Resurfacing Medium Area', '', [['Single session', 850, 0], ['Package of 3', 2040, 2550, '20% OFF'], ['Package of 6', 3570, 5100, '30% OFF']]],
-    ['Fractional Laser Skin Resurfacing Large Area', '', [['Single session', 1270, 0], ['Package of 3', 3048, 3810, '20% OFF'], ['Package of 6', 5334, 7620, '30% OFF']]],
-    ['Micro Laser Peel Face', '', [['Single session', 679, 0], ['Package of 3', 1629.6, 2037, '20% OFF'], ['Package of 6', 2851.8, 4074, '30% OFF']]],
-    ['Micro Laser Peel Face + Neck', '', [['Single session', 1178, 0], ['Package of 3', 2827, 3534, '20% OFF'], ['Package of 6', 4947, 7068, '30% OFF']]],
-    ['Micro Laser Peel Extra Small', '', [['Single session', 300, 0], ['Package of 3', 720, 900, '20% OFF'], ['Package of 6', 1260, 1800, '30% OFF']]],
-    ['Micro Laser Peel Small', '', [['Single session', 589, 0], ['Package of 3', 1413.6, 1767, '20% OFF'], ['Package of 6', 2473.8, 3534, '30% OFF']]],
-    ['Micro Laser Peel Medium', '', [['Single session', 900, 0], ['Package of 3', 2160, 2700, '20% OFF'], ['Package of 6', 3780, 5400, '30% OFF']]],
-    ['Micro Laser Peel Large', '', [['Single session', 1180, 0], ['Package of 3', 2832, 3540, '20% OFF'], ['Package of 6', 4956, 7080, '30% OFF']]],
-    ['Ultra Laser Peel Face', '', [['Single session', 489, 0], ['Package of 3', 1173.6, 1467, '20% OFF'], ['Package of 6', 2053.8, 2934, '30% OFF']]],
+  { id: 'laser-skin-resurfacing', name: 'Laser Skin Resurfacing', blurb: '', items: [
+    ['Laser Skin Resurfacing Face', '', [['Single session', 990, 0, ''], ['Package of 3', 2079, 2970, 'BLACK FRIDAY 30% OFF', 1455.3], ['Package of 6', 4158, 5940, 'BLACK FRIDAY 30% OFF', 2910.6]]],
+    ['Laser Skin Resurfacing Face & Neck', '', [['Single session', 1800, 0, ''], ['Package of 3', 3780, 5400, 'BLACK FRIDAY 30% OFF', 2646], ['Package of 6', 7560, 10800, 'BLACK FRIDAY 30% OFF', 5292]]],
+    ['Fractional Laser Skin Resurfacing Face', '', [['Single session', 1270, 0, ''], ['Package of 3', 2667, 3810, 'BLACK FRIDAY 30% OFF', 1866.9], ['Package of 6', 5334, 7620, 'BLACK FRIDAY 30% OFF', 3733.8]]],
+    ['Fractional Laser Skin Resurfacing Face & Neck', '', [['Single session', 2080, 0, ''], ['Package of 3', 4368, 6240, 'BLACK FRIDAY 30% OFF', 3057.6], ['Package of 6', 8736, 12480, 'BLACK FRIDAY 30% OFF', 6115.2]]],
+    ['Micro Laser Peel Face', '', [['Single session', 679, 0, ''], ['Package of 3', 1425.9, 2037, 'BLACK FRIDAY 30% OFF', 998.13], ['Package of 6', 2851.8, 4074, 'BLACK FRIDAY 30% OFF', 1996.26]]],
+    ['Micro Laser Peel Face + Neck', '', [['Single session', 1178, 0, ''], ['Package of 3', 2473.8, 3534, 'BLACK FRIDAY 30% OFF', 1731.66], ['Package of 6', 4947.6, 7068, 'BLACK FRIDAY 30% OFF', 3463.32]]],
+    ['Micro Laser Peel Extra Small', '', [['Single session', 300, 0, ''], ['Package of 3', 630, 900, 'BLACK FRIDAY 30% OFF', 441], ['Package of 6', 1260, 1800, 'BLACK FRIDAY 30% OFF', 882]]],
+    ['Micro Laser Peel Small', '', [['Single session', 589, 0, ''], ['Package of 3', 1236.9, 1767, 'BLACK FRIDAY 30% OFF', 865.83], ['Package of 6', 2473.8, 3534, 'BLACK FRIDAY 30% OFF', 1731.66]]],
+    ['Micro Laser Peel Medium', '', [['Single session', 900, 0, ''], ['Package of 3', 1890, 2700, 'BLACK FRIDAY 30% OFF', 1323], ['Package of 6', 3780, 5400, 'BLACK FRIDAY 30% OFF', 2646]]],
+    ['Micro Laser Peel Large', '', [['Single session', 1180, 0, ''], ['Package of 3', 2478, 3540, 'BLACK FRIDAY 30% OFF', 1734.6], ['Package of 6', 4956, 7080, 'BLACK FRIDAY 30% OFF', 3469.2]]],
+    ['Ultra Laser Peel Face', '', [['Single session', 489, 0, ''], ['Package of 3', 1026.9, 1467, 'BLACK FRIDAY 30% OFF', 718.83], ['Package of 6', 2053.8, 2934, 'BLACK FRIDAY 30% OFF', 1437.66]]],
   ] },
-  { id: 'photo-rejuvenation', name: 'Photo-Rejuvenation', blurb: 'IPL light therapy that can reduce the look of redness and sun spots.', items: [
-    ['Photo-Rejuvenation Face', '', [['Single session', 395, 0], ['Package of 3', 948, 1185, '20% OFF'], ['Package of 6', 1659, 2370, '30% OFF']]],
-    ['Photo-Rejuvenation Extra Small', '', [['Single session', 275, 0], ['Package of 3', 660, 825, '20% OFF'], ['Package of 6', 1155, 1650, '30% OFF']]],
-    ['Photo-Rejuvenation Small', '', [['Single session', 390, 0], ['Package of 3', 936, 1170, '20% OFF'], ['Package of 6', 1638, 2340, '30% OFF']]],
-    ['Photo-Rejuvenation Medium', '', [['Single session', 790, 0], ['Package of 3', 1896, 2370, '20% OFF'], ['Package of 6', 3318, 4740, '30% OFF']]],
-    ['Photo-Rejuvenation Large', '', [['Single session', 1185, 0], ['Package of 3', 2844, 3555, '20% OFF'], ['Package of 6', 2844, 7110, '60% OFF']]],
+  { id: 'photo-rejuvenation', name: 'Photo-Rejuvenation', blurb: '', items: [
+    ['Photo-Rejuvenation Face', '', [['Single session', 395, 0, ''], ['Package of 3', 829.5, 1185, 'BLACK FRIDAY 30% OFF', 580.65], ['Package of 6', 1659, 2370, 'BLACK FRIDAY 30% OFF', 1161.3]]],
+    ['Photo-Rejuvenation Small', '', [['Single session', 390, 0, '']]],
   ] },
-  { id: '4d-rejuvalift', name: '4D Rejuvalift', blurb: 'A multi-step laser protocol for the face and larger areas.', items: [
-    ['4D Rejuvalift Face', '', [['Single session', 1200, 0], ['Package of 3', 2880, 3600, '20% OFF'], ['Package of 6', 5040, 7200, '30% OFF']]],
-    ['4D Rejuvalift Large', '', [['Single session', 1200, 0], ['Package of 3', 2880, 3600, '20% OFF'], ['Package of 6', 5040, 7200, '30% OFF']]],
+  { id: '4d-rejuvalift', name: '4D Rejuvalift', blurb: '', items: [
+    ['4D Rejuvalift Face', '', [['Single session', 1200, 0, ''], ['Package of 3', 2520, 3600, 'BLACK FRIDAY 30% OFF', 1764], ['Package of 6', 5040, 7200, 'BLACK FRIDAY 30% OFF', 3528]]],
+    ['4D Rejuvalift Large', '', [['Single session', 1200, 0, ''], ['Package of 3', 2520, 3600, 'BLACK FRIDAY 30% OFF', 1764], ['Package of 6', 5040, 7200, 'BLACK FRIDAY 30% OFF', 3528]]],
   ] },
-  { id: '2d-3d-laser-skin-tightening', name: '2D & 3D Laser Skin Tightening', blurb: 'Laser protocols that can improve the look of skin laxity.', items: [
-    ['2D Skin Tightening Face', '', [['Single session', 480, 0], ['Package of 3', 1440, 0], ['Package of 6', 2880, 0]]],
-    ['2D Skin Tightening Large Area', '', [['Single session', 960, 0], ['Package of 3', 2880, 0], ['Package of 6', 5760, 0]]],
-    ['Smooth Eye Tightening', '', [['Single session', 600, 0], ['Package of 3', 1440, 1800, '20% OFF'], ['Package of 6', 2520, 3600, '30% OFF']]],
-    ['3D Skin Tightening Face', '', [['Single session', 810, 0], ['Package of 3', 2160, 2700, '20% OFF'], ['Package of 6', 3780, 5400, '30% OFF']]],
-    ['3D Skin Tightening Large Area', '', [['Single session', 810, 0], ['Package of 3', 2160, 2700, '20% OFF'], ['Package of 6', 3780, 5400, '30% OFF']]],
+  { id: '2d-3d-laser-skin-tightening', name: '2D & 3D Laser Skin Tightening', blurb: '', items: [
+    ['2D Skin Tightening Face', '', [['Single session', 480, 0, ''], ['Package of 3', 1008, 1440, 'BLACK FRIDAY 30% OFF', 705.6], ['Package of 6', 2016, 2880, 'BLACK FRIDAY 30% OFF', 1411.2]]],
+    ['2D Skin Tightening Large Area', '', [['Single session', 960, 0, ''], ['Package of 3', 2016, 2880, 'BLACK FRIDAY 30% OFF', 1411.2], ['Package of 6', 4032, 5760, 'BLACK FRIDAY 30% OFF', 2822.4]]],
+    ['Smooth Eye Tightening', '', [['Single session', 600, 0, ''], ['Package of 3', 1260, 1800, 'BLACK FRIDAY 30% OFF', 882], ['Package of 6', 2520, 3600, 'BLACK FRIDAY 30% OFF', 1764]]],
+    ['3D Skin Tightening Face', '', [['Single session', 810, 0, ''], ['Package of 3', 1890, 2700, 'BLACK FRIDAY 30% OFF', 1323], ['Package of 6', 3780, 5400, 'BLACK FRIDAY 30% OFF', 2646]]],
+    ['3D Skin Tightening Large Area', '', [['Single session', 810, 0, ''], ['Package of 3', 1890, 2700, 'BLACK FRIDAY 30% OFF', 1323], ['Package of 6', 3780, 5400, 'BLACK FRIDAY 30% OFF', 2646]]],
   ] },
-  { id: '2d-3d-laser-rejuvenation', name: '2D & 3D Laser Rejuvenation', blurb: 'Laser protocols for skin tone and texture.', items: [
-    ['2D Skin Rejuvenation Face', '', [['Single session', 600, 0], ['Package of 3', 1440, 1800, '20% OFF'], ['Package of 6', 2520, 3600, '30% OFF']]],
-    ['2D Skin Rejuvenation Large Area', '', [['Single session', 960, 0], ['Package of 3', 2880, 0], ['Package of 6', 5760, 0]]],
-    ['3D Skin Rejuvenation Face', '', [['Single session', 900, 0], ['Package of 3', 2700, 0], ['Package of 6', 5400, 0]]],
-    ['3D Skin Rejuvenation Large Area', '', [['Single session', 1200, 0], ['Package of 3', 3600, 0], ['Package of 6', 7200, 0]]],
+  { id: '2d-3d-laser-rejuvenation', name: '2D & 3D Laser Rejuvenation', blurb: '', items: [
+    ['2D Skin Rejuvenation Face', '', [['Single session', 600, 0, ''], ['Package of 3', 1260, 1800, 'BLACK FRIDAY 30% OFF', 882], ['Package of 6', 2520, 3600, 'BLACK FRIDAY 30% OFF', 1764]]],
+    ['2D Skin Rejuvenation Large Area', '', [['Single session', 960, 0, ''], ['Package of 3', 2016, 2880, 'BLACK FRIDAY 30% OFF', 1411.2], ['Package of 6', 4032, 5760, 'BLACK FRIDAY 30% OFF', 2822.4]]],
+    ['3D Skin Rejuvenation Face', '', [['Single session', 900, 0, ''], ['Package of 3', 1890, 2700, 'BLACK FRIDAY 30% OFF', 1323], ['Package of 6', 3780, 5400, 'BLACK FRIDAY 30% OFF', 2646]]],
+    ['3D Skin Rejuvenation Large Area', '', [['Single session', 1200, 0, ''], ['Package of 3', 2520, 3600, 'BLACK FRIDAY 30% OFF', 1764], ['Package of 6', 5040, 7200, 'BLACK FRIDAY 30% OFF', 3528]]],
   ] },
-  { id: 'facial', name: 'Facial', blurb: 'Medical-grade facials tailored to your skin at each visit.', items: [
-    ['Age Element Facial', '', [['Single session', 249, 0], ['Package of 3', 597.6, 747, '20% OFF'], ['Package of 6', 1045.8, 1494, '30% OFF']]],
-    ['Purifying Acne Relief Facial', '', [['Single session', 249, 0], ['Package of 3', 597.6, 747, '20% OFF'], ['Package of 6', 1045.8, 1494, '30% OFF']]],
-    ['Glass Glow Facial', '', [['Single session', 249, 0], ['Package of 3', 597.6, 747, '20% OFF'], ['Package of 6', 1045.8, 1494, '30% OFF']]],
+  { id: 'facial', name: 'Facial', blurb: '', items: [
+    ['Age Element Facial', '', [['Single session', 249, 0, ''], ['Package of 3', 597.6, 747, '20% OFF'], ['Package of 6', 1045.8, 1494, '30% OFF']]],
+    ['Purifying Acne Relief Facial', '', [['Single session', 249, 0, ''], ['Package of 3', 597.6, 747, '20% OFF'], ['Package of 6', 1045.8, 1494, '30% OFF']]],
+    ['Glass Glow Facial', '', [['Single session', 249, 0, ''], ['Package of 3', 597.6, 747, '20% OFF'], ['Package of 6', 1045.8, 1494, '30% OFF']]],
   ] },
-  { id: 'chemical-peel', name: 'Chemical Peel', blurb: 'Light, medium and deep peels, chosen for your skin type and goals.', items: [
-    ['Purifying Light Peel', '', [['Single session', 149, 0], ['Package of 3', 355.6, 447, '20% OFF'], ['Package of 6', 625.8, 894, '30% OFF']]],
-    ['Brightening Medium Peel', '', [['Single session', 299, 0], ['Package of 3', 717.6, 897, '20% OFF'], ['Package of 6', 1255.8, 1794, '30% OFF']]],
-    ['PRO Deep Peel', '', [['Single session', 399, 0], ['Package of 3', 957, 1197, '20% OFF'], ['Package of 6', 1675.8, 2394, '30% OFF']]],
-    ['Acnelan', '', [['Single session', 249, 0], ['Package of 3', 597.6, 747, '20% OFF'], ['Package of 6', 1045.8, 1494, '30% OFF']]],
+  { id: 'chemical-peel', name: 'Chemical Peel', blurb: '', items: [
+    ['PURIFYING Light Peel', '', [['Single session', 149, 0, ''], ['Package of 3', 312.9, 447, 'BLACK FRIDAY 30% OFF', 219.03], ['Package of 6', 625.8, 894, 'BLACK FRIDAY 30% OFF', 438.06]]],
+    ['BRIGHTENING Medium Peel', '', [['Single session', 299, 0, ''], ['Package of 3', 627.9, 897, 'BLACK FRIDAY 30% OFF', 439.53], ['Package of 6', 1255.8, 1794, 'BLACK FRIDAY 30% OFF', 879.06]]],
+    ['PRO Deep Peel', '', [['Single session', 399, 0, ''], ['Package of 3', 837.9, 1197, 'BLACK FRIDAY 30% OFF', 586.53], ['Package of 6', 1675.8, 2394, 'BLACK FRIDAY 30% OFF', 1173.06]]],
+    ['Acnelan', '', [['Single session', 249, 0, ''], ['Package of 3', 522.9, 747, 'BLACK FRIDAY 30% OFF', 366.03], ['Package of 6', 1045.8, 1494, 'BLACK FRIDAY 30% OFF', 732.06]]],
   ] },
-  { id: 'depigmenting-treatment', name: 'Depigmenting Treatment', blurb: 'Professional depigmentation protocols for the look of dark spots and uneven tone.', items: [
+  { id: 'depigmenting-treatment', name: 'Depigmenting Treatment', blurb: '', items: [
     ['Cosmelan', '', [['Single session', 799.2, 999, '20% OFF']]],
     ['Dermamelan', '', [['Single session', 1119.2, 1399, '20% OFF']]],
   ] },
-  { id: 'hair-loss', name: 'Hair Loss', blurb: 'PRP scalp treatments and laser hair rejuvenation, priced by area.', items: [
-    ['PRP Scalp - Small', '', [['Single session', 399, 1000, '60% OFF'], ['Package of 3', 1197, 0], ['Package of 6', 2394, 0]]],
-    ['PRP Scalp - Medium', '', [['Single session', 1500, 0], ['Package of 3', 3600, 4500, '20% OFF'], ['Package of 6', 6300, 9000, '30% OFF']]],
-    ['PRP Scalp - Full', '', [['Single session', 2100, 0], ['Package of 3', 5040, 6300, '20% OFF'], ['Package of 6', 8820, 12600, '30% OFF']]],
-    ['Laser Hair Rejuvenation', '', [['Single session', 350, 0], ['Package of 3', 1050, 0], ['Package of 6', 2100, 0]]],
+  { id: 'hair-loss', name: 'Hair Loss', blurb: '', items: [
+    ['PRP Scalp', '', [['Single session', 1000, 0, ''], ['Package of 3', 1500, 3000, '50% OFF'], ['Package of 6', 1800, 6000, '70% OFF']]],
+    ['Laser Hair Rejuvenation', '', [['Single session', 350, 0, ''], ['Package of 3', 1050, 0, ''], ['Package of 6', 2100, 0, '']]],
   ] },
-  { id: 'laser-hair-removal', name: 'Laser Hair Removal', blurb: 'Medical-grade laser hair reduction, priced per area and session.', items: [
-    ['LHR - Abdomen', '', lhrB(190, 570, 950, 1520)],
-    ['LHR - Arms (Full)', '', lhrB(290, 870, 1450, 2320)],
-    ['LHR - Arms (Lower)', '', lhrB(190, 570, 950, 1520)],
-    ['LHR - Arms (Upper)', '', lhrB(219, 657, 1095, 1752)],
-    ['Hands & Fingers', '', lhrB(150, 450, 750, 1200)],
-    ['LHR - Back (Full)', '', lhrB(390, 1170, 1950, 3120)],
-    ['LHR - Back (Lower)', '', lhrB(250, 750, 1250, 2000)],
-    ['LHR - Back (Upper)', '', lhrB(250, 750, 1250, 2000)],
-    ['Full Back & Shoulders', '', lhrB(520, 1560, 2600, 4160)],
-    ['Upper Back & Shoulders', '', lhrB(450, 1350, 2250, 3600)],
-    ['LHR - Chest', '', lhrB(290, 870, 1450, 2320)],
-    ['Chest & Abdomen', '', lhrB(450, 1350, 2250, 3600)],
-    ['Chest, Abdomen & Shoulders', '', lhrB(550, 1650, 2750, 4400)],
-    ['LHR - Legs (Full)', '', lhrB(490, 1470, 2450, 3920)],
-    ['LHR - Legs (Upper)', '', lhrB(290, 870, 1450, 2320)],
-    ['LHR - Legs (Lower)', '', lhrB(290, 870, 1450, 2320)],
-    ['Full Legs & Brazilian', '', lhrB(650, 1950, 3250, 5200)],
-    ['Full Legs & Bikini', '', lhrB(620, 1860, 3100, 4960)],
-    ['LHR - Brazilian', '', lhrB(190, 570, 950, 1520)],
-    ['Bikini', '', lhrB(150, 450, 750, 1200)],
-    ['LHR - Buttocks', '', lhrB(350, 1050, 1750, 2800)],
-    ['Linea Alba', '', lhrB(120, 360, 600, 960)],
-    ['Full face', '', lhrB(290, 870, 1450, 2320)],
-    ['Half Face', '', lhrB(190, 570, 950, 1520)],
-    ['Chin', '', lhrB(120, 360, 600, 960)],
-    ['LHR - Chin & Anterior Neck', '', lhrB(190, 570, 950, 1520)],
-    ['LHR - Lip (Upper & Lower)', '', lhrB(120, 360, 600, 960)],
-    ['LHR - Lip (Upper)', '', lhrB(90, 270, 450, 720)],
-    ['LHR - Sideburns', '', lhrB(120, 360, 600, 960)],
-    ['Eyebrows', '', lhrB(120, 360, 600)],
-    ['Entire Neck', '', lhrB(250, 750, 1250, 2000)],
-    ['LHR - Neck (Front)', '', lhrB(150, 450, 750, 1200)],
-    ['LHR - Neck (Back)', '', lhrB(150, 450, 750, 1200)],
-    ['Areola', '', lhrB(120, 360, 600, 960)],
-    ['LHR - Feet & Toes', '', lhrB(150, 450, 750, 1200)],
-    ['LHR - Shoulders', '', lhrB(190, 570, 950, 1520)],
-    ['LHR - Underarms', '', lhrB(150, 450, 750, 1200)],
+  { id: 'laser-hair-removal', name: 'Laser Hair Removal', blurb: '', items: [
+    ['LHR - Abdomen', '', [['Single session', 190, 0, ''], ['Package of 3', 399, 570, 'BLACK FRIDAY 30% OFF', 279.3], ['Package of 5', 665, 950, 'BLACK FRIDAY 30% OFF', 465.5], ['Package of 8', 1064, 1520, 'BLACK FRIDAY 30% OFF', 744.8]]],
+    ['LHR - Arms (Full)', '', [['Single session', 290, 0, ''], ['Package of 3', 609, 870, 'BLACK FRIDAY 30% OFF', 426.3], ['Package of 5', 1015, 1450, 'BLACK FRIDAY 30% OFF', 710.5], ['Package of 8', 1624, 2320, 'BLACK FRIDAY 30% OFF', 1136.8]]],
+    ['LHR - Arms (Lower)', '', [['Single session', 190, 0, ''], ['Package of 3', 399, 570, 'BLACK FRIDAY 30% OFF', 279.3], ['Package of 5', 665, 950, 'BLACK FRIDAY 30% OFF', 465.5], ['Package of 8', 1064, 1520, 'BLACK FRIDAY 30% OFF', 744.8]]],
+    ['LHR - Arms (Upper)', '', [['Single session', 219, 0, ''], ['Package of 3', 459.9, 657, 'BLACK FRIDAY 30% OFF', 321.93], ['Package of 5', 766.5, 1095, 'BLACK FRIDAY 30% OFF', 536.55], ['Package of 8', 1226.4, 1752, 'BLACK FRIDAY 30% OFF', 858.48]]],
+    ['Hands & Fingers', '', [['Single session', 150, 0, ''], ['Package of 3', 315, 450, 'BLACK FRIDAY 30% OFF', 220.5], ['Package of 5', 525, 750, 'BLACK FRIDAY 30% OFF', 367.5], ['Package of 8', 840, 1200, 'BLACK FRIDAY 30% OFF', 588]]],
+    ['LHR - Back (Full)', '', [['Single session', 390, 0, ''], ['Package of 3', 819, 1170, 'BLACK FRIDAY 30% OFF', 573.3], ['Package of 5', 1365, 1950, 'BLACK FRIDAY 30% OFF', 955.5], ['Package of 8', 2184, 3120, 'BLACK FRIDAY 30% OFF', 1528.8]]],
+    ['LHR - Back (Lower)', '', [['Single session', 250, 0, ''], ['Package of 3', 525, 750, 'BLACK FRIDAY 30% OFF', 367.5], ['Package of 5', 875, 1250, 'BLACK FRIDAY 30% OFF', 612.5], ['Package of 8', 1400, 2000, 'BLACK FRIDAY 30% OFF', 980]]],
+    ['LHR - Back (Upper)', '', [['Single session', 250, 0, ''], ['Package of 3', 525, 750, 'BLACK FRIDAY 30% OFF', 367.5], ['Package of 5', 875, 1250, 'BLACK FRIDAY 30% OFF', 612.5], ['Package of 8', 1400, 2000, 'BLACK FRIDAY 30% OFF', 980]]],
+    ['Full Back & Shoulders', '', [['Single session', 520, 0, ''], ['Package of 3', 1092, 1560, 'BLACK FRIDAY 30% OFF', 764.4], ['Package of 5', 1820, 2600, 'BLACK FRIDAY 30% OFF', 1274], ['Package of 8', 2912, 4160, 'BLACK FRIDAY 30% OFF', 2038.4]]],
+    ['Upper Back & Shoulders', '', [['Single session', 450, 0, ''], ['Package of 3', 945, 1350, 'BLACK FRIDAY 30% OFF', 661.5], ['Package of 5', 1575, 2250, 'BLACK FRIDAY 30% OFF', 1102.5], ['Package of 8', 2520, 3600, 'BLACK FRIDAY 30% OFF', 1764]]],
+    ['LHR - Chest', '', [['Single session', 290, 0, ''], ['Package of 3', 609, 870, 'BLACK FRIDAY 30% OFF', 426.3], ['Package of 5', 1015, 1450, 'BLACK FRIDAY 30% OFF', 710.5], ['Package of 8', 1624, 2320, 'BLACK FRIDAY 30% OFF', 1136.8]]],
+    ['Chest & Abdomen', '', [['Single session', 450, 0, ''], ['Package of 3', 945, 1350, 'BLACK FRIDAY 30% OFF', 661.5], ['Package of 5', 1575, 2250, 'BLACK FRIDAY 30% OFF', 1102.5], ['Package of 8', 2520, 3600, 'BLACK FRIDAY 30% OFF', 1764]]],
+    ['Chest, Abdomen & Shoulders', '', [['Single session', 550, 0, ''], ['Package of 3', 1155, 1650, 'BLACK FRIDAY 30% OFF', 808.5], ['Package of 5', 1925, 2750, 'BLACK FRIDAY 30% OFF', 1347.5], ['Package of 8', 3080, 4400, 'BLACK FRIDAY 30% OFF', 2156]]],
+    ['LHR - Legs (Full)', '', [['Single session', 490, 0, ''], ['Package of 3', 1029, 1470, 'BLACK FRIDAY 30% OFF', 720.3], ['Package of 5', 1715, 2450, 'BLACK FRIDAY 30% OFF', 1200.5], ['Package of 8', 2744, 3920, 'BLACK FRIDAY 30% OFF', 1920.8]]],
+    ['LHR - Legs (Upper)', '', [['Single session', 290, 0, ''], ['Package of 3', 609, 870, 'BLACK FRIDAY 30% OFF', 426.3], ['Package of 5', 1015, 1450, 'BLACK FRIDAY 30% OFF', 710.5], ['Package of 8', 1624, 2320, 'BLACK FRIDAY 30% OFF', 1136.8]]],
+    ['LHR - Legs (Lower)', '', [['Single session', 290, 0, ''], ['Package of 3', 609, 870, 'BLACK FRIDAY 30% OFF', 426.3], ['Package of 5', 1015, 1450, 'BLACK FRIDAY 30% OFF', 710.5], ['Package of 8', 1624, 2320, 'BLACK FRIDAY 30% OFF', 1136.8]]],
+    ['Full Legs & Brazilian', '', [['Single session', 650, 0, ''], ['Package of 3', 1365, 1950, 'BLACK FRIDAY 30% OFF', 955.5], ['Package of 5', 2275, 3250, 'BLACK FRIDAY 30% OFF', 1592.5], ['Package of 8', 3640, 5200, 'BLACK FRIDAY 30% OFF', 2548]]],
+    ['Full Legs & Bikini', '', [['Single session', 620, 0, ''], ['Package of 3', 1302, 1860, 'BLACK FRIDAY 30% OFF', 911.4], ['Package of 5', 2170, 3100, 'BLACK FRIDAY 30% OFF', 1519], ['Package of 8', 3472, 4960, 'BLACK FRIDAY 30% OFF', 2430.4]]],
+    ['LHR - Brazilian', '', [['Single session', 190, 0, ''], ['Package of 3', 399, 570, 'BLACK FRIDAY 30% OFF', 279.3], ['Package of 5', 665, 950, 'BLACK FRIDAY 30% OFF', 465.5], ['Package of 8', 1064, 1520, 'BLACK FRIDAY 30% OFF', 744.8]]],
+    ['Bikini', '', [['Single session', 150, 0, ''], ['Package of 3', 315, 450, 'BLACK FRIDAY 30% OFF', 220.5], ['Package of 5', 525, 750, 'BLACK FRIDAY 30% OFF', 367.5], ['Package of 8', 840, 1200, 'BLACK FRIDAY 30% OFF', 588]]],
+    ['LHR - Buttocks', '', [['Single session', 350, 0, ''], ['Package of 3', 735, 1050, 'BLACK FRIDAY 30% OFF', 514.5], ['Package of 5', 1225, 1750, 'BLACK FRIDAY 30% OFF', 857.5], ['Package of 8', 1960, 2800, 'BLACK FRIDAY 30% OFF', 1372]]],
+    ['Linea Alba', '', [['Single session', 120, 0, ''], ['Package of 3', 252, 360, 'BLACK FRIDAY 30% OFF', 176.4], ['Package of 5', 420, 600, 'BLACK FRIDAY 30% OFF', 294], ['Package of 8', 672, 960, 'BLACK FRIDAY 30% OFF', 470.4]]],
+    ['Full face', '', [['Single Session', 290, 0, ''], ['Package of 3', 609, 870, 'BLACK FRIDAY 30% OFF', 426.3], ['Package of 5', 1015, 1450, 'BLACK FRIDAY 30% OFF', 710.5], ['Package of 8', 1624, 2320, 'BLACK FRIDAY 30% OFF', 1136.8]]],
+    ['Half Face', '', [['Single session', 190, 0, ''], ['Package of 3', 399, 570, 'BLACK FRIDAY 30% OFF', 279.3], ['Package of 5', 665, 950, 'BLACK FRIDAY 30% OFF', 465.5], ['Package of 8', 1064, 1520, 'BLACK FRIDAY 30% OFF', 744.8]]],
+    ['Chin', '', [['Single session', 120, 0, ''], ['Package of 3', 252, 360, 'BLACK FRIDAY 30% OFF', 176.4], ['Package of 5', 420, 600, 'BLACK FRIDAY 30% OFF', 294], ['Package of 8', 672, 960, 'BLACK FRIDAY 30% OFF', 470.4]]],
+    ['LHR - Chin & Anterior Neck', '', [['Single session', 190, 0, ''], ['Package of 3', 399, 570, 'BLACK FRIDAY 30% OFF', 279.3], ['Package of 5', 665, 950, 'BLACK FRIDAY 30% OFF', 465.5], ['Package of 8', 1064, 1520, 'BLACK FRIDAY 30% OFF', 744.8]]],
+    ['LHR - Lip (Upper & Lower)', '', [['Single session', 120, 0, ''], ['Package of 3', 252, 360, 'BLACK FRIDAY 30% OFF', 176.4], ['Package of 5', 420, 600, 'BLACK FRIDAY 30% OFF', 294], ['Package of 8', 672, 960, 'BLACK FRIDAY 30% OFF', 470.4]]],
+    ['LHR - Lip (Upper)', '', [['Single session', 90, 0, ''], ['Package of 3', 189, 270, 'BLACK FRIDAY 30% OFF', 132.3], ['Package of 5', 315, 450, 'BLACK FRIDAY 30% OFF', 220.5], ['Package of 8', 504, 720, 'BLACK FRIDAY 30% OFF', 352.8]]],
+    ['LHR - Sideburns', '', [['Single session', 120, 0, ''], ['Package of 3', 252, 360, 'BLACK FRIDAY 30% OFF', 176.4], ['Package of 5', 420, 600, 'BLACK FRIDAY 30% OFF', 294], ['Package of 8', 672, 960, 'BLACK FRIDAY 30% OFF', 470.4]]],
+    ['Eyebrows', '', [['Single session', 120, 0, ''], ['Package of 3', 252, 360, 'BLACK FRIDAY 30% OFF', 176.4], ['Package of 5', 420, 600, 'BLACK FRIDAY 30% OFF', 294]]],
+    ['Entire Neck', '', [['Single session', 250, 0, ''], ['Package of 3', 525, 750, 'BLACK FRIDAY 30% OFF', 367.5], ['Package of 5', 875, 1250, 'BLACK FRIDAY 30% OFF', 612.5], ['Package of 8', 1400, 2000, 'BLACK FRIDAY 30% OFF', 980]]],
+    ['LHR - Neck (Front)', '', [['Single session', 150, 0, ''], ['Package of 3', 315, 450, 'BLACK FRIDAY 30% OFF', 220.5], ['Package of 5', 525, 750, 'BLACK FRIDAY 30% OFF', 367.5], ['Package of 8', 840, 1200, 'BLACK FRIDAY 30% OFF', 588]]],
+    ['LHR - Neck (Back)', '', [['Single session', 150, 0, ''], ['Package of 3', 315, 450, 'BLACK FRIDAY 30% OFF', 220.5], ['Package of 5', 525, 750, 'BLACK FRIDAY 30% OFF', 367.5], ['Package of 8', 840, 1200, 'BLACK FRIDAY 30% OFF', 588]]],
+    ['Areola', '', [['Single session', 120, 0, ''], ['Package of 3', 252, 360, 'BLACK FRIDAY 30% OFF', 176.4], ['Package of 5', 420, 600, 'BLACK FRIDAY 30% OFF', 294], ['Package of 8', 672, 960, 'BLACK FRIDAY 30% OFF', 470.4]]],
+    ['LHR - Feet & Toes', '', [['Single session', 150, 0, ''], ['Package of 3', 315, 450, 'BLACK FRIDAY 30% OFF', 220.5], ['Package of 5', 525, 750, 'BLACK FRIDAY 30% OFF', 367.5], ['Package of 8', 840, 1200, 'BLACK FRIDAY 30% OFF', 588]]],
+    ['LHR - Shoulders', '', [['Single session', 190, 0, ''], ['Package of 3', 399, 570, 'BLACK FRIDAY 30% OFF', 279.3], ['Package of 5', 665, 950, 'BLACK FRIDAY 30% OFF', 465.5], ['Package of 8', 1064, 1520, 'BLACK FRIDAY 30% OFF', 744.8]]],
+    ['LHR - Underarms', '', [['Single session', 150, 0, ''], ['Package of 3', 315, 450, 'BLACK FRIDAY 30% OFF', 220.5], ['Package of 5', 525, 750, 'BLACK FRIDAY 30% OFF', 367.5], ['Package of 8', 840, 1200, 'BLACK FRIDAY 30% OFF', 588]]],
   ] },
-  { id: 'laser-vaginal-tightening', name: 'Laser Vaginal Tightening', blurb: 'Non-surgical laser treatment, discussed privately at your consultation.', items: [
-    ['Vaginal Tightening', '', [['Single session', 1250, 0], ['Package of 3', 3000, 3750, '20% OFF'], ['Package of 6', 5250, 7500, '30% OFF']]],
+  { id: 'laser-vaginal-tightening', name: 'Laser Vaginal Tightening', blurb: '', items: [
+    ['Vaginal Tightening', '', [['Single session', 1250, 0, ''], ['Package of 3', 2625, 3750, 'BLACK FRIDAY 30% OFF', 1837.5], ['Package of 6', 5250, 7500, 'BLACK FRIDAY 30% OFF', 3675]]],
   ] },
-  { id: 'coolsculpting-tight-sculpting', name: 'Coolsculpting & Tight Sculpting', blurb: 'Non-invasive body contouring, priced per zone or area.', items: [
-    ['Regular Treatment Zone', '', [['Single zone', 850, 0], ['2 zones', 1360, 1700, '20% OFF'], ['4 zones and more', 3400, 0], ['8 zones', 4760, 6800, '30% OFF']]],
-    ['Coolsculpting Mini', '', [['Single zone', 1000, 0], ['2 zones', 1600, 2000, '20% OFF'], ['4 zones and more', 4000, 0], ['8 zones', 5600, 8000, '30% OFF']]],
-    ['Coolsculpting Smooth', '', [['Single zone', 1000, 0], ['2 zones', 2000, 0], ['4 zones and more', 4000, 0], ['8 zones', 8000, 0]]],
-    ['Coolsculpting Double', '', [['Single zone', 1600, 0], ['2 zones', 2560, 3200, '20% OFF'], ['4 zones and more', 6400, 0], ['8 zones', 8960, 12800, '30% OFF']]],
-    ['Tight Sculpting - Small Area', '', [['Single session', 600, 0], ['Package of 3', 1440, 1800, '20% OFF'], ['Package of 6', 2520, 3600, '30% OFF'], ['Package of 8', 4800, 0]]],
-    ['Tight Sculpting - Medium Area', '', [['Single session', 800, 0], ['Package of 3', 1920, 2400, '20% OFF'], ['Package of 6', 3360, 4800, '30% OFF'], ['Package of 8', 6400, 0]]],
+  { id: 'coolsculpting-tight-sculpting', name: 'Coolsculpting & Tight Sculpting', blurb: '', items: [
+    ['Regular Treatment Zone', '', [['Single zone', 850, 0, ''], ['2 zones', 1360, 1700, 'BLACK FRIDAY 20% OFF', 952], ['4 zones and more', 2720, 3400, 'BLACK FRIDAY 20% OFF', 1904], ['8 zones', 4760, 6800, 'BLACK FRIDAY 30% OFF', 3332]]],
+    ['Coolsculpting Mini', '', [['Single zone', 1000, 0, ''], ['2 zones', 1600, 2000, 'BLACK FRIDAY 20% OFF', 1120], ['4 zones and more', 3200, 4000, 'BLACK FRIDAY 20% OFF', 2240], ['8 zones', 5600, 8000, 'BLACK FRIDAY 30% OFF', 3920]]],
+    ['Coolsculpting Smooth', '', [['Single zone', 1000, 0, ''], ['2 zones', 1600, 2000, 'BLACK FRIDAY 20% OFF', 1120], ['4 zones and more', 3200, 4000, 'BLACK FRIDAY 20% OFF', 2240], ['8 zones', 5600, 8000, 'BLACK FRIDAY 30% OFF', 3920]]],
+    ['Coolsculpting Double', '', [['Single zone', 1600, 0, ''], ['2 zones', 2560, 3200, 'BLACK FRIDAY 20% OFF', 1792], ['4 zones and more', 5120, 6400, 'BLACK FRIDAY 20% OFF', 3584], ['8 zones', 8960, 12800, 'BLACK FRIDAY 30% OFF', 6272]]],
+    ['Tight Sculpting - Small Area', '', [['Single session', 600, 0, ''], ['Package of 3', 1260, 1800, 'BLACK FRIDAY 30% OFF', 882], ['Package of 6', 2520, 3600, 'BLACK FRIDAY 30% OFF', 1764], ['Package of 8', 3360, 4800, 'BLACK FRIDAY 30% OFF', 2352]]],
+    ['Tight Sculpting - Medium Area', '', [['Single session', 800, 0, ''], ['Package of 3', 1680, 2400, 'BLACK FRIDAY 30% OFF', 1176], ['Package of 6', 3360, 4800, 'BLACK FRIDAY 30% OFF', 2352], ['Package of 8', 4480, 6400, 'BLACK FRIDAY 30% OFF', 3136]]],
   ] },
-  { id: 'snoring-treatment', name: 'Snoring Treatment', blurb: 'A non-invasive laser treatment, given as a series of sessions.', items: [
-    ['Snoring Treatment', '', [['Single session', 450, 0], ['Package of 3', 1080, 1350, '20% OFF'], ['Package of 6', 1890, 2700, '30% OFF']]],
+  { id: 'snoring-treatment', name: 'Snoring Treatment', blurb: '', items: [
+    ['Snoring Treatment', '', [['Single session', 450, 0, ''], ['Package of 3', 1080, 1350, '20% OFF'], ['Package of 6', 1890, 2700, '30% OFF']]],
   ] },
-  { id: 'toenail-fungus-removal', name: 'Toenail Fungus Removal', blurb: 'Laser treatment, given as a series of sessions.', items: [
-    ['Toenail Fungus Removal', '', [['Single session', 300, 0], ['Package of 3', 719, 900, '20% OFF'], ['Package of 6', 1260, 1800, '30% OFF']]],
+  { id: 'toenail-fungus-removal', name: 'Toenail Fungus Removal', blurb: '', items: [
+    ['TOENAIL FUNGUS REMOVAL', '', [['Single session', 300, 0, ''], ['Package of 3', 719, 900, '20% OFF'], ['Package of 6', 1260, 1800, '30% OFF']]],
   ] },
-  { id: 'latisse', name: 'Latisse', blurb: 'Prescription product, available after a medical assessment.', items: [
-    ['Latisse', '', [['Single session', 245, 0]]],
+  { id: 'latisse', name: 'Latisse', blurb: '', items: [
+    ['Latisse', '', [['Single session', 245, 0, '']]],
   ] },
 ];
+/* the sale running on the live site when this list was read (null when none): its checkout code and percentage */
+const PRICE_SALE = {"code": "PLUS30", "percent": 30, "phase": "black-friday", "end": "2026-12-08T04:59:59+00:00"};
 /* ---------------------------------------------------------------- prices, one source for the whole site (round 29)
    PRICE_CATS comes from src/pricing-data.jsx (the pricing page's list) and is copied into both shells by src/sync_prices.py,
    so every page reads the same numbers. Edit src/pricing-data.jsx, run the sync, then rebuild.
@@ -1202,21 +1240,29 @@ const PRICE_CATS = [
 const PRICE_BY_ID = Object.fromEntries(PRICE_CATS.map((c) => [c.id, c]));
 const pfmt = (n) => '$' + (Math.round(n * 100) / 100).toLocaleString('en-CA', { useGrouping: false, minimumFractionDigits: Math.round(n * 100) % 100 ? 2 : 0, maximumFractionDigits: 2 });
 const pCount = (label) => { const m = /(\d+)\s*(units?|syringes?|sessions?|vials?|treatments?|zones?)\b/i.exec(label) || /package of (\d+)/i.exec(label); return m ? +m[1] : 1; };
-const pPct = (tag) => { const m = /^(\d+)% OFF$/i.exec(tag || ''); return m ? +m[1] : 0; };
+/* a percentage offer, also with the sale's name in front ("BLACK FRIDAY 30% OFF"), as the site reads it (price-book.ts percentOff) */
+const pPct = (tag) => { const m = /(?:^|\s)(\d+)%\s*OFF$/i.exec(String(tag || '').trim()); return m ? +m[1] : 0; };
+/* a "from" price as shown: per unit to the cent, anything else up to the next whole dollar ($167.33 -> $168), as the site (fromValue) */
+const fromValue = (n, perUnit) => { const c = Math.round(n * 100) / 100; return perUnit ? c : Math.ceil(c); };
 const pNorm = (s) => String(s || '').toLowerCase().replace(/[®™]/g, '').replace(/[–-]/g, ' ').replace(/\s+/g, ' ').trim();
 function priceOptions(id, item) {
   const c = PRICE_BY_ID[id]; if (!c) return [];
   const its = item ? c.items.filter((it) => pNorm(it[0]) === pNorm(item) || pNorm(it[0]).includes(pNorm(item))) : c.items;
-  return (its.length ? its : c.items).flatMap((it) => it[2].map((o) => ({ item: it[0], label: o[0], price: o[1], reg: o[2], tag: o[3] || '' })));
+  return (its.length ? its : c.items).flatMap((it) => it[2].map((o) => ({ item: it[0], label: o[0], price: o[1], reg: o[2], tag: o[3] || '', code: o[4] || 0 })));
 }
-function priceFrom(id, item) {
+/* withCode: the price with the running sale's checkout code where it applies. On by default since 2026-11-25 (user: every
+   price on the site is the Pricing page's), so every page shows the same "from" price as the price list's own rows */
+function priceFrom(id, item, withCode = true) {
   const c = PRICE_BY_ID[id]; const os = priceOptions(id, item); if (!c || !os.length) return null;
   let best = null;
-  os.forEach((o) => { const n = /regular/i.test(o.label) ? 1 : pCount(o.label); const v = o.price / n; if (!best || v < best.v - 0.001) best = { v, o, n }; });
+  os.forEach((o) => { const n = /regular/i.test(o.label) ? 1 : pCount(o.label); const paid = withCode && o.code && o.code < o.price ? o.code : o.price; const v = paid / n; if (!best || v < best.v - 0.001 || (Math.abs(v - best.v) <= 0.001 && n > best.n)) best = { v, o, n, paid }; });
   const pct = Math.max(0, ...os.map((o) => pPct(o.tag)));
   const tags = os.map((o) => o.tag).filter(Boolean);
   const offer = pct ? `Up to ${pct}% off` : (tags[0] ? tags[0].replace(/\bOFF\b/g, 'off').replace(/^BUY 1 GET 1/i, 'Buy 1 get 1').replace(/\bFREE\b/, 'free').replace(/^Save \$(\d+)\sOff$/i, 'Save $$$1') : '');
-  return { value: Math.round(best.v * 100) / 100, unit: c.unit ? ' / unit' : '', per: c.unit ? 'per unit' : /syringe/i.test(best.o.label) ? 'per syringe' : /zone/i.test(best.o.label) ? 'per zone' : best.n > 1 || /session/i.test(best.o.label) ? 'per session' : '', pct, offer };
+  /* the struck price beside it: the regular price, else (a code-only line) the price before the code, on the same count */
+  const full = best.o.reg && best.o.reg > best.paid ? best.o.reg : best.paid < best.o.price ? best.o.price : 0;
+  const reg = full ? (c.unit ? Math.round((full / best.n) * 100) / 100 : Math.round(full / best.n)) : 0;
+  return { src: { item: best.o.item, label: best.o.label, price: best.paid, count: best.n, reg }, value: fromValue(best.v, c.unit), unit: c.unit ? ' / unit' : '', per: c.unit ? 'per unit' : /syringe/i.test(best.o.label) ? 'per syringe' : /zone/i.test(best.o.label) ? 'per zone' : best.n > 1 || /session/i.test(best.o.label) ? 'per session' : '', pct, offer };
 }
 const priceLabel = (id, item) => { const f = priceFrom(id, item); return f ? `From ${pfmt(f.value)}${f.unit}` : null; };
 /* names used on the site's cards and menus, mapped to the price list: [category id, treatment] */
@@ -1247,6 +1293,240 @@ const priceInfo = (name) => { const k = pNorm(name); const hit = PRICE_NAMES[k] 
 const priceRows = (id, item) => { const c = PRICE_BY_ID[id]; const it = c && c.items.find((x) => pNorm(x[0]).includes(pNorm(item))); return it ? it[2] : []; };
 /* the lowest price in one price table after its discounts; per unit when the table is priced per unit (e.g. 220 units $1848 -> $8.40) */
 const rowsFrom = (rows, perUnit) => Math.round(Math.min(...rows.map((r) => (perUnit && !/regular/i.test(r[0]) ? r[1] / pCount(r[0]) : r[1]))) * 100) / 100;
+/* ---------------------------------------------------------------- sale tags and where a "from" price comes from (2026-11-16)
+   SALE_LOOK: the look of the offer tags while a promotion runs: 'vip' and 'bf' (black and gold, like VIP Early Access + Black Friday), 'holiday' (green and gold),
+   'newyear' (slate), or '' for the plain red tags. Every price table (pricing, Botox, Aptos) reads it. */
+const SALE_LOOK = PRICE_SALE ? 'bf' : '';
+/* the checkout code's percentage ("+ EXTRA 30%") while the sale runs */
+const SALE_PCT = PRICE_SALE ? PRICE_SALE.percent : 0;
+/* whether the pills name the sale ("BLACK FRIDAY 30% OFF") or give the offer only ("30% OFF"): the pricing page's list gives
+   the offer only (user, 2026-11-25, as the site); the treatment pages' tables keep the name. pricing-ui.jsx sets it to false. */
+let SALE_NAME_SHOWN = true;
+const saleWords = (t) => (SALE_NAME_SHOWN ? t : String(t).replace(/^\s*BLACK\s+FRIDAY\s+/i, ''));
+/* a red half of the flame icon alone beside an offer of one part ("30% OFF" | flame, "SAVE $1,000" | flame): the pricing page's
+   list and Monthly specials cards (user, 2026-11-26; it replaced the words "BEST DEAL"), pricing-ui.jsx sets it to true */
+let ICON_HALF_SHOWN = false;
+const withIconHalf = (parts) => (ICON_HALF_SHOWN && parts.length === 1 ? [parts[0], ''] : parts);
+const FireIcon = () => <svg aria-hidden="true" className="sb-fire-ico" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>;
+/* one half of a pill: the red half is plain red everywhere (user, 2026-11-26: no fire; site: PillPart), with the flame icon
+   alone when it has no words */
+const PillPart = ({ text, second }) => (!second
+  ? <span className="sb-a">{saleWords(text)}</span>
+  : <span className={`sb-b${text ? '' : ' sb-only'}`}>{text ? saleWords(text) : <FireIcon />}</span>);
+/* the lowest row of one price table and how it is counted (per unit when the table is priced per unit) */
+const rowsSource = (rows, perUnit) => {
+  let best = null;
+  rows.forEach((r) => { const n = perUnit && !/regular/i.test(r[0]) ? pCount(r[0]) : 1; const v = r[1] / n; if (!best || v < best.v - 0.001 || (Math.abs(v - best.v) <= 0.001 && n > best.n)) best = { v, r, n }; });
+  return best ? { label: best.r[0], price: best.r[1], count: best.n, reg: best.r[2] ? Math.round((best.r[2] / best.n) * 100) / 100 : 0 } : null;
+};
+/* a clinic tag in the pill's words: "Save $1000 Off" -> "SAVE $1,000" */
+const tagWords = (t) => String(t || '').trim().toUpperCase().replace(/\s+/g, ' ').replace(/^SALE\s+/, '').replace(/^SAVE \$(\d+)(?: OFF)?$/, (_, n) => 'SAVE $' + Number(n).toLocaleString('en-CA'));
+/* the offer of a list of tags as the pill shows it: the biggest percentage, else the first tag, split after "BUY 1" */
+const strictPct = (t) => { const m = /^(\d+)%\s*OFF$/i.exec(t || ''); return m ? +m[1] : 0; };
+const saleBadge = (tags) => {
+  const ts = tags.filter(Boolean).map(tagWords); if (!ts.length) return [];
+  const t = ts.sort((a, b) => strictPct(b) - strictPct(a))[0]; const m = /^(BUY \d+)\s+(GET .+)$/.exec(t);
+  return m ? [m[1], m[2]] : [t];
+};
+/* whether the checkout code belongs beside the badge: only when the option the badge is read from takes the code (site: badgeCoded) */
+const badgeCoded = (opts) => {
+  const tagged = opts.filter((o) => o[3] && tagWords(o[3]));
+  if (!tagged.length) return opts.some((o) => !!o[4]);
+  return !![...tagged].sort((a, b) => strictPct(tagWords(b[3])) - strictPct(tagWords(a[3])))[0][4];
+};
+/* the offer tag: the plain red tag, or in a sale's look the pill, in two halves when the offer has two parts
+   ("30% OFF" | "+ EXTRA 30%", "BUY 1" | "GET 1 FREE"), as the site's OfferTag */
+function SaleTag({ offer, badge, coded, small, plain = 'pr-badge' }) {
+  if (!SALE_LOOK) return offer ? <span className={plain}>{offer}</span> : null;
+  const b = badge || [];
+  const found = b.length === 1 && coded && /%\s*OFF$/.test(b[0]) ? [b[0], `+ EXTRA ${SALE_PCT}%`] : b.length ? b : coded ? [`+ EXTRA ${SALE_PCT}%`] : [];
+  if (!found.length) return null;
+  const parts = withIconHalf(found);
+  return <span data-look={SALE_LOOK} className={`sb ${small ? 'sb-sm' : ''} ${parts.length > 1 ? 'sb-split' : ''}`}>{parts.map((t, i) => <PillPart key={i} text={t} second={i > 0} />)}</span>;
+}
+/* the offer of a specials card (wheel, Promotion cards, Pricing specials) as a pill in the pricing tags' pattern, in the site's
+   own navy and sky (round 37): "Up to 30% off" -> UP TO | 30% OFF, "Buy 1 get 1 free" -> BUY 1 | GET 1 FREE, "Save $1000" -> SAVE $1,000 */
+const dealParts = (d) => { const t = tagWords(d); const m = /^(UP TO|BUY \d+)\s+(.+)$/.exec(t); return m ? [m[1], m[2]] : t ? [t] : []; };
+function DealPill({ deal, className = '' }) {
+  const p = dealParts(deal);
+  if (!p.length) return null;
+  /* during the Black Friday sale black and plain red, as the site (web/src/styles/sale-bf.css, user, 2026-11-26: no fire) */
+  return <span data-look={SALE_LOOK || undefined} className={`dp ${p.length > 1 ? 'dp-split' : ''} ${className}`}>{p.map((t, i) => <span key={i} className={i ? 'dp-b' : 'dp-a'}>{t}</span>)}</span>;
+}
+/* where a lowest price is read from: "Skin Booster, 2 Syringes" (withItem puts the treatment first) */
+const sourceWords = (s, withItem) => {
+  if (!s) return '';
+  const what = [withItem ? s.item : '', s.label === 'Regular' ? 'Per unit' : s.label].filter(Boolean).join(', ');
+  return what;
+};
+/* "From $343 / session": in the sale's colour with the regular price struck through, and under it, marked with a blue dot, where it comes from */
+function FromPrice({ value, unit, src, withItem, big, noWords, mark }) {
+  const cut = SALE_LOOK && src && src.reg > 0;
+  const words = noWords ? '' : sourceWords(src, withItem);
+  return (
+    <span className="flex flex-col items-start sm:items-end">
+      <span className="whitespace-nowrap font-inter text-[13px] text-ndm-muted">{mark && <i className="pr-dot" aria-hidden="true" />}From {cut ? <s className="pr-was mr-1"><span className="sr-only">Regular price </span>{pfmt(src.reg)}</s> : null}<span data-look={SALE_LOOK || undefined} className={`pr-from font-aeonik tracking-[-0.02em] text-[20px] ${SALE_LOOK && cut ? 'is-sale' : 'text-ndm-ink'}`}>{pfmt(value)}</span>{unit}</span>
+      {words && <span className="pr-src mt-1 font-inter text-[11.5px] leading-[1.35] text-ndm-muted"><i aria-hidden="true" /><span className="sr-only">Lowest price, from </span>{words}</span>}
+    </span>
+  );
+}
+const SrcMark = ({ children }) => <span className="pr-src-tag"><i aria-hidden="true" />{children}</span>;
+/* one option of a treatment in the stacked-discount layout (designer's reference, 2026-11-16): name, count and price of one,
+   the offer pill; the regular price struck through, the price to pay large, the saving; Add to cart on the right */
+/* an option's tag in the pill's words, as the site's pillWords: "Save $1000 Off" -> SAVE $1,000, BUY 1 | GET 1 FREE */
+const optPill = (tag) => {
+  const t = String(tag).trim().toUpperCase().replace(/\s+/g, ' ').replace(/^SALE\s+/, '').replace(/^SAVE \$(\d+)(?: OFF)?$/, (_, n) => 'SAVE $' + Number(n).toLocaleString('en-CA'));
+  const m = /^(BUY \d+)\s+(GET .+)$/.exec(t);
+  return m ? [m[1], m[2]] : [t];
+};
+const optCount = (label) => {
+  const m = /(\d+)\s*(unit|syringe|session|vial|treatment|zone)s?\b/i.exec(label);
+  if (m) return { n: +m[1], one: m[2].toLowerCase(), many: m[2].toLowerCase() + 's' };
+  const p = /package of (\d+)/i.exec(label);
+  return p ? { n: +p[1], one: 'session', many: 'sessions' } : null;
+};
+/* code: the price with the running sale's checkout code (site: OptionRow): both earlier prices struck, the price to pay,
+   "Extra 30% applied" and the saving */
+function OptionRow({ label, price, was, code, tag, unit, action, mark }) {
+  const cnt = optCount(label);
+  const coded = !!(SALE_LOOK && code && code < price);
+  const final = coded ? code : price;
+  const struck = [was > final ? was : 0, coded ? price : 0].filter((v, i, a) => v > 0 && a.indexOf(v) === i);
+  const cut = struck.length > 0;
+  const save = Math.round(((was || price) - final) * 100) / 100;
+  const found = tag && SALE_LOOK ? optPill(tag) : [];
+  if (found.length === 1 && coded && SALE_PCT) found.push(`+ EXTRA ${SALE_PCT}%`);
+  const pill = withIconHalf(found);
+  return (
+    <li className={`pr-opt pr-opt2 ${cut || tag ? 'is-featured' : ''}`}>
+      <span className="pr-opt2-info">
+        <span className="pr-opt2-name">{label}</span>
+        {cnt && cnt.n > 1 && <span className="pr-opt2-meta">{cnt.n} {cnt.many} · {pfmt(Math.round((final / cnt.n) * 100) / 100)} per {cnt.one}</span>}
+        {tag && (SALE_LOOK
+          ? <span data-look={SALE_LOOK} className={`sb sb-sm pr-opt2-offer ${pill.length > 1 ? 'sb-split' : ''}`}>{pill.map((t, i) => <PillPart key={i} text={t} second={i > 0} />)}</span>
+          : <span className="pr-tag pr-opt2-offer">{tag}</span>)}
+      </span>
+      <span className={`pr-opt2-price ${cut ? '' : 'is-single'}`}>
+        {cut && <span className="pr-opt2-was">{struck.map((v, i) => <s key={i}><span className="sr-only">{i ? 'Sale price ' : 'Regular price '}</span>{pfmt(v)}</s>)}</span>}
+        <span data-look={SALE_LOOK || undefined} className="pr-opt2-now">{mark && <i className="pr-dot" aria-hidden="true" />}{cut ? <span className="sr-only">now </span> : null}{pfmt(final)}{unit && <span className="pr-opt2-unit">{unit}</span>}</span>
+        {cut && <span className="pr-opt2-with">{coded && <><span className="pr-opt2-tick" aria-hidden="true">&#10003;</span><span>Extra {SALE_PCT}% applied</span><span className="pr-opt2-sep"> · </span></>}{save > 0 && <span className="pr-opt2-save">You save {pfmt(save)}</span>}</span>}
+      </span>
+      <span className="pr-opt2-act">{action}</span>
+    </li>
+  );
+}
+/* a special line under a category's options (user, 2026-11-27: the Aptos model call assessment; site: ExtraRow): its tag,
+   name and note, its price and Add to cart; never a sale pill or a struck price, it is a fee, not an offer */
+function ExtraRow({ tag, name, note, price, action }) {
+  return (
+    <li className="pr-opt pr-opt2 pr-extra">
+      <span className="pr-opt2-info">
+        {tag && <span className="pr-extra-tag">{tag}</span>}
+        <span className="pr-opt2-name">{name}</span>
+        {note && <span className="pr-extra-note">{note}</span>}
+      </span>
+      <span className="pr-opt2-price is-single"><span className="pr-opt2-now">{pfmt(price)}</span></span>
+      <span className="pr-opt2-act">{action}</span>
+    </li>
+  );
+}
+/* the styles of the pieces above, added once to any page that loads this list */
+if (typeof document !== 'undefined' && !document.getElementById('sale-tags-css')) {
+  const st = document.createElement('style'); st.id = 'sale-tags-css';
+  st.textContent = `.pr-src{display:block;max-width:260px;text-align:right}.pr-src i{margin-right:6px;transform:translateY(-1px)}@media (max-width:639px){.pr-src{text-align:left;max-width:none}}
+.pr-src i,.pr-src-tag i{display:inline-block;width:7px;height:7px;border-radius:999px;background:#DC1A27;box-shadow:0 0 0 3px rgba(220,26,39,.18);flex:none}
+.pr-src-tag{display:inline-flex;align-items:center;gap:6px;margin-left:10px;vertical-align:middle;font-family:Manrope,sans-serif;font-size:11.5px;font-weight:600;letter-spacing:.02em;line-height:1;color:#C8101D;white-space:nowrap}
+.pr-opt.is-src{box-shadow:0 0 0 1.5px rgba(220,26,39,.45)!important}.pr-opt.is-src .pr-src-tag{margin-left:0}
+.sb{--a-bg:#FFF5F6;--a-fg:#C0182C;--a-ring:rgba(192,24,44,.28);--b-bg:#C8101D;--b-fg:#fff;display:inline-flex;align-items:stretch;border-radius:999px;overflow:hidden;white-space:nowrap;font-family:Manrope,sans-serif;font-weight:700;letter-spacing:.06em;line-height:1;font-size:13px}
+.sb>span{display:inline-flex;align-items:center;padding:8px 13px}.sb-sm{font-size:11px}.sb-sm>span{padding:6px 10px}
+.sb-a{background:var(--a-bg);color:var(--a-fg);box-shadow:inset 0 0 0 1.5px var(--a-ring);border-radius:999px}
+.sb-split .sb-a{border-radius:999px 0 0 999px;box-shadow:inset 1.5px 0 0 var(--a-ring),inset 0 1.5px 0 var(--a-ring),inset 0 -1.5px 0 var(--a-ring)}
+.sb-b{background:var(--b-bg);color:var(--b-fg);border-radius:0 999px 999px 0}
+.dp{display:inline-flex;align-items:stretch;border-radius:999px;overflow:hidden;white-space:nowrap;font:700 11px/1 Manrope,sans-serif;letter-spacing:.06em}
+.dp>span{display:inline-flex;align-items:center;padding:6px 10px}
+.dp-a{background:#0B0B0C;color:#E2C88A;border-radius:999px}
+.dp-split .dp-a{border-radius:999px 0 0 999px}
+.dp-b{background:#D4B574;color:#0B0B0C;border-radius:0 999px 999px 0}
+.dp[data-look="bf"] .dp-a{background:#0B0B0C;color:#fff}.dp[data-look="bf"] .dp-b{background:#D3121F;color:#fff}
+.pr-from.is-sale{color:var(--now,#C8101D)}.pr-from[data-look]{--now:#C8101D}
+.sb[data-look="vip"],.pr-from[data-look="vip"]{--a-bg:#0B0B0C;--a-fg:#fff;--a-ring:#0B0B0C;--b-bg:#D4B574;--b-fg:#0B0B0C;--now:#9A7A3A}
+.sb[data-look="bf"],.pr-from[data-look="bf"]{--a-bg:#0B0B0C;--a-fg:#fff;--a-ring:#0B0B0C;--b-bg:#D3121F;--b-fg:#fff;--now:#C8101C}
+/* the small flame icon of a red half with no words (an offer of one part, user, 2026-11-26), which is a little narrower;
+   the red halves are plain red everywhere (the moving fire of 2026-11-25 was removed the same day) */
+.sb-fire-ico{position:relative;flex:none;width:.95em;height:.95em}
+.sb>.sb-only{padding-left:.85em;padding-right:1em}
+@media (max-width:639px){.sb-split{flex-wrap:wrap;gap:5px;max-width:100%;overflow:visible;border-radius:0}.sb-split .sb-a,.sb-split .sb-b{border-radius:999px}.sb-split .sb-a{box-shadow:inset 0 0 0 1.5px var(--a-ring)}}
+.sb[data-look="holiday"],.pr-from[data-look="holiday"]{--a-bg:#173D2C;--a-fg:#fff;--a-ring:#173D2C;--b-bg:#D4B574;--b-fg:#173D2C;--now:#1E5A3E}
+.sb[data-look="newyear"],.pr-from[data-look="newyear"]{--a-bg:#fff;--a-fg:#141414;--a-ring:rgba(20,20,20,.25);--b-bg:#4A5763;--b-fg:#fff;--now:#C8101D}
+.pr-opt.pr-opt2{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:28px;padding:15px 13px 15px 21px;border:1px solid transparent;border-radius:14px;background:#FAFAF8;box-shadow:none!important}
+.pr-opt2.is-featured{background:#fff;border-color:#E3E3E0;box-shadow:none!important}
+.pr-ghead>button,.pr-gintro{padding-inline:clamp(14px,2.4vw,28px)}
+.pr-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:999px;background:#DC1A27;box-shadow:0 0 0 3px rgba(220,26,39,.18);vertical-align:middle;transform:translateY(-2px)}
+.pr-dot,.pr-src i,.pr-src-tag i,.ndm-beat{animation:ndmBeat 1.6s ease-out infinite}
+@keyframes ndmBeat{0%{scale:1;box-shadow:0 0 0 0 rgba(220,26,39,.5)}12%{scale:1.3}24%{scale:1}36%{scale:1.2}55%{scale:1;box-shadow:0 0 0 7px rgba(220,26,39,0)}100%{scale:1;box-shadow:0 0 0 0 rgba(220,26,39,0)}}
+@media (prefers-reduced-motion: reduce){.pr-dot,.pr-src i,.pr-src-tag i,.ndm-beat{animation:none}}
+.pr-opt2-info{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.pr-opt2-name{font-family:Manrope,sans-serif;font-size:15.5px;font-weight:500;color:#141414}
+.pr-opt2-meta{margin-top:3px;font-family:Manrope,sans-serif;font-size:12.5px;color:#6B7480}
+.pr-opt2-offer{margin-top:9px}
+.pr-opt2-price{display:flex;flex-direction:column;align-items:flex-end;text-align:right;min-width:170px}
+.pr-opt2-was{font-family:Manrope,sans-serif;font-size:13px;color:#A3A9B1}
+.pr-opt2-was s{text-decoration-thickness:1px}
+.pr-opt2-was s+s{margin-left:8px}
+.pr-opt2-now{margin:2px 0;font-family:Fraunces,Georgia,serif;font-size:22px;line-height:1.1;letter-spacing:-.01em;color:#0B5F93}
+.pr-opt2-now[data-look="vip"]{color:#9A7A3A}
+.pr-opt2-now[data-look="bf"]{color:#C8101C}
+.pr-opt2-now[data-look="holiday"]{color:#1E5A3E}
+.pr-opt2-price.is-single .pr-opt2-now{font-size:22px;color:#141414}
+.pr-opt2-unit{margin-left:2px;font-family:Manrope,sans-serif;font-size:13px;letter-spacing:0;color:#6B7480}
+.pr-opt2-with{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:6px;font-family:Manrope,sans-serif;font-size:12px;color:#6B7480}
+.pr-opt2-tick{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#EEF6FC;color:#C8101D;font-size:9px;font-weight:700}
+.pr-opt2-save{font-weight:600;color:#0B5F93}
+@media (max-width:639px){
+.pr-opt.pr-opt2{grid-template-columns:1fr auto;gap:12px 10px;padding:15px}
+.pr-opt2-info{grid-column:1 / -1}
+.pr-opt2-price{align-items:flex-start;text-align:left;min-width:0}
+.pr-opt2-with{justify-content:flex-start;row-gap:2px}
+.pr-opt2-sep{display:none}
+.pr-opt2-save{flex-basis:100%}
+.pr-opt2-act{align-self:end}
+.pr-opt2-now{font-size:22px}
+.pr-opt2:not(.is-featured) .pr-opt2-info,.pr-opt2:not(.is-featured) .pr-opt2-price{grid-column:1}
+.pr-opt2:not(.is-featured) .pr-opt2-act{grid-column:2;grid-row:1 / span 2;align-self:center}
+}
+/* round 40 (user, 2026-11-17): every offer card (the offers wheel, the promotion page's "All current offers", the pricing page's
+   Monthly specials) is one light, premium glass card: frosted white over a soft sky and champagne glow, a hairline white edge,
+   champagne accents and solid black buttons that turn gold on hover (no gradients); black and gold like the VIP tags (round 41). The Black Friday page keeps its gold tickets (html.bf) */
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-stage{background:radial-gradient(34% 42% at 30% 56%,rgba(238,58,69,.2),transparent 70%),radial-gradient(28% 40% at 70% 60%,rgba(212,181,116,.2),transparent 72%),radial-gradient(30% 36% at 50% 34%,rgba(200,16,29,.12),transparent 70%)}
+section:has(article.promo-card),section:has(li.ps-card){background-image:radial-gradient(40% 32% at 16% 42%,rgba(238,58,69,.12),transparent 70%),radial-gradient(36% 32% at 84% 72%,rgba(212,181,116,.15),transparent 72%)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card){background:linear-gradient(140deg,rgba(255,255,255,.88) 0%,rgba(255,255,255,.55) 42%,rgba(255,255,255,.4) 70%,rgba(255,255,255,.62) 100%);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.92);box-shadow:inset 0 1px 0 #fff,inset 0 0 0 1px rgba(11,11,12,.05),0 1px 2px rgba(11,11,12,.05),0 24px 54px -30px rgba(11,11,12,.32)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card)::before{display:none}
+li.ps-card{transition:transform .6s var(--e-out),border-color .4s ease,box-shadow .6s ease}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card.is-on{background:linear-gradient(140deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.68) 45%,rgba(255,255,255,.52) 75%,rgba(255,255,255,.74) 100%);border-color:rgba(212,181,116,.6);box-shadow:inset 0 1px 0 #fff,0 0 0 4px rgba(212,181,116,.1),0 2px 4px rgba(11,11,12,.05),0 40px 80px -36px rgba(11,11,12,.45)}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card:not(.is-on):hover{border-color:rgba(212,181,116,.45)}
+@media (hover:hover){article.promo-card:hover,li.ps-card:hover{transform:translateY(-4px);border-color:rgba(212,181,116,.6);box-shadow:inset 0 1px 0 #fff,0 0 0 4px rgba(212,181,116,.08),0 36px 70px -34px rgba(11,11,12,.42)}
+  article.promo-card:hover .promo-badge{background:#0B0B0C;color:#E2C88A}}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card) .sw-ring{border-color:rgba(212,181,116,.2)}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card :is(.sw-price,.sw-cur){background:none;color:#0B0B0C}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) .sw-cur{color:#B8964F}
+article.promo-card .text-ndm-deep{color:#0B0B0C}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.sw-tag,.promo-tag){background:rgba(255,255,255,.6);border:1px solid rgba(11,11,12,.12);color:#0B0B0C}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .sw-tag.is-feature{background:#0B0B0C;border-color:#0B0B0C;color:#E2C88A}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .sw-photo,html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card.is-on .sw-photo{box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(212,181,116,.5),0 10px 22px -12px rgba(11,11,12,.45)}
+article.promo-card .promo-badge{background:rgba(255,255,255,.75);color:#0B0B0C;box-shadow:inset 0 0 0 1px rgba(212,181,116,.45)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.btn-ink,.btn-buy){background:#0B0B0C;border-color:#0B0B0C;color:#fff;box-shadow:0 10px 22px -14px rgba(11,11,12,.8)}
+:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.btn-ink,.btn-buy):is(:hover,:focus-visible){background:#D4B574;border-color:#D4B574;color:#0B0B0C}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .btn-line{background:rgba(255,255,255,.5);border-color:rgba(11,11,12,.16);color:#0B0B0C}
+html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card .btn-line:is(:hover,:focus-visible){background:#0B0B0C;border-color:#0B0B0C;color:#fff}
+li.ps-card > span:nth-child(2){background:rgba(255,255,255,.6);color:#0B0B0C;box-shadow:inset 0 0 0 1px rgba(212,181,116,.45)}
+@media (prefers-reduced-transparency:reduce){:is(html:not(.bf) .specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card){background:#fff}}
+/* a special line under a category's options (user, 2026-11-27: the Aptos model call assessment): tinted card, small blue tag, note */
+.pr-opt.pr-opt2.pr-extra{background:#F2F8FC;border-color:#CFE3F1}
+.pr-extra-tag{display:inline-flex;align-items:center;margin-bottom:8px;padding:5px 10px;border-radius:999px;background:#C8101D;color:#fff;font-family:Manrope,sans-serif;font-size:10.5px;font-weight:700;line-height:1;letter-spacing:.08em;text-transform:uppercase}
+.pr-extra-note{margin-top:5px;max-width:56ch;font-family:Manrope,sans-serif;font-size:13.5px;line-height:1.5;color:#5A646C}
+@media (max-width:639px){.pr-opt.pr-opt2.pr-extra .pr-opt2-info{grid-column:1 / -1;grid-row:1}.pr-opt.pr-opt2.pr-extra .pr-opt2-price{grid-column:1;grid-row:2;align-self:center}.pr-opt.pr-opt2.pr-extra .pr-opt2-act{grid-column:2;grid-row:2}}`;
+  document.head.appendChild(st);
+}
 /* PRICES:END */
 
 const PROCEDURES = [
@@ -1276,7 +1556,7 @@ const CONCERNS = [
 ];
 /* which page is open: the top menu marks its section, and dropdown links to this page are highlighted */
 const HERE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-const NAV_HERE = { 'index.html': 'home', 'pricing.html': 'pricing', 'promotion.html': 'promotion', 'about.html': 'about', 'blog.html': 'about', 'what-causes-rosacea-redness.html': 'about', 'botox.html': 'procedures', 'aptos-thread-lift.html': 'procedures', 'wrinkles-fine-lines.html': 'concerns' }[HERE];
+const NAV_HERE = { 'index.html': 'home', 'shop.html': 'shop', 'shop-product.html': 'shop', 'pricing.html': 'pricing', 'promotion.html': 'promotion', 'about.html': 'about', 'blog.html': 'about', 'what-causes-rosacea-redness.html': 'about', 'botox.html': 'procedures', 'aptos-thread-lift.html': 'procedures', 'wrinkles-fine-lines.html': 'concerns' }[HERE];
 const isHere = (href) => !!href && !href.includes('#') && href.toLowerCase() === HERE;
 const here = (href) => (isHere(href) ? { 'aria-current': 'page' } : {});
 const HERE_CAT = (PROCEDURES.find((c) => c.groups.some((g) => g.items.some((it) => isHere(slug(it))))) || {}).id;
@@ -1299,7 +1579,7 @@ const NAV = [
   { id: 'pricing', label: 'Pricing' },
   { id: 'promotion', label: 'Promotion' },
   { id: 'about', label: 'About', menu: 'about' },
-  { id: 'shop', label: 'Skincare shop', href: '#/shop', ext: true },
+  { id: 'shop', label: 'Skincare shop', href: 'shop.html' },
 ];
 /* ---------------------------------------------------------------- campaign looks (design preview for the team)
    One NDM base with swappable accents. A look changes colour tokens, the announcement bar, the home hero's first slide and the
@@ -1328,8 +1608,8 @@ const CAMPAIGNS = [
     head: ['Holiday gift cards,', 'with bonus value'], sub: 'Delivered instantly by email, with bonus value to use from January to March.', cta: ['Shop gift cards', '#/gift-cards'],
     img: { src: 'assets/hero/clinic-reception.jpg', alt: 'NewDermaMed reception with the clinic logo and skincare wall', pos: '50% 50%', scale: 1 } },
   { id: 'boxing-week', name: 'Boxing Week', look: 'holiday', when: 'Dec 26 to 31', badge: 'Gift Idea',
-    bar: 'Boxing Week online, Dec 26 to 31: skincare and gift cards', barM: 'Boxing Week online, Dec 26 to 31', barCta: ['Shop skincare', '#/shop'],
-    head: ['Boxing Week,', 'online only'], sub: 'Skincare offers, a last call on gift card bonus value, and January booking now open.', cta: ['Shop skincare', '#/shop'],
+    bar: 'Boxing Week online, Dec 26 to 31: skincare and gift cards', barM: 'Boxing Week online, Dec 26 to 31', barCta: ['Shop skincare', 'shop.html'],
+    head: ['Boxing Week,', 'online only'], sub: 'Skincare offers, a last call on gift card bonus value, and January booking now open.', cta: ['Shop skincare', 'shop.html'],
     img: { src: 'assets/hero/clinic-reception.jpg', alt: 'NewDermaMed reception with the clinic logo and skincare wall', pos: '50% 50%', scale: 1 } },
   { id: 'new-year', name: 'New Year Skin Plan', look: 'new-year', when: 'Jan 1 to 31', badge: 'New Year Plan',
     bar: 'New Year Skin Plan: a free skin analysis with your visit', barM: 'Free skin analysis with your visit', barCta: ['Book yours', '#/book'],
@@ -1479,6 +1759,7 @@ const Stars = ({ rating = 5, className = '' }) => (
 function PromoBar({ hidden }) {
   const desktop = useMedia('(min-width: 1024px)');
   const cd = useCountdown(CAMPAIGN && CAMPAIGN.until);
+  const bfLook = !useBfClock(60000).over; /* round 36: the Black Friday look until the sale is over */
   const msgs = CAMPAIGN ? (desktop ? [
     { k: 'cmp', node: <a href={CAMPAIGN.barCta[1]} className="underline-offset-4 hover:underline">{CAMPAIGN.bar} <span className="font-medium">→</span></a> },
   ] : [
@@ -1493,7 +1774,7 @@ function PromoBar({ hidden }) {
     { k: 'visia', node: <a href="#/book" className="hover:underline">Free VISIA® skin analysis, <span className="font-medium">book →</span></a> },
     { k: 'phones', node: <span className="inline-flex items-center gap-1.5 text-[11.5px]"><a href={tel(PHONES[0].num)} className="hover:underline">Uptown {PHONES[0].num}</a><span className="opacity-50">·</span><a href={tel(PHONES[1].num)} className="hover:underline">Downtown {PHONES[1].num}</a></span> },
     { k: 'plans', node: <a href="#/financing" className="hover:underline">Payment plans: start today, pay later →</a> },
-    { k: 'shop', node: <a href="#/shop" target="_blank" rel="noopener" className="inline-flex items-center gap-1 hover:underline">Shop skincare online <IconExternal /></a> },
+    { k: 'shop', node: <a href="shop.html" className="inline-flex items-center gap-1 hover:underline">Shop skincare online</a> },
   ];
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -1508,7 +1789,7 @@ function PromoBar({ hidden }) {
   return (
     <div
       role="region" aria-label="Clinic announcements"
-      className={`promo-attn fixed inset-x-0 top-0 z-[60] h-9 overflow-hidden text-white font-mont text-[12.5px] sm:text-[13px] ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
+      className={`promo-attn ${bfLook ? 'is-bf' : ''} fixed inset-x-0 top-0 z-[60] h-9 overflow-hidden text-white font-mont text-[12.5px] sm:text-[13px] ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
       style={{ transition: hidden ? 'transform .5s ease-out' : 'transform .9s cubic-bezier(.34,1.56,.64,1)' }}
       onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
@@ -1549,7 +1830,7 @@ function PromoBar({ hidden }) {
         </div>
         <div className="hidden lg:flex items-center justify-end gap-4">
           {cd && <span role="timer" aria-label={`${CAMPAIGN.untilLabel} ${cd.label}`} className="hidden whitespace-nowrap opacity-90 2xl:inline">{CAMPAIGN.untilLabel} <b className="font-semibold tabular-nums">{cd.text}</b></span>}
-          <a href="#/shop" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 font-medium hover:underline underline-offset-4">Shop skincare <IconExternal /></a>
+          <a href="shop.html" className="inline-flex items-center gap-1.5 font-medium hover:underline underline-offset-4">Shop skincare</a>
         </div>
       </div>
     </div>
@@ -1610,7 +1891,7 @@ function MegaMenu({ open, onLink }) {
                 aria-pressed={on}
                 className={`w-full flex items-center justify-between rounded-[12px] px-4 py-3 text-left font-mont text-[14px] transition-colors ${on ? 'bg-white text-ndm-blue shadow-sm' : 'text-ndm-ink hover:bg-white/70'}`}
               >
-                <span className="flex items-center gap-2">{c.label}{c.id === HERE_CAT && <i aria-hidden="true" className="size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(220,26,39,.18)]" />}</span>
+                <span className="flex items-center gap-2">{c.label}{c.id === HERE_CAT && <i aria-hidden="true" className="ndm-beat size-1.5 rounded-full bg-ndm-blue shadow-[0_0_0_3px_rgba(220,26,39,.18)]" />}</span>
                 <IconArrow className={`transition-transform ${on ? 'translate-x-0 opacity-100' : '-translate-x-1 opacity-0'}`} />
               </button>
             </li>
@@ -1712,7 +1993,7 @@ function AboutMenu({ open, onLink }) {
 
 /* ---------------------------------------------------------------- Black Friday (round 24): shared clock and timer, and the bottom tab
    that opens a full-width Black Friday panel. Dates match the black-friday campaign; the badge is the best offer on the landing page. */
-const BF_SALE = { href: 'black-friday-sale.html', start: '2026-11-27T00:00:00-05:00', end: '2026-11-30T23:59:00-05:00', when: 'Nov 27 to 30', badge: 'Up to 60% off' };
+const BF_SALE = { href: 'black-friday-sale.html', start: '2026-11-27T00:00:00-05:00', end: '2026-11-30T23:59:00-05:00', when: 'Nov 27 to 30', badge: 'Up to 70% off' };
 function useBfClock(step = 1000) {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => { const t = setInterval(() => setNow(Date.now()), step); return () => clearInterval(t); }, [step]);
@@ -2073,7 +2354,7 @@ function Drawer({ open, onClose }) {
               </ul>
             )}
           </div>
-          <a href="#/shop" target="_blank" rel="noopener" className="flex items-center gap-2 py-4 font-aeonik text-[22px]">Skincare shop <IconExternal size={16} /></a>
+          <a href="shop.html" {...here('shop.html')} className="flex items-center gap-2 py-4 font-aeonik text-[22px]">Skincare shop</a>
         </nav>
         <div className="border-t border-ndm-line p-5 space-y-3">
           <div className="grid grid-cols-2 gap-2">
@@ -2096,6 +2377,19 @@ function Drawer({ open, onClose }) {
    or the two filler syringes floating. It fades in with the slide (.fade). */
 /* ---------------------------------------------------------------- hero (website v3 film hero): one clinic film, the headline, proof points and the brand band */
 const HERO_FILM = { poster: 'assets/home/v3/hero-poster-1440.webp', m: 'assets/home/v3/hero-960.mp4', d: 'assets/home/v3/hero-1600.mp4' };
+/* round 42 (user, 2026-11-17): the hero is three photo slides, the film's three scenes. Each slide has a desktop photo (d) and an
+   optional phone photo (m, up to 760px wide; left empty, the desktop photo shows). On WordPress they are the Home page's
+   "Header photos". Each time a slide comes in it dissolves in and takes, at random, one of the film's slow camera moves
+   (round 43, user: the light effects and the blurred / zoomed dissolves are gone, only the photos' motion stays). dim darkens a light photo. */
+const HERO_SLIDES = [
+  { d: 'assets/hero/clinic-exterior.jpg', m: '', alt: 'The NewDermaMed clinic at night', dim: 0 },
+  { d: 'assets/hero/clinic-reception.jpg', m: '', alt: 'The NewDermaMed reception', dim: 0.22 },
+  { d: 'assets/home/visia-consult.jpg', m: 'assets/home/hero/visia-m.jpg', alt: 'A VISIA® skin analysis at NewDermaMed', dim: 0.24 },
+];
+const HERO_MS = 6500;
+const HERO_MOVES = ['push', 'pull', 'pan-l', 'pan-r', 'rise'];
+const heroPick = (a, not) => { const b = a.filter((x) => x !== not); return b[Math.floor(Math.random() * b.length)]; };
+const heroLook = (prev = {}) => ({ move: heroPick(HERO_MOVES, prev.move), n: (prev.n || 0) + 1 });
 /* a campaign look puts its own words in the hero (live text over the same film) */
 const HERO_CMP = null;
 const HERO_BRANDS = ['Fotona', 'Cutera', 'VISIA®', 'Dermapen 4', 'Aptos', 'Juvéderm®', 'Sculptra®', 'Radiesse®', 'Mesoestetic', 'Dermaceutic', 'CoolSculpting®'];
@@ -2130,8 +2424,30 @@ function useFilm(vid, opts = {}) {
 }
 
 function Hero({ sectionRef, onIntroDone }) {
-  const media = useRef(null), inner = useRef(null), vid = useRef(null);
-  const [paused, toggle] = useFilm(vid);
+  const media = useRef(null), inner = useRef(null), sec = useRef(null);
+  const n = HERO_SLIDES.length;
+  const [slide, setSlide] = useState(0);
+  /* each slide keeps the look it last came in with, so a slide that is fading out does not jump */
+  const [looks, setLooks] = useState(() => HERO_SLIDES.map(() => heroLook()));
+  const look = looks[slide];
+  const [paused, setPaused] = useState(REDUCED);
+  const [seen, setSeen] = useState(true);
+  const go = (i) => { const k = (i + n) % n; if (k === slide) return; setLooks((L) => L.map((l, j) => (j === k ? heroLook({ ...L[slide], n: Math.max(...L.map((x) => x.n)) }) : l))); setSlide(k); };
+  const toggle = () => setPaused((v) => !v);
+  /* the slides run only while the hero is on screen and the tab is visible */
+  useEffect(() => {
+    const el = sec.current; if (!el) return;
+    const io = new IntersectionObserver(([e]) => setSeen(e.isIntersecting), { threshold: 0.15 });
+    io.observe(el);
+    const vis = () => setSeen(!document.hidden && el.getBoundingClientRect().bottom > 0);
+    document.addEventListener('visibilitychange', vis);
+    return () => { io.disconnect(); document.removeEventListener('visibilitychange', vis); };
+  }, []);
+  useEffect(() => {
+    if (paused || !seen || n < 2) return;
+    const t = setTimeout(() => go(slide + 1), HERO_MS);
+    return () => clearTimeout(t);
+  }, [slide, paused, seen]);
   const c = HERO_CMP;
   useEffect(() => { const t = setTimeout(onIntroDone, REDUCED ? 0 : 420); return () => clearTimeout(t); }, []);
   /* the film drifts down a little and the words fade as the page scrolls */
@@ -2142,43 +2458,60 @@ function Hero({ sectionRef, onIntroDone }) {
     if (media.current) media.current.style.transform = `translate3d(0,${(y * 0.32).toFixed(1)}px,0)`;
     if (inner.current) inner.current.style.opacity = Math.max(0, 1 - y / (h * 0.75)).toFixed(3);
   }, []);
+  useOnScroll(() => { document.documentElement.classList.toggle('hero-hold', window.scrollY < window.innerHeight * 0.5); }, []);
+  useEffect(() => () => document.documentElement.classList.remove('hero-hold'), []);
   return (
-    <section ref={sectionRef} id="top" data-nav="dark" aria-labelledby="hero-title" className="hf">
+    <section ref={(el) => { sec.current = el; if (typeof sectionRef === 'function') sectionRef(el); else if (sectionRef) sectionRef.current = el; }} id="top" data-nav="dark" aria-labelledby="hero-title" aria-roledescription="carousel" className={`hf ${paused ? 'hs-paused' : ''}`}>
       <div ref={media} className="hf-media" aria-hidden="true">
-        <video ref={vid} muted loop playsInline autoPlay={!REDUCED} preload="metadata" poster={HERO_FILM.poster}>
-          <source src={HERO_FILM.m} type="video/mp4" media="(max-width: 760px)" />
-          <source src={HERO_FILM.d} type="video/mp4" />
-        </video>
+        {HERO_SLIDES.map((h, i) => {
+          const on = i === slide;
+          return (
+            <div key={i} className={`hs-slide ${on ? 'is-on' : ''}`} style={{ '--hs-dim': h.dim || 0 }}>
+              <picture key={looks[i].n} className={`hs-pic mv-${looks[i].move}`}>
+                {h.m && <source media="(max-width: 760px)" srcSet={h.m} />}
+                <img src={h.d} alt="" draggable="false" fetchpriority={i === 0 ? 'high' : 'low'} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+              </picture>
+            </div>
+          );
+        })}
       </div>
+      <p className="sr-only" aria-live="polite">{`Photo ${slide + 1} of ${n}: ${HERO_SLIDES[slide].alt}`}</p>
       {c && <div className="hf-tint cmp-tint" aria-hidden="true" />}
       <div ref={inner} className="hf-in px-[var(--gx)] pt-[118px] pb-[76px] md:grid md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-x-12 md:pt-[clamp(150px,24vh,240px)] md:pb-[clamp(30px,5.5vh,60px)]">
         <div>
-        {c ? <CampaignHeroTag c={c} /> : <p className="font-inter text-[clamp(14px,1.05vw,16px)] font-medium text-white/80">NewDermaMed, medical aesthetics in Toronto</p>}
+        {c ? <CampaignHeroTag c={c} /> : <p className="font-inter text-[13px] font-medium text-white/75 sm:text-[clamp(14px,1.05vw,16px)] sm:text-white/80">NewDermaMed, medical aesthetics in Toronto</p>}
         <h1 id="hero-title" className="mt-4 max-w-[14ch] font-aeonik text-[clamp(44px,6vw,94px)] font-normal leading-[1.02] tracking-[-0.035em] [text-shadow:0_20px_35px_rgba(0,0,0,.15)]">
           {c ? <>{c.head[0]}<br /><span className="tt-strong cmp-hl">{c.head[1]}</span></> : <>Refined,<br /><span className="tt-strong text-ndm-sky">not redone.</span></>}
         </h1>
-        <p className="mt-5 max-w-[46ch] font-inter text-[clamp(16px,1.1vw+3px,20px)] leading-[1.5] text-white/85">
+        <p className="mt-4 max-w-[34ch] font-inter text-[15px] leading-[1.55] text-white/80 sm:mt-5 sm:max-w-[46ch] sm:text-[clamp(16px,1.1vw+3px,20px)] sm:leading-[1.5] sm:text-white/85">
           {c ? c.sub : 'Aesthetic, laser and skin treatments planned around your features, your skin and your pace.'}
         </p>
-        <div className="mt-7 flex flex-wrap items-center gap-3">
+        <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-7">
           <Btn href={c ? c.cta[1] : '#/book'} v="book" hot>{c ? c.cta[0] : 'Book Free Consultation'}</Btn>
-          <Btn href="#start" v="glass">Find your treatment</Btn>
+          <span className="max-sm:hidden"><Btn href="#start" v="glass">Find your treatment</Btn></span>
         </div>
         </div>
-        <ul className="mt-6 grid max-w-[calc(100%-8px)] grid-cols-2 gap-x-4 gap-y-2.5 font-inter text-[13px] font-medium leading-[1.35] text-white/85 sm:mt-7 sm:text-[14px] md:mt-0 md:max-w-none md:grid-cols-1 md:gap-y-3.5 md:rounded-[20px] md:border md:border-white/15 md:bg-white/[.08] md:px-6 md:py-5 md:backdrop-blur-[12px]" aria-label="Why clients choose NewDermaMed">
-          {HERO_PROOF.map(([t, d]) => (
-            <li key={t} className="flex items-start gap-2 sm:items-center sm:gap-2.5 md:whitespace-nowrap">
+        <ul className="mt-5 grid max-w-[calc(100%-8px)] grid-cols-2 gap-x-4 gap-y-2.5 font-inter text-[12.5px] font-medium leading-[1.35] text-white/85 sm:mt-7 sm:text-[14px] md:mt-0 md:max-w-none md:grid-cols-1 md:gap-y-3.5 md:rounded-[20px] md:border md:border-white/15 md:bg-white/[.08] md:px-6 md:py-5 md:backdrop-blur-[12px]" aria-label="Why clients choose NewDermaMed">
+          {HERO_PROOF.map(([t, d], i) => (
+            <li key={t} className={`flex items-start gap-2 sm:items-center sm:gap-2.5 md:whitespace-nowrap ${i > 1 ? 'max-sm:hidden' : ''}`}>
               <svg viewBox="0 0 16 16" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="mt-px shrink-0 text-[#FF9298] sm:mt-0">{d}</svg>{t}
             </li>
           ))}
         </ul>
       </div>
       <div className="hf-band" data-float-avoid="">
-        <button type="button" onClick={toggle} className="hf-toggle" aria-label={paused ? 'Play background video' : 'Pause background video'}>
+        <button type="button" onClick={toggle} className="hf-toggle" aria-label={paused ? 'Play header slideshow' : 'Pause header slideshow'}>
           {paused
             ? <svg viewBox="0 0 14 14" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M3 1.5v11l9.5-5.5z" /></svg>
             : <svg viewBox="0 0 14 14" width="13" height="13" fill="currentColor" aria-hidden="true"><rect x="2" y="1" width="3.5" height="12" rx="1" /><rect x="8.5" y="1" width="3.5" height="12" rx="1" /></svg>}
         </button>
+        <div className="hs-dots" role="group" aria-label="Header photos">
+          {HERO_SLIDES.map((h, i) => (
+            <button key={i} type="button" onClick={() => go(i)} aria-label={`Show photo ${i + 1}: ${h.alt}`} aria-current={i === slide || undefined} className={`hs-dot ${i === slide ? 'is-on' : ''}`}>
+              <i key={looks[i].n} style={{ animationDuration: `${HERO_MS}ms` }} />
+            </button>
+          ))}
+        </div>
         <div className="marquee-mask min-w-0 flex-1 overflow-hidden" aria-label="Technology and brands we use">
           <div className="hf-marq">
             {[0, 1].map((copy) => (
@@ -2190,6 +2523,24 @@ function Hero({ sectionRef, onIntroDone }) {
         </div>
       </div>
     </section>
+  );
+}
+
+/* ---------------------------------------------------------------- the Black Friday page's crossed tapes under the hero (user, 2026-11-17):
+   bfs-tapes as on that page (red over ink, opposite directions, on the page's paper); only a banner, not a link; gone once the sale is over */
+const HOME_TAPE_WORDS = [`Black Friday · ${BF_SALE.when}`, `${BF_SALE.badge} selected treatments`, 'Buy 1 get 1 offers', 'Free consultation and VISIA® skin analysis', 'Uptown and Downtown Toronto'];
+function HomeTapeStrip({ tone, rev }) {
+  const row = <span>{HOME_TAPE_WORDS.map((w) => <Fragment key={w}>{w}<i /></Fragment>)}</span>;
+  return <div className={`bfs-tape bfs-tape-${tone}`}><div className={`bfs-tick-in ${rev ? 'is-rev' : ''}`}>{row}{row}{row}{row}</div></div>;
+}
+function HomeTape() {
+  const bf = useBfClock(60000);
+  if (bf.over) return null;
+  return (
+    <div className="home-tape">
+      <p className="sr-only">{`Black Friday, ${BF_SALE.when}: ${BF_SALE.badge.toLowerCase()} selected treatments.`}</p>
+      <div aria-hidden="true" className="bfs-tapes"><HomeTapeStrip tone="red" /><HomeTapeStrip tone="white" rev /></div>
+    </div>
   );
 }
 
@@ -2683,17 +3034,17 @@ const NDM = 'https://newdermamedlaserclinic.com';
 const FEES = `${NDM}/fees-financing/`;
 const SPECIALS = [ /* round 34: the twelve monthly specials the designer picked; price, unit and offer come from the price list (below) */
   { n: 'Botox', img: 'assets/pricing/price-1.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Botox / Dysport', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-botox-dysport-h', d: 'Priced per unit, planned at your free consultation.' },
-  { n: 'Lip Augmentation', img: 'assets/pricing/price-2.jpg', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Shape and definition for the lips, planned with you.' },
-  { n: 'Laser Hair Removal', img: 'assets/journal/laser-hair-removal.webp', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Laser Hair Removal', area: 'Body', icon: 'body', h: 'pricing.html#pg-laser-hair-removal-h', d: 'Medical-grade laser hair reduction, priced per area.' },
-  { n: 'Lip Filler', img: 'assets/treatments/lip-filler.jpg', pos: '50% 35%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
-  { n: 'Microneedling', img: 'assets/treatments/microneedling.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
-  { n: 'Chemical Peel', img: 'assets/treatments/chemical-peel.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
-  { n: 'CoolSculpting', img: 'assets/home/v3/hipdip-720.webp', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Body Contouring', area: 'Body', icon: 'body', h: 'pricing.html#pg-coolsculpting-tight-sculpting-h', d: 'Non-invasive body contouring, priced per zone.' },
-  { n: 'Sculptra', img: 'assets/treatments/sculptra.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Bio-stimulators', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Gradual, collagen-building facial lift.' },
-  { n: 'Laser Skin Resurfacing', img: 'assets/treatments/laser-resurfacing.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
-  { n: 'Photo Rejuvenation', img: 'assets/treatments/photo-rejuvenation.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
-  { n: 'PRP Hair Restoration', img: 'assets/pricing/price-7.jpg', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Hair Loss', area: 'Hair', icon: 'hair', h: 'pricing.html#pg-hair-loss-h', d: 'PRP scalp treatment for thinning hair, priced by area.' },
-  { n: 'PRP Face', img: 'assets/pricing/price-4.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Microneedling with PRP for the face.' }
+  { n: 'Lip Augmentation', img: 'assets/home/menu/lip-fillers.jpg', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Shape and definition for the lips, planned with you.' },
+  { n: 'Laser Hair Removal', img: 'assets/home/menu/laser-hair-removal.jpg', pos: '50% 45%', p: '', u: '', deal: '', tag: 'Laser Hair Removal', area: 'Body', icon: 'body', h: 'pricing.html#pg-laser-hair-removal-h', d: 'Medical-grade laser hair reduction, priced per area.' },
+  { n: 'Lip Filler', img: 'assets/home/menu/lip-fillers.jpg', pos: '50% 35%', p: '', u: '', deal: '', tag: 'Dermal Fillers', area: 'Face', icon: 'lips', h: 'pricing.html#pg-dermal-fillers-h', d: 'Add volume, shape and definition to the lips.' },
+  { n: 'Microneedling', img: 'assets/home/menu/microneedling.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Boost collagen for smoother, firmer skin.' },
+  { n: 'Chemical Peel', img: 'assets/home/menu/chemical-peels.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Chemical Peel', area: 'Face', icon: 'drop', h: 'pricing.html#pg-chemical-peel-h', d: 'Renew tone and texture with a tailored peel.' },
+  { n: 'CoolSculpting', img: 'assets/home/menu/coolsculpting.jpg', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Body Contouring', area: 'Body', icon: 'body', h: 'pricing.html#pg-coolsculpting-tight-sculpting-h', d: 'Non-invasive body contouring, priced per zone.' },
+  { n: 'Sculptra', img: 'assets/home/menu/sculptra.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Bio-stimulators', area: 'Face', icon: 'syringe', h: 'pricing.html#pg-skin-booster-and-bio-stimulators-h', d: 'Gradual, collagen-building facial lift.' },
+  { n: 'Laser Skin Resurfacing', img: 'assets/home/menu/laser-skin-resurfacing.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Laser Skin Resurfacing', area: 'Face', icon: 'face', h: 'pricing.html#pg-laser-skin-resurfacing-h', d: 'Resurface for clearer, smoother skin.' },
+  { n: 'Photo Rejuvenation', img: 'assets/home/menu/photo-rejuvenation.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Photo-Rejuvenation', area: 'Face', icon: 'drop', h: 'pricing.html#pg-photo-rejuvenation-h', d: 'Even out redness and sun spots.' },
+  { n: 'PRP Hair Restoration', img: 'assets/home/menu/prp-hair-restoration.jpg', pos: '50% 50%', p: '', u: '', deal: '', tag: 'Hair Loss', area: 'Hair', icon: 'hair', h: 'pricing.html#pg-hair-loss-h', d: 'PRP scalp treatment for thinning hair, priced by area.' },
+  { n: 'PRP Face', img: 'assets/home/menu/microneedling.jpg', pos: '50% 40%', p: '', u: '', deal: '', tag: 'Microneedling', area: 'Face', icon: 'pen', h: 'pricing.html#pg-microneedling-h', d: 'Microneedling with PRP for the face.' }
 ];
 
 /* round 29: each special shows the price list's lowest price after the discount, its unit and its offer (priceInfo / priceFrom) */
@@ -2801,14 +3152,14 @@ function Promotions({ level = 'h2' }) {
                     {s.off ? (
                       <>
                         <span className="sw-muted font-inter text-[11px] uppercase tracking-[.18em]">Save up to</span>
-                        <span className="sw-price mt-1 whitespace-nowrap font-aeonik leading-none tracking-[-0.035em]" style={{ fontSize: 40 * k }}>{s.off}<span className="sw-cur sw-pct">%</span></span>
+                        <span className="sw-price mt-1 whitespace-nowrap font-aeonik leading-none tracking-[-0.035em]" style={{ fontSize: 30 * k }}>{s.off}<span className="sw-cur sw-pct">%</span></span>
                         <span className="sw-muted mt-2 font-inter text-[12.5px]">on selected packages</span>
                       </>
                     ) : (
                       <>
-                        {s.deal && <span className="deal-badge mb-3"><i aria-hidden="true">%</i>{s.deal}</span>}
+                        {s.deal && <DealPill deal={s.deal} className="mb-3" />}
                         <span className="sw-muted font-inter text-[11px] uppercase tracking-[.18em]">From</span>
-                        <span className="sw-price mt-1 whitespace-nowrap font-aeonik leading-none tracking-[-0.035em]" style={{ fontSize: 40 * k }}><span className="sw-cur">$</span>{s.p}</span>
+                        <span className="sw-price mt-1 whitespace-nowrap font-aeonik leading-none tracking-[-0.035em]" style={{ fontSize: 30 * k }}><span className="sw-cur">$</span>{s.p}</span>
                         <span className="sw-muted mt-2 font-inter text-[12.5px]">{s.u || 'for selected packages'}</span>
                       </>
                     )}
@@ -3108,7 +3459,7 @@ function AptosCare() {
           </p>
           {/* round 29: no price here; the facts become three dials and the points become icon chips */}
           <ul className="rv sig-dials mt-8 grid grid-cols-3 gap-3 sm:gap-4" role="list" style={{ transitionDelay: '.14s' }}>
-            {[['60', 'min', 'Treatment time', 'About 60 minutes', .34], ['2', 'weeks', 'Downtime', 'Up to about 2 weeks', .5], ['24', 'months', 'May last', 'Up to 24 months', .82]].map(([n, u, t, sr, k], i) => (
+            {[['60', 'min', 'Treatment time', 'About 60 minutes', .34], ['1', 'session', 'For most plans', 'One session for most plans', .2], ['24', 'months', 'May last', 'Up to 24 months', .82]].map(([n, u, t, sr, k], i) => (
               <li key={t} className="sig-dial relative grid place-items-center rounded-[22px] bg-white px-2 py-5 ring-1 ring-ndm-ink/[.06]" style={{ '--k': k, '--d': `${0.15 * i}s` }}>
                 <svg viewBox="0 0 100 100" aria-hidden="true" className="sig-ring absolute left-1/2 top-[18px] size-[clamp(78px,7vw,96px)] -translate-x-1/2"><circle cx="50" cy="50" r="44" className="sig-track" /><circle cx="50" cy="50" r="44" className="sig-arc" pathLength="100" /></svg>
                 <span className="relative grid size-[clamp(78px,7vw,96px)] place-items-center text-center" aria-hidden="true">
@@ -3433,8 +3784,6 @@ const TEAM = [
     ],
     facts: [['Education', 'BSc, Biology'], ['Certifications', 'Cosmetic Dermatology, Medical Aesthetics'], ['Role', 'Director of NewDermaMed']],
   },
-  /* photo in; her profile (bio, focus, facts) is still to come, so the card has no profile dialog yet */
-  { id: 'team-heather', first: 'Heather', tag: 'Nurse Practitioner', sample: true, name: 'Heather Bouchard, NP', role: 'Nurse Practitioner', img: 'assets/team/heather.jpg' },
 ];
 
 const TEAM_LABEL = 'font-inter text-[11.5px] font-[550] uppercase tracking-[.14em] text-ndm-muted';
@@ -3553,8 +3902,8 @@ function TeamProfile({ m, onClose }) {
 /* meet the team: copy on the left, three staggered portraits on the right (Alin, Negin, Luis).
    The portraits wipe up one after another when the row comes into view, drift at different speeds while scrolling,
    and each one opens the profile dialog. */
-const TEAM_ORDER = ['team-alin', 'team-negin', 'team-luis', 'team-heather'];
-const TEAM_DRIFT = [-26, 30, -10, 22]; /* px of parallax over the section's pass through the viewport */
+const TEAM_ORDER = ['team-alin', 'team-negin', 'team-luis'];
+const TEAM_DRIFT = [-26, 30, -10]; /* px of parallax over the section's pass through the viewport */
 
 function TeamPortrait({ m, i, onOpen }) {
   return (
@@ -3613,7 +3962,7 @@ function Team() {
             <Btn href="#/book" v="book">Book Free Consultation</Btn>
           </div>
         </div>
-        <ul ref={row} role="list" className={`team-ports grid grid-cols-2 items-start gap-[clamp(10px,1.6vw,24px)] sm:grid-cols-4 pb-[clamp(28px,3.4vw,56px)] ${shown ? 'in' : ''}`}>
+        <ul ref={row} role="list" className={`team-ports grid grid-cols-2 items-start gap-[clamp(10px,1.6vw,24px)] sm:grid-cols-3 pb-[clamp(28px,3.4vw,56px)] ${shown ? 'in' : ''}`}>
           {people.map((m, i) => (
             <li key={m.id} ref={(el) => (cells.current[i] = el)} className="will-change-transform">
               <TeamPortrait m={m} i={i} onOpen={open(m)} />
@@ -4061,7 +4410,7 @@ function Start({ onSearch }) {
         <button type="button" onClick={onSearch} className="rv group flex h-[60px] w-full max-w-[440px] items-center gap-3 rounded-full border border-ndm-line bg-white pl-5 pr-2 text-left shadow-[0_18px_40px_-30px_rgba(20,20,20,.45)] transition-colors hover:border-ndm-ink/30" style={{ transitionDelay: '.1s' }}>
           <IconSearch className="shrink-0 text-ndm-muted" />
           <span className="flex-1 font-inter text-[16px] text-ndm-muted">Search treatments</span>
-          <span className="grid size-11 place-items-center rounded-full bg-ndm-deep text-white transition-[transform,background-color] group-hover:translate-x-0.5 group-hover:bg-[#0A4F7A]" aria-hidden="true"><IconArrow /></span>
+          <span className="grid size-11 place-items-center rounded-full bg-ndm-deep text-white transition-[transform,background-color] group-hover:translate-x-0.5 group-hover:bg-[#0A4F7A]" aria-hidden="true"><IconSearch size={20} /></span>
         </button>
       </div>
 
@@ -4650,7 +4999,7 @@ function Shop() {
             The medical-grade skincare we carry at our Toronto clinics, available to order from our online shop.
           </p>
           <div className="rv mt-6 flex justify-center" style={{ transitionDelay: '.14s' }}>
-            <Btn href={SHOP_URL} target="_blank" rel="noopener" v="ink">Visit Skincare shop<span className="sr-only"> (opens in a new tab)</span></Btn>
+            <Btn href="shop.html" v="ink">Visit Skincare shop</Btn>
           </div>
         </div>
       </div>
@@ -4811,7 +5160,7 @@ function CartPill({ onOpen, hidden }) {
     <button type="button" onClick={onOpen} tabIndex={show ? 0 : -1} aria-hidden={!show} data-float-avoid=""
       onTransitionEnd={(e) => { if (e.propertyName === 'transform') window.dispatchEvent(new Event('scroll')); }}
       aria-label={`View cart, ${cart.count} ${cart.count === 1 ? 'item' : 'items'}, ${money(cart.total)}`}
-      className={`cart-pill fixed inset-x-4 bottom-4 z-[60] flex items-center gap-3 rounded-full bg-ndm-deep py-2 pl-2 pr-2 text-left text-white shadow-[0_24px_50px_-20px_rgba(11,11,12,.6)] sm:inset-x-auto sm:right-6 sm:bottom-6 ${show ? '' : 'is-off'}`}>
+      className={`cart-pill fixed inset-x-4 bottom-4 z-[60] flex items-center gap-3 rounded-full bg-ndm-deep py-1.5 pl-1.5 pr-1.5 sm:py-2 sm:pl-2 sm:pr-2 text-left text-white shadow-[0_24px_50px_-20px_rgba(11,11,12,.6)] sm:inset-x-auto sm:right-6 sm:bottom-6 ${show ? '' : 'is-off'}`}>
       <span className="relative grid size-11 shrink-0 place-items-center rounded-full bg-white/10">
         <IconBag size={20} />
         <span key={bump} className="cart-bump absolute -right-0.5 -top-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ndm-sky px-1 font-inter text-[11px] font-semibold leading-none text-white">{cart.count}</span>
@@ -5041,11 +5390,13 @@ function ChatBot({ ready, hidden }) {
   const asked = new Set(msgs.filter((m) => m.me).map((m) => m.t));
   const left = CHAT_PRESETS.filter(([q]) => !asked.has(q));
   /* wide screens: sits above the cart bar when it shows (same corner) */
-  const bottom = small ? Math.max(16, avoid) + 64 : Math.max(24, avoid);
+  /* phones: above the floating search button, or in its place on the Pricing page, which has none (2026-11-25) */
+  const bottom = small ? Math.max(16, avoid) + (HERE === 'pricing.html' ? 0 : 64) : Math.max(24, avoid);
   const off = hidden && !open;
   return (
     <>
-      {note && !open && !off && (!small || clear) && (
+      {/* the note never opens on phones (user, 2026-11-25: it crowded the bottom of the screen) */}
+      {note && !open && !off && !small && (
         <div role="status" className="chat-pop fixed z-[61] flex max-w-[calc(100vw-88px)] items-center gap-2.5 rounded-[18px] rounded-br-[6px] bg-white py-2 pl-2 pr-9 shadow-[0_24px_50px_-22px_rgba(11,11,12,.5)] ring-1 ring-ndm-ink/[.06]"
           style={small ? { right: 16, bottom: `calc(${bottom + 64}px + env(safe-area-inset-bottom))` } : { right: 24 + 58 + 12, bottom: bottom + 8 }}>
           <span className="relative size-9 shrink-0"><img src={CHAT_AGENT.img} alt="" className="size-9 rounded-full object-cover" /><i className="absolute bottom-0 right-0 size-2.5 rounded-full bg-[#3DDC84] ring-2 ring-white" /></span>
@@ -5056,10 +5407,10 @@ function ChatBot({ ready, hidden }) {
         </div>
       )}
       <button ref={btn} type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} aria-controls="chat-panel" aria-label={open ? 'Close chat' : 'Chat with NewDermaMed'} tabIndex={off ? -1 : 0}
-        className={`chat-btn chat-launch fixed z-[61] grid size-[56px] place-items-center rounded-full text-white md:size-[62px] ${off ? 'is-off' : ''} ${note && !open ? 'has-note' : ''} ${open ? 'is-open' : ''}`}
+        className={`chat-btn chat-launch fixed z-[61] grid size-[48px] place-items-center rounded-full text-white md:size-[62px] ${off ? 'is-off' : ''} ${note && !open && !small ? 'has-note' : ''} ${open ? 'is-open' : ''}`}
         style={{ right: small ? 16 : 24, bottom: `calc(${bottom}px + env(safe-area-inset-bottom))` }}>
         {open ? <IconClose /> : <><img src={CHAT_AGENT.img} alt="" className="chat-launch-img" /><span aria-hidden="true" className="chat-launch-badge"><IconChat size={13} /></span></>}
-        {note && !open && <i aria-hidden="true" className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#E5484D] px-1 font-inter text-[11px] font-semibold not-italic leading-none text-white ring-2 ring-white">1</i>}
+        {note && !open && !small && <i aria-hidden="true" className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#E5484D] px-1 font-inter text-[11px] font-semibold not-italic leading-none text-white ring-2 ring-white">1</i>}
       </button>
       <section id="chat-panel" role="dialog" aria-label={`Chat with ${CHAT_AGENT.name} from NewDermaMed`} aria-hidden={!open} {...(open ? {} : { inert: '' })} data-lenis-prevent=""
         className={`chat-panel fixed z-[62] flex flex-col overflow-hidden bg-white shadow-[0_40px_80px_-30px_rgba(11,11,12,.55)] ring-1 ring-ndm-ink/[.06] ${open ? 'is-on' : ''} ${small ? 'inset-x-2 bottom-2 top-[76px] rounded-[26px]' : 'h-[min(640px,calc(100vh-140px))] w-[400px] rounded-[26px]'}`}
@@ -5120,7 +5471,7 @@ function ChatBot({ ready, hidden }) {
 
 /* home: "Where would you like to start?" panels and "Treatments, by what they do" (content from the NDM website v3 prototype, Nov 2026) */
 const START = [{"id": "face", "t": "Face", "sub": "6 concerns", "h": "Face", "d": "Lines, volume and contour.", "img": "assets/home/v3/mirror-1000.webp", "set": "assets/home/v3/mirror-720.webp 720w, assets/home/v3/mirror-1000.webp 1000w, assets/home/v3/mirror-1440.webp 1440w", "pos": "center 18%", "posO": "center 100%", "chips": [{"id": "xo-wrinkles", "label": "Wrinkles & fine lines", "title": "Wrinkles & fine lines", "lede": "Lines tell a story. Whether they appear when you smile or stay when your face is at rest, there are ways to soften them that still look like you.", "items": [["Laser Skin Resurfacing", "Surface renewal for fine lines and texture", "From $200", "#/laser-skin-resurfacing"], ["Dermal Fillers", "Can soften deeper folds at rest", "From $750", "#/dermal-fillers"], ["Skin Boosters", "Hydration and quality for crepey skin", "From $399", "#/skin-boosters"]], "facts": [], "rx": "Prescription treatments for expression lines are available after an in-person medical assessment. Your provider discusses them privately at your consultation.", "more": ["wrinkles-fine-lines.html", "Compare all 6 options"], "interest": "Wrinkles & fine lines"}, {"id": "xo-volume-loss", "label": "Volume loss", "title": "Volume loss", "lede": "Hollow cheeks, flatter temples or a tired look that sleep doesn’t fix often come from volume loss, and it can be restored subtly.", "items": [["Dermal Fillers", "Can restore volume right away", "From $750", "#/dermal-fillers"], ["Sculptra®", "Gradual volume through your own collagen", "From $699", "#/sculptra"], ["Radiesse®", "Structure plus collagen support", "From $599", "#/radiesse"], ["Aptos Thread Lift", "Repositions tissue alongside volume", "From $2500", "aptos-thread-lift.html"]], "facts": [], "rx": "", "more": ["#/volume-loss", "Compare these options"], "interest": "Volume loss"}, {"id": "xo-sagging-skin", "label": "Sagging skin & jowls", "title": "Sagging skin & jowls", "lede": "When the jawline softens or the cheeks start to drop, lift and support can be restored without surgery for many people.", "items": [["Aptos Thread Lift", "Can lift mild to moderate laxity", "From $2500", "aptos-thread-lift.html"], ["Laser Skin Tightening", "Gradual firming, little to no downtime", "From $480", "#/laser-skin-tightening"], ["Radiesse®", "Jawline structure and collagen support", "From $599", "#/radiesse"]], "facts": [], "rx": "", "more": ["#/sagging-skin", "Compare all 5 options"], "interest": "Sagging skin & jowls"}, {"id": "xo-under-eye-hollows", "label": "Dark circles & hollows", "title": "Dark circles & under-eye hollows", "lede": "Shadows under the eyes have different causes, and the right treatment depends on which one you have.", "items": [["Under-Eye Filler", "Can soften a true hollow", "From $850", "#/under-eye-filler"], ["Skin Boosters", "Hydration for thin, crepey skin", "From $399", "#/skin-boosters"], ["Laser Skin Tightening", "Smooth Eye for fine lines and firmness", "From $480", "#/laser-skin-tightening"], ["Microneedling", "Skin quality and fine texture", "From $245", "#/microneedling"]], "facts": [], "rx": "", "more": ["#/under-eye-hollows", "Compare these options"], "interest": "Dark circles & under-eye hollows"}, {"id": "xo-double-chin", "label": "Double chin", "title": "Double chin", "lede": "Fullness under the chin can hide a defined jawline even at a healthy weight. Non-surgical options can help define it.", "items": [["CoolSculpting®", "Mini applicator for fat under the chin", "From $850", "#/coolsculpting"], ["Radiesse®", "Jawline definition", "From $599", "#/radiesse"], ["Aptos Thread Lift", "Lift for the lower face and neck", "From $2500", "aptos-thread-lift.html"]], "facts": [], "rx": "Prescription options for fat under the chin are available after an in-person medical assessment. Your provider discusses them privately at your consultation.", "more": ["#/double-chin", "Compare these options"], "interest": "Double chin"}, {"id": "xo-lip-fillers", "label": "Thin lips", "title": "Thin lips", "lede": "Hyaluronic acid lip enhancement for definition, balance and hydration, planned to suit your face.", "items": [["Lip Fillers", "Usually one session", "From $750", "#/lip-fillers"]], "facts": [["Downtime", "Swelling for 2 to 3 days is common; bruising is possible"], ["When results may appear", "Visible right away, settling over about 2 weeks"]], "rx": "", "more": ["#/lip-fillers", "About lip fillers"], "interest": "Lip Fillers"}]}, {"id": "skin", "t": "Skin", "sub": "6 concerns", "h": "Skin", "d": "Tone, texture and clarity.", "img": "assets/home/v3/skinx-1000.webp", "set": "assets/home/v3/skinx-720.webp 720w, assets/home/v3/skinx-1000.webp 1000w, assets/home/v3/skinx-1366.webp 1366w", "pos": "center 6%", "posO": "center 6%", "chips": [{"id": "xo-acne", "label": "Acne", "title": "Acne", "lede": "Breakouts can be calmed with the right combination of clinic treatments and skincare, at any age.", "items": [["Laser Acne Treatment", "May calm active inflammatory acne", "From $375", "#/laser-acne-treatment"], ["Chemical Peels", "Acnelan® and peels to unclog and calm", "From $149", "#/chemical-peels"], ["Medical Facials", "Purifying Acne Relief facial between treatments", "From $249", "#/medical-facials"]], "facts": [], "rx": "", "more": ["#/acne", "Compare these options"], "interest": "Acne"}, {"id": "xo-acne-scars", "label": "Acne scars", "title": "Acne scars", "lede": "Not every scar responds to the same treatment. Matching your scar type to the right option is what makes the difference.", "items": [["Microneedling", "Collagen induction for texture", "From $245", "#/microneedling"], ["Laser Skin Resurfacing", "Fractional laser for deeper texture", "From $200", "#/laser-skin-resurfacing"], ["Chemical Peels", "Evens tone and marks", "From $149", "#/chemical-peels"]], "facts": [], "rx": "", "more": ["#/acne-scars", "Compare these options"], "interest": "Acne scars"}, {"id": "xo-pigmentation", "label": "Pigmentation & sun spots", "title": "Pigmentation & sun spots", "lede": "Sun spots, uneven tone and marks after breakouts can be brightened once we know what is causing them.", "items": [["Photo-Rejuvenation (IPL)", "Light-based treatment for sun spots", "From $275", "#/photo-rejuvenation"], ["Cosmelan® & Dermamelan®", "Depigmenting protocol for stubborn pigment", "From $799.20", "#/cosmelan-dermamelan"], ["Chemical Peels", "Brightening peels for tone", "From $149", "#/chemical-peels"], ["Laser Skin Resurfacing", "Surface renewal for sun damage", "From $200", "#/laser-skin-resurfacing"]], "facts": [], "rx": "", "more": ["#/pigmentation", "Compare these options"], "interest": "Pigmentation & sun spots"}, {"id": "xo-melasma", "label": "Melasma", "title": "Melasma", "lede": "Melasma needs a careful plan. The right protocol can lighten it while avoiding treatments that make it worse.", "items": [["Cosmelan® & Dermamelan®", "Depigmenting protocol designed for melasma", "From $799.20", "#/cosmelan-dermamelan"], ["Chemical Peels", "Gentle brightening peels", "From $149", "#/chemical-peels"], ["Microneedling", "With depigmenting serums, case by case", "From $245", "#/microneedling"]], "facts": [], "rx": "", "more": ["#/melasma", "Compare these options"], "interest": "Melasma"}, {"id": "xo-rosacea-redness", "label": "Rosacea & redness", "title": "Rosacea & redness", "lede": "Flushing and visible vessels can often be calmed with light-based treatments and a skin plan built around your triggers.", "items": [["Photo-Rejuvenation (IPL)", "Light-based treatment for diffuse redness", "From $275", "#/photo-rejuvenation"], ["Laser Vein Removal", "Excel V+ for visible vessels", "From $240", "#/laser-vein-removal"], ["Medical Facials", "Calming facials for sensitive skin", "From $249", "#/medical-facials"]], "facts": [], "rx": "", "more": ["#/rosacea-redness", "Compare these options"], "interest": "Rosacea & redness"}, {"id": "xo-texture-pores", "label": "Pores & texture", "title": "Enlarged pores & texture", "lede": "Rough texture and visible pores can be refined with treatments that renew the surface and support collagen.", "items": [["Microneedling", "Collagen induction for pores and texture", "From $245", "#/microneedling"], ["4D Rejuvalift", "Surface renewal and firmness", "From $600", "#/laser-rejuvenation"], ["Chemical Peels", "Regular exfoliation", "From $149", "#/chemical-peels"]], "facts": [], "rx": "", "more": ["#/texture-pores", "Compare all 5 options"], "interest": "Enlarged pores & texture"}]}, {"id": "body-hair", "t": "Body & hair", "sub": "5 concerns", "h": "Body & hair", "d": "Contour, veins and hair.", "img": "assets/home/v3/knee-1000.webp", "set": "assets/home/v3/knee-720.webp 720w, assets/home/v3/knee-1000.webp 1000w, assets/home/v3/knee-1122.webp 1122w", "pos": "center 42%", "posO": "center 100%", "chips": [{"id": "xo-stubborn-fat", "label": "Stubborn fat", "title": "Stubborn fat", "lede": "Areas that don’t change with diet and exercise can be contoured without surgery or downtime.", "items": [["CoolSculpting®", "Controlled cooling for pinchable fat", "From $850", "#/coolsculpting"], ["TightSculpting®", "Laser contouring with skin tightening", "From $600", "#/tightsculpting"], ["Non-Surgical Butt Lift", "Shape and contour for the buttocks and hips", "From $1999", "#/non-surgical-bbl"]], "facts": [], "rx": "", "more": ["#/stubborn-fat", "Compare these options"], "interest": "Stubborn fat"}, {"id": "xo-laser-hair-removal", "label": "Unwanted hair", "title": "Unwanted hair", "lede": "Medical-grade laser hair reduction for the face and body, planned for your skin and hair type.", "items": [["Laser Hair Removal", "Usually 6 to 8 sessions, 4 to 8 weeks apart", "From $90", "#/laser-hair-removal"]], "facts": [["Downtime", "Redness for a few hours"], ["When results may appear", "Gradual reduction after each session"]], "rx": "", "more": ["#/laser-hair-removal", "About laser hair removal"], "interest": "Laser Hair Removal"}, {"id": "xo-spider-veins", "label": "Spider veins", "title": "Spider veins", "lede": "Small red, blue or purple veins on the legs or face can be treated, with a vascular surgeon on our team for anything more.", "items": [["Laser Vein Removal", "Excel V+ laser for fine veins", "From $240", "#/laser-vein-removal"], ["Sclerotherapy", "Injections for leg spider veins", "At consultation", "#/sclerotherapy"]], "facts": [], "rx": "", "more": ["#/spider-veins", "Compare these options"], "interest": "Spider veins"}, {"id": "xo-varicose-veins", "label": "Varicose veins", "title": "Varicose veins", "lede": "Bulging or aching veins are assessed by our vascular surgeon, with minimally invasive treatment where appropriate.", "items": [["VenaSeal™", "Medical adhesive closes the diseased vein", "At consultation", "#/venaseal"], ["Sclerotherapy", "For smaller veins and branches", "At consultation", "#/sclerotherapy"]], "facts": [], "rx": "", "more": ["#/varicose-veins", "Compare these options"], "interest": "Varicose veins"}, {"id": "xo-hair-loss", "label": "Hair loss & thinning", "title": "Hair loss & thinning", "lede": "Thinning hair is common in men and women, and earlier treatment usually gives better options.", "items": [["PRP Hair Restoration", "Your own platelets to support follicles", "From $399", "#/prp-hair-restoration"], ["Laser Hair Rejuvenation", "Needle-free laser for the scalp", "From $350", "#/laser-hair-rejuvenation"]], "facts": [], "rx": "", "more": ["#/hair-loss", "Compare these options"], "interest": "Hair loss & thinning"}]}, {"id": "not-sure", "t": "Not sure?", "sub": "Free skin analysis", "h": "Not sure?", "d": "Every consultation includes a free VISIA® skin analysis, so your plan starts from what your skin actually needs.", "img": "assets/home/v3/visia-720.webp", "set": "assets/home/v3/visia-720.webp 720w, assets/home/v3/visia-1440.webp 1440w", "pos": "28% 60%", "posO": "28% 60%", "chips": [], "visia": "#/visia-skin-analysis"}];
-const MENU = [{"id": "injectables", "label": "Injectables", "all": ["#/injectables", "All injectables"], "cards": [["Dermal Fillers", "Hyaluronic acid fillers that can restore lost volume, soften folds and refine contours, placed with restraint.", "From $750", "#/dermal-fillers", "assets/home/v3/sface-1000.webp", "assets/home/v3/sface-720.webp 720w, assets/home/v3/sface-1000.webp 1000w", "Injectables"], ["Lip Fillers", "Hyaluronic acid lip enhancement for definition, balance and hydration, planned to suit your face.", "From $750", "#/lip-fillers", "assets/home/v3/lips-1000.webp", "assets/home/v3/lips-720.webp 720w, assets/home/v3/lips-1000.webp 1000w", "Injectables"], ["Under-Eye Filler", "Careful placement of a soft filler that can soften hollows under the eyes and the shadow they cast.", "From $850", "#/under-eye-filler", "assets/home/v3/p1-683.webp", "assets/home/v3/p1-683.webp 683w", "Injectables"], ["Sculptra®", "A poly-L-lactic acid biostimulator that supports your own collagen, for gradual, natural-looking volume.", "From $699", "#/sculptra", "assets/home/v3/sculptra-1000.webp", "assets/home/v3/sculptra-720.webp 720w, assets/home/v3/sculptra-1000.webp 1000w", "Injectables"], ["Radiesse®", "A calcium hydroxylapatite biostimulator that gives structure and supports collagen, for facial contour and the hands.", "From $599", "#/radiesse", "assets/home/v3/collagen-1000.webp", "assets/home/v3/collagen-720.webp 720w, assets/home/v3/collagen-1000.webp 1000w", "Injectables"], ["Skin Boosters", "Micro-injections of hyaluronic acid that can improve hydration, smoothness and skin quality.", "From $399", "#/skin-boosters", "assets/home/v3/booster-1000.webp", "assets/home/v3/booster-720.webp 720w, assets/home/v3/booster-1000.webp 1000w", "Injectables"]]}, {"id": "laser", "label": "Laser & Energy", "all": ["#/laser", "All laser & energy"], "cards": [["Laser Skin Resurfacing", "Fotona laser resurfacing that can refine texture, tone and fine lines, from a light laser peel to fractional and deeper options.", "From $200", "#/laser-skin-resurfacing", "assets/home/v3/resurf-1000.webp", "assets/home/v3/resurf-720.webp 720w, assets/home/v3/resurf-1000.webp 1000w", "Laser & Energy"], ["Laser Skin Tightening", "Non-invasive Fotona protocols that gently heat deeper layers of skin to improve the look of mild laxity.", "From $480", "#/laser-skin-tightening", "assets/home/v3/jawline-1000.webp", "assets/home/v3/jawline-720.webp 720w, assets/home/v3/jawline-1000.webp 1000w", "Laser & Energy"], ["4D Rejuvalift", "Multi-step Fotona protocols, including 4D Rejuvalift, for tone, texture and firmness in a single visit.", "From $600", "#/laser-rejuvenation", "assets/home/v3/facial-1000.webp", "assets/home/v3/facial-720.webp 720w, assets/home/v3/facial-1000.webp 1000w", "Laser & Energy"], ["Photo-Rejuvenation (IPL)", "Intense pulsed light that can reduce the look of sun spots, redness and uneven tone.", "From $275", "#/photo-rejuvenation", "assets/home/v3/ipl-1000.webp", "assets/home/v3/ipl-720.webp 720w, assets/home/v3/ipl-1000.webp 1000w", "Laser & Energy"], ["Laser Hair Removal", "Medical-grade laser hair reduction for the face and body, planned for your skin and hair type.", "From $90", "#/laser-hair-removal", "assets/home/v3/p6-1024.webp", "assets/home/v3/p6-720.webp 720w, assets/home/v3/p6-1024.webp 1024w", "Laser & Energy"], ["Laser Acne Treatment", "Laser sessions that can calm active breakouts on the face and upper back.", "From $375", "#/laser-acne-treatment", "assets/home/v3/peel-1000.webp", "assets/home/v3/peel-720.webp 720w, assets/home/v3/peel-1000.webp 1000w", "Laser & Energy"]]}, {"id": "skin", "label": "Skin", "all": ["#/skin", "All skin"], "cards": [["VISIA® Skin Analysis", "Included free with every consultation: imaging that maps spots, wrinkles, texture, pores and redness, so your plan starts from facts.", "Free", "#/visia-skin-analysis", "assets/home/v3/visia-720.webp", "assets/home/v3/visia-720.webp 720w, assets/home/v3/visia-1440.webp 1440w", "Skin Treatments"], ["Microneedling", "Collagen induction with Dermapen 4, with options to add PRP, PDRN or exosomes for your skin’s needs.", "From $245", "#/microneedling", "assets/home/v3/mneedle-1000.webp", "assets/home/v3/mneedle-720.webp 720w, assets/home/v3/mneedle-1000.webp 1000w", "Skin Treatments"], ["Chemical Peels", "Light, medium and deep professional peels, including Acnelan®, chosen for your skin type and goals.", "From $149", "#/chemical-peels", "assets/home/v3/peel-1000.webp", "assets/home/v3/peel-720.webp 720w, assets/home/v3/peel-1000.webp 1000w", "Skin Treatments"], ["Cosmelan® & Dermamelan®", "Professional depigmenting protocols by Mesoestetic for melasma, sun spots and uneven tone.", "From $799.20", "#/cosmelan-dermamelan", "assets/home/v3/p3-682.webp", "assets/home/v3/p3-682.webp 682w", "Skin Treatments"], ["Medical Facials", "Clinical facials, including Age Element®, Purifying Acne Relief and Glass Glow, tailored at each visit.", "From $249", "#/medical-facials", "assets/home/v3/facial-1000.webp", "assets/home/v3/facial-720.webp 720w, assets/home/v3/facial-1000.webp 1000w", "Skin Treatments"]]}, {"id": "body", "label": "Body", "all": ["#/body", "All body"], "cards": [["CoolSculpting®", "Controlled cooling that can reduce stubborn fat in treated areas, without surgery.", "From $850", "#/coolsculpting", "assets/home/v3/knee-1000.webp", "assets/home/v3/knee-720.webp 720w, assets/home/v3/knee-1000.webp 1000w, assets/home/v3/knee-1122.webp 1122w", "Body Contouring"], ["TightSculpting®", "Fotona laser body contouring that can reduce fat and tighten skin in the same treatment.", "From $600", "#/tightsculpting", "assets/home/v3/arms-1000.webp", "assets/home/v3/arms-720.webp 720w, assets/home/v3/arms-1000.webp 1000w", "Body Contouring"], ["Non-Surgical Butt Lift", "Injectable collagen stimulators planned to improve the shape and contour of the buttocks and hips, without surgery.", "From $1999", "#/non-surgical-bbl", "assets/home/v3/bbl-1000.webp", "assets/home/v3/bbl-720.webp 720w, assets/home/v3/bbl-1000.webp 1000w", "Body Contouring"]]}, {"id": "veins", "label": "Veins", "all": ["#/veins", "All veins"], "cards": [["Laser Vein Removal", "Cutera Excel V+ laser for small visible veins and spider veins on the face and legs.", "From $240", "#/laser-vein-removal", "assets/home/v3/p6-1024.webp", "assets/home/v3/p6-720.webp 720w, assets/home/v3/p6-1024.webp 1024w", "Vein Treatments"], ["Sclerotherapy", "Injections that close small spider and reticular veins on the legs, after a vascular assessment.", "Priced at consultation", "#/sclerotherapy", "assets/home/v3/d4-720.webp", "assets/home/v3/d4-720.webp 720w, assets/home/v3/d4-1440.webp 1440w", "Vein Treatments"], ["VenaSeal™", "A minimally invasive treatment that seals larger varicose veins with a medical adhesive, decided after an ultrasound assessment.", "Priced at consultation", "#/venaseal", "assets/home/v3/d3-720.webp", "assets/home/v3/d3-720.webp 720w, assets/home/v3/d3-1440.webp 1440w", "Vein Treatments"]]}, {"id": "hair", "label": "Hair", "all": ["#/hair", "All hair"], "cards": [["PRP Hair Restoration", "Platelet-rich plasma from your own blood, applied to the scalp to support thinning hair.", "From $399", "#/prp-hair-restoration", "assets/home/v3/u2-1000.webp", "assets/home/v3/u2-720.webp 720w, assets/home/v3/u2-1000.webp 1000w", "Hair Restoration"], ["Laser Hair Rejuvenation", "A gentle Fotona laser treatment for the scalp that may support thinning hair, with no needles and little downtime.", "From $350", "#/laser-hair-rejuvenation", "assets/home/v3/u4-720.webp", "assets/home/v3/u4-720.webp 720w, assets/home/v3/u4-1400.webp 1400w", "Hair Restoration"]]}];
+const MENU = [{"id": "injectables", "label": "Injectables", "all": ["#/injectables", "All injectables"], "cards": [["Dermal Fillers", "Hyaluronic acid fillers that can restore lost volume, soften folds and refine contours, placed with restraint.", "From $750", "#/dermal-fillers", "assets/home/menu/dermal-fillers.jpg", "assets/home/menu/dermal-fillers.jpg 720w", "Injectables"], ["Lip Fillers", "Hyaluronic acid lip enhancement for definition, balance and hydration, planned to suit your face.", "From $750", "#/lip-fillers", "assets/home/menu/lip-fillers.jpg", "assets/home/menu/lip-fillers.jpg 720w", "Injectables"], ["Under-Eye Filler", "Careful placement of a soft filler that can soften hollows under the eyes and the shadow they cast.", "From $850", "#/under-eye-filler", "assets/home/menu/under-eye-filler.jpg", "assets/home/menu/under-eye-filler.jpg 720w", "Injectables"], ["Sculptra®", "A poly-L-lactic acid biostimulator that supports your own collagen, for gradual, natural-looking volume.", "From $699", "#/sculptra", "assets/home/menu/sculptra.jpg", "assets/home/menu/sculptra.jpg 720w", "Injectables"], ["Radiesse®", "A calcium hydroxylapatite biostimulator that gives structure and supports collagen, for facial contour and the hands.", "From $599", "#/radiesse", "assets/home/menu/radiesse.jpg", "assets/home/menu/radiesse.jpg 720w", "Injectables"], ["Skin Boosters", "Micro-injections of hyaluronic acid that can improve hydration, smoothness and skin quality.", "From $399", "#/skin-boosters", "assets/home/menu/skin-boosters.jpg", "assets/home/menu/skin-boosters.jpg 720w", "Injectables"]]}, {"id": "laser", "label": "Laser & Energy", "all": ["#/laser", "All laser & energy"], "cards": [["Laser Skin Resurfacing", "Fotona laser resurfacing that can refine texture, tone and fine lines, from a light laser peel to fractional and deeper options.", "From $200", "#/laser-skin-resurfacing", "assets/home/menu/laser-skin-resurfacing.jpg", "assets/home/menu/laser-skin-resurfacing.jpg 720w", "Laser & Energy"], ["Laser Skin Tightening", "Non-invasive Fotona protocols that gently heat deeper layers of skin to improve the look of mild laxity.", "From $480", "#/laser-skin-tightening", "assets/home/menu/laser-skin-tightening.jpg", "assets/home/menu/laser-skin-tightening.jpg 720w", "Laser & Energy"], ["4D Rejuvalift", "Multi-step Fotona protocols, including 4D Rejuvalift, for tone, texture and firmness in a single visit.", "From $600", "#/laser-rejuvenation", "assets/home/menu/laser-rejuvenation.jpg", "assets/home/menu/laser-rejuvenation.jpg 720w", "Laser & Energy"], ["Photo-Rejuvenation (IPL)", "Intense pulsed light that can reduce the look of sun spots, redness and uneven tone.", "From $275", "#/photo-rejuvenation", "assets/home/menu/photo-rejuvenation.jpg", "assets/home/menu/photo-rejuvenation.jpg 720w", "Laser & Energy"], ["Laser Hair Removal", "Medical-grade laser hair reduction for the face and body, planned for your skin and hair type.", "From $90", "#/laser-hair-removal", "assets/home/menu/laser-hair-removal.jpg", "assets/home/menu/laser-hair-removal.jpg 720w", "Laser & Energy"], ["Laser Acne Treatment", "Laser sessions that can calm active breakouts on the face and upper back.", "From $375", "#/laser-acne-treatment", "assets/home/menu/laser-acne-treatment.jpg", "assets/home/menu/laser-acne-treatment.jpg 720w", "Laser & Energy"]]}, {"id": "skin", "label": "Skin", "all": ["#/skin", "All skin"], "cards": [["VISIA® Skin Analysis", "Included free with every consultation: imaging that maps spots, wrinkles, texture, pores and redness, so your plan starts from facts.", "Free", "#/visia-skin-analysis", "assets/home/menu/visia-skin-analysis.jpg", "assets/home/menu/visia-skin-analysis.jpg 720w", "Skin Treatments"], ["Microneedling", "Collagen induction with Dermapen 4, with options to add PRP, PDRN or exosomes for your skin’s needs.", "From $245", "#/microneedling", "assets/home/menu/microneedling.jpg", "assets/home/menu/microneedling.jpg 720w", "Skin Treatments"], ["Chemical Peels", "Light, medium and deep professional peels, including Acnelan®, chosen for your skin type and goals.", "From $149", "#/chemical-peels", "assets/home/menu/chemical-peels.jpg", "assets/home/menu/chemical-peels.jpg 720w", "Skin Treatments"], ["Cosmelan® & Dermamelan®", "Professional depigmenting protocols by Mesoestetic for melasma, sun spots and uneven tone.", "From $799.20", "#/cosmelan-dermamelan", "assets/home/menu/cosmelan-dermamelan.jpg", "assets/home/menu/cosmelan-dermamelan.jpg 720w", "Skin Treatments"], ["Medical Facials", "Clinical facials, including Age Element®, Purifying Acne Relief and Glass Glow, tailored at each visit.", "From $249", "#/medical-facials", "assets/home/menu/medical-facials.jpg", "assets/home/menu/medical-facials.jpg 720w", "Skin Treatments"]]}, {"id": "body", "label": "Body", "all": ["#/body", "All body"], "cards": [["CoolSculpting®", "Controlled cooling that can reduce stubborn fat in treated areas, without surgery.", "From $850", "#/coolsculpting", "assets/home/menu/coolsculpting.jpg", "assets/home/menu/coolsculpting.jpg 720w", "Body Contouring"], ["TightSculpting®", "Fotona laser body contouring that can reduce fat and tighten skin in the same treatment.", "From $600", "#/tightsculpting", "assets/home/menu/tightsculpting.jpg", "assets/home/menu/tightsculpting.jpg 720w", "Body Contouring"], ["Non-Surgical Butt Lift", "Injectable collagen stimulators planned to improve the shape and contour of the buttocks and hips, without surgery.", "From $1999", "#/non-surgical-bbl", "assets/home/menu/non-surgical-bbl.jpg", "assets/home/menu/non-surgical-bbl.jpg 720w", "Body Contouring"]]}, {"id": "veins", "label": "Veins", "all": ["#/veins", "All veins"], "cards": [["Laser Vein Removal", "Cutera Excel V+ laser for small visible veins and spider veins on the face and legs.", "From $240", "#/laser-vein-removal", "assets/home/menu/laser-vein-removal.jpg", "assets/home/menu/laser-vein-removal.jpg 720w", "Vein Treatments"], ["Sclerotherapy", "Injections that close small spider and reticular veins on the legs, after a vascular assessment.", "Priced at consultation", "#/sclerotherapy", "assets/home/menu/sclerotherapy.jpg", "assets/home/menu/sclerotherapy.jpg 720w", "Vein Treatments"], ["VenaSeal™", "A minimally invasive treatment that seals larger varicose veins with a medical adhesive, decided after an ultrasound assessment.", "Priced at consultation", "#/venaseal", "assets/home/menu/venaseal.jpg", "assets/home/menu/venaseal.jpg 720w", "Vein Treatments"]]}, {"id": "hair", "label": "Hair", "all": ["#/hair", "All hair"], "cards": [["PRP Hair Restoration", "Platelet-rich plasma from your own blood, applied to the scalp to support thinning hair.", "From $399", "#/prp-hair-restoration", "assets/home/menu/prp-hair-restoration.jpg", "assets/home/menu/prp-hair-restoration.jpg 720w", "Hair Restoration"], ["Laser Hair Rejuvenation", "A gentle Fotona laser treatment for the scalp that may support thinning hair, with no needles and little downtime.", "From $350", "#/laser-hair-rejuvenation", "assets/home/menu/laser-hair-rejuvenation.jpg", "assets/home/menu/laser-hair-rejuvenation.jpg 720w", "Hair Restoration"]]}];
 /* round 29: every card and panel price comes from the price list (priceFor), so the home page always matches the pricing page */
 MENU.forEach((t) => t.cards.forEach((c) => { const v = priceFor(c[0]); if (v) c[2] = v; }));
 START.forEach((pnl) => pnl.chips.forEach((ch) => ch.items.forEach((it) => { const v = priceFor(it[0]); if (v) it[2] = v; })));
@@ -5219,6 +5570,7 @@ function App() {
       <main id="main">
         <Hero sectionRef={heroRef} onIntroDone={() => setIntroDone(true)} />
         <BfTape />
+        <HomeTape />
         <Statement />
         <Start onSearch={() => setSearch(true)} />
         <BfTape flip />
@@ -5244,7 +5596,7 @@ function App() {
       <Drawer open={drawer} onClose={() => setDrawer(false)} />
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} onBrowse={() => { window.location.href = 'pricing.html#prices'; }} />
       <CartPill onOpen={() => setCartOpen(true)} hidden={!introDone || cartOpen || drawer || search} />
-      <FloatSearch onOpen={() => setSearch(true)} hidden={!introDone || search || drawer || cartOpen} />
+      <FloatSearch onOpen={() => setSearch(true)} hidden={!introDone || search || drawer || cartOpen || HERE === 'pricing.html'} />
       <OfferPopup ready={introDone} />
       <ChatBot ready={introDone} hidden={!introDone || cartOpen || drawer || search} />
     </CartCtx.Provider>

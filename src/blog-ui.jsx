@@ -1,6 +1,9 @@
 /* ---------------------------------------------------------------- blog data: every post on the NDM blog, newest first.
    Titles, dates, images and links are NDM's; summaries are rewritten short, in qualified language; topics regroup NDM's categories for filtering. */
 const POST_IMG = `${NDM}/wp-content/uploads/`;
+/* new featured photos (Unsplash, warm peach grade baked in; credits in assets/blog/featured/credits.csv), one per post, named by slug */
+const POST_IMG_NEW = 'assets/blog/featured/';
+const postImg = (u) => `${POST_IMG_NEW}${u.replace(/^\/|\/$/g, '')}.webp`;
 /* posts that already have their own page here; the rest open on NDM's current site */
 const BLOG_LOCAL = { '/what-causes-rosacea-redness/': 'what-causes-rosacea-redness.html' };
 const newTab = (p) => (p.ext ? { target: '_blank', rel: 'noopener' } : {});
@@ -40,7 +43,7 @@ const BLOG_POSTS = [
   ['Chemical Peels', '/chemical-peels/', 'June 30, 2015', 774, 'Skin', '2020/08/31-CHEMICAL-PEELS-m.webp', 'A personal look at what chemical peels can do for fine lines and early sun spots.'],
   ['Juvéderm Vycross Technology', '/juvederm-vycross-technology/', 'June 22, 2015', 587, 'Injectables', '2020/08/32-JUVEDERM-VYCROSS-TECHNOLOGY-m.webp', 'An introduction to the Juvéderm Vycross filler range and how it differs from earlier generations.'],
   ['Pineapple, Cucumber & Apple Smoothie for Healthy Skin!', '/pineapple-cucumber-apple-smoothie-for-healthy-skin/', 'October 23, 2013', 355, 'Skin', '2020/08/33-Pineapple-Cucumber-Apple-Smoothie-for-Healthy-Skin-m.webp', 'A simple pineapple, cucumber and apple smoothie made with skin-friendly ingredients.'],
-].map(([t, u, d, w, topic, img, ex]) => ({ t, slug: u, url: BLOG_LOCAL[u] || NDM + u, ext: !BLOG_LOCAL[u], d, min: Math.max(2, Math.round(w / 220)), topic, img: POST_IMG + img, ex }));
+].map(([t, u, d, w, topic, img, ex]) => ({ t, slug: u, url: BLOG_LOCAL[u] || NDM + u, ext: !BLOG_LOCAL[u], d, min: Math.max(2, Math.round(w / 220)), topic, img: postImg(u), ex }));
 const BLOG_STEP = 9;
 
 /* ---------------------------------------------------------------- motion helpers */

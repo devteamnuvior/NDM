@@ -1,0 +1,19 @@
+/* Black Friday colours on the regular pages while the sale runs (user, 2026-11-19): the offer cards (offers wheel,
+   Promotion's "All current offers", Pricing's Monthly specials) and their pills were black and gold; under
+   .site-root[data-sale="bf"] (set by the site layout from the campaign) the gold turns signal red. After the sale the
+   attribute is gone and offer-cards.css's black and gold come back. */
+.site-root[data-sale="bf"] .dp-a{background:#0B0B0C;color:#fff}
+.site-root[data-sale="bf"] .dp-b{background:#D3121F;color:#fff}
+.site-root[data-sale="bf"] .specials-wheel:not(.sw-dark) .sw-stage{background:radial-gradient(34% 42% at 30% 56%,rgba(38,177,231,.16),transparent 70%),radial-gradient(28% 40% at 70% 60%,rgba(211,18,31,.12),transparent 72%),radial-gradient(30% 36% at 50% 34%,rgba(15,128,195,.1),transparent 70%)}
+.site-root[data-sale="bf"] section:has(article.promo-card),.site-root[data-sale="bf"] section:has(li.ps-card){background-image:radial-gradient(40% 32% at 16% 42%,rgba(38,177,231,.1),transparent 70%),radial-gradient(36% 32% at 84% 72%,rgba(211,18,31,.08),transparent 72%)}
+.site-root[data-sale="bf"] .specials-wheel:not(.sw-dark) .sw-card.is-on{border-color:rgba(211,18,31,.45);box-shadow:inset 0 1px 0 #fff,0 0 0 4px rgba(211,18,31,.08),0 24px 50px -26px rgba(11,15,19,.4)}
+.site-root[data-sale="bf"] .specials-wheel:not(.sw-dark) .sw-card:not(.is-on):hover{border-color:rgba(211,18,31,.35)}
+@media (hover:hover){.site-root[data-sale="bf"] :is(article.promo-card,li.ps-card):hover{border-color:rgba(211,18,31,.45);box-shadow:inset 0 1px 0 #fff,0 0 0 4px rgba(211,18,31,.06),0 36px 70px -34px rgba(11,15,19,.42)}
+  .site-root[data-sale="bf"] article.promo-card:hover .promo-badge{background:#0B0B0C;color:#fff}}
+.site-root[data-sale="bf"] :is(.specials-wheel:not(.sw-dark) .sw-card,article.promo-card) .sw-ring{border-color:rgba(211,18,31,.16)}
+.site-root[data-sale="bf"] :is(.specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) .sw-cur{color:#C8101C}
+.site-root[data-sale="bf"] .specials-wheel:not(.sw-dark) .sw-card .sw-tag.is-feature{background:#0B0B0C;border-color:#0B0B0C;color:#FF9AA0}
+.site-root[data-sale="bf"] .specials-wheel:not(.sw-dark) .sw-card .sw-photo,.site-root[data-sale="bf"] .specials-wheel:not(.sw-dark) .sw-card.is-on .sw-photo{box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(211,18,31,.4),0 10px 22px -12px rgba(11,15,19,.45)}
+.site-root[data-sale="bf"] article.promo-card .promo-badge,.site-root[data-sale="bf"] li.ps-card > span:nth-child(2){box-shadow:inset 0 0 0 1px rgba(211,18,31,.35)}
+.site-root[data-sale="bf"] :is(.specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.btn-ink,.btn-buy){background:#0B0B0C;border-color:#0B0B0C}
+.site-root[data-sale="bf"] :is(.specials-wheel:not(.sw-dark) .sw-card,article.promo-card,li.ps-card) :is(.btn-ink,.btn-buy):is(:hover,:focus-visible){background:#D3121F;border-color:#D3121F;color:#fff}

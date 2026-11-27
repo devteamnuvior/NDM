@@ -1,0 +1,20 @@
+/* Top Choice Award motion: badges appear year by year, then "8 Years of Excellence". Copied from the prototype (promotion.html, lines 540 to 557). */
+.aw-motion{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(14px,2.2vw,34px)}
+.aw-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1vw,14px)}
+@media (min-width:640px){.aw-row{grid-template-columns:repeat(8,minmax(0,1fr))}}
+.aw-b{display:flex;flex-direction:column;align-items:center;opacity:0;transform:translateY(10px) scale(.6);transition:opacity .45s ease,transform .65s cubic-bezier(.3,1.45,.5,1)}
+.aw-b.on{opacity:1;transform:none}
+.aw-b img{width:clamp(56px,5.4vw,80px);height:auto;filter:drop-shadow(0 8px 12px rgba(120,90,30,.18))}
+.aw-b span{margin-top:6px;font:500 12px/1 Inter,system-ui,sans-serif;color:#5A646C;letter-spacing:.02em}
+.aw-txt{display:flex;align-items:center;gap:12px;margin:0;color:#1B242B;text-align:left}
+.aw-n{font-size:clamp(48px,4.6vw,64px);line-height:1;opacity:0;transform:scale(.6);transition:opacity .4s ease,transform .6s cubic-bezier(.3,1.45,.5,1)}
+.aw-n.on{opacity:1;transform:none}
+.aw-words{display:flex;flex-direction:column;gap:4px}
+.aw-t1{font-size:clamp(20px,1.8vw,26px);line-height:1.1;letter-spacing:-.01em;clip-path:inset(0 100% 0 0);transition:clip-path .9s steps(19,end)}
+.aw-t1.on{clip-path:inset(0 0 0 0)}
+.aw-t2{font-size:clamp(13px,1.05vw,15px);color:#5A646C;opacity:0;transform:translateY(6px);transition:opacity .5s ease,transform .6s ease}
+.aw-t2.on{opacity:1;transform:none}
+.aw-motion.is-out .aw-b.on,.aw-motion.is-out .aw-n.on,.aw-motion.is-out .aw-t2.on{opacity:0;transition:opacity .55s ease}
+.aw-motion.is-out .aw-t1.on{opacity:0;transition:opacity .55s ease}
+@media (prefers-reduced-motion:reduce){.aw-b,.aw-n,.aw-t1,.aw-t2{transition:none;opacity:1;transform:none;clip-path:none}}
+

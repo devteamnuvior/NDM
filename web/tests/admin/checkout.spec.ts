@@ -1,0 +1,128 @@
+import { execFileSync } from "node:child_process";
+import path from "node:path";
+import { expect, test } from "@playwright/test";
+import { NEXT_URL } from "../../playwright.config";
+
+/**
+ * The cart, checkout and order request, end to end against the local WordPress + WooCommerce (see
+ * ../../../cms): the cart is corrected from WooCommerce when it loads, the order request becomes a real
+ * WooCommerce order at WooCommerce's prices, and nothing personal is kept in the browser. It creates an
+ * order (and deletes it afterwards), so it runs with the admin tests: npm run test:admin.
+ */
+const CMS = path.resolve(__dirname, "../../../cms");
+const WP = "http://localhost:8080";
+const wp = (...args: string[]) => execFileSync("docker", ["compose", "run", "--rm", "-T", "cli", "wp", ...args], { cwd: CMS, stdio: ["ignore", "pipe", "ignore"] }).toString().trim();
+const placed: string[] = [];
+
+test.use({ viewport: { width: 1440, height: 900 } });
+test.setTimeout(180_000);
+
+test.afterAll(() => {
+  for (const no of placed) {
+    try {
+      wp("eval", `wc_get_order(${Number(no)})->delete(true);`);
+    } catch {
+      /* already gone */
+    }
+  }
+});
+
+test("the order route is closed to visitors", async ({ request }) => {
+  const body = { lines: [{ productId: 18, variationId: 20, qty: 1 }], customer: {}, clinic: "x" };
+  expect((await request.post(`${WP}/wp-json/ndm/v1/orders`, { data: body })).status()).toBe(401);
+});
+
+test("the cart is corrected from WooCommerce, and the order request becomes a WooCommerce order", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
+
+  /* a cart as an older page (or a curious visitor) could have left it: no IDs, a made-up price, and
+     something that is not on the price list */
+  await page.goto(`${NEXT_URL}/pricing`);
+  await page.evaluate(() =>
+    localStorage.setItem(
+      "ndm-cart",
+      JSON.stringify([
+        { key: "Botox Cosmetic|60 units", cat: "Anything", name: "Botox Cosmetic", label: "60 units", price: 1, unit: "", qty: 2 },
+        { key: "gone", cat: "Anything", name: "Gone Treatment", label: "Single session", price: 5, unit: "", qty: 1 },
+      ]),
+    ),
+  );
+
+  await page.goto(`${NEXT_URL}/cart`);
+  const main = page.locator("main:visible"); /* after a link the previous page can stay in the document, hidden */
+  await expect(main.getByRole("status").filter({ hasText: "Your cart was updated" })).toContainText("Gone Treatment, Single session");
+  await expect(main).toContainText("Botox / Dysport"); /* the category, as WooCommerce names it */
+  await expect(main).toContainText("60 units · $648 each");
+  await expect(main).toContainText("Regular price $1440");
+  await expect(main.getByLabel("Cart summary")).toContainText("Subtotal$1296.00");
+  const stored = await page.evaluate(() => JSON.parse(localStorage.getItem("ndm-cart") ?? "[]") as Record<string, unknown>[]);
+  expect(stored).toEqual([{ key: "wc:18:20", cat: "Botox / Dysport", name: "Botox Cosmetic", label: "60 units", price: 648, unit: "", was: 720, productId: 18, variationId: 20, qty: 2 }]);
+
+  /* the Pricing page's own button adds to the same cart, by WooCommerce ID */
+  await page.goto(`${NEXT_URL}/pricing`);
+  await page.locator("#pg-botox-dysport-h").click();
+  await page.locator("#pr-botox-dysport-0-h").click();
+  const option = page.locator("#pr-botox-dysport-0 .pr-opt").nth(1);
+  await expect(option.getByRole("group", { name: "Quantity, Botox Cosmetic, 60 units" })).toContainText("2"); /* already in the cart */
+  await page.locator("#pr-botox-dysport-0 .pr-opt").first().getByRole("button", { name: "Add Botox Cosmetic, Regular to cart" }).click();
+
+  /* checkout: details (with the clinic), then payment with the terms (no review step, user, 2026-11-18) */
+  await page.goto(`${NEXT_URL}/checkout`);
+  await expect(page.locator("h1:visible")).toHaveText(/Your\s*details/);
+  await page.getByLabel("First name").fill("Sam");
+  await page.getByLabel("Last name").fill("Tester");
+  await page.getByLabel("Email address").fill("sam.tester@example.test");
+  await page.getByLabel("Phone").fill("416 555 0100");
+  await page.getByLabel("Address", { exact: true }).fill("1 Test Street");
+  await page.getByLabel("City").fill("Toronto");
+  await page.getByLabel("Postal code").fill("123");
+  await page.getByRole("button", { name: "Continue to payment" }).click();
+  await expect(main.getByRole("alert").filter({ hasText: "A few details are missing" })).toBeVisible(); /* not a postal code */
+  await page.getByLabel("Postal code").fill("m2n 5m5");
+  await expect(page.getByLabel("Preferred day")).toHaveCount(0); /* no appointment step for now (user, 2026-11-18) */
+  await page.getByRole("button", { name: "Continue to payment" }).click();
+  await expect(page.locator("h1:visible")).toHaveText(/How you\s*pay/);
+  await expect(page.getByRole("button", { name: "Continue to review" })).toHaveCount(0);
+  await page.getByRole("checkbox", { name: /I accept/ }).check();
+  /* every order is paid online by card (user, 2026-11-19): there is no "pay at your appointment" */
+  await expect(main).not.toContainText(/Pay at your appointment|Place order request/);
+  await page.getByRole("button", { name: /Continue to card payment/ }).click();
+
+  /* WooCommerce's pay page for the order; its number is kept in the browser's receipt */
+  await page.waitForURL(/order-pay\/\d+/);
+  const no = /order-pay\/(\d+)/.exec(page.url())![1];
+  placed.push(no);
+
+  /* back on the site before paying: the confirmation says the payment is not completed */
+  await page.goto(`${NEXT_URL}/order-confirmed`);
+  await expect(page.locator("h1:visible")).toContainText("Thank you, Sam,");
+  await expect(main).toContainText("Your card payment was not completed");
+  await expect(main.getByText("Botox Cosmetic").first()).toBeVisible();
+
+  /* the order is in WooCommerce: pending until it is paid, at WooCommerce's prices */
+  const order = JSON.parse(
+    wp("eval", `$o = wc_get_order(${Number(no)}); echo wp_json_encode(array('status' => $o->get_status(), 'total' => (float) $o->get_total(), 'via' => $o->get_created_via(), 'email' => $o->get_billing_email(), 'postcode' => $o->get_billing_postcode(), 'clinic' => $o->get_meta('_ndm_clinic'), 'when' => $o->get_meta('_ndm_preferred_time'), 'items' => array_values(array_map(fn($i) => array($i->get_variation_id(), $i->get_quantity(), (float) $i->get_total()), $o->get_items()))));`),
+  ) as Record<string, unknown>;
+  expect(order).toEqual({
+    status: "pending",
+    total: 1308,
+    via: "ndm-site",
+    email: "sam.tester@example.test",
+    postcode: "M2N 5M5",
+    clinic: "NewDermaMed Uptown",
+    when: "",
+    items: [
+      [20, 2, 1296],
+      [19, 1, 12],
+    ],
+  });
+
+  /* the browser keeps the cart empty and, of the order, nothing personal beyond the first name */
+  expect(await page.evaluate(() => localStorage.getItem("ndm-cart"))).toBe("[]");
+  const kept = await page.evaluate(() => localStorage.getItem("ndm-last-order") ?? "");
+  expect(kept).toContain(`"no":"${no}"`);
+  expect(kept).not.toMatch(/sam\.tester|Test Street|M2N|Tester/);
+  expect(errors).toEqual([]);
+});

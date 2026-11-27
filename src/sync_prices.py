@@ -10,6 +10,10 @@ root, src = Path(sys.argv[1]), Path(sys.argv[2])
 data = (src / 'pricing-data.jsx').read_text(encoding='utf-8')
 a = data.index('const PRICE_CATS = [')
 b = data.index('\n];\n', a) + 4
+# the running sale (PRICE_SALE, src/price_data_from_live.py) travels with the list: the price helpers read it
+m = re.match(r'(?:/\*[^\n]*\*/\n)?const PRICE_SALE = [^\n]*\n', data[b:])
+if m:
+    b += m.end()
 cats = data[a:b]
 lhr = re.search(r'helper = "(.*?)\\n"\n', (src / 'build_pricing.py').read_text(encoding='utf-8')).group(1).split('\\n', 1)[1]
 lib = (src / 'price-lib.jsx').read_text(encoding='utf-8')
