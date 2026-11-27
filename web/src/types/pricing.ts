@@ -65,6 +65,9 @@ export interface WooProduct extends WooPriceFields {
   image?: WooPromoImage | null;
   /** Empty for a simple product, whose own price fields apply. */
   variations: WooVariation[];
+  /** A special line shown under its category's options (the Aptos model call assessment), never a treatment of its
+   *  own and never counted in a "from" price, offer or monthly special (plugin meta `_ndm_pricing_extra`). */
+  extra?: boolean;
 }
 
 export interface WooCategory<P = WooProduct> {

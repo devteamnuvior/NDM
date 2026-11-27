@@ -49,7 +49,15 @@ def main():
     total = 0
     for c in tree["categories"]:
         items = []
+        extras = []
         for p in c["products"]:
+            if p.get("extra"):
+                # a special line under the options (the Aptos model call assessment): never a treatment, never in a "from" price
+                lab = p.get("label") or {}
+                price = num(p.get("price"))
+                if price == price and price >= 0:
+                    extras.append((p["name"], p.get("note") or "", clean(price), lab.get("text") if lab.get("enabled") and lab.get("text") else ""))
+                continue
             lab = p.get("label") or {}
             tag = lab.get("text") if lab.get("enabled") and lab.get("text") else ""
             if p.get("variations"):
@@ -62,7 +70,8 @@ def main():
         if not items:
             continue
         total += len(items)
-        head = f"  {{ id: {js(c['slug'])}, name: {js(c['name'])}{', unit: true' if c.get('perUnit') else ''}, blurb: {js(c.get('description') or '')}, items: ["
+        ext = (", extras: [" + ", ".join("[" + ", ".join(js(x) for x in e) + "]" for e in extras) + "]") if extras else ""
+        head = f"  {{ id: {js(c['slug'])}, name: {js(c['name'])}{', unit: true' if c.get('perUnit') else ''}, blurb: {js(c.get('description') or '')}{ext}, items: ["
         lines.append(head)
         for name, note, opts in items:
             rows = ", ".join("[" + ", ".join(js(x) for x in o) + "]" for o in opts)
@@ -77,7 +86,7 @@ def main():
     start = src.index("const PRICE_CATS = [")
     end = src.index("/* monthly specials above the price list")
     head = src[:start]
-    head = re.sub(r"/\* item: .*?\*/\n", "/* item: [name, note, [[option, price, regular price or 0, badge, price with the checkout code], ...]]; read from the live price list by src/price_data_from_live.py */\n", head, count=1, flags=re.S)
+    head = re.sub(r"/\* item: .*?\*/\n", "/* item: [name, note, [[option, price, regular price or 0, badge, price with the checkout code], ...]]; extras (special lines under the options, never in a \"from\" price): [[name, note, price, tag], ...]; read from the live price list by src/price_data_from_live.py */\n", head, count=1, flags=re.S)
     open(out, "w").write(head + block + src[end:])
     print(f"{len(tree['categories'])} categories, {total} treatments, sale {sale}")
 

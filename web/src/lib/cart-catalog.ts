@@ -59,7 +59,8 @@ export async function getCartCatalog(): Promise<CartCatalog> {
   const byId = new Map<number, CatalogEntry>();
   const byName = new Map<string, CatalogEntry>();
   for (const c of view.categories) {
-    for (const it of c.items) {
+    /* the special lines (Aptos model call assessment) go in the cart like any option */
+    for (const it of [...c.items, ...c.extras]) {
       for (const o of it.options) {
         const entry: CatalogEntry = { productId: o.productId, variationId: o.variationId, ...cartNames(c.name, it.name), label: o.label, price: o.price, was: o.was, unit: o.unit, code: o.code ?? 0 };
         const id = o.variationId || o.productId;

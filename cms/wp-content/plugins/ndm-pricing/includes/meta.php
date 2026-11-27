@@ -13,6 +13,9 @@
  *   _ndm_pricing_hidden        "1" hides it on the Pricing page only (the product itself is untouched).
  *   _ndm_pricing_label         Promotional label text, for example "Save $1000 Off". Never a price.
  *   _ndm_pricing_label_on      "1" when the label is shown.
+ *   _ndm_pricing_extra         "1" on a product: a special line shown under its category's options (for example the
+ *                              refundable Aptos model call assessment), never a treatment of its own and never
+ *                              counted in the category's "from" price, offers or monthly specials.
  *
  * A product that is a current offer also carries _ndm_promo (see promotions.php).
  *
@@ -31,6 +34,7 @@ const NDM_PRICING_TERM_PRODUCT_ORDER = 'ndm_pricing_product_order';
 const NDM_PRICING_HIDDEN   = '_ndm_pricing_hidden';
 const NDM_PRICING_LABEL    = '_ndm_pricing_label';
 const NDM_PRICING_LABEL_ON = '_ndm_pricing_label_on';
+const NDM_PRICING_EXTRA    = '_ndm_pricing_extra';
 
 const NDM_PRICING_NAME_MAX  = 200;
 const NDM_PRICING_TEXT_MAX  = 600;
@@ -73,6 +77,16 @@ function ndm_pricing_label_of( $product ) {
  */
 function ndm_pricing_is_hidden( $product ) {
 	return '1' === (string) $product->get_meta( NDM_PRICING_HIDDEN );
+}
+
+/**
+ * Whether a product is a special line under its category's options (see NDM_PRICING_EXTRA).
+ *
+ * @param WC_Product $product Product.
+ * @return bool
+ */
+function ndm_pricing_is_extra( $product ) {
+	return '1' === (string) $product->get_meta( NDM_PRICING_EXTRA );
 }
 
 /**

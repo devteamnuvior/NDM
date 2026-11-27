@@ -34,6 +34,19 @@ function OptionList({ cat, it, mark, className = 'grid gap-2 pb-5' }) {
   );
 }
 
+/* the category's special lines (user, 2026-11-27: the Aptos model call assessment), under its options; site: ExtraList */
+function ExtraList({ cat }) {
+  if (!cat.extras || !cat.extras.length) return null;
+  return (
+    <ul className="pr-extras grid gap-2 pb-[18px]" role="list">
+      {cat.extras.map(([name, note, price, tag]) => {
+        const line = { key: `${name}|Price`, cat: cat.name, name, label: 'Price', price, was: 0, unit: '' };
+        return <ExtraRow key={name} tag={tag} name={name} note={note} price={price} action={<QtyControl line={line} label={name} />} />;
+      })}
+    </ul>
+  );
+}
+
 function TreatmentRow({ cat, it, uid, open, onToggle }) {
   const [name, note, opts] = it;
   const offer = bestOffer(opts);
@@ -176,10 +189,13 @@ function PriceGroup({ c, on, onToggle, hits, openItem, toggleItem, setItems }) {
           </div>
           {/* treatments sit on their own white panel, flush with the category title, so they read as part of the category */}
           {single
-            ? <div className="pr-sub"><OptionList cat={c} it={c.items[0]} mark={c.items[0][2].length > 1} className="grid gap-2 py-[18px]" /></div>
-            : <ul className="pr-sub" role="list">
-                {shown.map(([it, i]) => <TreatmentRow key={i} cat={c} it={it} uid={`pr-${c.id}-${i}`} open={openItem(i)} onToggle={() => toggleItem(i)} />)}
-              </ul>}
+            ? <div className="pr-sub"><OptionList cat={c} it={c.items[0]} mark={c.items[0][2].length > 1} className="grid gap-2 py-[18px]" />{!hits && <ExtraList cat={c} />}</div>
+            : <>
+                <ul className="pr-sub" role="list">
+                  {shown.map(([it, i]) => <TreatmentRow key={i} cat={c} it={it} uid={`pr-${c.id}-${i}`} open={openItem(i)} onToggle={() => toggleItem(i)} />)}
+                </ul>
+                {!hits && c.extras && c.extras.length > 0 && <div className="pr-sub pt-[18px]"><ExtraList cat={c} /></div>}
+              </>}
         </div>
       </div>
     </li>
